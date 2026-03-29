@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - LKG Learning!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fff9f0;
+            min-height: 100vh;
+        }
+
+        /* Top Nav */
+        .navbar {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 12px; }
+        .navbar-logo { font-size: 22px; font-weight: 900; color: white; }
+        .navbar-grade {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .navbar-right { display: flex; align-items: center; gap: 10px; }
+        .stars-badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .home-btn {
+            background: white;
+            color: #ff6b6b;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            padding: 20px 20px 40px;
+            text-align: center;
+            color: white;
+        }
+        .hero-avatar { font-size: 60px; margin-bottom: 8px; }
+        .hero h2 { font-size: 24px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 14px; opacity: 0.9; }
+
+        /* Progress bar */
+        .progress-section {
+            background: white;
+            margin: -20px 16px 20px;
+            border-radius: 20px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .progress-title { font-size: 14px; font-weight: 700; color: #333; }
+        .progress-count { font-size: 13px; color: #888; }
+        .progress-bar {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            height: 100%;
+            border-radius: 10px;
+            width: 10%;
+            transition: width 0.5s ease;
+        }
+
+        /* Section title */
+        .section-title {
+            padding: 5px 20px 12px;
+            font-size: 18px;
+            font-weight: 900;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Subject Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            padding: 0 16px 30px;
+        }
+
+        /* Subject Card */
+        .subject-card {
+            border-radius: 24px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .subject-card:hover  { transform: translateY(-5px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
+        .subject-card:active { transform: scale(0.97); }
+
+        /* Card shine effect */
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .card-icon { font-size: 52px; margin-bottom: 8px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .card-title { font-size: 16px; font-weight: 900; color: white; text-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-bottom: 4px; }
+        .card-sub   { font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 600; }
+
+        /* Lock overlay */
+        .card-lock {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        /* Progress ring on card */
+        .card-progress {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* New badge */
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #fbbf24;
+            color: #333;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* Colors */
+        .card-1  { background: linear-gradient(135deg, #FF6B6B, #ee4444); }
+        .card-2  { background: linear-gradient(135deg, #FF8E53, #e06020); }
+        .card-3  { background: linear-gradient(135deg, #FFC300, #e0a000); }
+        .card-4  { background: linear-gradient(135deg, #2ECC71, #1a9950); }
+        .card-5  { background: linear-gradient(135deg, #3498DB, #1a6fa8); }
+        .card-6  { background: linear-gradient(135deg, #9B59B6, #6c3080); }
+        .card-7  { background: linear-gradient(135deg, #E91E63, #b00040); }
+        .card-8  { background: linear-gradient(135deg, #00BCD4, #007a90); }
+        .card-9  { background: linear-gradient(135deg, #FF5722, #c03000); }
+        .card-10 { background: linear-gradient(135deg, #8BC34A, #5a8a1a); }
+
+        /* Daily challenge */
+        .challenge-card {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.35);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .challenge-card:hover { transform: scale(1.02); }
+        .challenge-icon { font-size: 44px; flex-shrink: 0; }
+        .challenge-text h3 { font-size: 16px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .challenge-text p  { font-size: 13px; color: rgba(255,255,255,0.85); }
+        .challenge-arrow {
+            margin-left: auto;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            padding: 8px 0 12px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+            z-index: 50;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            padding: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .nav-icon { font-size: 22px; }
+        .nav-label { font-size: 11px; font-weight: 700; color: #888; }
+        .nav-item.active .nav-label { color: #ff6b6b; }
+        .nav-item.active .nav-icon  { transform: scale(1.15); }
+
+        /* Padding for bottom nav */
+        .page-content { padding-bottom: 80px; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">LKG</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+        <a href="/dashboard" class="home-btn">🏠 Home</a>
+    </div>
+</nav>
+
+<div class="page-content">
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-avatar">👧</div>
+        <h2>Hello, {{ student.name }}! 👋</h2>
+        <p>What do you want to learn today?</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-title">📊 Today's Progress</div>
+            <div class="progress-count">1 of 10 subjects</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 10%"></div>
+        </div>
+    </div>
+
+    <!-- Daily Challenge -->
+    <div class="challenge-card" onclick="location.href='/lkg/alphabets'">
+        <div class="challenge-icon">🌟</div>
+        <div class="challenge-text">
+            <h3>Today's Challenge!</h3>
+            <p>Learn 5 new Alphabets and earn stars!</p>
+        </div>
+        <div class="challenge-arrow">→</div>
+    </div>
+
+    <!-- Subjects -->
+    <div class="section-title">🎯 Choose a Subject</div>
+
+    <div class="subjects-grid">
+
+        <!-- 1. Alphabets -->
+        <a href="/lkg/alphabets" class="subject-card card-1">
+            <div class="card-badge">✅ Ready</div>
+            <span class="card-icon">🔤</span>
+            <div class="card-title">Alphabets</div>
+            <div class="card-sub">A to Z • 26 Letters</div>
+        </a>
+
+        <!-- 2. Numbers -->
+        <a href="/lkg/numbers" class="subject-card card-2">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">🔢</span>
+            <div class="card-title">Numbers</div>
+            <div class="card-sub">1 to 10 • Count!</div>
+        </a>
+
+        <!-- 3. Colors -->
+        <a href="/lkg/colors" class="subject-card card-3">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">🌈</span>
+            <div class="card-title">Colors</div>
+            <div class="card-sub">12 Beautiful Colors</div>
+        </a>
+
+        <!-- 4. Shapes -->
+        <a href="/lkg/shapes" class="subject-card card-4">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">🔷</span>
+            <div class="card-title">Shapes</div>
+            <div class="card-sub">Circle, Square & More</div>
+        </a>
+
+        <!-- 5. Animals -->
+        <a href="/lkg/animals" class="subject-card card-5">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">🐘</span>
+            <div class="card-title">Animals</div>
+            <div class="card-sub">Farm & Wild Animals</div>
+        </a>
+
+        <!-- 6. Fruits & Vegetables -->
+        <a href="/lkg/fruits" class="subject-card card-6">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">🍎</span>
+            <div class="card-title">Fruits & Veggies</div>
+            <div class="card-sub">Healthy & Yummy!</div>
+        </a>
+
+        <!-- 7. Body Parts -->
+        <a href="/lkg/body" class="subject-card card-7">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">👁️</span>
+            <div class="card-title">Body Parts</div>
+            <div class="card-sub">Know Your Body!</div>
+        </a>
+
+        <!-- 8. Rhymes -->
+        <a href="/lkg/rhymes" class="subject-card card-8">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">🎵</span>
+            <div class="card-title">Rhymes & Songs</div>
+            <div class="card-sub">Fun Nursery Rhymes</div>
+        </a>
+
+        <!-- 9. Family -->
+        <a href="/lkg/family" class="subject-card card-9">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">👨‍👩‍👧</span>
+            <div class="card-title">My Family</div>
+            <div class="card-sub">People I Love!</div>
+        </a>
+
+        <!-- 10. Days & Months -->
+        <a href="/lkg/days" class="subject-card card-10">
+            <div class="card-badge">🆕 New</div>
+            <span class="card-icon">📅</span>
+            <div class="card-title">Days & Months</div>
+            <div class="card-sub">7 Days • 12 Months</div>
+        </a>
+
+    </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+    <a href="/lkg" class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">⭐</div>
+        <div class="nav-label">Stars</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
+
+</body>
+</html>

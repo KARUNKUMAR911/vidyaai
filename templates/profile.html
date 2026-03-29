@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - My Profile</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f3ff;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar h1 { font-size: 20px; color: white; font-weight: 900; }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 7px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+        .profile-hero {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            padding: 20px 20px 50px;
+            text-align: center;
+            color: white;
+        }
+        .avatar-circle {
+            width: 90px; height: 90px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            margin: 0 auto 12px;
+            border: 3px solid rgba(255,255,255,0.4);
+        }
+        .profile-hero h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .profile-hero p  { font-size: 13px; opacity: 0.85; }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: -25px 16px 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 22px; font-weight: 900; color: #7c3aed; }
+        .stat-label { font-size: 11px; color: #888; font-weight: 600; margin-top: 2px; }
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            margin: 0 16px 16px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .form-card h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s;
+            background: white;
+            color: #333;
+        }
+        .form-group input:focus    { border-color: #7c3aed; }
+        .form-group input:disabled { background: #f9f9f9; color: #aaa; }
+        .section-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 6px 0 18px;
+        }
+        /* Medium Selector */
+        .medium-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .medium-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        .medium-btn:hover  { border-color: #7c3aed; background: #f3f0ff; }
+        .medium-btn.active {
+            border-color: #7c3aed;
+            background: #f3f0ff;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+        }
+        .medium-flag  { font-size: 24px; flex-shrink: 0; }
+        .medium-name  { font-size: 14px; font-weight: 700; color: #333; flex: 1; }
+        .medium-btn.active .medium-name { color: #7c3aed; }
+        .medium-check { font-size: 18px; display: none; }
+        .medium-btn.active .medium-check { display: block; }
+        /* Grade Selector */
+        .grade-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .grade-btn {
+            padding: 10px 5px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            background: white;
+            color: #666;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .grade-btn:hover  { border-color: #7c3aed; color: #7c3aed; }
+        .grade-btn.active { border-color: #7c3aed; background: #7c3aed; color: white; }
+        /* Save Button */
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: transform 0.2s;
+            box-shadow: 0 6px 20px rgba(124,58,237,0.3);
+        }
+        .save-btn:hover { transform: translateY(-2px); }
+        /* Danger Zone */
+        .danger-card {
+            background: white;
+            border-radius: 20px;
+            margin: 0 16px 30px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 2px solid #fee2e2;
+        }
+        .danger-card h3 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #dc2626;
+            margin-bottom: 12px;
+        }
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h1>👤 My Profile</h1>
+    <button class="back-btn" onclick="history.back()">← Back</button>
+</nav>
+
+<div class="profile-hero">
+    <div class="avatar-circle">👧</div>
+    <h2>{{ student.name }}</h2>
+    <p>Grade {{ student.grade }} • {{ student.school or 'VidyaAI Student' }}</p>
+</div>
+
+<div class="stats-row">
+    <div class="stat">
+        <div class="stat-value">{{ student.points }}</div>
+        <div class="stat-label">⭐ Stars</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">{{ student.grade }}</div>
+        <div class="stat-label">🎓 Grade</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">{{ student.joined.strftime('%b %Y') }}</div>
+        <div class="stat-label">📅 Joined</div>
+    </div>
+</div>
+
+<form method="POST" action="/profile">
+    <div class="form-card">
+        <h3>✏️ Edit My Profile</h3>
+
+        <div class="form-group">
+            <label>My Name</label>
+            <input type="text" value="{{ student.name }}" disabled>
+        </div>
+
+        <div class="form-group">
+            <label>My School</label>
+            <input type="text" name="school"
+                   value="{{ student.school or '' }}"
+                   placeholder="Enter your school name">
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="form-group">
+            <label>🌐 My Learning Medium</label>
+            <div class="medium-grid">
+
+                <div class="medium-btn {% if student.language == 'english' %}active{% endif %}"
+                     onclick="selectMedium('english', this)">
+                    <span class="medium-flag">🇬🇧</span>
+                    <span class="medium-name">English Medium</span>
+                    <span class="medium-check">✅</span>
+                </div>
+
+                <div class="medium-btn {% if student.language == 'kannada' %}active{% endif %}"
+                     onclick="selectMedium('kannada', this)">
+                    <span class="medium-flag">🌸</span>
+                    <span class="medium-name">ಕನ್ನಡ ಮಾಧ್ಯಮ</span>
+                    <span class="medium-check">✅</span>
+                </div>
+
+                <div class="medium-btn {% if student.language == 'hindi' %}active{% endif %}"
+                     onclick="selectMedium('hindi', this)">
+                    <span class="medium-flag">🇮🇳</span>
+                    <span class="medium-name">हिंदी माध्यम</span>
+                    <span class="medium-check">✅</span>
+                </div>
+
+                <div class="medium-btn {% if student.language == 'tamil' %}active{% endif %}"
+                     onclick="selectMedium('tamil', this)">
+                    <span class="medium-flag">🌺</span>
+                    <span class="medium-name">தமிழ் மாத்யமம்</span>
+                    <span class="medium-check">✅</span>
+                </div>
+
+                <div class="medium-btn {% if student.language == 'telugu' %}active{% endif %}"
+                     onclick="selectMedium('telugu', this)">
+                    <span class="medium-flag">🌻</span>
+                    <span class="medium-name">తెలుగు మాధ్యమం</span>
+                    <span class="medium-check">✅</span>
+                </div>
+
+            </div>
+            <input type="hidden" name="language" id="languageInput" value="{{ student.language }}">
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="form-group">
+            <label>🎓 Change My Class</label>
+            <div class="grade-grid">
+                {% for g in ['LKG','UKG','1','2','3','4','5','6','7','8','9','10','11','12'] %}
+                <div class="grade-btn {% if student.grade == g %}active{% endif %}"
+                     onclick="selectGrade('{{ g }}', this)">
+                    {{ g }}
+                </div>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="grade" id="gradeInput" value="{{ student.grade }}">
+        </div>
+
+        <button type="submit" class="save-btn">
+            💾 Save Changes and Continue Learning!
+        </button>
+    </div>
+</form>
+
+<div class="danger-card">
+    <h3>⚠️ Account</h3>
+    <a href="/logout" class="logout-btn">🚪 Logout</a>
+</div>
+
+<script>
+function selectMedium(lang, el) {
+    document.querySelectorAll('.medium-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('languageInput').value = lang;
+}
+
+function selectGrade(grade, el) {
+    document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('gradeInput').value = grade;
+}
+</script>
+
+</body>
+</html>

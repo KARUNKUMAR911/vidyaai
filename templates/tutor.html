@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - AI Tutor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f3ff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: white;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .navbar h1 { font-size: 20px; color: #7c3aed; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .back-btn {
+            padding: 7px 14px;
+            background: #f3f0ff;
+            color: #7c3aed;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+        }
+        .chat-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+        .sidebar h3 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .subject-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-bottom: 4px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subject-item:hover { background: #f3f0ff; color: #7c3aed; }
+        .subject-item.active { background: #7c3aed; color: white; }
+
+        /* Chat Area */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-header {
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-header h2 { font-size: 16px; color: #333; }
+        .subject-badge {
+            padding: 4px 12px;
+            background: #f3f0ff;
+            color: #7c3aed;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .message {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            animation: fadeIn 0.3s ease;
+        }
+        .user-message { flex-direction: row-reverse; }
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            background: #f3f0ff;
+        }
+        .bubble {
+            max-width: 65%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .user-message .bubble {
+            background: #7c3aed;
+            color: white;
+            border-radius: 16px 4px 16px 16px;
+        }
+        .bot-message .bubble {
+            border-radius: 4px 16px 16px 16px;
+        }
+        .typing .bubble { color: #999; font-style: italic; }
+
+        /* Input */
+        .input-area {
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        .input-area input:focus { border-color: #7c3aed; }
+        .send-btn {
+            padding: 12px 20px;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .send-btn:hover { background: #6d28d9; }
+        .suggested {
+            padding: 10px 20px;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .suggestion {
+            padding: 6px 12px;
+            background: #f3f0ff;
+            color: #7c3aed;
+            border: none;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .suggestion:hover { background: #7c3aed; color: white; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>📚 VidyaAI — AI Tutor</h1>
+        <div class="nav-right">
+            <span style="font-size:13px;color:#666">{{ student.name }} | Grade {{ student.grade }}</span>
+            <a href="/dashboard" class="back-btn">← Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <div class="sidebar">
+            <h3>Subjects</h3>
+            {% for subj, emoji in [
+                ('Mathematics','🔢'),('Science','🔬'),('English','📝'),
+                ('Kannada','🌸'),('Social Science','🌍'),('Hindi','🙏'),
+                ('Physics','⚡'),('Chemistry','🧪'),('Biology','🌿'),
+                ('History','🏛️'),('Geography','🗺️'),('Computer Science','💻')
+            ] %}
+            <div class="subject-item {% if subject == subj %}active{% endif %}"
+                 onclick="changeSubject('{{ subj }}')">
+                {{ emoji }} {{ subj }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="chat-main">
+            <div class="chat-header">
+                <h2>🤖 AI Tutor</h2>
+                <span class="subject-badge" id="subjectBadge">{{ subject }}</span>
+            </div>
+
+            <div class="messages" id="messages">
+                <div class="message bot-message">
+                    <div class="avatar">🤖</div>
+                    <div class="bubble">
+                        Hello {{ student.name }}! 👋 I'm your VidyaAI tutor for Grade {{ student.grade }}.
+                        I'm here to help you with <b>{{ subject }}</b> and all your Karnataka State Board subjects!
+                        Ask me anything — I'll explain it clearly in simple language. What would you like to learn today? 😊
+                    </div>
+                </div>
+            </div>
+
+            <div class="suggested">
+                <button class="suggestion" onclick="askSuggestion(this)">What is photosynthesis?</button>
+                <button class="suggestion" onclick="askSuggestion(this)">Explain the water cycle</button>
+                <button class="suggestion" onclick="askSuggestion(this)">What are prime numbers?</button>
+                <button class="suggestion" onclick="askSuggestion(this)">Tell me about Indian history</button>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="questionInput"
+                    placeholder="Ask any question from your syllabus..."
+                    onkeypress="handleKey(event)">
+                <button class="send-btn" onclick="askQuestion()">Ask 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSubject = '{{ subject }}';
+        const studentGrade = '{{ student.grade }}';
+        const studentName = '{{ student.name }}';
+
+        function changeSubject(subj) {
+            currentSubject = subj;
+            document.getElementById('subjectBadge').textContent = subj;
+            document.querySelectorAll('.subject-item').forEach(el => {
+                el.classList.toggle('active', el.textContent.trim().includes(subj));
+            });
+            addMessage('bot', `Switched to <b>${subj}</b>! Ask me anything about ${subj} for Grade ${studentGrade} 📚`);
+        }
+
+        function handleKey(e) {
+            if (e.key === 'Enter') askQuestion();
+        }
+
+        function askSuggestion(btn) {
+            document.getElementById('questionInput').value = btn.textContent;
+            askQuestion();
+        }
+
+        async function askQuestion() {
+            const input = document.getElementById('questionInput');
+            const question = input.value.trim();
+            if (!question) return;
+            input.value = '';
+
+            addMessage('user', question);
+            const typingId = addTyping();
+
+            try {
+                const res = await fetch('http://localhost:5000/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question: `Grade ${studentGrade} Karnataka State Board ${currentSubject}: ${question}`
+                    })
+                });
+                const data = await res.json();
+                removeTyping(typingId);
+                addMessage('bot', data.answer);
+            } catch {
+                removeTyping(typingId);
+                addMessage('bot', '⚠️ AI tutor is loading... Make sure the chatbot server is running at port 5000!');
+            }
+        }
+
+        function addMessage(type, text) {
+            const messages = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = `message ${type === 'user' ? 'user-message' : 'bot-message'}`;
+            div.innerHTML = `
+                <div class="avatar">${type === 'user' ? '👤' : '🤖'}</div>
+                <div class="bubble">${text}</div>
+            `;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function addTyping() {
+            const id = Date.now();
+            const messages = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = 'message bot-message typing';
+            div.id = `typing-${id}`;
+            div.innerHTML = `<div class="avatar">🤖</div><div class="bubble">Thinking...</div>`;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+            return id;
+        }
+
+        function removeTyping(id) {
+            const el = document.getElementById(`typing-${id}`);
+            if (el) el.remove();
+        }
+    </script>
+</body>
+</html>
+

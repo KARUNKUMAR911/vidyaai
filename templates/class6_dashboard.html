@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - Class 6</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fdf4ff; min-height: 100vh; }
+
+        .navbar {
+            background: linear-gradient(135deg, #7B2D8B, #4e1a5e);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(123,45,139,0.3);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 12px; }
+        .navbar-logo { font-size: 20px; font-weight: 900; color: white; }
+        .navbar-grade {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .navbar-right { display: flex; align-items: center; gap: 10px; }
+        .stars-badge {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700;
+        }
+        .home-btn {
+            background: white; color: #7B2D8B;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #7B2D8B, #4e1a5e);
+            padding: 20px 20px 40px; text-align: center; color: white;
+        }
+        .hero-avatar { font-size: 60px; margin-bottom: 8px; }
+        .hero h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 14px; opacity: 0.9; }
+
+        .progress-section {
+            background: white; margin: -20px 16px 20px;
+            border-radius: 20px; padding: 16px 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .progress-title { font-size: 14px; font-weight: 700; color: #333; }
+        .progress-count { font-size: 13px; color: #888; }
+        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 12px; overflow: hidden; }
+        .progress-fill {
+            background: linear-gradient(90deg, #7B2D8B, #4e1a5e);
+            height: 100%; border-radius: 10px; width: 0%; transition: width 0.5s;
+        }
+
+        .challenge-card {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #7B2D8B, #4e1a5e);
+            border-radius: 20px; padding: 18px 20px;
+            display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 8px 25px rgba(123,45,139,0.3);
+            cursor: pointer; text-decoration: none; transition: transform 0.2s;
+        }
+        .challenge-card:hover { transform: scale(1.02); }
+        .challenge-icon { font-size: 44px; flex-shrink: 0; }
+        .challenge-text h3 { font-size: 16px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .challenge-text p  { font-size: 13px; color: rgba(255,255,255,0.85); }
+        .challenge-arrow   { margin-left: auto; font-size: 22px; color: white; }
+
+        .section-title { padding: 5px 20px 12px; font-size: 18px; font-weight: 900; color: #333; }
+
+        .subjects-grid {
+            display: grid; grid-template-columns: repeat(2,1fr);
+            gap: 14px; padding: 0 16px 30px;
+        }
+        .subject-card {
+            border-radius: 24px; padding: 22px 16px; text-align: center;
+            cursor: pointer; transition: all 0.25s; position: relative;
+            overflow: hidden; text-decoration: none; display: block;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .subject-card:hover  { transform: translateY(-5px) scale(1.02); }
+        .subject-card:active { transform: scale(0.97); }
+        .subject-card::before {
+            content: ''; position: absolute; top:-50%; left:-50%;
+            width:200%; height:200%;
+            background: radial-gradient(circle,rgba(255,255,255,0.15) 0%,transparent 60%);
+            pointer-events: none;
+        }
+        .card-icon  { font-size: 52px; margin-bottom: 10px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .card-title { font-size: 16px; font-weight: 900; color: white; margin-bottom: 4px; }
+        .card-sub   { font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 600; }
+        .card-badge {
+            position: absolute; top:10px; left:10px;
+            background: #fbbf24; color: #333;
+            border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 800;
+        }
+        .progress-bar-card {
+            height: 4px; background: rgba(255,255,255,0.3);
+            border-radius: 2px; margin-top: 10px; overflow: hidden;
+        }
+        .progress-bar-fill { height:100%; background:white; border-radius:2px; width:0%; transition:width 0.5s; }
+
+        /* Class 6 subject colours — middle school palette */
+        .c1  { background: linear-gradient(135deg, #7B2D8B, #4e1a5e); } /* English        — purple      */
+        .c2  { background: linear-gradient(135deg, #118AB2, #0a5c7a); } /* Maths          — ocean       */
+        .c3  { background: linear-gradient(135deg, #43AA8B, #2a7a60); } /* Science        — teal        */
+        .c4  { background: linear-gradient(135deg, #E85D04, #aa3a00); } /* History        — amber       */
+        .c5  { background: linear-gradient(135deg, #4895EF, #1a68c0); } /* Geography      — blue        */
+        .c6  { background: linear-gradient(135deg, #F9C74F, #c99a00); } /* Civics         — gold        */
+        .c7  { background: linear-gradient(135deg, #E63946, #9d0208); } /* Hindi          — red         */
+        .c8  { background: linear-gradient(135deg, #C77DFF, #7b00cc); } /* Kannada        — violet      */
+        .c9  { background: linear-gradient(135deg, #06A77D, #047a58); } /* Computer       — green       */
+        .c10 { background: linear-gradient(135deg, #F77F00, #b85c00); } /* GK             — orange      */
+
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#7B2D8B; }
+        .nav-item.active .nav-icon  { transform:scale(1.15); }
+
+        .page-content { padding-bottom:80px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">Class 6 • English</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+        <a href="/dashboard" class="home-btn">🏠</a>
+    </div>
+</nav>
+
+<div class="page-content">
+
+    <div class="hero">
+        <div class="hero-avatar">🧑</div>
+        <h2>Welcome, {{ student.name }}! 🌟</h2>
+        <p>Class 6 • English Medium • Welcome to Middle School! 🎓</p>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-title">📊 My Progress</div>
+            <div class="progress-count" id="progressCount">0 of 10 subjects</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <a href="/class/6/english" class="challenge-card">
+        <div class="challenge-icon">🌟</div>
+        <div class="challenge-text">
+            <h3>Today's Challenge!</h3>
+            <p>Complete 1 lesson and earn bonus stars!</p>
+        </div>
+        <div class="challenge-arrow">→</div>
+    </a>
+
+    <div class="section-title">📖 My Subjects</div>
+
+    <div class="subjects-grid">
+
+        <a href="/class/6/english" class="subject-card c1">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">📝</span>
+            <div class="card-title">English</div>
+            <div class="card-sub">Literature, Writing & Grammar</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
+        </a>
+
+        <a href="/class/6/maths" class="subject-card c2">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🔢</span>
+            <div class="card-title">Mathematics</div>
+            <div class="card-sub">Integers, Algebra & Mensuration</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-maths"></div></div>
+        </a>
+
+        <a href="/class/6/science" class="subject-card c3">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🔬</span>
+            <div class="card-title">Science</div>
+            <div class="card-sub">Matter, Motion & Living World</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-science"></div></div>
+        </a>
+
+        <a href="/class/6/history" class="subject-card c4">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🏛️</span>
+            <div class="card-title">History</div>
+            <div class="card-sub">Ancient India & World Civilisations</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-history"></div></div>
+        </a>
+
+        <a href="/class/6/geography" class="subject-card c5">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🗺️</span>
+            <div class="card-title">Geography</div>
+            <div class="card-sub">Earth, Continents & Climate</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-geography"></div></div>
+        </a>
+
+        <a href="/class/6/civics" class="subject-card c6">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">⚖️</span>
+            <div class="card-title">Civics</div>
+            <div class="card-sub">Government, Rights & Democracy</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-civics"></div></div>
+        </a>
+
+        <a href="/class/6/hindi" class="subject-card c7">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🙏</span>
+            <div class="card-title">Hindi</div>
+            <div class="card-sub">हिंदी भाषा</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hindi"></div></div>
+        </a>
+
+        <a href="/class/6/kannada" class="subject-card c8">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🌸</span>
+            <div class="card-title">Kannada</div>
+            <div class="card-sub">ಕನ್ನಡ ಭಾಷೆ</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
+        </a>
+
+        <a href="/class/6/computer" class="subject-card c9">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">💻</span>
+            <div class="card-title">Computer Science</div>
+            <div class="card-sub">Programming, Internet & MS Office</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-computer"></div></div>
+        </a>
+
+        <a href="/class/6/gk" class="subject-card c10">
+            <div class="card-badge">📘 Subject</div>
+            <span class="card-icon">🌐</span>
+            <div class="card-title">General Knowledge</div>
+            <div class="card-sub">World, Science & Current Affairs</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-gk"></div></div>
+        </a>
+
+    </div>
+
+</div>
+
+<div class="bottom-nav">
+    <a href="/class/6" class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">⭐</div>
+        <div class="nav-label">Stars</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=6');
+        const data = await res.json();
+        let completed = 0;
+        const subjects = ['english','maths','science','history','geography','civics','hindi','kannada','computer','gk'];
+        const total = subjects.length;
+        subjects.forEach(s => {
+            const p = data[s];
+            const bar = document.getElementById(`prog-${s}`);
+            if (bar && p && p.total > 0) {
+                const pct = Math.round((p.completed / p.total) * 100);
+                bar.style.width = pct + '%';
+                if (pct === 100) completed++;
+            }
+        });
+        document.getElementById('progressCount').textContent = `${completed} of ${total} subjects`;
+        document.getElementById('progressFill').style.width = `${Math.round((completed / total) * 100)}%`;
+        const stars = Object.values(data).reduce((s, p) => s + (p.stars || 0), 0);
+        document.getElementById('totalStars').textContent = stars;
+    } catch(e) {}
+}
+loadProgress();
+</script>
+</body>
+</html>

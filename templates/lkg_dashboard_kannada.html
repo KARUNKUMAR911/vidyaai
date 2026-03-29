@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - LKG ಕನ್ನಡ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans Kannada', 'Segoe UI', sans-serif;
+            background: #fff8f0;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, #e85d04, #dc2f02);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(232,93,4,0.3);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 12px; }
+        .navbar-logo { font-size: 20px; font-weight: 900; color: white; }
+        .navbar-grade {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .navbar-right { display: flex; align-items: center; gap: 10px; }
+        .stars-badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .home-btn {
+            background: white;
+            color: #e85d04;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #e85d04, #dc2f02);
+            padding: 20px 20px 40px;
+            text-align: center;
+            color: white;
+        }
+        .hero-avatar { font-size: 60px; margin-bottom: 8px; }
+        .hero h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 14px; opacity: 0.9; }
+
+        /* Progress */
+        .progress-section {
+            background: white;
+            margin: -20px 16px 20px;
+            border-radius: 20px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .progress-title { font-size: 14px; font-weight: 700; color: #333; }
+        .progress-count { font-size: 13px; color: #888; }
+        .progress-bar {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #e85d04, #dc2f02);
+            height: 100%;
+            border-radius: 10px;
+            width: 10%;
+            transition: width 0.5s ease;
+        }
+
+        /* Challenge card */
+        .challenge-card {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #e85d04, #dc2f02);
+            border-radius: 20px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(232,93,4,0.35);
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+        .challenge-card:hover { transform: scale(1.02); }
+        .challenge-icon { font-size: 44px; flex-shrink: 0; }
+        .challenge-text h3 { font-size: 16px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .challenge-text p  { font-size: 13px; color: rgba(255,255,255,0.85); }
+        .challenge-arrow { margin-left: auto; font-size: 22px; color: white; flex-shrink: 0; }
+
+        /* Section title */
+        .section-title {
+            padding: 5px 20px 12px;
+            font-size: 18px;
+            font-weight: 900;
+            color: #333;
+        }
+
+        /* Subjects Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            padding: 0 16px 30px;
+        }
+        .subject-card {
+            border-radius: 24px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .subject-card:hover  { transform: translateY(-5px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
+        .subject-card:active { transform: scale(0.97); }
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .card-icon  { font-size: 52px; margin-bottom: 8px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .card-title { font-size: 16px; font-weight: 900; color: white; text-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-bottom: 2px; }
+        .card-sub   { font-size: 11px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 4px; }
+        .card-en    { font-size: 11px; color: rgba(255,255,255,0.65); font-style: italic; }
+        .card-badge {
+            position: absolute; top: 10px; left: 10px;
+            background: #fbbf24; color: #333;
+            border-radius: 20px; padding: 3px 10px;
+            font-size: 11px; font-weight: 800;
+        }
+        .progress-bar-card {
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        /* Card colors */
+        .c1  { background: linear-gradient(135deg, #FF6B6B, #cc3333); }
+        .c2  { background: linear-gradient(135deg, #FF8C42, #cc5511); }
+        .c3  { background: linear-gradient(135deg, #F9C74F, #c99a00); }
+        .c4  { background: linear-gradient(135deg, #43AA8B, #2a7a60); }
+        .c5  { background: linear-gradient(135deg, #4895EF, #1a68c0); }
+        .c6  { background: linear-gradient(135deg, #7B2D8B, #4e1a5e); }
+        .c7  { background: linear-gradient(135deg, #E91E63, #b00040); }
+        .c8  { background: linear-gradient(135deg, #00BCD4, #007a90); }
+        .c9  { background: linear-gradient(135deg, #FF5722, #c03000); }
+        .c10 { background: linear-gradient(135deg, #8BC34A, #5a8a1a); }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; border-top: 1px solid #f0f0f0;
+            display: flex; padding: 8px 0 12px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08); z-index: 50;
+        }
+        .nav-item {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; gap: 3px; cursor: pointer;
+            padding: 6px; text-decoration: none;
+        }
+        .nav-icon  { font-size: 22px; }
+        .nav-label { font-size: 11px; font-weight: 700; color: #888; }
+        .nav-item.active .nav-label { color: #e85d04; }
+        .nav-item.active .nav-icon  { transform: scale(1.15); }
+
+        .page-content { padding-bottom: 80px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">LKG • ಕನ್ನಡ</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+        <a href="/dashboard" class="home-btn">🏠</a>
+    </div>
+</nav>
+
+<div class="page-content">
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-avatar">👧</div>
+        <h2>ನಮಸ್ಕಾರ, {{ student.name }}! 👋</h2>
+        <p>ಇಂದು ನೀವು ಏನು ಕಲಿಯಲು ಬಯಸುತ್ತೀರಿ?</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-title">📊 ಇಂದಿನ ಪ್ರಗತಿ</div>
+            <div class="progress-count" id="progressCount">10 ರಲ್ಲಿ 1 ವಿಷಯ</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width:10%"></div>
+        </div>
+    </div>
+
+    <!-- Daily Challenge -->
+    <a href="/lkg/kannada/varnamale" class="challenge-card">
+        <div class="challenge-icon">🌟</div>
+        <div class="challenge-text">
+            <h3>ಇಂದಿನ ಸವಾಲು!</h3>
+            <p>5 ಹೊಸ ಅಕ್ಷರಗಳನ್ನು ಕಲಿತು ನಕ್ಷತ್ರಗಳನ್ನು ಗಳಿಸಿ!</p>
+        </div>
+        <div class="challenge-arrow">→</div>
+    </a>
+
+    <!-- Section Title -->
+    <div class="section-title">🎯 ವಿಷಯ ಆಯ್ಕೆ ಮಾಡಿ</div>
+
+    <div class="subjects-grid">
+
+        <!-- 1. Kannada Varnamale -->
+        <a href="/lkg/kannada/varnamale" class="subject-card c1">
+            <div class="card-badge">✅ ಸಿದ್ಧ</div>
+            <span class="card-icon">ಅ</span>
+            <div class="card-title">ಕನ್ನಡ ವರ್ಣಮಾಲೆ</div>
+            <div class="card-sub">ಅ ಆ ಇ ಈ ಉ ಊ...</div>
+            <div class="card-en">Kannada Alphabets</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-varnamale"></div></div>
+        </a>
+
+        <!-- 2. Numbers in Kannada -->
+        <a href="/lkg/kannada/sankhye" class="subject-card c2">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">೧</span>
+            <div class="card-title">ಸಂಖ್ಯೆಗಳು</div>
+            <div class="card-sub">೧ ರಿಂದ ೨೦ ವರೆಗೆ</div>
+            <div class="card-en">Numbers 1 to 20</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-sankhye"></div></div>
+        </a>
+
+        <!-- 3. Colors -->
+        <a href="/lkg/kannada/banna" class="subject-card c3">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🌈</span>
+            <div class="card-title">ಬಣ್ಣಗಳು</div>
+            <div class="card-sub">12 ಸುಂದರ ಬಣ್ಣಗಳು</div>
+            <div class="card-en">Colors</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-banna"></div></div>
+        </a>
+
+        <!-- 4. Shapes -->
+        <a href="/lkg/kannada/aakara" class="subject-card c4">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🔷</span>
+            <div class="card-title">ಆಕಾರಗಳು</div>
+            <div class="card-sub">ವೃತ್ತ, ಚೌಕ ಮತ್ತು ಹೆಚ್ಚು</div>
+            <div class="card-en">Shapes</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-aakara"></div></div>
+        </a>
+
+        <!-- 5. Animals -->
+        <a href="/lkg/kannada/praani" class="subject-card c5">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🐘</span>
+            <div class="card-title">ಪ್ರಾಣಿಗಳು</div>
+            <div class="card-sub">ಕಾಡು ಮತ್ತು ಸಾಕು ಪ್ರಾಣಿಗಳು</div>
+            <div class="card-en">Animals</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-praani"></div></div>
+        </a>
+
+        <!-- 6. Fruits & Vegetables -->
+        <a href="/lkg/kannada/hanna" class="subject-card c6">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🍎</span>
+            <div class="card-title">ಹಣ್ಣು ತರಕಾರಿ</div>
+            <div class="card-sub">ಆರೋಗ್ಯಕರ ಮತ್ತು ರುಚಿಯಾದ!</div>
+            <div class="card-en">Fruits & Vegetables</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hanna"></div></div>
+        </a>
+
+        <!-- 7. Body Parts -->
+        <a href="/lkg/kannada/sharira" class="subject-card c7">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">👁️</span>
+            <div class="card-title">ದೇಹದ ಭಾಗಗಳು</div>
+            <div class="card-sub">ನಿಮ್ಮ ದೇಹವನ್ನು ತಿಳಿಯಿರಿ!</div>
+            <div class="card-en">Body Parts</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-sharira"></div></div>
+        </a>
+
+        <!-- 8. Rhymes -->
+        <a href="/lkg/kannada/padya" class="subject-card c8">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🎵</span>
+            <div class="card-title">ಕನ್ನಡ ಪದ್ಯಗಳು</div>
+            <div class="card-sub">ಸುಂದರ ಹಾಡುಗಳು!</div>
+            <div class="card-en">Kannada Rhymes</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-padya"></div></div>
+        </a>
+
+        <!-- 9. Family -->
+        <a href="/lkg/kannada/kutumba" class="subject-card c9">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">👨‍👩‍👧</span>
+            <div class="card-title">ನನ್ನ ಕುಟುಂಬ</div>
+            <div class="card-sub">ನಾನು ಪ್ರೀತಿಸುವ ಜನರು!</div>
+            <div class="card-en">My Family</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kutumba"></div></div>
+        </a>
+
+        <!-- 10. Days & Months -->
+        <a href="/lkg/kannada/vaara" class="subject-card c10">
+            <div class="card-badge">🆕 ಹೊಸದು</div>
+            <span class="card-icon">📅</span>
+            <div class="card-title">ವಾರ ಮತ್ತು ತಿಂಗಳು</div>
+            <div class="card-sub">7 ದಿನಗಳು • 12 ತಿಂಗಳು</div>
+            <div class="card-en">Days & Months</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-vaara"></div></div>
+        </a>
+
+    </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+    <a href="/lkg/kannada" class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">ಮನೆ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">ಪ್ರಗತಿ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">⭐</div>
+        <div class="nav-label">ನಕ್ಷತ್ರ</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">ಪ್ರೊಫೈಲ್</div>
+    </a>
+</div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=LKG');
+        const data = await res.json();
+        let completed = 0;
+        const subjects = ['varnamale','sankhye','banna','aakara','praani','hanna','sharira','padya','kutumba','vaara'];
+
+        subjects.forEach(subject => {
+            const p = data[subject];
+            const bar = document.getElementById(`prog-${subject}`);
+            if (bar && p && p.total > 0) {
+                const pct = Math.round((p.completed / p.total) * 100);
+                bar.style.width = pct + '%';
+                if (pct === 100) completed++;
+            }
+        });
+
+        document.getElementById('progressCount').textContent =
+            `10 ರಲ್ಲಿ ${completed} ವಿಷಯ`;
+
+        const totalStars = Object.values(data).reduce((sum, p) => sum + (p.stars || 0), 0);
+        document.getElementById('totalStars').textContent = totalStars;
+
+    } catch(e) {
+        console.log('Progress load failed', e);
+    }
+}
+
+loadProgress();
+</script>
+
+</body>
+</html>
