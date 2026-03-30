@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>My Body! Inside & Outside 🫀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold:#FFD600; --accent:#e63946; }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{font-family:'Fredoka One',cursive;overflow:hidden;height:100vh;width:100vw;user-select:none;background:#222;}
+
+        .screen{width:100vw;height:100vh;position:relative;overflow:hidden;cursor:pointer;}
+
+        #bgPhoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.45s ease;z-index:0;}
+        #colorOverlay{position:absolute;inset:0;z-index:1;transition:background 0.6s ease;pointer-events:none;}
+        .grad-top{position:absolute;top:0;left:0;right:0;height:220px;background:linear-gradient(to bottom,rgba(0,0,0,0.65),transparent);z-index:2;pointer-events:none;}
+        .grad-bottom{position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,rgba(0,0,0,0.80),transparent);z-index:2;pointer-events:none;}
+        .bg-blob{position:absolute;border-radius:50%;background:rgba(255,255,255,0.07);pointer-events:none;animation:floatBlob 7s ease-in-out infinite alternate;z-index:3;}
+        .bg-blob:nth-child(1){width:200px;height:200px;top:-50px;left:-50px;animation-delay:0s;}
+        .bg-blob:nth-child(2){width:130px;height:130px;bottom:70px;right:-20px;animation-delay:2s;}
+        @keyframes floatBlob{from{transform:translateY(0) scale(1);}to{transform:translateY(18px) scale(1.1);}}
+
+        /* ── TOP BAR ── */
+        .topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;z-index:10;}
+        .topbar-btn{background:rgba(255,255,255,0.22);border:2.5px solid rgba(255,255,255,0.45);color:white;padding:8px 18px;border-radius:50px;font-size:15px;font-family:'Fredoka One',cursive;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:transform 0.15s,background 0.15s;backdrop-filter:blur(6px);}
+        .topbar-btn:active{transform:scale(0.92);background:rgba(255,255,255,0.38);}
+        .stars-display{background:rgba(255,215,0,0.3);border:2.5px solid rgba(255,215,0,0.6);color:white;padding:8px 18px;border-radius:50px;font-size:16px;font-family:'Fredoka One',cursive;backdrop-filter:blur(6px);transition:transform 0.2s;}
+
+        /* ── MODE PILL (below topbar) ── */
+        .mode-wrap{position:absolute;top:64px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:10;padding:0 16px;}
+        .mode-pill{display:flex;background:rgba(0,0,0,0.28);border-radius:50px;padding:4px;gap:3px;border:2px solid rgba(255,255,255,0.28);backdrop-filter:blur(8px);}
+        .mode-btn{padding:6px 15px;border-radius:50px;border:none;font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;transition:all 0.25s;color:rgba(255,255,255,0.72);background:transparent;}
+        .mode-btn.active{background:white;color:#333;box-shadow:0 3px 10px rgba(0,0,0,0.2);}
+        .mode-btn:active{transform:scale(0.95);}
+
+        /* ── SECTION BADGE (outside / inside) ── */
+        .section-badge{position:absolute;top:108px;left:50%;transform:translateX(-50%);z-index:10;padding:5px 20px;border-radius:50px;font-size:13px;font-family:'Nunito',sans-serif;font-weight:900;backdrop-filter:blur(6px);border:2px solid rgba(255,255,255,0.4);color:white;white-space:nowrap;animation:slideUp 0.35s ease both;}
+        .section-badge.outside{background:rgba(39,174,96,0.55);}
+        .section-badge.inside {background:rgba(231,57,70,0.55);}
+
+        /* ── DOTS ── */
+        .dots-row{position:absolute;top:140px;left:0;right:0;display:flex;justify-content:center;gap:4px;flex-wrap:wrap;padding:0 20px;z-index:10;}
+        .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);transition:all 0.3s;flex-shrink:0;}
+        .dot.done{background:rgba(255,255,255,0.65);}
+        .dot.current{background:var(--gold);transform:scale(1.7);box-shadow:0 0 8px var(--gold);}
+
+        /* ── BODY DIAGRAM (inside parts) ── */
+        .body-diagram-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;pointer-events:none;display:none;}
+        .body-diagram-wrap.show{display:block;}
+        .body-svg{width:min(38vw,48vh);height:min(38vw,48vh);opacity:0.15;}
+
+        /* ── NAME CARD ── */
+        .name-card{position:absolute;bottom:100px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:10;pointer-events:none;}
+        .word-label{font-size:clamp(36px,9.5vw,66px);font-family:'Fredoka One',cursive;color:white;text-shadow:0 4px 20px rgba(0,0,0,0.55);animation:slideUp 0.4s ease both;line-height:1;letter-spacing:1px;}
+        .fun-fact-chip{background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.38);backdrop-filter:blur(8px);color:white;border-radius:50px;padding:7px 22px;font-size:clamp(13px,3.5vw,18px);font-family:'Nunito',sans-serif;font-weight:900;animation:slideUp 0.4s ease 0.12s both;text-align:center;max-width:88vw;}
+        /* inside part badge */
+        .inside-badge{background:rgba(231,57,70,0.7);border:2px solid rgba(255,255,255,0.5);border-radius:50px;padding:4px 16px;font-size:12px;font-family:'Nunito',sans-serif;font-weight:900;color:white;animation:slideUp 0.4s ease 0.22s both;}
+
+        /* ── BOTTOM BAR ── */
+        .bottom-bar{position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:10px 20px 22px;z-index:10;gap:10px;}
+        .nav-btn{background:rgba(255,255,255,0.2);border:2.5px solid rgba(255,255,255,0.45);color:white;padding:14px 20px;border-radius:50px;font-size:22px;font-family:'Fredoka One',cursive;cursor:pointer;transition:all 0.15s;min-width:70px;text-align:center;backdrop-filter:blur(6px);}
+        .nav-btn:hover{background:rgba(255,255,255,0.35);transform:scale(1.06);}
+        .nav-btn:active{transform:scale(0.92);}
+        .nav-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+        .next-btn{background:white;color:#333;border:none;padding:16px 36px;border-radius:50px;font-size:17px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,0.3),0 0 0 4px rgba(255,255,255,0.3);transition:all 0.18s;}
+        .next-btn:hover{transform:scale(1.06) translateY(-3px);}
+        .next-btn:active{transform:scale(0.94);}
+        .bottom-center{text-align:center;flex:1;}
+        .tap-hint{font-size:14px;color:rgba(255,255,255,0.82);font-family:'Nunito',sans-serif;font-weight:700;animation:tapWiggle 1.8s ease-in-out infinite;}
+        @keyframes tapWiggle{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+        .autoplay-pill{display:none;background:var(--gold);color:#333;padding:4px 14px;border-radius:20px;font-size:13px;font-family:'Nunito',sans-serif;font-weight:800;margin-top:4px;}
+        .autoplay-pill.show{display:inline-block;}
+
+        /* ── SOUND PILL + SPEAK FAB ── */
+        .sound-pill{background:rgba(255,255,255,0.22);border:2.5px solid rgba(255,255,255,0.45);color:white;padding:8px 16px;border-radius:50px;font-size:14px;font-family:'Fredoka One',cursive;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:transform 0.15s,background 0.2s;backdrop-filter:blur(6px);}
+        .sound-pill:active{transform:scale(0.92);}
+        .sound-pill.muted{background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.45);}
+        .speak-fab{position:absolute;bottom:96px;right:18px;width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,0.22);border:2.5px solid rgba(255,255,255,0.5);color:white;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.15s;z-index:11;backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,0.25);}
+        .speak-fab:active{transform:scale(0.88);}
+        .speak-fab.speaking{animation:speakPulse 0.5s ease infinite alternate;}
+        @keyframes speakPulse{from{box-shadow:0 0 0 0 rgba(255,255,255,0.4);}to{box-shadow:0 0 0 14px rgba(255,255,255,0);}}
+
+        /* ── QUIZ MODE ── */
+        .quiz-overlay{display:none;position:fixed;inset:0;z-index:50;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:14px;}
+        .quiz-overlay.show{display:flex;}
+        .quiz-score{font-size:min(4vw,5.5vh);font-family:'Fredoka One',cursive;color:white;background:rgba(0,0,0,0.3);padding:6px 22px;border-radius:50px;backdrop-filter:blur(6px);z-index:51;}
+        .quiz-question{font-size:min(6vw,7.5vh);font-family:'Fredoka One',cursive;color:white;text-align:center;text-shadow:0 3px 14px rgba(0,0,0,0.5);z-index:51;animation:slideUp 0.4s ease both;max-width:90vw;}
+        .quiz-options{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%;max-width:500px;z-index:51;animation:bounceIn 0.5s ease 0.15s both;}
+        .quiz-opt{border-radius:22px;padding:14px 10px;border:4px solid rgba(255,255,255,0.45);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.18s;box-shadow:0 5px 18px rgba(0,0,0,0.25);background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);}
+        .quiz-opt:active{transform:scale(0.93);}
+        .quiz-opt:hover{transform:scale(1.04);border-color:rgba(255,255,255,0.75);}
+        .quiz-opt.correct{border-color:#FFD600;box-shadow:0 0 0 5px rgba(255,214,0,0.45);animation:correctPop 0.4s ease both;}
+        .quiz-opt.wrong{border-color:#ff4444;opacity:0.5;transform:scale(0.95);}
+        @keyframes correctPop{0%{transform:scale(1);}50%{transform:scale(1.12);}100%{transform:scale(1.04);}}
+        .quiz-opt-emoji{font-size:min(9vw,11vh);line-height:1;}
+        .quiz-opt-name{font-size:min(3.5vw,4.5vh);font-family:'Fredoka One',cursive;color:white;}
+        .quiz-next-btn{background:white;color:#333;border:none;padding:14px 32px;border-radius:50px;font-size:16px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.25),0 0 0 4px rgba(255,255,255,0.35);transition:all 0.18s;display:none;z-index:51;}
+        .quiz-next-btn:hover{transform:scale(1.06) translateY(-2px);}
+        .quiz-next-btn.show{display:block;animation:slideUp 0.35s ease both;}
+
+        /* ── TOUCH GAME MODE ── */
+        .touch-overlay{display:none;position:fixed;inset:0;z-index:50;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:30px;gap:14px;}
+        .touch-overlay.show{display:flex;}
+        .touch-instruction{font-size:min(7vw,9vh);font-family:'Fredoka One',cursive;color:white;text-align:center;text-shadow:0 4px 20px rgba(0,0,0,0.6);animation:slideUp 0.4s ease both;max-width:90vw;z-index:51;padding:0 16px;}
+        .touch-sub{font-size:min(3.8vw,5vh);font-family:'Nunito',sans-serif;font-weight:900;color:rgba(255,255,255,0.85);animation:slideUp 0.4s ease 0.1s both;z-index:51;}
+        .touch-result{font-size:min(10vw,14vh);line-height:1;animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.4) both;z-index:51;}
+        .touch-next-btn{background:white;color:#333;border:none;padding:14px 32px;border-radius:50px;font-size:16px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.25),0 0 0 4px rgba(255,255,255,0.35);transition:all 0.18s;z-index:51;display:none;}
+        .touch-next-btn:hover{transform:scale(1.06) translateY(-2px);}
+        .touch-next-btn.show{display:block;animation:slideUp 0.35s ease both;}
+        .touch-score{font-size:min(4vw,5.5vh);font-family:'Fredoka One',cursive;color:white;background:rgba(0,0,0,0.3);padding:6px 22px;border-radius:50px;backdrop-filter:blur(6px);z-index:51;}
+        .touch-timer-bar{width:90vw;max-width:420px;height:10px;background:rgba(255,255,255,0.25);border-radius:5px;overflow:hidden;z-index:51;}
+        .touch-timer-fill{height:100%;background:#FFD600;border-radius:5px;transition:width 0.1s linear;}
+
+        /* ── FLOAT STAR ── */
+        .float-star{position:fixed;font-size:32px;pointer-events:none;z-index:200;animation:floatUp 1.1s ease forwards;}
+        @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-90px) scale(1.5);opacity:0;}}
+
+        /* ── PARENT PANEL ── */
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+        .overlay.show{display:flex;}
+        .panel{background:white;border-radius:30px;padding:26px;width:92%;max-width:400px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.35);}
+        .panel h2{font-size:20px;color:#e63946;margin-bottom:6px;text-align:center;font-family:'Fredoka One',cursive;}
+        .panel-progress{text-align:center;font-size:13px;color:#666;background:#fde8ea;padding:8px;border-radius:12px;margin-bottom:18px;font-family:'Nunito',sans-serif;font-weight:700;}
+        .panel-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f0f0f0;}
+        .panel-label{font-size:14px;font-weight:700;color:#333;font-family:'Nunito',sans-serif;}
+        .panel-sub{font-size:12px;color:#999;margin-top:2px;font-family:'Nunito',sans-serif;}
+        .toggle{width:52px;height:28px;background:#ddd;border-radius:14px;cursor:pointer;position:relative;transition:background 0.3s;border:none;flex-shrink:0;}
+        .toggle.on{background:#e63946;}
+        .toggle::after{content:'';position:absolute;width:22px;height:22px;background:white;border-radius:50%;top:3px;left:3px;transition:left 0.3s;box-shadow:0 2px 6px rgba(0,0,0,0.25);}
+        .toggle.on::after{left:27px;}
+        .speed-row{display:flex;gap:7px;}
+        .speed-btn{padding:7px 14px;border:2px solid #e5e7eb;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;background:white;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+        .speed-btn.active{border-color:#e63946;background:#fde8ea;color:#e63946;}
+        .jump-section{margin-top:14px;}
+        .jump-section h4{font-size:12px;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;font-family:'Nunito',sans-serif;font-weight:700;}
+        .jump-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+        .jump-btn{border:2px solid #e5e7eb;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;background:white;color:#333;transition:all 0.2s;padding:7px 4px;font-family:'Nunito',sans-serif;text-align:center;}
+        .jump-btn.out{color:#27ae60;}
+        .jump-btn.ins{color:#e63946;}
+        .jump-btn:hover{background:#e63946;color:white;border-color:#e63946;}
+        .jump-btn.done{background:#d1fae5;color:#059669;border-color:#a7f3d0;}
+        .jump-btn.cur{background:#e63946;color:white;border-color:#e63946;}
+        .close-panel-btn{width:100%;padding:15px;background:#e63946;color:white;border:none;border-radius:20px;font-size:16px;font-family:'Fredoka One',cursive;cursor:pointer;margin-top:18px;transition:transform 0.15s;}
+        .close-panel-btn:active{transform:scale(0.96);}
+
+        /* ── CELEBRATION ── */
+        .celeb-overlay{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#e63946 0%,#ff8fa3 100%);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;}
+        .celeb-overlay.show{display:flex;}
+        .celeb-stars{display:flex;gap:14px;margin-bottom:14px;}
+        .celeb-star{font-size:44px;animation:starPop 0.5s cubic-bezier(0.175,0.885,0.32,1.4) both;}
+        .celeb-star:nth-child(2){animation-delay:0.15s;}
+        .celeb-star:nth-child(3){animation-delay:0.30s;}
+        @keyframes starPop{0%{transform:scale(0) rotate(-30deg);opacity:0;}100%{transform:scale(1) rotate(0deg);opacity:1;}}
+        .celeb-big{font-size:90px;margin-bottom:10px;animation:popIn 0.6s cubic-bezier(0.175,0.885,0.32,1.4) both;}
+        .celeb-title{font-size:36px;color:white;margin-bottom:8px;font-family:'Fredoka One',cursive;text-shadow:0 3px 12px rgba(0,0,0,0.2);}
+        .celeb-sub{font-size:17px;color:rgba(255,255,255,0.92);white-space:pre-line;margin-bottom:28px;font-family:'Nunito',sans-serif;font-weight:700;}
+        .celeb-btn{background:white;color:#e63946;border:none;padding:18px 44px;border-radius:50px;font-size:19px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.22);transition:transform 0.15s;}
+        .celeb-btn:active{transform:scale(0.94);}
+
+        @keyframes popIn{0%{transform:scale(0) rotate(-10deg);opacity:0;}80%{transform:scale(1.12) rotate(4deg);}100%{transform:scale(1) rotate(0deg);opacity:1;}}
+        @keyframes slideUp{from{transform:translateY(28px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+        @keyframes bounceIn{0%{transform:scale(0.4) translateY(40px);opacity:0;}65%{transform:scale(1.08) translateY(-8px);}100%{transform:scale(1) translateY(0);opacity:1;}}
+        @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+    </style>
+</head>
+<body>
+
+<div class="screen" id="mainScreen" onclick="handleTap(event)">
+    <img id="bgPhoto" src="" alt=""/>
+    <div id="colorOverlay"></div>
+    <div class="grad-top"></div>
+    <div class="grad-bottom"></div>
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+
+    <!-- Top Bar -->
+    <div class="topbar" onclick="event.stopPropagation()">
+        <a href="/dashboard" class="topbar-btn">🏠 Home</a>
+        <div class="stars-display" id="starsDisplay">⭐ 0</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <button class="sound-pill" id="soundFab" onclick="event.stopPropagation();toggleSound();">🔊 Sound</button>
+            <button class="topbar-btn" onclick="openPanel(event)">⚙️ Parent</button>
+        </div>
+    </div>
+
+    <!-- Mode Toggle -->
+    <div class="mode-wrap" onclick="event.stopPropagation()">
+        <div class="mode-pill">
+            <button class="mode-btn active" id="modeLearn" onclick="switchMode('learn')">📚 Learn</button>
+            <button class="mode-btn"        id="modeQuiz"  onclick="switchMode('quiz')">🧠 Quiz</button>
+            <button class="mode-btn"        id="modeTouch" onclick="switchMode('touch')">👆 Touch!</button>
+        </div>
+    </div>
+
+    <!-- Section badge -->
+    <div class="section-badge outside" id="sectionBadge">🌿 Outside Parts</div>
+
+    <!-- Dots -->
+    <div class="dots-row" id="dotsRow"></div>
+
+    <!-- Name card -->
+    <div class="name-card" id="nameCard">
+        <div class="word-label"    id="wordLabel">Head</div>
+        <div class="fun-fact-chip" id="funFactChip">My brain lives inside!</div>
+        <div class="inside-badge"  id="insideBadge" style="display:none">🫀 Inside Part</div>
+    </div>
+
+    <button class="speak-fab" id="speakFab" onclick="event.stopPropagation();tapSpeak();">🔊</button>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar" onclick="event.stopPropagation()">
+        <button class="nav-btn" id="prevBtn" onclick="prevPart(event)" disabled>◀</button>
+        <div class="bottom-center">
+            <div class="tap-hint" id="tapHint">👆 Tap to see next!</div>
+            <div class="autoplay-pill" id="autoplayPill">▶ Playing…</div>
+        </div>
+        <button class="next-btn" onclick="nextPart(event)">Next ▶</button>
+    </div>
+</div>
+
+<!-- Quiz Overlay -->
+<div class="quiz-overlay" id="quizOverlay">
+    <div class="quiz-score" id="quizScore">✅ 0 &nbsp; ❌ 0</div>
+    <div class="quiz-question" id="quizQ">Which body part is this?</div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuiz()">Next ▶</button>
+</div>
+
+<!-- Touch Game Overlay -->
+<div class="touch-overlay" id="touchOverlay">
+    <div class="touch-score" id="touchScore">⭐ 0 right!</div>
+    <div class="touch-timer-bar"><div class="touch-timer-fill" id="touchTimerFill" style="width:100%"></div></div>
+    <div class="touch-result" id="touchResult" style="display:none"></div>
+    <div class="touch-instruction" id="touchInstruction">Touch your Head!</div>
+    <div class="touch-sub" id="touchSub">Tap the screen when you do it!</div>
+    <button class="touch-next-btn" id="touchNextBtn" onclick="nextTouchGame()">Next ▶</button>
+</div>
+
+<!-- Parent Panel -->
+<div class="overlay" id="parentOverlay">
+    <div class="panel">
+        <h2>🫀 Parent Controls</h2>
+        <div class="panel-progress" id="panelProgress">0 of 28 body parts seen</div>
+        <div class="panel-row">
+            <div><div class="panel-label">🔊 Voice Sound</div><div class="panel-sub">Speaks body part name aloud</div></div>
+            <button class="toggle on" id="soundToggle" onclick="toggleSound()"></button>
+        </div>
+        <div class="panel-row">
+            <div><div class="panel-label">▶️ Auto Play</div><div class="panel-sub">Changes card automatically</div></div>
+            <button class="toggle" id="autoToggle" onclick="toggleAuto()"></button>
+        </div>
+        <div class="panel-row" style="border:none">
+            <div><div class="panel-label">⏱️ Speed</div><div class="panel-sub">Seconds per card</div></div>
+            <div class="speed-row">
+                <button class="speed-btn"        onclick="setSpeed(3,this)">3s</button>
+                <button class="speed-btn active" onclick="setSpeed(5,this)">5s</button>
+                <button class="speed-btn"        onclick="setSpeed(8,this)">8s</button>
+            </div>
+        </div>
+        <div class="jump-section">
+            <h4>Jump to any body part</h4>
+            <div class="jump-grid" id="jumpGrid"></div>
+        </div>
+        <button class="close-panel-btn" onclick="closePanel()">✅ Keep Learning!</button>
+    </div>
+</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-stars"><span class="celeb-star">⭐</span><span class="celeb-star">⭐</span><span class="celeb-star">⭐</span></div>
+    <div class="celeb-big"   id="celebBig">🎉</div>
+    <div class="celeb-title" id="celebTitle">Amazing!</div>
+    <div class="celeb-sub"   id="celebSub">Great job!</div>
+    <button class="celeb-btn" onclick="closeCelebration()">Keep Going! 🚀</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   BODY PARTS DATA — UKG
+   section: 'outside' | 'inside'
+   image: path to photo (falls back to color gradient)
+   fact: age-appropriate fact
+   emoji: used for quiz & touch game
+══════════════════════════════════════════════════════ */
+const parts = [
+    // ── OUTSIDE PARTS (20) ──
+    { name:'Head',      section:'outside', emoji:'🗣️', image:'body_parts/head.jpg',      color:['#e63946','#a4162a'], fact:'My head holds my brain — the most important organ!' },
+    { name:'Hair',      section:'outside', emoji:'💇', image:'body_parts/hair.jpg',      color:['#c77dff','#7b00cc'], fact:'Hair grows from tiny holes in our skin called follicles!' },
+    { name:'Forehead',  section:'outside', emoji:'🧠', image:'body_parts/forehead.jpg',  color:['#f4a261','#c05c00'], fact:'The forehead is the front part of my head above my eyes!' },
+    { name:'Eyes',      section:'outside', emoji:'👀', image:'body_parts/eyes.jpg',      color:['#4895ef','#1a68c0'], fact:'My eyes have a coloured part called the iris. What colour are yours?' },
+    { name:'Eyebrows',  section:'outside', emoji:'🤨', image:'body_parts/eyebrows.jpg',  color:['#7b2d8b','#4e1a5e'], fact:'Eyebrows stop sweat and rain from falling into our eyes!' },
+    { name:'Ears',      section:'outside', emoji:'👂', image:'body_parts/ears.jpg',      color:['#f77f00','#c05500'], fact:'Sound travels into my ear as tiny vibrations in the air!' },
+    { name:'Nose',      section:'outside', emoji:'👃', image:'body_parts/nose.jpg',      color:['#fb923c','#c05020'], fact:'I can smell more than one trillion different smells!' },
+    { name:'Mouth',     section:'outside', emoji:'👄', image:'body_parts/mouth.jpg',     color:['#e85d04','#aa3a00'], fact:'My mouth helps me eat, drink, talk and breathe!' },
+    { name:'Teeth',     section:'outside', emoji:'🦷', image:'body_parts/teeth.jpg',     color:['#118ab2','#0a5c7a'], fact:'I have 20 baby teeth. Adult teeth come later — 32 in all!' },
+    { name:'Tongue',    section:'outside', emoji:'👅', image:'body_parts/tongue.jpg',    color:['#d62246','#9a1030'], fact:'My tongue has about 10,000 tiny taste buds!' },
+    { name:'Neck',      section:'outside', emoji:'🦒', image:'body_parts/neck.jpg',      color:['#f4844c','#c05020'], fact:'My neck has 7 bones called vertebrae — same as a giraffe!' },
+    { name:'Shoulders', section:'outside', emoji:'💪', image:'body_parts/shoulders.jpg', color:['#2d6a4f','#1a3d30'], fact:'Shoulders are ball-and-socket joints so my arms can spin around!' },
+    { name:'Chest',     section:'outside', emoji:'🫁', image:'body_parts/chest.jpg',     color:['#e63946','#a4162a'], fact:'My chest protects my heart and lungs inside!' },
+    { name:'Tummy',     section:'outside', emoji:'🍽️', image:'body_parts/tummy.jpg',    color:['#f9c74f','#c99a00'], fact:'My stomach makes acid that breaks food into energy!' },
+    { name:'Back',      section:'outside', emoji:'🏋️', image:'body_parts/back.jpg',     color:['#43aa8b','#2a7a60'], fact:'My spine in my back has 33 small bones stacked together!' },
+    { name:'Arms',      section:'outside', emoji:'💪', image:'body_parts/arms.jpg',      color:['#00b4d8','#007aaa'], fact:'My arm has 3 bones — humerus, radius and ulna!' },
+    { name:'Hands',     section:'outside', emoji:'🤚', image:'body_parts/hands.jpg',     color:['#7209b7','#4a0880'], fact:'My hands have 27 bones each — more than any other body part!' },
+    { name:'Fingers',   section:'outside', emoji:'☝️', image:'body_parts/fingers.jpg',  color:['#e9c46a','#b08800'], fact:'My fingerprints are totally unique — no two people the same!' },
+    { name:'Legs',      section:'outside', emoji:'🦵', image:'body_parts/legs.jpg',      color:['#27ae60','#1a7a40'], fact:'The femur in my thigh is the longest bone in my body!' },
+    { name:'Feet',      section:'outside', emoji:'🦶', image:'body_parts/feet.jpg',      color:['#ff6b6b','#cc3333'], fact:'Each foot has 26 bones, 33 joints and over 100 muscles!' },
+
+    // ── INSIDE PARTS (8) ──
+    { name:'Brain',     section:'inside', emoji:'🧠', image:'body_parts/brain.jpg',     color:['#9b5de5','#6a2aaa'], fact:'My brain is the control centre — it sends messages to my whole body!' },
+    { name:'Heart',     section:'inside', emoji:'❤️', image:'body_parts/heart.jpg',     color:['#e63946','#7d0020'], fact:'My heart beats about 100,000 times every single day!' },
+    { name:'Lungs',     section:'inside', emoji:'🫁', image:'body_parts/lungs.jpg',     color:['#4895ef','#1a68c0'], fact:'I have two lungs. They fill with air when I breathe in!' },
+    { name:'Stomach',   section:'inside', emoji:'🫃', image:'body_parts/stomach.jpg',   color:['#f77f00','#b85c00'], fact:'My stomach stretches like a balloon to hold food — then shrinks!' },
+    { name:'Bones',     section:'inside', emoji:'🦴', image:'body_parts/bones.jpg',     color:['#2d6a4f','#1a3d30'], fact:'My skeleton has 206 bones. Bones are harder than steel!' },
+    { name:'Muscles',   section:'inside', emoji:'💪', image:'body_parts/muscles.jpg',   color:['#e85d04','#aa3a00'], fact:'I have about 600 muscles in my body. They work in pairs!' },
+    { name:'Blood',     section:'inside', emoji:'🩸', image:'body_parts/blood.jpg',     color:['#d62246','#9a1030'], fact:'My blood carries oxygen and food to every cell in my body!' },
+    { name:'Spine',     section:'inside', emoji:'🦴', image:'body_parts/spine.jpg',     color:['#118ab2','#0a5c7a'], fact:'My spine lets me bend, twist and stand up straight!' },
+];
+
+/* ── STATE ── */
+let mode='learn', current=0, stars=0, soundOn=true, autoPlay=false, autoSpeed=5000, autoTimer=null, learned=new Set();
+let quizCorrect=0, quizWrong=0, quizAnswered=false;
+let touchScore=0, touchTimer=null, touchTimeLeft=0, touchIdx=0, touchQueue=[];
+
+/* ── MODE SWITCH ── */
+function switchMode(m){
+    mode=m;
+    ['learn','quiz','touch'].forEach(n=>document.getElementById('mode'+n.charAt(0).toUpperCase()+n.slice(1)).classList.toggle('active',n===m));
+    document.getElementById('quizOverlay').classList.toggle('show',m==='quiz');
+    document.getElementById('touchOverlay').classList.toggle('show',m==='touch');
+    document.getElementById('mainScreen').style.cursor=m==='learn'?'pointer':'default';
+    document.getElementById('tapHint').style.display=m==='learn'?'block':'none';
+    if(m==='quiz'){quizCorrect=0;quizWrong=0;startQuiz();}
+    if(m==='touch'){touchScore=0;startTouchGame();}
+    if(m==='learn') updateScreen(false);
+}
+
+/* ── UPDATE LEARN SCREEN ── */
+function updateScreen(animate=true){
+    const a=parts[current];
+    const photo=document.getElementById('bgPhoto');
+    photo.style.opacity='0';
+    photo.src=a.image; photo.alt=a.name;
+    photo.onload=()=>{photo.style.opacity='1';};
+    photo.onerror=()=>{photo.style.opacity='0';};
+
+    document.getElementById('colorOverlay').style.background=`linear-gradient(135deg,${a.color[0]} 0%,${a.color[1]} 100%)`;
+    document.getElementById('wordLabel').textContent=a.name;
+    document.getElementById('funFactChip').textContent=a.fact;
+
+    // Section badge
+    const badge=document.getElementById('sectionBadge');
+    const isInside=a.section==='inside';
+    badge.textContent=isInside?'🩸 Inside Part':'🌿 Outside Part';
+    badge.className='section-badge '+(isInside?'inside':'outside');
+    document.getElementById('insideBadge').style.display=isInside?'block':'none';
+
+    document.getElementById('prevBtn').disabled=current===0;
+    if(animate){
+        reAnimate('wordLabel','slideUp 0.4s ease both');
+        reAnimate('funFactChip','slideUp 0.4s ease 0.12s both');
+    }
+    updateDots();
+    if(soundOn) setTimeout(speakPart,450);
+}
+
+/* ── SPEAK ── */
+function speakPart(){
+    if(!soundOn||!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const a=parts[current];
+    const prefix=a.section==='inside'?'Inside my body: ':'';
+    const u=new SpeechSynthesisUtterance(`${prefix}${a.name}! ... ${a.fact}`);
+    u.rate=0.7;u.pitch=1.4;u.volume=1;
+    const fab=document.getElementById('speakFab');
+    fab.classList.add('speaking');
+    u.onend=()=>fab.classList.remove('speaking');
+    window.speechSynthesis.speak(u);
+}
+function tapSpeak(){speakPart();}
+function speakWord(w){
+    if(!soundOn||!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(w);u.rate=0.72;u.pitch=1.4;u.volume=1;
+    window.speechSynthesis.speak(u);
+}
+
+/* ── TAP HANDLER ── */
+function handleTap(e){
+    if(mode!=='learn') return;
+    burstStar(e.clientX,e.clientY);
+    nextPart(e);
+}
+function burstStar(x,y){
+    const el=document.createElement('div');el.className='float-star';
+    el.textContent=['⭐','✨','🌟','❤️','🫀'][Math.floor(Math.random()*5)];
+    el.style.left=`${x-16}px`;el.style.top=`${y-16}px`;
+    document.body.appendChild(el);setTimeout(()=>el.remove(),1200);
+}
+
+/* ── NAVIGATION ── */
+function nextPart(e){
+    if(e)e.stopPropagation();
+    learned.add(current);addStars(1);
+    if(learned.size%5===0&&current<parts.length-1){showCelebration('🌟','Great Job!',`You learned ${learned.size} body parts!\nKeep going! 🚀`);return;}
+    if(current>=parts.length-1){learned.add(parts.length-1);showCelebration('🏆','You Did It!',`WOW! You know ALL ${parts.length} body parts!\nInside AND outside! ⭐⭐⭐`);return;}
+    current++;updateScreen();
+    if(autoPlay)resetAutoTimer();
+}
+function prevPart(e){if(e)e.stopPropagation();if(current>0){current--;updateScreen();}}
+function addStars(n){
+    stars+=n;
+    const el=document.getElementById('starsDisplay');
+    el.textContent=`⭐ ${stars}`;el.style.transform='scale(1.35)';setTimeout(()=>el.style.transform='',200);
+}
+
+/* ══════════════════════════════════════════
+   QUIZ MODE
+══════════════════════════════════════════ */
+function startQuiz(){
+    quizAnswered=false;
+    document.getElementById('quizNextBtn').classList.remove('show');
+    updateQuizScore();
+    const idx=Math.floor(Math.random()*parts.length);
+    const correct=parts[idx];
+    const pool=parts.filter((_,i)=>i!==idx);
+    const wrong=pool.sort(()=>Math.random()-0.5).slice(0,3);
+    const opts=[...wrong,correct].sort(()=>Math.random()-0.5);
+
+    // Set background to correct part's color
+    document.getElementById('colorOverlay').style.background=`linear-gradient(135deg,${correct.color[0]} 0%,${correct.color[1]} 100%)`;
+    const photo=document.getElementById('bgPhoto');
+    photo.style.opacity='0';photo.src=correct.image;
+    photo.onload=()=>{photo.style.opacity='0.35';};
+    photo.onerror=()=>{photo.style.opacity='0';};
+
+    document.getElementById('quizQ').textContent=`Which body part is the ${correct.section==='inside'?'🩸 inside':'🌿 outside'} part?`;
+
+    const optEl=document.getElementById('quizOptions');optEl.innerHTML='';
+    opts.forEach(o=>{
+        const btn=document.createElement('div');btn.className='quiz-opt';
+        btn.innerHTML=`<div class="quiz-opt-emoji">${o.emoji}</div><div class="quiz-opt-name">${o.name}</div>`;
+        btn.onclick=()=>{
+            if(quizAnswered)return;
+            quizAnswered=true;
+            if(o.name===correct.name){
+                btn.classList.add('correct');quizCorrect++;addStars(2);
+                burstStar(btn.getBoundingClientRect().left+50,btn.getBoundingClientRect().top);
+                if(soundOn)speakWord('Correct! Well done!');
+            }else{
+                btn.classList.add('wrong');quizWrong++;
+                optEl.querySelectorAll('.quiz-opt').forEach(b=>{if(b.querySelector('.quiz-opt-name').textContent===correct.name)b.classList.add('correct');});
+                if(soundOn)speakWord(`The answer is ${correct.name}!`);
+            }
+            updateQuizScore();
+            learned.add(idx);
+            document.getElementById('quizNextBtn').classList.add('show');
+            if(quizCorrect>0&&quizCorrect%5===0){
+                setTimeout(()=>showCelebration('🧠','Body Expert!',`You got ${quizCorrect} right!\nYou know your body! 🫀`),700);
+            }
+        };
+        optEl.appendChild(btn);
+    });
+}
+function nextQuiz(){startQuiz();}
+function updateQuizScore(){document.getElementById('quizScore').innerHTML=`✅ ${quizCorrect} &nbsp; ❌ ${quizWrong}`;}
+
+/* ══════════════════════════════════════════
+   TOUCH GAME — "Touch your ___!"
+   Shows instruction, child taps when done.
+   Timer adds urgency & fun.
+══════════════════════════════════════════ */
+const outsideParts=parts.filter(p=>p.section==='outside');
+
+function startTouchGame(){
+    touchScore=0;
+    document.getElementById('touchScore').textContent=`⭐ 0 right!`;
+    touchQueue=[...outsideParts].sort(()=>Math.random()-0.5);
+    touchIdx=0;
+    nextTouchRound();
+}
+
+function nextTouchRound(){
+    if(touchIdx>=touchQueue.length){
+        touchQueue=[...outsideParts].sort(()=>Math.random()-0.5);
+        touchIdx=0;
+    }
+    const p=touchQueue[touchIdx];
+    document.getElementById('touchResult').style.display='none';
+    document.getElementById('touchNextBtn').classList.remove('show');
+    document.getElementById('touchInstruction').textContent=`Touch your ${p.name}!`;
+    document.getElementById('touchSub').textContent='Tap anywhere when you do it!';
+
+    // Set background
+    document.getElementById('colorOverlay').style.background=`linear-gradient(135deg,${p.color[0]} 0%,${p.color[1]} 100%)`;
+    const photo=document.getElementById('bgPhoto');
+    photo.style.opacity='0';photo.src=p.image;
+    photo.onload=()=>{photo.style.opacity='0.4';};
+    photo.onerror=()=>{photo.style.opacity='0';};
+
+    if(soundOn){
+        window.speechSynthesis.cancel();
+        const u=new SpeechSynthesisUtterance(`Touch your ${p.name}!`);
+        u.rate=0.72;u.pitch=1.4;u.volume=1;
+        window.speechSynthesis.speak(u);
+    }
+
+    // Timer — 8 seconds
+    clearInterval(touchTimer);
+    touchTimeLeft=8000;
+    document.getElementById('touchTimerFill').style.width='100%';
+    const start=Date.now();
+    touchTimer=setInterval(()=>{
+        const elapsed=Date.now()-start;
+        const pct=Math.max(0,(1-elapsed/8000)*100);
+        document.getElementById('touchTimerFill').style.width=pct+'%';
+        if(pct<=0){
+            clearInterval(touchTimer);
+            showTouchResult(false, p);
+        }
+    },80);
+}
+
+function nextTouchGame(){
+    touchIdx++;
+    nextTouchRound();
+}
+
+// Tapping the screen = "I did it!"
+document.getElementById('touchOverlay').addEventListener('click',(e)=>{
+    if(e.target.id==='touchNextBtn') return;
+    clearInterval(touchTimer);
+    const p=touchQueue[touchIdx];
+    showTouchResult(true, p);
+});
+
+function showTouchResult(correct, p){
+    document.getElementById('touchTimerFill').style.width='0%';
+    const resultEl=document.getElementById('touchResult');
+    resultEl.style.display='block';
+    if(correct){
+        touchScore++;
+        resultEl.textContent='✅';
+        document.getElementById('touchInstruction').textContent=`Great! You touched your ${p.name}!`;
+        document.getElementById('touchSub').textContent='';
+        document.getElementById('touchScore').textContent=`⭐ ${touchScore} right!`;
+        addStars(1);
+        if(soundOn) speakWord(`Great job! That is your ${p.name}!`);
+        if(touchScore>0&&touchScore%5===0){
+            setTimeout(()=>showCelebration('👆','Touch Champion!',`You got ${touchScore} right!\nYou know your body! 🌟`),600);
+        }
+    } else {
+        resultEl.textContent='⏰';
+        document.getElementById('touchInstruction').textContent=`Time's up! This is your ${p.name}!`;
+        document.getElementById('touchSub').textContent='Try again next time!';
+        if(soundOn) speakWord(`Time is up! That was your ${p.name}!`);
+    }
+    document.getElementById('touchNextBtn').classList.add('show');
+}
+
+/* ── DOTS ── */
+function updateDots(){
+    const row=document.getElementById('dotsRow');row.innerHTML='';
+    parts.forEach((_,i)=>{
+        const d=document.createElement('div');
+        d.className=`dot ${i===current?'current':learned.has(i)?'done':''}`;
+        row.appendChild(d);
+    });
+}
+
+/* ── AUTO PLAY ── */
+function toggleAuto(){
+    autoPlay=!autoPlay;
+    document.getElementById('autoToggle').classList.toggle('on',autoPlay);
+    document.getElementById('autoplayPill').classList.toggle('show',autoPlay);
+    document.getElementById('tapHint').style.display=autoPlay?'none':'block';
+    autoPlay?resetAutoTimer():clearInterval(autoTimer);
+}
+function resetAutoTimer(){
+    clearInterval(autoTimer);
+    autoTimer=setInterval(()=>{
+        learned.add(current);
+        if(current<parts.length-1){current++;updateScreen();}
+        else{clearInterval(autoTimer);showCelebration('🏆','You Did It!',`ALL ${parts.length} body parts learned!`);}
+    },autoSpeed);
+}
+function setSpeed(s,btn){autoSpeed=s*1000;document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(autoPlay)resetAutoTimer();}
+
+/* ── SOUND ── */
+function toggleSound(){
+    soundOn=!soundOn;
+    document.getElementById('soundToggle').classList.toggle('on',soundOn);
+    document.getElementById('speakFab').style.opacity=soundOn?'1':'0.45';
+    const pill=document.getElementById('soundFab');
+    pill.textContent=soundOn?'🔊 Sound':'🔇 Muted';
+    pill.classList.toggle('muted',!soundOn);
+    if(!soundOn)window.speechSynthesis.cancel();
+}
+
+/* ── PARENT PANEL ── */
+function openPanel(e){
+    if(e)e.stopPropagation();clearInterval(autoTimer);
+    document.getElementById('panelProgress').textContent=`${learned.size} of ${parts.length} body parts seen ✅`;
+    buildJumpGrid();document.getElementById('parentOverlay').classList.add('show');
+}
+function closePanel(){document.getElementById('parentOverlay').classList.remove('show');if(autoPlay)resetAutoTimer();}
+function buildJumpGrid(){
+    const grid=document.getElementById('jumpGrid');grid.innerHTML='';
+    parts.forEach((a,i)=>{
+        const btn=document.createElement('button');
+        btn.className=`jump-btn ${a.section} ${i===current?'cur':learned.has(i)?'done':''}`;
+        btn.innerHTML=`${a.emoji}<br>${a.name}`;
+        btn.title=`${a.section==='inside'?'Inside':'Outside'}: ${a.name}`;
+        btn.onclick=()=>{current=i;switchMode('learn');updateScreen();closePanel();};
+        grid.appendChild(btn);
+    });
+}
+
+/* ── CELEBRATION ── */
+function showCelebration(icon,title,sub){
+    clearInterval(autoTimer);
+    document.getElementById('celebBig').textContent=icon;
+    document.getElementById('celebTitle').textContent=title;
+    document.getElementById('celebSub').textContent=sub;
+    document.getElementById('celebOverlay').classList.add('show');
+    if(soundOn){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('Amazing! Well done! You are a superstar!');u.pitch=1.4;u.rate=0.8;window.speechSynthesis.speak(u);}
+    launchConfetti();
+}
+function closeCelebration(){
+    document.getElementById('celebOverlay').classList.remove('show');
+    if(mode==='touch'){nextTouchGame();return;}
+    if(current<parts.length-1){current++;updateScreen();}
+    if(autoPlay)resetAutoTimer();
+}
+
+/* ── CONFETTI ── */
+function launchConfetti(){
+    const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24','#f472b6','#FB923C'];
+    for(let i=0;i<80;i++){
+        const c=document.createElement('div');const sz=Math.random()*16+7;
+        c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'4px'};left:${Math.random()*100}vw;top:-24px;z-index:300;animation:confettiFall ${Math.random()*2.2+1.8}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);setTimeout(()=>c.remove(),5000);
+    }
+}
+
+function reAnimate(id,anim){const el=document.getElementById(id);if(!el)return;el.style.animation='none';void el.offsetWidth;el.style.animation=anim;}
+
+/* ── INIT ── */
+updateDots();
+updateScreen(false);
+setTimeout(speakPart,900);
+</script>
+</body>
+</html>
