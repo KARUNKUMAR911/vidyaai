@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - 9ನೇ ತರಗತಿ ಕನ್ನಡ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans Kannada', 'Segoe UI', sans-serif; background: #0f0f1a; min-height: 100vh; color: #fff; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .navbar-left { display: flex; align-items: center; gap: 12px; }
+        .navbar-logo { font-size: 20px; font-weight: 900; color: white; }
+        .navbar-grade {
+            background: rgba(255,165,0,0.2); color: #ffa500;
+            border: 1px solid rgba(255,165,0,0.3);
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .navbar-right { display: flex; align-items: center; gap: 10px; }
+        .stars-badge {
+            background: rgba(255,215,0,0.15); color: #ffd700;
+            border: 1px solid rgba(255,215,0,0.3);
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700;
+        }
+        .home-btn {
+            background: rgba(255,255,255,0.1); color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+            transition: background 0.2s;
+        }
+        .home-btn:hover { background: rgba(255,255,255,0.18); }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative; overflow: hidden;
+            padding: 32px 20px 56px; text-align: center;
+            background: linear-gradient(145deg, #1a0a3e, #0d1b4b, #0a2a1a);
+        }
+        /* animated orbs */
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
+            animation: orbFloat 8s ease-in-out infinite alternate;
+        }
+        .orb1 { width:250px;height:250px;background:rgba(99,60,220,0.35);top:-80px;left:-60px; animation-delay:0s; }
+        .orb2 { width:200px;height:200px;background:rgba(0,180,120,0.25);bottom:-60px;right:-40px; animation-delay:3s; }
+        .orb3 { width:150px;height:150px;background:rgba(255,140,0,0.2);top:20px;right:30%; animation-delay:1.5s; }
+        @keyframes orbFloat { from{transform:translate(0,0) scale(1);} to{transform:translate(20px,15px) scale(1.1);} }
+
+        .hero-avatar { font-size: 70px; margin-bottom: 12px; display: block; position: relative; z-index:2; animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+        .hero h2 { font-size: 24px; font-weight: 900; margin-bottom: 6px; position:relative;z-index:2; }
+        .hero p  { font-size: 14px; color: rgba(255,255,255,0.7); position:relative;z-index:2; }
+        .hero-pills { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; position:relative;z-index:2; }
+        .hero-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: white;
+        }
+        .hero-pill.fire  { background: rgba(255,100,0,0.2);  border-color: rgba(255,100,0,0.4);  color:#ff8c42; }
+        .hero-pill.gold  { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.35); color:#ffd700; }
+        .hero-pill.blue  { background: rgba(99,179,237,0.15);border-color: rgba(99,179,237,0.3); color:#63b3ed; }
+
+        /* ── CARDS COMMON ── */
+        .glass-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+        }
+
+        /* ── PROGRESS ── */
+        .progress-section {
+            margin: -28px 16px 20px;
+            padding: 18px 20px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .progress-title { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+        .progress-count { font-size: 13px; color: rgba(255,255,255,0.45); }
+        .progress-track { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; }
+        .progress-fill  {
+            background: linear-gradient(90deg, #6366f1, #a78bfa, #f472b6);
+            height: 100%; border-radius: 10px; width: 0%; transition: width 0.7s ease;
+        }
+
+        /* ── STATS ── */
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; padding: 0 16px 20px; }
+        .stat-card {
+            padding: 14px 8px; text-align: center;
+            border-radius: 16px;
+        }
+        .stat-icon  { font-size: 22px; margin-bottom: 4px; }
+        .stat-value { font-size: 19px; font-weight: 900; color: #fff; }
+        .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 2px; }
+
+        /* ── CHALLENGE ── */
+        .challenge-card {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            border-radius: 20px; padding: 18px 20px;
+            display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 30px rgba(245,158,11,0.3);
+            cursor: pointer; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .challenge-card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(245,158,11,0.4); }
+        .challenge-icon { font-size: 44px; flex-shrink: 0; }
+        .challenge-text h3 { font-size: 16px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .challenge-text p  { font-size: 13px; color: rgba(255,255,255,0.88); }
+        .challenge-arrow   { margin-left: auto; font-size: 22px; color: white; }
+
+        /* ── EXAM COUNTDOWN ── */
+        .exam-card {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #1e3a5f, #0f2744);
+            border: 1px solid rgba(99,179,237,0.25);
+            border-radius: 20px; padding: 18px 20px;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .exam-icon { font-size: 38px; flex-shrink:0; }
+        .exam-text h3 { font-size: 15px; font-weight: 800; color: #63b3ed; margin-bottom:4px; }
+        .exam-text p  { font-size: 12px; color: rgba(255,255,255,0.6); }
+        .exam-days {
+            margin-left:auto; text-align:center; flex-shrink:0;
+            background: rgba(99,179,237,0.15); border-radius:14px; padding:8px 14px;
+        }
+        .exam-days .num { font-size:24px; font-weight:900; color:#63b3ed; line-height:1; }
+        .exam-days .lbl { font-size:10px; color:rgba(255,255,255,0.5); font-weight:700; }
+
+        /* ── SUBJECTS ── */
+        .section-title { padding: 5px 20px 12px; font-size: 18px; font-weight: 900; color: #e2e8f0; }
+        .subjects-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; padding: 0 16px 30px; }
+        .subject-card {
+            border-radius: 22px; padding: 20px 16px; text-align: center;
+            cursor: pointer; transition: all 0.25s; position: relative;
+            overflow: hidden; text-decoration: none; display: block;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+        }
+        .subject-card.full { grid-column: span 2; }
+        .subject-card:hover  { transform: translateY(-5px) scale(1.02); }
+        .subject-card:active { transform: scale(0.97); }
+        .subject-card::before {
+            content: ''; position: absolute; top:-50%; left:-50%;
+            width:200%; height:200%;
+            background: radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 60%);
+            pointer-events: none;
+        }
+        .card-icon  { font-size: 48px; margin-bottom: 10px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+        .card-title { font-size: 15px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .card-sub   { font-size: 11px; color: rgba(255,255,255,0.8); font-weight: 600; margin-bottom: 2px; }
+        .card-en    { font-size: 10px; color: rgba(255,255,255,0.55); font-style: italic; }
+        .card-badge {
+            position: absolute; top:10px; left:10px;
+            background: #fbbf24; color: #1a1a1a;
+            border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 800;
+        }
+        .card-badge.board { background: #6366f1; color: white; }
+        .card-badge.new   { background: #ef4444; color: white; }
+        .progress-bar-card { height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+        .progress-bar-fill { height:100%; background:white; border-radius:2px; width:0%; transition:width 0.7s; }
+
+        /* class 9 dark-vivid palettes */
+        .c1  { background: linear-gradient(135deg,#6d28d9,#4c1d95); }   /* Kannada  */
+        .c2  { background: linear-gradient(135deg,#0891b2,#164e63); }   /* Maths    */
+        .c3  { background: linear-gradient(135deg,#047857,#064e3b); }   /* Science  */
+        .c4  { background: linear-gradient(135deg,#b45309,#78350f); }   /* Social   */
+        .c5  { background: linear-gradient(135deg,#be123c,#881337); }   /* English  */
+        .c6  { background: linear-gradient(135deg,#9d174d,#831843); }   /* Hindi    */
+        .c7  { background: linear-gradient(135deg,#0f766e,#134e4a); }   /* Sanskrit */
+        .c8  { background: linear-gradient(135deg,#1d4ed8,#1e3a8a); }   /* ICT      */
+        .c9  { background: linear-gradient(135deg,#c2410c,#7c2d12); }   /* Phy Ed   */
+
+        /* ── TOPPER LEADERBOARD ── */
+        .leaderboard { padding: 0 16px 20px; }
+        .leader-card {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; border-radius: 14px; margin-bottom: 8px;
+        }
+        .leader-rank  { font-size: 18px; font-weight: 900; width: 28px; text-align:center; color:rgba(255,255,255,0.5); }
+        .leader-rank.gold   { color:#ffd700; }
+        .leader-rank.silver { color:#c0c0c0; }
+        .leader-rank.bronze { color:#cd7f32; }
+        .leader-avatar { font-size: 28px; flex-shrink:0; }
+        .leader-info { flex:1; }
+        .leader-name  { font-size:14px; font-weight:700; color:#e2e8f0; }
+        .leader-sub   { font-size:11px; color:rgba(255,255,255,0.45); }
+        .leader-stars { font-size:13px; font-weight:800; color:#ffd700; }
+
+        /* ── RECENT ACTIVITY ── */
+        .activity-section { padding: 0 16px 20px; }
+        .activity-card {
+            border-radius: 14px; padding: 14px 16px;
+            display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+        }
+        .activity-icon { font-size: 26px; flex-shrink: 0; }
+        .activity-text { flex: 1; }
+        .activity-title { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+        .activity-sub   { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+        .activity-badge {
+            background: rgba(99,102,241,0.2); color: #a5b4fc;
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 12px; padding: 4px 10px;
+            font-size: 11px; font-weight: 800; flex-shrink:0;
+        }
+
+        /* ── BOTTOM NAV ── */
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background: rgba(15,15,26,0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; padding: 8px 0 14px;
+            z-index: 50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size: 22px; }
+        .nav-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); }
+        .nav-item.active .nav-label { color: #a78bfa; }
+        .nav-item.active .nav-icon  { transform: scale(1.15); }
+
+        .page-content { padding-bottom: 84px; }
+
+        @media(max-width:400px){
+            .stats-row { grid-template-columns: repeat(2,1fr); }
+            .hero h2   { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">9ನೇ ತರಗತಿ • ಕನ್ನಡ</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+        <a href="/dashboard" class="home-btn">🏠</a>
+    </div>
+</nav>
+
+<div class="page-content">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+        <span class="hero-avatar">🧑‍🎓</span>
+        <h2>ಸ್ವಾಗತ, {{ student.name }}! 🚀</h2>
+        <p>9ನೇ ತರಗತಿ • ಕನ್ನಡ ಮಾಧ್ಯಮ • SSLC ಸಿದ್ಧತೆ ಆರಂಭ!</p>
+        <div class="hero-pills">
+            <span class="hero-pill fire">🔥 <span id="streakDays">0</span> ದಿನ ಸ್ಟ್ರೀಕ್</span>
+            <span class="hero-pill gold">🏆 <span id="rankDisplay">–</span> ಶ್ರೇಣಿ</span>
+            <span class="hero-pill blue">📅 SSLC <span id="sslcDays">–</span> ದಿನಗಳು</span>
+        </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-section glass-card">
+        <div class="progress-header">
+            <div class="progress-title">📊 ವಾರ್ಷಿಕ ಪ್ರಗತಿ</div>
+            <div class="progress-count" id="progressCount">9 ರಲ್ಲಿ 0 ವಿಷಯ</div>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-card glass-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value" id="statStars">0</div>
+            <div class="stat-label">ನಕ್ಷತ್ರ</div>
+        </div>
+        <div class="stat-card glass-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-value" id="statLessons">0</div>
+            <div class="stat-label">ಪಾಠಗಳು</div>
+        </div>
+        <div class="stat-card glass-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-value" id="statTests">0</div>
+            <div class="stat-label">ಪರೀಕ್ಷೆಗಳು</div>
+        </div>
+        <div class="stat-card glass-card">
+            <div class="stat-icon">🏅</div>
+            <div class="stat-value" id="statBadges">0</div>
+            <div class="stat-label">ಬ್ಯಾಡ್ಜ್</div>
+        </div>
+    </div>
+
+    <!-- SSLC COUNTDOWN -->
+    <div class="exam-card">
+        <div class="exam-icon">📋</div>
+        <div class="exam-text">
+            <h3>SSLC ಪರೀಕ್ಷೆ ಸಿದ್ಧತೆ</div>
+            <p>ಪ್ರತಿ ದಿನ ಕಲಿತರೆ ಶ್ರೇಷ್ಠ ಅಂಕ ಗಳಿಸಬಹುದು!</p>
+        </div>
+        <div class="exam-days">
+            <div class="num" id="countdownNum">–</div>
+            <div class="lbl">ದಿನಗಳು</div>
+        </div>
+    </div>
+
+    <!-- DAILY CHALLENGE -->
+    <a href="/class/9/kannada/paatha" class="challenge-card">
+        <div class="challenge-icon">🏆</div>
+        <div class="challenge-text">
+            <h3>ಇಂದಿನ ಸವಾಲು!</h3>
+            <p>1 ಅಧ್ಯಾಯ ಪೂರ್ಣಗೊಳಿಸಿ ಬೋನಸ್ ನಕ್ಷತ್ರ ಗಳಿಸಿ!</p>
+        </div>
+        <div class="challenge-arrow">→</div>
+    </a>
+
+    <!-- SUBJECTS -->
+    <div class="section-title">📖 ನನ್ನ ವಿಷಯಗಳು</div>
+    <div class="subjects-grid">
+
+        <a href="/class/9/kannada/paatha" class="subject-card c1">
+            <div class="card-badge board">📘 ಮುಖ್ಯ</div>
+            <span class="card-icon">🌸</span>
+            <div class="card-title">ಪ್ರಥಮ ಭಾಷೆ ಕನ್ನಡ</div>
+            <div class="card-sub">ಗದ್ಯ, ಪದ್ಯ, ವ್ಯಾಕರಣ ಮತ್ತು ಪ್ರಬಂಧ</div>
+            <div class="card-en">First Language Kannada</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/ganitha" class="subject-card c2">
+            <div class="card-badge board">📘 ಮುಖ್ಯ</div>
+            <span class="card-icon">🔢</span>
+            <div class="card-title">ಗಣಿತ</div>
+            <div class="card-sub">ಬೀಜಗಣಿತ, ರೇಖಾಗಣಿತ ಮತ್ತು ಸಂಖ್ಯಾ ಶಾಸ್ತ್ರ</div>
+            <div class="card-en">Mathematics</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-ganitha"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/vigyana" class="subject-card c3">
+            <div class="card-badge board">📘 ಮುಖ್ಯ</div>
+            <span class="card-icon">⚗️</span>
+            <div class="card-title">ವಿಜ್ಞಾನ</div>
+            <div class="card-sub">ಭೌತ, ರಾಸಾಯನ ಮತ್ತು ಜೀವ ವಿಜ್ಞಾನ</div>
+            <div class="card-en">Science (Physics, Chemistry, Biology)</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-vigyana"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/samaja" class="subject-card c4">
+            <div class="card-badge board">📘 ಮುಖ್ಯ</div>
+            <span class="card-icon">🌍</span>
+            <div class="card-title">ಸಮಾಜ ವಿಜ್ಞಾನ</div>
+            <div class="card-sub">ಭೂಗೋಳ, ಇತಿಹಾಸ ಮತ್ತು ರಾಜ್ಯಶಾಸ್ತ್ರ</div>
+            <div class="card-en">Social Science</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-samaja"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/english" class="subject-card c5">
+            <div class="card-badge board">📘 ಮುಖ್ಯ</div>
+            <span class="card-icon">📝</span>
+            <div class="card-title">ಇಂಗ್ಲೀಷ್</div>
+            <div class="card-sub">Prose, Poetry, Grammar & Writing</div>
+            <div class="card-en">Second Language English</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/hindi" class="subject-card c6">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🙏</span>
+            <div class="card-title">ಹಿಂದಿ</div>
+            <div class="card-sub">गद्य, पद्य एवं व्याकरण</div>
+            <div class="card-en">Third Language Hindi</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hindi"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/sanskrit" class="subject-card c7">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🕉️</span>
+            <div class="card-title">ಸಂಸ್ಕೃತ</div>
+            <div class="card-sub">गद्यं, पद्यं च व्याकरणम्</div>
+            <div class="card-en">Sanskrit (Optional)</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-sanskrit"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/ict" class="subject-card c8">
+            <div class="card-badge new">🆕 ಹೊಸದು</div>
+            <span class="card-icon">💻</span>
+            <div class="card-title">ಮಾಹಿತಿ ತಂತ್ರಜ್ಞಾನ</div>
+            <div class="card-sub">ಕಂಪ್ಯೂಟರ್, ಇಂಟರ್ನೆಟ್ ಮತ್ತು ಕೋಡಿಂಗ್</div>
+            <div class="card-en">Information & Communication Technology</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-ict"></div></div>
+        </a>
+
+        <a href="/class/9/kannada/sharirika" class="subject-card c9 full">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🏃</span>
+            <div class="card-title">ಶಾರೀರಿಕ ಶಿಕ್ಷಣ ಮತ್ತು ಯೋಗ</div>
+            <div class="card-sub">ಆರೋಗ್ಯ, ಕ್ರೀಡೆ ಮತ್ತು ಯೋಗ ಸಾಧನೆ</div>
+            <div class="card-en">Physical Education & Yoga</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-sharirika"></div></div>
+        </a>
+
+    </div>
+
+    <!-- CLASS LEADERBOARD -->
+    <div class="section-title">🏆 ತರಗತಿ ಶ್ರೇಣಿ</div>
+    <div class="leaderboard">
+        <div class="activity-card glass-card">
+            <div class="leader-rank gold">🥇</div>
+            <div class="leader-avatar">🧑‍🎓</div>
+            <div class="leader-info">
+                <div class="leader-name">ರಾಹುಲ್ ಕುಮಾರ್</div>
+                <div class="leader-sub">ಎಲ್ಲ ವಿಷಯ • 12 ಸ್ಟ್ರೀಕ್</div>
+            </div>
+            <div class="leader-stars">⭐ 980</div>
+        </div>
+        <div class="activity-card glass-card">
+            <div class="leader-rank silver">🥈</div>
+            <div class="leader-avatar">👧</div>
+            <div class="leader-info">
+                <div class="leader-name">ಪ್ರಿಯಾ ಶರ್ಮಾ</div>
+                <div class="leader-sub">ವಿಜ್ಞಾನ ಚಾಂಪಿಯನ್ • 9 ಸ್ಟ್ರೀಕ್</div>
+            </div>
+            <div class="leader-stars">⭐ 875</div>
+        </div>
+        <div class="activity-card glass-card">
+            <div class="leader-rank bronze">🥉</div>
+            <div class="leader-avatar">🧒</div>
+            <div class="leader-info">
+                <div class="leader-name">ಅರ್ಜುನ್ ನಾಯ್ಕ್</div>
+                <div class="leader-sub">ಗಣಿತ ಚಾಂಪಿಯನ್ • 7 ಸ್ಟ್ರೀಕ್</div>
+            </div>
+            <div class="leader-stars">⭐ 820</div>
+        </div>
+        <div class="activity-card glass-card" style="border:1px solid rgba(167,139,250,0.4);">
+            <div class="leader-rank" style="color:#a78bfa;">👤</div>
+            <div class="leader-avatar">🧑‍🎓</div>
+            <div class="leader-info">
+                <div class="leader-name" style="color:#a78bfa;">{{ student.name }} (ನೀವು)</div>
+                <div class="leader-sub" id="myRankSub">ಅಂಕ ಲೋಡ್ ಆಗುತ್ತಿದೆ...</div>
+            </div>
+            <div class="leader-stars" id="myStarsDisplay">⭐ 0</div>
+        </div>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="section-title">🕐 ಇತ್ತೀಚಿನ ಚಟುವಟಿಕೆ</div>
+    <div class="activity-section">
+        <div class="activity-card glass-card">
+            <div class="activity-icon">📖</div>
+            <div class="activity-text">
+                <div class="activity-title">ಕನ್ನಡ – ಅಧ್ಯಾಯ ೧ ರಸಪ್ರಶ್ನೆ</div>
+                <div class="activity-sub">ನಿನ್ನೆ • 25 ನಿಮಿಷ • 92%</div>
+            </div>
+            <div class="activity-badge">⭐ 15</div>
+        </div>
+        <div class="activity-card glass-card">
+            <div class="activity-icon">⚗️</div>
+            <div class="activity-text">
+                <div class="activity-title">ವಿಜ್ಞಾನ – ರಾಸಾಯನ ಕ್ರಿಯೆ ಪ್ರಯೋಗ</div>
+                <div class="activity-sub">2 ದಿನಗಳ ಹಿಂದೆ • 30 ನಿಮಿಷ • 88%</div>
+            </div>
+            <div class="activity-badge">⭐ 12</div>
+        </div>
+        <div class="activity-card glass-card">
+            <div class="activity-icon">🔢</div>
+            <div class="activity-text">
+                <div class="activity-title">ಗಣಿತ – ಬಹುಪದೋಕ್ತಿ ಅಭ್ಯಾಸ</div>
+                <div class="activity-sub">3 ದಿನಗಳ ಹಿಂದೆ • 40 ನಿಮಿಷ • 76%</div>
+            </div>
+            <div class="activity-badge">⭐ 10</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <a href="/class/9/kannada" class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">ಮನೆ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">ಪ್ರಗತಿ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📝</div>
+        <div class="nav-label">ಪರೀಕ್ಷೆ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">🏆</div>
+        <div class="nav-label">ಶ್ರೇಣಿ</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">ಪ್ರೊಫೈಲ್</div>
+    </a>
+</div>
+
+<script>
+const SUBJECTS = ['kannada','ganitha','vigyana','samaja','english','hindi','sanskrit','ict','sharirika'];
+const TOTAL    = SUBJECTS.length;
+
+/* SSLC countdown — March 28 next year */
+function updateCountdown() {
+    const now    = new Date();
+    const exam   = new Date(now.getFullYear() + (now.getMonth() >= 2 ? 1 : 0), 2, 28);
+    const days   = Math.ceil((exam - now) / (1000*60*60*24));
+    document.getElementById('countdownNum').textContent  = days;
+    document.getElementById('sslcDays').textContent      = days;
+}
+updateCountdown();
+
+async function loadProgress() {
+    try {
+        const res  = await fetch('/api/progress/load?grade=9');
+        const data = await res.json();
+
+        let completed = 0, totalStars = 0, totalLessons = 0, totalTests = 0;
+
+        SUBJECTS.forEach(s => {
+            const p   = data[s];
+            const bar = document.getElementById(`prog-${s}`);
+            if (bar && p && p.total > 0) {
+                const pct = Math.round((p.completed / p.total) * 100);
+                bar.style.width = pct + '%';
+                if (pct === 100) completed++;
+                totalLessons += (p.completed || 0);
+                totalTests   += (p.tests     || 0);
+            }
+            totalStars += (p && p.stars) ? p.stars : 0;
+        });
+
+        document.getElementById('progressCount').textContent  = `${TOTAL} ರಲ್ಲಿ ${completed} ವಿಷಯ`;
+        document.getElementById('progressFill').style.width   = `${Math.round((completed / TOTAL) * 100)}%`;
+        document.getElementById('totalStars').textContent     = totalStars;
+        document.getElementById('statStars').textContent      = totalStars;
+        document.getElementById('statLessons').textContent    = totalLessons;
+        document.getElementById('statTests').textContent      = totalTests;
+        document.getElementById('statBadges').textContent     = data.badges  || 0;
+        document.getElementById('streakDays').textContent     = data.streak  || 0;
+        document.getElementById('rankDisplay').textContent    = data.rank    || '–';
+        document.getElementById('myStarsDisplay').textContent = '⭐ ' + totalStars;
+        document.getElementById('myRankSub').textContent      = `ಶ್ರೇಣಿ #${data.rank || '–'} • ${data.streak || 0} ದಿನ ಸ್ಟ್ರೀಕ್`;
+    } catch(e) {
+        // graceful fallback
+    }
+}
+
+loadProgress();
+</script>
+</body>
+</html>

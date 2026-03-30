@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - 6ನೇ ತರಗತಿ ಕನ್ನಡ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans Kannada', 'Segoe UI', sans-serif; background: #f0fff8; min-height: 100vh; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: linear-gradient(135deg, #06A77D, #047a58);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(6,167,125,0.35);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 12px; }
+        .navbar-logo { font-size: 20px; font-weight: 900; color: white; }
+        .navbar-grade {
+            background: rgba(255,255,255,0.22); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .navbar-right { display: flex; align-items: center; gap: 10px; }
+        .stars-badge {
+            background: rgba(255,255,255,0.22); color: white;
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700;
+        }
+        .home-btn {
+            background: white; color: #06A77D;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, #06A77D, #047a58);
+            padding: 24px 20px 48px; text-align: center; color: white;
+        }
+        .hero-avatar { font-size: 64px; margin-bottom: 10px; display: block; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+        .hero h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 14px; opacity: 0.88; }
+        .streak-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px; padding: 6px 14px; font-size: 13px;
+            font-weight: 700; color: white; margin-top: 12px;
+        }
+
+        /* Middle school badge below streak */
+        .middle-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,215,0,0.25); border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 50px; padding: 5px 14px; font-size: 12px;
+            font-weight: 700; color: #FFD600; margin-top: 8px; margin-left: 8px;
+        }
+
+        /* ── PROGRESS CARD ── */
+        .progress-section {
+            background: white; margin: -24px 16px 20px;
+            border-radius: 20px; padding: 18px 20px;
+            box-shadow: 0 8px 28px rgba(6,167,125,0.12);
+        }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .progress-title { font-size: 14px; font-weight: 700; color: #333; }
+        .progress-count { font-size: 13px; color: #888; }
+        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 12px; overflow: hidden; }
+        .progress-fill {
+            background: linear-gradient(90deg, #06A77D, #43aa8b);
+            height: 100%; border-radius: 10px; width: 0%; transition: width 0.6s ease;
+        }
+
+        /* ── QUICK STATS ── */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            gap: 12px; padding: 0 16px 20px;
+        }
+        .stat-card {
+            background: white; border-radius: 16px; padding: 14px 10px;
+            text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        }
+        .stat-icon  { font-size: 26px; margin-bottom: 4px; }
+        .stat-value { font-size: 20px; font-weight: 900; color: #333; }
+        .stat-label { font-size: 11px; color: #888; font-weight: 600; margin-top: 2px; }
+
+        /* ── MIDDLE SCHOOL BANNER ── */
+        .ms-banner {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #FFD600, #f59e0b);
+            border-radius: 20px; padding: 16px 20px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 6px 20px rgba(245,158,11,0.3);
+        }
+        .ms-banner-icon { font-size: 36px; flex-shrink: 0; }
+        .ms-banner-text h4 { font-size: 15px; font-weight: 900; color: #333; margin-bottom: 2px; }
+        .ms-banner-text p  { font-size: 12px; color: #555; }
+
+        /* ── CHALLENGE CARD ── */
+        .challenge-card {
+            margin: 0 16px 20px;
+            background: linear-gradient(135deg, #f77f00, #d62828);
+            border-radius: 20px; padding: 18px 20px;
+            display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 8px 25px rgba(247,127,0,0.35);
+            cursor: pointer; text-decoration: none; transition: transform 0.2s;
+        }
+        .challenge-card:hover { transform: scale(1.02); }
+        .challenge-icon { font-size: 44px; flex-shrink: 0; }
+        .challenge-text h3 { font-size: 16px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .challenge-text p  { font-size: 13px; color: rgba(255,255,255,0.88); }
+        .challenge-arrow   { margin-left: auto; font-size: 22px; color: white; }
+
+        /* ── SUBJECTS ── */
+        .section-title { padding: 5px 20px 12px; font-size: 18px; font-weight: 900; color: #333; }
+        .subjects-grid {
+            display: grid; grid-template-columns: repeat(2,1fr);
+            gap: 14px; padding: 0 16px 30px;
+        }
+        .subject-card {
+            border-radius: 24px; padding: 22px 16px; text-align: center;
+            cursor: pointer; transition: all 0.25s; position: relative;
+            overflow: hidden; text-decoration: none; display: block;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+        .subject-card.full { grid-column: span 2; }
+        .subject-card:hover  { transform: translateY(-5px) scale(1.02); }
+        .subject-card:active { transform: scale(0.97); }
+        .subject-card::before {
+            content: ''; position: absolute; top:-50%; left:-50%;
+            width:200%; height:200%;
+            background: radial-gradient(circle,rgba(255,255,255,0.15) 0%,transparent 60%);
+            pointer-events: none;
+        }
+        .card-icon  { font-size: 52px; margin-bottom: 10px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .card-title { font-size: 15px; font-weight: 900; color: white; margin-bottom: 3px; }
+        .card-sub   { font-size: 11px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 2px; }
+        .card-en    { font-size: 10px; color: rgba(255,255,255,0.65); font-style: italic; }
+        .card-badge {
+            position: absolute; top:10px; left:10px;
+            background: #fbbf24; color: #333;
+            border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 800;
+        }
+        .card-badge.new { background: #ef4444; color: white; }
+        .progress-bar-card {
+            height: 4px; background: rgba(255,255,255,0.3);
+            border-radius: 2px; margin-top: 10px; overflow: hidden;
+        }
+        .progress-bar-fill { height:100%; background:white; border-radius:2px; width:0%; transition:width 0.6s; }
+
+        /* subject colours — Class 6 palette */
+        .c1  { background: linear-gradient(135deg, #06A77D, #047a58); } /* ಕನ್ನಡ         — emerald     */
+        .c2  { background: linear-gradient(135deg, #118AB2, #0a5c7a); } /* ಗಣಿತ          — ocean       */
+        .c3  { background: linear-gradient(135deg, #2D6A4F, #1a3d30); } /* ವಿಜ್ಞಾನ        — dark green  */
+        .c4  { background: linear-gradient(135deg, #9B2335, #6a1020); } /* ಇತಿಹಾಸ        — crimson     */
+        .c5  { background: linear-gradient(135deg, #4895EF, #1a68c0); } /* ಭೂಗೋಳ         — blue        */
+        .c6  { background: linear-gradient(135deg, #F9C74F, #c99a00); } /* ನಾಗರಿಕ        — gold        */
+        .c7  { background: linear-gradient(135deg, #E63946, #9d0208); } /* ಇಂಗ್ಲೀಷ್       — red         */
+        .c8  { background: linear-gradient(135deg, #f72585, #b5179e); } /* ಹಿಂದಿ          — pink        */
+        .c9  { background: linear-gradient(135deg, #7B2D8B, #4e1a5e); } /* ಸಂಸ್ಕೃತ        — purple      */
+        .c10 { background: linear-gradient(135deg, #F77F00, #b85c00); } /* ಕಂಪ್ಯೂಟರ್      — orange      */
+
+        /* ── RECENT ACTIVITY ── */
+        .activity-section { padding: 0 16px 20px; }
+        .activity-card {
+            background: white; border-radius: 16px; padding: 14px 16px;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 10px; box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+        .activity-icon { font-size: 28px; flex-shrink: 0; }
+        .activity-text { flex: 1; }
+        .activity-title { font-size: 14px; font-weight: 700; color: #333; }
+        .activity-sub   { font-size: 12px; color: #888; margin-top: 2px; }
+        .activity-badge {
+            background: #f0fff8; color: #06A77D;
+            border-radius: 12px; padding: 4px 10px;
+            font-size: 11px; font-weight: 800; flex-shrink: 0;
+        }
+
+        /* ── BOTTOM NAV ── */
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#06A77D; }
+        .nav-item.active .nav-icon  { transform:scale(1.15); }
+
+        .page-content { padding-bottom:80px; }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">6ನೇ ತರಗತಿ • ಕನ್ನಡ</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+        <a href="/dashboard" class="home-btn">🏠</a>
+    </div>
+</nav>
+
+<div class="page-content">
+
+    <!-- HERO -->
+    <div class="hero">
+        <span class="hero-avatar">🧑</span>
+        <h2>ನಮಸ್ಕಾರ, {{ student.name }}! 🌟</h2>
+        <p>6ನೇ ತರಗತಿ • ಕನ್ನಡ ಮಾಧ್ಯಮ • ಮಾಧ್ಯಮಿಕ ಶಾಲೆಗೆ ಸ್ವಾಗತ!</p>
+        <div class="streak-pill">🔥 <span id="streakDays">0</span> ದಿನಗಳ ಸ್ಟ್ರೀಕ್!</div>
+        <div class="middle-pill">🎓 ಮಾಧ್ಯಮಿಕ ಶಾಲೆ ಆರಂಭ!</div>
+    </div>
+
+    <!-- OVERALL PROGRESS -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <div class="progress-title">📊 ನನ್ನ ಒಟ್ಟಾರೆ ಪ್ರಗತಿ</div>
+            <div class="progress-count" id="progressCount">10 ರಲ್ಲಿ 0 ವಿಷಯ</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value" id="statStars">0</div>
+            <div class="stat-label">ನಕ್ಷತ್ರಗಳು</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-value" id="statLessons">0</div>
+            <div class="stat-label">ಪಾಠಗಳು</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value" id="statBadges">0</div>
+            <div class="stat-label">ಬ್ಯಾಡ್ಜ್</div>
+        </div>
+    </div>
+
+    <!-- MIDDLE SCHOOL WELCOME BANNER -->
+    <div class="ms-banner">
+        <div class="ms-banner-icon">🎓</div>
+        <div class="ms-banner-text">
+            <h4>ಮಾಧ್ಯಮಿಕ ಶಾಲೆಗೆ ಸ್ವಾಗತ!</h4>
+            <p>6ನೇ ತರಗತಿಯಲ್ಲಿ ಹೊಸ ವಿಷಯಗಳು ಆರಂಭವಾಗುತ್ತವೆ — ಕಲಿಯೋಣ, ಬೆಳೆಯೋಣ!</p>
+        </div>
+    </div>
+
+    <!-- DAILY CHALLENGE -->
+    <a href="/class/6/kannada/paatha" class="challenge-card">
+        <div class="challenge-icon">🏆</div>
+        <div class="challenge-text">
+            <h3>ಇಂದಿನ ಸವಾಲು!</h3>
+            <p>1 ಪಾಠ ಪೂರ್ಣಗೊಳಿಸಿ ಬೋನಸ್ ನಕ್ಷತ್ರ ಗಳಿಸಿ!</p>
+        </div>
+        <div class="challenge-arrow">→</div>
+    </a>
+
+    <!-- SUBJECTS -->
+    <div class="section-title">📖 ನನ್ನ ವಿಷಯಗಳು</div>
+
+    <div class="subjects-grid">
+
+        <a href="/class/6/kannada/paatha" class="subject-card c1">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🌸</span>
+            <div class="card-title">ಕನ್ನಡ</div>
+            <div class="card-sub">ಗದ್ಯ, ಪದ್ಯ ಮತ್ತು ವ್ಯಾಕರಣ</div>
+            <div class="card-en">Kannada Language</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/ganitha" class="subject-card c2">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🔢</span>
+            <div class="card-title">ಗಣಿತ</div>
+            <div class="card-sub">ಸಂಖ್ಯೆಗಳು, ಬೀಜಗಣಿತ ಮತ್ತು ಅಳತೆ</div>
+            <div class="card-en">Mathematics</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-ganitha"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/vigyana" class="subject-card c3">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🔬</span>
+            <div class="card-title">ವಿಜ್ಞಾನ</div>
+            <div class="card-sub">ಪದಾರ್ಥ, ಚಲನೆ ಮತ್ತು ಜೀವ ಪ್ರಪಂಚ</div>
+            <div class="card-en">Science</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-vigyana"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/itihasa" class="subject-card c4">
+            <div class="card-badge new">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🏛️</span>
+            <div class="card-title">ಇತಿಹಾಸ</div>
+            <div class="card-sub">ಪ್ರಾಚೀನ ಭಾರತ ಮತ್ತು ವಿಶ್ವ ನಾಗರಿಕತೆ</div>
+            <div class="card-en">History</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-itihasa"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/bhugola" class="subject-card c5">
+            <div class="card-badge new">🆕 ಹೊಸದು</div>
+            <span class="card-icon">🗺️</span>
+            <div class="card-title">ಭೂಗೋಳ ಶಾಸ್ತ್ರ</div>
+            <div class="card-sub">ಭೂಮಿ, ಖಂಡಗಳು ಮತ್ತು ಹವಾಮಾನ</div>
+            <div class="card-en">Geography</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-bhugola"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/nagarikashastra" class="subject-card c6">
+            <div class="card-badge new">🆕 ಹೊಸದು</div>
+            <span class="card-icon">⚖️</span>
+            <div class="card-title">ನಾಗರಿಕ ಶಾಸ್ತ್ರ</div>
+            <div class="card-sub">ಸರ್ಕಾರ, ಹಕ್ಕುಗಳು ಮತ್ತು ಪ್ರಜಾಪ್ರಭುತ್ವ</div>
+            <div class="card-en">Civics</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-nagarikashastra"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/english" class="subject-card c7">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">📝</span>
+            <div class="card-title">ಇಂಗ್ಲೀಷ್</div>
+            <div class="card-sub">Literature, Writing & Grammar</div>
+            <div class="card-en">English</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/hindi" class="subject-card c8">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🙏</span>
+            <div class="card-title">ಹಿಂದಿ</div>
+            <div class="card-sub">हिंदी भाषा एवं व्याकरण</div>
+            <div class="card-en">Hindi</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hindi"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/sanskrit" class="subject-card c9">
+            <div class="card-badge new">🆕 ಹೊಸದು</div>
+            <span class="card-icon">📜</span>
+            <div class="card-title">ಸಂಸ್ಕೃತ</div>
+            <div class="card-sub">संस्कृत भाषा एवं व्याकरण</div>
+            <div class="card-en">Sanskrit</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-sanskrit"></div></div>
+        </a>
+
+        <a href="/class/6/kannada/computer" class="subject-card c10 full">
+            <div class="card-badge new">🆕 ಹೊಸದು</div>
+            <span class="card-icon">💻</span>
+            <div class="card-title">ಕಂಪ್ಯೂಟರ್ ವಿಜ್ಞಾನ</div>
+            <div class="card-sub">ಪ್ರೋಗ್ರಾಮಿಂಗ್, ಇಂಟರ್ನೆಟ್ ಮತ್ತು MS Office</div>
+            <div class="card-en">Computer Science</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-computer"></div></div>
+        </a>
+
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="section-title">🕐 ಇತ್ತೀಚಿನ ಚಟುವಟಿಕೆ</div>
+    <div class="activity-section">
+        <div class="activity-card">
+            <div class="activity-icon">🌸</div>
+            <div class="activity-text">
+                <div class="activity-title">ಕನ್ನಡ – ಪಾಠ ೧</div>
+                <div class="activity-sub">ನಿನ್ನೆ • 15 ನಿಮಿಷ</div>
+            </div>
+            <div class="activity-badge">⭐ 10</div>
+        </div>
+        <div class="activity-card">
+            <div class="activity-icon">🔢</div>
+            <div class="activity-text">
+                <div class="activity-title">ಗಣಿತ – ಸಂಖ್ಯೆಗಳ ರಸಪ್ರಶ್ನೆ</div>
+                <div class="activity-sub">2 ದಿನಗಳ ಹಿಂದೆ • 20 ನಿಮಿಷ</div>
+            </div>
+            <div class="activity-badge">⭐ 8</div>
+        </div>
+        <div class="activity-card">
+            <div class="activity-icon">🏛️</div>
+            <div class="activity-text">
+                <div class="activity-title">ಇತಿಹಾಸ – ಪ್ರಾಚೀನ ಭಾರತ ಪಾಠ</div>
+                <div class="activity-sub">3 ದಿನಗಳ ಹಿಂದೆ • 12 ನಿಮಿಷ</div>
+            </div>
+            <div class="activity-badge">⭐ 6</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <a href="/class/6/kannada" class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">ಮನೆ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">ಪ್ರಗತಿ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">⭐</div>
+        <div class="nav-label">ನಕ್ಷತ್ರ</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">🏆</div>
+        <div class="nav-label">ಸವಾಲು</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">ಪ್ರೊಫೈಲ್</div>
+    </a>
+</div>
+
+<script>
+const SUBJECTS = ['kannada','ganitha','vigyana','itihasa','bhugola','nagarikashastra','english','hindi','sanskrit','computer'];
+const TOTAL    = SUBJECTS.length;
+
+async function loadProgress() {
+    try {
+        const res  = await fetch('/api/progress/load?grade=6&medium=kannada');
+        const data = await res.json();
+
+        let completed = 0, totalStars = 0, totalLessons = 0;
+
+        SUBJECTS.forEach(s => {
+            const p   = data[s];
+            const bar = document.getElementById(`prog-${s}`);
+            if (bar && p && p.total > 0) {
+                const pct = Math.round((p.completed / p.total) * 100);
+                bar.style.width = pct + '%';
+                if (pct === 100) completed++;
+                totalLessons += (p.completed || 0);
+            }
+            totalStars += (p && p.stars) ? p.stars : 0;
+        });
+
+        document.getElementById('progressCount').textContent  = `${TOTAL} ರಲ್ಲಿ ${completed} ವಿಷಯ`;
+        document.getElementById('progressFill').style.width   = `${Math.round((completed / TOTAL) * 100)}%`;
+        document.getElementById('totalStars').textContent     = totalStars;
+        document.getElementById('statStars').textContent      = totalStars;
+        document.getElementById('statLessons').textContent    = totalLessons;
+        document.getElementById('statBadges').textContent     = data.badges || 0;
+        document.getElementById('streakDays').textContent     = data.streak || 0;
+    } catch(e) {
+        // graceful fallback — zeros already shown
+    }
+}
+
+loadProgress();
+</script>
+</body>
+</html>
