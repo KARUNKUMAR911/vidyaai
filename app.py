@@ -790,13 +790,12 @@ def lkg_kannada_vaara():
     student = Student.query.get(session['student_id'])
     return render_template('lkg_kannada_vaara.html', student=student)@app.route('/class/1/english')
 
-
+@app.route('/class/1/english')
 def class1_english():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_chapters.html', student=student)
-
 
 
 
