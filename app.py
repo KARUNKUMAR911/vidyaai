@@ -519,7 +519,12 @@ def class10_kannada_dashboard():
     student = Student.query.get(session['student_id'])
     return render_template('class10_dashboard_kannada.html', student=student)
 
-
+@app.route('/ukg/alphabets')
+def ukg_alphabets():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('ukg_alphabets.html', student=student)
 
 if __name__ == '__main__':
     with app.app_context():
@@ -527,5 +532,5 @@ if __name__ == '__main__':
         print("Database created!")
     import os
     port = int(os.environ.get('PORT', 5001))
-    print(f"VidyaAI running at http://localhost:{port}")
+    print(f"VidyaAI running on port {port}")
     app.run(debug=False, host='0.0.0.0', port=port)
