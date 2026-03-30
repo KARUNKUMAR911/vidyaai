@@ -295,6 +295,34 @@ def lkg_fruits_vegetables():
 
 
 
+@app.route('/lkg/body')
+def lkg_body():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('lkg_body.html', student=student)
+
+@app.route('/lkg/rhymes')
+def lkg_rhymes():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('lkg_rhymes.html', student=student)
+
+@app.route('/lkg/family')
+def lkg_family():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('lkg_family.html', student=student)
+
+@app.route('/lkg/days')
+def lkg_days():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('lkg_days.html', student=student)
+
 
 import json
 

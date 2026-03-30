@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VidyaAI - UKG ಕನ್ನಡ ವರ್ಣಮಾಲೆ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans Kannada', 'Segoe UI', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        .screen {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.6s ease;
+        }
+
+        /* NO VOICE OVERLAY */
+        .no-voice-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 500;
+            align-items: center; justify-content: center;
+            flex-direction: column;
+            text-align: center; padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .no-voice-overlay.show { display: flex; }
+        .no-voice-icon  { font-size: 80px; margin-bottom: 20px; }
+        .no-voice-title {
+            font-size: 24px; font-weight: 900; color: white;
+            margin-bottom: 12px;
+        }
+        .no-voice-text  {
+            font-size: 15px; color: rgba(255,255,255,0.85);
+            line-height: 1.7; margin-bottom: 25px; max-width: 380px;
+        }
+        .no-voice-steps {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 18px 22px;
+            text-align: left; margin-bottom: 25px;
+            max-width: 380px; width: 100%;
+        }
+        .no-voice-steps h4 {
+            font-size: 14px; font-weight: 800;
+            color: #fbbf24; margin-bottom: 10px;
+        }
+        .no-voice-steps p {
+            font-size: 13px; color: rgba(255,255,255,0.85);
+            line-height: 1.8;
+        }
+        .no-voice-btn {
+            padding: 14px 32px;
+            background: #2d6a4f; color: white;
+            border: none; border-radius: 50px;
+            font-size: 16px; font-weight: 700;
+            cursor: pointer; margin: 6px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .no-voice-btn.secondary {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* TOP BAR */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            background: rgba(0,0,0,0.18);
+            backdrop-filter: blur(10px);
+            flex-shrink: 0; z-index: 10;
+        }
+        .topbar-btn {
+            background: rgba(255,255,255,0.22);
+            border: none; color: white;
+            padding: 7px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; text-decoration: none;
+        }
+        .stars-display {
+            background: rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,215,0,0.5);
+            color: white; padding: 7px 16px;
+            border-radius: 20px; font-size: 14px; font-weight: 700;
+        }
+
+        /* PROGRESS DOTS */
+        .dots-row {
+            display: flex; justify-content: center;
+            gap: 4px; padding: 6px 16px;
+            flex-wrap: wrap; flex-shrink: 0;
+            background: rgba(0,0,0,0.1);
+        }
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(255,255,255,0.28);
+            transition: all 0.3s; flex-shrink: 0;
+        }
+        .dot.done    { background: rgba(255,255,255,0.65); }
+        .dot.current { background: #fbbf24; transform: scale(1.5); box-shadow: 0 0 8px #fbbf24; }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1; display: flex;
+            align-items: center; justify-content: center;
+            padding: 10px 16px; gap: 16px;
+            min-height: 0; cursor: pointer;
+        }
+
+        /* LEFT */
+        .left-half {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 10px; height: 100%;
+        }
+        .big-letter {
+            font-size: min(33vw, 45vh);
+            font-weight: 900; color: white; line-height: 1;
+            filter: drop-shadow(0 8px 28px rgba(0,0,0,0.25));
+            animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+            text-align: center;
+        }
+        .letter-info-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 18px; padding: 10px 20px;
+            text-align: center;
+            animation: slideUp 0.4s ease 0.1s both;
+        }
+        .letter-name {
+            font-size: min(5.5vw, 6.5vh);
+            font-weight: 900; color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .letter-trans {
+            font-size: min(3vw, 3.5vh);
+            color: rgba(255,255,255,0.8);
+            font-weight: 600; margin-top: 3px;
+        }
+        .letter-level {
+            font-size: min(2.5vw, 3vh);
+            color: #fbbf24;
+            font-weight: 700; margin-top: 4px;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 10px; border-radius: 10px;
+            display: inline-block;
+        }
+
+        /* RIGHT */
+        .right-half {
+            flex: 1; display: flex; flex-direction: column;
+            gap: 8px; height: 100%; justify-content: center;
+        }
+        .word-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.35);
+            border-radius: 16px; padding: 10px 14px;
+            display: flex; align-items: center; gap: 12px;
+            cursor: pointer; transition: all 0.2s;
+            animation: slideUp 0.4s ease both;
+        }
+        .word-card:hover { background: rgba(255,255,255,0.3); transform: scale(1.02); }
+        .word-emoji { font-size: min(8vw, 40px); flex-shrink: 0; }
+        .word-info  { flex: 1; }
+        .word-kannada {
+            font-size: min(4.5vw, 5vh);
+            font-weight: 900; color: white;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            line-height: 1.1;
+        }
+        .word-meaning {
+            font-size: min(2.8vw, 3vh);
+            color: rgba(255,255,255,0.75);
+            font-weight: 600; margin-top: 2px;
+        }
+        .speak-btn {
+            background: rgba(255,255,255,0.2);
+            border: none; color: white;
+            width: 32px; height: 32px;
+            border-radius: 50%; font-size: 15px;
+            cursor: pointer; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* BOTTOM BAR */
+        .bottom-bar {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px 14px;
+            background: rgba(0,0,0,0.14);
+            backdrop-filter: blur(10px); flex-shrink: 0;
+        }
+        .nav-btn {
+            background: rgba(255,255,255,0.22);
+            border: 2px solid rgba(255,255,255,0.35);
+            color: white; padding: 10px 20px;
+            border-radius: 50px; font-size: 14px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .nav-btn:hover   { background: rgba(255,255,255,0.38); }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .next-btn {
+            background: white; color: #333; border: none;
+            padding: 12px 28px; border-radius: 50px;
+            font-size: 15px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.22); transition: all 0.2s;
+        }
+        .next-btn:hover { transform: scale(1.05) translateY(-2px); }
+        .bottom-center { text-align: center; }
+        .tap-hint { font-size: 12px; color: rgba(255,255,255,0.72); font-weight: 600; }
+        .autoplay-pill {
+            display: none; background: #fbbf24; color: #333;
+            padding: 4px 12px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; margin-top: 3px;
+        }
+        .autoplay-pill.show { display: inline-block; }
+
+        /* MOBILE */
+        @media (max-width: 540px) {
+            .main-content { flex-direction: column; gap: 8px; padding: 6px 12px; }
+            .left-half  { flex: none; height: auto; }
+            .right-half { flex: none; height: auto; width: 100%; }
+            .big-letter { font-size: min(38vw, 20vh); }
+        }
+
+        /* PARENT PANEL */
+        .overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 100;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        .overlay.show { display: flex; }
+        .panel {
+            background: white; border-radius: 28px;
+            padding: 26px; width: 92%; max-width: 400px;
+            max-height: 88vh; overflow-y: auto;
+        }
+        .panel h2 { font-size: 19px; color: #2d6a4f; margin-bottom: 6px; text-align: center; }
+        .panel-progress {
+            text-align: center; font-size: 13px; color: #666;
+            background: #f0fff4; padding: 8px; border-radius: 10px; margin-bottom: 18px;
+        }
+        .panel-row {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 13px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .panel-label { font-size: 14px; font-weight: 700; color: #333; }
+        .panel-sub   { font-size: 12px; color: #999; margin-top: 2px; }
+        .toggle {
+            width: 48px; height: 26px; background: #ddd;
+            border-radius: 13px; cursor: pointer;
+            position: relative; transition: background 0.3s; border: none; flex-shrink: 0;
+        }
+        .toggle.on { background: #2d6a4f; }
+        .toggle::after {
+            content: ''; position: absolute;
+            width: 20px; height: 20px; background: white;
+            border-radius: 50%; top: 3px; left: 3px;
+            transition: left 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle.on::after { left: 25px; }
+        .speed-row { display: flex; gap: 7px; }
+        .speed-btn {
+            padding: 6px 13px; border: 2px solid #e5e7eb;
+            border-radius: 20px; font-size: 13px; font-weight: 600;
+            cursor: pointer; background: white; transition: all 0.2s;
+        }
+        .speed-btn.active { border-color: #2d6a4f; background: #f0fff4; color: #2d6a4f; }
+        .jump-section { margin-top: 14px; }
+        .jump-section h4 {
+            font-size: 12px; color: #888; margin-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .jump-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
+        .jump-btn {
+            aspect-ratio: 1; border: 2px solid #e5e7eb;
+            border-radius: 8px; font-size: 14px; font-weight: 800;
+            cursor: pointer; background: white; color: #2d6a4f; transition: all 0.2s;
+        }
+        .jump-btn:hover { background: #2d6a4f; color: white; border-color: #2d6a4f; }
+        .jump-btn.done  { background: #d1fae5; color: #059669; border-color: #a7f3d0; }
+        .jump-btn.cur   { background: #2d6a4f; color: white; border-color: #2d6a4f; }
+        .close-panel-btn {
+            width: 100%; padding: 13px;
+            background: linear-gradient(135deg,#2d6a4f,#1b4332);
+            color: white; border: none; border-radius: 14px;
+            font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 18px;
+        }
+
+        /* QUIZ */
+        .quiz-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7); z-index: 150;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .quiz-overlay.show { display: flex; }
+        .quiz-card {
+            background: white; border-radius: 28px;
+            padding: 28px; width: 92%; max-width: 400px; text-align: center;
+        }
+        .quiz-title    { font-size: 15px; color: #888; margin-bottom: 8px; font-weight: 600; }
+        .quiz-emoji    { font-size: 68px; margin-bottom: 10px; }
+        .quiz-question { font-size: 17px; font-weight: 800; color: #333; margin-bottom: 18px; }
+        .quiz-options  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .quiz-opt {
+            padding: 16px; border: 3px solid #e5e7eb;
+            border-radius: 14px; font-size: 24px; font-weight: 900;
+            cursor: pointer; transition: all 0.2s; background: white; color: #2d6a4f;
+        }
+        .quiz-opt:hover  { border-color: #2d6a4f; background: #f0fff4; }
+        .quiz-opt.correct { border-color: #059669; background: #d1fae5; }
+        .quiz-opt.wrong   { border-color: #dc2626; background: #fee2e2; }
+
+        /* CELEBRATION */
+        .celeb-overlay {
+            display: none; position: fixed; inset: 0;
+            background: linear-gradient(135deg,rgba(45,106,79,.96),rgba(27,67,50,.96));
+            z-index: 200; align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; padding: 30px;
+        }
+        .celeb-overlay.show { display: flex; }
+        .celeb-emoji  { font-size: 80px; animation: bounce 0.5s ease infinite alternate; }
+        .celeb-title  { font-size: 36px; font-weight: 900; color: white; margin: 14px 0 8px; }
+        .celeb-sub    { font-size: 16px; color: rgba(255,255,255,.88); margin-bottom: 28px; line-height: 1.6; }
+        .celeb-btn {
+            padding: 17px 48px; background: white; color: #2d6a4f;
+            border: none; border-radius: 50px; font-size: 18px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.22);
+        }
+
+        /* ANIMATIONS */
+        @keyframes popIn {
+            0%   { transform: scale(0.2) rotate(-15deg); opacity: 0; }
+            65%  { transform: scale(1.12) rotate(3deg); }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(24px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-16px); }
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- No Voice Overlay -->
+<div class="no-voice-overlay" id="noVoiceOverlay">
+    <div class="no-voice-icon">🔇</div>
+    <div class="no-voice-title">ಕನ್ನಡ ಧ್ವನಿ ಇಲ್ಲ!</div>
+    <div class="no-voice-text">
+        ಈ ಪಾಠಕ್ಕೆ ಕನ್ನಡ ಧ್ವನಿ ಅಗತ್ಯ.<br>
+        ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಕನ್ನಡ ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.
+    </div>
+    <div class="no-voice-steps">
+        <h4>📱 Android ನಲ್ಲಿ ಕನ್ನಡ ಧ್ವನಿ ಸ್ಥಾಪಿಸಿ:</h4>
+        <p>
+            1️⃣ Settings → General Management → Language<br>
+            2️⃣ ಕನ್ನಡ ಭಾಷೆ ಸೇರಿಸಿ<br>
+            3️⃣ Settings → Accessibility → Text to Speech<br>
+            4️⃣ Google TTS → Download ಕನ್ನಡ<br>
+            5️⃣ ಮರಳಿ ಬನ್ನಿ ✅
+        </p>
+    </div>
+    <div>
+        <button class="no-voice-btn" onclick="checkVoiceAgain()">
+            🔄 ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ
+        </button>
+        <button class="no-voice-btn secondary" onclick="continueWithoutVoice()">
+            ▶️ ಧ್ವನಿ ಇಲ್ಲದೆ ಮುಂದುವರಿಸಿ
+        </button>
+    </div>
+</div>
+
+<div class="screen" id="mainScreen">
+
+    <div class="topbar">
+        <a href="/ukg/kannada" class="topbar-btn">🏠 ಮನೆ</a>
+        <div class="stars-display">⭐ <span id="starsDisplay">0</span></div>
+        <div style="display:flex;gap:8px">
+            <button class="topbar-btn" id="soundTopBtn" onclick="toggleSoundTop(event)">🔊</button>
+            <button class="topbar-btn" onclick="openPanel(event)">⚙️ ಪೋಷಕರು</button>
+        </div>
+    </div>
+
+    <div class="dots-row" id="dotsRow"></div>
+
+    <div class="main-content" onclick="handleTap()">
+        <div class="left-half">
+            <div class="big-letter" id="bigLetter">ಅ</div>
+            <div class="letter-info-card">
+                <div class="letter-name"  id="letterName">ಅ</div>
+                <div class="letter-trans" id="letterTrans">a</div>
+                <div class="letter-level" id="letterLevel">ಸ್ವರ</div>
+            </div>
+        </div>
+        <div class="right-half" id="wordsContainer"></div>
+    </div>
+
+    <div class="bottom-bar">
+        <button class="nav-btn" id="prevBtn" onclick="prevLetter(event)" disabled>← ಹಿಂದೆ</button>
+        <div class="bottom-center">
+            <div class="tap-hint" id="tapHint">👆 ಮುಂದುವರಿಯಲು ತಟ್ಟಿ!</div>
+            <div class="autoplay-pill" id="autoplayPill">▶ ಸ್ವಯಂ ಚಾಲನೆ</div>
+        </div>
+        <button class="next-btn" onclick="nextLetter(event)">ಮುಂದೆ →</button>
+    </div>
+</div>
+
+<!-- Parent Panel -->
+<div class="overlay" id="parentOverlay">
+    <div class="panel">
+        <h2>⚙️ ಪೋಷಕರ ನಿಯಂತ್ರಣ</h2>
+        <div class="panel-progress" id="panelProgress">49 ರಲ್ಲಿ 0 ಅಕ್ಷರ ಕಲಿತಿದ್ದೀರಿ</div>
+        <div class="panel-row">
+            <div><div class="panel-label">🔊 ಧ್ವನಿ</div><div class="panel-sub">ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡುತ್ತದೆ</div></div>
+            <button class="toggle on" id="soundToggle" onclick="toggleSound()"></button>
+        </div>
+        <div class="panel-row">
+            <div><div class="panel-label">▶️ ಸ್ವಯಂ ಚಾಲನೆ</div><div class="panel-sub">ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಬದಲಾಗುತ್ತದೆ</div></div>
+            <button class="toggle" id="autoToggle" onclick="toggleAuto()"></button>
+        </div>
+        <div class="panel-row" style="border:none">
+            <div><div class="panel-label">⏱️ ವೇಗ</div><div class="panel-sub">ಪ್ರತಿ ಅಕ್ಷರಕ್ಕೆ ಸೆಕೆಂಡ್</div></div>
+            <div class="speed-row">
+                <button class="speed-btn"        onclick="setSpeed(3,this)">3s</button>
+                <button class="speed-btn active" onclick="setSpeed(5,this)">5s</button>
+                <button class="speed-btn"        onclick="setSpeed(8,this)">8s</button>
+            </div>
+        </div>
+        <div class="jump-section">
+            <h4>ಯಾವುದೇ ಅಕ್ಷರಕ್ಕೆ ಹೋಗಿ</h4>
+            <div class="jump-grid" id="jumpGrid"></div>
+        </div>
+        <button class="close-panel-btn" onclick="closePanel()">✅ ಕಲಿಕೆ ಮುಂದುವರಿಸಿ!</button>
+    </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz-overlay" id="quizOverlay">
+    <div class="quiz-card">
+        <div class="quiz-title">ಪ್ರಶ್ನೆ! 🎯</div>
+        <div class="quiz-emoji"    id="quizEmoji">🌸</div>
+        <div class="quiz-question" id="quizQuestion">ಯಾವ ಅಕ್ಷರ?</div>
+        <div class="quiz-options"  id="quizOptions"></div>
+    </div>
+</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-emoji" id="celebEmoji">🎉</div>
+    <div class="celeb-title" id="celebTitle">ಅಭಿನಂದನೆ!</div>
+    <div class="celeb-sub"   id="celebSub">ನೀವು ಕಲಿತಿರಿ!</div>
+    <button class="celeb-btn" onclick="closeCelebration()">ಮುಂದುವರಿಸಿ! 🚀</button>
+</div>
+
+<script>
+/* UKG VARNAMALE — More advanced with meanings in Kannada */
+const varnamale = [
+    /* SWARAS */
+    { letter:'ಅ', name:'ಅ', trans:'a', level:'ಸ್ವರ', color:['#FF6B6B','#cc3333'],
+      words:[{k:'ಅಮ್ಮ',m:'ತಾಯಿ',em:'👩'},{k:'ಅಡಿಗೆ',m:'ಅಡುಗೆ ಮನೆ',em:'🍳'},{k:'ಅಂಗಡಿ',m:'ವ್ಯಾಪಾರ ಮಾಡುವ ಜಾಗ',em:'🏪'}]},
+    { letter:'ಆ', name:'ಆ', trans:'aa', level:'ಸ್ವರ', color:['#FF8C42','#cc5511'],
+      words:[{k:'ಆನೆ',m:'ದೊಡ್ಡ ಪ್ರಾಣಿ',em:'🐘'},{k:'ಆಕಾಶ',m:'ನೀಲಿ ಮೇಲ್ಭಾಗ',em:'🌤️'},{k:'ಆಟ',m:'ಮಕ್ಕಳ ಆಡುವಿಕೆ',em:'🎮'}]},
+    { letter:'ಇ', name:'ಇ', trans:'i', level:'ಸ್ವರ', color:['#F9C74F','#c99a00'],
+      words:[{k:'ಇಲಿ',m:'ಸಣ್ಣ ಪ್ರಾಣಿ',em:'🐭'},{k:'ಇಟ್ಟಿಗೆ',m:'ಮನೆ ಕಟ್ಟಲು ಬಳಸುತ್ತಾರೆ',em:'🧱'},{k:'ಇಂಗ್ಲೀಷ್',m:'ಒಂದು ಭಾಷೆ',em:'📝'}]},
+    { letter:'ಈ', name:'ಈ', trans:'ee', level:'ಸ್ವರ', color:['#43AA8B','#2a7a60'],
+      words:[{k:'ಈರುಳ್ಳಿ',m:'ಅಡಿಗೆಯಲ್ಲಿ ಬಳಸುತ್ತಾರೆ',em:'🧅'},{k:'ಈಜು',m:'ನೀರಿನಲ್ಲಿ ಈಜಾಡುವುದು',em:'🏊'},{k:'ಈಚಲು',m:'ಒಂದು ಮರ',em:'🌴'}]},
+    { letter:'ಉ', name:'ಉ', trans:'u', level:'ಸ್ವರ', color:['#4895EF','#1a68c0'],
+      words:[{k:'ಉಪ್ಪು',m:'ಅಡಿಗೆಯ ರುಚಿ',em:'🧂'},{k:'ಉದ್ಯಾನ',m:'ಹೂವಿನ ತೋಟ',em:'🌺'},{k:'ಉಡ',m:'ಒಂದು ಪ್ರಾಣಿ',em:'🦎'}]},
+    { letter:'ಊ', name:'ಊ', trans:'oo', level:'ಸ್ವರ', color:['#7B2D8B','#4e1a5e'],
+      words:[{k:'ಊಟ',m:'ಅನ್ನ ತಿನ್ನುವುದು',em:'🍽️'},{k:'ಊರು',m:'ನಾವು ವಾಸಿಸುವ ಜಾಗ',em:'🏘️'},{k:'ಊಂಟ',m:'ಮರುಭೂಮಿ ಪ್ರಾಣಿ',em:'🐪'}]},
+    { letter:'ಎ', name:'ಎ', trans:'e', level:'ಸ್ವರ', color:['#1ABC9C','#0d8870'],
+      words:[{k:'ಎಮ್ಮೆ',m:'ಹಾಲು ಕೊಡುವ ಪ್ರಾಣಿ',em:'🐃'},{k:'ಎಲೆ',m:'ಮರದ ಭಾಗ',em:'🍃'},{k:'ಎಣ್ಣೆ',m:'ಅಡಿಗೆಯಲ್ಲಿ ಬಳಸುತ್ತಾರೆ',em:'🫙'}]},
+    { letter:'ಏ', name:'ಏ', trans:'ae', level:'ಸ್ವರ', color:['#F39C12','#b07000'],
+      words:[{k:'ಏಡಿ',m:'ಸಮುದ್ರ ಪ್ರಾಣಿ',em:'🦀'},{k:'ಏಣಿ',m:'ಮೇಲೆ ಹತ್ತಲು ಬಳಸುತ್ತಾರೆ',em:'🪜'},{k:'ಏಳು',m:'ಒಂದು ಸಂಖ್ಯೆ',em:'7️⃣'}]},
+    { letter:'ಐ', name:'ಐ', trans:'ai', level:'ಸ್ವರ', color:['#8E44AD','#5e2c75'],
+      words:[{k:'ಐದು',m:'ಒಂದು ಸಂಖ್ಯೆ',em:'5️⃣'},{k:'ಐಸ್',m:'ಶೀತಲ ನೀರು',em:'🧊'},{k:'ಐರಾವತ',m:'ದೇವೇಂದ್ರನ ಆನೆ',em:'🐘'}]},
+    { letter:'ಒ', name:'ಒ', trans:'o', level:'ಸ್ವರ', color:['#D35400','#9a3a00'],
+      words:[{k:'ಒಂಟೆ',m:'ಮರುಭೂಮಿ ಪ್ರಾಣಿ',em:'🐪'},{k:'ಒಲೆ',m:'ಅಡಿಗೆ ಮಾಡಲು ಬಳಸುತ್ತಾರೆ',em:'🔥'},{k:'ಒಕ್ಕಲು',m:'ರೈತ',em:'👨‍🌾'}]},
+    { letter:'ಓ', name:'ಓ', trans:'oo', level:'ಸ್ವರ', color:['#16A085','#0d6b58'],
+      words:[{k:'ಓಡು',m:'ವೇಗವಾಗಿ ಹೋಗು',em:'🏃'},{k:'ಓದು',m:'ಪುಸ್ತಕ ನೋಡು',em:'📖'},{k:'ಓಕುಳಿ',m:'ಹಬ್ಬದ ಸಂಭ್ರಮ',em:'🎊'}]},
+    { letter:'ಔ', name:'ಔ', trans:'au', level:'ಸ್ವರ', color:['#2C3E50','#1a2535'],
+      words:[{k:'ಔಷಧ',m:'ರೋಗ ಗುಣಪಡಿಸಲು',em:'💊'},{k:'ಔತಣ',m:'ಹಬ್ಬದ ಊಟ',em:'🎉'},{k:'ಔನ್ಯ',m:'ಶ್ರೇಷ್ಠತೆ',em:'🌟'}]},
+    { letter:'ಅಂ', name:'ಅಂ', trans:'am', level:'ಅನುಸ್ವಾರ', color:['#E67E22','#b05810'],
+      words:[{k:'ಅಂಚೆ',m:'ಪತ್ರ ಕಳಿಸುವ ಜಾಗ',em:'📮'},{k:'ಅಂಗಳ',m:'ಮನೆ ಮುಂದಿನ ಜಾಗ',em:'🏡'},{k:'ಅಂಕ',m:'ಸಂಖ್ಯೆ',em:'🔢'}]},
+    { letter:'ಅಃ', name:'ಅಃ', trans:'ah', level:'ವಿಸರ್ಗ', color:['#C0392B','#8a2020'],
+      words:[{k:'ಅಃ',m:'ಉದ್ಗಾರ',em:'😲'},{k:'ರಾಮಃ',m:'ರಾಮನ ಹೆಸರು',em:'🙏'},{k:'ದೇವಃ',m:'ದೇವರ ಹೆಸರು',em:'✨'}]},
+
+    /* VYANJANAS */
+    { letter:'ಕ', name:'ಕ', trans:'ka', level:'ವ್ಯಂಜನ', color:['#FF6B6B','#cc3333'],
+      words:[{k:'ಕಮಲ',m:'ಸುಂದರ ಹೂವು',em:'🌸'},{k:'ಕಪ್ಪೆ',m:'ನೀರಿನ ಪ್ರಾಣಿ',em:'🐸'},{k:'ಕರಡಿ',m:'ಕಾಡಿನ ಪ್ರಾಣಿ',em:'🐻'}]},
+    { letter:'ಖ', name:'ಖ', trans:'kha', level:'ವ್ಯಂಜನ', color:['#FF8C42','#cc5511'],
+      words:[{k:'ಖಗ',m:'ಹಕ್ಕಿ',em:'🐦'},{k:'ಖರ್ಚು',m:'ಹಣ ಖರ್ಚು',em:'💸'},{k:'ಖೇದ',m:'ದುಃಖ',em:'😢'}]},
+    { letter:'ಗ', name:'ಗ', trans:'ga', level:'ವ್ಯಂಜನ', color:['#F9C74F','#c99a00'],
+      words:[{k:'ಗಣೇಶ',m:'ಆನೆ ತಲೆಯ ದೇವರು',em:'🐘'},{k:'ಗಿಳಿ',m:'ಮಾತನಾಡುವ ಹಕ್ಕಿ',em:'🦜'},{k:'ಗುಲಾಬಿ',m:'ಸುಂದರ ಹೂವು',em:'🌹'}]},
+    { letter:'ಘ', name:'ಘ', trans:'gha', level:'ವ್ಯಂಜನ', color:['#43AA8B','#2a7a60'],
+      words:[{k:'ಘಂಟೆ',m:'ಶಬ್ದ ಮಾಡುವ ವಸ್ತು',em:'🔔'},{k:'ಘಟ',m:'ಮಡಕೆ',em:'🏺'},{k:'ಘನ',m:'ಗಟ್ಟಿಯಾದ',em:'🧊'}]},
+    { letter:'ಚ', name:'ಚ', trans:'cha', level:'ವ್ಯಂಜನ', color:['#7B2D8B','#4e1a5e'],
+      words:[{k:'ಚಂದ್ರ',m:'ರಾತ್ರಿ ಬೆಳಕು',em:'🌙'},{k:'ಚಿಟ್ಟೆ',m:'ಸುಂದರ ಕೀಟ',em:'🦋'},{k:'ಚಳಿ',m:'ತಣ್ಣಗಿನ ಹವಾಮಾನ',em:'🥶'}]},
+    { letter:'ಛ', name:'ಛ', trans:'chha', level:'ವ್ಯಂಜನ', color:['#E74C3C','#b03030'],
+      words:[{k:'ಛತ್ರಿ',m:'ಮಳೆಯಿಂದ ರಕ್ಷಿಸುತ್ತದೆ',em:'☂️'},{k:'ಛಾಯೆ',m:'ನೆರಳು',em:'🌑'},{k:'ಛಲ',m:'ದೃಢ ನಿಶ್ಚಯ',em:'💪'}]},
+    { letter:'ಜ', name:'ಜ', trans:'ja', level:'ವ್ಯಂಜನ', color:['#1ABC9C','#0d8870'],
+      words:[{k:'ಜಲ',m:'ನೀರು',em:'💧'},{k:'ಜೇನು',m:'ಸಿಹಿ ದ್ರವ',em:'🍯'},{k:'ಜಿಂಕೆ',m:'ವೇಗವಾಗಿ ಓಡುವ ಪ್ರಾಣಿ',em:'🦌'}]},
+    { letter:'ಟ', name:'ಟ', trans:'ta', level:'ವ್ಯಂಜನ', color:['#8E44AD','#5e2c75'],
+      words:[{k:'ಟೊಮ್ಯಾಟೊ',m:'ಕೆಂಪು ತರಕಾರಿ',em:'🍅'},{k:'ಟ್ರೇನ್',m:'ರೈಲು',em:'🚂'},{k:'ಟೋಪಿ',m:'ತಲೆ ಮೇಲೆ ಹಾಕುತ್ತಾರೆ',em:'🎩'}]},
+    { letter:'ಡ', name:'ಡ', trans:'da', level:'ವ್ಯಂಜನ', color:['#D35400','#9a3a00'],
+      words:[{k:'ಡಮರು',m:'ಸಣ್ಣ ತಮ್ಮಟ',em:'🥁'},{k:'ಡಬ್ಬ',m:'ಪೆಟ್ಟಿಗೆ',em:'📦'},{k:'ಡಾಕ್ಟರ್',m:'ರೋಗ ಗುಣಪಡಿಸುವ ವ್ಯಕ್ತಿ',em:'👨‍⚕️'}]},
+    { letter:'ತ', name:'ತ', trans:'tha', level:'ವ್ಯಂಜನ', color:['#2C3E50','#1a2535'],
+      words:[{k:'ತಾಯಿ',m:'ಅಮ್ಮ',em:'👩'},{k:'ತಲೆ',m:'ದೇಹದ ಮೇಲ್ಭಾಗ',em:'🗣️'},{k:'ತೆಂಗು',m:'ಕೊಬ್ಬರಿ ಮರ',em:'🥥'}]},
+    { letter:'ದ', name:'ದ', trans:'da', level:'ವ್ಯಂಜನ', color:['#E67E22','#b05810'],
+      words:[{k:'ದೀಪ',m:'ಬೆಳಕು ಕೊಡುತ್ತದೆ',em:'🪔'},{k:'ದಾಳಿಂಬೆ',m:'ಕೆಂಪು ಹಣ್ಣು',em:'🍎'},{k:'ದೇವರು',m:'ಭಗವಂತ',em:'🙏'}]},
+    { letter:'ನ', name:'ನ', trans:'na', level:'ವ್ಯಂಜನ', color:['#FF6B6B','#cc3333'],
+      words:[{k:'ನಾಯಿ',m:'ನಂಬಿಗಸ್ತ ಪ್ರಾಣಿ',em:'🐕'},{k:'ನೀರು',m:'ಜೀವಕ್ಕೆ ಅವಶ್ಯ',em:'💧'},{k:'ನಕ್ಷತ್ರ',m:'ರಾತ್ರಿ ಹೊಳೆಯುತ್ತದೆ',em:'⭐'}]},
+    { letter:'ಪ', name:'ಪ', trans:'pa', level:'ವ್ಯಂಜನ', color:['#4895EF','#1a68c0'],
+      words:[{k:'ಪಕ್ಷಿ',m:'ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ',em:'🐦'},{k:'ಪೆನ್ನು',m:'ಬರೆಯಲು ಬಳಸುತ್ತಾರೆ',em:'✒️'},{k:'ಪೂಜೆ',m:'ದೇವರ ಆರಾಧನೆ',em:'🙏'}]},
+    { letter:'ಬ', name:'ಬ', trans:'ba', level:'ವ್ಯಂಜನ', color:['#43AA8B','#2a7a60'],
+      words:[{k:'ಬೆಕ್ಕು',m:'ಸಾಕು ಪ್ರಾಣಿ',em:'🐱'},{k:'ಬಾಳೆ',m:'ಹಳದಿ ಹಣ್ಣು',em:'🍌'},{k:'ಬಸ್ಸು',m:'ಸಾರಿಗೆ ವಾಹನ',em:'🚌'}]},
+    { letter:'ಮ', name:'ಮ', trans:'ma', level:'ವ್ಯಂಜನ', color:['#7B2D8B','#4e1a5e'],
+      words:[{k:'ಮನೆ',m:'ನಾವು ವಾಸಿಸುವ ಜಾಗ',em:'🏠'},{k:'ಮಂಗ',m:'ಮರ ಹತ್ತುವ ಪ್ರಾಣಿ',em:'🐒'},{k:'ಮೀನು',m:'ನೀರಿನ ಪ್ರಾಣಿ',em:'🐟'}]},
+    { letter:'ಯ', name:'ಯ', trans:'ya', level:'ವ್ಯಂಜನ', color:['#E74C3C','#b03030'],
+      words:[{k:'ಯಾನ',m:'ಪ್ರಯಾಣ',em:'✈️'},{k:'ಯೋಗ',m:'ದೇಹ ಆರೋಗ್ಯ ವ್ಯಾಯಾಮ',em:'🧘'},{k:'ಯುವ',m:'ಯುವಕ',em:'👦'}]},
+    { letter:'ರ', name:'ರ', trans:'ra', level:'ವ್ಯಂಜನ', color:['#1ABC9C','#0d8870'],
+      words:[{k:'ರಸ್ತೆ',m:'ವಾಹನ ಹೋಗುವ ದಾರಿ',em:'🛣️'},{k:'ರಾಜ',m:'ರಾಜ್ಯ ಆಳುವ ವ್ಯಕ್ತಿ',em:'👑'},{k:'ರೈತ',m:'ಕೃಷಿ ಮಾಡುವ ವ್ಯಕ್ತಿ',em:'👨‍🌾'}]},
+    { letter:'ಲ', name:'ಲ', trans:'la', level:'ವ್ಯಂಜನ', color:['#F39C12','#b07000'],
+      words:[{k:'ಲಡ್ಡು',m:'ಸಿಹಿ ತಿಂಡಿ',em:'🍬'},{k:'ಲೋಟ',m:'ನೀರು ಕುಡಿಯಲು',em:'🥛'},{k:'ಲಂಗ',m:'ಹೆಣ್ಣು ಮಕ್ಕಳ ಉಡುಪು',em:'👗'}]},
+    { letter:'ವ', name:'ವ', trans:'va', level:'ವ್ಯಂಜನ', color:['#8E44AD','#5e2c75'],
+      words:[{k:'ವಿಮಾನ',m:'ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ',em:'✈️'},{k:'ವೃಕ್ಷ',m:'ದೊಡ್ಡ ಮರ',em:'🌳'},{k:'ವಾನರ',m:'ಕಪಿ',em:'🐒'}]},
+    { letter:'ಶ', name:'ಶ', trans:'sha', level:'ವ್ಯಂಜನ', color:['#D35400','#9a3a00'],
+      words:[{k:'ಶಾಲೆ',m:'ಕಲಿಯುವ ಜಾಗ',em:'🏫'},{k:'ಶಿಕ್ಷಕ',m:'ಕಲಿಸುವ ವ್ಯಕ್ತಿ',em:'👨‍🏫'},{k:'ಶ್ರೀಗಂಧ',m:'ಸುಗಂಧ ಮರ',em:'🌿'}]},
+    { letter:'ಸ', name:'ಸ', trans:'sa', level:'ವ್ಯಂಜನ', color:['#16A085','#0d6b58'],
+      words:[{k:'ಸೂರ್ಯ',m:'ಬೆಳಕು ಕೊಡುತ್ತದೆ',em:'☀️'},{k:'ಸಿಂಹ',m:'ಕಾಡಿನ ರಾಜ',em:'🦁'},{k:'ಸೇಬು',m:'ಕೆಂಪು ಹಣ್ಣು',em:'🍎'}]},
+    { letter:'ಹ', name:'ಹ', trans:'ha', level:'ವ್ಯಂಜನ', color:['#2C3E50','#1a2535'],
+      words:[{k:'ಹಕ್ಕಿ',m:'ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ',em:'🐦'},{k:'ಹಣ್ಣು',m:'ಮರದ ಫಲ',em:'🍎'},{k:'ಹಸು',m:'ಹಾಲು ಕೊಡುತ್ತದೆ',em:'🐄'}]},
+    { letter:'ಳ', name:'ಳ', trans:'la', level:'ವ್ಯಂಜನ', color:['#E67E22','#b05810'],
+      words:[{k:'ಬಾಳೆ',m:'ಹಳದಿ ಹಣ್ಣು',em:'🍌'},{k:'ಹಳ್ಳ',m:'ಸಣ್ಣ ನದಿ',em:'🌊'},{k:'ಕೊಳ',m:'ಸಣ್ಣ ಕೆರೆ',em:'🏞️'}]},
+];
+
+/* STATE */
+let current    = 0;
+let stars      = 0;
+let soundOn    = true;
+let autoPlay   = false;
+let autoSpeed  = 5000;
+let autoTimer  = null;
+let learned    = new Set();
+let kannadaVoice = null;
+const total    = varnamale.length;
+
+/* VOICE DETECTION */
+function findKannadaVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    return voices.find(v =>
+        v.lang === 'kn-IN' || v.lang === 'kn' ||
+        v.name.toLowerCase().includes('kannada')
+    ) || null;
+}
+
+function checkVoiceAvailable() {
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) {
+        document.getElementById('noVoiceOverlay').classList.add('show');
+        return false;
+    }
+    document.getElementById('noVoiceOverlay').classList.remove('show');
+    return true;
+}
+
+function checkVoiceAgain() {
+    window.speechSynthesis.getVoices();
+    setTimeout(() => {
+        if (checkVoiceAvailable()) {
+            updateScreen(false);
+            setTimeout(speakLetter, 500);
+        }
+    }, 500);
+}
+
+function continueWithoutVoice() {
+    soundOn = false;
+    document.getElementById('soundTopBtn').textContent = '🔇';
+    document.getElementById('soundTopBtn').style.background = 'rgba(255,80,80,0.4)';
+    document.getElementById('soundToggle').classList.remove('on');
+    document.getElementById('noVoiceOverlay').classList.remove('show');
+}
+
+/* UPDATE SCREEN */
+function updateScreen(animate = true) {
+    const a = varnamale[current];
+    document.getElementById('mainScreen').style.background =
+        `linear-gradient(135deg, ${a.color[0]} 0%, ${a.color[1]} 100%)`;
+
+    document.getElementById('bigLetter').textContent   = a.letter;
+    document.getElementById('letterName').textContent  = a.name;
+    document.getElementById('letterTrans').textContent = a.trans;
+    document.getElementById('letterLevel').textContent = a.level;
+
+    const container = document.getElementById('wordsContainer');
+    container.innerHTML = '';
+    a.words.forEach((word, idx) => {
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.style.animationDelay = `${0.1 + idx * 0.08}s`;
+        card.innerHTML = `
+            <div class="word-emoji">${word.em}</div>
+            <div class="word-info">
+                <div class="word-kannada">${word.k}</div>
+                <div class="word-meaning">${word.m}</div>
+            </div>
+            <button class="speak-btn" onclick="speakWord('${word.k}', event)">🔊</button>
+        `;
+        container.appendChild(card);
+    });
+
+    document.getElementById('prevBtn').disabled = current === 0;
+
+    if (animate) {
+        const el = document.getElementById('bigLetter');
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = 'popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275)';
+    }
+
+    updateDots();
+    if (soundOn) setTimeout(speakLetter, 500);
+}
+
+/* SPEAK — KANNADA ONLY, NO FALLBACK */
+function speakLetter() {
+    if (!soundOn) return;
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) {
+        checkVoiceAvailable();
+        return;
+    }
+    window.speechSynthesis.cancel();
+    const a = varnamale[current];
+    const u = new SpeechSynthesisUtterance();
+    u.voice  = kannadaVoice;
+    u.lang   = 'kn-IN';
+    u.text   = `${a.name}... ${a.words[0].k}, ${a.words[1].k}, ${a.words[2].k}`;
+    u.rate   = 0.75; u.pitch = 1.2; u.volume = 1;
+    window.speechSynthesis.speak(u);
+}
+
+function speakWord(word, e) {
+    if (e) e.stopPropagation();
+    if (!soundOn) return;
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) { checkVoiceAvailable(); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance();
+    u.voice = kannadaVoice;
+    u.lang  = 'kn-IN';
+    u.text  = word;
+    u.rate  = 0.75; u.pitch = 1.2;
+    window.speechSynthesis.speak(u);
+}
+
+function toggleSoundTop(e) {
+    if (e) e.stopPropagation();
+    soundOn = !soundOn;
+    const btn = document.getElementById('soundTopBtn');
+    btn.textContent = soundOn ? '🔊' : '🔇';
+    btn.style.background = soundOn
+        ? 'rgba(255,255,255,0.22)'
+        : 'rgba(255,80,80,0.4)';
+    document.getElementById('soundToggle').classList.toggle('on', soundOn);
+    if (!soundOn) window.speechSynthesis.cancel();
+}
+
+/* DOTS */
+function updateDots() {
+    const row = document.getElementById('dotsRow');
+    row.innerHTML = '';
+    varnamale.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = `dot ${i === current ? 'current' : learned.has(i) ? 'done' : ''}`;
+        row.appendChild(d);
+    });
+}
+
+/* NAVIGATE */
+function handleTap() { nextLetter(); }
+
+function nextLetter(e) {
+    if (e) e.stopPropagation();
+    learned.add(current);
+    addStars(1);
+    if (learned.size % 7 === 0 && current < total - 1) { showQuiz(); return; }
+    if (current >= total - 1) {
+        learned.add(total - 1);
+        showCelebration('🏆','ಅಭಿನಂದನೆ!','ವಾಹ್! UKG ಕನ್ನಡ ವರ್ಣಮಾಲೆ ಪೂರ್ಣ!\nನೀವು ಕನ್ನಡ ತಾರೆ! ⭐⭐⭐');
+        return;
+    }
+    current++;
+    updateScreen();
+    if (autoPlay) resetAutoTimer();
+}
+
+function prevLetter(e) {
+    if (e) e.stopPropagation();
+    if (current > 0) { current--; updateScreen(); }
+}
+
+function addStars(n) {
+    stars += n;
+    document.getElementById('starsDisplay').textContent = stars;
+}
+
+/* AUTO PLAY */
+function toggleAuto() {
+    autoPlay = !autoPlay;
+    document.getElementById('autoToggle').classList.toggle('on', autoPlay);
+    document.getElementById('autoplayPill').classList.toggle('show', autoPlay);
+    document.getElementById('tapHint').style.display = autoPlay ? 'none' : 'block';
+    autoPlay ? resetAutoTimer() : clearInterval(autoTimer);
+}
+
+function resetAutoTimer() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => {
+        learned.add(current);
+        if (current < total - 1) { current++; updateScreen(); }
+        else { clearInterval(autoTimer); showCelebration('🏆','ಅಭಿನಂದನೆ!','ಎಲ್ಲಾ ಅಕ್ಷರ ಕಲಿತಿರಿ!'); }
+    }, autoSpeed);
+}
+
+function setSpeed(s, btn) {
+    autoSpeed = s * 1000;
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (autoPlay) resetAutoTimer();
+}
+
+/* SOUND TOGGLE (panel) */
+function toggleSound() {
+    soundOn = !soundOn;
+    document.getElementById('soundToggle').classList.toggle('on', soundOn);
+    const btn = document.getElementById('soundTopBtn');
+    btn.textContent = soundOn ? '🔊' : '🔇';
+    btn.style.background = soundOn ? 'rgba(255,255,255,0.22)' : 'rgba(255,80,80,0.4)';
+    if (!soundOn) window.speechSynthesis.cancel();
+}
+
+/* PARENT PANEL */
+function openPanel(e) {
+    if (e) e.stopPropagation();
+    clearInterval(autoTimer);
+    document.getElementById('panelProgress').textContent =
+        `${total} ರಲ್ಲಿ ${learned.size} ಅಕ್ಷರ ಕಲಿತಿದ್ದೀರಿ ✅`;
+    buildJumpGrid();
+    document.getElementById('parentOverlay').classList.add('show');
+}
+
+function closePanel() {
+    document.getElementById('parentOverlay').classList.remove('show');
+    if (autoPlay) resetAutoTimer();
+}
+
+function buildJumpGrid() {
+    const grid = document.getElementById('jumpGrid');
+    grid.innerHTML = '';
+    varnamale.forEach((a, i) => {
+        const btn = document.createElement('button');
+        btn.className = `jump-btn ${i === current ? 'cur' : learned.has(i) ? 'done' : ''}`;
+        btn.textContent = a.letter;
+        btn.onclick = () => { current = i; updateScreen(); closePanel(); };
+        grid.appendChild(btn);
+    });
+}
+
+/* QUIZ */
+function showQuiz() {
+    clearInterval(autoTimer);
+    const a = varnamale[current];
+    const word = a.words[0];
+    document.getElementById('quizEmoji').textContent   = word.em;
+    document.getElementById('quizQuestion').textContent = `"${word.k}" ಯಾವ ಅಕ್ಷರದಿಂದ ಶುರುವಾಗುತ್ತದೆ?`;
+    const opts = new Set([a.letter]);
+    while (opts.size < 4) {
+        const r = varnamale[Math.floor(Math.random() * total)].letter;
+        opts.add(r);
+    }
+    const optArr = [...opts].sort(() => Math.random() - 0.5);
+    const container = document.getElementById('quizOptions');
+    container.innerHTML = '';
+    optArr.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => checkQuiz(btn, opt, a.letter);
+        container.appendChild(btn);
+    });
+    document.getElementById('quizOverlay').classList.add('show');
+}
+
+function checkQuiz(btn, selected, correct) {
+    document.querySelectorAll('.quiz-opt').forEach(b => b.onclick = null);
+    if (selected === correct) {
+        btn.classList.add('correct');
+        addStars(2);
+        if (soundOn && kannadaVoice) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance('ಸರಿ! ಭೇಷ್!');
+            u.voice = kannadaVoice; u.lang = 'kn-IN'; u.pitch = 1.4;
+            window.speechSynthesis.speak(u);
+        }
+        setTimeout(() => {
+            document.getElementById('quizOverlay').classList.remove('show');
+            if (current < total - 1) { current++; updateScreen(); }
+            if (autoPlay) resetAutoTimer();
+        }, 1000);
+    } else {
+        btn.classList.add('wrong');
+        document.querySelectorAll('.quiz-opt').forEach(b => {
+            if (b.textContent === correct) b.classList.add('correct');
+        });
+        setTimeout(() => {
+            document.getElementById('quizOverlay').classList.remove('show');
+            if (current < total - 1) { current++; updateScreen(); }
+            if (autoPlay) resetAutoTimer();
+        }, 1500);
+    }
+}
+
+/* CELEBRATION */
+function showCelebration(emoji, title, sub) {
+    clearInterval(autoTimer);
+    document.getElementById('celebEmoji').textContent = emoji;
+    document.getElementById('celebTitle').textContent = title;
+    document.getElementById('celebSub').textContent   = sub;
+    document.getElementById('celebOverlay').classList.add('show');
+    if (soundOn && kannadaVoice) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance('ಅದ್ಭುತ! ನೀವು ಕನ್ನಡ ತಾರೆ!');
+        u.voice = kannadaVoice; u.lang = 'kn-IN'; u.pitch = 1.4; u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+    }
+    launchConfetti();
+}
+
+function closeCelebration() {
+    document.getElementById('celebOverlay').classList.remove('show');
+    if (current < total - 1) { current++; updateScreen(); }
+    if (autoPlay) resetAutoTimer();
+}
+
+/* CONFETTI */
+function launchConfetti() {
+    const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+    for (let i = 0; i < 65; i++) {
+        const c = document.createElement('div');
+        const size = Math.random() * 14 + 6;
+        c.style.cssText = `
+            position:fixed; width:${size}px; height:${size}px;
+            background:${cols[Math.floor(Math.random()*cols.length)]};
+            border-radius:${Math.random()>0.5?'50%':'3px'};
+            left:${Math.random()*100}vw; top:-20px; z-index:300;
+            animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*0.8}s forwards;
+            pointer-events:none;
+        `;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+    }
+}
+
+/* INIT */
+window.speechSynthesis.getVoices();
+if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = () => {
+        kannadaVoice = findKannadaVoice();
+        if (kannadaVoice) {
+            document.getElementById('noVoiceOverlay').classList.remove('show');
+            console.log('✅ Kannada voice found:', kannadaVoice.name);
+        }
+    };
+}
+
+updateDots();
+updateScreen(false);
+
+// Check voice after small delay to allow voices to load
+setTimeout(() => {
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) {
+        checkVoiceAvailable();
+    } else {
+        speakLetter();
+    }
+}, 1000);
+</script>
+</body>
+</html>
