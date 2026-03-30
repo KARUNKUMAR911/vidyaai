@@ -6,7 +6,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'vidyaai_secret_key_2026'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/vidyaai/database/vidyaai.db'
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database', 'vidyaai.db')
+os.makedirs(os.path.join(basedir, 'database'), exist_ok=True)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
