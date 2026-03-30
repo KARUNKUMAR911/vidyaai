@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - Class 1 English</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4ff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(58,12,163,0.3);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-subject {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .back-btn {
+            background: white; color: #3a0ca3;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            padding: 20px 20px 35px; text-align: center; color: white;
+        }
+        .hero-icon { font-size: 56px; margin-bottom: 8px; }
+        .hero h2   { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p    { font-size: 13px; opacity: 0.9; }
+
+        /* Progress card */
+        .progress-card {
+            background: white; margin: -18px 16px 20px;
+            border-radius: 18px; padding: 14px 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-circle {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
+        }
+        .progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
+        .progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+        .progress-bar-wrap {
+            flex: 1; background: #f0f0f0;
+            border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
+        }
+        .progress-bar-inner {
+            height: 100%; background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            border-radius: 10px; width: 0%; transition: width 0.5s;
+        }
+
+        /* Section label */
+        .section-label {
+            padding: 8px 16px 6px;
+            font-size: 12px; font-weight: 800;
+            color: #888; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* Chapter list */
+        .chapters-list {
+            padding: 0 16px 100px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        /* Chapter card */
+        .chapter-card {
+            background: white; border-radius: 18px;
+            padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            cursor: pointer; transition: all 0.25s;
+            text-decoration: none; position: relative; overflow: hidden;
+        }
+        .chapter-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .chapter-card:active { transform: scale(0.98); }
+        .chapter-card.locked { opacity: 0.6; cursor: not-allowed; }
+        .chapter-card.completed { border-left: 4px solid #059669; }
+        .chapter-card.inprogress { border-left: 4px solid #f59e0b; }
+        .chapter-card.notstarted { border-left: 4px solid #e5e7eb; }
+
+        .chapter-num {
+            width: 42px; height: 42px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; font-weight: 900;
+        }
+        .chapter-info { flex: 1; }
+        .chapter-title { font-size: 15px; font-weight: 800; color: #333; margin-bottom: 3px; }
+        .chapter-meta  { font-size: 12px; color: #888; font-weight: 600; }
+        .chapter-status {
+            font-size: 18px; flex-shrink: 0;
+        }
+
+        /* Special cards */
+        .intro-card  .chapter-num { background: #ede9fe; }
+        .fruits-card .chapter-num { background: #fef3c7; }
+        .veg-card    .chapter-num { background: #d1fae5; }
+        .animal-card .chapter-num { background: #dbeafe; }
+        .body-card   .chapter-num { background: #fce7f3; }
+        .school-card .chapter-num { background: #ffedd5; }
+        .family-card .chapter-num { background: #fef9c3; }
+        .shapes-card .chapter-num { background: #ede9fe; }
+        .habits-card .chapter-num { background: #d1fae5; }
+        .trans-card  .chapter-num { background: #dbeafe; }
+        .numbers-card .chapter-num { background: #fce7f3; }
+        .stories-card .chapter-num { background: #f3f4f6; }
+
+        /* Story card style */
+        .story-card {
+            background: linear-gradient(135deg, #fdf4ff, #f5f3ff);
+            border: 2px dashed #c084fc;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#3a0ca3; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-subject">Class 1 • English</div>
+    </div>
+    <a href="/class/1" class="back-btn">← Back</a>
+</nav>
+
+<div class="hero">
+    <div class="hero-icon">📝</div>
+    <h2>English</h2>
+    <p>Class 1 • Karnataka State Board • All Chapters</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-card">
+    <div class="progress-circle" id="progressNum">0</div>
+    <div class="progress-info" style="flex:1">
+        <h4>My Progress</h4>
+        <p id="progressText">0 of 12 chapters completed</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Chapters -->
+<div class="section-label">📖 All Chapters</div>
+
+<div class="chapters-list">
+
+    <!-- Letters of Alphabet -->
+    <a href="/class/1/english/alphabets" class="chapter-card intro-card notstarted">
+        <div class="chapter-num">🔤</div>
+        <div class="chapter-info">
+            <div class="chapter-title">Letters of Alphabet</div>
+            <div class="chapter-meta">Introduction • A to Z</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 1 -->
+    <a href="/class/1/english/fruits" class="chapter-card fruits-card notstarted">
+        <div class="chapter-num">🍎</div>
+        <div class="chapter-info">
+            <div class="chapter-title">1. Fruits</div>
+            <div class="chapter-meta">Names of fruits • Reading & Writing</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 2 -->
+    <a href="/class/1/english/vegetables" class="chapter-card veg-card notstarted">
+        <div class="chapter-num">🥦</div>
+        <div class="chapter-info">
+            <div class="chapter-title">2. Vegetables</div>
+            <div class="chapter-meta">Names of vegetables • Spelling</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 3 -->
+    <a href="/class/1/english/animals" class="chapter-card animal-card notstarted">
+        <div class="chapter-num">🐘</div>
+        <div class="chapter-info">
+            <div class="chapter-title">3. Animals, Birds and Insects</div>
+            <div class="chapter-meta">Wild, farm & flying creatures</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 4 -->
+    <a href="/class/1/english/body" class="chapter-card body-card notstarted">
+        <div class="chapter-num">👁️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">4. Parts of the Body</div>
+            <div class="chapter-meta">Head, eyes, ears, nose & more</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Stories for Listening 1 -->
+    <div class="chapter-card stories-card story-card notstarted"
+         onclick="location.href='/class/1/english/story1'">
+        <div class="chapter-num">📖</div>
+        <div class="chapter-info">
+            <div class="chapter-title">Stories for Listening</div>
+            <div class="chapter-meta">Listen and understand</div>
+        </div>
+        <div class="chapter-status">🎧</div>
+    </div>
+
+    <!-- Chapter 5 -->
+    <a href="/class/1/english/school" class="chapter-card school-card notstarted">
+        <div class="chapter-num">🏫</div>
+        <div class="chapter-info">
+            <div class="chapter-title">5. My School</div>
+            <div class="chapter-meta">Classroom, teachers & friends</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 6 -->
+    <a href="/class/1/english/family" class="chapter-card family-card notstarted">
+        <div class="chapter-num">👨‍👩‍👧</div>
+        <div class="chapter-info">
+            <div class="chapter-title">6. Family</div>
+            <div class="chapter-meta">Mother, father, siblings & more</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 7 -->
+    <a href="/class/1/english/shapes" class="chapter-card shapes-card notstarted">
+        <div class="chapter-num">🔷</div>
+        <div class="chapter-info">
+            <div class="chapter-title">7. Shapes and Colours</div>
+            <div class="chapter-meta">Circle, square, triangle & colours</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 8 -->
+    <a href="/class/1/english/habits" class="chapter-card habits-card notstarted">
+        <div class="chapter-num">🪥</div>
+        <div class="chapter-info">
+            <div class="chapter-title">8. Good Habits</div>
+            <div class="chapter-meta">Cleanliness, manners & health</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 9 -->
+    <a href="/class/1/english/transport" class="chapter-card trans-card notstarted">
+        <div class="chapter-num">🚗</div>
+        <div class="chapter-info">
+            <div class="chapter-title">9. Means of Transport</div>
+            <div class="chapter-meta">Bus, train, car, boat & more</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 10 -->
+    <a href="/class/1/english/numbers" class="chapter-card numbers-card notstarted">
+        <div class="chapter-num">🔢</div>
+        <div class="chapter-info">
+            <div class="chapter-title">10. Numbers and Days</div>
+            <div class="chapter-meta">1 to 20, days of week & months</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Stories for Listening 2 -->
+    <div class="chapter-card stories-card story-card notstarted"
+         onclick="location.href='/class/1/english/story2'">
+        <div class="chapter-num">📖</div>
+        <div class="chapter-info">
+            <div class="chapter-title">Stories for Listening</div>
+            <div class="chapter-meta">More stories to listen & enjoy</div>
+        </div>
+        <div class="chapter-status">🎧</div>
+    </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+    <a href="/class/1" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">📝</div>
+        <div class="nav-label">English</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=1');
+        const data = await res.json();
+        const chapters = [
+            'alphabets','fruits','vegetables','animals',
+            'body','school','family','shapes',
+            'habits','transport','numbers'
+        ];
+        let completed = 0;
+        chapters.forEach(ch => {
+            const p = data[`english_${ch}`];
+            if (p && p.total > 0 && p.completed === p.total) completed++;
+        });
+        const total = 12;
+        const pct = Math.round((completed / total) * 100);
+        document.getElementById('progressNum').textContent  = `${pct}%`;
+        document.getElementById('progressText').textContent = `${completed} of ${total} chapters completed`;
+        document.getElementById('progressBar').style.width  = `${pct}%`;
+    } catch(e) {}
+}
+loadProgress();
+</script>
+</body>
+</html>
