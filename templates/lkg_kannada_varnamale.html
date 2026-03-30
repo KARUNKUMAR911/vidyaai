@@ -23,6 +23,36 @@
             transition: background 0.6s ease;
         }
 
+        /* ── NO VOICE OVERLAY ── */
+        .no-voice-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.88);
+            z-index: 500;
+            align-items: center; justify-content: center;
+            flex-direction: column;
+            text-align: center; padding: 28px;
+            backdrop-filter: blur(12px);
+        }
+        .no-voice-overlay.show { display: flex; }
+        .no-voice-icon  { font-size: 72px; margin-bottom: 16px; }
+        .no-voice-title { font-size: 22px; font-weight: 900; color: white; margin-bottom: 10px; line-height: 1.3; }
+        .no-voice-text  { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.75; margin-bottom: 22px; max-width: 370px; }
+        .no-voice-steps { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 16px 20px; text-align: left; margin-bottom: 22px; max-width: 370px; width: 100%; border: 1px solid rgba(255,255,255,0.15); }
+        .no-voice-steps h4 { font-size: 13px; font-weight: 800; color: #fbbf24; margin-bottom: 10px; }
+        .no-voice-steps p  { font-size: 13px; color: rgba(255,255,255,0.88); line-height: 1.9; }
+        .device-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+        .device-tab { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 3px 10px; font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.6); cursor: pointer; }
+        .device-tab.active { background: rgba(232,93,4,0.35); border-color: #e85d04; color: #fbbf24; }
+        .steps-panel { display: none; }
+        .steps-panel.show { display: block; }
+        .no-voice-btn { padding: 13px 28px; background: #e85d04; color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; margin: 5px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); transition: transform 0.15s; }
+        .no-voice-btn:hover { transform: scale(1.04); }
+        .no-voice-btn.secondary { background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); }
+
+        /* ── LETTER LEVEL BADGE ── */
+        .letter-level { font-size: min(2.5vw, 3vh); color: #fbbf24; font-weight: 700; margin-top: 4px; background: rgba(0,0,0,0.2); padding: 2px 10px; border-radius: 10px; display: inline-block; }
+
         /* TOP BAR */
         .topbar {
             display: flex;
@@ -311,6 +341,45 @@
 </head>
 <body>
 
+<!-- ══ NO KANNADA VOICE OVERLAY ══ -->
+<div class="no-voice-overlay" id="noVoiceOverlay">
+    <div class="no-voice-icon">🔇</div>
+    <div class="no-voice-title">ಕನ್ನಡ ಧ್ವನಿ ಇಲ್ಲ!</div>
+    <div class="no-voice-text">
+        ಈ ಪಾಠಕ್ಕೆ ಕನ್ನಡ ಧ್ವನಿ ಅಗತ್ಯ.<br>
+        ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಕನ್ನಡ ಧ್ವನಿ ಸ್ಥಾಪಿಸಿ.
+    </div>
+    <div class="no-voice-steps">
+        <h4>📱 ಕನ್ನಡ ಧ್ವನಿ ಹೇಗೆ ಸ್ಥಾಪಿಸುವುದು?</h4>
+        <div class="device-tabs">
+            <span class="device-tab active" onclick="showTab('android')">Android</span>
+            <span class="device-tab"        onclick="showTab('ios')">iPhone / iPad</span>
+        </div>
+        <div class="steps-panel show" id="tab-android">
+            <p>
+                1️⃣ <strong>Settings</strong> → <strong>General Management</strong> → <strong>Language</strong><br>
+                2️⃣ <strong>ಕನ್ನಡ</strong> ಭಾಷೆ ಸೇರಿಸಿ<br>
+                3️⃣ <strong>Settings</strong> → <strong>Accessibility</strong> → <strong>Text to Speech</strong><br>
+                4️⃣ <strong>Google TTS</strong> → <strong>ಕನ್ನಡ Download</strong> ಮಾಡಿ<br>
+                5️⃣ ಬ್ರೌಸರ್ ಮುಚ್ಚಿ ಮತ್ತೆ ತೆರೆಯಿರಿ → <strong>ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ✅</strong>
+            </p>
+        </div>
+        <div class="steps-panel" id="tab-ios">
+            <p>
+                1️⃣ <strong>Settings</strong> → <strong>General</strong> → <strong>Language &amp; Region</strong><br>
+                2️⃣ <strong>ಕನ್ನಡ</strong> ಸೇರಿಸಿ<br>
+                3️⃣ <strong>Settings</strong> → <strong>Accessibility</strong> → <strong>Spoken Content</strong><br>
+                4️⃣ <strong>Voices</strong> → <strong>ಕನ್ನಡ</strong> → Download ಮಾಡಿ<br>
+                5️⃣ ಮರಳಿ ಬನ್ನಿ → <strong>ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ✅</strong>
+            </p>
+        </div>
+    </div>
+    <div>
+        <button class="no-voice-btn" onclick="checkVoiceAgain()">🔄 ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</button>
+        <button class="no-voice-btn secondary" onclick="continueWithoutVoice()">▶️ ಧ್ವನಿ ಇಲ್ಲದೆ ಮುಂದುವರಿಸಿ</button>
+    </div>
+</div>
+
 <div class="screen" id="mainScreen">
 
     <div class="topbar">
@@ -332,6 +401,7 @@
             <div class="letter-info-card">
                 <div class="letter-name"     id="letterName">ಅ</div>
                 <div class="letter-transliteration" id="letterTrans">a</div>
+                <div class="letter-level"    id="letterLevel">ಸ್ವರ</div>
             </div>
         </div>
 
@@ -399,103 +469,148 @@
 </div>
 
 <script>
-/* KANNADA VARNAMALE DATA */
-/* Vowels (ಸ್ವರಗಳು) + Consonants (ವ್ಯಂಜನಗಳು) */
+/* KANNADA VARNAMALE DATA — Kannada meanings only, no English */
 const varnamale = [
-    /* SWARAS - Vowels */
-    { letter:'ಅ', name:'ಅ', trans:'a', color:['#FF6B6B','#cc3333'],
-      words:[{k:'ಅಂಗಡಿ',e:'Shop',em:'🏪'},{k:'ಅಡಿಗೆ',e:'Cooking',em:'🍳'},{k:'ಅಮ್ಮ',e:'Mother',em:'👩'}]},
-    { letter:'ಆ', name:'ಆ', trans:'aa', color:['#FF8C42','#cc5511'],
-      words:[{k:'ಆನೆ',e:'Elephant',em:'🐘'},{k:'ಆಕಾಶ',e:'Sky',em:'🌤️'},{k:'ಆಟ',e:'Play',em:'🎮'}]},
-    { letter:'ಇ', name:'ಇ', trans:'i', color:['#F9C74F','#c99a00'],
-      words:[{k:'ಇಲಿ',e:'Mouse',em:'🐭'},{k:'ಇಟ್ಟಿಗೆ',e:'Brick',em:'🧱'},{k:'ಇಂಗ್ಲೀಷ್',e:'English',em:'📝'}]},
-    { letter:'ಈ', name:'ಈ', trans:'ee', color:['#43AA8B','#2a7a60'],
-      words:[{k:'ಈರುಳ್ಳಿ',e:'Onion',em:'🧅'},{k:'ಈಜು',e:'Swimming',em:'🏊'},{k:'ಈಚಲು',e:'Palm tree',em:'🌴'}]},
-    { letter:'ಉ', name:'ಉ', trans:'u', color:['#4895EF','#1a68c0'],
-      words:[{k:'ಉಪ್ಪು',e:'Salt',em:'🧂'},{k:'ಉದ್ಯಾನ',e:'Garden',em:'🌺'},{k:'ಉಗುರು',e:'Nail',em:'💅'}]},
-    { letter:'ಊ', name:'ಊ', trans:'oo', color:['#7B2D8B','#4e1a5e'],
-      words:[{k:'ಊಟ',e:'Meal',em:'🍽️'},{k:'ಊರು',e:'Village',em:'🏘️'},{k:'ಊಂಟ',e:'Camel',em:'🐪'}]},
-    { letter:'ಋ', name:'ಋ', trans:'ru', color:['#E74C3C','#b03030'],
-      words:[{k:'ಋಷಿ',e:'Sage',em:'🧘'},{k:'ಋತು',e:'Season',em:'🌸'},{k:'ಋಣ',e:'Debt',em:'💰'}]},
-    { letter:'ಎ', name:'ಎ', trans:'e', color:['#1ABC9C','#0d8870'],
-      words:[{k:'ಎಮ್ಮೆ',e:'Buffalo',em:'🐃'},{k:'ಎಲೆ',e:'Leaf',em:'🍃'},{k:'ಎಣ್ಣೆ',e:'Oil',em:'🫙'}]},
-    { letter:'ಏ', name:'ಏ', trans:'ae', color:['#F39C12','#b07000'],
-      words:[{k:'ಏಡಿ',e:'Crab',em:'🦀'},{k:'ಏಣಿ',e:'Ladder',em:'🪜'},{k:'ಏಳು',e:'Seven',em:'7️⃣'}]},
-    { letter:'ಐ', name:'ಐ', trans:'ai', color:['#8E44AD','#5e2c75'],
-      words:[{k:'ಐದು',e:'Five',em:'5️⃣'},{k:'ಐರಾವತ',e:'Airavata',em:'🐘'},{k:'ಐಸ್',e:'Ice',em:'🧊'}]},
-    { letter:'ಒ', name:'ಒ', trans:'o', color:['#D35400','#9a3a00'],
-      words:[{k:'ಒಂಟೆ',e:'Camel',em:'🐪'},{k:'ಒಲೆ',e:'Stove',em:'🔥'},{k:'ಒಕ್ಕಲು',e:'Farmer',em:'👨‍🌾'}]},
-    { letter:'ಓ', name:'ಓ', trans:'oo', color:['#16A085','#0d6b58'],
-      words:[{k:'ಓಡು',e:'Run',em:'🏃'},{k:'ಓದು',e:'Read',em:'📖'},{k:'ಓಕುಳಿ',e:'Festival',em:'🎊'}]},
-    { letter:'ಔ', name:'ಔ', trans:'au', color:['#2C3E50','#1a2535'],
-      words:[{k:'ಔಷಧ',e:'Medicine',em:'💊'},{k:'ಔತಣ',e:'Feast',em:'🎉'},{k:'ಔಕಾತು',e:'Power',em:'💪'}]},
-    { letter:'ಅಂ', name:'ಅಂ', trans:'am', color:['#E67E22','#b05810'],
-      words:[{k:'ಅಂಚೆ',e:'Post',em:'📮'},{k:'ಅಂಗಳ',e:'Courtyard',em:'🏡'},{k:'ಅಂಕ',e:'Number',em:'🔢'}]},
+    /* SWARAS - ಸ್ವರಗಳು */
+    { letter:'ಅ', name:'ಅ', trans:'a',   level:'ಸ್ವರ', color:['#FF6B6B','#cc3333'],
+      words:[{k:'ಅಮ್ಮ',m:'ತಾಯಿ',em:'👩'},{k:'ಅಡಿಗೆ',m:'ಅಡುಗೆ ಮನೆ',em:'🍳'},{k:'ಅಂಗಡಿ',m:'ವ್ಯಾಪಾರ ಮಾಡುವ ಜಾಗ',em:'🏪'}]},
+    { letter:'ಆ', name:'ಆ', trans:'aa',  level:'ಸ್ವರ', color:['#FF8C42','#cc5511'],
+      words:[{k:'ಆನೆ',m:'ದೊಡ್ಡ ಪ್ರಾಣಿ',em:'🐘'},{k:'ಆಕಾಶ',m:'ನೀಲಿ ಮೇಲ್ಭಾಗ',em:'🌤️'},{k:'ಆಟ',m:'ಮಕ್ಕಳ ಆಡುವಿಕೆ',em:'🎮'}]},
+    { letter:'ಇ', name:'ಇ', trans:'i',   level:'ಸ್ವರ', color:['#F9C74F','#c99a00'],
+      words:[{k:'ಇಲಿ',m:'ಸಣ್ಣ ಪ್ರಾಣಿ',em:'🐭'},{k:'ಇಟ್ಟಿಗೆ',m:'ಮನೆ ಕಟ್ಟಲು ಬಳಸುತ್ತಾರೆ',em:'🧱'},{k:'ಇಂಗ್ಲೀಷ್',m:'ಒಂದು ಭಾಷೆ',em:'📝'}]},
+    { letter:'ಈ', name:'ಈ', trans:'ee',  level:'ಸ್ವರ', color:['#43AA8B','#2a7a60'],
+      words:[{k:'ಈರುಳ್ಳಿ',m:'ಅಡಿಗೆಯಲ್ಲಿ ಬಳಸುತ್ತಾರೆ',em:'🧅'},{k:'ಈಜು',m:'ನೀರಿನಲ್ಲಿ ಈಜಾಡುವುದು',em:'🏊'},{k:'ಈಚಲು',m:'ಒಂದು ಮರ',em:'🌴'}]},
+    { letter:'ಉ', name:'ಉ', trans:'u',   level:'ಸ್ವರ', color:['#4895EF','#1a68c0'],
+      words:[{k:'ಉಪ್ಪು',m:'ಅಡಿಗೆಯ ರುಚಿ',em:'🧂'},{k:'ಉದ್ಯಾನ',m:'ಹೂವಿನ ತೋಟ',em:'🌺'},{k:'ಉಡ',m:'ಒಂದು ಪ್ರಾಣಿ',em:'🦎'}]},
+    { letter:'ಊ', name:'ಊ', trans:'oo',  level:'ಸ್ವರ', color:['#7B2D8B','#4e1a5e'],
+      words:[{k:'ಊಟ',m:'ಅನ್ನ ತಿನ್ನುವುದು',em:'🍽️'},{k:'ಊರು',m:'ನಾವು ವಾಸಿಸುವ ಜಾಗ',em:'🏘️'},{k:'ಊಂಟ',m:'ಮರುಭೂಮಿ ಪ್ರಾಣಿ',em:'🐪'}]},
+    { letter:'ಋ', name:'ಋ', trans:'ru',  level:'ಸ್ವರ', color:['#E74C3C','#b03030'],
+      words:[{k:'ಋಷಿ',m:'ತಪಸ್ಸು ಮಾಡುವ ವ್ಯಕ್ತಿ',em:'🧘'},{k:'ಋತು',m:'ವರ್ಷದ ಕಾಲ',em:'🌸'},{k:'ಋಣ',m:'ಸಾಲ',em:'💰'}]},
+    { letter:'ಎ', name:'ಎ', trans:'e',   level:'ಸ್ವರ', color:['#1ABC9C','#0d8870'],
+      words:[{k:'ಎಮ್ಮೆ',m:'ಹಾಲು ಕೊಡುವ ಪ್ರಾಣಿ',em:'🐃'},{k:'ಎಲೆ',m:'ಮರದ ಭಾಗ',em:'🍃'},{k:'ಎಣ್ಣೆ',m:'ಅಡಿಗೆಯಲ್ಲಿ ಬಳಸುತ್ತಾರೆ',em:'🫙'}]},
+    { letter:'ಏ', name:'ಏ', trans:'ae',  level:'ಸ್ವರ', color:['#F39C12','#b07000'],
+      words:[{k:'ಏಡಿ',m:'ಸಮುದ್ರ ಪ್ರಾಣಿ',em:'🦀'},{k:'ಏಣಿ',m:'ಮೇಲೆ ಹತ್ತಲು ಬಳಸುತ್ತಾರೆ',em:'🪜'},{k:'ಏಳು',m:'ಒಂದು ಸಂಖ್ಯೆ',em:'7️⃣'}]},
+    { letter:'ಐ', name:'ಐ', trans:'ai',  level:'ಸ್ವರ', color:['#8E44AD','#5e2c75'],
+      words:[{k:'ಐದು',m:'ಒಂದು ಸಂಖ್ಯೆ',em:'5️⃣'},{k:'ಐರಾವತ',m:'ದೇವೇಂದ್ರನ ಆನೆ',em:'🐘'},{k:'ಐಸ್',m:'ಶೀತಲ ನೀರು',em:'🧊'}]},
+    { letter:'ಒ', name:'ಒ', trans:'o',   level:'ಸ್ವರ', color:['#D35400','#9a3a00'],
+      words:[{k:'ಒಂಟೆ',m:'ಮರುಭೂಮಿ ಪ್ರಾಣಿ',em:'🐪'},{k:'ಒಲೆ',m:'ಅಡಿಗೆ ಮಾಡಲು ಬಳಸುತ್ತಾರೆ',em:'🔥'},{k:'ಒಕ್ಕಲು',m:'ರೈತ',em:'👨‍🌾'}]},
+    { letter:'ಓ', name:'ಓ', trans:'oo',  level:'ಸ್ವರ', color:['#16A085','#0d6b58'],
+      words:[{k:'ಓಡು',m:'ವೇಗವಾಗಿ ಹೋಗು',em:'🏃'},{k:'ಓದು',m:'ಪುಸ್ತಕ ನೋಡು',em:'📖'},{k:'ಓಕುಳಿ',m:'ಹಬ್ಬದ ಸಂಭ್ರಮ',em:'🎊'}]},
+    { letter:'ಔ', name:'ಔ', trans:'au',  level:'ಸ್ವರ', color:['#2C3E50','#1a2535'],
+      words:[{k:'ಔಷಧ',m:'ರೋಗ ಗುಣಪಡಿಸಲು',em:'💊'},{k:'ಔತಣ',m:'ಹಬ್ಬದ ಊಟ',em:'🎉'},{k:'ಔನ್ಯ',m:'ಶ್ರೇಷ್ಠತೆ',em:'🌟'}]},
+    { letter:'ಅಂ', name:'ಅಂ', trans:'am', level:'ಅನುಸ್ವಾರ', color:['#E67E22','#b05810'],
+      words:[{k:'ಅಂಚೆ',m:'ಪತ್ರ ಕಳಿಸುವ ಜಾಗ',em:'📮'},{k:'ಅಂಗಳ',m:'ಮನೆ ಮುಂದಿನ ಜಾಗ',em:'🏡'},{k:'ಅಂಕ',m:'ಸಂಖ್ಯೆ',em:'🔢'}]},
 
-    /* VYANJANAS - Consonants */
-    { letter:'ಕ', name:'ಕ', trans:'ka', color:['#FF6B6B','#cc3333'],
-      words:[{k:'ಕಮಲ',e:'Lotus',em:'🌸'},{k:'ಕಪ್ಪೆ',e:'Frog',em:'🐸'},{k:'ಕರಡಿ',e:'Bear',em:'🐻'}]},
-    { letter:'ಖ', name:'ಖ', trans:'kha', color:['#FF8C42','#cc5511'],
-      words:[{k:'ಖಗ',e:'Bird',em:'🐦'},{k:'ಖರ್ಚು',e:'Expense',em:'💸'},{k:'ಖೇದ',e:'Sadness',em:'😢'}]},
-    { letter:'ಗ', name:'ಗ', trans:'ga', color:['#F9C74F','#c99a00'],
-      words:[{k:'ಗಣೇಶ',e:'Ganesha',em:'🐘'},{k:'ಗಿಳಿ',e:'Parrot',em:'🦜'},{k:'ಗುಲಾಬಿ',e:'Rose',em:'🌹'}]},
-    { letter:'ಘ', name:'ಘ', trans:'gha', color:['#43AA8B','#2a7a60'],
-      words:[{k:'ಘಂಟೆ',e:'Bell',em:'🔔'},{k:'ಘನ',e:'Solid',em:'🧊'},{k:'ಘೋರ',e:'Terrible',em:'😱'}]},
-    { letter:'ಙ', name:'ಙ', trans:'nga', color:['#4895EF','#1a68c0'],
-      words:[{k:'ಪಂಙ್ತಿ',e:'Row',em:'📋'},{k:'ಅಙ್ಗ',e:'Body',em:'💪'},{k:'ಮಙ್ಗಳ',e:'Auspicious',em:'🌟'}]},
-    { letter:'ಚ', name:'ಚ', trans:'cha', color:['#7B2D8B','#4e1a5e'],
-      words:[{k:'ಚಂದ್ರ',e:'Moon',em:'🌙'},{k:'ಚಿಟ್ಟೆ',e:'Butterfly',em:'🦋'},{k:'ಚಳಿ',e:'Cold',em:'🥶'}]},
-    { letter:'ಛ', name:'ಛ', trans:'chha', color:['#E74C3C','#b03030'],
-      words:[{k:'ಛತ್ರಿ',e:'Umbrella',em:'☂️'},{k:'ಛಾಯೆ',e:'Shadow',em:'🌑'},{k:'ಛಲ',e:'Determination',em:'💪'}]},
-    { letter:'ಜ', name:'ಜ', trans:'ja', color:['#1ABC9C','#0d8870'],
-      words:[{k:'ಜಲ',e:'Water',em:'💧'},{k:'ಜೇನು',e:'Honey',em:'🍯'},{k:'ಜಿಂಕೆ',e:'Deer',em:'🦌'}]},
-    { letter:'ಝ', name:'ಝ', trans:'jha', color:['#F39C12','#b07000'],
-      words:[{k:'ಝರಿ',e:'Stream',em:'🌊'},{k:'ಝಾಡು',e:'Broom',em:'🧹'},{k:'ಝೀಬ್ರಾ',e:'Zebra',em:'🦓'}]},
-    { letter:'ಟ', name:'ಟ', trans:'ta', color:['#8E44AD','#5e2c75'],
-      words:[{k:'ಟೊಮ್ಯಾಟೊ',e:'Tomato',em:'🍅'},{k:'ಟ್ರೇನ್',e:'Train',em:'🚂'},{k:'ಟ್ಯಾಂಕ್',e:'Tank',em:'🪣'}]},
-    { letter:'ಡ', name:'ಡ', trans:'da', color:['#D35400','#9a3a00'],
-      words:[{k:'ಡಮರು',e:'Drum',em:'🥁'},{k:'ಡಬ್ಬ',e:'Box',em:'📦'},{k:'ಡಾಕ್ಟರ್',e:'Doctor',em:'👨‍⚕️'}]},
-    { letter:'ಣ', name:'ಣ', trans:'na', color:['#16A085','#0d6b58'],
-      words:[{k:'ಬಾಣ',e:'Arrow',em:'🏹'},{k:'ಗಣ',e:'Group',em:'👥'},{k:'ಕಣ',e:'Eye',em:'👁️'}]},
-    { letter:'ತ', name:'ತ', trans:'tha', color:['#2C3E50','#1a2535'],
-      words:[{k:'ತಾಯಿ',e:'Mother',em:'👩'},{k:'ತಲೆ',e:'Head',em:'🗣️'},{k:'ತೆಂಗು',e:'Coconut',em:'🥥'}]},
-    { letter:'ದ', name:'ದ', trans:'da', color:['#E67E22','#b05810'],
-      words:[{k:'ದೀಪ',e:'Lamp',em:'🪔'},{k:'ದಾಳಿಂಬೆ',e:'Pomegranate',em:'🍎'},{k:'ದೇವರು',e:'God',em:'🙏'}]},
-    { letter:'ನ', name:'ನ', trans:'na', color:['#FF6B6B','#cc3333'],
-      words:[{k:'ನಾಯಿ',e:'Dog',em:'🐕'},{k:'ನೀರು',e:'Water',em:'💧'},{k:'ನಕ್ಷತ್ರ',e:'Star',em:'⭐'}]},
-    { letter:'ಪ', name:'ಪ', trans:'pa', color:['#4895EF','#1a68c0'],
-      words:[{k:'ಪಕ್ಷಿ',e:'Bird',em:'🐦'},{k:'ಪೆನ್ನು',e:'Pen',em:'✒️'},{k:'ಪೂಜೆ',e:'Prayer',em:'🙏'}]},
-    { letter:'ಬ', name:'ಬ', trans:'ba', color:['#43AA8B','#2a7a60'],
-      words:[{k:'ಬೆಕ್ಕು',e:'Cat',em:'🐱'},{k:'ಬಾಳೆ',e:'Banana',em:'🍌'},{k:'ಬಸ್ಸು',e:'Bus',em:'🚌'}]},
-    { letter:'ಮ', name:'ಮ', trans:'ma', color:['#7B2D8B','#4e1a5e'],
-      words:[{k:'ಮನೆ',e:'House',em:'🏠'},{k:'ಮಂಗ',e:'Monkey',em:'🐒'},{k:'ಮೀನು',e:'Fish',em:'🐟'}]},
-    { letter:'ಯ', name:'ಯ', trans:'ya', color:['#E74C3C','#b03030'],
-      words:[{k:'ಯಾನ',e:'Journey',em:'✈️'},{k:'ಯುದ್ಧ',e:'War',em:'⚔️'},{k:'ಯೋಗ',e:'Yoga',em:'🧘'}]},
-    { letter:'ರ', name:'ರ', trans:'ra', color:['#1ABC9C','#0d8870'],
-      words:[{k:'ರಸ್ತೆ',e:'Road',em:'🛣️'},{k:'ರಾಜ',e:'King',em:'👑'},{k:'ರೈತ',e:'Farmer',em:'👨‍🌾'}]},
-    { letter:'ಲ', name:'ಲ', trans:'la', color:['#F39C12','#b07000'],
-      words:[{k:'ಲಂಗ',e:'Skirt',em:'👗'},{k:'ಲಡ್ಡು',e:'Sweet',em:'🍬'},{k:'ಲೋಟ',e:'Glass',em:'🥛'}]},
-    { letter:'ವ', name:'ವ', trans:'va', color:['#8E44AD','#5e2c75'],
-      words:[{k:'ವಾನರ',e:'Monkey',em:'🐒'},{k:'ವಿಮಾನ',e:'Airplane',em:'✈️'},{k:'ವೃಕ್ಷ',e:'Tree',em:'🌳'}]},
-    { letter:'ಶ', name:'ಶ', trans:'sha', color:['#D35400','#9a3a00'],
-      words:[{k:'ಶಾಲೆ',e:'School',em:'🏫'},{k:'ಶಿಕ್ಷಕ',e:'Teacher',em:'👨‍🏫'},{k:'ಶ್ರೀಗಂಧ',e:'Sandalwood',em:'🌿'}]},
-    { letter:'ಸ', name:'ಸ', trans:'sa', color:['#16A085','#0d6b58'],
-      words:[{k:'ಸೂರ್ಯ',e:'Sun',em:'☀️'},{k:'ಸಿಂಹ',e:'Lion',em:'🦁'},{k:'ಸೇಬು',e:'Apple',em:'🍎'}]},
-    { letter:'ಹ', name:'ಹ', trans:'ha', color:['#2C3E50','#1a2535'],
-      words:[{k:'ಹಕ್ಕಿ',e:'Bird',em:'🐦'},{k:'ಹಣ್ಣು',e:'Fruit',em:'🍎'},{k:'ಹಸು',e:'Cow',em:'🐄'}]},
-    { letter:'ಳ', name:'ಳ', trans:'la', color:['#E67E22','#b05810'],
-      words:[{k:'ಬಾಳೆ',e:'Banana',em:'🍌'},{k:'ಹಳ್ಳ',e:'Stream',em:'🌊'},{k:'ಕೊಳ',e:'Pond',em:'🏞️'}]},
+    /* VYANJANAS - ವ್ಯಂಜನಗಳು */
+    { letter:'ಕ', name:'ಕ', trans:'ka',  level:'ವ್ಯಂಜನ', color:['#FF6B6B','#cc3333'],
+      words:[{k:'ಕಮಲ',m:'ಸುಂದರ ಹೂವು',em:'🌸'},{k:'ಕಪ್ಪೆ',m:'ನೀರಿನ ಪ್ರಾಣಿ',em:'🐸'},{k:'ಕರಡಿ',m:'ಕಾಡಿನ ಪ್ರಾಣಿ',em:'🐻'}]},
+    { letter:'ಖ', name:'ಖ', trans:'kha', level:'ವ್ಯಂಜನ', color:['#FF8C42','#cc5511'],
+      words:[{k:'ಖಗ',m:'ಹಕ್ಕಿ',em:'🐦'},{k:'ಖರ್ಚು',m:'ಹಣ ಖರ್ಚು',em:'💸'},{k:'ಖೇದ',m:'ದುಃಖ',em:'😢'}]},
+    { letter:'ಗ', name:'ಗ', trans:'ga',  level:'ವ್ಯಂಜನ', color:['#F9C74F','#c99a00'],
+      words:[{k:'ಗಣೇಶ',m:'ಆನೆ ತಲೆಯ ದೇವರು',em:'🐘'},{k:'ಗಿಳಿ',m:'ಮಾತನಾಡುವ ಹಕ್ಕಿ',em:'🦜'},{k:'ಗುಲಾಬಿ',m:'ಸುಂದರ ಹೂವು',em:'🌹'}]},
+    { letter:'ಘ', name:'ಘ', trans:'gha', level:'ವ್ಯಂಜನ', color:['#43AA8B','#2a7a60'],
+      words:[{k:'ಘಂಟೆ',m:'ಶಬ್ದ ಮಾಡುವ ವಸ್ತು',em:'🔔'},{k:'ಘನ',m:'ಗಟ್ಟಿಯಾದ',em:'🧊'},{k:'ಘೋರ',m:'ಭಯಂಕರ',em:'😱'}]},
+    { letter:'ಙ', name:'ಙ', trans:'nga', level:'ವ್ಯಂಜನ', color:['#4895EF','#1a68c0'],
+      words:[{k:'ಪಂಙ್ತಿ',m:'ಸಾಲು',em:'📋'},{k:'ಅಙ್ಗ',m:'ದೇಹದ ಭಾಗ',em:'💪'},{k:'ಮಙ್ಗಳ',m:'ಶುಭ',em:'🌟'}]},
+    { letter:'ಚ', name:'ಚ', trans:'cha', level:'ವ್ಯಂಜನ', color:['#7B2D8B','#4e1a5e'],
+      words:[{k:'ಚಂದ್ರ',m:'ರಾತ್ರಿ ಬೆಳಕು',em:'🌙'},{k:'ಚಿಟ್ಟೆ',m:'ಸುಂದರ ಕೀಟ',em:'🦋'},{k:'ಚಳಿ',m:'ತಣ್ಣಗಿನ ಹವಾಮಾನ',em:'🥶'}]},
+    { letter:'ಛ', name:'ಛ', trans:'chha', level:'ವ್ಯಂಜನ', color:['#E74C3C','#b03030'],
+      words:[{k:'ಛತ್ರಿ',m:'ಮಳೆಯಿಂದ ರಕ್ಷಿಸುತ್ತದೆ',em:'☂️'},{k:'ಛಾಯೆ',m:'ನೆರಳು',em:'🌑'},{k:'ಛಲ',m:'ದೃಢ ನಿಶ್ಚಯ',em:'💪'}]},
+    { letter:'ಜ', name:'ಜ', trans:'ja',  level:'ವ್ಯಂಜನ', color:['#1ABC9C','#0d8870'],
+      words:[{k:'ಜಲ',m:'ನೀರು',em:'💧'},{k:'ಜೇನು',m:'ಸಿಹಿ ದ್ರವ',em:'🍯'},{k:'ಜಿಂಕೆ',m:'ವೇಗವಾಗಿ ಓಡುವ ಪ್ರಾಣಿ',em:'🦌'}]},
+    { letter:'ಝ', name:'ಝ', trans:'jha', level:'ವ್ಯಂಜನ', color:['#F39C12','#b07000'],
+      words:[{k:'ಝರಿ',m:'ಸಣ್ಣ ಝರಿ',em:'🌊'},{k:'ಝಾಡು',m:'ಗುಡಿಸಲು ಬಳಸುತ್ತಾರೆ',em:'🧹'},{k:'ಝೀಬ್ರಾ',m:'ಪಟ್ಟೆ ಪ್ರಾಣಿ',em:'🦓'}]},
+    { letter:'ಟ', name:'ಟ', trans:'ta',  level:'ವ್ಯಂಜನ', color:['#8E44AD','#5e2c75'],
+      words:[{k:'ಟೊಮ್ಯಾಟೊ',m:'ಕೆಂಪು ತರಕಾರಿ',em:'🍅'},{k:'ಟ್ರೇನ್',m:'ರೈಲು',em:'🚂'},{k:'ಟ್ಯಾಂಕ್',m:'ನೀರಿನ ತೊಟ್ಟಿ',em:'🪣'}]},
+    { letter:'ಡ', name:'ಡ', trans:'da',  level:'ವ್ಯಂಜನ', color:['#D35400','#9a3a00'],
+      words:[{k:'ಡಮರು',m:'ಸಣ್ಣ ತಮ್ಮಟ',em:'🥁'},{k:'ಡಬ್ಬ',m:'ಪೆಟ್ಟಿಗೆ',em:'📦'},{k:'ಡಾಕ್ಟರ್',m:'ರೋಗ ಗುಣಪಡಿಸುವ ವ್ಯಕ್ತಿ',em:'👨‍⚕️'}]},
+    { letter:'ಣ', name:'ಣ', trans:'na',  level:'ವ್ಯಂಜನ', color:['#16A085','#0d6b58'],
+      words:[{k:'ಬಾಣ',m:'ಬಿಲ್ಲಿನ ಆಯುಧ',em:'🏹'},{k:'ಗಣ',m:'ಗುಂಪು',em:'👥'},{k:'ಕಣ',m:'ಕಣ್ಣು',em:'👁️'}]},
+    { letter:'ತ', name:'ತ', trans:'tha', level:'ವ್ಯಂಜನ', color:['#2C3E50','#1a2535'],
+      words:[{k:'ತಾಯಿ',m:'ಅಮ್ಮ',em:'👩'},{k:'ತಲೆ',m:'ದೇಹದ ಮೇಲ್ಭಾಗ',em:'🗣️'},{k:'ತೆಂಗು',m:'ಕೊಬ್ಬರಿ ಮರ',em:'🥥'}]},
+    { letter:'ದ', name:'ದ', trans:'da',  level:'ವ್ಯಂಜನ', color:['#E67E22','#b05810'],
+      words:[{k:'ದೀಪ',m:'ಬೆಳಕು ಕೊಡುತ್ತದೆ',em:'🪔'},{k:'ದಾಳಿಂಬೆ',m:'ಕೆಂಪು ಹಣ್ಣು',em:'🍎'},{k:'ದೇವರು',m:'ಭಗವಂತ',em:'🙏'}]},
+    { letter:'ನ', name:'ನ', trans:'na',  level:'ವ್ಯಂಜನ', color:['#FF6B6B','#cc3333'],
+      words:[{k:'ನಾಯಿ',m:'ನಂಬಿಗಸ್ತ ಪ್ರಾಣಿ',em:'🐕'},{k:'ನೀರು',m:'ಜೀವಕ್ಕೆ ಅವಶ್ಯ',em:'💧'},{k:'ನಕ್ಷತ್ರ',m:'ರಾತ್ರಿ ಹೊಳೆಯುತ್ತದೆ',em:'⭐'}]},
+    { letter:'ಪ', name:'ಪ', trans:'pa',  level:'ವ್ಯಂಜನ', color:['#4895EF','#1a68c0'],
+      words:[{k:'ಪಕ್ಷಿ',m:'ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ',em:'🐦'},{k:'ಪೆನ್ನು',m:'ಬರೆಯಲು ಬಳಸುತ್ತಾರೆ',em:'✒️'},{k:'ಪೂಜೆ',m:'ದೇವರ ಆರಾಧನೆ',em:'🙏'}]},
+    { letter:'ಬ', name:'ಬ', trans:'ba',  level:'ವ್ಯಂಜನ', color:['#43AA8B','#2a7a60'],
+      words:[{k:'ಬೆಕ್ಕು',m:'ಸಾಕು ಪ್ರಾಣಿ',em:'🐱'},{k:'ಬಾಳೆ',m:'ಹಳದಿ ಹಣ್ಣು',em:'🍌'},{k:'ಬಸ್ಸು',m:'ಸಾರಿಗೆ ವಾಹನ',em:'🚌'}]},
+    { letter:'ಮ', name:'ಮ', trans:'ma',  level:'ವ್ಯಂಜನ', color:['#7B2D8B','#4e1a5e'],
+      words:[{k:'ಮನೆ',m:'ನಾವು ವಾಸಿಸುವ ಜಾಗ',em:'🏠'},{k:'ಮಂಗ',m:'ಮರ ಹತ್ತುವ ಪ್ರಾಣಿ',em:'🐒'},{k:'ಮೀನು',m:'ನೀರಿನ ಪ್ರಾಣಿ',em:'🐟'}]},
+    { letter:'ಯ', name:'ಯ', trans:'ya',  level:'ವ್ಯಂಜನ', color:['#E74C3C','#b03030'],
+      words:[{k:'ಯಾನ',m:'ಪ್ರಯಾಣ',em:'✈️'},{k:'ಯುದ್ಧ',m:'ಹೋರಾಟ',em:'⚔️'},{k:'ಯೋಗ',m:'ದೇಹ ಆರೋಗ್ಯ ವ್ಯಾಯಾಮ',em:'🧘'}]},
+    { letter:'ರ', name:'ರ', trans:'ra',  level:'ವ್ಯಂಜನ', color:['#1ABC9C','#0d8870'],
+      words:[{k:'ರಸ್ತೆ',m:'ವಾಹನ ಹೋಗುವ ದಾರಿ',em:'🛣️'},{k:'ರಾಜ',m:'ರಾಜ್ಯ ಆಳುವ ವ್ಯಕ್ತಿ',em:'👑'},{k:'ರೈತ',m:'ಕೃಷಿ ಮಾಡುವ ವ್ಯಕ್ತಿ',em:'👨‍🌾'}]},
+    { letter:'ಲ', name:'ಲ', trans:'la',  level:'ವ್ಯಂಜನ', color:['#F39C12','#b07000'],
+      words:[{k:'ಲಡ್ಡು',m:'ಸಿಹಿ ತಿಂಡಿ',em:'🍬'},{k:'ಲೋಟ',m:'ನೀರು ಕುಡಿಯಲು',em:'🥛'},{k:'ಲಂಗ',m:'ಹೆಣ್ಣು ಮಕ್ಕಳ ಉಡುಪು',em:'👗'}]},
+    { letter:'ವ', name:'ವ', trans:'va',  level:'ವ್ಯಂಜನ', color:['#8E44AD','#5e2c75'],
+      words:[{k:'ವಿಮಾನ',m:'ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ',em:'✈️'},{k:'ವೃಕ್ಷ',m:'ದೊಡ್ಡ ಮರ',em:'🌳'},{k:'ವಾನರ',m:'ಕಪಿ',em:'🐒'}]},
+    { letter:'ಶ', name:'ಶ', trans:'sha', level:'ವ್ಯಂಜನ', color:['#D35400','#9a3a00'],
+      words:[{k:'ಶಾಲೆ',m:'ಕಲಿಯುವ ಜಾಗ',em:'🏫'},{k:'ಶಿಕ್ಷಕ',m:'ಕಲಿಸುವ ವ್ಯಕ್ತಿ',em:'👨‍🏫'},{k:'ಶ್ರೀಗಂಧ',m:'ಸುಗಂಧ ಮರ',em:'🌿'}]},
+    { letter:'ಸ', name:'ಸ', trans:'sa',  level:'ವ್ಯಂಜನ', color:['#16A085','#0d6b58'],
+      words:[{k:'ಸೂರ್ಯ',m:'ಬೆಳಕು ಕೊಡುತ್ತದೆ',em:'☀️'},{k:'ಸಿಂಹ',m:'ಕಾಡಿನ ರಾಜ',em:'🦁'},{k:'ಸೇಬು',m:'ಕೆಂಪು ಹಣ್ಣು',em:'🍎'}]},
+    { letter:'ಹ', name:'ಹ', trans:'ha',  level:'ವ್ಯಂಜನ', color:['#2C3E50','#1a2535'],
+      words:[{k:'ಹಕ್ಕಿ',m:'ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ',em:'🐦'},{k:'ಹಣ್ಣು',m:'ಮರದ ಫಲ',em:'🍎'},{k:'ಹಸು',m:'ಹಾಲು ಕೊಡುತ್ತದೆ',em:'🐄'}]},
+    { letter:'ಳ', name:'ಳ', trans:'la',  level:'ವ್ಯಂಜನ', color:['#E67E22','#b05810'],
+      words:[{k:'ಬಾಳೆ',m:'ಹಳದಿ ಹಣ್ಣು',em:'🍌'},{k:'ಹಳ್ಳ',m:'ಸಣ್ಣ ನದಿ',em:'🌊'},{k:'ಕೊಳ',m:'ಸಣ್ಣ ಕೆರೆ',em:'🏞️'}]},
 ];
 
 /* STATE */
-let current   = 0;
-let stars     = 0;
-let soundOn   = true;
-let autoPlay  = false;
-let autoSpeed = 5000;
-let autoTimer = null;
-let learned   = new Set();
-const total   = varnamale.length;
+let current      = 0;
+let stars        = 0;
+let soundOn      = true;
+let autoPlay     = false;
+let autoSpeed    = 5000;
+let autoTimer    = null;
+let learned      = new Set();
+let kannadaVoice = null;
+const total      = varnamale.length;
+
+/* ── VOICE DETECTION ── */
+function findKannadaVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    return voices.find(v =>
+        v.lang === 'kn-IN' || v.lang === 'kn' ||
+        v.name.toLowerCase().includes('kannada')
+    ) || null;
+}
+
+function checkVoiceAvailable() {
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) {
+        document.getElementById('noVoiceOverlay').classList.add('show');
+        return false;
+    }
+    document.getElementById('noVoiceOverlay').classList.remove('show');
+    return true;
+}
+
+function checkVoiceAgain() {
+    window.speechSynthesis.getVoices();
+    setTimeout(() => {
+        if (checkVoiceAvailable()) {
+            updateScreen(false);
+            setTimeout(speakLetter, 500);
+        }
+    }, 500);
+}
+
+function continueWithoutVoice() {
+    soundOn = false;
+    document.getElementById('soundTopBtn').textContent = '🔇';
+    document.getElementById('soundTopBtn').style.background = 'rgba(255,80,80,0.4)';
+    document.getElementById('soundToggle').classList.remove('on');
+    document.getElementById('noVoiceOverlay').classList.remove('show');
+}
+
+/* Device tab switcher inside the overlay */
+function showTab(device) {
+    document.querySelectorAll('.device-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.steps-panel').forEach(p => p.classList.remove('show'));
+    document.querySelector(`[onclick="showTab('${device}')"]`).classList.add('active');
+    document.getElementById('tab-' + device).classList.add('show');
+}
 
 /* UPDATE SCREEN */
 function updateScreen(animate = true) {
@@ -503,11 +618,12 @@ function updateScreen(animate = true) {
     document.getElementById('mainScreen').style.background =
         `linear-gradient(135deg, ${a.color[0]} 0%, ${a.color[1]} 100%)`;
 
-    document.getElementById('bigLetter').textContent    = a.letter;
-    document.getElementById('letterName').textContent   = a.name;
-    document.getElementById('letterTrans').textContent  = a.trans;
+    document.getElementById('bigLetter').textContent   = a.letter;
+    document.getElementById('letterName').textContent  = a.name;
+    document.getElementById('letterTrans').textContent = a.trans;
+    document.getElementById('letterLevel').textContent = a.level;
 
-    // Build word cards
+    // Build word cards — Kannada meaning only, no English
     const container = document.getElementById('wordsContainer');
     container.innerHTML = '';
     a.words.forEach((word, idx) => {
@@ -518,9 +634,9 @@ function updateScreen(animate = true) {
             <div class="word-emoji">${word.em}</div>
             <div class="word-info">
                 <div class="word-kannada">${word.k}</div>
-                <div class="word-english">${word.e}</div>
+                <div class="word-english">${word.m}</div>
             </div>
-            <button class="speak-btn" onclick="speakWord('${word.k}', '${word.e}', event)">🔊</button>
+            <button class="speak-btn" onclick="speakWord('${word.k}', event)">🔊</button>
         `;
         container.appendChild(card);
     });
@@ -538,48 +654,35 @@ function updateScreen(animate = true) {
     if (soundOn) setTimeout(speakLetter, 500);
 }
 
-/* SPEAK */
-function getKannadaVoice() {
-    const voices = window.speechSynthesis.getVoices();
-    return voices.find(v =>
-        v.lang === 'kn-IN' || v.lang === 'kn' ||
-        v.name.toLowerCase().includes('kannada')
-    ) || null;
-}
-
+/* ── SPEAK — KANNADA ONLY, NO ENGLISH FALLBACK ── */
 function speakLetter() {
-    if (!soundOn || !window.speechSynthesis) return;
+    if (!soundOn) return;
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) {
+        checkVoiceAvailable(); // show the overlay
+        return;
+    }
     window.speechSynthesis.cancel();
     const a = varnamale[current];
-    const knVoice = getKannadaVoice();
     const u = new SpeechSynthesisUtterance();
-    if (knVoice) {
-        u.voice = knVoice;
-        u.lang  = 'kn-IN';
-        u.text  = `${a.name}... ${a.words[0].k}, ${a.words[1].k}, ${a.words[2].k}`;
-    } else {
-        u.lang = 'en-IN';
-        u.text = `${a.trans}... ${a.words[0].e}, ${a.words[1].e}, ${a.words[2].e}`;
-    }
-    u.rate = 0.75; u.pitch = 1.2; u.volume = 1;
+    u.voice  = kannadaVoice;
+    u.lang   = 'kn-IN';
+    u.text   = `${a.name}... ${a.words[0].k}, ${a.words[1].k}, ${a.words[2].k}`;
+    u.rate   = 0.75; u.pitch = 1.2; u.volume = 1;
     window.speechSynthesis.speak(u);
 }
 
-function speakWord(word, english, e) {
+function speakWord(word, e) {
     if (e) e.stopPropagation();
-    if (!soundOn || !window.speechSynthesis) return;
+    if (!soundOn) return;
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) { checkVoiceAvailable(); return; }
     window.speechSynthesis.cancel();
-    const knVoice = getKannadaVoice();
     const u = new SpeechSynthesisUtterance();
-    if (knVoice) {
-        u.voice = knVoice;
-        u.lang  = 'kn-IN';
-        u.text  = word;
-    } else {
-        u.lang = 'en-IN';
-        u.text = english;
-    }
-    u.rate = 0.75; u.pitch = 1.2;
+    u.voice = kannadaVoice;
+    u.lang  = 'kn-IN';
+    u.text  = word;
+    u.rate  = 0.75; u.pitch = 1.2;
     window.speechSynthesis.speak(u);
 }
 
@@ -727,10 +830,10 @@ function checkQuiz(btn, selected, correct) {
     if (selected === correct) {
         btn.classList.add('correct');
         addStars(2);
-        if (soundOn) {
+        if (soundOn && kannadaVoice) {
             window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance('ಸರಿ! ಭೇಷ್!');
-            u.lang = 'kn-IN'; u.pitch = 1.4;
+            u.voice = kannadaVoice; u.lang = 'kn-IN'; u.pitch = 1.4;
             window.speechSynthesis.speak(u);
         }
         setTimeout(() => {
@@ -758,10 +861,10 @@ function showCelebration(emoji, title, sub) {
     document.getElementById('celebTitle').textContent = title;
     document.getElementById('celebSub').textContent   = sub;
     document.getElementById('celebOverlay').classList.add('show');
-    if (soundOn) {
+    if (soundOn && kannadaVoice) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance('ಅದ್ಭುತ! ನೀವು ಕನ್ನಡ ತಾರೆ!');
-        u.lang = 'kn-IN'; u.pitch = 1.4; u.rate = 0.85;
+        u.voice = kannadaVoice; u.lang = 'kn-IN'; u.pitch = 1.4; u.rate = 0.85;
         window.speechSynthesis.speak(u);
     }
     launchConfetti();
@@ -793,17 +896,28 @@ function launchConfetti() {
 }
 
 /* INIT */
-// Load voices
 window.speechSynthesis.getVoices();
 if (window.speechSynthesis.onvoiceschanged !== undefined) {
     window.speechSynthesis.onvoiceschanged = () => {
-        const kn = getKannadaVoice();
-        console.log(kn ? '✅ Kannada voice: ' + kn.name : '⚠️ No Kannada voice — using English fallback');
+        kannadaVoice = findKannadaVoice();
+        if (kannadaVoice) {
+            document.getElementById('noVoiceOverlay').classList.remove('show');
+        }
     };
 }
+
 updateDots();
 updateScreen(false);
-setTimeout(speakLetter, 900);
+
+// Check voice after a small delay to allow browser to load voice list
+setTimeout(() => {
+    kannadaVoice = findKannadaVoice();
+    if (!kannadaVoice) {
+        checkVoiceAvailable(); // shows overlay with setup instructions
+    } else {
+        speakLetter();
+    }
+}, 1000);
 </script>
 </body>
 </html>
