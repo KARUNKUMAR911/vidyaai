@@ -804,6 +804,14 @@ def class1_english_ch1():
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_ch1.html', student=student)
 
+@app.route('/class/1/english/chapter/vegetables')
+def class1_english_ch2():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch2.html', student=student)
+
+
 
 if __name__ == '__main__':
     with app.app_context():
