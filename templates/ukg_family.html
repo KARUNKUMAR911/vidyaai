@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>VidyaAI – UKG My Family!</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh;width:100vw;user-select:none}
+.screen{width:100vw;height:100vh;display:flex;flex-direction:column;transition:background .6s ease}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:rgba(0,0,0,0.15);backdrop-filter:blur(10px);flex-shrink:0;z-index:10}
+.topbar-btn{background:rgba(255,255,255,0.22);border:none;color:white;padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.stars-display{background:rgba(255,215,0,0.3);border:1px solid rgba(255,215,0,0.5);color:white;padding:7px 16px;border-radius:20px;font-size:14px;font-weight:700}
+.sound-pill{background:rgba(255,255,255,0.22);border:2px solid rgba(255,255,255,0.45);color:white;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:transform 0.15s,background 0.2s;backdrop-filter:blur(6px);white-space:nowrap;font-family:inherit}
+.sound-pill:active{transform:scale(0.92);background:rgba(255,255,255,0.4)}
+.sound-pill.muted{background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.5);text-decoration:line-through}
+
+/* PROGRESS DOTS */
+.dots-row{display:flex;justify-content:center;gap:6px;padding:8px 16px;flex-wrap:wrap;flex-shrink:0;background:rgba(0,0,0,0.1)}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.28);transition:all .3s;flex-shrink:0;cursor:pointer}
+.dot.done{background:rgba(255,255,255,0.65)}
+.dot.current{background:#fbbf24;transform:scale(1.6);box-shadow:0 0 10px #fbbf24}
+
+/* MAIN */
+.main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 24px;gap:28px;min-height:0;cursor:pointer}
+
+/* LEFT — character illustration */
+.char-half{flex:1.1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%}
+
+.char-frame{
+  width:min(36vw,52vh);height:min(36vw,52vh);
+  background:rgba(255,255,255,0.18);
+  border:3px solid rgba(255,255,255,0.45);
+  border-radius:28px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 16px 48px rgba(0,0,0,0.28);
+  animation:slideUp .45s ease .05s both;
+  flex-shrink:0;cursor:pointer;
+  transition:transform .15s;
+  overflow:hidden;
+  position:relative;
+}
+.char-frame:active{transform:scale(0.95)}
+.char-frame svg{width:85%;height:85%}
+
+.member-name{font-size:min(8vw,10vh);font-weight:900;color:white;text-shadow:0 4px 16px rgba(0,0,0,0.25);animation:popIn .5s cubic-bezier(0.175,0.885,0.32,1.275) both;text-align:center;line-height:1}
+.member-role{font-size:min(3vw,3.5vh);font-weight:600;color:rgba(255,255,255,.65);animation:slideUp .4s ease .2s both;text-align:center;background:rgba(255,255,255,0.15);padding:4px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25)}
+
+/* RIGHT — info cards */
+.info-half{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;height:100%}
+
+.info-card{background:rgba(255,255,255,0.18);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,0.35);border-radius:22px;padding:13px 16px;width:100%;animation:slideUp .4s ease both;box-shadow:0 6px 24px rgba(0,0,0,0.1)}
+.info-card:nth-child(1){animation-delay:.1s}
+.info-card:nth-child(2){animation-delay:.18s}
+.info-card:nth-child(3){animation-delay:.26s}
+.info-card:nth-child(4){animation-delay:.34s}
+
+.card-label{font-size:10px;font-weight:800;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
+.card-value{font-size:min(3.2vw,3.8vh);font-weight:800;color:white;line-height:1.25}
+.card-sub{font-size:min(2.4vw,2.8vh);font-weight:600;color:rgba(255,255,255,.7);margin-top:3px;line-height:1.3}
+
+.rel-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.rel-chip{background:rgba(255,255,255,0.22);border:1.5px solid rgba(255,255,255,.38);border-radius:20px;padding:3px 11px;font-size:min(2vw,2.6vh);font-weight:700;color:white}
+
+.love-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.love-word{font-size:min(3vw,3.8vh);animation:popIn .3s ease both}
+
+/* BOTTOM BAR */
+.bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 16px;background:rgba(0,0,0,0.14);backdrop-filter:blur(10px);flex-shrink:0}
+.nav-btn{background:rgba(255,255,255,0.22);border:2px solid rgba(255,255,255,.35);color:white;padding:11px 22px;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.nav-btn:hover{background:rgba(255,255,255,0.38);transform:scale(1.04)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.next-btn{background:white;color:#333;border:none;padding:13px 30px;border-radius:50px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);transition:all .2s}
+.next-btn:hover{transform:scale(1.05) translateY(-2px)}
+.bottom-center{text-align:center}
+.tap-hint{font-size:13px;color:rgba(255,255,255,.72);font-weight:600}
+
+/* MOBILE */
+@media(max-width:540px){
+  .main-content{flex-direction:column;gap:10px;padding:8px 14px}
+  .char-half,.info-half{flex:none;height:auto;width:100%}
+  .char-frame{width:min(48vw,26vh);height:min(48vw,26vh)}
+  .member-name{font-size:min(12vw,8vh)}
+  .info-card{padding:10px 14px}
+  .card-value{font-size:min(4.5vw,3.5vh)}
+}
+
+/* PARENT PANEL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.overlay.show{display:flex}
+.panel{background:white;border-radius:28px;padding:26px;width:92%;max-width:400px;max-height:88vh;overflow-y:auto}
+.panel h2{font-size:19px;color:#ec4899;margin-bottom:6px;text-align:center}
+.panel-progress{text-align:center;font-size:13px;color:#666;background:#fdf2f8;padding:8px;border-radius:10px;margin-bottom:18px}
+.panel-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid #f0f0f0}
+.panel-label{font-size:14px;font-weight:700;color:#333}
+.panel-sub{font-size:12px;color:#999;margin-top:2px}
+.toggle{width:48px;height:26px;background:#ddd;border-radius:13px;cursor:pointer;position:relative;transition:background .3s;border:none;flex-shrink:0}
+.toggle.on{background:#ec4899}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;left:3px;transition:left .3s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+.toggle.on::after{left:25px}
+.jump-section{margin-top:14px}
+.jump-section h4{font-size:12px;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.jump-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.jump-btn{padding:10px 4px;border:2px solid #e5e7eb;border-radius:12px;font-size:20px;font-weight:800;cursor:pointer;background:white;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.jump-btn span{font-size:10px;font-weight:700;color:#aaa}
+.jump-btn:hover{border-color:#ec4899;background:#fdf2f8}
+.jump-btn.done{background:#d1fae5;border-color:#a7f3d0}
+.jump-btn.done span{color:#059669}
+.jump-btn.cur{background:#fdf2f8;border-color:#ec4899}
+.jump-btn.cur span{color:#ec4899}
+.close-panel-btn{width:100%;padding:13px;background:linear-gradient(135deg,#ec4899,#db2777);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:18px}
+
+/* QUIZ */
+.quiz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:150;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.quiz-overlay.show{display:flex}
+.quiz-card{background:white;border-radius:28px;padding:22px;width:92%;max-width:460px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.35);animation:popIn .35s cubic-bezier(0.175,0.885,0.32,1.275)}
+.quiz-title{font-size:15px;color:#888;font-weight:700;margin-bottom:12px}
+.quiz-char{font-size:80px;margin-bottom:8px;animation:bounce .5s ease infinite alternate;display:block}
+.quiz-question{font-size:18px;font-weight:800;color:#333;margin-bottom:16px;line-height:1.3}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.quiz-opt{padding:12px 6px;border:3px solid #e5e7eb;border-radius:18px;cursor:pointer;transition:all .2s;background:white;display:flex;flex-direction:column;align-items:center;gap:3px}
+.quiz-opt-emoji{font-size:32px;line-height:1}
+.quiz-opt-label{font-size:13px;font-weight:800;color:#555}
+.quiz-opt:hover{border-color:#ec4899;background:#fdf2f8;transform:scale(1.03)}
+.quiz-opt.correct{border-color:#059669;background:#d1fae5}
+.quiz-opt.correct .quiz-opt-label{color:#059669}
+.quiz-opt.wrong{border-color:#dc2626;background:#fee2e2}
+.quiz-opt.wrong .quiz-opt-label{color:#dc2626}
+.quiz-opt:disabled{cursor:not-allowed;transform:none}
+.quiz-feedback{margin-top:12px;font-size:14px;font-weight:700;min-height:20px}
+.quiz-feedback.good{color:#059669}
+.quiz-feedback.bad{color:#dc2626}
+.quiz-retry-btn{display:none;margin-top:10px;padding:11px 26px;background:#ec4899;color:white;border:none;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(236,72,153,0.4);transition:all .2s}
+.quiz-retry-btn:hover{transform:scale(1.05)}
+
+.quiz-rel-img{font-size:64px;margin-bottom:4px;display:block;animation:bounce .5s ease infinite alternate}
+.quiz-rel-stem{font-size:15px;color:#666;font-weight:600;margin-bottom:10px}
+
+/* CELEBRATION */
+.celeb-overlay{display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px}
+.celeb-overlay.show{display:flex}
+.celeb-emoji{font-size:80px;animation:bounce .5s ease infinite alternate}
+.celeb-title{font-size:38px;font-weight:900;color:white;margin:14px 0 8px;text-shadow:0 4px 16px rgba(0,0,0,.3)}
+.celeb-sub{font-size:17px;color:rgba(255,255,255,.9);margin-bottom:28px;line-height:1.6;white-space:pre-line}
+.celeb-btn{padding:17px 48px;background:white;border:none;border-radius:50px;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.22);transition:transform .2s}
+.celeb-btn:hover{transform:scale(1.05)}
+
+/* ANIMATIONS */
+@keyframes popIn{0%{transform:scale(.2) rotate(-15deg);opacity:0}65%{transform:scale(1.12) rotate(3deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes slideUp{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes bounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-14px) scale(1.06)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="screen" id="mainScreen">
+
+  <div class="topbar">
+    <a href="/ukg" class="topbar-btn">&#127968; Home</a>
+    <div class="stars-display">&#11088; <span id="starsDisplay">0</span></div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="sound-pill" id="soundFab" onclick="event.stopPropagation();toggleSound();">🔊 Sound</button>
+      <button class="topbar-btn" onclick="openPanel(event)">&#9881;&#65039; Parent</button>
+    </div>
+  </div>
+
+  <div class="dots-row" id="dotsRow"></div>
+
+  <div class="main-content" id="mainContent">
+    <div class="char-half">
+      <div class="char-frame" id="charFrame" onclick="bounceChar(event)">
+        <svg id="charSvg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="member-name" id="memberName">Mummy</div>
+      <div class="member-role" id="memberRole">She is your Mother</div>
+    </div>
+    <div class="info-half" id="infoHalf"></div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="nav-btn" id="prevBtn" onclick="prev(event)" disabled>&#8592; Back</button>
+    <div class="bottom-center">
+      <div class="tap-hint">&#128070; Tap to continue!</div>
+    </div>
+    <button class="next-btn" onclick="next(event)">Next &#8594;</button>
+  </div>
+</div>
+
+<!-- PARENT PANEL -->
+<div class="overlay" id="parentOverlay">
+  <div class="panel">
+    <h2>&#128149; Family Controls</h2>
+    <div class="panel-progress" id="panelProgress">0 of 10 members learned</div>
+    <div class="panel-row">
+      <div><div class="panel-label">&#128266; Voice Sound</div><div class="panel-sub">Reads names and relationships</div></div>
+      <button class="toggle on" id="soundToggle" onclick="toggleSound()"></button>
+    </div>
+    <div class="jump-section">
+      <h4>Jump to any member</h4>
+      <div class="jump-grid" id="jumpGrid"></div>
+    </div>
+    <button class="close-panel-btn" onclick="closePanel()">&#10003; Continue Learning!</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-card" id="quizCard">
+    <div class="quiz-title" id="quizTitle">Quick Quiz! &#127919;</div>
+    <div id="quizCharArea"></div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-options"  id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="quiz-retry-btn" id="quizRetryBtn" onclick="retryQuiz()">&#128260; Try Again!</button>
+  </div>
+</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-overlay" id="celebOverlay">
+  <div class="celeb-emoji" id="celebEmoji">&#127881;</div>
+  <div class="celeb-title" id="celebTitle">Amazing!</div>
+  <div class="celeb-sub"   id="celebSub"></div>
+  <button class="celeb-btn" id="celebBtn" onclick="closeCelebration()">Keep Going! &#128640;</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   SVG CHARACTER BUILDERS
+   ══════════════════════════════════════════════════ */
+
+function svgMummy() {
+  return `
+  <ellipse cx="100" cy="170" rx="46" ry="48" fill="#f9a8d4"/>
+  <rect x="70" y="130" width="60" height="55" rx="14" fill="#f9a8d4"/>
+  <ellipse cx="100" cy="72" rx="40" ry="42" fill="#92400e"/>
+  <rect x="62" y="80" width="14" height="50" rx="7" fill="#92400e"/>
+  <rect x="124" y="80" width="14" height="50" rx="7" fill="#92400e"/>
+  <ellipse cx="100" cy="78" rx="32" ry="34" fill="#fde68a"/>
+  <ellipse cx="88" cy="72" rx="5" ry="6" fill="#1e1b4b"/>
+  <ellipse cx="112" cy="72" rx="5" ry="6" fill="#1e1b4b"/>
+  <circle cx="90" cy="70" r="2" fill="white"/>
+  <circle cx="114" cy="70" r="2" fill="white"/>
+  <line x1="84" y1="67" x2="82" y2="63" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="88" y1="66" x2="88" y2="62" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="92" y1="67" x2="94" y2="63" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="108" y1="67" x2="106" y2="63" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="112" y1="66" x2="112" y2="62" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="116" y1="67" x2="118" y2="63" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M83,65 Q88,62 93,65" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+  <path d="M107,65 Q112,62 117,65" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="100" cy="82" rx="4" ry="3" fill="#fbbf24" opacity=".6"/>
+  <path d="M88,91 Q100,102 112,91" fill="none" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="80" cy="86" rx="9" ry="6" fill="#fca5a5" opacity=".5"/>
+  <ellipse cx="120" cy="86" rx="9" ry="6" fill="#fca5a5" opacity=".5"/>
+  <circle cx="100" cy="60" r="4" fill="#dc2626"/>
+  <path d="M58,128 Q70,115 100,118 Q130,115 142,128" fill="#fda4af" opacity=".7"/>
+  <ellipse cx="60" cy="152" rx="10" ry="28" fill="#f9a8d4" transform="rotate(-12,60,152)"/>
+  <ellipse cx="140" cy="152" rx="10" ry="28" fill="#f9a8d4" transform="rotate(12,140,152)"/>
+  <circle cx="52" cy="178" r="10" fill="#fde68a"/>
+  <circle cx="148" cy="178" r="10" fill="#fde68a"/>
+  <text x="88" y="158" font-size="22" fill="#e11d48">&#10084;</text>`;
+}
+
+function svgDaddy() {
+  return `
+  <rect x="68" y="155" width="30" height="55" rx="8" fill="#1e40af"/>
+  <rect x="102" y="155" width="30" height="55" rx="8" fill="#1e40af"/>
+  <rect x="62" y="110" width="76" height="58" rx="14" fill="#3b82f6"/>
+  <polygon points="100,110 88,125 100,118 112,125" fill="white"/>
+  <circle cx="100" cy="132" r="3" fill="white"/>
+  <circle cx="100" cy="145" r="3" fill="white"/>
+  <ellipse cx="100" cy="68" rx="36" ry="28" fill="#1c1917"/>
+  <ellipse cx="100" cy="78" rx="32" ry="34" fill="#fde68a"/>
+  <ellipse cx="68" cy="80" rx="7" ry="10" fill="#fde68a"/>
+  <ellipse cx="132" cy="80" rx="7" ry="10" fill="#fde68a"/>
+  <ellipse cx="88" cy="74" rx="5" ry="6" fill="#1e1b4b"/>
+  <ellipse cx="112" cy="74" rx="5" ry="6" fill="#1e1b4b"/>
+  <circle cx="90" cy="72" r="2" fill="white"/>
+  <circle cx="114" cy="72" r="2" fill="white"/>
+  <path d="M82,67 Q88,64 94,67" fill="none" stroke="#1c1917" stroke-width="3" stroke-linecap="round"/>
+  <path d="M106,67 Q112,64 118,67" fill="none" stroke="#1c1917" stroke-width="3" stroke-linecap="round"/>
+  <path d="M89,90 Q100,96 111,90" fill="#1c1917"/>
+  <ellipse cx="100" cy="83" rx="5" ry="4" fill="#fbbf24" opacity=".5"/>
+  <path d="M90,95 Q100,103 110,95" fill="none" stroke="#78350f" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="78" cy="87" rx="8" ry="5" fill="#fca5a5" opacity=".4"/>
+  <ellipse cx="122" cy="87" rx="8" ry="5" fill="#fca5a5" opacity=".4"/>
+  <ellipse cx="56" cy="138" rx="11" ry="30" fill="#3b82f6" transform="rotate(-10,56,138)"/>
+  <ellipse cx="144" cy="138" rx="11" ry="30" fill="#3b82f6" transform="rotate(10,144,138)"/>
+  <circle cx="48" cy="168" r="11" fill="#fde68a"/>
+  <circle cx="152" cy="168" r="11" fill="#fde68a"/>`;
+}
+
+function svgGrandmaDadi() {
+  return `
+  <ellipse cx="100" cy="172" rx="50" ry="46" fill="#a855f7"/>
+  <rect x="64" y="128" width="72" height="58" rx="14" fill="#a855f7"/>
+  <path d="M64,128 Q100,120 136,128" fill="#fbbf24" opacity=".7"/>
+  <rect x="64" y="124" width="72" height="8" rx="4" fill="#fbbf24" opacity=".6"/>
+  <ellipse cx="100" cy="55" rx="28" ry="22" fill="#e5e7eb"/>
+  <ellipse cx="100" cy="44" rx="14" ry="12" fill="#d1d5db"/>
+  <rect x="64" y="60" width="12" height="32" rx="6" fill="#e5e7eb"/>
+  <rect x="124" y="60" width="12" height="32" rx="6" fill="#e5e7eb"/>
+  <ellipse cx="100" cy="80" rx="30" ry="32" fill="#fef3c7"/>
+  <path d="M80,75 Q84,72 88,75" fill="none" stroke="#d97706" stroke-width="1" opacity=".5"/>
+  <path d="M112,75 Q116,72 120,75" fill="none" stroke="#d97706" stroke-width="1" opacity=".5"/>
+  <path d="M85,95 Q100,98 115,95" fill="none" stroke="#d97706" stroke-width="1" opacity=".5"/>
+  <ellipse cx="88" cy="77" rx="4" ry="4.5" fill="#44403c"/>
+  <ellipse cx="112" cy="77" rx="4" ry="4.5" fill="#44403c"/>
+  <circle cx="89" cy="76" r="1.5" fill="white"/>
+  <circle cx="113" cy="76" r="1.5" fill="white"/>
+  <circle cx="88" cy="77" r="10" fill="none" stroke="#78716c" stroke-width="2"/>
+  <circle cx="112" cy="77" r="10" fill="none" stroke="#78716c" stroke-width="2"/>
+  <line x1="98" y1="77" x2="102" y2="77" stroke="#78716c" stroke-width="2"/>
+  <line x1="78" y1="77" x2="72" y2="74" stroke="#78716c" stroke-width="2"/>
+  <line x1="122" y1="77" x2="128" y2="74" stroke="#78716c" stroke-width="2"/>
+  <path d="M83,67 Q88,65 93,67" fill="none" stroke="#d1d5db" stroke-width="2" stroke-linecap="round"/>
+  <path d="M107,67 Q112,65 117,67" fill="none" stroke="#d1d5db" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="100" cy="86" rx="4" ry="3" fill="#fbbf24" opacity=".4"/>
+  <path d="M87,94 Q100,106 113,94" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="78" cy="89" rx="9" ry="6" fill="#fca5a5" opacity=".45"/>
+  <ellipse cx="122" cy="89" rx="9" ry="6" fill="#fca5a5" opacity=".45"/>
+  <circle cx="100" cy="63" r="4" fill="#dc2626"/>
+  <ellipse cx="58" cy="148" rx="10" ry="26" fill="#a855f7" transform="rotate(-14,58,148)"/>
+  <ellipse cx="142" cy="148" rx="10" ry="26" fill="#a855f7" transform="rotate(14,142,148)"/>
+  <line x1="148" y1="175" x2="152" y2="210" stroke="#78716c" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="50" cy="173" r="10" fill="#fef3c7"/>
+  <circle cx="150" cy="173" r="10" fill="#fef3c7"/>`;
+}
+
+function svgGrandpaDada() {
+  return `
+  <rect x="70" y="158" width="28" height="50" rx="8" fill="#374151"/>
+  <rect x="102" y="158" width="28" height="50" rx="8" fill="#374151"/>
+  <rect x="60" y="112" width="80" height="58" rx="14" fill="#6b7280"/>
+  <circle cx="100" cy="128" r="3" fill="white" opacity=".7"/>
+  <circle cx="100" cy="142" r="3" fill="white" opacity=".7"/>
+  <ellipse cx="100" cy="65" rx="34" ry="26" fill="#f3f4f6"/>
+  <ellipse cx="100" cy="52" rx="20" ry="14" fill="#e5e7eb"/>
+  <ellipse cx="100" cy="80" rx="30" ry="33" fill="#fef3c7"/>
+  <ellipse cx="70" cy="82" rx="7" ry="10" fill="#fef3c7"/>
+  <ellipse cx="130" cy="82" rx="7" ry="10" fill="#fef3c7"/>
+  <path d="M78,72 Q82,69 86,72" fill="none" stroke="#d97706" stroke-width="1" opacity=".45"/>
+  <path d="M114,72 Q118,69 122,72" fill="none" stroke="#d97706" stroke-width="1" opacity=".45"/>
+  <ellipse cx="88" cy="77" rx="4.5" ry="5" fill="#1c1917"/>
+  <ellipse cx="112" cy="77" rx="4.5" ry="5" fill="#1c1917"/>
+  <circle cx="90" cy="75" r="1.5" fill="white"/>
+  <circle cx="114" cy="75" r="1.5" fill="white"/>
+  <circle cx="88" cy="77" r="10" fill="none" stroke="#6b7280" stroke-width="2"/>
+  <circle cx="112" cy="77" r="10" fill="none" stroke="#6b7280" stroke-width="2"/>
+  <line x1="98" y1="77" x2="102" y2="77" stroke="#6b7280" stroke-width="2"/>
+  <line x1="78" y1="77" x2="72" y2="74" stroke="#6b7280" stroke-width="2"/>
+  <line x1="122" y1="77" x2="128" y2="74" stroke="#6b7280" stroke-width="2"/>
+  <path d="M82,67 Q88,64 94,67" fill="none" stroke="#d1d5db" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M106,67 Q112,64 118,67" fill="none" stroke="#d1d5db" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M88,91 Q100,97 112,91" fill="#e5e7eb"/>
+  <ellipse cx="100" cy="105" rx="22" ry="14" fill="#e5e7eb"/>
+  <ellipse cx="100" cy="84" rx="5" ry="4" fill="#fbbf24" opacity=".4"/>
+  <path d="M90,96 Q100,104 110,96" fill="none" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="76" cy="88" rx="8" ry="5" fill="#fca5a5" opacity=".35"/>
+  <ellipse cx="124" cy="88" rx="8" ry="5" fill="#fca5a5" opacity=".35"/>
+  <ellipse cx="55" cy="142" rx="11" ry="28" fill="#6b7280" transform="rotate(-12,55,142)"/>
+  <ellipse cx="145" cy="142" rx="11" ry="28" fill="#6b7280" transform="rotate(12,145,142)"/>
+  <line x1="148" y1="168" x2="155" y2="208" stroke="#78716c" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="47" cy="170" r="11" fill="#fef3c7"/>
+  <circle cx="153" cy="170" r="11" fill="#fef3c7"/>`;
+}
+
+/* Nani — Mummy's mother, saree in teal */
+function svgNani() {
+  return `
+  <ellipse cx="100" cy="172" rx="50" ry="46" fill="#0d9488"/>
+  <rect x="64" y="128" width="72" height="58" rx="14" fill="#0d9488"/>
+  <path d="M64,128 Q100,120 136,128" fill="#fbbf24" opacity=".7"/>
+  <rect x="64" y="124" width="72" height="8" rx="4" fill="#fde68a" opacity=".7"/>
+  <ellipse cx="100" cy="55" rx="26" ry="20" fill="#d1d5db"/>
+  <ellipse cx="100" cy="44" rx="13" ry="11" fill="#e5e7eb"/>
+  <rect x="66" y="60" width="11" height="28" rx="5" fill="#d1d5db"/>
+  <rect x="123" y="60" width="11" height="28" rx="5" fill="#d1d5db"/>
+  <ellipse cx="100" cy="80" rx="30" ry="32" fill="#fef9c3"/>
+  <path d="M80,74 Q84,71 88,74" fill="none" stroke="#d97706" stroke-width="1" opacity=".5"/>
+  <path d="M112,74 Q116,71 120,74" fill="none" stroke="#d97706" stroke-width="1" opacity=".5"/>
+  <ellipse cx="88" cy="77" rx="4" ry="4.5" fill="#44403c"/>
+  <ellipse cx="112" cy="77" rx="4" ry="4.5" fill="#44403c"/>
+  <circle cx="89" cy="76" r="1.5" fill="white"/>
+  <circle cx="113" cy="76" r="1.5" fill="white"/>
+  <circle cx="88" cy="77" r="10" fill="none" stroke="#0d9488" stroke-width="2"/>
+  <circle cx="112" cy="77" r="10" fill="none" stroke="#0d9488" stroke-width="2"/>
+  <line x1="98" y1="77" x2="102" y2="77" stroke="#0d9488" stroke-width="2"/>
+  <line x1="78" y1="77" x2="72" y2="74" stroke="#0d9488" stroke-width="2"/>
+  <line x1="122" y1="77" x2="128" y2="74" stroke="#0d9488" stroke-width="2"/>
+  <ellipse cx="100" cy="86" rx="4" ry="3" fill="#fbbf24" opacity=".4"/>
+  <path d="M87,94 Q100,106 113,94" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="78" cy="89" rx="9" ry="6" fill="#fca5a5" opacity=".4"/>
+  <ellipse cx="122" cy="89" rx="9" ry="6" fill="#fca5a5" opacity=".4"/>
+  <circle cx="100" cy="63" r="4" fill="#f59e0b"/>
+  <ellipse cx="58" cy="148" rx="10" ry="26" fill="#0d9488" transform="rotate(-14,58,148)"/>
+  <ellipse cx="142" cy="148" rx="10" ry="26" fill="#0d9488" transform="rotate(14,142,148)"/>
+  <line x1="148" y1="175" x2="152" y2="210" stroke="#78716c" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="50" cy="173" r="10" fill="#fef9c3"/>
+  <circle cx="150" cy="173" r="10" fill="#fef9c3"/>`;
+}
+
+/* Nana — Mummy's father, kurta in warm orange */
+function svgNana() {
+  return `
+  <rect x="70" y="158" width="28" height="50" rx="8" fill="#9a3412"/>
+  <rect x="102" y="158" width="28" height="50" rx="8" fill="#9a3412"/>
+  <rect x="60" y="112" width="80" height="58" rx="14" fill="#ea580c"/>
+  <circle cx="100" cy="128" r="3" fill="white" opacity=".7"/>
+  <circle cx="100" cy="142" r="3" fill="white" opacity=".7"/>
+  <ellipse cx="100" cy="65" rx="33" ry="25" fill="#fef9c3"/>
+  <ellipse cx="100" cy="52" rx="18" ry="13" fill="#fef3c7"/>
+  <ellipse cx="100" cy="80" rx="30" ry="33" fill="#fef9c3"/>
+  <ellipse cx="70" cy="82" rx="7" ry="10" fill="#fef9c3"/>
+  <ellipse cx="130" cy="82" rx="7" ry="10" fill="#fef9c3"/>
+  <path d="M79,72 Q83,69 87,72" fill="none" stroke="#b45309" stroke-width="1" opacity=".45"/>
+  <path d="M113,72 Q117,69 121,72" fill="none" stroke="#b45309" stroke-width="1" opacity=".45"/>
+  <ellipse cx="88" cy="77" rx="4.5" ry="5" fill="#1c1917"/>
+  <ellipse cx="112" cy="77" rx="4.5" ry="5" fill="#1c1917"/>
+  <circle cx="90" cy="75" r="1.5" fill="white"/>
+  <circle cx="114" cy="75" r="1.5" fill="white"/>
+  <circle cx="88" cy="77" r="10" fill="none" stroke="#ea580c" stroke-width="2"/>
+  <circle cx="112" cy="77" r="10" fill="none" stroke="#ea580c" stroke-width="2"/>
+  <line x1="98" y1="77" x2="102" y2="77" stroke="#ea580c" stroke-width="2"/>
+  <line x1="78" y1="77" x2="72" y2="74" stroke="#ea580c" stroke-width="2"/>
+  <line x1="122" y1="77" x2="128" y2="74" stroke="#ea580c" stroke-width="2"/>
+  <path d="M83,67 Q88,64 94,67" fill="none" stroke="#fef3c7" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M106,67 Q112,64 118,67" fill="none" stroke="#fef3c7" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M88,91 Q100,97 112,91" fill="#fef3c7"/>
+  <ellipse cx="100" cy="104" rx="20" ry="13" fill="#fef3c7"/>
+  <ellipse cx="100" cy="84" rx="5" ry="4" fill="#fbbf24" opacity=".4"/>
+  <path d="M90,96 Q100,104 110,96" fill="none" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="76" cy="88" rx="8" ry="5" fill="#fca5a5" opacity=".3"/>
+  <ellipse cx="124" cy="88" rx="8" ry="5" fill="#fca5a5" opacity=".3"/>
+  <ellipse cx="55" cy="142" rx="11" ry="28" fill="#ea580c" transform="rotate(-12,55,142)"/>
+  <ellipse cx="145" cy="142" rx="11" ry="28" fill="#ea580c" transform="rotate(12,145,142)"/>
+  <line x1="148" y1="168" x2="155" y2="208" stroke="#78716c" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="47" cy="170" r="11" fill="#fef9c3"/>
+  <circle cx="153" cy="170" r="11" fill="#fef9c3"/>`;
+}
+
+/* Uncle — Daddy's brother, casual shirt green */
+function svgUncle() {
+  return `
+  <rect x="70" y="155" width="28" height="52" rx="8" fill="#166534"/>
+  <rect x="102" y="155" width="28" height="52" rx="8" fill="#166534"/>
+  <rect x="62" y="108" width="76" height="58" rx="14" fill="#22c55e"/>
+  <polygon points="100,108 88,124 100,117 112,124" fill="white"/>
+  <circle cx="100" cy="133" r="3" fill="white"/>
+  <circle cx="100" cy="148" r="3" fill="white"/>
+  <ellipse cx="100" cy="68" rx="34" ry="27" fill="#292524"/>
+  <ellipse cx="100" cy="78" rx="32" ry="34" fill="#fde68a"/>
+  <ellipse cx="68" cy="80" rx="7" ry="10" fill="#fde68a"/>
+  <ellipse cx="132" cy="80" rx="7" ry="10" fill="#fde68a"/>
+  <ellipse cx="88" cy="74" rx="5" ry="6" fill="#1e1b4b"/>
+  <ellipse cx="112" cy="74" rx="5" ry="6" fill="#1e1b4b"/>
+  <circle cx="90" cy="72" r="2" fill="white"/>
+  <circle cx="114" cy="72" r="2" fill="white"/>
+  <path d="M82,67 Q88,64 94,67" fill="none" stroke="#292524" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M106,67 Q112,64 118,67" fill="none" stroke="#292524" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M88,89 Q100,95 112,89" fill="#292524"/>
+  <ellipse cx="100" cy="83" rx="5" ry="4" fill="#fbbf24" opacity=".5"/>
+  <path d="M88,95 Q100,105 112,95" fill="none" stroke="#78350f" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="78" cy="87" rx="8" ry="5" fill="#fca5a5" opacity=".4"/>
+  <ellipse cx="122" cy="87" rx="8" ry="5" fill="#fca5a5" opacity=".4"/>
+  <ellipse cx="56" cy="136" rx="11" ry="30" fill="#22c55e" transform="rotate(-10,56,136)"/>
+  <ellipse cx="144" cy="136" rx="11" ry="30" fill="#22c55e" transform="rotate(10,144,136)"/>
+  <circle cx="48" cy="166" r="11" fill="#fde68a"/>
+  <circle cx="152" cy="166" r="11" fill="#fde68a"/>`;
+}
+
+/* Aunt — Daddy's sister, churidar in orange */
+function svgAunt() {
+  return `
+  <ellipse cx="100" cy="172" rx="44" ry="44" fill="#fb923c"/>
+  <rect x="70" y="128" width="60" height="56" rx="14" fill="#fb923c"/>
+  <ellipse cx="100" cy="70" rx="38" ry="40" fill="#92400e"/>
+  <rect x="63" y="78" width="13" height="46" rx="6" fill="#92400e"/>
+  <rect x="124" y="78" width="13" height="46" rx="6" fill="#92400e"/>
+  <ellipse cx="100" cy="76" rx="31" ry="33" fill="#fde68a"/>
+  <ellipse cx="88" cy="70" rx="5" ry="6" fill="#1e1b4b"/>
+  <ellipse cx="112" cy="70" rx="5" ry="6" fill="#1e1b4b"/>
+  <circle cx="90" cy="68" r="2" fill="white"/>
+  <circle cx="114" cy="68" r="2" fill="white"/>
+  <line x1="84" y1="65" x2="82" y2="61" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="88" y1="64" x2="88" y2="60" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="92" y1="65" x2="94" y2="61" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="108" y1="65" x2="106" y2="61" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="112" y1="64" x2="112" y2="60" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="116" y1="65" x2="118" y2="61" stroke="#1e1b4b" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M83,63 Q88,60 93,63" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+  <path d="M107,63 Q112,60 117,63" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="100" cy="80" rx="4" ry="3" fill="#fbbf24" opacity=".6"/>
+  <path d="M88,89 Q100,100 112,89" fill="none" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="80" cy="84" rx="9" ry="6" fill="#fca5a5" opacity=".5"/>
+  <ellipse cx="120" cy="84" rx="9" ry="6" fill="#fca5a5" opacity=".5"/>
+  <circle cx="100" cy="58" r="4" fill="#dc2626"/>
+  <path d="M58,126 Q70,113 100,116 Q130,113 142,126" fill="#fdba74" opacity=".7"/>
+  <ellipse cx="60" cy="150" rx="10" ry="27" fill="#fb923c" transform="rotate(-12,60,150)"/>
+  <ellipse cx="140" cy="150" rx="10" ry="27" fill="#fb923c" transform="rotate(12,140,150)"/>
+  <circle cx="52" cy="176" r="10" fill="#fde68a"/>
+  <circle cx="148" cy="176" r="10" fill="#fde68a"/>
+  <text x="86" y="156" font-size="20" fill="#dc2626">&#127800;</text>`;
+}
+
+/* Baby sibling — tiny, in yellow onesie */
+function svgBaby() {
+  return `
+  <!-- onesie body -->
+  <ellipse cx="100" cy="168" rx="38" ry="42" fill="#fde047"/>
+  <rect x="66" y="130" width="68" height="52" rx="20" fill="#fde047"/>
+  <!-- tiny legs -->
+  <ellipse cx="82" cy="196" rx="16" ry="14" fill="#fde047"/>
+  <ellipse cx="118" cy="196" rx="16" ry="14" fill="#fde047"/>
+  <!-- booties -->
+  <ellipse cx="80" cy="208" rx="14" ry="10" fill="#fb923c"/>
+  <ellipse cx="120" cy="208" rx="14" ry="10" fill="#fb923c"/>
+  <!-- snap buttons on onesie -->
+  <circle cx="100" cy="182" r="3" fill="white"/>
+  <circle cx="100" cy="168" r="3" fill="white"/>
+  <!-- soft hair tuft -->
+  <ellipse cx="100" cy="66" rx="26" ry="20" fill="#92400e"/>
+  <ellipse cx="100" cy="56" rx="10" ry="8" fill="#92400e"/>
+  <!-- face — big baby eyes -->
+  <ellipse cx="100" cy="80" rx="28" ry="30" fill="#fde68a"/>
+  <ellipse cx="89" cy="74" rx="7" ry="8" fill="#1e1b4b"/>
+  <ellipse cx="111" cy="74" rx="7" ry="8" fill="#1e1b4b"/>
+  <circle cx="92" cy="71" r="3" fill="white"/>
+  <circle cx="114" cy="71" r="3" fill="white"/>
+  <ellipse cx="100" cy="83" rx="3" ry="2.5" fill="#fbbf24" opacity=".5"/>
+  <!-- baby big smile -->
+  <path d="M88,92 Q100,107 112,92" fill="none" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+  <!-- chubby cheeks -->
+  <ellipse cx="78" cy="86" rx="11" ry="8" fill="#fca5a5" opacity=".65"/>
+  <ellipse cx="122" cy="86" rx="11" ry="8" fill="#fca5a5" opacity=".65"/>
+  <!-- tiny arms out -->
+  <ellipse cx="56" cy="144" rx="10" ry="20" fill="#fde047" transform="rotate(-20,56,144)"/>
+  <ellipse cx="144" cy="144" rx="10" ry="20" fill="#fde047" transform="rotate(20,144,144)"/>
+  <circle cx="46" cy="160" r="10" fill="#fde68a"/>
+  <circle cx="154" cy="160" r="10" fill="#fde68a"/>
+  <!-- rattle -->
+  <line x1="46" y1="160" x2="38" y2="138" stroke="#fb923c" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="36" cy="132" r="10" fill="#fb923c"/>
+  <circle cx="36" cy="132" r="6" fill="#fde047"/>`;
+}
+
+/* Best Friend — school uniform, blue tie */
+function svgFriend() {
+  return `
+  <!-- school uniform trousers -->
+  <rect x="72" y="155" width="26" height="52" rx="8" fill="#1e40af"/>
+  <rect x="102" y="155" width="26" height="52" rx="8" fill="#1e40af"/>
+  <!-- white shirt -->
+  <rect x="62" y="106" width="76" height="60" rx="14" fill="white"/>
+  <!-- collar + blue tie -->
+  <polygon points="100,106 88,122 100,115 112,122" fill="#e5e7eb"/>
+  <polygon points="100,115 94,138 100,145 106,138" fill="#3b82f6"/>
+  <!-- buttons -->
+  <circle cx="100" cy="128" r="2.5" fill="#d1d5db"/>
+  <!-- backpack strap hint -->
+  <path d="M68,110 Q60,130 62,155" fill="none" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+  <!-- hair — side parted -->
+  <ellipse cx="100" cy="66" rx="34" ry="25" fill="#451a03"/>
+  <path d="M68,60 Q100,46 132,60" fill="#451a03"/>
+  <rect x="66" y="60" width="10" height="24" rx="5" fill="#451a03"/>
+  <!-- face -->
+  <ellipse cx="100" cy="78" rx="30" ry="32" fill="#fde68a"/>
+  <ellipse cx="70" cy="80" rx="6" ry="9" fill="#fde68a"/>
+  <ellipse cx="130" cy="80" rx="6" ry="9" fill="#fde68a"/>
+  <!-- big happy eyes -->
+  <ellipse cx="88" cy="74" rx="6" ry="7" fill="#1e1b4b"/>
+  <ellipse cx="112" cy="74" rx="6" ry="7" fill="#1e1b4b"/>
+  <circle cx="91" cy="72" r="2.5" fill="white"/>
+  <circle cx="115" cy="72" r="2.5" fill="white"/>
+  <!-- brows -->
+  <path d="M82,66 Q88,63 94,66" fill="none" stroke="#451a03" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M106,66 Q112,63 118,66" fill="none" stroke="#451a03" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="100" cy="82" rx="3.5" ry="3" fill="#fbbf24" opacity=".5"/>
+  <!-- big grin -->
+  <path d="M86,92 Q100,107 114,92" fill="#e11d48"/>
+  <path d="M88,93 Q100,101 112,93" fill="white"/>
+  <ellipse cx="78" cy="86" rx="9" ry="6" fill="#fca5a5" opacity=".5"/>
+  <ellipse cx="122" cy="86" rx="9" ry="6" fill="#fca5a5" opacity=".5"/>
+  <!-- arms raised high — excited! -->
+  <ellipse cx="50" cy="122" rx="10" ry="26" fill="white" transform="rotate(-35,50,122)"/>
+  <ellipse cx="150" cy="122" rx="10" ry="26" fill="white" transform="rotate(35,150,122)"/>
+  <circle cx="34" cy="104" r="10" fill="#fde68a"/>
+  <circle cx="166" cy="104" r="10" fill="#fde68a"/>
+  <!-- pencil in hand -->
+  <rect x="168" y="90" width="5" height="28" rx="2" fill="#fde047" transform="rotate(15,170,104)"/>
+  <polygon points="168,118 173,118 170.5,128" fill="#f87171" transform="rotate(15,170,104)"/>`;
+}
+
+/* ══════════════════════════════════════════════════
+   DATA — 10 MEMBERS
+   ══════════════════════════════════════════════════ */
+const members = [
+  {
+    id:'mummy', name:'Mummy', emoji:'👩', role:'She is your Mother',
+    color:['#db2777','#9d174d'], celebColor:'#db2777', svgFn:svgMummy, bgCircle:'#fce7f3',
+    relationship:'Mummy is the mother — she takes care of the whole family.',
+    relChips:['Your Mother','Daddy\'s Wife','Daddy\'s side Dadi\'s Daughter-in-law','Nani\'s Daughter'],
+    loves:['👩‍🍳','🤗','📖','🌸','☕'],
+    loveNote:'Mummy cooks, hugs you and loves you every single day!',
+    fact:'Mummy is the heart of your home — she makes everything warm! 💝',
+  },
+  {
+    id:'daddy', name:'Daddy', emoji:'👨', role:'He is your Father',
+    color:['#1d4ed8','#1e3a8a'], celebColor:'#1d4ed8', svgFn:svgDaddy, bgCircle:'#dbeafe',
+    relationship:'Daddy is the father — he works hard and keeps the family safe.',
+    relChips:['Your Father','Mummy\'s Husband','Dada\'s Son','Nana\'s Son-in-law'],
+    loves:['🚗','⚽','📰','💼','🎵'],
+    loveNote:'Daddy protects the family like a superhero every day!',
+    fact:'Daddy was once a little child just like you! 🦸',
+  },
+  {
+    id:'dadi', name:'Dadi', emoji:'👵', role:'She is Daddy\'s Mother',
+    color:['#7c3aed','#4c1d95'], celebColor:'#7c3aed', svgFn:svgGrandmaDadi, bgCircle:'#ede9fe',
+    relationship:'Dadi is Daddy\'s mother — she is your paternal grandmother.',
+    relChips:['Your Grandmother','Daddy\'s Mother','Dada\'s Wife','Paternal side'],
+    loves:['🧶','📿','🫖','🍬','📖'],
+    loveNote:'Dadi tells the best bedtime stories and gives the warmest hugs!',
+    fact:'Dadi raised your Daddy — she knows all his childhood secrets! 🤫',
+  },
+  {
+    id:'dada', name:'Dada', emoji:'👴', role:'He is Daddy\'s Father',
+    color:['#374151','#111827'], celebColor:'#4b5563', svgFn:svgGrandpaDada, bgCircle:'#f3f4f6',
+    relationship:'Dada is Daddy\'s father — he is your paternal grandfather.',
+    relChips:['Your Grandfather','Daddy\'s Father','Dadi\'s Husband','Paternal side'],
+    loves:['📰','🌳','♟️','🎙️','🌅'],
+    loveNote:'Dada has great wisdom — listen to his wonderful stories!',
+    fact:'Dada knows stories from long before you were born! 🌟',
+  },
+  {
+    id:'nani', name:'Nani', emoji:'👵', role:'She is Mummy\'s Mother',
+    color:['#0f766e','#134e4a'], celebColor:'#0f766e', svgFn:svgNani, bgCircle:'#ccfbf1',
+    relationship:'Nani is Mummy\'s mother — she is your maternal grandmother.',
+    relChips:['Your Grandmother','Mummy\'s Mother','Nana\'s Wife','Maternal side'],
+    loves:['🌺','🍫','🪷','📿','🎶'],
+    loveNote:'Nani gives extra sweets and extra love when she visits!',
+    fact:'You have TWO grandmothers — Dadi and Nani — double the love! 💚',
+  },
+  {
+    id:'nana', name:'Nana', emoji:'👴', role:'He is Mummy\'s Father',
+    color:['#c2410c','#7c2d12'], celebColor:'#c2410c', svgFn:svgNana, bgCircle:'#ffedd5',
+    relationship:'Nana is Mummy\'s father — he is your maternal grandfather.',
+    relChips:['Your Grandfather','Mummy\'s Father','Nani\'s Husband','Maternal side'],
+    loves:['📻','🌾','🎣','🏡','🌄'],
+    loveNote:'Nana loves long walks and telling stories about the good old days!',
+    fact:'You have TWO grandfathers — Dada and Nana — double the wisdom! 🧡',
+  },
+  {
+    id:'uncle', name:'Uncle', emoji:'👨', role:'He is Daddy\'s Brother',
+    color:['#15803d','#14532d'], celebColor:'#15803d', svgFn:svgUncle, bgCircle:'#dcfce7',
+    relationship:'Uncle (Chacha) is Daddy\'s brother — he is your father\'s brother.',
+    relChips:['Your Uncle','Daddy\'s Brother','Dadi\'s Son','You call him Chacha'],
+    loves:['🏏','🚴','🎮','🎵','🍕'],
+    loveNote:'Uncle takes you for rides, plays cricket and is always fun to be with!',
+    fact:'Your Uncle was once your Daddy\'s best playmate — just like your friends! 🏏',
+  },
+  {
+    id:'aunt', name:'Aunt', emoji:'👩', role:'She is Daddy\'s Sister',
+    color:['#ea580c','#9a3412'], celebColor:'#ea580c', svgFn:svgAunt, bgCircle:'#ffedd5',
+    relationship:'Aunt (Bua) is Daddy\'s sister — she is your father\'s sister.',
+    relChips:['Your Aunt','Daddy\'s Sister','Dadi\'s Daughter','You call her Bua'],
+    loves:['🌸','🎨','💄','🍰','📸'],
+    loveNote:'Aunt loves dressing you up, drawing with you and baking yummy cakes!',
+    fact:'Bua is like a second Mummy who spoils you with gifts! 🎁',
+  },
+  {
+    id:'baby', name:'Baby', emoji:'👶', role:'Baby is your little sibling',
+    color:['#ca8a04','#713f12'], celebColor:'#ca8a04', svgFn:svgBaby, bgCircle:'#fef9c3',
+    relationship:'Baby is Mummy and Daddy\'s youngest child — your little sibling!',
+    relChips:['Your Little Sibling','Mummy\'s Baby','Daddy\'s Baby','Newest Family Member'],
+    loves:['🍼','🧸','🪀','🌈','😴'],
+    loveNote:'Baby is new to the world — be gentle, kind and help take care of them!',
+    fact:'You were once a tiny baby too — and everyone loved you just as much! 👶',
+  },
+  {
+    id:'friend', name:'Friend', emoji:'🧑', role:'Best Friend from School',
+    color:['#0369a1','#0c4a6e'], celebColor:'#0369a1', svgFn:svgFriend, bgCircle:'#e0f2fe',
+    relationship:'A Best Friend is someone who plays, shares and cares — just like family!',
+    relChips:['School Friend','Play Partner','Study Buddy','Chosen Family'],
+    loves:['⚽','🎨','🍕','📚','🎲'],
+    loveNote:'A good friend shares their lunch, cheers you up and never leaves you out!',
+    fact:'Friends are the family we choose for ourselves — be a kind friend! 🤝',
+  },
+];
+
+/* STATE */
+let current=0, stars=0, soundOn=true;
+let learned=new Set();
+let quizType='name';
+
+/* UPDATE SCREEN */
+function updateScreen(animate=true){
+  const m=members[current];
+  document.getElementById('mainScreen').style.background=
+    `linear-gradient(135deg,${m.color[0]} 0%,${m.color[1]} 100%)`;
+
+  const svg=document.getElementById('charSvg');
+  svg.innerHTML=m.svgFn();
+
+  document.getElementById('charFrame').style.background=
+    `radial-gradient(circle at 50% 60%, ${m.bgCircle}55, rgba(255,255,255,0.08))`;
+
+  document.getElementById('memberName').textContent=m.name;
+  document.getElementById('memberRole').textContent=m.role;
+
+  buildInfoCards(m);
+  document.getElementById('prevBtn').disabled=(current===0);
+
+  if(animate){
+    ['memberName','memberRole'].forEach((id,idx)=>{
+      const el=document.getElementById(id);
+      el.style.animation='none'; void el.offsetWidth;
+      el.style.animation=idx===0
+        ?'popIn .5s cubic-bezier(0.175,0.885,0.32,1.275) both'
+        :`slideUp .4s ease ${.08+idx*.1}s both`;
+    });
+    const cf=document.getElementById('charFrame');
+    cf.style.animation='none'; void cf.offsetWidth;
+    cf.style.animation='slideUp .45s ease .05s both';
+  }
+
+  updateDots();
+  if(soundOn) setTimeout(speak,500);
+}
+
+/* INFO CARDS */
+function buildInfoCards(m){
+  const half=document.getElementById('infoHalf');
+  half.innerHTML='';
+
+  const c1=card();
+  c1.innerHTML=`<div class="card-label">&#128149; Who is ${m.name}?</div>
+    <div class="card-value">${m.relationship}</div>`;
+  half.appendChild(c1);
+
+  const c2=card();
+  c2.innerHTML=`<div class="card-label">&#128101; Family Links</div>
+    <div class="rel-chips">${m.relChips.map(r=>`<span class="rel-chip">${r}</span>`).join('')}</div>`;
+  half.appendChild(c2);
+
+  const c3=card();
+  c3.innerHTML=`<div class="card-label">&#10024; ${m.name} Loves</div>
+    <div class="love-row">${m.loves.map((l,i)=>`<span class="love-word" style="animation-delay:${i*.06}s">${l}</span>`).join('')}</div>
+    <div class="card-sub" style="margin-top:6px">${m.loveNote}</div>`;
+  half.appendChild(c3);
+
+  const c4=card();
+  c4.innerHTML=`<div class="card-label">&#128161; Fun Fact</div>
+    <div class="card-sub" style="font-size:min(2.8vw,3.3vh);color:white;font-weight:700;line-height:1.4">${m.fact}</div>`;
+  half.appendChild(c4);
+}
+
+function card(){
+  const d=document.createElement('div');
+  d.className='info-card';
+  return d;
+}
+
+/* CHAR BOUNCE */
+function bounceChar(e){
+  e.stopPropagation();
+  const cf=document.getElementById('charFrame');
+  cf.style.animation='none'; void cf.offsetWidth;
+  cf.style.animation='popIn .4s cubic-bezier(0.175,0.885,0.32,1.275)';
+  if(soundOn) speak();
+}
+
+/* SPEECH */
+function speak(){
+  if(!soundOn||!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const m=members[current];
+  const u=new SpeechSynthesisUtterance(
+    `${m.name}! ${m.role}. ${m.relationship} ${m.fact}`
+  );
+  u.rate=0.8; u.pitch=1.2; u.volume=1;
+  window.speechSynthesis.speak(u);
+}
+
+/* DOTS */
+function updateDots(){
+  const row=document.getElementById('dotsRow');
+  row.innerHTML='';
+  members.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.className=`dot ${i===current?'current':learned.has(i)?'done':''}`;
+    d.title=m.name;
+    d.onclick=(e)=>{e.stopPropagation();current=i;updateScreen();};
+    row.appendChild(d);
+  });
+}
+
+/* NAVIGATION */
+function handleTap(){next();}
+
+function next(e){
+  if(e) e.stopPropagation();
+  learned.add(current);
+  addStars(1);
+  /* quiz after every 3 members AND at the last member */
+  const isQuiz=(learned.size%3===0)||(current===members.length-1);
+  if(isQuiz){ showQuiz(); return; }
+  if(current>=members.length-1){ showFinalCelebration(); return; }
+  current++; updateScreen();
+}
+
+function prev(e){
+  if(e) e.stopPropagation();
+  if(current>0){current--;updateScreen();}
+}
+
+function addStars(n){
+  stars+=n;
+  document.getElementById('starsDisplay').textContent=stars;
+}
+
+/* PARENT PANEL */
+function openPanel(e){
+  if(e) e.stopPropagation();
+  document.getElementById('panelProgress').textContent=
+    `${learned.size} of ${members.length} members learned ✅`;
+  buildJumpGrid();
+  document.getElementById('parentOverlay').classList.add('show');
+}
+function closePanel(){document.getElementById('parentOverlay').classList.remove('show');}
+
+function buildJumpGrid(){
+  const grid=document.getElementById('jumpGrid');
+  grid.innerHTML='';
+  members.forEach((m,i)=>{
+    const btn=document.createElement('button');
+    btn.className=`jump-btn ${i===current?'cur':learned.has(i)?'done':''}`;
+    btn.innerHTML=`${m.emoji}<span>${m.name}</span>`;
+    btn.onclick=()=>{current=i;updateScreen();closePanel();};
+    grid.appendChild(btn);
+  });
+}
+
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById('soundToggle').classList.toggle('on',soundOn);
+  const pill=document.getElementById('soundFab');
+  pill.textContent=soundOn?'🔊 Sound':'🔇 Muted';
+  pill.classList.toggle('muted',!soundOn);
+  if(!soundOn) window.speechSynthesis.cancel();
+}
+
+/* QUIZ */
+function showQuiz(){
+  window.speechSynthesis.cancel();
+  quizType=learned.size<=3?'name':(Math.random()<0.5?'name':'relationship');
+  const m=members[current];
+
+  document.getElementById('quizFeedback').textContent='';
+  document.getElementById('quizFeedback').className='quiz-feedback';
+  document.getElementById('quizRetryBtn').style.display='none';
+
+  const charArea=document.getElementById('quizCharArea');
+  const optsEl=document.getElementById('quizOptions');
+  optsEl.innerHTML='';
+
+  if(quizType==='name'){
+    document.getElementById('quizTitle').textContent='Quick Quiz! 🎯';
+    charArea.innerHTML=`<span class="quiz-char">${m.emoji}</span>`;
+    document.getElementById('quizQuestion').textContent=`Who is this family member?`;
+
+    const pool=shuffle(members.filter((_,i)=>i!==current)).slice(0,3).map(x=>x.name);
+    pool.push(m.name);
+    shuffle(pool).forEach(name=>{
+      const mem=members.find(x=>x.name===name);
+      const btn=document.createElement('button');
+      btn.className='quiz-opt';
+      btn.innerHTML=`<span class="quiz-opt-emoji">${mem.emoji}</span>
+        <span class="quiz-opt-label">${name}</span>`;
+      btn.onclick=()=>checkQuiz(btn,name,m.name,'name');
+      optsEl.appendChild(btn);
+    });
+
+  } else {
+    document.getElementById('quizTitle').textContent='Relationship Quiz! 🌳';
+    charArea.innerHTML=`<span class="quiz-rel-img">${m.emoji}</span>
+      <div class="quiz-rel-stem">This is <strong>${m.name}</strong></div>`;
+    document.getElementById('quizQuestion').textContent=`What is ${m.name}'s relationship to you?`;
+
+    const correctRole=m.role;
+    const wrongRoles=shuffle(
+      members.filter((_,i)=>i!==current).map(x=>x.role)
+    ).slice(0,3);
+    const allRoles=shuffle([correctRole,...wrongRoles]);
+    allRoles.forEach(role=>{
+      const mem=members.find(x=>x.role===role)||members[0];
+      const btn=document.createElement('button');
+      btn.className='quiz-opt';
+      btn.innerHTML=`<span class="quiz-opt-emoji">${mem.emoji}</span>
+        <span class="quiz-opt-label" style="font-size:11px;text-align:center;line-height:1.3">${role}</span>`;
+      btn.onclick=()=>checkQuiz(btn,role,correctRole,'relationship');
+      optsEl.appendChild(btn);
+    });
+  }
+
+  document.getElementById('quizOverlay').classList.add('show');
+}
+
+function checkQuiz(btn,selected,correct,type){
+  document.querySelectorAll('.quiz-opt').forEach(b=>{b.onclick=null;b.disabled=true;});
+  const fb=document.getElementById('quizFeedback');
+
+  if(selected===correct){
+    btn.classList.add('correct');
+    fb.textContent='🎉 Correct! Well done!';
+    fb.className='quiz-feedback good';
+    addStars(2);
+    if(soundOn){
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance('Correct! Excellent!');
+      u.pitch=1.4; window.speechSynthesis.speak(u);
+    }
+    setTimeout(()=>{
+      document.getElementById('quizOverlay').classList.remove('show');
+      afterQuiz();
+    },1300);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{
+      const lbl=b.querySelector('.quiz-opt-label');
+      if(lbl&&lbl.textContent.trim()===correct) b.classList.add('correct');
+    });
+    fb.textContent=`Not quite! The answer is: "${correct}"`;
+    fb.className='quiz-feedback bad';
+    const card=document.getElementById('quizCard');
+    card.style.animation='none'; void card.offsetWidth;
+    card.style.animation='shake .4s ease';
+    if(soundOn){
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance('Not quite! Try again!');
+      u.pitch=1.0; window.speechSynthesis.speak(u);
+    }
+    document.getElementById('quizRetryBtn').style.display='inline-block';
+  }
+}
+
+function retryQuiz(){showQuiz();}
+
+function afterQuiz(){
+  if(current>=members.length-1){ showFinalCelebration(); }
+  else { current++; updateScreen(); }
+}
+
+/* CELEBRATIONS */
+function showCelebration(emoji,title,sub,btnLabel,color,onBtn){
+  const ov=document.getElementById('celebOverlay');
+  ov.style.background=`linear-gradient(135deg,${color}f5,${color}cc)`;
+  document.getElementById('celebEmoji').textContent=emoji;
+  document.getElementById('celebTitle').textContent=title;
+  document.getElementById('celebSub').textContent=sub;
+  const btn=document.getElementById('celebBtn');
+  btn.textContent=btnLabel;
+  btn.style.color=color;
+  btn.onclick=onBtn;
+  ov.classList.add('show');
+  if(soundOn){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance('Amazing! You know your whole family! You are a family champion!');
+    u.pitch=1.4; u.rate=0.85; window.speechSynthesis.speak(u);
+  }
+  launchConfetti();
+}
+
+function showFinalCelebration(){
+  showCelebration(
+    '🏡','You Know Your Family!',
+    'WOW! You learned all 10 family members!\nMummy, Daddy, Dadi, Dada, Nani, Nana,\nUncle, Aunt, Baby and Best Friend!\n❤️ Family is your greatest treasure! ❤️',
+    'Start Again 🔄','#db2777',
+    ()=>{
+      document.getElementById('celebOverlay').classList.remove('show');
+      current=0; stars=0; learned.clear();
+      document.getElementById('starsDisplay').textContent='0';
+      updateScreen(false);
+    }
+  );
+}
+
+function closeCelebration(){
+  document.getElementById('celebOverlay').classList.remove('show');
+}
+
+/* CONFETTI */
+function launchConfetti(){
+  const cols=['#FF6B6B','#FFC300','#2ECC71','#f9a8d4','#a78bfa','#fff','#fbbf24','#fb7185'];
+  for(let i=0;i<80;i++){
+    const c=document.createElement('div');
+    const sz=Math.random()*14+5;
+    c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;
+      background:${cols[~~(Math.random()*cols.length)]};
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      left:${Math.random()*100}vw;top:-20px;z-index:300;
+      animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*.8}s forwards;
+      pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4500);
+  }
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+/* INIT */
+document.getElementById('mainContent').addEventListener('click',handleTap);
+updateDots();
+updateScreen(false);
+setTimeout(speak,900);
+</script>
+</body>
+</html>
