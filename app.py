@@ -618,7 +618,7 @@ def ukg_days():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('ukg_days.html', student=student)
+    return render_template('ukg_days_months.html', student=student)
 
 @app.route('/ukg/environment')
 def ukg_environment():

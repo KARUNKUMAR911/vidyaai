@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>UKG Days, Months & Seasons!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent; }
+        body { font-family:'Fredoka One',cursive;overflow:hidden;height:100vh;width:100vw;user-select:none; }
+        .screen { width:100vw;height:100vh;display:flex;flex-direction:column;transition:background 0.7s ease;position:relative;overflow:hidden; }
+        .bg-blob { position:absolute;border-radius:50%;background:rgba(255,255,255,0.10);pointer-events:none;animation:floatBlob 7s ease-in-out infinite alternate; }
+        .bg-blob:nth-child(1){width:220px;height:220px;top:-60px;left:-60px;animation-delay:0s;}
+        .bg-blob:nth-child(2){width:140px;height:140px;bottom:80px;right:-30px;animation-delay:2.2s;}
+        .bg-blob:nth-child(3){width:90px;height:90px;top:38%;left:3%;animation-delay:4s;}
+        .bg-blob:nth-child(4){width:65px;height:65px;top:18%;right:6%;animation-delay:1.5s;}
+        @keyframes floatBlob{from{transform:translateY(0) scale(1);}to{transform:translateY(22px) scale(1.1);}}
+        .mode-toggle-wrap{display:flex;justify-content:center;padding:8px 16px 0;z-index:11;position:relative;flex-shrink:0;}
+        .mode-pill{display:flex;background:rgba(0,0,0,0.18);border-radius:50px;padding:4px;gap:4px;border:2px solid rgba(255,255,255,0.3);}
+        .mode-btn{padding:7px 16px;border-radius:50px;border:none;font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;transition:all 0.25s;color:rgba(255,255,255,0.7);background:transparent;}
+        .mode-btn.active{background:white;color:#333;box-shadow:0 3px 10px rgba(0,0,0,0.2);}
+        .mode-btn:active{transform:scale(0.95);}
+        .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 4px;flex-shrink:0;z-index:10;position:relative;}
+        .topbar-btn{background:rgba(255,255,255,0.28);border:3px solid rgba(255,255,255,0.5);color:white;padding:7px 16px;border-radius:50px;font-size:14px;font-family:'Fredoka One',cursive;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:transform 0.15s,background 0.15s;}
+        .topbar-btn:active{transform:scale(0.92);background:rgba(255,255,255,0.45);}
+        .stars-display{background:rgba(255,215,0,0.35);border:3px solid rgba(255,215,0,0.65);color:white;padding:7px 16px;border-radius:50px;font-size:15px;font-family:'Fredoka One',cursive;letter-spacing:1px;transition:transform 0.2s;}
+        .dots-row{display:flex;justify-content:center;gap:6px;padding:5px 16px;flex-wrap:wrap;flex-shrink:0;}
+        .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.30);transition:all 0.3s;flex-shrink:0;}
+        .dot.done{background:rgba(255,255,255,0.72);}
+        .dot.current{background:#FFD600;transform:scale(1.7);box-shadow:0 0 10px #FFD600;}
+        .main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:4px 24px 0;gap:22px;min-height:0;position:relative;z-index:2;}
+        .cal-half{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+        .cal-card{width:min(33vw,44vh);height:min(33vw,44vh);border-radius:28px;background:rgba(255,255,255,0.18);border:4px solid rgba(255,255,255,0.45);box-shadow:0 14px 44px rgba(0,0,0,0.28);display:flex;flex-direction:column;overflow:hidden;cursor:pointer;animation:popIn 0.55s cubic-bezier(0.175,0.885,0.32,1.4) both;transition:transform 0.1s;position:relative;}
+        .cal-card:active{transform:scale(0.93) rotate(-2deg);}
+        .cal-header{background:rgba(0,0,0,0.22);padding:min(1.8vw,2.4vh) min(2vw,2.5vh);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .cal-header-text{font-size:min(3.2vw,4.2vh);color:rgba(255,255,255,0.9);font-family:'Nunito',sans-serif;font-weight:900;letter-spacing:2px;text-transform:uppercase;}
+        .cal-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;}
+        .cal-big-emoji{font-size:min(12vw,16vh);line-height:1;animation:bounceIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) 0.08s both;}
+        .cal-number{font-size:min(5vw,6.5vh);color:rgba(255,255,255,0.75);font-family:'Nunito',sans-serif;font-weight:900;line-height:1;}
+        .cal-card::after{content:'';position:absolute;top:0;left:0;right:0;height:45%;border-radius:24px 24px 0 0;background:linear-gradient(to bottom,rgba(255,255,255,0.14),transparent);pointer-events:none;}
+        .cal-ring{position:absolute;inset:-8px;border-radius:34px;border:5px solid rgba(255,255,255,0.55);pointer-events:none;opacity:0;}
+        .cal-ring.pulse{animation:ringPulse 0.65s ease-out forwards;}
+        @keyframes ringPulse{0%{transform:scale(0.85);opacity:0.9;}100%{transform:scale(1.25);opacity:0;}}
+        .item-name{font-size:min(9vw,12vh);font-family:'Fredoka One',cursive;color:white;text-shadow:0 4px 16px rgba(0,0,0,0.22);animation:slideUp 0.4s ease 0.18s both;line-height:1;letter-spacing:1px;text-align:center;}
+        .item-sub{font-size:min(3.6vw,4.8vh);color:rgba(255,255,255,0.9);font-family:'Nunito',sans-serif;font-weight:900;animation:slideUp 0.4s ease 0.28s both;background:rgba(0,0,0,0.16);padding:5px 18px;border-radius:20px;text-align:center;}
+        .info-half{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+        .week-strip{display:flex;gap:5px;animation:bounceIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) 0.1s both;}
+        .week-pip{width:min(5.5vw,7vh);height:min(5.5vw,7vh);border-radius:12px;background:rgba(255,255,255,0.18);border:2px solid rgba(255,255,255,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:min(1.8vw,2.2vh);color:rgba(255,255,255,0.7);font-family:'Nunito',sans-serif;font-weight:900;transition:all 0.25s;}
+        .week-pip.active{background:rgba(255,255,255,0.35);border-color:rgba(255,255,255,0.7);color:white;transform:scale(1.15);box-shadow:0 4px 14px rgba(0,0,0,0.2);}
+        .week-pip.weekend{color:rgba(255,220,100,0.8);}
+        .week-pip.active.weekend{color:#FFD600;}
+        .pip-abbr{font-size:min(2vw,2.6vh);line-height:1;}
+        .pip-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0.6;}
+        .pip-dot.active{opacity:1;}
+        .things-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;animation:bounceIn 0.55s cubic-bezier(0.175,0.885,0.32,1.4) 0.12s both;}
+        .thing-card{width:min(16vw,20vh);height:min(16vw,20vh);border-radius:20px;background:rgba(255,255,255,0.20);border:3px solid rgba(255,255,255,0.42);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:transform 0.15s,background 0.15s;box-shadow:0 5px 16px rgba(0,0,0,0.16);}
+        .thing-card:active{transform:scale(0.88);background:rgba(255,255,255,0.4);}
+        .thing-card:hover{transform:scale(1.05);background:rgba(255,255,255,0.30);}
+        .thing-emoji{font-size:min(7vw,9vh);line-height:1;transition:transform 0.2s;}
+        .thing-card:hover .thing-emoji{transform:scale(1.15) rotate(-5deg);}
+        .thing-name{font-size:min(2.2vw,2.8vh);font-family:'Nunito',sans-serif;font-weight:900;color:rgba(255,255,255,0.92);text-align:center;line-height:1;}
+        .season-badge{background:rgba(255,255,255,0.22);border:3px solid rgba(255,255,255,0.45);color:white;padding:6px 20px;border-radius:50px;font-size:min(3.2vw,4.2vh);font-family:'Nunito',sans-serif;font-weight:900;animation:slideUp 0.4s ease 0.3s both;display:flex;align-items:center;gap:8px;}
+        .info-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;animation:slideUp 0.4s ease 0.22s both;}
+        .info-chip{background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.38);color:white;padding:5px 14px;border-radius:20px;font-size:min(2.4vw,3vh);font-family:'Nunito',sans-serif;font-weight:900;}
+        .month-strip{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:min(46vw,52vh);animation:bounceIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) 0.1s both;}
+        .month-pip{padding:5px 10px;border-radius:10px;background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.5);font-size:min(2.2vw,2.8vh);font-family:'Nunito',sans-serif;font-weight:900;color:white;}
+        .bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 16px;flex-shrink:0;position:relative;z-index:2;gap:10px;}
+        .nav-btn{background:rgba(255,255,255,0.25);border:3px solid rgba(255,255,255,0.5);color:white;padding:13px 18px;border-radius:50px;font-size:22px;font-family:'Fredoka One',cursive;cursor:pointer;transition:all 0.15s;min-width:65px;text-align:center;}
+        .nav-btn:hover{background:rgba(255,255,255,0.4);transform:scale(1.06);}
+        .nav-btn:active{transform:scale(0.92);}
+        .nav-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+        .next-btn{background:white;color:#333;border:none;padding:14px 32px;border-radius:50px;font-size:17px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.22),0 0 0 4px rgba(255,255,255,0.4);transition:all 0.18s;}
+        .next-btn:hover{transform:scale(1.06) translateY(-3px);}
+        .next-btn:active{transform:scale(0.94);}
+        .bottom-center{text-align:center;flex:1;}
+        .tap-hint{font-size:14px;color:rgba(255,255,255,0.88);font-family:'Nunito',sans-serif;font-weight:700;animation:tapWiggle 1.8s ease-in-out infinite;}
+        @keyframes tapWiggle{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+        .autoplay-pill{display:none;background:#FFD600;color:#333;padding:4px 13px;border-radius:20px;font-size:12px;font-family:'Nunito',sans-serif;font-weight:800;margin-top:3px;}
+        .autoplay-pill.show{display:inline-block;}
+        .sound-pill{background:rgba(255,255,255,0.22);border:2.5px solid rgba(255,255,255,0.45);color:white;padding:8px 16px;border-radius:50px;font-size:15px;font-family:'Fredoka One',cursive;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:transform 0.15s,background 0.2s;backdrop-filter:blur(6px);white-space:nowrap;}
+        .sound-pill:active{transform:scale(0.92);background:rgba(255,255,255,0.4);}
+        .sound-pill.muted{background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.5);text-decoration:line-through;}
+        .speak-fab{position:absolute;bottom:86px;right:16px;width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,0.28);border:3px solid rgba(255,255,255,0.55);color:white;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.15s,background 0.15s;z-index:5;box-shadow:0 4px 14px rgba(0,0,0,0.2);}
+        .speak-fab:active{transform:scale(0.88);}
+        .speak-fab.speaking{animation:speakPulse 0.5s ease infinite alternate;}
+        @keyframes speakPulse{from{box-shadow:0 0 0 0 rgba(255,255,255,0.4);}to{box-shadow:0 0 0 14px rgba(255,255,255,0);}}
+        @media(max-width:540px){
+            .main-content{flex-direction:column;gap:6px;padding:2px 12px 0;}
+            .cal-half{order:1;gap:6px;}.info-half{order:2;}
+            .cal-card{width:min(42vw,22vh);height:min(42vw,22vh);border-radius:20px;}
+            .item-name{font-size:min(11vw,7vh);}.item-sub{font-size:min(3.8vw,3.2vh);}
+            .week-pip{width:min(7vw,5vh);height:min(7vw,5vh);border-radius:8px;}.pip-abbr{font-size:min(2.4vw,2vh);}
+            .thing-card{width:min(18vw,11vh);height:min(18vw,11vh);border-radius:14px;}
+            .thing-emoji{font-size:min(8vw,5.5vh);}.thing-name{font-size:min(2.8vw,2vh);}
+            .speak-fab{bottom:78px;right:10px;width:48px;height:48px;font-size:20px;}
+            .mode-btn{font-size:11px;padding:5px 10px;}
+        }
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+        .overlay.show{display:flex;}
+        .panel{background:white;border-radius:30px;padding:24px;width:92%;max-width:400px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.35);}
+        .panel h2{font-size:20px;margin-bottom:6px;text-align:center;font-family:'Fredoka One',cursive;}
+        .panel-progress{text-align:center;font-size:13px;color:#666;padding:8px;border-radius:12px;margin-bottom:18px;font-family:'Nunito',sans-serif;font-weight:700;}
+        .panel-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f0f0f0;}
+        .panel-label{font-size:14px;font-weight:700;color:#333;font-family:'Nunito',sans-serif;}
+        .panel-sub{font-size:12px;color:#999;margin-top:2px;font-family:'Nunito',sans-serif;}
+        .toggle{width:52px;height:28px;background:#ddd;border-radius:14px;cursor:pointer;position:relative;transition:background 0.3s;border:none;flex-shrink:0;}
+        .toggle::after{content:'';position:absolute;width:22px;height:22px;background:white;border-radius:50%;top:3px;left:3px;transition:left 0.3s;box-shadow:0 2px 6px rgba(0,0,0,0.25);}
+        .toggle.on::after{left:27px;}
+        .speed-row{display:flex;gap:7px;}
+        .speed-btn{padding:6px 12px;border:2px solid #e5e7eb;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;background:white;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+        .jump-section{margin-top:12px;}
+        .jump-section h4{font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;font-family:'Nunito',sans-serif;font-weight:700;}
+        .jump-grid-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+        .jump-grid-months{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+        .jump-grid-seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+        .jump-btn{aspect-ratio:1;border:2px solid #e5e7eb;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;background:white;transition:all 0.2s;font-family:'Nunito',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#444;padding:3px;}
+        .jump-btn .jb-emoji{font-size:16px;}.jump-btn .jb-label{font-size:9px;}
+        .jump-btn:hover{transform:scale(1.06);}
+        .jump-btn.done{background:#d1fae5;border-color:#a7f3d0;color:#059669;}
+        .jump-btn.cur{color:white;border-color:transparent;}
+        .close-panel-btn{width:100%;padding:14px;color:white;border:none;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px;font-family:'Fredoka One',cursive;transition:transform 0.15s;}
+        .close-panel-btn:active{transform:scale(0.97);}
+        .quiz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:150;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+        .quiz-overlay.show{display:flex;}
+        .quiz-card{background:white;border-radius:28px;padding:26px 24px 28px;width:92%;max-width:440px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.35);animation:popIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275);}
+        .quiz-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;margin-bottom:10px;}
+        .quiz-big-emoji{font-size:72px;margin-bottom:8px;animation:bounce 0.5s ease infinite alternate;display:block;}
+        .quiz-question{font-size:18px;font-weight:800;color:#333;font-family:'Nunito',sans-serif;margin-bottom:16px;line-height:1.4;}
+        .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+        .quiz-opt{padding:14px 8px;border:3px solid #e5e7eb;border-radius:16px;font-size:22px;font-weight:900;cursor:pointer;transition:all 0.2s;background:white;color:#444;font-family:'Nunito',sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;}
+        .quiz-opt-name{font-size:13px;font-weight:800;}
+        .quiz-opt:hover{transform:scale(1.03);}
+        .quiz-opt.correct{border-color:#059669;background:#d1fae5;color:#059669;}
+        .quiz-opt.wrong{border-color:#dc2626;background:#fee2e2;color:#dc2626;}
+        .quiz-opt:disabled{cursor:not-allowed;transform:none;}
+        .quiz-feedback{margin-top:12px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;min-height:20px;}
+        .quiz-feedback.good{color:#059669;}.quiz-feedback.bad{color:#dc2626;}
+        .quiz-retry-btn{display:none;margin-top:10px;padding:11px 26px;color:white;border:none;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+        .quiz-retry-btn:hover{transform:scale(1.05);}
+        .celeb-overlay{display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;}
+        .celeb-overlay.show{display:flex;}
+        .celeb-emoji{font-size:100px;animation:bounce 0.55s ease infinite alternate;line-height:1;}
+        .celeb-title{font-size:48px;font-family:'Fredoka One',cursive;color:white;margin:14px 0 8px;text-shadow:0 4px 20px rgba(0,0,0,.3);animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.3) both;}
+        .celeb-sub{font-size:17px;color:rgba(255,255,255,.92);margin-bottom:28px;line-height:1.5;font-family:'Nunito',sans-serif;font-weight:800;white-space:pre-line;}
+        .celeb-btn{padding:18px 52px;background:white;border:none;border-radius:50px;font-size:20px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.22);transition:transform 0.18s;}
+        .celeb-btn:hover{transform:scale(1.06) translateY(-3px);}
+        .celeb-stars{display:flex;gap:12px;margin-bottom:10px;}
+        .celeb-star{font-size:44px;animation:starSpin 0.6s ease both;}
+        .celeb-star:nth-child(2){animation-delay:0.12s;}.celeb-star:nth-child(3){animation-delay:0.24s;}
+        @keyframes popIn{0%{transform:scale(0.3) rotate(-12deg);opacity:0;}65%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0);opacity:1;}}
+        @keyframes bounceIn{0%{transform:scale(0.4) translateY(40px);opacity:0;}65%{transform:scale(1.08) translateY(-8px);}100%{transform:scale(1) translateY(0);opacity:1;}}
+        @keyframes slideUp{from{transform:translateY(28px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+        @keyframes bounce{from{transform:translateY(0) scale(1);}to{transform:translateY(-18px) scale(1.08);}}
+        @keyframes starSpin{from{transform:scale(0) rotate(-180deg);opacity:0;}to{transform:scale(1) rotate(0deg);opacity:1;}}
+        @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+        .float-emoji{position:fixed;font-size:38px;pointer-events:none;z-index:50;animation:floatUp 1.1s ease forwards;}
+        @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-90px) scale(1.5);opacity:0;}}
+        @keyframes cardWobble{0%{transform:scale(1) rotate(0deg);}25%{transform:scale(1.1) rotate(-5deg);}50%{transform:scale(1.06) rotate(4deg);}75%{transform:scale(1.03) rotate(-2deg);}100%{transform:scale(1) rotate(0deg);}}
+        .wobble{animation:cardWobble 0.55s ease both !important;}
+        @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(7px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+    </style>
+</head>
+<body>
+<div class="screen" id="mainScreen" onclick="handleTap(event)">
+    <div class="bg-blob"></div><div class="bg-blob"></div>
+    <div class="bg-blob"></div><div class="bg-blob"></div>
+    <div class="topbar">
+        <a href="/ukg" class="topbar-btn" onclick="event.stopPropagation()">&#127968; Home</a>
+        <div class="stars-display" id="starsDisplay">&#11088; 0</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <button class="sound-pill" id="soundFab" onclick="event.stopPropagation();toggleSound();">&#128266; Sound</button>
+            <button class="topbar-btn" onclick="openPanel(event)">&#9881;&#65039; Parent</button>
+        </div>
+    </div>
+    <div class="mode-toggle-wrap" onclick="event.stopPropagation()">
+        <div class="mode-pill">
+            <button class="mode-btn active" id="modeDays"    onclick="switchMode('days')">&#128197; Days</button>
+            <button class="mode-btn"        id="modeMonths"  onclick="switchMode('months')">&#128467;&#65039; Months</button>
+            <button class="mode-btn"        id="modeSeasons" onclick="switchMode('seasons')">&#127784;&#65039; Seasons</button>
+        </div>
+    </div>
+    <div class="dots-row" id="dotsRow"></div>
+    <div class="main-content">
+        <div class="cal-half">
+            <div style="position:relative">
+                <div class="cal-card" id="calCard" onclick="tapCard(event)">
+                    <div class="cal-header"><div class="cal-header-text" id="calHeaderText">WEEK</div></div>
+                    <div class="cal-body">
+                        <div class="cal-big-emoji" id="calEmoji">&#127749;</div>
+                        <div class="cal-number"    id="calNumber">Day 1</div>
+                    </div>
+                </div>
+                <div class="cal-ring" id="calRing"></div>
+            </div>
+            <div class="item-name" id="itemName">Monday</div>
+            <div class="item-sub"  id="itemSub">1st day of the week</div>
+        </div>
+        <div class="info-half" id="infoHalf"></div>
+    </div>
+    <button class="speak-fab" id="speakFab" onclick="event.stopPropagation();tapSpeak();">&#128266;</button>
+    <div class="bottom-bar">
+        <button class="nav-btn" id="prevBtn" onclick="prevItem(event)" disabled>&#9664;</button>
+        <div class="bottom-center">
+            <div class="tap-hint" id="tapHint">&#128070; Tap anywhere!</div>
+            <div class="autoplay-pill" id="autoplayPill">&#9654; Playing&#8230;</div>
+        </div>
+        <button class="next-btn" onclick="nextItem(event)">Next &#9654;</button>
+    </div>
+</div>
+
+<!-- Parent Panel -->
+<div class="overlay" id="parentOverlay">
+    <div class="panel">
+        <h2 id="panelTitle">&#9881;&#65039; Parent Controls</h2>
+        <div class="panel-progress" id="panelProgress">0 completed</div>
+        <div class="panel-row">
+            <div><div class="panel-label">&#128266; Voice Sound</div><div class="panel-sub">Speaks name aloud</div></div>
+            <button class="toggle on" id="soundToggle" onclick="toggleSound()"></button>
+        </div>
+        <div class="panel-row">
+            <div><div class="panel-label">&#9654;&#65039; Auto Play</div><div class="panel-sub">Changes automatically</div></div>
+            <button class="toggle" id="autoToggle" onclick="toggleAuto()"></button>
+        </div>
+        <div class="panel-row" style="border:none">
+            <div><div class="panel-label">&#9201;&#65039; Speed</div><div class="panel-sub">Seconds per item</div></div>
+            <div class="speed-row">
+                <button class="speed-btn"        onclick="setSpeed(3,this)">3s</button>
+                <button class="speed-btn active" onclick="setSpeed(5,this)">5s</button>
+                <button class="speed-btn"        onclick="setSpeed(8,this)">8s</button>
+            </div>
+        </div>
+        <div class="jump-section">
+            <h4 id="jumpLabel">Jump to any day</h4>
+            <div id="jumpGrid"></div>
+        </div>
+        <button class="close-panel-btn" onclick="closePanel()">&#10003; Continue Learning!</button>
+    </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz-overlay" id="quizOverlay">
+    <div class="quiz-card" id="quizCard">
+        <div class="quiz-badge" id="quizBadge">&#127919; Quick Quiz!</div>
+        <span class="quiz-big-emoji" id="quizEmoji">&#128197;</span>
+        <div class="quiz-question" id="quizQuestion">What comes next?</div>
+        <div class="quiz-opts" id="quizOpts"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <button class="quiz-retry-btn" id="quizRetryBtn" onclick="retryQuiz()">&#128260; Try Again!</button>
+    </div>
+</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-stars"><span class="celeb-star">&#11088;</span><span class="celeb-star">&#11088;</span><span class="celeb-star">&#11088;</span></div>
+    <div class="celeb-emoji" id="celebEmoji">&#127881;</div>
+    <div class="celeb-title" id="celebTitle">Amazing!</div>
+    <div class="celeb-sub"   id="celebSub">Great job!</div>
+    <button class="celeb-btn" id="celebContinueBtn" onclick="closeCelebration()">Keep Going! &#128640;</button>
+</div>
+
+<script>
+const days = [
+    {name:'Monday',   abbr:'MON',number:'Day 1',ordinal:'1st',emoji:'🌅',icon:'🌅',bg:['#4361ee','#1a237e'],weekend:false,sub:'1st day · Weekday',   speak:'Monday! The first day of the week. Monday is a weekday.',  yesterday:'Sunday',  tomorrow:'Tuesday',  things:[{emoji:'📚',name:'School'},{emoji:'🌅',name:'Sunrise'},{emoji:'🎒',name:'Bag'},{emoji:'✏️',name:'Study'}]},
+    {name:'Tuesday',  abbr:'TUE',number:'Day 2',ordinal:'2nd',emoji:'🌤️',icon:'🌤️',bg:['#7b2d8b','#3d0057'],weekend:false,sub:'2nd day · Weekday',   speak:'Tuesday! The second day of the week.',                     yesterday:'Monday',  tomorrow:'Wednesday',things:[{emoji:'🖍️',name:'Drawing'},{emoji:'🌤️',name:'Sunny'},{emoji:'🍱',name:'Lunch'},{emoji:'🧩',name:'Puzzle'}]},
+    {name:'Wednesday',abbr:'WED',number:'Day 3',ordinal:'3rd',emoji:'🌈',icon:'🌈',bg:['#06a77d','#034d3a'],weekend:false,sub:'3rd day · Midweek!',   speak:'Wednesday! The third day. Middle of the week!',            yesterday:'Tuesday', tomorrow:'Thursday', things:[{emoji:'🌈',name:'Rainbow'},{emoji:'⚽',name:'Sports'},{emoji:'🎨',name:'Art'},{emoji:'🌿',name:'Garden'}]},
+    {name:'Thursday', abbr:'THU',number:'Day 4',ordinal:'4th',emoji:'⛅',icon:'⛅',bg:['#e07a5f','#8b3120'],weekend:false,sub:'4th day · Weekday',    speak:'Thursday! The fourth day of the week.',                    yesterday:'Wednesday',tomorrow:'Friday',  things:[{emoji:'📖',name:'Reading'},{emoji:'⛅',name:'Cloudy'},{emoji:'🎵',name:'Music'},{emoji:'🍎',name:'Snack'}]},
+    {name:'Friday',   abbr:'FRI',number:'Day 5',ordinal:'5th',emoji:'🎉',icon:'🎉',bg:['#f4a261','#8b4500'],weekend:false,sub:'5th day · Last Weekday!',speak:'Friday! The fifth day. Weekend is coming!',               yesterday:'Thursday',tomorrow:'Saturday',things:[{emoji:'🎉',name:'Fun Day'},{emoji:'🍕',name:'Pizza'},{emoji:'🎈',name:'Party'},{emoji:'😊',name:'Happy'}]},
+    {name:'Saturday', abbr:'SAT',number:'Day 6',ordinal:'6th',emoji:'🏖️',icon:'🏖️',bg:['#f9c74f','#b08800'],weekend:true, sub:'6th day · Weekend! 🎉',speak:'Saturday! Weekend! Time to play!',                       yesterday:'Friday',  tomorrow:'Sunday',   things:[{emoji:'🏖️',name:'Beach'},{emoji:'🛝',name:'Park'},{emoji:'🎮',name:'Games'},{emoji:'🍦',name:'Ice Cream'}]},
+    {name:'Sunday',   abbr:'SUN',number:'Day 7',ordinal:'7th',emoji:'☀️',icon:'☀️',bg:['#e63946','#8b0010'],weekend:true, sub:'7th day · Last day of week',speak:'Sunday! The seventh and last day of the week!',        yesterday:'Saturday',tomorrow:'Monday',  things:[{emoji:'☀️',name:'Sunshine'},{emoji:'🏠',name:'Home'},{emoji:'👨‍👩‍👧',name:'Family'},{emoji:'😴',name:'Rest'}]},
+];
+
+const months = [
+    {name:'January',  abbr:'JAN',number:'Month 1', ordinal:'1st', emoji:'❄️',icon:'❄️',bg:['#48cae4','#023e8a'],season:'❄️ Winter',  days:31,sub:'1st month · 31 days', speak:'January! The first month. 31 days.',   festival:'🎆 New Year',  things:[{emoji:'🎆',name:'New Year'},{emoji:'❄️',name:'Snow'},{emoji:'🧥',name:'Coat'},{emoji:'☕',name:'Hot Cocoa'}]},
+    {name:'February', abbr:'FEB',number:'Month 2', ordinal:'2nd', emoji:'💕',icon:'💕',bg:['#74c0fc','#1864ab'],season:'❄️ Winter',  days:28,sub:'2nd month · 28 days', speak:'February! The second month. Only 28 days — shortest month!', festival:'💕 Valentine',  things:[{emoji:'💕',name:'Valentine'},{emoji:'⛄',name:'Snowman'},{emoji:'🧤',name:'Gloves'},{emoji:'☃️',name:'Snow'}]},
+    {name:'March',    abbr:'MAR',number:'Month 3', ordinal:'3rd', emoji:'🌸',icon:'🌸',bg:['#2dc653','#1a5c44'],season:'🌸 Spring',  days:31,sub:'3rd month · 31 days', speak:'March! The third month. Spring begins!',festival:'🌈 Holi',      things:[{emoji:'🌸',name:'Flowers'},{emoji:'🌈',name:'Holi'},{emoji:'🐣',name:'Chick'},{emoji:'🌱',name:'New Growth'}]},
+    {name:'April',    abbr:'APR',number:'Month 4', ordinal:'4th', emoji:'🌦️',icon:'🌦️',bg:['#06a77d','#014d3a'],season:'🌸 Spring',  days:30,sub:'4th month · 30 days', speak:'April! The fourth month. April showers bring May flowers!', festival:'🙏 Ugadi',  things:[{emoji:'🌦️',name:'Rain'},{emoji:'🌷',name:'Tulip'},{emoji:'🪔',name:'Ugadi'},{emoji:'☂️',name:'Umbrella'}]},
+    {name:'May',      abbr:'MAY',number:'Month 5', ordinal:'5th', emoji:'🦋',icon:'🦋',bg:['#f77f00','#8b3a00'],season:'🌸 Spring',  days:31,sub:'5th month · 31 days', speak:'May! The fifth month.',                 festival:'🌻 Summer Eve',things:[{emoji:'🦋',name:'Butterfly'},{emoji:'🐝',name:'Bee'},{emoji:'🌻',name:'Sunflower'},{emoji:'🍓',name:'Strawberry'}]},
+    {name:'June',     abbr:'JUN',number:'Month 6', ordinal:'6th', emoji:'☀️',icon:'☀️',bg:['#f9c74f','#9a6e00'],season:'☀️ Summer',  days:30,sub:'6th month · 30 days', speak:'June! The sixth month. Summer!',        festival:'☀️ Summer',    things:[{emoji:'☀️',name:'Sun'},{emoji:'🏖️',name:'Beach'},{emoji:'🍉',name:'Watermelon'},{emoji:'🕶️',name:'Sunglasses'}]},
+    {name:'July',     abbr:'JUL',number:'Month 7', ordinal:'7th', emoji:'🎆',icon:'🎆',bg:['#e63946','#8b0010'],season:'☀️ Summer',  days:31,sub:'7th month · 31 days', speak:'July! The seventh month.',              festival:'🎆 Fireworks', things:[{emoji:'🎆',name:'Fireworks'},{emoji:'🏊',name:'Swimming'},{emoji:'🍦',name:'Ice Cream'},{emoji:'🌊',name:'Ocean'}]},
+    {name:'August',   abbr:'AUG',number:'Month 8', ordinal:'8th', emoji:'🌻',icon:'🌻',bg:['#f4a261','#8b4500'],season:'☀️ Summer',  days:31,sub:'8th month · 31 days', speak:'August! The eighth month.',             festival:'🇮🇳 Independence',things:[{emoji:'🌻',name:'Sunflower'},{emoji:'🍦',name:'Ice Cream'},{emoji:'🏕️',name:'Camping'},{emoji:'🇮🇳',name:'Ind. Day'}]},
+    {name:'September',abbr:'SEP',number:'Month 9', ordinal:'9th', emoji:'🍂',icon:'🍂',bg:['#b5838d','#6d3040'],season:'🍂 Autumn',  days:30,sub:'9th month · 30 days', speak:'September! The ninth month.',           festival:'🙏 Navratri',  things:[{emoji:'🍂',name:'Leaves'},{emoji:'📚',name:'School'},{emoji:'🍎',name:'Apple'},{emoji:'🌾',name:'Harvest'}]},
+    {name:'October',  abbr:'OCT',number:'Month 10',ordinal:'10th',emoji:'🪔',icon:'🪔',bg:['#e85d04','#7d2d00'],season:'🍂 Autumn',  days:31,sub:'10th month · 31 days',speak:'October! The tenth month.',             festival:'🪔 Diwali',    things:[{emoji:'🪔',name:'Diwali'},{emoji:'🎃',name:'Pumpkin'},{emoji:'🍁',name:'Maple'},{emoji:'🌕',name:'Full Moon'}]},
+    {name:'November', abbr:'NOV',number:'Month 11',ordinal:'11th',emoji:'🦃',icon:'🦃',bg:['#6a4c93','#3d1f60'],season:'🍂 Autumn',  days:30,sub:'11th month · 30 days',speak:'November! The eleventh month.',         festival:'🍂 Harvest',   things:[{emoji:'🦃',name:'Turkey'},{emoji:'🍂',name:'Falling Leaves'},{emoji:'🧣',name:'Scarf'},{emoji:'🕯️',name:'Candle'}]},
+    {name:'December', abbr:'DEC',number:'Month 12',ordinal:'12th',emoji:'🎄',icon:'🎄',bg:['#2b4162','#0a1a2a'],season:'❄️ Winter',  days:31,sub:'12th month · 31 days',speak:'December! The twelfth and last month!', festival:'🎄 Christmas', things:[{emoji:'🎄',name:'Christmas'},{emoji:'⛄',name:'Snowman'},{emoji:'🎁',name:'Presents'},{emoji:'❄️',name:'Snow'}]},
+];
+
+const seasons = [
+    {name:'Spring',abbr:'SPR',number:'Season 1',ordinal:'1st',emoji:'🌸',icon:'🌸',bg:['#2dc653','#1a5c44'],season:'🌸 March · April · May',   sub:'Flowers bloom · Warm & breezy', speak:'Spring! Flowers bloom and birds sing. March, April and May are spring months!',  months:['March','April','May'],      things:[{emoji:'🌸',name:'Blossom'},{emoji:'🐝',name:'Bees'},{emoji:'🌈',name:'Rainbow'},{emoji:'🌱',name:'New Leaves'}]},
+    {name:'Summer',abbr:'SUM',number:'Season 2',ordinal:'2nd',emoji:'☀️',icon:'☀️',bg:['#f9c74f','#9a6e00'],season:'☀️ June · July · August',   sub:'Hot & sunny · No school!',      speak:'Summer! The hottest season. June, July and August are summer months!',          months:['June','July','August'],     things:[{emoji:'☀️',name:'Hot Sun'},{emoji:'🍦',name:'Ice Cream'},{emoji:'🏖️',name:'Beach'},{emoji:'🌊',name:'Swimming'}]},
+    {name:'Autumn', abbr:'AUT',number:'Season 3',ordinal:'3rd',emoji:'🍂',icon:'🍂',bg:['#b5838d','#6d3040'],season:'🍂 Sep · Oct · Nov',         sub:'Leaves fall · Cool breeze',     speak:'Autumn! Leaves turn orange and fall. September, October and November!',         months:['September','October','November'],things:[{emoji:'🍂',name:'Falling Leaves'},{emoji:'🍎',name:'Apples'},{emoji:'🌾',name:'Harvest'},{emoji:'🧣',name:'Sweater'}]},
+    {name:'Winter', abbr:'WIN',number:'Season 4',ordinal:'4th',emoji:'❄️',icon:'❄️',bg:['#48cae4','#023e8a'],season:'❄️ Dec · Jan · Feb',         sub:'Cold & frosty · Snow!',         speak:'Winter! The coldest season. December, January and February are winter months!',  months:['December','January','February'],things:[{emoji:'❄️',name:'Snow'},{emoji:'⛄',name:'Snowman'},{emoji:'🧤',name:'Gloves'},{emoji:'☕',name:'Hot Cocoa'}]},
+];
+
+let mode='days', current=0, stars=0, soundOn=true, autoPlay=false, autoSpeed=5000, autoTimer=null;
+let learnedDays=new Set(), learnedMonths=new Set(), learnedSeasons=new Set();
+
+function dataset(){ return mode==='days'?days:mode==='months'?months:seasons; }
+function learned() { return mode==='days'?learnedDays:mode==='months'?learnedMonths:learnedSeasons; }
+
+const modeTheme = {
+    days:   {accent:'#4361ee',panelBg:'#eef0ff',celebBg:'rgba(67,97,238,.97),rgba(30,50,180,.97)',  celebBtn:'#4361ee'},
+    months: {accent:'#e85d04',panelBg:'#fff4e0',celebBg:'rgba(232,93,4,.97),rgba(130,50,0,.97)',   celebBtn:'#e85d04'},
+    seasons:{accent:'#2dc653',panelBg:'#f0fff4',celebBg:'rgba(45,198,83,.97),rgba(20,100,40,.97)', celebBtn:'#2dc653'},
+};
+
+function switchMode(m){
+    if(m===mode) return;
+    mode=m; current=0;
+    clearInterval(autoTimer); autoPlay=false;
+    document.getElementById('autoToggle').classList.remove('on');
+    document.getElementById('autoplayPill').classList.remove('show');
+    document.getElementById('tapHint').style.display='block';
+    ['Days','Months','Seasons'].forEach(n=>
+        document.getElementById('mode'+n).classList.toggle('active',m===n.toLowerCase()));
+    updateScreen(false);
+}
+
+function updateScreen(animate=true){
+    const data=dataset(), item=data[current];
+    document.getElementById('mainScreen').style.background=
+        `linear-gradient(135deg,${item.bg[0]} 0%,${item.bg[1]} 100%)`;
+    document.getElementById('calHeaderText').textContent=
+        mode==='days'?'WEEK':mode==='months'?'YEAR':'SEASONS';
+    document.getElementById('calEmoji').textContent=item.emoji;
+    document.getElementById('calNumber').textContent=item.number;
+    document.getElementById('itemName').textContent=item.name;
+    document.getElementById('itemSub').textContent=item.sub;
+    document.getElementById('prevBtn').disabled=(current===0);
+    buildInfoPanel(item,animate);
+    if(animate){
+        reAnimate('calCard','popIn 0.55s cubic-bezier(0.175,0.885,0.32,1.4) both');
+        reAnimate('calEmoji','bounceIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) 0.08s both');
+        reAnimate('itemName','slideUp 0.4s ease both');
+        reAnimate('itemSub','slideUp 0.4s ease 0.12s both');
+    }
+    updateDots();
+    if(soundOn) setTimeout(speakItem,450);
+}
+
+function buildInfoPanel(item,animate){
+    const half=document.getElementById('infoHalf');
+    half.innerHTML='';
+
+    if(mode==='days'){
+        const strip=document.createElement('div');
+        strip.className='week-strip';
+        days.forEach((d,i)=>{
+            const pip=document.createElement('div');
+            pip.className=`week-pip${d.weekend?' weekend':''}${i===current?' active':''}`;
+            pip.innerHTML=`<span class="pip-abbr">${d.abbr}</span><div class="pip-dot${i===current?' active':''}"></div>`;
+            strip.appendChild(pip);
+        });
+        if(animate) strip.style.animation='bounceIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) 0.1s both';
+        half.appendChild(strip);
+
+        const chips=document.createElement('div');
+        chips.className='info-chips';
+        chips.innerHTML=`<span class="info-chip">&#9664; ${item.yesterday}</span><span class="info-chip">${item.ordinal} day</span><span class="info-chip">${item.tomorrow} &#9654;</span>`;
+        if(animate) chips.style.animation='slideUp 0.4s ease 0.22s both';
+        half.appendChild(chips);
+
+    } else if(mode==='months'){
+        const badge=document.createElement('div');
+        badge.className='season-badge';
+        badge.textContent=item.season;
+        if(animate) badge.style.animation='slideUp 0.4s ease 0.28s both';
+        half.appendChild(badge);
+
+        const chips=document.createElement('div');
+        chips.className='info-chips';
+        chips.innerHTML=`<span class="info-chip">${item.ordinal} month</span><span class="info-chip">&#128198; ${item.days} days</span><span class="info-chip">${item.festival}</span>`;
+        if(animate) chips.style.animation='slideUp 0.4s ease 0.32s both';
+        half.appendChild(chips);
+
+    } else {
+        const strip=document.createElement('div');
+        strip.className='month-strip';
+        item.months.forEach(mn=>{
+            const pip=document.createElement('div');
+            pip.className='month-pip';
+            pip.textContent=mn.slice(0,3).toUpperCase();
+            strip.appendChild(pip);
+        });
+        if(animate) strip.style.animation='bounceIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) 0.1s both';
+        half.appendChild(strip);
+
+        const chips=document.createElement('div');
+        chips.className='info-chips';
+        chips.innerHTML=`<span class="info-chip">${item.ordinal} season</span><span class="info-chip">&#128197; 3 months</span>`;
+        if(animate) chips.style.animation='slideUp 0.4s ease 0.22s both';
+        half.appendChild(chips);
+    }
+
+    const grid=document.createElement('div');
+    grid.className='things-grid';
+    if(animate) grid.style.animation='bounceIn 0.55s cubic-bezier(0.175,0.885,0.32,1.4) 0.15s both';
+    item.things.forEach(t=>{
+        const card=document.createElement('div');
+        card.className='thing-card';
+        card.innerHTML=`<div class="thing-emoji">${t.emoji}</div><div class="thing-name">${t.name}</div>`;
+        card.onclick=e=>{e.stopPropagation();floatEmoji(t.emoji,e.clientX,e.clientY);speakWord(t.name);};
+        grid.appendChild(card);
+    });
+    half.appendChild(grid);
+}
+
+function reAnimate(id,anim){
+    const el=document.getElementById(id); if(!el) return;
+    el.style.animation='none'; void el.offsetWidth; el.style.animation=anim;
+}
+
+function speakItem(){
+    if(!soundOn||!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(dataset()[current].speak);
+    u.rate=0.68; u.pitch=1.4; u.volume=1;
+    const fab=document.getElementById('speakFab');
+    fab.classList.add('speaking');
+    u.onend=()=>fab.classList.remove('speaking');
+    window.speechSynthesis.speak(u);
+}
+function speakWord(word){
+    if(!soundOn||!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(word);
+    u.rate=0.72; u.pitch=1.4; window.speechSynthesis.speak(u);
+}
+function tapSpeak(){speakItem();}
+
+function tapCard(e){
+    e.stopPropagation();
+    const card=document.getElementById('calCard');
+    card.classList.remove('wobble'); void card.offsetWidth; card.classList.add('wobble');
+    setTimeout(()=>card.classList.remove('wobble'),600);
+    const ring=document.getElementById('calRing');
+    ring.classList.remove('pulse'); void ring.offsetWidth; ring.classList.add('pulse');
+    floatEmoji(dataset()[current].emoji,e.clientX,e.clientY);
+    speakItem();
+}
+
+function floatEmoji(emoji,x,y){
+    const el=document.createElement('div');
+    el.className='float-emoji'; el.textContent=emoji;
+    el.style.left=`${x-19}px`; el.style.top=`${y-19}px`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1200);
+}
+
+function updateDots(){
+    const row=document.getElementById('dotsRow'); row.innerHTML='';
+    dataset().forEach((_,i)=>{
+        const d=document.createElement('div');
+        d.className=`dot ${i===current?'current':learned().has(i)?'done':''}`;
+        row.appendChild(d);
+    });
+}
+
+function handleTap(e){nextItem(e);}
+
+function nextItem(e){
+    if(e) e.stopPropagation();
+    learned().add(current);
+    addStars(1);
+    const data=dataset();
+    if(learned().size>=2 && learned().size%5===0 && current<data.length-1){showQuiz();return;}
+    if(current>=data.length-1){
+        learned().add(data.length-1);
+        const lbl={days:'7 days',months:'12 months',seasons:'4 seasons'};
+        showCelebration('🏆','You Did It!',`WOW! You know ALL ${lbl[mode]}!\nYou are a SUPERSTAR! ⭐⭐⭐`);
+        return;
+    }
+    current++; updateScreen();
+    if(autoPlay) resetAutoTimer();
+}
+
+function prevItem(e){
+    if(e) e.stopPropagation();
+    if(current>0){current--;updateScreen();}
+}
+
+function addStars(n){
+    stars+=n;
+    const el=document.getElementById('starsDisplay');
+    el.textContent=`⭐ ${stars}`;
+    el.style.transform='scale(1.35)';
+    setTimeout(()=>el.style.transform='',200);
+}
+
+function toggleAuto(){
+    autoPlay=!autoPlay;
+    document.getElementById('autoToggle').classList.toggle('on',autoPlay);
+    document.getElementById('autoplayPill').classList.toggle('show',autoPlay);
+    document.getElementById('tapHint').style.display=autoPlay?'none':'block';
+    autoPlay?resetAutoTimer():clearInterval(autoTimer);
+}
+function resetAutoTimer(){
+    clearInterval(autoTimer);
+    autoTimer=setInterval(()=>{
+        learned().add(current);
+        const data=dataset();
+        if(current<data.length-1){current++;updateScreen();}
+        else{clearInterval(autoTimer);showCelebration('🏆','You Did It!','All learned!');}
+    },autoSpeed);
+}
+function setSpeed(s,btn){
+    autoSpeed=s*1000;
+    document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    if(autoPlay) resetAutoTimer();
+}
+
+function toggleSound(){
+    soundOn=!soundOn;
+    document.getElementById('soundToggle').classList.toggle('on',soundOn);
+    document.getElementById('speakFab').style.opacity=soundOn?'1':'0.45';
+    const pill=document.getElementById('soundFab');
+    pill.textContent=soundOn?'🔊 Sound':'🔇 Muted';
+    pill.classList.toggle('muted',!soundOn);
+    if(!soundOn) window.speechSynthesis.cancel();
+}
+
+function applyPanelTheme(){
+    const t=modeTheme[mode];
+    document.querySelector('.panel h2').style.color=t.accent;
+    document.querySelector('.panel-progress').style.background=t.panelBg;
+    document.querySelectorAll('.toggle.on').forEach(el=>el.style.background=t.accent);
+    document.querySelector('.close-panel-btn').style.background=
+        `linear-gradient(135deg,${t.accent},${t.accent}cc)`;
+}
+
+function openPanel(e){
+    if(e) e.stopPropagation();
+    clearInterval(autoTimer);
+    const data=dataset();
+    const lbl={days:'days',months:'months',seasons:'seasons'};
+    document.getElementById('panelProgress').textContent=
+        `${learned().size} of ${data.length} ${lbl[mode]} completed ✅`;
+    document.getElementById('jumpLabel').textContent=
+        mode==='days'?'Jump to any day':mode==='months'?'Jump to any month':'Jump to any season';
+    buildJumpGrid(); applyPanelTheme();
+    document.getElementById('parentOverlay').classList.add('show');
+}
+function closePanel(){
+    document.getElementById('parentOverlay').classList.remove('show');
+    if(autoPlay) resetAutoTimer();
+}
+function buildJumpGrid(){
+    const grid=document.getElementById('jumpGrid'); grid.innerHTML='';
+    const gc={days:'jump-grid-days',months:'jump-grid-months',seasons:'jump-grid-seasons'};
+    grid.className=gc[mode];
+    const t=modeTheme[mode];
+    dataset().forEach((item,i)=>{
+        const btn=document.createElement('button');
+        btn.className=`jump-btn ${i===current?'cur':learned().has(i)?'done':''}`;
+        if(i===current) btn.style.background=t.accent;
+        btn.innerHTML=`<span class="jb-emoji">${item.icon}</span><span class="jb-label">${item.abbr}</span>`;
+        btn.title=item.name;
+        btn.onclick=()=>{current=i;updateScreen();closePanel();};
+        grid.appendChild(btn);
+    });
+}
+
+let quizCount=0;
+
+function showQuiz(){
+    clearInterval(autoTimer);
+    quizCount++;
+    const t=modeTheme[mode];
+    const data=dataset(), correct=data[current];
+
+    document.getElementById('quizFeedback').textContent='';
+    document.getElementById('quizFeedback').className='quiz-feedback';
+    document.getElementById('quizRetryBtn').style.display='none';
+    const badge=document.getElementById('quizBadge');
+    badge.style.background=t.panelBg; badge.style.color=t.accent;
+    document.getElementById('quizRetryBtn').style.background=t.accent;
+
+    const useNext=(quizCount%2===1)&&current<data.length-1;
+
+    if(useNext){
+        const nextIt=data[current+1];
+        badge.textContent='🔢 What Comes Next?';
+        document.getElementById('quizEmoji').textContent=correct.emoji;
+        document.getElementById('quizQuestion').textContent=`${correct.name} comes... then what?`;
+        const pool=data.filter((_,i)=>i!==current&&i!==current+1).sort(()=>Math.random()-.5).slice(0,3);
+        const opts=[...pool,nextIt].sort(()=>Math.random()-.5);
+        const container=document.getElementById('quizOpts'); container.innerHTML='';
+        opts.forEach(opt=>{
+            const btn=document.createElement('button');
+            btn.className='quiz-opt';
+            btn.innerHTML=`<span>${opt.emoji}</span><span class="quiz-opt-name">${opt.name}</span>`;
+            btn.onclick=()=>checkQuiz(btn,opt.name,nextIt.name);
+            container.appendChild(btn);
+        });
+    } else {
+        badge.textContent='🎯 Name This!';
+        document.getElementById('quizEmoji').textContent=correct.emoji;
+        document.getElementById('quizQuestion').textContent=
+            mode==='seasons'
+                ? `Which season has ${correct.months[0]}, ${correct.months[1]} and ${correct.months[2]}?`
+                : `Which ${mode==='days'?'day':'month'} is this?`;
+        const pool=data.filter((_,i)=>i!==current).sort(()=>Math.random()-.5).slice(0,3);
+        const opts=[...pool,correct].sort(()=>Math.random()-.5);
+        const container=document.getElementById('quizOpts'); container.innerHTML='';
+        opts.forEach(opt=>{
+            const btn=document.createElement('button');
+            btn.className='quiz-opt';
+            btn.innerHTML=`<span>${opt.emoji}</span><span class="quiz-opt-name">${opt.name}</span>`;
+            btn.onclick=()=>checkQuiz(btn,opt.name,correct.name);
+            container.appendChild(btn);
+        });
+    }
+    document.getElementById('quizOverlay').classList.add('show');
+}
+
+function checkQuiz(btn,selected,correct){
+    document.querySelectorAll('.quiz-opt').forEach(b=>{b.onclick=null;b.disabled=true;});
+    const fb=document.getElementById('quizFeedback');
+    if(selected===correct){
+        btn.classList.add('correct');
+        fb.textContent='🎉 Correct! Brilliant!';
+        fb.className='quiz-feedback good';
+        addStars(2);
+        if(soundOn){
+            window.speechSynthesis.cancel();
+            const u=new SpeechSynthesisUtterance('Correct! Brilliant!');
+            u.pitch=1.4; window.speechSynthesis.speak(u);
+        }
+        setTimeout(()=>{
+            document.getElementById('quizOverlay').classList.remove('show');
+            afterQuiz();
+        },1300);
+    } else {
+        btn.classList.add('wrong');
+        document.querySelectorAll('.quiz-opt').forEach(b=>{
+            if(b.querySelector('.quiz-opt-name')?.textContent===correct) b.classList.add('correct');
+        });
+        fb.textContent=`Not quite! The answer is ${correct}.`;
+        fb.className='quiz-feedback bad';
+        const card=document.getElementById('quizCard');
+        card.style.animation='none'; void card.offsetWidth; card.style.animation='shake .4s ease';
+        if(soundOn){
+            window.speechSynthesis.cancel();
+            const u=new SpeechSynthesisUtterance(`Not quite! The answer is ${correct}.`);
+            u.pitch=1.0; window.speechSynthesis.speak(u);
+        }
+        document.getElementById('quizRetryBtn').style.display='inline-block';
+    }
+}
+
+function retryQuiz(){showQuiz();}
+
+function afterQuiz(){
+    const data=dataset();
+    if(current>=data.length-1){
+        const lbl={days:'7 days',months:'12 months',seasons:'4 seasons'};
+        showCelebration('🏆','You Did It!',`WOW! You know ALL ${lbl[mode]}!\nYou are a SUPERSTAR! ⭐⭐⭐`);
+    } else {
+        current++; updateScreen();
+        if(autoPlay) resetAutoTimer();
+    }
+}
+
+function showCelebration(emoji,title,sub){
+    clearInterval(autoTimer);
+    const t=modeTheme[mode];
+    document.getElementById('celebEmoji').textContent=emoji;
+    document.getElementById('celebTitle').textContent=title;
+    document.getElementById('celebSub').textContent=sub;
+    document.getElementById('celebOverlay').style.background=
+        `linear-gradient(135deg,${t.celebBg})`;
+    document.getElementById('celebContinueBtn').style.color=t.celebBtn;
+    document.getElementById('celebOverlay').classList.add('show');
+    if(soundOn){
+        window.speechSynthesis.cancel();
+        const u=new SpeechSynthesisUtterance('Amazing! Well done! You are a superstar!');
+        u.pitch=1.4; u.rate=0.8; window.speechSynthesis.speak(u);
+    }
+    launchConfetti();
+}
+function closeCelebration(){
+    document.getElementById('celebOverlay').classList.remove('show');
+    const data=dataset();
+    if(current<data.length-1){current++;updateScreen();}
+    if(autoPlay) resetAutoTimer();
+}
+
+function launchConfetti(){
+    const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24','#f472b6','#FB923C'];
+    for(let i=0;i<85;i++){
+        const c=document.createElement('div');
+        const size=Math.random()*16+7;
+        c.style.cssText=`position:fixed;width:${size}px;height:${size}px;background:${cols[~~(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'4px'};left:${Math.random()*100}vw;top:-24px;z-index:300;animation:confettiFall ${Math.random()*2.2+1.8}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),5000);
+    }
+}
+
+document.querySelectorAll('.toggle').forEach(el=>{
+    new MutationObserver(()=>{
+        if(el.classList.contains('on')) el.style.background=modeTheme[mode].accent;
+        else el.style.background='#ddd';
+    }).observe(el,{attributes:true,attributeFilter:['class']});
+});
+
+updateDots();
+updateScreen(false);
+setTimeout(speakItem,900);
+</script>
+</body>
+</html>
