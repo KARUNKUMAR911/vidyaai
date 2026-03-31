@@ -590,7 +590,7 @@ def ukg_fruits():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('ukg_fruits.html', student=student)
+    return render_template('ukg_fruits_vegetables.html', student=student)
 
 @app.route('/ukg/body')
 def ukg_body():
