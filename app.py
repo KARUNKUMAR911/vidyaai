@@ -307,7 +307,7 @@ def lkg_rhymes():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_rhymes.html', student=student)
+    return render_template('lkg_rhymes_songs.html', student=student)
 
 @app.route('/lkg/family')
 def lkg_family():
