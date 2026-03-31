@@ -797,6 +797,7 @@ def class1_english():
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_chapters.html', student=student)
 
+@app.route('/class/1/english/alphabets')
 @app.route('/class/1/english/chapter/alphabets')
 def class1_english_ch1():
     if 'student_id' not in session:
@@ -804,6 +805,7 @@ def class1_english_ch1():
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_ch1.html', student=student)
 
+@app.route('/class/1/english/fruits')
 @app.route('/class/1/english/vegetables')
 def class1_english_ch2():
     if 'student_id' not in session:
