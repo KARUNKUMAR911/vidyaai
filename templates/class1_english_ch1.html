@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VidyaAI - Letters of Alphabet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f0f4ff;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            padding: 12px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 15px rgba(58,12,163,0.3);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo  { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-grade {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+        }
+        .navbar-right { display: flex; align-items: center; gap: 8px; }
+        .nav-btn {
+            background: rgba(255,255,255,0.22); color: white;
+            border: none; padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; text-decoration: none;
+        }
+        .stars-badge {
+            background: rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,215,0,0.5);
+            color: white; padding: 6px 14px;
+            border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            padding: 16px 20px 32px;
+            text-align: center; color: white;
+        }
+        .hero h2 { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 13px; opacity: 0.85; }
+
+        /* PROGRESS */
+        .progress-card {
+            background: white; margin: -16px 16px 20px;
+            border-radius: 16px; padding: 14px 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-info { flex: 1; }
+        .progress-info h4 { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
+        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .progress-fill {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            height: 100%; border-radius: 10px; transition: width 0.5s;
+        }
+        .progress-pct { font-size: 20px; font-weight: 900; color: #3a0ca3; }
+
+        /* TABS */
+        .tabs {
+            display: flex; gap: 0;
+            padding: 0 16px; margin-bottom: 16px;
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab {
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; white-space: nowrap;
+            border: 2px solid #e5e7eb; background: white;
+            color: #888; margin-right: 8px; transition: all 0.2s;
+        }
+        .tab.active {
+            background: #3a0ca3; color: white; border-color: #3a0ca3;
+        }
+
+        /* CONTENT AREA */
+        .content { padding: 0 16px 100px; }
+
+        /* ====== LETTER CARD ====== */
+        .letter-section {
+            background: white; border-radius: 24px;
+            margin-bottom: 16px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .letter-section.active-card {
+            border-color: #4361ee;
+            box-shadow: 0 8px 25px rgba(67,97,238,0.2);
+        }
+
+        /* Letter Header */
+        .letter-header {
+            padding: 16px 20px;
+            display: flex; align-items: center; gap: 16px;
+            cursor: pointer;
+        }
+        .letter-display {
+            display: flex; gap: 8px; align-items: baseline;
+        }
+        .letter-capital {
+            font-family: 'Fredoka One', cursive;
+            font-size: 72px; line-height: 1;
+            filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.1));
+        }
+        .letter-small {
+            font-family: 'Fredoka One', cursive;
+            font-size: 52px; line-height: 1;
+            opacity: 0.7;
+            filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.1));
+        }
+        .letter-info { flex: 1; }
+        .letter-name {
+            font-size: 18px; font-weight: 900; color: #333; margin-bottom: 4px;
+        }
+        .letter-sound {
+            font-size: 13px; color: #888; font-weight: 600;
+        }
+        .letter-speak-btn {
+            width: 40px; height: 40px;
+            background: #f0f4ff; border: none;
+            border-radius: 50%; font-size: 18px;
+            cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.2s;
+        }
+        .letter-speak-btn:hover { background: #4361ee; }
+
+        /* Words Grid */
+        .words-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; padding: 0 16px 16px;
+        }
+        .word-card {
+            background: #f8f9ff; border-radius: 16px;
+            padding: 14px; text-align: center;
+            border: 2px solid #e8eeff; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .word-card:hover { border-color: #4361ee; background: #f0f4ff; transform: scale(1.02); }
+        .word-emoji { font-size: 48px; margin-bottom: 8px; display: block; }
+        .word-image {
+            width: 80px; height: 70px; object-fit: contain;
+            margin: 0 auto 8px; display: block;
+        }
+        .word-text {
+            font-size: 18px; font-weight: 800; color: #333;
+        }
+        .word-first-letter { color: #4361ee; }
+        .word-speak {
+            margin-top: 6px; font-size: 12px;
+            color: #888; font-weight: 600;
+        }
+
+        /* ====== MATCHING EXERCISE ====== */
+        .exercise-card {
+            background: white; border-radius: 24px;
+            padding: 20px; margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .exercise-title {
+            font-size: 16px; font-weight: 900; color: #3a0ca3;
+            margin-bottom: 4px;
+        }
+        .exercise-instruction {
+            font-size: 13px; color: #666; margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .match-container {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .match-col { display: flex; flex-direction: column; gap: 12px; }
+        .match-col-title {
+            font-size: 13px; font-weight: 800; color: #888;
+            text-align: center; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 4px;
+        }
+        .match-item {
+            background: #f8f9ff; border: 3px solid #e8eeff;
+            border-radius: 14px; padding: 12px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 28px; text-align: center;
+            cursor: pointer; transition: all 0.2s;
+            user-select: none;
+        }
+        .match-item:hover { border-color: #4361ee; background: #f0f4ff; }
+        .match-item.selected { border-color: #4361ee; background: #4361ee; color: white; }
+        .match-item.correct  { border-color: #059669; background: #d1fae5; color: #059669; }
+        .match-item.wrong    { border-color: #dc2626; background: #fee2e2; color: #dc2626; }
+        .match-item.matched  { border-color: #059669; background: #d1fae5; color: #059669; pointer-events: none; }
+
+        .match-check-btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            color: white; border: none; border-radius: 14px;
+            font-size: 16px; font-weight: 700; cursor: pointer;
+            margin-top: 16px; transition: transform 0.2s;
+        }
+        .match-check-btn:hover { transform: scale(1.02); }
+
+        .match-result {
+            text-align: center; padding: 12px;
+            border-radius: 12px; margin-top: 12px;
+            font-size: 15px; font-weight: 700; display: none;
+        }
+        .match-result.success { background: #d1fae5; color: #059669; }
+        .match-result.partial { background: #fef3c7; color: #b45309; }
+
+        /* ====== COMPLETE BUTTON ====== */
+        .complete-btn {
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white; border: none; border-radius: 16px;
+            font-size: 17px; font-weight: 800; cursor: pointer;
+            margin-bottom: 16px; box-shadow: 0 6px 20px rgba(5,150,105,0.3);
+            transition: transform 0.2s;
+        }
+        .complete-btn:hover { transform: scale(1.02); }
+
+        /* ====== CELEBRATION ====== */
+        .celeb-overlay {
+            display: none; position: fixed; inset: 0;
+            background: linear-gradient(135deg,rgba(58,12,163,.96),rgba(67,97,238,.96));
+            z-index: 200; align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; padding: 30px;
+        }
+        .celeb-overlay.show { display: flex; }
+        .celeb-emoji  { font-size: 80px; animation: bounce 0.5s ease infinite alternate; }
+        .celeb-title  { font-size: 38px; font-weight: 900; color: white; margin: 14px 0 8px; }
+        .celeb-sub    { font-size: 16px; color: rgba(255,255,255,.88); margin-bottom: 28px; line-height: 1.6; }
+        .celeb-stars  { font-size: 32px; margin-bottom: 20px; }
+        .celeb-btn {
+            padding: 16px 44px; background: white; color: #3a0ca3;
+            border: none; border-radius: 50px; font-size: 17px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.22); margin: 6px;
+        }
+        .celeb-btn.secondary {
+            background: rgba(255,255,255,0.2);
+            color: white; border: 2px solid rgba(255,255,255,0.4);
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0) scale(1); }
+            to   { transform: translateY(-15px) scale(1.08); }
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">Class 1 • English</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
+        <a href="/class/1/english" class="nav-btn">← Back</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <h2>Letters of Alphabet</h2>
+    <p>Study the letters • Say the words after your teacher</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-card">
+    <div class="progress-info">
+        <h4>📊 Chapter Progress</h4>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+    </div>
+    <div class="progress-pct" id="progressPct">0%</div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+    <div class="tab active" onclick="showTab('letters', this)">🔤 A-Z Letters</div>
+    <div class="tab" onclick="showTab('matching', this)">🔗 Matching</div>
+    <div class="tab" onclick="showTab('quiz', this)">🎯 Quiz</div>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+    <!-- ===== LETTERS TAB ===== -->
+    <div id="tab-letters">
+
+        <div id="lettersContainer"></div>
+
+        <button class="complete-btn" onclick="completeChapter()">
+            ✅ I've Learned All Letters! Complete Chapter →
+        </button>
+
+    </div>
+
+    <!-- ===== MATCHING TAB ===== -->
+    <div id="tab-matching" style="display:none">
+
+        <!-- Match Set 1: A-I -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 1</div>
+            <div class="exercise-instruction">Match the capital letters with the small letters. Draw lines.</div>
+            <div class="match-container">
+                <div class="match-col">
+                    <div class="match-col-title">Capital</div>
+                    <div class="match-item" onclick="selectMatch(this, 'A', 'cap')" data-letter="A">A</div>
+                    <div class="match-item" onclick="selectMatch(this, 'B', 'cap')" data-letter="B">B</div>
+                    <div class="match-item" onclick="selectMatch(this, 'C', 'cap')" data-letter="C">C</div>
+                    <div class="match-item" onclick="selectMatch(this, 'D', 'cap')" data-letter="D">D</div>
+                    <div class="match-item" onclick="selectMatch(this, 'E', 'cap')" data-letter="E">E</div>
+                    <div class="match-item" onclick="selectMatch(this, 'F', 'cap')" data-letter="F">F</div>
+                    <div class="match-item" onclick="selectMatch(this, 'G', 'cap')" data-letter="G">G</div>
+                    <div class="match-item" onclick="selectMatch(this, 'H', 'cap')" data-letter="H">H</div>
+                    <div class="match-item" onclick="selectMatch(this, 'I', 'cap')" data-letter="I">I</div>
+                </div>
+                <div class="match-col">
+                    <div class="match-col-title">Small</div>
+                    <div class="match-item" onclick="selectMatch(this, 'e', 'sml')" data-letter="e">e</div>
+                    <div class="match-item" onclick="selectMatch(this, 'f', 'sml')" data-letter="f">f</div>
+                    <div class="match-item" onclick="selectMatch(this, 'i', 'sml')" data-letter="i">i</div>
+                    <div class="match-item" onclick="selectMatch(this, 'a', 'sml')" data-letter="a">a</div>
+                    <div class="match-item" onclick="selectMatch(this, 'c', 'sml')" data-letter="c">c</div>
+                    <div class="match-item" onclick="selectMatch(this, 'h', 'sml')" data-letter="h">h</div>
+                    <div class="match-item" onclick="selectMatch(this, 'b', 'sml')" data-letter="b">b</div>
+                    <div class="match-item" onclick="selectMatch(this, 'g', 'sml')" data-letter="g">g</div>
+                    <div class="match-item" onclick="selectMatch(this, 'd', 'sml')" data-letter="d">d</div>
+                </div>
+            </div>
+            <button class="match-check-btn" onclick="checkMatch('match1')">Check Answers ✓</button>
+            <div class="match-result" id="match1-result"></div>
+        </div>
+
+        <!-- Match Set 2: J-R -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 2</div>
+            <div class="exercise-instruction">Match the capital letters with the small letters. Draw lines.</div>
+            <div class="match-container">
+                <div class="match-col">
+                    <div class="match-col-title">Capital</div>
+                    <div class="match-item" onclick="selectMatch(this, 'J', 'cap')" data-letter="J">J</div>
+                    <div class="match-item" onclick="selectMatch(this, 'K', 'cap')" data-letter="K">K</div>
+                    <div class="match-item" onclick="selectMatch(this, 'L', 'cap')" data-letter="L">L</div>
+                    <div class="match-item" onclick="selectMatch(this, 'M', 'cap')" data-letter="M">M</div>
+                    <div class="match-item" onclick="selectMatch(this, 'N', 'cap')" data-letter="N">N</div>
+                    <div class="match-item" onclick="selectMatch(this, 'O', 'cap')" data-letter="O">O</div>
+                    <div class="match-item" onclick="selectMatch(this, 'P', 'cap')" data-letter="P">P</div>
+                    <div class="match-item" onclick="selectMatch(this, 'Q', 'cap')" data-letter="Q">Q</div>
+                    <div class="match-item" onclick="selectMatch(this, 'R', 'cap')" data-letter="R">R</div>
+                </div>
+                <div class="match-col">
+                    <div class="match-col-title">Small</div>
+                    <div class="match-item" onclick="selectMatch(this, 'r', 'sml')" data-letter="r">r</div>
+                    <div class="match-item" onclick="selectMatch(this, 'm', 'sml')" data-letter="m">m</div>
+                    <div class="match-item" onclick="selectMatch(this, 'o', 'sml')" data-letter="o">o</div>
+                    <div class="match-item" onclick="selectMatch(this, 'j', 'sml')" data-letter="j">j</div>
+                    <div class="match-item" onclick="selectMatch(this, 'p', 'sml')" data-letter="p">p</div>
+                    <div class="match-item" onclick="selectMatch(this, 'k', 'sml')" data-letter="k">k</div>
+                    <div class="match-item" onclick="selectMatch(this, 'l', 'sml')" data-letter="l">l</div>
+                    <div class="match-item" onclick="selectMatch(this, 'n', 'sml')" data-letter="n">n</div>
+                    <div class="match-item" onclick="selectMatch(this, 'q', 'sml')" data-letter="q">q</div>
+                </div>
+            </div>
+            <button class="match-check-btn" onclick="checkMatch('match2')">Check Answers ✓</button>
+            <div class="match-result" id="match2-result"></div>
+        </div>
+
+        <!-- Match Set 3: S-Z -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 3</div>
+            <div class="exercise-instruction">Match the capital letters with the small letters. Draw lines.</div>
+            <div class="match-container">
+                <div class="match-col">
+                    <div class="match-col-title">Capital</div>
+                    <div class="match-item" onclick="selectMatch(this, 'S', 'cap')" data-letter="S">S</div>
+                    <div class="match-item" onclick="selectMatch(this, 'T', 'cap')" data-letter="T">T</div>
+                    <div class="match-item" onclick="selectMatch(this, 'U', 'cap')" data-letter="U">U</div>
+                    <div class="match-item" onclick="selectMatch(this, 'V', 'cap')" data-letter="V">V</div>
+                    <div class="match-item" onclick="selectMatch(this, 'W', 'cap')" data-letter="W">W</div>
+                    <div class="match-item" onclick="selectMatch(this, 'X', 'cap')" data-letter="X">X</div>
+                    <div class="match-item" onclick="selectMatch(this, 'Y', 'cap')" data-letter="Y">Y</div>
+                    <div class="match-item" onclick="selectMatch(this, 'Z', 'cap')" data-letter="Z">Z</div>
+                </div>
+                <div class="match-col">
+                    <div class="match-col-title">Small</div>
+                    <div class="match-item" onclick="selectMatch(this, 'z', 'sml')" data-letter="z">z</div>
+                    <div class="match-item" onclick="selectMatch(this, 'x', 'sml')" data-letter="x">x</div>
+                    <div class="match-item" onclick="selectMatch(this, 'w', 'sml')" data-letter="w">w</div>
+                    <div class="match-item" onclick="selectMatch(this, 's', 'sml')" data-letter="s">s</div>
+                    <div class="match-item" onclick="selectMatch(this, 'y', 'sml')" data-letter="y">y</div>
+                    <div class="match-item" onclick="selectMatch(this, 'v', 'sml')" data-letter="v">v</div>
+                    <div class="match-item" onclick="selectMatch(this, 'u', 'sml')" data-letter="u">u</div>
+                    <div class="match-item" onclick="selectMatch(this, 't', 'sml')" data-letter="t">t</div>
+                </div>
+            </div>
+            <button class="match-check-btn" onclick="checkMatch('match3')">Check Answers ✓</button>
+            <div class="match-result" id="match3-result"></div>
+        </div>
+
+    </div>
+
+    <!-- ===== QUIZ TAB ===== -->
+    <div id="tab-quiz" style="display:none">
+        <div class="exercise-card" id="quizContainer">
+            <div style="text-align:center;padding:20px">
+                <div style="font-size:60px;margin-bottom:12px">🎯</div>
+                <div style="font-size:18px;font-weight:800;color:#333;margin-bottom:8px">Ready for Quiz?</div>
+                <div style="font-size:14px;color:#888;margin-bottom:20px">Test what you learned about Alphabets!</div>
+                <button class="match-check-btn" onclick="startQuiz()" style="max-width:280px;margin:0 auto;display:block">
+                    Start Quiz! 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-emoji" id="celebEmoji">🎉</div>
+    <div class="celeb-title" id="celebTitle">Chapter Complete!</div>
+    <div class="celeb-sub"   id="celebSub">You learned all 26 letters!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="celeb-btn" onclick="location.href='/class/1/english'">
+        📚 Next Chapter →
+    </button>
+    <button class="celeb-btn secondary" onclick="closeCelebration()">
+        🔄 Practice Again
+    </button>
+</div>
+
+<script>
+/* ====== DATA — Exact from Karnataka State Board textbook ====== */
+const letters = [
+    { cap:'A', sml:'a', color:'#FF6B6B', bg:'#fff5f5',
+      words:[{w:'ant',    e:'🐜'},{w:'apple',  e:'🍎'}]},
+    { cap:'B', sml:'b', color:'#4361ee', bg:'#f0f4ff',
+      words:[{w:'bat',    e:'🏏'},{w:'ball',   e:'⚽'}]},
+    { cap:'C', sml:'c', color:'#f77f00', bg:'#fff8f0',
+      words:[{w:'cat',    e:'🐱'},{w:'cup',    e:'☕'}]},
+    { cap:'D', sml:'d', color:'#2dc653', bg:'#f0fff4',
+      words:[{w:'dog',    e:'🐕'},{w:'doll',   e:'🪆'}]},
+    { cap:'E', sml:'e', color:'#9b5de5', bg:'#faf0ff',
+      words:[{w:'elephant',e:'🐘'},{w:'eagle', e:'🦅'}]},
+    { cap:'F', sml:'f', color:'#00b4d8', bg:'#f0fbff',
+      words:[{w:'fish',   e:'🐟'},{w:'fan',    e:'🌀'}]},
+    { cap:'G', sml:'g', color:'#e76f51', bg:'#fff5f0',
+      words:[{w:'goat',   e:'🐐'},{w:'gun',    e:'🔫'}]},
+    { cap:'H', sml:'h', color:'#43aa8b', bg:'#f0fff8',
+      words:[{w:'hen',    e:'🐓'},{w:'hat',    e:'🎩'}]},
+    { cap:'I', sml:'i', color:'#f72585', bg:'#fff0f8',
+      words:[{w:'inkpot', e:'🖊️'},{w:'ice-cream',e:'🍦'}]},
+    { cap:'J', sml:'j', color:'#4361ee', bg:'#f0f4ff',
+      words:[{w:'jug',    e:'🫙'},{w:'jump',   e:'🤸'}]},
+    { cap:'K', sml:'k', color:'#FF6B6B', bg:'#fff5f5',
+      words:[{w:'king',   e:'👑'},{w:'kite',   e:'🪁'}]},
+    { cap:'L', sml:'l', color:'#f77f00', bg:'#fff8f0',
+      words:[{w:'lion',   e:'🦁'},{w:'lamp',   e:'💡'}]},
+    { cap:'M', sml:'m', color:'#2dc653', bg:'#f0fff4',
+      words:[{w:'monkey', e:'🐒'},{w:'mop',    e:'🧹'}]},
+    { cap:'N', sml:'n', color:'#9b5de5', bg:'#faf0ff',
+      words:[{w:'nest',   e:'🪺'},{w:'nine',   e:'9️⃣'}]},
+    { cap:'O', sml:'o', color:'#00b4d8', bg:'#f0fbff',
+      words:[{w:'owl',    e:'🦉'},{w:'orange', e:'🍊'}]},
+    { cap:'P', sml:'p', color:'#e76f51', bg:'#fff5f0',
+      words:[{w:'pen',    e:'✒️'},{w:'penguin',e:'🐧'}]},
+    { cap:'Q', sml:'q', color:'#43aa8b', bg:'#f0fff8',
+      words:[{w:'queen',  e:'👸'},{w:'queue',  e:'🚶'}]},
+    { cap:'R', sml:'r', color:'#f72585', bg:'#fff0f8',
+      words:[{w:'rose',   e:'🌹'},{w:'rat',    e:'🐀'}]},
+    { cap:'S', sml:'s', color:'#FF6B6B', bg:'#fff5f5',
+      words:[{w:'sun',    e:'☀️'},{w:'sunflower',e:'🌻'}]},
+    { cap:'T', sml:'t', color:'#4361ee', bg:'#f0f4ff',
+      words:[{w:'tomato', e:'🍅'},{w:'tree',   e:'🌳'}]},
+    { cap:'U', sml:'u', color:'#f77f00', bg:'#fff8f0',
+      words:[{w:'uniform',e:'👔'},{w:'umbrella',e:'☂️'}]},
+    { cap:'V', sml:'v', color:'#2dc653', bg:'#f0fff4',
+      words:[{w:'van',    e:'🚐'},{w:'violin', e:'🎻'}]},
+    { cap:'W', sml:'w', color:'#9b5de5', bg:'#faf0ff',
+      words:[{w:'watch',  e:'⌚'},{w:'window', e:'🪟'}]},
+    { cap:'X', sml:'x', color:'#00b4d8', bg:'#f0fbff',
+      words:[{w:'x-mass tree',e:'🎄'},{w:'x-ray',e:'🩻'}]},
+    { cap:'Y', sml:'y', color:'#e76f51', bg:'#fff5f0',
+      words:[{w:'yak',    e:'🐃'},{w:'yellow', e:'🟡'}]},
+    { cap:'Z', sml:'z', color:'#43aa8b', bg:'#f0fff8',
+      words:[{w:'zebra',  e:'🦓'},{w:'zoo',    e:'🦁'}]},
+];
+
+/* STATE */
+let stars    = 0;
+let learned  = new Set();
+let selectedCap = null;
+let selectedSml = null;
+let matchPairs  = {};
+let quizStarted = false;
+let quizCurrent = 0;
+let quizScore   = 0;
+let quizLetters = [];
+
+/* BUILD LETTERS */
+function buildLetters() {
+    const container = document.getElementById('lettersContainer');
+    container.innerHTML = '';
+    letters.forEach((l, idx) => {
+        const section = document.createElement('div');
+        section.className = 'letter-section';
+        section.id = `letter-${l.cap}`;
+        section.innerHTML = `
+            <div class="letter-header" onclick="speakLetter('${l.cap}', '${l.sml}')">
+                <div class="letter-display">
+                    <div class="letter-capital" style="color:${l.color}">${l.cap}</div>
+                    <div class="letter-small"   style="color:${l.color}">${l.sml}</div>
+                </div>
+                <div class="letter-info">
+                    <div class="letter-name">${l.cap}${l.sml} — ${l.cap === 'A' ? 'First' : ''} Letter</div>
+                    <div class="letter-sound">Sound: "${l.sml}..." as in ${l.words[0].w}</div>
+                </div>
+                <button class="letter-speak-btn" onclick="speakLetter('${l.cap}','${l.sml}');event.stopPropagation()">🔊</button>
+            </div>
+            <div class="words-grid">
+                ${l.words.map(w => `
+                    <div class="word-card" onclick="speakWord('${w.w}')">
+                        <span class="word-emoji">${w.e}</span>
+                        <div class="word-text">
+                            <span class="word-first-letter" style="color:${l.color}">${l.sml}</span>${w.w.slice(1)}
+                        </div>
+                        <div class="word-speak">🔊 Tap to hear</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(section);
+    });
+}
+
+/* SPEAK */
+function speakLetter(cap, sml) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const letter = letters.find(l => l.cap === cap);
+    const text = `${cap}! ${sml}! ${cap} for ${letter.words[0].w}! ${sml} for ${letter.words[1].w}!`;
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.8; u.pitch = 1.2; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+
+    // Mark as learned
+    learned.add(cap);
+    updateProgress();
+    document.getElementById(`letter-${cap}`).classList.add('active-card');
+    addStars(1);
+}
+
+function speakWord(word) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(word);
+    u.rate = 0.75; u.pitch = 1.2; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+}
+
+/* PROGRESS */
+function updateProgress() {
+    const pct = Math.round((learned.size / 26) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent  = pct + '%';
+}
+
+function addStars(n) {
+    stars += n;
+    document.getElementById('starsDisplay').textContent = stars;
+}
+
+/* TABS */
+function showTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('tab-letters').style.display  = tab === 'letters'  ? 'block' : 'none';
+    document.getElementById('tab-matching').style.display = tab === 'matching' ? 'block' : 'none';
+    document.getElementById('tab-quiz').style.display     = tab === 'quiz'     ? 'block' : 'none';
+}
+
+/* MATCHING */
+function selectMatch(el, letter, type) {
+    if (el.classList.contains('matched')) return;
+
+    if (type === 'cap') {
+        // Deselect previous cap
+        document.querySelectorAll('.match-item.selected').forEach(item => {
+            if (item.dataset.type !== 'sml') item.classList.remove('selected');
+        });
+        el.classList.add('selected');
+        el.dataset.type = 'cap';
+        selectedCap = { el, letter };
+    } else {
+        el.classList.add('selected');
+        el.dataset.type = 'sml';
+        selectedSml = { el, letter };
+    }
+
+    // If both selected try to pair
+    if (selectedCap && selectedSml) {
+        matchPairs[selectedCap.letter] = selectedSml.letter;
+        selectedCap.el.classList.remove('selected');
+        selectedSml.el.classList.remove('selected');
+        selectedCap.el.classList.add('matched');
+        selectedSml.el.classList.add('matched');
+        selectedCap = null;
+        selectedSml = null;
+        addStars(1);
+    }
+}
+
+const correctPairs = {
+    A:'a',B:'b',C:'c',D:'d',E:'e',F:'f',G:'g',H:'h',I:'i',
+    J:'j',K:'k',L:'l',M:'m',N:'n',O:'o',P:'p',Q:'q',R:'r',
+    S:'s',T:'t',U:'u',V:'v',W:'w',X:'x',Y:'y',Z:'z'
+};
+
+function checkMatch(id) {
+    let correct = 0;
+    let total   = 0;
+
+    document.querySelectorAll('.match-item.matched').forEach(el => {
+        total++;
+    });
+
+    Object.entries(matchPairs).forEach(([cap, sml]) => {
+        if (correctPairs[cap] === sml) correct++;
+    });
+
+    const result = document.getElementById(`${id}-result`);
+    result.style.display = 'block';
+
+    if (correct === Object.keys(matchPairs).length && correct > 0) {
+        result.className = 'match-result success';
+        result.textContent = `✅ All correct! You matched ${correct} pairs perfectly! +${correct * 2} stars!`;
+        addStars(correct * 2);
+    } else {
+        result.className = 'match-result partial';
+        result.textContent = `Good try! ${correct} correct out of ${Object.keys(matchPairs).length} matched. Keep going!`;
+    }
+}
+
+/* QUIZ */
+function startQuiz() {
+    quizLetters = [...letters].sort(() => Math.random() - 0.5).slice(0, 10);
+    quizCurrent = 0;
+    quizScore   = 0;
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    const container = document.getElementById('quizContainer');
+    if (quizCurrent >= quizLetters.length) {
+        // Quiz done
+        addStars(quizScore * 3);
+        container.innerHTML = `
+            <div style="text-align:center;padding:20px">
+                <div style="font-size:60px;margin-bottom:12px">🏆</div>
+                <div style="font-size:22px;font-weight:900;color:#333;margin-bottom:8px">Quiz Complete!</div>
+                <div style="font-size:16px;color:#666;margin-bottom:8px">Score: ${quizScore}/${quizLetters.length}</div>
+                <div style="font-size:14px;color:#4361ee;font-weight:700;margin-bottom:20px">+${quizScore * 3} stars earned!</div>
+                <button class="match-check-btn" onclick="startQuiz()" style="max-width:280px;margin:0 auto;display:block">
+                    🔄 Try Again
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    const q = quizLetters[quizCurrent];
+    // Pick 3 wrong options
+    const wrong = letters.filter(l => l.cap !== q.cap)
+        .sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [q, ...wrong].sort(() => Math.random() - 0.5);
+    const isWordQ = Math.random() > 0.5;
+
+    container.innerHTML = `
+        <div style="text-align:center;padding:10px 0 16px">
+            <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:4px">
+                Question ${quizCurrent + 1} of ${quizLetters.length}
+            </div>
+            <div style="font-size:70px;margin:10px 0">${isWordQ ? q.words[0].e : q.cap}</div>
+            <div style="font-size:18px;font-weight:800;color:#333;margin-bottom:20px">
+                ${isWordQ ? `What letter does "${q.words[0].w}" start with?` : `What is the small letter for "${q.cap}"?`}
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                ${opts.map(o => `
+                    <button onclick="answerQuiz(this,'${isWordQ ? o.cap : o.sml}','${isWordQ ? q.cap : q.sml}')"
+                        style="padding:18px;border:3px solid #e5e7eb;border-radius:14px;
+                        font-family:'Fredoka One',cursive;font-size:28px;
+                        background:white;cursor:pointer;transition:all 0.2s;color:#333">
+                        ${isWordQ ? o.cap : o.sml}
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function answerQuiz(btn, selected, correct) {
+    btn.parentElement.querySelectorAll('button').forEach(b => b.onclick = null);
+    if (selected === correct) {
+        btn.style.borderColor  = '#059669';
+        btn.style.background   = '#d1fae5';
+        btn.style.color        = '#059669';
+        quizScore++;
+        addStars(3);
+    } else {
+        btn.style.borderColor = '#dc2626';
+        btn.style.background  = '#fee2e2';
+        btn.style.color       = '#dc2626';
+        btn.parentElement.querySelectorAll('button').forEach(b => {
+            if (b.textContent.trim() === correct) {
+                b.style.borderColor = '#059669';
+                b.style.background  = '#d1fae5';
+                b.style.color       = '#059669';
+            }
+        });
+    }
+    setTimeout(() => {
+        quizCurrent++;
+        showQuizQuestion();
+    }, 1200);
+}
+
+/* COMPLETE CHAPTER */
+function completeChapter() {
+    learned = new Set(letters.map(l => l.cap));
+    updateProgress();
+    addStars(50);
+    document.getElementById('celebEmoji').textContent = '🎉';
+    document.getElementById('celebTitle').textContent = 'Chapter Complete!';
+    document.getElementById('celebSub').textContent   =
+        'Amazing! You learned all 26 letters of the alphabet!\nA B C D E F G H I J K L M N O P Q R S T U V W X Y Z!';
+    document.getElementById('celebStars').textContent = `⭐ ${stars} Stars Earned!`;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+
+    if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(
+            'Congratulations! You learned all 26 letters! A B C D E F G H I J K L M N O P Q R S T U V W X Y Z!'
+        );
+        u.rate = 0.85; u.pitch = 1.2; u.lang = 'en-IN';
+        window.speechSynthesis.speak(u);
+    }
+}
+
+function closeCelebration() {
+    document.getElementById('celebOverlay').classList.remove('show');
+}
+
+/* CONFETTI */
+function launchConfetti() {
+    const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+    for (let i = 0; i < 70; i++) {
+        const c = document.createElement('div');
+        const sz = Math.random() * 14 + 6;
+        c.style.cssText = `
+            position:fixed;width:${sz}px;height:${sz}px;
+            background:${cols[Math.floor(Math.random()*cols.length)]};
+            border-radius:${Math.random()>0.5?'50%':'3px'};
+            left:${Math.random()*100}vw;top:-20px;z-index:300;
+            animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*0.8}s forwards;
+            pointer-events:none;
+        `;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+    }
+}
+
+/* INIT */
+buildLetters();
+</script>
+</body>
+</html>
