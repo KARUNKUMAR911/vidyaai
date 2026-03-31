@@ -806,12 +806,15 @@ def class1_english_ch1():
     return render_template('class1_english_ch1.html', student=student)
 
 @app.route('/class/1/english/fruits')
-@app.route('/class/1/english/vegetables')
 def class1_english_ch2():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_ch2.html', student=student)
+
+@app.route('/class/1/english/vegetables')
+def class1_english_vegetables():
+    return redirect(url_for('class1_english'))
 
 
 
