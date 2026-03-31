@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>UKG Rhymes & Songs! 🎵</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #FFD600; }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { font-family:'Fredoka One',cursive; overflow:hidden; height:100vh; width:100vw; user-select:none; }
+
+        .screen { width:100vw; height:100vh; position:relative; overflow:hidden; display:flex; flex-direction:column; transition:background 0.7s ease; }
+
+        /* BLOBS */
+        .bg-blob { position:absolute; border-radius:50%; background:rgba(255,255,255,0.09); pointer-events:none; z-index:0; animation:floatBlob 8s ease-in-out infinite alternate; }
+        .bg-blob:nth-child(1){ width:260px;height:260px;top:-80px;left:-80px;animation-delay:0s; }
+        .bg-blob:nth-child(2){ width:160px;height:160px;bottom:60px;right:-40px;animation-delay:2.5s; }
+        .bg-blob:nth-child(3){ width:100px;height:100px;top:40%;left:2%;animation-delay:4s; }
+        @keyframes floatBlob { from{transform:translateY(0) scale(1);} to{transform:translateY(24px) scale(1.1);} }
+
+        /* TOP BAR */
+        .topbar { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; flex-shrink:0; position:relative; z-index:10; }
+        .topbar-btn { background:rgba(255,255,255,0.22); border:3px solid rgba(255,255,255,0.45); color:white; padding:7px 16px; border-radius:50px; font-size:14px; font-family:'Fredoka One',cursive; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:transform 0.15s; }
+        .topbar-btn:active { transform:scale(0.92); }
+        .stars-display { background:rgba(255,215,0,0.3); border:3px solid rgba(255,215,0,0.6); color:white; padding:7px 16px; border-radius:50px; font-size:15px; font-family:'Fredoka One',cursive; transition:transform 0.2s; }
+
+        /* DOTS */
+        .dots-row { display:flex; justify-content:center; gap:5px; padding:2px 16px 4px; flex-wrap:wrap; flex-shrink:0; position:relative; z-index:10; }
+        .dot { width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.28);transition:all 0.3s;flex-shrink:0; }
+        .dot.done    { background:rgba(255,255,255,0.65); }
+        .dot.current { background:var(--gold); transform:scale(1.7); box-shadow:0 0 8px var(--gold); }
+
+        /* CHARACTER SCENE */
+        .scene-area {
+            flex-shrink:0; height:min(26vh, 180px);
+            position:relative; display:flex; align-items:flex-end; justify-content:center;
+            overflow:hidden; z-index:2;
+        }
+        .ground { position:absolute; bottom:0; left:0; right:0; height:24px; background:rgba(255,255,255,0.14); border-radius:50% 50% 0 0 / 18px 18px 0 0; }
+        .char { position:absolute; bottom:24px; font-size:min(17vw, 110px); animation:charBounce 0.75s ease-in-out infinite alternate; filter:drop-shadow(0 6px 16px rgba(0,0,0,0.28)); line-height:1; }
+        .char.left  { left:8%;  animation-delay:0s; }
+        .char.right { right:8%; animation-delay:0.38s; }
+        .char.center{ left:50%; transform:translateX(-50%); animation-delay:0.19s; animation-name:charBounceC; }
+        @keyframes charBounce  { from{transform:translateY(0) rotate(-4deg);}       to{transform:translateY(-16px) rotate(4deg);} }
+        @keyframes charBounceC { from{transform:translateX(-50%) translateY(0) scale(1);} to{transform:translateX(-50%) translateY(-16px) scale(1.06);} }
+        .note { position:absolute; font-size:18px; color:rgba(255,255,255,0.7); animation:noteFloat 2.5s ease-in-out infinite; pointer-events:none; }
+        @keyframes noteFloat { 0%{transform:translateY(0) rotate(-10deg);opacity:0;} 20%{opacity:1;} 100%{transform:translateY(-70px) rotate(15deg);opacity:0;} }
+        .scene-star { position:absolute; font-size:20px; animation:sceneStar 3s ease-in-out infinite; opacity:0.8; }
+        .scene-star:nth-child(1){ top:12%;left:5%;  animation-delay:0s; }
+        .scene-star:nth-child(2){ top:22%;right:9%; animation-delay:1s; }
+        .scene-star:nth-child(3){ top:6%; left:52%; animation-delay:1.8s; }
+        @keyframes sceneStar { 0%,100%{transform:translateY(0) rotate(0);opacity:0.6;} 50%{transform:translateY(-10px) rotate(20deg);opacity:1;} }
+
+        /* RHYME TITLE */
+        .rhyme-title { text-align:center; font-size:clamp(20px,5.5vw,34px); color:white; font-family:'Fredoka One',cursive; text-shadow:0 3px 14px rgba(0,0,0,0.28); padding:6px 20px 0; flex-shrink:0; position:relative; z-index:5; }
+
+        /* SING ALONG AUDIO BUTTON */
+        .sing-btn-wrap { display:flex; justify-content:center; padding:6px 16px 0; flex-shrink:0; position:relative; z-index:5; }
+        .sing-btn {
+            display:inline-flex; align-items:center; gap:10px;
+            background:rgba(255,255,255,0.22); color:white;
+            border:3px solid rgba(255,255,255,0.5); border-radius:50px;
+            padding:11px 28px; font-size:16px; font-family:'Fredoka One',cursive;
+            cursor:pointer; box-shadow:0 5px 20px rgba(0,0,0,0.2), 0 0 0 3px rgba(255,255,255,0.15);
+            transition:all 0.18s;
+        }
+        .sing-btn:hover  { transform:scale(1.06) translateY(-2px); background:rgba(255,255,255,0.32); }
+        .sing-btn:active { transform:scale(0.94); }
+        .sing-btn.playing {
+            background:var(--gold); color:#333; border-color:var(--gold);
+            box-shadow:0 5px 20px rgba(255,214,0,0.5), 0 0 0 3px rgba(255,255,255,0.25);
+            animation:singPulse 0.9s ease-in-out infinite;
+        }
+        .sing-btn.no-audio { opacity:0.45; cursor:not-allowed; }
+        .sing-hint { text-align:center; font-size:12px; color:rgba(255,255,255,0.7); font-family:'Nunito',sans-serif; font-weight:700; padding:3px 0 0; }
+        .sing-icon { font-size:20px; line-height:1; }
+
+        /* LYRICS AREA */
+        .lyrics-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:6px 18px 0; gap:3px; position:relative; z-index:5; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+        .lyrics-area::-webkit-scrollbar { display:none; }
+        .lyric-line { font-family:'Nunito',sans-serif; font-weight:900; font-size:clamp(15px,4vw,23px); color:rgba(255,255,255,0.5); text-align:center; border-radius:18px; padding:5px 16px; transition:all 0.3s ease; line-height:1.35; max-width:95vw; width:100%; cursor:pointer; }
+        .lyric-line.active { color:white; font-size:clamp(18px,5vw,28px); background:rgba(255,255,255,0.18); border:2px solid rgba(255,255,255,0.32); text-shadow:0 2px 10px rgba(0,0,0,0.2); transform:scale(1.03); }
+        .lyric-line.done { color:rgba(255,255,255,0.32); }
+
+        /* BOTTOM BAR */
+        .bottom-bar { display:flex; align-items:center; justify-content:space-between; padding:8px 16px 18px; flex-shrink:0; position:relative; z-index:10; gap:8px; }
+        .nav-btn { background:rgba(255,255,255,0.2); border:3px solid rgba(255,255,255,0.45); color:white; padding:13px 18px; border-radius:50px; font-size:20px; font-family:'Fredoka One',cursive; cursor:pointer; transition:all 0.15s; min-width:62px; text-align:center; }
+        .nav-btn:hover  { background:rgba(255,255,255,0.35); transform:scale(1.06); }
+        .nav-btn:active { transform:scale(0.92); }
+        .nav-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none; }
+
+        /* KARAOKE button */
+        .centre-controls { display:flex; flex-direction:column; align-items:center; gap:5px; flex:1; }
+        .karaoke-btn { background:white; color:#333; border:none; padding:12px 26px; border-radius:50px; font-size:15px; font-family:'Fredoka One',cursive; cursor:pointer; box-shadow:0 5px 20px rgba(0,0,0,0.25),0 0 0 4px rgba(255,255,255,0.28); transition:all 0.18s; display:flex; align-items:center; gap:8px; }
+        .karaoke-btn:hover  { transform:scale(1.06) translateY(-2px); }
+        .karaoke-btn:active { transform:scale(0.94); }
+        .karaoke-btn.on { background:var(--gold); animation:singPulse 0.7s ease infinite alternate; }
+        @keyframes singPulse { from{box-shadow:0 5px 20px rgba(0,0,0,0.25),0 0 0 4px rgba(255,215,0,0.35);} to{box-shadow:0 5px 28px rgba(0,0,0,0.25),0 0 0 12px rgba(255,215,0,0);} }
+        .tap-hint { font-size:11px; color:rgba(255,255,255,0.72); font-family:'Nunito',sans-serif; font-weight:700; }
+
+        /* floating notes */
+        .note-float { position:fixed; pointer-events:none; z-index:30; font-size:22px; animation:noteUp 2s ease forwards; }
+        @keyframes noteUp { 0%{transform:translateY(0) rotate(-10deg);opacity:0;} 15%{opacity:0.9;} 100%{transform:translateY(-70px) rotate(15deg);opacity:0;} }
+
+        /* tap burst */
+        .float-burst { position:fixed; font-size:28px; pointer-events:none; z-index:50; animation:burstUp 1s ease forwards; }
+        @keyframes burstUp { 0%{transform:translateY(0) scale(1);opacity:1;} 100%{transform:translateY(-70px) scale(1.4);opacity:0;} }
+
+        /* PARENT PANEL */
+        .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:100; align-items:center; justify-content:center; backdrop-filter:blur(6px); }
+        .overlay.show { display:flex; }
+        .panel { background:white; border-radius:28px; padding:24px; width:92%; max-width:400px; max-height:88vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.35); }
+        .panel h2 { font-size:20px; color:#0a9396; margin-bottom:6px; text-align:center; font-family:'Fredoka One',cursive; }
+        .panel-progress { text-align:center; font-size:13px; color:#666; background:#e0f7f8; padding:8px; border-radius:12px; margin-bottom:16px; font-family:'Nunito',sans-serif; font-weight:700; }
+        .jump-section h4 { font-size:12px; color:#888; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; font-family:'Nunito',sans-serif; font-weight:700; }
+        .jump-grid { display:grid; grid-template-columns:1fr; gap:6px; }
+        .jump-btn { border:2px solid #e5e7eb; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; background:white; color:#555; transition:all 0.2s; padding:10px 12px; font-family:'Nunito',sans-serif; text-align:left; display:flex; align-items:center; gap:8px; }
+        .jump-btn:hover { background:#0a9396; color:white; border-color:#0a9396; }
+        .jump-btn.done  { background:#d1fae5; color:#059669; border-color:#a7f3d0; }
+        .jump-btn.cur   { background:#0a9396; color:white; border-color:#0a9396; }
+        .close-panel-btn { width:100%; padding:14px; background:#0a9396; color:white; border:none; border-radius:18px; font-size:16px; font-family:'Fredoka One',cursive; cursor:pointer; margin-top:16px; transition:transform 0.15s; }
+        .close-panel-btn:active { transform:scale(0.96); }
+
+        /* CELEBRATION */
+        .celeb-overlay { display:none; position:fixed; inset:0; background:linear-gradient(135deg,#0a9396 0%,#94d2bd 100%); z-index:200; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; }
+        .celeb-overlay.show { display:flex; }
+        .celeb-stars { display:flex; gap:14px; margin-bottom:14px; }
+        .celeb-star  { font-size:44px; animation:starPop 0.5s cubic-bezier(0.175,0.885,0.32,1.4) both; }
+        .celeb-star:nth-child(2){ animation-delay:0.15s; }
+        .celeb-star:nth-child(3){ animation-delay:0.30s; }
+        @keyframes starPop { 0%{transform:scale(0) rotate(-30deg);opacity:0;} 100%{transform:scale(1) rotate(0);opacity:1;} }
+        .celeb-big   { font-size:90px; animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.4) both; }
+        .celeb-title { font-size:36px; color:white; margin:10px 0 6px; font-family:'Fredoka One',cursive; }
+        .celeb-sub   { font-size:16px; color:rgba(255,255,255,0.92); white-space:pre-line; margin-bottom:26px; font-family:'Nunito',sans-serif; font-weight:700; }
+        .celeb-btn   { background:white; color:#0a9396; border:none; padding:17px 42px; border-radius:50px; font-size:18px; font-family:'Fredoka One',cursive; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.22); }
+
+        @keyframes popIn { 0%{transform:scale(0) rotate(-10deg);opacity:0;} 80%{transform:scale(1.12) rotate(4deg);} 100%{transform:scale(1) rotate(0);opacity:1;} }
+        @keyframes slideUp { from{transform:translateY(22px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+        @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0);opacity:1;} 100%{transform:translateY(110vh) rotate(720deg);opacity:0;} }
+    </style>
+</head>
+<body>
+
+<div class="screen" id="mainScreen">
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+
+    <!-- Top bar -->
+    <div class="topbar">
+        <a href="/ukg" class="topbar-btn">🏠 Home</a>
+        <div class="stars-display" id="starsDisplay">⭐ 0</div>
+        <button class="topbar-btn" onclick="openPanel(event)">⚙️ Parent</button>
+    </div>
+
+    <!-- Dots -->
+    <div class="dots-row" id="dotsRow"></div>
+
+    <!-- Animated character scene -->
+    <div class="scene-area" id="sceneArea">
+        <div class="ground"></div>
+        <div class="scene-star">✨</div>
+        <div class="scene-star">⭐</div>
+        <div class="scene-star">✨</div>
+    </div>
+
+    <!-- Rhyme title -->
+    <div class="rhyme-title" id="rhymeTitle">Mary Had a Little Lamb</div>
+
+    <!-- Sing Along audio button -->
+    <div class="sing-btn-wrap">
+        <button class="sing-btn" id="singBtn" onclick="toggleSing()">
+            <span class="sing-icon" id="singIcon">&#127925;</span>
+            <span id="singLabel">Sing Along!</span>
+        </button>
+    </div>
+    <div class="sing-hint" id="singHint">Tap to play the song &#127926;</div>
+
+    <!-- Lyrics -->
+    <div class="lyrics-area" id="lyricsArea"></div>
+
+    <!-- Bottom bar -->
+    <div class="bottom-bar">
+        <button class="nav-btn" id="prevBtn" onclick="prevRhyme()" disabled>◀</button>
+        <div class="centre-controls">
+            <button class="karaoke-btn" id="karaokeBtn" onclick="toggleKaraoke()">
+                <span id="kIcon">🎤</span>
+                <span id="kLabel">Read Along</span>
+            </button>
+            <div class="tap-hint">Tap a line to highlight it!</div>
+        </div>
+        <button class="nav-btn" onclick="nextRhyme()">▶</button>
+    </div>
+</div>
+
+<!-- Parent Panel -->
+<div class="overlay" id="parentOverlay">
+    <div class="panel">
+        <h2>🎵 UKG Rhymes & Songs</h2>
+        <div class="panel-progress" id="panelProgress">0 of 10 rhymes done</div>
+        <div class="jump-section">
+            <h4>Pick a rhyme</h4>
+            <div class="jump-grid" id="jumpGrid"></div>
+        </div>
+        <button class="close-panel-btn" onclick="closePanel()">✅ Let's Sing!</button>
+    </div>
+</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-stars"><span class="celeb-star">⭐</span><span class="celeb-star">⭐</span><span class="celeb-star">⭐</span></div>
+    <div class="celeb-big"   id="celebBig">🎉</div>
+    <div class="celeb-title" id="celebTitle">Wonderful!</div>
+    <div class="celeb-sub"   id="celebSub">You sang a whole song!</div>
+    <button class="celeb-btn" onclick="closeCelebration()">More Songs! 🎶</button>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   UKG RHYME DATA — 10 rhymes different from LKG set
+   audio  — path to the MP3 file for this rhyme
+   lines[] — lyrics for sing-along highlighting
+════════════════════════════════════════════════════ */
+const rhymes = [
+    {
+        title:    'Mary Had a Little Lamb',
+        color:    ['#1b4332','#40916c'],
+        emoji:    '🐑',
+        chars:    ['🐑','👧','🏫'],
+        notes:    ['♪','♫','♩','♬'],
+        audio:    '/static/audio/rhymes/ukg/mary_had_a_little_lamb.mp3',
+        lines: [
+            'Mary had a little lamb,',
+            'Little lamb, little lamb!',
+            'Mary had a little lamb,',
+            'Its fleece was white as snow.',
+            'And everywhere that Mary went,',
+            'Mary went, Mary went,',
+            'Everywhere that Mary went,',
+            'The lamb was sure to go!',
+            'It followed her to school one day,',
+            'Which was against the rule.',
+            'It made the children laugh and play,',
+            'To see a lamb at school!',
+        ]
+    },
+    {
+        title:    'Little Miss Muffet',
+        color:    ['#6d23b6','#9d4edd'],
+        emoji:    '🕷️',
+        chars:    ['👧','🕷️','🍽️'],
+        notes:    ['♩','♪','♫'],
+        audio:    '/static/audio/rhymes/ukg/little_miss_muffet.mp3',
+        lines: [
+            'Little Miss Muffet,',
+            'Sat on a tuffet,',
+            'Eating her curds and whey.',
+            'Along came a spider,',
+            'Who sat down beside her,',
+            'And frightened Miss Muffet away! 😱',
+        ]
+    },
+    {
+        title:    'Hickory Dickory Dock',
+        color:    ['#7f4f24','#b5838d'],
+        emoji:    '🕰️',
+        chars:    ['🐭','🕰️','🔔'],
+        notes:    ['♬','♪','♩'],
+        audio:    '/static/audio/rhymes/ukg/hickory_dickory_dock.mp3',
+        lines: [
+            'Hickory dickory dock,',
+            'The mouse ran up the clock!',
+            'The clock struck one,',
+            'The mouse ran down,',
+            'Hickory dickory dock!',
+            'Hickory dickory dock,',
+            'The mouse ran up the clock!',
+            'The clock struck two,',
+            'He lost his shoe,',
+            'Hickory dickory dock!',
+        ]
+    },
+    {
+        title:    'One Two Three Four Five',
+        color:    ['#03045e','#0077b6'],
+        emoji:    '🐟',
+        chars:    ['🎣','🐟','🌊'],
+        notes:    ['♪','♫','♬','♩'],
+        audio:    '/static/audio/rhymes/ukg/one_two_three_four_five.mp3',
+        lines: [
+            'One two three four five,',
+            'Once I caught a fish alive!',
+            'Six seven eight nine ten,',
+            'Then I let it go again.',
+            'Why did you let it go?',
+            'Because it bit my finger so!',
+            'Which finger did it bite?',
+            'This little finger on the right! 👉',
+        ]
+    },
+    {
+        title:    'Sing a Song of Sixpence',
+        color:    ['#1a1a2e','#e94560'],
+        emoji:    '🐦',
+        chars:    ['👑','🐦','🥧'],
+        notes:    ['♫','♬','♩','♪'],
+        audio:    '/static/audio/rhymes/ukg/sing_a_song_of_sixpence.mp3',
+        lines: [
+            'Sing a song of sixpence,',
+            'A pocket full of rye,',
+            'Four and twenty blackbirds,',
+            'Baked in a pie!',
+            'When the pie was opened,',
+            'The birds began to sing,',
+            'Wasn\'t that a dainty dish,',
+            'To set before the king? 👑',
+        ]
+    },
+    {
+        title:    'The Itsy Bitsy Spider',
+        color:    ['#283618','#588157'],
+        emoji:    '🕸️',
+        chars:    ['🕷️','🌧️','🌞'],
+        notes:    ['♩','♫','♪'],
+        audio:    '/static/audio/rhymes/ukg/itsy_bitsy_spider.mp3',
+        lines: [
+            'The itsy bitsy spider,',
+            'Climbed up the waterspout.',
+            'Down came the rain,',
+            'And washed the spider out!',
+            'Out came the sun,',
+            'And dried up all the rain.',
+            'And the itsy bitsy spider,',
+            'Climbed up the spout again! 🌞',
+            'The big and scary spider,',
+            'Climbed up again one day,',
+            'She spun a silky cobweb,',
+            'And caught a fly that way! 🕸️',
+        ]
+    },
+    {
+        title:    'London Bridge is Falling Down',
+        color:    ['#023e8a','#48cae4'],
+        emoji:    '🌉',
+        chars:    ['🌉','👷','🧱'],
+        notes:    ['♬','♪','♫'],
+        audio:    '/static/audio/rhymes/ukg/london_bridge.mp3',
+        lines: [
+            'London Bridge is falling down,',
+            'Falling down, falling down!',
+            'London Bridge is falling down,',
+            'My fair lady!',
+            'Build it up with iron bars,',
+            'Iron bars, iron bars!',
+            'Build it up with iron bars,',
+            'My fair lady!',
+            'Iron bars will bend and break,',
+            'Bend and break, bend and break!',
+            'Iron bars will bend and break,',
+            'My fair lady!',
+        ]
+    },
+    {
+        title:    'I\'m a Little Teapot',
+        color:    ['#9d0208','#f77f00'],
+        emoji:    '🫖',
+        chars:    ['🫖','☕','🍪'],
+        notes:    ['♪','♩','♫'],
+        audio:    '/static/audio/rhymes/ukg/im_a_little_teapot.mp3',
+        lines: [
+            'I\'m a little teapot,',
+            'Short and stout!',
+            'Here is my handle,',
+            'Here is my spout.',
+            'When I get all steamed up,',
+            'Hear me shout!',
+            '"Tip me over and pour me out!" ☕',
+            'I\'m a very clever pot,',
+            'It is true!',
+            'Here let me show you,',
+            'What I can do.',
+            'I can change my handle,',
+            'To my spout!',
+            'Just tip me over and pour me out! 🍵',
+        ]
+    },
+    {
+        title:    'Five Little Monkeys',
+        color:    ['#4a0072','#c77dff'],
+        emoji:    '🐒',
+        chars:    ['🐒','🛏️','👨‍⚕️'],
+        notes:    ['♫','♬','♪','♩'],
+        audio:    '/static/audio/rhymes/ukg/five_little_monkeys.mp3',
+        lines: [
+            'Five little monkeys jumping on the bed,',
+            'One fell off and bumped his head!',
+            'Mama called the doctor and the doctor said,',
+            '"No more monkeys jumping on the bed!" 🐒',
+            'Four little monkeys jumping on the bed,',
+            'One fell off and bumped her head!',
+            'Mama called the doctor and the doctor said,',
+            '"No more monkeys jumping on the bed!" 🐒',
+            'Three little monkeys jumping on the bed,',
+            'One fell off and bumped his head!',
+            'Mama called the doctor and the doctor said,',
+            '"No more monkeys jumping on the bed!" 🐒',
+        ]
+    },
+    {
+        title:    'If You\'re Happy and You Know It',
+        color:    ['#1d3557','#e63946'],
+        emoji:    '😊',
+        chars:    ['😊','👏','🦶'],
+        notes:    ['♩','♪','♫','♬'],
+        audio:    '/static/audio/rhymes/ukg/if_youre_happy.mp3',
+        lines: [
+            'If you\'re happy and you know it,',
+            'Clap your hands! 👏👏',
+            'If you\'re happy and you know it,',
+            'Clap your hands! 👏👏',
+            'If you\'re happy and you know it,',
+            'And you really want to show it,',
+            'If you\'re happy and you know it,',
+            'Clap your hands! 👏👏',
+            'If you\'re happy and you know it,',
+            'Stamp your feet! 🦶🦶',
+            'If you\'re happy and you know it,',
+            'Stamp your feet! 🦶🦶',
+            'If you\'re happy and you know it,',
+            'And you really want to show it,',
+            'If you\'re happy and you know it,',
+            'Stamp your feet! 🦶🦶',
+        ]
+    },
+];
+
+/* ── STATE ── */
+let current    = 0;
+let stars      = 0;
+let sung       = new Set();
+let karaokeOn  = false;
+let karaokeIdx = 0;
+let karaokeTimer = null;
+let noteInterval = null;
+
+/* ── AUDIO PLAYER ── */
+let audioEl = new Audio();
+audioEl.preload = 'none';
+
+audioEl.addEventListener('ended', () => {
+    stopSing();
+    sung.add(current); addStars(1); updateDots();
+    showCelebration('🎶', 'Wonderful!', `You sang "${rhymes[current].title}"!\nBeautiful singing! 🌟`);
+});
+
+audioEl.addEventListener('error', () => {
+    setSingBtn(false);
+    document.getElementById('singHint').textContent = 'Audio coming soon! 🎵';
+});
+
+function toggleSing() {
+    const r = rhymes[current];
+
+    if (!audioEl.paused) {
+        audioEl.pause();
+        setSingBtn(false);
+        stopNotes();
+        stopKaraoke();
+        return;
+    }
+
+    if (audioEl.src !== window.location.origin + r.audio) {
+        audioEl.src = r.audio;
+        karaokeIdx = 0;
+    }
+
+    audioEl.play().then(() => {
+        setSingBtn(true);
+        spawnNotes();
+        startAudioKaraoke();
+        sung.add(current);
+        addStars(1);
+        updateDots();
+    }).catch(() => {
+        setSingBtn(false);
+        document.getElementById('singHint').textContent = 'Audio coming soon! 🎵';
+    });
+}
+
+function setSingBtn(playing) {
+    const btn  = document.getElementById('singBtn');
+    const icon = document.getElementById('singIcon');
+    const lbl  = document.getElementById('singLabel');
+    if (playing) {
+        btn.classList.add('playing');
+        icon.textContent = '⏸';
+        lbl.textContent  = 'Pause';
+        document.getElementById('singHint').textContent = 'Singing along... 🎶';
+    } else {
+        btn.classList.remove('playing');
+        icon.innerHTML  = '&#127925;';
+        lbl.textContent = 'Sing Along!';
+        document.getElementById('singHint').textContent = 'Tap to play the song 🎶';
+    }
+}
+
+function stopSing() {
+    audioEl.pause();
+    audioEl.currentTime = 0;
+    setSingBtn(false);
+    stopKaraoke();
+    stopNotes();
+}
+
+/* ══ SCREEN UPDATE ══ */
+function updateScreen(animate = true) {
+    stopSing();
+    const r = rhymes[current];
+    document.getElementById('mainScreen').style.background =
+        `linear-gradient(150deg, ${r.color[0]} 0%, ${r.color[1]} 100%)`;
+    document.getElementById('rhymeTitle').textContent = r.title;
+
+    audioEl.src = '';
+
+    buildScene(r);
+    buildLyrics(r);
+
+    document.getElementById('prevBtn').disabled = current === 0;
+    updateDots();
+    if (animate) reAnimate('rhymeTitle', 'slideUp 0.4s ease both');
+
+    setSingBtn(false);
+    document.getElementById('singHint').textContent = 'Tap to play the song 🎶';
+}
+
+function buildScene(r) {
+    const area = document.getElementById('sceneArea');
+    area.querySelectorAll('.char,.note').forEach(el => el.remove());
+    ['left','center','right'].forEach((pos, i) => {
+        if (!r.chars[i]) return;
+        const el = document.createElement('div');
+        el.className = `char ${pos}`;
+        el.textContent = r.chars[i];
+        area.appendChild(el);
+    });
+    r.notes.forEach((n, i) => {
+        const el = document.createElement('div');
+        el.className = 'note';
+        el.textContent = n;
+        el.style.left   = `${14 + i * 22}%`;
+        el.style.bottom = `${38 + (i%2)*20}px`;
+        el.style.animationDelay = `${i * 0.65}s`;
+        el.style.animationDuration = `${2 + i * 0.4}s`;
+        area.appendChild(el);
+    });
+}
+
+function buildLyrics(r) {
+    const area = document.getElementById('lyricsArea');
+    area.innerHTML = '';
+    r.lines.forEach((line, i) => {
+        const el = document.createElement('div');
+        el.className = 'lyric-line';
+        el.id = `line-${i}`;
+        el.textContent = line;
+        el.onclick = (e) => {
+            e.stopPropagation();
+            setActiveLine(i);
+            burst(e.clientX, e.clientY);
+        };
+        area.appendChild(el);
+    });
+}
+
+/* ══ AUDIO-SYNCED LYRIC HIGHLIGHTING ══ */
+function startAudioKaraoke() {
+    stopKaraoke();
+    karaokeOn = true;
+    karaokeIdx = 0;
+    setActiveLine(0);
+
+    const lines = rhymes[current].lines;
+
+    function tick() {
+        if (!karaokeOn || audioEl.paused) return;
+        const duration = audioEl.duration;
+        if (duration && isFinite(duration)) {
+            const perLine = duration / lines.length;
+            const idx = Math.min(Math.floor(audioEl.currentTime / perLine), lines.length - 1);
+            if (idx !== karaokeIdx) {
+                karaokeIdx = idx;
+                setActiveLine(idx);
+            }
+        }
+        karaokeTimer = requestAnimationFrame(tick);
+    }
+    karaokeTimer = requestAnimationFrame(tick);
+}
+
+/* ══ READ-ALONG (offline / no audio fallback) ══ */
+function toggleKaraoke() {
+    karaokeOn = !karaokeOn;
+    const btn = document.getElementById('karaokeBtn');
+    const lbl = document.getElementById('kLabel');
+    if (karaokeOn) {
+        if (!audioEl.paused) stopSing();
+        btn.classList.add('on');
+        lbl.textContent = 'Stop';
+        karaokeIdx = 0;
+        setActiveLine(0);
+        tickKaraoke();
+        spawnNotes();
+    } else {
+        stopKaraoke();
+        btn.classList.remove('on');
+        lbl.textContent = 'Read Along';
+    }
+}
+
+function tickKaraoke() {
+    if (!karaokeOn) return;
+    const lines = rhymes[current].lines;
+    karaokeTimer = setTimeout(() => {
+        karaokeIdx++;
+        if (karaokeIdx >= lines.length) {
+            stopKaraoke();
+            document.getElementById('karaokeBtn').classList.remove('on');
+            document.getElementById('kLabel').textContent = 'Read Along';
+            sung.add(current); addStars(1); updateDots();
+            showCelebration('🎶','Wonderful!',`You sang "${rhymes[current].title}"!\nBeautiful singing! 🌟`);
+            return;
+        }
+        setActiveLine(karaokeIdx);
+        tickKaraoke();
+    }, 1800);
+}
+
+function stopKaraoke() {
+    karaokeOn = false;
+    if (typeof karaokeTimer === 'number') {
+        clearTimeout(karaokeTimer);
+        cancelAnimationFrame(karaokeTimer);
+    }
+    karaokeTimer = null;
+    stopNotes();
+}
+
+function setActiveLine(idx) {
+    const lines = rhymes[current].lines;
+    lines.forEach((_, i) => {
+        const el = document.getElementById(`line-${i}`);
+        if (!el) return;
+        if (i === idx) {
+            el.className = 'lyric-line active';
+            el.scrollIntoView({ behavior:'smooth', block:'center' });
+        } else {
+            el.className = 'lyric-line' + (i < idx ? ' done' : '');
+        }
+    });
+}
+
+/* ══ FLOATING NOTES ══ */
+function spawnNotes() {
+    stopNotes();
+    const picks = ['♪','♫','♬','♩','🎵','🎶','⭐','✨'];
+    noteInterval = setInterval(() => {
+        if (!karaokeOn) return;
+        const el = document.createElement('div');
+        el.className = 'note-float';
+        el.textContent = picks[Math.floor(Math.random()*picks.length)];
+        el.style.left   = `${8+Math.random()*84}vw`;
+        el.style.bottom = `${70+Math.random()*30}px`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2100);
+    }, 650);
+}
+function stopNotes() {
+    clearInterval(noteInterval); noteInterval = null;
+    document.querySelectorAll('.note-float').forEach(el => el.remove());
+}
+
+/* ══ TAP BURST ══ */
+function burst(x, y) {
+    const picks = ['🎵','⭐','✨','🎶','🌟','♪'];
+    const el = document.createElement('div');
+    el.className = 'float-burst';
+    el.textContent = picks[Math.floor(Math.random()*picks.length)];
+    el.style.left = `${x-14}px`;
+    el.style.top  = `${y-14}px`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1100);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('mainScreen').addEventListener('click', e => burst(e.clientX, e.clientY));
+});
+
+/* ══ NAVIGATION ══ */
+function nextRhyme() {
+    sung.add(current); addStars(1);
+    if (current >= rhymes.length-1) {
+        showCelebration('🏆','You Did It!',`WOW! You sang ALL ${rhymes.length} rhymes!\nYou are a SUPERSTAR! ⭐⭐⭐`);
+        return;
+    }
+    current++; updateScreen();
+}
+function prevRhyme() { if (current>0){current--;updateScreen();} }
+function addStars(n) {
+    stars+=n;
+    const el=document.getElementById('starsDisplay');
+    el.textContent=`⭐ ${stars}`;
+    el.style.transform='scale(1.4)';
+    setTimeout(()=>el.style.transform='',220);
+}
+
+/* ══ DOTS ══ */
+function updateDots() {
+    const row = document.getElementById('dotsRow');
+    row.innerHTML='';
+    rhymes.forEach((_,i)=>{
+        const d=document.createElement('div');
+        d.className=`dot ${i===current?'current':sung.has(i)?'done':''}`;
+        row.appendChild(d);
+    });
+}
+
+/* ══ PARENT PANEL ══ */
+function openPanel(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('panelProgress').textContent=`${sung.size} of ${rhymes.length} rhymes done ✅`;
+    buildJumpGrid();
+    document.getElementById('parentOverlay').classList.add('show');
+}
+function closePanel() { document.getElementById('parentOverlay').classList.remove('show'); }
+function buildJumpGrid() {
+    const grid=document.getElementById('jumpGrid');
+    grid.innerHTML='';
+    rhymes.forEach((r,i)=>{
+        const btn=document.createElement('button');
+        btn.className=`jump-btn ${i===current?'cur':sung.has(i)?'done':''}`;
+        btn.innerHTML=`<span style="font-size:18px">${r.emoji}</span>${r.title}`;
+        btn.onclick=()=>{current=i;updateScreen();closePanel();};
+        grid.appendChild(btn);
+    });
+}
+
+/* ══ CELEBRATION ══ */
+function showCelebration(icon,title,sub) {
+    document.getElementById('celebBig').textContent=icon;
+    document.getElementById('celebTitle').textContent=title;
+    document.getElementById('celebSub').textContent=sub;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+}
+function closeCelebration() {
+    document.getElementById('celebOverlay').classList.remove('show');
+    if (current<rhymes.length-1){current++;updateScreen();}
+}
+
+/* ══ CONFETTI ══ */
+function launchConfetti() {
+    const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24','#f472b6'];
+    for(let i=0;i<80;i++){
+        const c=document.createElement('div');const sz=Math.random()*16+7;
+        c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'4px'};left:${Math.random()*100}vw;top:-24px;z-index:300;animation:confettiFall ${Math.random()*2.2+1.8}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),5000);
+    }
+}
+
+function reAnimate(id,anim){const el=document.getElementById(id);if(!el)return;el.style.animation='none';void el.offsetWidth;el.style.animation=anim;}
+
+/* ══ INIT ══ */
+updateDots();
+updateScreen(false);
+</script>
+</body>
+</html>

@@ -604,7 +604,7 @@ def ukg_rhymes():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('ukg_rhymes.html', student=student)
+    return render_template('ukg_rhymes_songs.html', student=student)
 
 @app.route('/ukg/family')
 def ukg_family():
