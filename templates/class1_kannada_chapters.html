@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - Class 1 Kannada</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4ff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #7c2d12, #dc2626);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(124,45,18,0.3);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-subject {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .back-btn {
+            background: white; color: #7c2d12;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #7c2d12, #dc2626);
+            padding: 20px 20px 35px; text-align: center; color: white;
+        }
+        .hero-icon { font-size: 56px; margin-bottom: 8px; }
+        .hero h2   { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p    { font-size: 13px; opacity: 0.9; }
+
+        .progress-card {
+            background: white; margin: -18px 16px 20px;
+            border-radius: 18px; padding: 14px 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-circle {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, #7c2d12, #dc2626);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
+        }
+        .progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
+        .progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+        .progress-bar-wrap {
+            flex: 1; background: #f0f0f0;
+            border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
+        }
+        .progress-bar-inner {
+            height: 100%; background: linear-gradient(90deg, #7c2d12, #dc2626);
+            border-radius: 10px; width: 0%; transition: width 0.5s;
+        }
+
+        .section-label {
+            padding: 8px 16px 6px;
+            font-size: 12px; font-weight: 800;
+            color: #888; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .chapters-list {
+            padding: 0 16px 100px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .chapter-card {
+            background: white; border-radius: 18px;
+            padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            cursor: pointer; transition: all 0.25s;
+            text-decoration: none; position: relative; overflow: hidden;
+        }
+        .chapter-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .chapter-card:active { transform: scale(0.98); }
+        .chapter-card.locked { opacity: 0.6; cursor: not-allowed; }
+        .chapter-card.completed  { border-left: 4px solid #059669; }
+        .chapter-card.inprogress { border-left: 4px solid #f59e0b; }
+        .chapter-card.notstarted { border-left: 4px solid #e5e7eb; }
+
+        .chapter-num {
+            width: 42px; height: 42px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; font-weight: 900;
+        }
+        .chapter-info { flex: 1; }
+        .chapter-title { font-size: 15px; font-weight: 800; color: #333; margin-bottom: 3px; }
+        .chapter-meta  { font-size: 12px; color: #888; font-weight: 600; }
+        .chapter-badge {
+            font-size: 10px; font-weight: 700;
+            background: #fef3c7; color: #92400e;
+            padding: 2px 7px; border-radius: 8px; margin-left: 6px;
+            vertical-align: middle;
+        }
+        .chapter-badge.poem { background: #ede9fe; color: #5b21b6; }
+        .chapter-status { font-size: 18px; flex-shrink: 0; }
+
+        /* Card color themes */
+        .vandane-card .chapter-num  { background: #fce7f3; }
+        .sahakara-card .chapter-num { background: #d1fae5; }
+        .ootada-card .chapter-num   { background: #dbeafe; }
+        .hodeo-card .chapter-num    { background: #ffedd5; }
+        .rekha-card .chapter-num    { background: #fef9c3; }
+        .besige-card .chapter-num   { background: #fce7f3; }
+        .koti-card .chapter-num     { background: #d1fae5; }
+        .pada-card .chapter-num     { background: #ede9fe; }
+
+        /* Story/poem special card */
+        .poem-card {
+            background: linear-gradient(135deg, #fff7ed, #fef3c7);
+            border: 2px dashed #fbbf24;
+        }
+        .story-card {
+            background: linear-gradient(135deg, #fdf4ff, #f5f3ff);
+            border: 2px dashed #c084fc;
+        }
+
+        /* Page number badge */
+        .page-badge {
+            font-size: 11px; font-weight: 700;
+            background: #f3f4f6; color: #6b7280;
+            padding: 3px 8px; border-radius: 8px;
+            flex-shrink: 0; margin-right: 4px;
+        }
+
+        /* Author tag */
+        .author-tag {
+            font-size: 11px; color: #9ca3af; font-weight: 500;
+            display: block; margin-top: 2px;
+        }
+
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#dc2626; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-subject">1ನೇ ತರಗತಿ • ಕನ್ನಡ</div>
+    </div>
+    <a href="/class/1" class="back-btn">← Back</a>
+</nav>
+
+<div class="hero">
+    <div class="hero-icon">🌸</div>
+    <h2>ಕನ್ನಡ</h2>
+    <p>1ನೇ ತರಗತಿ • Karnataka State Board • All Chapters</p>
+</div>
+
+<div class="progress-card">
+    <div class="progress-circle" id="progressNum">0%</div>
+    <div class="progress-info" style="flex:1">
+        <h4>My Progress</h4>
+        <p id="progressText">0 of 8 chapters completed</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+    </div>
+</div>
+
+<div class="section-label">📖 All Chapters</div>
+
+<div class="chapters-list">
+
+    <!-- Chapter 1: Vandane (Poem) -->
+    <a href="/class/1/kannada/vandane" class="chapter-card vandane-card poem-card notstarted">
+        <div class="chapter-num">🙏</div>
+        <div class="chapter-info">
+            <div class="chapter-title">
+                ೧. ವಂದನೆ
+                <span class="chapter-badge poem">ಪದ್ಯ</span>
+            </div>
+            <div class="chapter-meta">ಎಲ್.ಕೆ. ಕಂಬಾರ</div>
+            <span class="author-tag">ಪ್ರಾರ್ಥನೆ ಹಾಗೂ ನಮಸ್ಕಾರ • ಪುಟ ೩</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 2: Sahakara -->
+    <a href="/class/1/kannada/sahakara" class="chapter-card sahakara-card notstarted">
+        <div class="chapter-num">🤝</div>
+        <div class="chapter-info">
+            <div class="chapter-title">೨. ಸಹಕಾರ</div>
+            <div class="chapter-meta">ಸಮಿತಿ ರಚನೆ</div>
+            <span class="author-tag">ಒಟ್ಟಿಗೆ ಕೆಲಸ ಮಾಡುವುದು • ಪುಟ ೮</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 3: Ootada Eta (Poem) -->
+    <a href="/class/1/kannada/ootada-eta" class="chapter-card ootada-card poem-card notstarted">
+        <div class="chapter-num">🎵</div>
+        <div class="chapter-info">
+            <div class="chapter-title">
+                ೩. ಊಟದ ಏಟ
+                <span class="chapter-badge poem">ಪದ್ಯ</span>
+            </div>
+            <div class="chapter-meta">ಜಿ.ಪಿ. ರಾಜರತ್ನಂ</div>
+            <span class="author-tag">ಲಯಬದ್ಧ ಕವಿತೆ • ಪುಟ ೧೩</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 4: Hodeota -->
+    <a href="/class/1/kannada/hodeota" class="chapter-card hodeo-card notstarted">
+        <div class="chapter-num">🌿</div>
+        <div class="chapter-info">
+            <div class="chapter-title">೪. ಹೊದೇಟ</div>
+            <div class="chapter-meta">ಸಮಿತಿ ರಚನೆ</div>
+            <span class="author-tag">ಗದ್ಯ ಪಾಠ • ಪುಟ ೧೬</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 5: Rekhaabhyaasa Paathagalu -->
+    <a href="/class/1/kannada/rekha" class="chapter-card rekha-card notstarted">
+        <div class="chapter-num">✏️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">೫. ರೇಖಾಭ್ಯಾಸ ಪಾಠಗಳು</div>
+            <div class="chapter-meta">ಸಮಿತಿ ರಚನೆ</div>
+            <span class="author-tag">ಬರವಣಿಗೆ ಅಭ್ಯಾಸ • ಪುಟ ೨೧</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 6: Besige Rajeyali (Poem) -->
+    <a href="/class/1/kannada/besige" class="chapter-card besige-card poem-card notstarted">
+        <div class="chapter-num">☀️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">
+                ೬. ಬೇಸಿಗೆ ರಜೆಯಲಿ
+                <span class="chapter-badge poem">ಪದ್ಯ</span>
+            </div>
+            <div class="chapter-meta">ವಿದ್ಯಾಸಾಗರ ಕುಕ್ಕುಂದಾ</div>
+            <span class="author-tag">ಬೇಸಿಗೆ ರಜೆಯ ಸಂತೋಷ • ಪುಟ ೩೧</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 7: Koti Mattu Akilu -->
+    <a href="/class/1/kannada/koti-akilu" class="chapter-card koti-card notstarted">
+        <div class="chapter-num">🐒</div>
+        <div class="chapter-info">
+            <div class="chapter-title">೭. ಕೋತಿ ಮತ್ತು ಅಳಿಲು</div>
+            <div class="chapter-meta">ಸಮಿತಿ ರಚನೆ</div>
+            <span class="author-tag">ಪ್ರಾಣಿ ಕಥೆ • ಪುಟ ೩೫</span>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 8: Pada Odu – Akshara Kali (Locked) -->
+    <div class="chapter-card pada-card locked">
+        <div class="chapter-num">📝</div>
+        <div class="chapter-info">
+            <div class="chapter-title">೮. ಪದ ಓದು – ಅಕ್ಷರ ಕಲಿ</div>
+            <div class="chapter-meta">ಸಮಿತಿ ರಚನೆ</div>
+            <span class="author-tag">ಅಕ್ಷರಮಾಲೆ ಅಭ್ಯಾಸ • ಪುಟ ೩೮</span>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+    <a href="/class/1" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">🌸</div>
+        <div class="nav-label">Kannada</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=1');
+        const data = await res.json();
+        const chapters = [
+            'vandane','sahakara','ootada-eta','hodeota',
+            'rekha','besige','koti-akilu'
+        ];
+        let completed = 0;
+        chapters.forEach(ch => {
+            const p = data[`kannada_${ch}`];
+            if (p && p.total > 0 && p.completed === p.total) completed++;
+        });
+        const total = 8;
+        const pct = Math.round((completed / total) * 100);
+        document.getElementById('progressNum').textContent  = `${pct}%`;
+        document.getElementById('progressText').textContent = `${completed} of ${total} chapters completed`;
+        document.getElementById('progressBar').style.width  = `${pct}%`;
+    } catch(e) {}
+}
+loadProgress();
+</script>
+</body>
+</html>

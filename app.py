@@ -236,7 +236,7 @@ def class1_kannada_dashboard():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_dashboard_kannada.html', student=student)
+    return render_template('class1_kannada_chapters.html', student=student)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -874,6 +874,20 @@ def class1_english_transport():
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_ch9_means_of_transport.html', student=student)
+
+@app.route('/class/1/english/numbers')
+def class1_english_numbers():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch10_numbers_and_days.html', student=student)
+
+@app.route('/class/1/english/story2')
+def class1_english_story2():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('stories_for_listening2.html', student=student)
 
 
 
