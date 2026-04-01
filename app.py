@@ -732,63 +732,65 @@ def lkg_kannada_sankhye():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_sankhye.html', student=student)
+    return render_template('lkg_kannada_numbers.html', student=student)
 
 @app.route('/lkg/kannada/banna')
 def lkg_kannada_banna():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_banna.html', student=student)
+    return render_template('lkg_kannada_colors.html', student=student)
 
 @app.route('/lkg/kannada/aakara')
 def lkg_kannada_aakara():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_aakara.html', student=student)
+    return render_template('lkg_kannada_shapes.html', student=student)
 
 @app.route('/lkg/kannada/praani')
 def lkg_kannada_praani():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_praani.html', student=student)
+    return render_template('lkg_kannada_animals.html', student=student)
 
 @app.route('/lkg/kannada/hanna')
 def lkg_kannada_hanna():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_hanna.html', student=student)
+    return render_template('lkg_kannada_fruits_vegetables.html', student=student)
 
 @app.route('/lkg/kannada/sharira')
 def lkg_kannada_sharira():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_sharira.html', student=student)
+    return render_template('lkg_kannada_body_parts.html', student=student)
 
 @app.route('/lkg/kannada/padya')
 def lkg_kannada_padya():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_padya.html', student=student)
+    return render_template('lkg_kannada_rhymes.html', student=student)
 
 @app.route('/lkg/kannada/kutumba')
 def lkg_kannada_kutumba():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_kutumba.html', student=student)
+    return render_template('lkg_kannada_family.html', student=student)
 
 @app.route('/lkg/kannada/vaara')
 def lkg_kannada_vaara():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('lkg_kannada_vaara.html', student=student)@app.route('/class/1/english')
+    return render_template('lkg_kannada_days_months.html', student=student)
+
+@app.route('/class/1/english')
 
 @app.route('/class/1/english')
 def class1_english():
