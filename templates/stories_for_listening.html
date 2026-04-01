@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VidyaAI – Stories for Listening</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #1a6b3a;
+            --green2: #2d9e5f;
+            --yellow: #fbbf24;
+            --orange: #f77f00;
+            --pink: #ec4899;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --bg: #fffbf0;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Baloo 2', cursive; background: var(--bg); min-height:100vh; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: linear-gradient(135deg, #1a6b3a, #2d9e5f);
+            padding: 12px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top:0; z-index:100;
+            box-shadow: 0 4px 15px rgba(26,107,58,0.35);
+        }
+        .navbar-left { display:flex; align-items:center; gap:10px; }
+        .navbar-logo { font-family:'Fredoka One',cursive; font-size:20px; color:white; letter-spacing:.5px; }
+        .navbar-grade { background:rgba(255,255,255,0.25); color:white; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+        .navbar-right { display:flex; align-items:center; gap:8px; }
+        .nav-btn { background:rgba(255,255,255,0.22); color:white; border:none; padding:7px 14px; border-radius:20px; font-size:13px; font-weight:700; cursor:pointer; }
+        .stars-badge { background:rgba(255,215,0,0.3); border:1px solid rgba(255,215,0,0.5); color:white; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700; }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, #1a6b3a, #2d9e5f);
+            padding: 20px 20px 40px; text-align:center; color:white;
+        }
+        .hero-animals { font-size:36px; margin-bottom:6px; letter-spacing:4px; }
+        .hero h2 { font-family:'Fredoka One',cursive; font-size:26px; margin-bottom:4px; }
+        .hero p  { font-size:13px; opacity:.85; font-weight:600; }
+
+        /* ── PROGRESS CARD ── */
+        .progress-card {
+            background:white; margin:-20px 16px 20px;
+            border-radius:16px; padding:14px 18px;
+            box-shadow:0 6px 20px rgba(0,0,0,.1);
+            display:flex; align-items:center; gap:14px;
+        }
+        .progress-info { flex:1; }
+        .progress-info h4 { font-size:13px; font-weight:700; color:#555; margin-bottom:6px; }
+        .progress-bar { background:#f0f0f0; border-radius:10px; height:10px; overflow:hidden; }
+        .progress-fill { background:linear-gradient(90deg,#1a6b3a,#2d9e5f); height:100%; border-radius:10px; transition:width .5s; width:0%; }
+        .progress-pct { font-size:20px; font-weight:900; color:#1a6b3a; font-family:'Fredoka One',cursive; }
+
+        /* ── TABS ── */
+        .tabs { display:flex; padding:0 16px; margin-bottom:16px; overflow-x:auto; scrollbar-width:none; gap:8px; }
+        .tabs::-webkit-scrollbar { display:none; }
+        .tab { padding:8px 16px; border-radius:20px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; border:2px solid #d1fae5; background:white; color:#888; transition:all .2s; }
+        .tab.active { background:#1a6b3a; color:white; border-color:#1a6b3a; }
+
+        .content { padding:0 16px 100px; }
+
+        /* ── STORY CARD ── */
+        .story-card {
+            background:white; border-radius:24px; margin-bottom:20px;
+            box-shadow:0 4px 18px rgba(0,0,0,.09); overflow:hidden;
+            border:3px solid transparent; transition:border .3s;
+        }
+        .story-card.read { border-color: var(--green2); }
+
+        .story-header {
+            padding:16px 20px;
+            display:flex; align-items:center; gap:14px; cursor:pointer;
+        }
+        .story-emoji { font-size:52px; flex-shrink:0; }
+        .story-meta { flex:1; }
+        .story-num { font-size:11px; font-weight:800; background:#fef3c7; color:#b45309; padding:2px 10px; border-radius:20px; display:inline-block; margin-bottom:4px; }
+        .story-title { font-family:'Fredoka One',cursive; font-size:22px; color:#1a6b3a; }
+        .story-tagline { font-size:12px; color:#888; font-weight:600; margin-top:2px; }
+        .story-listen-btn {
+            width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+            font-size:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(135deg,#1a6b3a,#2d9e5f); color:white;
+            box-shadow:0 4px 12px rgba(45,158,95,.35); transition:transform .15s;
+        }
+        .story-listen-btn:active { transform:scale(.92); }
+
+        .story-body { display:none; padding:0 20px 20px; }
+        .story-body.open { display:block; animation:slideDown .3s ease; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+        .story-banner {
+            border-radius:16px; padding:14px 18px; margin-bottom:14px;
+            font-size:13px; font-weight:700; color:#444; display:flex; align-items:center; gap:8px;
+        }
+        .story-banner.green { background:#f0faf4; border-left:4px solid #2d9e5f; }
+        .story-banner span { color:#1a6b3a; font-size:16px; }
+
+        /* story paragraphs */
+        .story-para {
+            background:#fffbf0; border-radius:14px; padding:14px 16px; margin-bottom:10px;
+            font-size:15px; line-height:1.7; color:#333; font-weight:600;
+            border-left:4px solid var(--yellow);
+        }
+        .story-para.dialogue {
+            background:#f0f7ff; border-left-color:var(--blue);
+            font-style:italic;
+        }
+        .story-para.highlight {
+            background:#fff0f6; border-left-color:var(--pink);
+        }
+
+        /* moral badge */
+        .moral-badge {
+            background:linear-gradient(135deg,#fef9c3,#fde68a);
+            border-radius:14px; padding:12px 16px; margin-top:10px;
+            font-size:14px; font-weight:800; color:#92400e;
+            display:flex; align-items:center; gap:8px;
+        }
+
+        /* ── QUIZ TAB ── */
+        .quiz-card { background:white; border-radius:24px; padding:20px; margin-bottom:16px; box-shadow:0 4px 15px rgba(0,0,0,.08); }
+        .quiz-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1a6b3a; margin-bottom:4px; }
+        .quiz-inst  { font-size:13px; color:#888; margin-bottom:18px; font-weight:600; }
+        .q-block { background:#f8fafb; border-radius:14px; padding:14px; margin-bottom:12px; }
+        .q-text  { font-size:14px; font-weight:700; color:#333; margin-bottom:10px; }
+        .q-opts  { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .q-opt {
+            padding:10px; border:2px solid #d1fae5; border-radius:12px;
+            background:white; font-size:13px; font-weight:700; cursor:pointer;
+            color:#333; transition:all .2s; text-align:center; font-family:'Baloo 2',cursive;
+        }
+        .q-opt:hover { border-color:#2d9e5f; background:#f0faf4; }
+        .q-opt.correct { border-color:#059669; background:#d1fae5; color:#059669; pointer-events:none; }
+        .q-opt.wrong   { border-color:#dc2626; background:#fee2e2; color:#dc2626; }
+
+        /* ── ACTIVITIES TAB ── */
+        .activity-card { background:white; border-radius:24px; padding:20px; margin-bottom:16px; box-shadow:0 4px 15px rgba(0,0,0,.08); }
+        .act-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1a6b3a; margin-bottom:4px; }
+        .act-inst  { font-size:13px; color:#888; margin-bottom:14px; font-weight:600; }
+        .match-row { display:flex; gap:10px; align-items:center; margin-bottom:10px; }
+        .match-char { font-family:'Fredoka One',cursive; font-size:20px; color:#1a6b3a; min-width:30px; text-align:center; }
+        .match-word { flex:1; background:#f8fafb; border-radius:10px; padding:8px 12px; font-size:14px; font-weight:700; color:#333; }
+        .match-fill { flex:1; border:2px dashed #a7f3d0; border-radius:10px; padding:8px 12px; font-size:14px; font-weight:700; color:#1a6b3a; text-align:center; cursor:pointer; transition:background .2s; }
+        .match-fill:hover { background:#f0faf4; }
+        .fill-blank { width:100%; padding:10px 14px; border:3px solid #a7f3d0; border-radius:12px; font-size:15px; font-weight:700; font-family:'Baloo 2',cursive; outline:none; color:#333; margin-bottom:10px; }
+        .fill-blank:focus { border-color:#2d9e5f; }
+        .check-btn { width:100%; padding:12px; background:linear-gradient(135deg,#1a6b3a,#2d9e5f); color:white; border:none; border-radius:14px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Baloo 2',cursive; margin-top:6px; }
+        .result-msg { margin-top:8px; padding:10px; border-radius:12px; font-size:14px; font-weight:700; display:none; text-align:center; }
+        .result-msg.ok  { background:#d1fae5; color:#059669; display:block; }
+        .result-msg.bad { background:#fee2e2; color:#dc2626; display:block; }
+
+        /* ── CELEBRATION ── */
+        .celeb-overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:200;
+            display:flex; align-items:center; justify-content:center;
+            opacity:0; pointer-events:none; transition:opacity .3s;
+        }
+        .celeb-overlay.show { opacity:1; pointer-events:all; }
+        .celeb-box { background:white; border-radius:28px; padding:32px 24px; text-align:center; max-width:320px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+        .celeb-icon { font-size:64px; margin-bottom:12px; }
+        .celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#1a6b3a; margin-bottom:6px; }
+        .celeb-sub { font-size:14px; color:#666; margin-bottom:8px; font-weight:600; }
+        .celeb-stars { font-size:20px; color:#f59e0b; font-weight:800; margin-bottom:20px; }
+        .celeb-close { padding:12px 28px; background:linear-gradient(135deg,#1a6b3a,#2d9e5f); color:white; border:none; border-radius:20px; font-size:16px; font-weight:700; cursor:pointer; }
+
+        /* ── BOTTOM NAV ── */
+        .bottom-nav {
+            position:fixed; bottom:0; left:0; right:0;
+            background:white; border-top:2px solid #e9ecef;
+            display:flex; padding:8px 0 12px; z-index:90;
+            box-shadow:0 -4px 16px rgba(0,0,0,.08);
+        }
+        .bnav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; color:#aaa; font-size:10px; font-weight:700; transition:color .2s; }
+        .bnav-item.active { color:#1a6b3a; }
+        .bnav-item span { font-size:20px; }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📖 VidyaAI</div>
+        <div class="navbar-grade">Class 1 · English</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
+        <button class="nav-btn">🏠</button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-animals">🐐🦁🫏🐺🐰🐀🐱</div>
+    <h2>Stories for Listening</h2>
+    <p>Listen, enjoy and learn from animal tales!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-card">
+    <div class="progress-info">
+        <h4>Stories Read</h4>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="progress-pct" id="progressPct">0%</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+    <div class="tab active" onclick="showTab('stories',this)">📚 Stories</div>
+    <div class="tab" onclick="showTab('quiz',this)">🧠 Quiz</div>
+    <div class="tab" onclick="showTab('activities',this)">✏️ Activities</div>
+</div>
+
+<!-- ══════════════ STORIES TAB ══════════════ -->
+<div class="content" id="tab-stories">
+
+    <!-- Story 1 -->
+    <div class="story-card" id="card-1">
+        <div class="story-header" onclick="toggleStory(1)">
+            <div class="story-emoji">🐐</div>
+            <div class="story-meta">
+                <div class="story-num">Story 1</div>
+                <div class="story-title">The Goat and the Lion</div>
+                <div class="story-tagline">Be clever, stay safe 🌿</div>
+            </div>
+            <button class="story-listen-btn" onclick="event.stopPropagation();speakStory(1)">🔊</button>
+        </div>
+        <div class="story-body" id="body-1">
+            <div class="story-banner green"><span>👂</span> Listen and enjoy.</div>
+            <div class="story-para">One day, a hungry lion was looking for food. He could not get anything to eat. At last, he saw a goat eating grass on a high hill. He could not climb the hill.</div>
+            <div class="story-para dialogue">"Hello, Goat!" he called out. "Why don't you come down and taste the grass here? It's much sweeter than the grass up there."</div>
+            <div class="story-para">But the goat was clever too. He knew that the lion wanted to eat him.</div>
+            <div class="story-para dialogue">"Thank you very much," said the goat. "The grass may be sweeter down there. But I would rather live and eat the grass up here."</div>
+            <div class="moral-badge">💡 Moral: Be clever! Don't fall for sweet words from someone who means you harm.</div>
+        </div>
+    </div>
+
+    <!-- Story 2 -->
+    <div class="story-card" id="card-2">
+        <div class="story-header" onclick="toggleStory(2)">
+            <div class="story-emoji">🫏</div>
+            <div class="story-meta">
+                <div class="story-num">Story 2</div>
+                <div class="story-title">A Clever Donkey</div>
+                <div class="story-tagline">Outwit the wolf! 🐺</div>
+            </div>
+            <button class="story-listen-btn" onclick="event.stopPropagation();speakStory(2)">🔊</button>
+        </div>
+        <div class="story-body" id="body-2">
+            <div class="story-banner green"><span>👂</span> Listen and enjoy.</div>
+            <div class="story-para">A wolf was trying to catch a donkey. The donkey saw this.</div>
+            <div class="story-para dialogue">He told the wolf, "You can eat me. But before that please remove the thorn in my foot. It may trouble you."</div>
+            <div class="story-para">The wolf bent down to see. The donkey kicked the wolf as hard as he could and ran away.</div>
+            <div class="story-para highlight">The other donkeys were very happy. They said, "You are very clever." The wolf felt foolish.</div>
+            <div class="moral-badge">💡 Moral: Use your wits to get out of danger!</div>
+        </div>
+    </div>
+
+    <!-- Story 3 -->
+    <div class="story-card" id="card-3">
+        <div class="story-header" onclick="toggleStory(3)">
+            <div class="story-emoji">🦊</div>
+            <div class="story-meta">
+                <div class="story-num">Story 3</div>
+                <div class="story-title">A Foolish Donkey</div>
+                <div class="story-tagline">Listen to good advice! 🎵</div>
+            </div>
+            <button class="story-listen-btn" onclick="event.stopPropagation();speakStory(3)">🔊</button>
+        </div>
+        <div class="story-body" id="body-3">
+            <div class="story-banner green"><span>👂</span> Enjoy listening to the story.</div>
+            <div class="story-para">A donkey made friends with a fox. Together they went to a sugar cane field. They ate sugar cane.</div>
+            <div class="story-para">They were very happy. The donkey wanted to sing after a good meal. The fox asked the donkey not to sing and alert the farmers. But the donkey did not care for the advice.</div>
+            <div class="story-para dialogue">He started singing happily. The fox ran away. The farmers heard the donkey singing. They came running. They beat the donkey and chased him away.</div>
+            <div class="moral-badge">💡 Moral: Always listen to good advice from friends!</div>
+        </div>
+    </div>
+
+    <!-- Story 4 -->
+    <div class="story-card" id="card-4">
+        <div class="story-header" onclick="toggleStory(4)">
+            <div class="story-emoji">🐰</div>
+            <div class="story-meta">
+                <div class="story-num">Story 4</div>
+                <div class="story-title">The Sky is Falling!</div>
+                <div class="story-tagline">Don't panic — check first! 🌿</div>
+            </div>
+            <button class="story-listen-btn" onclick="event.stopPropagation();speakStory(4)">🔊</button>
+        </div>
+        <div class="story-body" id="body-4">
+            <div class="story-banner green"><span>👂</span> Enjoy listening to a story.</div>
+            <div class="story-para">A hare heard a loud sound. It was frightened. It shouted, "The sky is falling!"</div>
+            <div class="story-para">Other animals heard this. They saw the hare running. They were frightened too. All of them started running.</div>
+            <div class="story-para dialogue">A lion saw them running. He asked, "Why are you running?" They said, "The sky is falling! So we are running." "Where is the sky falling?" "Here!" they showed.</div>
+            <div class="story-para">The lion went there to see. He saw only a dry branch of a fallen tree. "So that is the sky!" he laughed. The other animals too laughed. They all returned to their homes.</div>
+            <div class="moral-badge">💡 Moral: Don't panic! Always check before you believe something scary.</div>
+        </div>
+    </div>
+
+    <!-- Story 5 -->
+    <div class="story-card" id="card-5">
+        <div class="story-header" onclick="toggleStory(5)">
+            <div class="story-emoji">🐀</div>
+            <div class="story-meta">
+                <div class="story-num">Story 5</div>
+                <div class="story-title">The Rat and the Cat</div>
+                <div class="story-tagline">Be quick and clever! 🎂</div>
+            </div>
+            <button class="story-listen-btn" onclick="event.stopPropagation();speakStory(5)">🔊</button>
+        </div>
+        <div class="story-body" id="body-5">
+            <div class="story-banner green"><span>👂</span> Enjoy listening to this story.</div>
+            <div class="story-para">A rat saw a piece of cake. "I will take it home and eat it," she thought. Just then a cat came by. She jumped and caught the rat by the tail.</div>
+            <div class="story-para dialogue">The clever rat did not cry. She just smiled at the cat. "It's too bad that you got me," said the rat. "But you didn't get the cake. That cake looks good. My friends do need food. Now they can eat the cake."</div>
+            <div class="story-para">The cat let off the rat and jumped on the cake. The rat ran away.</div>
+            <div class="story-para highlight">"Good-bye, Cat," said the rat when she was in her hole, "you may eat the cake if you want to. But you shall not eat me!"</div>
+            <div class="moral-badge">💡 Moral: Stay calm and use clever thinking even in danger!</div>
+        </div>
+    </div>
+
+</div><!-- /tab-stories -->
+
+<!-- ══════════════ QUIZ TAB ══════════════ -->
+<div class="content" id="tab-quiz" style="display:none">
+    <div class="quiz-card">
+        <div class="quiz-title">🧠 Story Quiz</div>
+        <div class="quiz-inst">Tap the right answer for each question!</div>
+
+        <!-- Q1 -->
+        <div class="q-block">
+            <div class="q-text">1. Why didn't the goat come down from the hill?</div>
+            <div class="q-opts">
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He was sleeping</button>
+                <button class="q-opt" onclick="ansQ(this,'correct')">He knew the lion wanted to eat him</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">The grass was bad</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He was afraid of heights</button>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="q-block">
+            <div class="q-text">2. How did the clever donkey escape from the wolf?</div>
+            <div class="q-opts">
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He ran very fast</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He called his friends</button>
+                <button class="q-opt" onclick="ansQ(this,'correct')">He kicked the wolf and ran away</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He hid behind a tree</button>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="q-block">
+            <div class="q-text">3. Why was the foolish donkey beaten by the farmers?</div>
+            <div class="q-opts">
+                <button class="q-opt" onclick="ansQ(this,'correct')">He started singing and alerted them</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He ate too much cane</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He kicked the fox</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">He ran into the farm</button>
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="q-block">
+            <div class="q-text">4. What did the lion find when he went to see the "falling sky"?</div>
+            <div class="q-opts">
+                <button class="q-opt" onclick="ansQ(this,'wrong')">A big rock</button>
+                <button class="q-opt" onclick="ansQ(this,'correct')">A dry branch of a fallen tree</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">A piece of sky</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">A hare's home</button>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="q-block">
+            <div class="q-text">5. How did the clever rat escape from the cat?</div>
+            <div class="q-opts">
+                <button class="q-opt" onclick="ansQ(this,'wrong')">She bit the cat</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">She hid under the cake</button>
+                <button class="q-opt" onclick="ansQ(this,'correct')">She tricked the cat into going for the cake</button>
+                <button class="q-opt" onclick="ansQ(this,'wrong')">She called her friends</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════════ ACTIVITIES TAB ══════════════ -->
+<div class="content" id="tab-activities" style="display:none">
+
+    <!-- Activity 1: Who said it? -->
+    <div class="activity-card">
+        <div class="act-title">🗣️ Who Said It?</div>
+        <div class="act-inst">Match the sentence to the correct character!</div>
+        <div id="whoSaidRows"></div>
+        <button class="check-btn" onclick="checkWhoSaid()">✅ Check Answers</button>
+        <div class="result-msg" id="whoSaidResult"></div>
+    </div>
+
+    <!-- Activity 2: Fill in the blanks -->
+    <div class="activity-card">
+        <div class="act-title">✏️ Fill in the Blanks</div>
+        <div class="act-inst">Complete each sentence with the correct word!</div>
+
+        <div style="margin-bottom:12px">
+            <div style="font-size:14px;font-weight:700;color:#444;margin-bottom:6px">1. The goat stayed on the hill because he was ___.</div>
+            <input class="fill-blank" id="fb1" placeholder="Type the missing word…">
+        </div>
+        <div style="margin-bottom:12px">
+            <div style="font-size:14px;font-weight:700;color:#444;margin-bottom:6px">2. The donkey kicked the wolf and ___ away.</div>
+            <input class="fill-blank" id="fb2" placeholder="Type the missing word…">
+        </div>
+        <div style="margin-bottom:12px">
+            <div style="font-size:14px;font-weight:700;color:#444;margin-bottom:6px">3. The hare shouted, "The ___ is falling!"</div>
+            <input class="fill-blank" id="fb3" placeholder="Type the missing word…">
+        </div>
+        <div style="margin-bottom:12px">
+            <div style="font-size:14px;font-weight:700;color:#444;margin-bottom:6px">4. The rat tricked the cat into going for the ___.</div>
+            <input class="fill-blank" id="fb4" placeholder="Type the missing word…">
+        </div>
+
+        <button class="check-btn" onclick="checkFillBlanks()">✅ Check Answers</button>
+        <div class="result-msg" id="fillResult"></div>
+    </div>
+
+    <!-- Activity 3: Morals match -->
+    <div class="activity-card">
+        <div class="act-title">💡 Match the Moral</div>
+        <div class="act-inst">Tap to reveal which moral belongs to which story!</div>
+        <div id="moralRows"></div>
+    </div>
+
+</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-box">
+        <div class="celeb-icon" id="celebIcon">🎉</div>
+        <div class="celeb-title" id="celebTitle">Well Done!</div>
+        <div class="celeb-sub" id="celebSub">You answered correctly!</div>
+        <div class="celeb-stars" id="celebStars">⭐ +5 Stars!</div>
+        <button class="celeb-close" onclick="closeCeleb()">Keep Going! 🚀</button>
+    </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <div class="bnav-item active" onclick="showTab('stories',null);setNav(this)"><span>📚</span>Stories</div>
+    <div class="bnav-item" onclick="showTab('quiz',null);setNav(this)"><span>🧠</span>Quiz</div>
+    <div class="bnav-item" onclick="showTab('activities',null);setNav(this)"><span>✏️</span>Activities</div>
+</div>
+
+<script>
+let stars = 0;
+let readCount = 0;
+const totalStories = 5;
+const storyOpen = {};
+
+/* ── TOGGLE STORY ── */
+function toggleStory(n) {
+    const body = document.getElementById('body-' + n);
+    const card = document.getElementById('card-' + n);
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    if (!isOpen && !storyOpen[n]) {
+        storyOpen[n] = true;
+        readCount++;
+        card.classList.add('read');
+        addStars(5);
+        updateProgress();
+        if (readCount === totalStories) celebrate('🌟','All Stories Read!','You explored all 5 stories!', `⭐ ${stars} Stars!`);
+    }
+}
+
+/* ── SPEAK ── */
+function speak(txt) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.rate = 0.85; u.pitch = 1.1; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+}
+const storyTexts = {
+    1: 'One day, a hungry lion was looking for food. He could not get anything to eat. At last, he saw a goat eating grass on a high hill. He could not climb the hill. Hello Goat! he called out. Why don\'t you come down and taste the grass here? It\'s much sweeter than the grass up there. But the goat was clever too. He knew that the lion wanted to eat him. Thank you very much, said the goat. The grass may be sweeter down there. But I would rather live and eat the grass up here.',
+    2: 'A wolf was trying to catch a donkey. The donkey saw this. He told the wolf — You can eat me. But before that please remove the thorn in my foot. It may trouble you. The wolf bent down to see. The donkey kicked the wolf as hard as he could and ran away. The other donkeys were very happy. They said, You are very clever. The wolf felt foolish.',
+    3: 'A donkey made friends with a fox. Together they went to a sugar cane field. They ate sugar cane. They were very happy. The donkey wanted to sing after a good meal. The fox asked the donkey not to sing and alert the farmers. But the donkey did not care for the advice. He started singing happily. The fox ran away. The farmers heard the donkey singing. They came running. They beat the donkey and chased him away.',
+    4: 'A hare heard a loud sound. It was frightened. It shouted, The sky is falling! Other animals heard this. They saw the hare running. They were frightened too. All of them started running. A lion saw them running. He asked, Why are you running? They said, The sky is falling! So we are running. Where is the sky falling? Here, they showed. The lion went there to see. He saw only a dry branch of a fallen tree. So that is the sky, he laughed. The other animals too laughed. They all returned to their homes.',
+    5: 'A rat saw a piece of cake. I will take it home and eat it, she thought. Just then a cat came by. She jumped and caught the rat by the tail. The clever rat did not cry. She just smiled at the cat. It\'s too bad that you got me, said the rat. But you didn\'t get the cake. That cake looks good. My friends do need food. Now they can eat the cake. The cat let off the rat and jumped on the cake. The rat ran away. Good-bye, Cat, said the rat when she was in her hole, you may eat the cake if you want to. But you shall not eat me!'
+};
+function speakStory(n) { speak(storyTexts[n]); }
+
+/* ── QUIZ ── */
+function ansQ(btn, type) {
+    const block = btn.closest('.q-block');
+    block.querySelectorAll('.q-opt').forEach(b => b.onclick = null);
+    btn.classList.add(type);
+    if (type === 'correct') {
+        addStars(3);
+        // show correct for others too if needed
+    } else {
+        btn.classList.add('wrong');
+        block.querySelectorAll('.q-opt').forEach(b => {
+            if (b.getAttribute('onclick') && b.getAttribute('onclick').includes('correct')) {
+                b.classList.add('correct');
+            }
+        });
+    }
+}
+
+/* ── WHO SAID IT ── */
+const whoSaidData = [
+    { quote: '"The grass may be sweeter down there. But I would rather live and eat the grass up here."', answer: 'Goat' },
+    { quote: '"You can eat me. But before that please remove the thorn in my foot."', answer: 'Donkey' },
+    { quote: '"The sky is falling!"', answer: 'Hare' },
+    { quote: '"You may eat the cake if you want to. But you shall not eat me!"', answer: 'Rat' },
+];
+const characters = ['Goat','Donkey','Hare','Rat','Lion','Fox'];
+
+function buildWhoSaid() {
+    const container = document.getElementById('whoSaidRows');
+    whoSaidData.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'background:#f8fafb;border-radius:12px;padding:12px;margin-bottom:10px;';
+        div.innerHTML = `
+            <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:8px;font-style:italic">${item.quote}</div>
+            <select id="ws${i}" style="width:100%;padding:8px 12px;border:2px solid #a7f3d0;border-radius:10px;font-size:14px;font-weight:700;font-family:'Baloo 2',cursive;color:#333;outline:none;background:white;">
+                <option value="">-- Choose a character --</option>
+                ${characters.map(c=>`<option value="${c}">${c}</option>`).join('')}
+            </select>`;
+        container.appendChild(div);
+    });
+}
+function checkWhoSaid() {
+    let correct = 0;
+    whoSaidData.forEach((item, i) => {
+        const sel = document.getElementById('ws'+i);
+        if (sel.value === item.answer) correct++;
+    });
+    const res = document.getElementById('whoSaidResult');
+    if (correct === whoSaidData.length) {
+        res.textContent = `🎉 Perfect! All ${correct}/${whoSaidData.length} correct!`;
+        res.className = 'result-msg ok';
+        addStars(10);
+    } else {
+        res.textContent = `You got ${correct}/${whoSaidData.length}. Try again!`;
+        res.className = 'result-msg bad';
+    }
+}
+
+/* ── FILL BLANKS ── */
+function checkFillBlanks() {
+    const answers = ['clever','ran','sky','cake'];
+    const ids = ['fb1','fb2','fb3','fb4'];
+    let correct = 0;
+    ids.forEach((id, i) => {
+        const val = document.getElementById(id).value.trim().toLowerCase();
+        if (val === answers[i]) correct++;
+    });
+    const res = document.getElementById('fillResult');
+    if (correct === answers.length) {
+        res.textContent = `🎉 Excellent! All ${correct}/${answers.length} correct!`;
+        res.className = 'result-msg ok';
+        addStars(10);
+    } else {
+        res.textContent = `You got ${correct}/${answers.length} correct. Keep trying!`;
+        res.className = 'result-msg bad';
+    }
+}
+
+/* ── MORAL MATCH ── */
+const morals = [
+    { story:'The Goat and the Lion', moral:'Don\'t fall for sweet words from someone who means you harm.' },
+    { story:'A Clever Donkey', moral:'Use your wits to get out of danger!' },
+    { story:'A Foolish Donkey', moral:'Always listen to good advice from friends!' },
+    { story:'The Sky is Falling!', moral:'Don\'t panic! Always check before you believe something scary.' },
+    { story:'The Rat and the Cat', moral:'Stay calm and use clever thinking even in danger!' },
+];
+const emojis = ['🐐','🫏','🎵','🐰','🐀'];
+function buildMorals() {
+    const container = document.getElementById('moralRows');
+    morals.forEach((m, i) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'background:#fffbf0;border-radius:12px;padding:12px;margin-bottom:10px;border:2px solid #fde68a;cursor:pointer;';
+        div.innerHTML = `<div style="font-size:14px;font-weight:800;color:#1a6b3a;">${emojis[i]} ${m.story}</div><div id="moral${i}" style="display:none;margin-top:6px;font-size:13px;font-weight:700;color:#92400e;">💡 ${m.moral}</div>`;
+        div.onclick = () => {
+            const md = document.getElementById('moral'+i);
+            md.style.display = md.style.display === 'none' ? 'block' : 'none';
+        };
+        container.appendChild(div);
+    });
+}
+
+/* ── TABS ── */
+function showTab(tab, el) {
+    if (el) {
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        el.classList.add('active');
+    }
+    ['stories','quiz','activities'].forEach(t => {
+        document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
+    });
+}
+function setNav(el) {
+    document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+}
+
+/* ── PROGRESS / STARS ── */
+function updateProgress() {
+    const pct = Math.round((readCount/totalStories)*100);
+    document.getElementById('progressFill').style.width = pct+'%';
+    document.getElementById('progressPct').textContent = pct+'%';
+}
+function addStars(n) {
+    stars += n;
+    document.getElementById('starsDisplay').textContent = stars;
+}
+
+/* ── CELEBRATE ── */
+function celebrate(icon, title, sub, starsText) {
+    document.getElementById('celebIcon').textContent = icon;
+    document.getElementById('celebTitle').textContent = title;
+    document.getElementById('celebSub').textContent = sub;
+    document.getElementById('celebStars').textContent = starsText;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+}
+function closeCeleb() { document.getElementById('celebOverlay').classList.remove('show'); }
+
+/* ── CONFETTI ── */
+function launchConfetti() {
+    const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+    for (let i=0;i<70;i++) {
+        const c=document.createElement('div');
+        const sz=Math.random()*14+6;
+        c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:300;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),4500);
+    }
+}
+const style=document.createElement('style');
+style.textContent=`@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}`;
+document.head.appendChild(style);
+
+/* ── INIT ── */
+buildWhoSaid();
+buildMorals();
+</script>
+</body>
+</html>

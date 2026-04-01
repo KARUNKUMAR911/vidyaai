@@ -833,6 +833,48 @@ def class1_english_body():
     student = Student.query.get(session['student_id'])
     return render_template('class1_english_ch4.html', student=student)
 
+@app.route('/class/1/english/story1')
+def class1_english_story1():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('stories_for_listening.html', student=student)
+
+@app.route('/class/1/english/school')
+def class1_english_school():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch5_my_school.html', student=student)
+
+@app.route('/class/1/english/family')
+def class1_english_family():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch6_family.html', student=student)
+
+@app.route('/class/1/english/shapes')
+def class1_english_shapes():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch7_shapes_colours.html', student=student)
+
+@app.route('/class/1/english/habits')
+def class1_english_habits():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch8_good_habits.html', student=student)
+
+@app.route('/class/1/english/transport')
+def class1_english_transport():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch9_means_of_transport.html', student=student)
+
 
 
 if __name__ == '__main__':
