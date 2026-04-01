@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VidyaAI - Stories for Listening</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; background: #f8f4ff; min-height: 100vh; }
+
+        .navbar {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed);
+            padding: 12px 20px; display: flex; align-items: center;
+            justify-content: space-between; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 15px rgba(91,33,182,0.35);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo  { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-grade { background: rgba(255,255,255,0.25); color: white; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .navbar-right { display: flex; align-items: center; gap: 8px; }
+        .nav-btn { background: rgba(255,255,255,0.22); color: white; border: none; padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .stars-badge { background: rgba(255,215,0,0.3); border: 1px solid rgba(255,215,0,0.5); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+
+        .hero { background: linear-gradient(135deg, #5b21b6, #7c3aed); padding: 16px 20px 36px; text-align: center; color: white; }
+        .hero h2 { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+        .hero p  { font-size: 13px; opacity: 0.85; }
+        .hero-icons { font-size: 36px; margin-bottom: 8px; }
+
+        .progress-card { background: white; margin: -16px 16px 20px; border-radius: 16px; padding: 14px 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 14px; }
+        .progress-info { flex: 1; }
+        .progress-info h4 { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
+        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #5b21b6, #7c3aed); height: 100%; border-radius: 10px; transition: width 0.5s; }
+        .progress-pct { font-size: 20px; font-weight: 900; color: #5b21b6; }
+
+        .content { padding: 0 16px 100px; }
+
+        /* Story index chips */
+        .story-index {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .story-chip {
+            padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 800;
+            cursor: pointer; border: 2px solid; transition: all 0.2s;
+        }
+        .story-chip:hover { transform: scale(1.05); }
+
+        /* Story card */
+        .story-card {
+            border-radius: 24px; margin-bottom: 20px; overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .story-header {
+            padding: 18px 20px 14px; display: flex; align-items: center; gap: 14px;
+        }
+        .story-num {
+            font-family: 'Fredoka One', cursive; font-size: 42px; line-height: 1;
+            opacity: 0.15; position: absolute;
+        }
+        .story-emoji-big { font-size: 56px; flex-shrink: 0; }
+        .story-header-info { flex: 1; }
+        .story-label-badge { display: inline-block; font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; margin-bottom: 6px; }
+        .story-title-text { font-family: 'Fredoka One', cursive; font-size: 20px; line-height: 1.2; margin-bottom: 4px; }
+        .story-tagline { font-size: 12px; font-weight: 700; opacity: 0.75; }
+        .story-listen-btn {
+            padding: 10px 16px; border: none; border-radius: 50px;
+            font-size: 13px; font-weight: 800; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .story-listen-btn:hover { transform: scale(1.05); }
+
+        .story-body { padding: 0 20px 18px; }
+        .story-text-block { font-size: 14px; line-height: 1.9; font-weight: 600; color: #333; }
+        .story-text-block p { margin-bottom: 12px; }
+
+        .story-moral {
+            margin-top: 14px; padding: 12px 16px;
+            border-radius: 14px; font-size: 14px; font-weight: 800;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        /* comprehension questions */
+        .story-questions { margin-top: 14px; }
+        .sq-title { font-size: 13px; font-weight: 900; margin-bottom: 10px; color: #5b21b6; }
+        .sq-item {
+            background: white; border-radius: 14px; padding: 12px 14px;
+            margin-bottom: 10px; border: 2px solid #ede9fe;
+        }
+        .sq-q { font-size: 13px; font-weight: 800; color: #333; margin-bottom: 8px; }
+        .sq-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .sq-opt {
+            padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 800;
+            border: 2px solid #ede9fe; background: white; cursor: pointer;
+            transition: all 0.2s; text-align: center; color: #444;
+        }
+        .sq-opt:hover { border-color: #7c3aed; }
+        .sq-opt.correct { border-color: #059669; background: #d1fae5; color: #059669; }
+        .sq-opt.wrong   { border-color: #dc2626; background: #fee2e2; color: #dc2626; }
+
+        /* divider */
+        .story-divider { height: 3px; margin: 0 20px; border-radius: 3px; opacity: 0.4; }
+
+        /* complete */
+        .complete-btn { width: 100%; padding: 16px; background: linear-gradient(135deg,#059669,#047857); color: white; border: none; border-radius: 16px; font-size: 17px; font-weight: 800; cursor: pointer; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(5,150,105,0.3); transition: transform 0.2s; margin-top: 10px; }
+        .complete-btn:hover { transform: scale(1.02); }
+
+        /* celebration */
+        .celeb-overlay { display: none; position: fixed; inset: 0; background: linear-gradient(135deg,rgba(91,33,182,.96),rgba(124,58,237,.96)); z-index: 200; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 30px; }
+        .celeb-overlay.show { display: flex; }
+        .celeb-emoji { font-size: 80px; animation: bounce 0.5s ease infinite alternate; }
+        .celeb-title { font-size: 34px; font-weight: 900; color: white; margin: 14px 0 8px; }
+        .celeb-sub   { font-size: 15px; color: rgba(255,255,255,.88); margin-bottom: 28px; line-height: 1.6; }
+        .celeb-stars { font-size: 32px; margin-bottom: 20px; }
+        .celeb-btn { padding: 14px 40px; background: white; color: #5b21b6; border: none; border-radius: 50px; font-size: 16px; font-weight: 800; cursor: pointer; margin: 6px; }
+        .celeb-btn.sec { background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); }
+
+        @keyframes bounce { from { transform: translateY(0) scale(1); } to { transform: translateY(-15px) scale(1.08); } }
+        @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+
+        .playing-indicator { display: inline-flex; gap: 3px; align-items: flex-end; height: 16px; }
+        .playing-indicator span { width: 4px; background: currentColor; border-radius: 2px; animation: wave 0.8s ease infinite; }
+        .playing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+        .playing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes wave { 0%,100% { height: 4px; } 50% { height: 14px; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">Class 1 • English</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
+        <a href="/class/1/english" class="nav-btn">← Back</a>
+    </div>
+</nav>
+
+<div class="hero">
+    <div class="hero-icons">📖✨🎧</div>
+    <h2>Stories for Listening</h2>
+    <p>Enjoy every story • Listen, understand and answer</p>
+</div>
+
+<div class="progress-card">
+    <div class="progress-info">
+        <h4>📊 Stories Read</h4>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="progress-pct" id="progressPct">0/7</div>
+</div>
+
+<div class="content">
+
+    <!-- Quick-jump index -->
+    <div class="story-index" id="storyIndex"></div>
+
+    <!-- Stories container -->
+    <div id="storiesContainer"></div>
+
+    <button class="complete-btn" onclick="completeAll()">🎉 I've Read All Stories! →</button>
+</div>
+
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-emoji">📖</div>
+    <div class="celeb-title">All Stories Done!</div>
+    <div class="celeb-sub">Amazing! You listened to all 7 stories and answered the questions!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="celeb-btn" onclick="location.href='/class/1/english'">📚 Go to All Chapters →</button>
+    <button class="celeb-btn sec" onclick="document.getElementById('celebOverlay').classList.remove('show')">🔄 Read Again</button>
+</div>
+
+<script>
+const stories = [
+    {
+        id: 'jackal',
+        emoji: '🦊',
+        title: 'The Jackal and the Drum',
+        tagline: 'Face your fears and find the truth!',
+        color: '#f77f00', bg: '#fff8f0', border: '#fde68a',
+        badgeColor: '#fff3cd', badgeText: '#b45309',
+        text: `It was a very hot day. A hungry jackal went to a forest in search of food. He walked a long way, but found nothing. Suddenly he heard a loud noise. He was afraid, and he did not know what to do.\n\nHe stood quite still for a long time and listened. He heard the noise again. It was louder than ever, and the jackal's fear was greater. But he was a clever jackal. He went slowly towards the noise.\n\nThere had been a battle in the forest, and the soldiers had left a drum under the branch of a big tree. The branch was broken, and it moved when the wind blew. When it moved, it beat the drum and made a loud noise.\n\nThe jackal saw this and he was not afraid now. There was nothing to be afraid of. "How foolish I have been!" He ran away, laughing to himself.`,
+        moral: 'Don\'t be afraid of what you don\'t know — go and find out!',
+        questions: [
+            { q: 'Why was the jackal afraid?', opts: ['He saw a lion', 'He heard a loud noise', 'He was hungry', 'He was lost'], ans: 1 },
+            { q: 'What was making the loud noise?', opts: ['A lion', 'Thunder', 'A drum under a tree', 'A soldier'], ans: 2 },
+            { q: 'What kind of jackal was he?', opts: ['Cowardly', 'Clever', 'Silly', 'Lazy'], ans: 1 },
+        ]
+    },
+    {
+        id: 'wolf',
+        emoji: '🐺',
+        title: 'The Boy Who Cried Wolf',
+        tagline: 'Always tell the truth!',
+        color: '#dc2626', bg: '#fff5f5', border: '#fecaca',
+        badgeColor: '#fee2e2', badgeText: '#b91c1c',
+        text: `There was once a shepherd boy in a village. He loved to play jokes on his friends. One day he was attending to the sheep on the hillside. He saw some women were collecting water from the well.\n\n"Help, mother, help!" he shouted, "wolves are attacking me, come quickly. Help!" The women ran over the rough ground to help him. But that naughty boy only laughed. "Fooled you, didn't I?" he shouted.\n\nAnother day he waited until all the men sat down to eat their supper after a hard day's work. "Wolves, wolves," he shouted. The villagers rushed to his side but he had fooled them again.\n\nThis unkind shepherd boy played this trick many times. One day he was alone outside the village with his flock. A wolf silently crept up and attacked his sheep. He screamed and he shouted but the villagers looked at each other and smiled. "He's up to his old tricks," they thought. They did not go to help him. The wolf killed a sheep.`,
+        moral: 'If you lie too often, nobody will believe you when you tell the truth.',
+        questions: [
+            { q: 'What did the boy love to do?', opts: ['Look after sheep', 'Play jokes', 'Collect water', 'Sleep'], ans: 1 },
+            { q: 'Why didn\'t the villagers help when the wolf came?', opts: ['They were busy', 'They didn\'t hear', 'They thought it was a joke', 'They were scared'], ans: 2 },
+            { q: 'What happened to the sheep in the end?', opts: ['They ran away', 'A wolf killed one', 'They were safe', 'They went home'], ans: 1 },
+        ]
+    },
+    {
+        id: 'ground',
+        emoji: '🧹',
+        title: 'A Clean Ground',
+        tagline: 'Work together to help everyone!',
+        color: '#0891b2', bg: '#f0fbff', border: '#bae6fd',
+        badgeColor: '#dbeafe', badgeText: '#1d4ed8',
+        text: `Raghu slipped while running and fell on the ground. He was hurt. He was crying. Swathi miss attended to his wounds. The other children were watching.\n\nMamatha said, "Come let us all remove the small stones from the ground." Rakesh said, "Yes, we should remove all those sharp stones. They hurt our feet while playing."\n\nAll children of class I went to the ground and started removing the stones. Children from other classes saw them. They also came and joined their friends.\n\nIn 30 minutes, their ground was neat and clean. Children ran all over the ground and were happy. Raghu also felt happy that his friends won't be hurt while playing.`,
+        moral: 'When we work together, we can make things better for everyone.',
+        questions: [
+            { q: 'Why did Raghu fall?', opts: ['He tripped on a stone', 'He was pushed', 'He slipped while running', 'He was tired'], ans: 2 },
+            { q: 'What did the children remove from the ground?', opts: ['Leaves', 'Small sharp stones', 'Water', 'Sand'], ans: 1 },
+            { q: 'How long did it take to clean the ground?', opts: ['1 hour', '10 minutes', '30 minutes', '2 hours'], ans: 2 },
+        ]
+    },
+    {
+        id: 'frog',
+        emoji: '🐸',
+        title: 'The Hare and the Frog',
+        tagline: 'You never know what you can do till you have to!',
+        color: '#16a34a', bg: '#f0fff4', border: '#bbf7d0',
+        badgeColor: '#dcfce7', badgeText: '#15803d',
+        text: `Once upon a time, a big green frog fell into a deep hole. It tried to jump out, but could not reach the top. It stopped trying and began to shout for help.\n\nA hare was playing in the tall grass nearby. He heard the cry, and went near the deep hole. "I can't get out of this hole," croaked the frog, "I can't jump very high." "Wait a minute," said the hare, "I know where there is a ladder. I'll go and bring it. Then you can use the ladder and get out." "Thank you," croaked the frog, "I'll wait."\n\nThe hare ran off to fetch a ladder. When he came back with the ladder, the frog was sitting outside the hole. "Oh!" said the hare, "you've done it. I thought you couldn't get out by yourself." "I thought so, too," croaked the frog, "but a snake came into the hole, and I just had to get out. So I did."\n\nYou do not know what you can do, till you have to.`,
+        moral: 'In an emergency you can do things you never thought possible!',
+        questions: [
+            { q: 'How did the frog get into trouble?', opts: ['A snake bit it', 'It fell into a deep hole', 'It got lost', 'It was pushed'], ans: 1 },
+            { q: 'What did the hare offer to bring?', opts: ['Food', 'A rope', 'A ladder', 'Water'], ans: 2 },
+            { q: 'How did the frog finally get out?', opts: ['The hare helped', 'It used the ladder', 'A snake came — it had to jump out', 'It waited for help'], ans: 2 },
+        ]
+    },
+    {
+        id: 'chilli',
+        emoji: '🌶️',
+        title: 'A Hot Green Chilli',
+        tagline: 'Always say sorry when you are wrong!',
+        color: '#65a30d', bg: '#f7fee7', border: '#bef264',
+        badgeColor: '#ecfccb', badgeText: '#4d7c0f',
+        text: `A pumpkin went to see a green chilli. He was very plump and heavy. When he met the green chilli, he rolled over the green chilli. The green chilli got crushed under the pumpkin. He was very angry.\n\nHe stood up and went near the pumpkin. He asked the pumpkin to apologise. But the pumpkin made fun of the green chilli. The green chilli danced on the face of the pumpkin. It was very hot. The pumpkin could not bear it. He ran and jumped into a nearby pond. The burning reduced. Then he apologised to the green chilli.`,
+        moral: 'Always apologise when you are wrong — don\'t wait to be taught a lesson!',
+        questions: [
+            { q: 'How was the pumpkin?', opts: ['Thin and light', 'Plump and heavy', 'Small and green', 'Tall and red'], ans: 1 },
+            { q: 'Why was the green chilli angry?', opts: ['The pumpkin ate it', 'It was crushed under the pumpkin', 'The pumpkin laughed at it', 'It was lost'], ans: 1 },
+            { q: 'What did the pumpkin do to cool himself?', opts: ['Drank water', 'Jumped into a pond', 'Ran into a forest', 'Slept under a tree'], ans: 1 },
+        ]
+    },
+    {
+        id: 'helpother',
+        emoji: '🐜',
+        title: 'Help Each Other',
+        tagline: 'A good deed is never forgotten!',
+        color: '#7c3aed', bg: '#faf5ff', border: '#ddd6fe',
+        badgeColor: '#ede9fe', badgeText: '#5b21b6',
+        text: `An ant fell into a river. It was not able to come out. A bird saw this. It took a leaf and dropped it near the ant. The ant climbed on to the leaf. The winds drove the leaf to the banks of the river. The ant was saved. The ant thanked the bird.\n\nOne day a hunter came to catch the bird. The ant saw this. It called all its friends. All the ants started biting the hunter. He ran away in fear. The bird was saved. The bird thanked the ants.`,
+        moral: 'Help others and they will help you in return. Kindness comes back to you!',
+        questions: [
+            { q: 'How did the bird help the ant?', opts: ['It carried the ant', 'It dropped a leaf near the ant', 'It pulled the ant out', 'It called for help'], ans: 1 },
+            { q: 'Who came to catch the bird?', opts: ['A cat', 'A fox', 'A hunter', 'A wolf'], ans: 2 },
+            { q: 'How did the ants save the bird?', opts: ['They bit the hunter', 'They hid the bird', 'They called the police', 'They made a noise'], ans: 0 },
+        ]
+    },
+    {
+        id: 'egg',
+        emoji: '🥚',
+        title: 'Egg in a Hole / Henny and the Baby Chick',
+        tagline: 'Sometimes losing something leads to something better!',
+        color: '#db2777', bg: '#fff5f9', border: '#fbcfe8',
+        badgeColor: '#fce7f3', badgeText: '#9d174d',
+        text: `A hen had laid an egg up on the roof of the farmhouse. One day, the egg rolled down through a hole in the roof into a room down below. "Oh my! I hope I haven't lost it!" she said. She ran down the steps to the room below. "Have you seen my egg?" asked Henny.\n\n"Yes, I have," said Billy the goat. "It fell on my plate of rice. Then it rolled along the table and out of the window." Henny ran quickly to the window. "Have you seen my egg?" she asked. "Yes, I have," said a little bird. "It rolled along the drain pipe and then into a hole."\n\nHenny ran across the farm. She saw her egg just before it rolled into the hole in the ground. Just then, from out of the hole, appeared a small mouse. "Henny," he said, "I've found your egg! Something very special happened. It's broken and it's in a lot of little pieces. But, if you look closely you will see that you've a new baby chick in its place!"\n\nHenny was so pleased! She had lost her egg. But now she had a baby chick instead.`,
+        moral: 'Sometimes when we lose something, we find something even more wonderful!',
+        questions: [
+            { q: 'Where did Henny lay her egg?', opts: ['In a nest', 'On the roof', 'Under a tree', 'In a hole'], ans: 1 },
+            { q: 'Who told Henny where the egg went last?', opts: ['Billy the goat', 'A little bird', 'A small mouse', 'A duck'], ans: 2 },
+            { q: 'What did Henny find instead of her egg?', opts: ['Two eggs', 'A baby chick', 'A broken shell', 'Nothing'], ans: 1 },
+        ]
+    },
+];
+
+let stars = 0, storiesRead = new Set(), answersGiven = {};
+
+function buildStories() {
+    const container = document.getElementById('storiesContainer');
+    const index = document.getElementById('storyIndex');
+
+    stories.forEach((s, i) => {
+        // Index chip
+        const chip = document.createElement('div');
+        chip.className = 'story-chip';
+        chip.style.cssText = `background:${s.badgeColor};color:${s.badgeText};border-color:${s.border}`;
+        chip.textContent = `${s.emoji} ${s.title.split(' ').slice(0,3).join(' ')}...`;
+        chip.onclick = () => document.getElementById(`story-${s.id}`).scrollIntoView({behavior:'smooth'});
+        index.appendChild(chip);
+
+        // Story card
+        const card = document.createElement('div');
+        card.className = 'story-card';
+        card.id = `story-${s.id}`;
+        card.style.cssText = `background:${s.bg};border:3px solid ${s.border}`;
+
+        const paragraphs = s.text.split('\n\n').map(p => `<p>${p}</p>`).join('');
+
+        const qHTML = s.questions.map((q, qi) => `
+            <div class="sq-item">
+                <div class="sq-q">${qi+1}. ${q.q}</div>
+                <div class="sq-options">
+                    ${q.opts.map((opt, oi) => `
+                        <div class="sq-opt" data-story="${s.id}" data-q="${qi}" data-opt="${oi}" onclick="answerQ(this,'${s.id}',${qi},${oi},${q.ans})">
+                            ${opt}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        card.innerHTML = `
+            <div class="story-header" style="background:${s.bg}">
+                <div class="story-emoji-big">${s.emoji}</div>
+                <div class="story-header-info">
+                    <div class="story-label-badge" style="background:${s.badgeColor};color:${s.badgeText}">📖 STORY ${i+1}</div>
+                    <div class="story-title-text" style="color:${s.color}">${s.title}</div>
+                    <div class="story-tagline" style="color:${s.color}">${s.tagline}</div>
+                </div>
+            </div>
+            <div class="story-divider" style="background:${s.color}"></div>
+            <div class="story-body">
+                <div class="story-text-block">${paragraphs}</div>
+                <div class="story-moral" style="background:${s.badgeColor};color:${s.badgeText}">
+                    <span style="font-size:20px">💡</span>
+                    <span><strong>Moral:</strong> ${s.moral}</span>
+                </div>
+                <button class="story-listen-btn" id="btn-${s.id}"
+                    style="background:${s.color};color:white;margin-top:14px;width:100%;justify-content:center"
+                    onclick="listenStory('${s.id}')">
+                    🔊 Listen to This Story
+                </button>
+                <div class="story-questions" id="q-${s.id}" style="margin-top:16px">
+                    <div class="sq-title">💬 Answer These Questions</div>
+                    ${qHTML}
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+let currentAudio = null;
+function listenStory(id) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const s = stories.find(x => x.id === id);
+    const clean = s.text.replace(/\n\n/g, '. ');
+    const u = new SpeechSynthesisUtterance(`${s.title}. ${clean}`);
+    u.rate = 0.78; u.pitch = 1.1; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+    storiesRead.add(id);
+    updateProgress();
+    addStars(3);
+    const btn = document.getElementById(`btn-${id}`);
+    btn.innerHTML = `<span class="playing-indicator"><span></span><span></span><span></span></span> Playing... (tap to stop)`;
+    btn.onclick = () => { window.speechSynthesis.cancel(); btn.innerHTML = `🔊 Listen Again`; btn.onclick = () => listenStory(id); };
+    u.onend = () => { btn.innerHTML = `🔊 Listen Again`; btn.onclick = () => listenStory(id); };
+}
+
+function answerQ(el, storyId, qIdx, optIdx, correct) {
+    const key = `${storyId}-${qIdx}`;
+    if (answersGiven[key]) return;
+    answersGiven[key] = true;
+
+    const parent = el.parentElement;
+    parent.querySelectorAll('.sq-opt').forEach(o => o.onclick = null);
+
+    if (optIdx === correct) {
+        el.classList.add('correct');
+        addStars(2);
+    } else {
+        el.classList.add('wrong');
+        parent.querySelectorAll('.sq-opt')[correct].classList.add('correct');
+    }
+}
+
+function updateProgress() {
+    const n = storiesRead.size;
+    const pct = Math.round((n / stories.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = `${n}/7`;
+}
+function addStars(n) { stars += n; document.getElementById('starsDisplay').textContent = stars; }
+
+function completeAll() {
+    storiesRead = new Set(stories.map(s => s.id));
+    updateProgress(); addStars(50);
+    document.getElementById('celebStars').textContent = `⭐ ${stars} Stars Earned!`;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+}
+
+function launchConfetti() {
+    const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+    for (let i = 0; i < 70; i++) {
+        const c = document.createElement('div');
+        const sz = Math.random() * 14 + 6;
+        c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:300;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+    }
+}
+
+buildStories();
+</script>
+</body>
+</html>
