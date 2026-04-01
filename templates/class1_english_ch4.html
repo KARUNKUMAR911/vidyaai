@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VidyaAI - Parts of the Body</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; background: #fff5f7; min-height: 100vh; }
+
+        .navbar { background: linear-gradient(135deg, #c2185b, #e91e8c); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(194,24,91,0.35); }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-grade { background: rgba(255,255,255,0.25); color: white; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .navbar-right { display: flex; align-items: center; gap: 8px; }
+        .nav-btn { background: rgba(255,255,255,0.22); color: white; border: none; padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .stars-badge { background: rgba(255,215,0,0.3); border: 1px solid rgba(255,215,0,0.5); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+
+        .hero { background: linear-gradient(135deg, #c2185b, #e91e8c); padding: 16px 20px 32px; text-align: center; color: white; }
+        .hero h2 { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 13px; opacity: 0.85; }
+
+        .progress-card { background: white; margin: -16px 16px 20px; border-radius: 16px; padding: 14px 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 14px; }
+        .progress-info { flex: 1; }
+        .progress-info h4 { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
+        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #c2185b, #e91e8c); height: 100%; border-radius: 10px; transition: width 0.5s; }
+        .progress-pct { font-size: 20px; font-weight: 900; color: #c2185b; }
+
+        .tabs { display: flex; padding: 0 16px; margin-bottom: 16px; overflow-x: auto; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 2px solid #fce4ec; background: white; color: #888; margin-right: 8px; transition: all 0.2s; }
+        .tab.active { background: #c2185b; color: white; border-color: #c2185b; }
+        .content { padding: 0 16px 100px; }
+
+        /* body part chips */
+        .body-diagram { background: white; border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .section-title { font-size: 15px; font-weight: 900; color: #c2185b; margin-bottom: 16px; }
+        .body-parts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .bpc { background: #fff5f7; border: 2px solid #fce4ec; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s; }
+        .bpc:hover { border-color: #c2185b; background: #fce4ec; transform: scale(1.02); }
+        .bpc.learned { border-color: #c2185b; background: #fce4ec; }
+        .bpc-emoji { font-size: 28px; }
+        .bpc-name { font-family: 'Fredoka One', cursive; font-size: 18px; color: #c2185b; line-height: 1.1; }
+        .bpc-use  { font-size: 11px; color: #888; font-weight: 600; }
+
+        /* senses */
+        .sense-card { background: white; border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .sense-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #fce4ec; cursor: pointer; }
+        .sense-row:last-child { border-bottom: none; }
+        .sense-num { font-family: 'Fredoka One', cursive; font-size: 18px; color: white; background: #c2185b; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .sense-text { font-size: 14px; font-weight: 700; color: #333; flex: 1; }
+        .sense-text b { color: #c2185b; }
+        .sense-emoji { font-size: 28px; }
+
+        /* action grid */
+        .exercise-card { background: white; border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .exercise-title { font-size: 16px; font-weight: 900; color: #c2185b; margin-bottom: 4px; }
+        .exercise-instruction { font-size: 13px; color: #666; margin-bottom: 16px; font-weight: 600; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .action-btn { background: #fff5f7; border: 2px solid #fce4ec; border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 800; color: #444; transition: all 0.2s; }
+        .action-btn:hover { border-color: #c2185b; background: #fce4ec; }
+        .action-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+        .action-btn.done { border-color: #c2185b; background: #fce4ec; }
+
+        /* match */
+        .match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .match-col { display: flex; flex-direction: column; gap: 10px; }
+        .match-col-title { font-size: 12px; font-weight: 800; color: #888; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .match-item { background: #fff5f7; border: 3px solid #fce4ec; border-radius: 14px; padding: 10px 8px; font-size: 14px; font-weight: 800; text-align: center; cursor: pointer; transition: all 0.2s; user-select: none; color: #333; }
+        .match-item:hover { border-color: #c2185b; }
+        .match-item.selected { border-color: #c2185b; background: #c2185b; color: white; }
+        .match-item.matched  { border-color: #059669; background: #d1fae5; color: #059669; pointer-events: none; }
+
+        /* riddle */
+        .riddle-box { background: #fff5f7; border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 2px solid #fce4ec; }
+        .riddle-clue { font-size: 14px; font-weight: 700; color: #444; line-height: 1.9; margin-bottom: 12px; }
+        .riddle-input { width: 100%; padding: 10px 14px; border: 2px solid #fce4ec; border-radius: 12px; font-size: 15px; font-weight: 700; font-family: 'Nunito',sans-serif; outline: none; }
+        .riddle-input:focus { border-color: #c2185b; }
+        .riddle-submit { width: 100%; padding: 11px; margin-top: 8px; background: linear-gradient(135deg,#c2185b,#e91e8c); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; }
+        .riddle-result { margin-top: 8px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 700; display: none; text-align: center; }
+        .riddle-result.ok { background: #d1fae5; color: #059669; }
+        .riddle-result.no { background: #fee2e2; color: #dc2626; }
+
+        /* rhyme pairs */
+        .rp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .rp-chip { background: #fff5f7; border: 2px solid #fce4ec; border-radius: 14px; padding: 10px 6px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .rp-chip:hover { border-color: #c2185b; background: #fce4ec; }
+        .rp-word { font-family: 'Fredoka One', cursive; font-size: 15px; color: #c2185b; }
+        .rp-sub  { font-size: 10px; color: #888; font-weight: 700; margin-top: 2px; }
+
+        /* rhyme card */
+        .rhyme-card { background: linear-gradient(135deg,#fff5f7,#fce4ec); border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 2px solid #f48fb1; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .rhyme-title { font-size: 14px; font-weight: 900; color: #c2185b; margin-bottom: 14px; }
+        .rhyme-lines { line-height: 2.2; font-size: 15px; color: #333; font-weight: 600; }
+        .rhyme-btn { margin-top: 14px; width: 100%; padding: 10px; background: linear-gradient(135deg,#c2185b,#e91e8c); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+        .rhyme-btn:hover { transform: scale(1.02); }
+
+        /* story */
+        .story-card { background: white; border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .story-label { display: inline-block; background: linear-gradient(135deg,#c2185b,#e91e8c); color: white; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; letter-spacing: 1px; }
+        .story-title { font-family: 'Fredoka One', cursive; font-size: 22px; color: #c2185b; margin-bottom: 12px; }
+        .story-text { font-size: 14px; color: #444; font-weight: 600; line-height: 1.9; }
+        .story-moral { background: #fff5f7; border-left: 4px solid #c2185b; border-radius: 0 12px 12px 0; padding: 10px 14px; font-size: 13px; font-weight: 800; color: #c2185b; margin-top: 12px; }
+        .story-btn { width: 100%; padding: 11px; background: linear-gradient(135deg,#c2185b,#e91e8c); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 14px; }
+
+        /* check btn result */
+        .check-btn { width: 100%; padding: 14px; background: linear-gradient(135deg,#c2185b,#e91e8c); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: transform 0.2s; }
+        .check-btn:hover { transform: scale(1.02); }
+        .result-box { text-align: center; padding: 12px; border-radius: 12px; margin-top: 12px; font-size: 15px; font-weight: 700; display: none; }
+        .result-box.success { background: #d1fae5; color: #059669; }
+        .result-box.partial { background: #fef3c7; color: #b45309; }
+
+        .complete-btn { width: 100%; padding: 16px; background: linear-gradient(135deg,#059669,#047857); color: white; border: none; border-radius: 16px; font-size: 17px; font-weight: 800; cursor: pointer; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(5,150,105,0.3); transition: transform 0.2s; }
+        .complete-btn:hover { transform: scale(1.02); }
+
+        .celeb-overlay { display: none; position: fixed; inset: 0; background: linear-gradient(135deg,rgba(194,24,91,.96),rgba(233,30,140,.96)); z-index: 200; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 30px; }
+        .celeb-overlay.show { display: flex; }
+        .celeb-emoji { font-size: 80px; animation: bounce 0.5s ease infinite alternate; }
+        .celeb-title { font-size: 38px; font-weight: 900; color: white; margin: 14px 0 8px; }
+        .celeb-sub   { font-size: 16px; color: rgba(255,255,255,.88); margin-bottom: 28px; line-height: 1.6; }
+        .celeb-stars { font-size: 32px; margin-bottom: 20px; }
+        .celeb-btn { padding: 16px 44px; background: white; color: #c2185b; border: none; border-radius: 50px; font-size: 17px; font-weight: 800; cursor: pointer; margin: 6px; }
+        .celeb-btn.secondary { background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); }
+
+        @keyframes bounce { from { transform: translateY(0) scale(1); } to { transform: translateY(-15px) scale(1.08); } }
+        @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">Class 1 • English</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
+        <a href="/class/1/english" class="nav-btn">← Back</a>
+    </div>
+</nav>
+
+<div class="hero">
+    <h2>Chapter 4 — Parts of the Body 🫀</h2>
+    <p>Look at the picture • Say the names after the teacher</p>
+</div>
+
+<div class="progress-card">
+    <div class="progress-info">
+        <h4>📊 Chapter Progress</h4>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="progress-pct" id="progressPct">0%</div>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="showTab('learn',this)">🫀 Learn</div>
+    <div class="tab" onclick="showTab('exercises',this)">✏️ Exercises</div>
+    <div class="tab" onclick="showTab('rhymes',this)">🎵 Rhymes</div>
+    <div class="tab" onclick="showTab('stories',this)">📖 Stories</div>
+    <div class="tab" onclick="showTab('quiz',this)">🎯 Quiz</div>
+</div>
+
+<div class="content">
+
+    <!-- LEARN -->
+    <div id="tab-learn">
+        <div class="body-diagram">
+            <div class="section-title">👆 Tap any body part to learn it!</div>
+            <div style="text-align:center;font-size:110px;margin-bottom:16px;line-height:1">🧑</div>
+            <div class="body-parts-grid" id="bodyPartsGrid"></div>
+        </div>
+
+        <div class="sense-card">
+            <div class="section-title" style="font-size:15px;font-weight:900;color:#c2185b;margin-bottom:16px">👁️ What do our body parts do?</div>
+            <div id="sensesContainer"></div>
+        </div>
+
+        <div class="exercise-card">
+            <div class="exercise-title">🙌 Do As the Teacher Says!</div>
+            <div class="exercise-instruction">Tap each card, listen, and do the action!</div>
+            <div class="action-grid" id="actionGrid"></div>
+        </div>
+
+        <button class="complete-btn" onclick="completeChapter()">✅ I Know All Body Parts! Complete Chapter →</button>
+    </div>
+
+    <!-- EXERCISES -->
+    <div id="tab-exercises" style="display:none">
+
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 1 — Match the Body Part to Its Use 🔗</div>
+            <div class="exercise-instruction">Tap a body part, then tap what we use it for!</div>
+            <div class="match-container">
+                <div class="match-col">
+                    <div class="match-col-title">Body Part</div>
+                    <div class="match-item" onclick="selectMatch(this,'eye','part')">👁️ eye</div>
+                    <div class="match-item" onclick="selectMatch(this,'nose','part')">👃 nose</div>
+                    <div class="match-item" onclick="selectMatch(this,'hand','part')">✋ hand</div>
+                    <div class="match-item" onclick="selectMatch(this,'mouth','part')">👄 mouth</div>
+                    <div class="match-item" onclick="selectMatch(this,'ear','part')">👂 ear</div>
+                    <div class="match-item" onclick="selectMatch(this,'leg','part')">🦵 leg</div>
+                </div>
+                <div class="match-col">
+                    <div class="match-col-title">What we do</div>
+                    <div class="match-item" onclick="selectMatch(this,'ear','use')" style="font-size:13px">We hear</div>
+                    <div class="match-item" onclick="selectMatch(this,'leg','use')" style="font-size:13px">We walk</div>
+                    <div class="match-item" onclick="selectMatch(this,'eye','use')" style="font-size:13px">We see</div>
+                    <div class="match-item" onclick="selectMatch(this,'hand','use')" style="font-size:13px">We work</div>
+                    <div class="match-item" onclick="selectMatch(this,'mouth','use')" style="font-size:13px">We taste</div>
+                    <div class="match-item" onclick="selectMatch(this,'nose','use')" style="font-size:13px">We smell</div>
+                </div>
+            </div>
+            <button class="check-btn" onclick="checkMatch()">Check Answers ✓</button>
+            <div class="result-box" id="match-result"></div>
+        </div>
+
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 2 — Solve the Riddles! 🔍</div>
+            <div class="exercise-instruction">Read each clue and type your answer.</div>
+            <div class="riddle-box">
+                <div class="riddle-clue">I am a part of your hands.<br>I am ten in number.<br><strong>Who am I?</strong></div>
+                <input class="riddle-input" id="r1" type="text" placeholder="Your answer...">
+                <button class="riddle-submit" onclick="checkRiddle('r1','fingers','r1-res')">Submit ✓</button>
+                <div class="riddle-result" id="r1-res"></div>
+            </div>
+            <div class="riddle-box">
+                <div class="riddle-clue">I am a part of your legs.<br>I am ten in number.<br><strong>Who am I?</strong></div>
+                <input class="riddle-input" id="r2" type="text" placeholder="Your answer...">
+                <button class="riddle-submit" onclick="checkRiddle('r2','toes','r2-res')">Submit ✓</button>
+                <div class="riddle-result" id="r2-res"></div>
+            </div>
+            <div class="riddle-box">
+                <div class="riddle-clue">I am on your head.<br>I grow long as you cut me.<br><strong>Who am I?</strong></div>
+                <input class="riddle-input" id="r3" type="text" placeholder="Your answer...">
+                <button class="riddle-submit" onclick="checkRiddle('r3','hair','r3-res')">Submit ✓</button>
+                <div class="riddle-result" id="r3-res"></div>
+            </div>
+            <div class="riddle-box">
+                <div class="riddle-clue">I am a part of your fingers.<br>You cut me as I grow.<br><strong>Who am I?</strong></div>
+                <input class="riddle-input" id="r4" type="text" placeholder="Your answer...">
+                <button class="riddle-submit" onclick="checkRiddle('r4','nail','r4-res')">Submit ✓</button>
+                <div class="riddle-result" id="r4-res"></div>
+            </div>
+        </div>
+
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 3 — Rhyming Word Pairs 🎵</div>
+            <div class="exercise-instruction">Tap each pair to hear them — they rhyme!</div>
+            <div class="rp-grid" id="rpGrid"></div>
+        </div>
+
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 4 — Number and Touch! 🔢</div>
+            <div class="exercise-instruction">Tap each card, listen, then do the action!</div>
+            <div class="action-grid" id="numberTouchGrid"></div>
+        </div>
+
+    </div>
+
+    <!-- RHYMES -->
+    <div id="tab-rhymes" style="display:none">
+        <div class="rhyme-card">
+            <div class="rhyme-title">🤸 Rhyme 1 — Hop a Little</div>
+            <div class="rhyme-lines">
+                Hop a little, jump a little, one two three,<br>
+                Run a little, skip a little, tap one knee,<br>
+                Bend a little, stretch a little, nod your head,<br>
+                Yawn a little, sleep a little, in your bed.
+            </div>
+            <button class="rhyme-btn" onclick="speak('Hop a little, jump a little, one two three. Run a little, skip a little, tap one knee. Bend a little, stretch a little, nod your head. Yawn a little, sleep a little, in your bed.')">🔊 Sing This Rhyme!</button>
+        </div>
+
+        <div class="rhyme-card">
+            <div class="rhyme-title">👏 Rhyme 2 — Clap Your Hands</div>
+            <div class="rhyme-lines">
+                Clap your hands, clap your hands,<br>
+                Listen to the music and clap your hands.<br><br>
+                Now make your own rhyme!<br>
+                Stamp your feet...<br>
+                Blink your eyes...<br>
+                Jump up high...<br>
+                Bend sideways...
+            </div>
+            <button class="rhyme-btn" onclick="speak('Clap your hands. Clap your hands. Listen to the music and clap your hands. Stamp your feet. Blink your eyes. Jump up high. Bend sideways.')">🔊 Sing This Rhyme!</button>
+        </div>
+
+        <div class="rhyme-card">
+            <div class="rhyme-title">😊 Rhyme 3 — If You're Happy</div>
+            <div class="rhyme-lines">
+                If you're happy and you know it, clap your hands.<br>
+                If you're happy and you know it, clap your hands.<br>
+                If you're happy and you know it,<br>
+                And you really want to show it,<br>
+                If you're happy and you know it, clap your hands.<br><br>
+                If you're happy and you know it, stamp your feet...<br>
+                If you're happy and you know it, blink your eyes...
+            </div>
+            <button class="rhyme-btn" onclick="speak('If you are happy and you know it, clap your hands. If you are happy and you know it, clap your hands. If you are happy and you know it, and you really want to show it, if you are happy and you know it, clap your hands. Stamp your feet. Blink your eyes.')">🔊 Sing This Rhyme!</button>
+        </div>
+
+        <div class="rhyme-card">
+            <div class="rhyme-title">🔢 Rhyme 4 — Number One, Touch Your Tongue</div>
+            <div class="rhyme-lines">
+                Number one, touch your tongue.<br>
+                Number two, touch your shoe.<br>
+                Number three, touch your knee.<br>
+                Number four, touch the floor.<br>
+                Number five, jump up high!
+            </div>
+            <button class="rhyme-btn" onclick="speak('Number one, touch your tongue. Number two, touch your shoe. Number three, touch your knee. Number four, touch the floor. Number five, jump up high!')">🔊 Sing This Rhyme!</button>
+        </div>
+    </div>
+
+    <!-- STORIES -->
+    <div id="tab-stories" style="display:none">
+        <div class="story-card">
+            <div class="story-label">📖 STORY 1</div>
+            <div class="story-title">🐐 The Goat and the Lion</div>
+            <div class="story-text">
+                One day, a hungry lion was looking for food. He could not get anything to eat. At last, he saw a goat eating grass on a high hill. He could not climb the hill.<br><br>
+                "Hello, Goat!" he called out. "Why don't you come down and taste the grass here? It's much sweeter than the grass up there." But the goat was clever too. He knew that the lion wanted to eat him.<br><br>
+                "Thank you very much," said the goat. "The grass may be sweeter down there. But I would rather live and eat the grass up here."
+            </div>
+            <div class="story-moral">💡 Moral: Be clever — don't fall for tricks!</div>
+            <button class="story-btn" onclick="speak('One day, a hungry lion was looking for food. He could not get anything to eat. At last, he saw a goat eating grass on a high hill. He could not climb the hill. Hello, Goat! he called out. Why do not you come down and taste the grass here? It is much sweeter than the grass up there. But the goat was clever too. He knew that the lion wanted to eat him. Thank you very much, said the goat. The grass may be sweeter down there. But I would rather live and eat the grass up here.')">🔊 Listen to the Story</button>
+        </div>
+
+        <div class="story-card">
+            <div class="story-label">📖 STORY 2</div>
+            <div class="story-title">🫏 A Clever Donkey</div>
+            <div class="story-text">
+                A wolf was trying to catch a donkey. The donkey saw this. He told the wolf, "You can eat me. But before that please remove the thorn in my foot. It may trouble you." The wolf bent down to see.<br><br>
+                The donkey kicked the wolf as hard as he could and ran away.<br><br>
+                The other donkeys were very happy. They said, "You are very clever." The wolf felt foolish.
+            </div>
+            <div class="story-moral">💡 Moral: Think fast and you can escape danger!</div>
+            <button class="story-btn" onclick="speak('A wolf was trying to catch a donkey. The donkey saw this. He told the wolf, You can eat me. But before that please remove the thorn in my foot. It may trouble you. The wolf bent down to see. The donkey kicked the wolf as hard as he could and ran away. The other donkeys were very happy. They said, You are very clever. The wolf felt foolish.')">🔊 Listen to the Story</button>
+        </div>
+
+        <div class="story-card">
+            <div class="story-label">📖 STORY 3</div>
+            <div class="story-title">🐰 The Sky is Falling!</div>
+            <div class="story-text">
+                A hare heard a loud sound. It was frightened. It shouted, "The sky is falling!"<br><br>
+                Other animals heard this. They saw the hare running. They were frightened too. All of them started running. A lion saw them running. He asked, "Why are you running?" They said, "The sky is falling! So we are running."<br><br>
+                "Where is the sky falling?" "Here!" they showed. The lion went there to see. He saw only a dry branch of a fallen tree. "So that is the sky!" he laughed. The other animals too laughed. They all returned to their homes.
+            </div>
+            <div class="story-moral">💡 Moral: Don't panic — check before you believe!</div>
+            <button class="story-btn" onclick="speak('A hare heard a loud sound. It was frightened. It shouted, The sky is falling! Other animals heard this. They saw the hare running. They were frightened too. All of them started running. A lion saw them running. He asked, Why are you running? They said, The sky is falling! So we are running. Where is the sky falling? Here! they showed. The lion went there to see. He saw only a dry branch of a fallen tree. So that is the sky! he laughed. The other animals too laughed. They all returned to their homes.')">🔊 Listen to the Story</button>
+        </div>
+
+        <div class="story-card">
+            <div class="story-label">📖 STORY 4</div>
+            <div class="story-title">🐭 The Rat and the Cat</div>
+            <div class="story-text">
+                A rat saw a piece of cake. "I will take it home and eat it," she thought. Just then a cat came by. She jumped and caught the rat by the tail.<br><br>
+                The clever rat did not cry. She just smiled at the cat. "It's too bad that you got me," said the rat. "But you didn't get the cake. That cake looks good. My friends do need food. Now they can eat the cake."<br><br>
+                The cat let off the rat and jumped on the cake. The rat ran away. "Good-bye, Cat," said the rat when she was in her hole, "you may eat the cake if you want to. But you shall not eat me!"
+            </div>
+            <div class="story-moral">💡 Moral: Use your brain to get out of trouble!</div>
+            <button class="story-btn" onclick="speak('A rat saw a piece of cake. I will take it home and eat it, she thought. Just then a cat came by. She jumped and caught the rat by the tail. The clever rat did not cry. She just smiled at the cat. It is too bad that you got me, said the rat. But you did not get the cake. That cake looks good. My friends do need food. Now they can eat the cake. The cat let off the rat and jumped on the cake. The rat ran away. Good-bye Cat, said the rat, you may eat the cake if you want to. But you shall not eat me!')">🔊 Listen to the Story</button>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="tab-quiz" style="display:none">
+        <div class="exercise-card">
+            <div class="exercise-title">🎯 Parts of the Body Quiz</div>
+            <div style="min-height:200px" id="quizContainer">
+                <div style="text-align:center;padding:20px">
+                    <div style="font-size:52px;margin-bottom:12px">🫀👁️👂</div>
+                    <div style="font-size:14px;color:#888;margin-bottom:20px">Test what you learned!</div>
+                    <button class="check-btn" onclick="startQuiz()" style="max-width:280px;margin:0 auto;display:block">Start Quiz! 🚀</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-emoji">🫀</div>
+    <div class="celeb-title">Chapter Complete!</div>
+    <div class="celeb-sub" id="celebSub">Amazing! You learned all the body parts!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="celeb-btn" onclick="location.href='/class/1/english'">📚 Next Chapter →</button>
+    <button class="celeb-btn secondary" onclick="document.getElementById('celebOverlay').classList.remove('show')">🔄 Practice Again</button>
+</div>
+
+<script>
+/* ── DATA ── */
+const bodyParts = [
+    { name:'hair',    emoji:'💇', use:'Grows on our head', sense:'We feel with it' },
+    { name:'eye',     emoji:'👁️',  use:'We see with our eyes', sense:'We see' },
+    { name:'ear',     emoji:'👂', use:'We hear with our ears', sense:'We hear' },
+    { name:'nose',    emoji:'👃', use:'We smell with our nose', sense:'We smell' },
+    { name:'mouth',   emoji:'👄', use:'We taste and talk', sense:'We taste' },
+    { name:'neck',    emoji:'🧣', use:'Connects head to body', sense:'We move our head' },
+    { name:'hand',    emoji:'✋', use:'We work with our hands', sense:'We work & feel' },
+    { name:'fingers', emoji:'🤚', use:'Ten fingers help us hold', sense:'We hold things' },
+    { name:'leg',     emoji:'🦵', use:'We walk with our legs', sense:'We walk & run' },
+    { name:'toes',    emoji:'🦶', use:'Ten toes on our feet', sense:'We balance' },
+    { name:'tongue',  emoji:'👅', use:'We taste and talk', sense:'We taste food' },
+    { name:'stomach', emoji:'🫃', use:'Helps digest food', sense:'We feel hunger' },
+];
+
+const senses = [
+    { num:'1', text:'We <b>see</b> with our', part:'eyes', emoji:'👁️' },
+    { num:'2', text:'We <b>smell</b> with our', part:'nose', emoji:'👃' },
+    { num:'3', text:'We <b>work</b> with our', part:'hands', emoji:'✋' },
+    { num:'4', text:'We <b>taste</b> with our', part:'mouth', emoji:'👄' },
+    { num:'5', text:'We <b>hear</b> with our', part:'ears', emoji:'👂' },
+    { num:'6', text:'We <b>walk</b> with our', part:'legs', emoji:'🦵' },
+];
+
+const actions = [
+    { icon:'🙂', label:'Nod your head', cmd:'Nod your head.' },
+    { icon:'👁️', label:'Touch your eyes', cmd:'Touch your eyes.' },
+    { icon:'✋', label:'Lift your hands', cmd:'Lift your hands.' },
+    { icon:'👃', label:'Touch your nose', cmd:'Touch your nose.' },
+    { icon:'⬆️', label:'Jump up', cmd:'Jump up.' },
+    { icon:'😑', label:'Close your eyes', cmd:'Close your eyes.' },
+    { icon:'⬇️', label:'Bend down', cmd:'Bend down.' },
+    { icon:'👅', label:'Show your tongue', cmd:'Show your tongue.' },
+    { icon:'🤚', label:'Lift right hand', cmd:'Lift your right hand.' },
+    { icon:'🫃', label:'Touch your stomach', cmd:'Touch your stomach.' },
+];
+
+const numberTouch = [
+    { icon:'1️⃣', label:'Touch your tongue', cmd:'Number one, touch your tongue.' },
+    { icon:'2️⃣', label:'Touch your shoe', cmd:'Number two, touch your shoe.' },
+    { icon:'3️⃣', label:'Touch your knee', cmd:'Number three, touch your knee.' },
+    { icon:'4️⃣', label:'Touch the floor', cmd:'Number four, touch the floor.' },
+    { icon:'5️⃣', label:'Jump up high!', cmd:'Number five, jump up high!' },
+];
+
+const rhymePairs = [
+    {a:'hand',b:'sand'},{a:'head',b:'bed'},{a:'hair',b:'pair'},
+    {a:'leg',b:'egg'},{a:'eyes',b:'ice'},{a:'ear',b:'hear'},
+    {a:'nose',b:'toes'},{a:'tongue',b:'sung'},{a:'finger',b:'singer'},
+];
+
+let stars = 0, learned = new Set();
+let matchPartSel = null, matchUseSel = null, matchPairs = {};
+let quizCurrent = 0, quizScore = 0, quizItems = [];
+
+/* ── BUILD ── */
+function buildBodyParts() {
+    const grid = document.getElementById('bodyPartsGrid');
+    bodyParts.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'bpc'; div.id = `bpc-${p.name}`;
+        div.innerHTML = `<div class="bpc-emoji">${p.emoji}</div><div><div class="bpc-name">${p.name}</div><div class="bpc-use">${p.use}</div></div><div style="margin-left:auto;font-size:18px;cursor:pointer">🔊</div>`;
+        div.onclick = () => learnPart(p.name, p.use);
+        grid.appendChild(div);
+    });
+}
+
+function buildSenses() {
+    const c = document.getElementById('sensesContainer');
+    senses.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'sense-row';
+        div.innerHTML = `<div class="sense-num">${s.num}</div><div class="sense-text">${s.text} <b>${s.part}</b>.</div><div class="sense-emoji">${s.emoji}</div>`;
+        div.onclick = () => { speak(`We use our ${s.part} to ${s.text.replace(/<b>|<\/b>/g,'').trim().split(' ')[1]}.`); addStars(1); };
+        c.appendChild(div);
+    });
+}
+
+function buildActions() {
+    const grid = document.getElementById('actionGrid');
+    actions.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'action-btn';
+        div.innerHTML = `<span class="action-icon">${a.icon}</span>${a.label}`;
+        div.onclick = () => { speak(a.cmd); div.classList.add('done'); addStars(1); };
+        grid.appendChild(div);
+    });
+}
+
+function buildNumberTouch() {
+    const grid = document.getElementById('numberTouchGrid');
+    numberTouch.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'action-btn';
+        div.innerHTML = `<span class="action-icon">${a.icon}</span>${a.label}`;
+        div.onclick = () => { speak(a.cmd); div.classList.add('done'); addStars(1); };
+        grid.appendChild(div);
+    });
+}
+
+function buildRhymePairs() {
+    const grid = document.getElementById('rpGrid');
+    rhymePairs.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'rp-chip';
+        div.innerHTML = `<div class="rp-word">${p.a} — ${p.b}</div><div class="rp-sub">tap to hear</div>`;
+        div.onclick = () => { speak(`${p.a}... ${p.b}... ${p.a}, ${p.b}!`); addStars(1); };
+        grid.appendChild(div);
+    });
+}
+
+/* ── LEARN ── */
+function learnPart(name, use) {
+    speak(`${name}! ${use}`);
+    learned.add(name); updateProgress();
+    document.getElementById(`bpc-${name}`)?.classList.add('learned');
+    addStars(1);
+}
+
+/* ── MATCHING ── */
+function selectMatch(el, key, type) {
+    if (el.classList.contains('matched')) return;
+    if (type === 'part') {
+        document.querySelectorAll('.match-item.selected').forEach(i => { if (i.dataset.type !== 'use') i.classList.remove('selected'); });
+        el.classList.add('selected'); el.dataset.type = 'part';
+        matchPartSel = { el, key };
+    } else {
+        el.classList.add('selected'); el.dataset.type = 'use';
+        matchUseSel = { el, key };
+    }
+    if (matchPartSel && matchUseSel) {
+        matchPairs[matchPartSel.key] = matchUseSel.key;
+        matchPartSel.el.classList.remove('selected'); matchPartSel.el.classList.add('matched');
+        matchUseSel.el.classList.remove('selected'); matchUseSel.el.classList.add('matched');
+        matchPartSel = null; matchUseSel = null;
+        addStars(1);
+    }
+}
+
+function checkMatch() {
+    let correct = Object.entries(matchPairs).filter(([k,v]) => k === v).length;
+    const res = document.getElementById('match-result');
+    res.style.display = 'block';
+    if (correct === Object.keys(matchPairs).length && correct > 0) {
+        res.className = 'result-box success';
+        res.textContent = `✅ All ${correct} correct! +${correct * 2} stars!`;
+        addStars(correct * 2);
+    } else {
+        res.className = 'result-box partial';
+        res.textContent = `${correct}/${Object.keys(matchPairs).length} correct. Keep going!`;
+    }
+}
+
+/* ── RIDDLES ── */
+function checkRiddle(inputId, answer, resultId) {
+    const val = document.getElementById(inputId).value.trim().toLowerCase();
+    const res = document.getElementById(resultId);
+    res.style.display = 'block';
+    if (val === answer || val === 'my ' + answer) {
+        res.className = 'riddle-result ok';
+        res.textContent = `🎉 Correct! The answer is ${answer.toUpperCase()}! +5 stars!`;
+        addStars(5);
+    } else {
+        res.className = 'riddle-result no';
+        res.textContent = `❌ Try again! Hint: it starts with "${answer[0].toUpperCase()}"`;
+    }
+}
+
+/* ── QUIZ ── */
+const quizData = bodyParts;
+function startQuiz() {
+    quizItems = [...quizData].sort(() => Math.random() - 0.5).slice(0, 8);
+    quizCurrent = 0; quizScore = 0;
+    showQuizQ();
+}
+function showQuizQ() {
+    const container = document.getElementById('quizContainer');
+    if (quizCurrent >= quizItems.length) {
+        addStars(quizScore * 3);
+        container.innerHTML = `<div style="text-align:center;padding:20px"><div style="font-size:60px;margin-bottom:12px">🏆</div><div style="font-size:22px;font-weight:900;color:#333;margin-bottom:8px">Quiz Complete!</div><div style="font-size:16px;color:#666;margin-bottom:8px">Score: ${quizScore}/${quizItems.length}</div><div style="font-size:14px;color:#c2185b;font-weight:700;margin-bottom:20px">+${quizScore * 3} stars earned!</div><button class="check-btn" onclick="startQuiz()" style="max-width:280px;margin:0 auto;display:block">🔄 Try Again</button></div>`;
+        return;
+    }
+    const q = quizItems[quizCurrent];
+    const wrong = quizData.filter(p => p.name !== q.name).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [q, ...wrong].sort(() => Math.random() - 0.5);
+    const showEmoji = Math.random() > 0.4;
+    container.innerHTML = `<div style="text-align:center;padding:10px 0 16px">
+        <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:4px">Question ${quizCurrent + 1} of ${quizItems.length}</div>
+        <div style="font-size:72px;margin:10px 0">${showEmoji ? q.emoji : '❓'}</div>
+        <div style="font-size:17px;font-weight:800;color:#333;margin-bottom:20px">${showEmoji ? 'What body part is this?' : `Which emoji shows the <span style="color:#c2185b">${q.name}</span>?`}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            ${opts.map(o => `<button onclick="answerQuiz(this,'${o.name}','${q.name}')" style="padding:16px;border:3px solid #fce4ec;border-radius:14px;font-size:${showEmoji?'16px':'28px'};font-weight:${showEmoji?'800':'400'};background:white;cursor:pointer;color:#333;font-family:inherit;transition:all 0.2s">${showEmoji ? o.name : o.emoji}</button>`).join('')}
+        </div></div>`;
+}
+function answerQuiz(btn, sel, correct) {
+    btn.parentElement.querySelectorAll('button').forEach(b => b.onclick = null);
+    if (sel === correct) { btn.style.borderColor='#059669';btn.style.background='#d1fae5';btn.style.color='#059669';quizScore++;addStars(3); }
+    else { btn.style.borderColor='#dc2626';btn.style.background='#fee2e2';btn.style.color='#dc2626';
+        btn.parentElement.querySelectorAll('button').forEach(b => { if(b.textContent.trim()===correct||(b.style.fontSize==='28px'&&bodyParts.find(p=>p.name===correct)?.emoji===b.textContent.trim())){b.style.borderColor='#059669';b.style.background='#d1fae5';b.style.color='#059669';} }); }
+    setTimeout(() => { quizCurrent++; showQuizQ(); }, 1200);
+}
+
+/* ── SPEECH ── */
+function speak(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.8; u.pitch = 1.2; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+}
+
+/* ── PROGRESS / STARS ── */
+function updateProgress() {
+    const pct = Math.round((learned.size / bodyParts.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+}
+function addStars(n) { stars += n; document.getElementById('starsDisplay').textContent = stars; }
+
+/* ── TABS ── */
+function showTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    ['learn','exercises','rhymes','stories','quiz'].forEach(t => {
+        document.getElementById(`tab-${t}`).style.display = t === tab ? 'block' : 'none';
+    });
+}
+
+/* ── COMPLETE ── */
+function completeChapter() {
+    learned = new Set(bodyParts.map(p => p.name));
+    updateProgress(); addStars(50);
+    document.getElementById('celebSub').textContent = 'Amazing! You learned all 12 body parts — hair, eye, ear, nose, mouth, neck, hand, fingers, leg, toes, tongue and stomach!';
+    document.getElementById('celebStars').textContent = `⭐ ${stars} Stars Earned!`;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+    speak('Congratulations! You learned all the parts of the body! Hair, eye, ear, nose, mouth, neck, hand, fingers, leg, toes, tongue and stomach!');
+}
+
+function launchConfetti() {
+    const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+    for (let i = 0; i < 70; i++) {
+        const c = document.createElement('div');
+        const sz = Math.random() * 14 + 6;
+        c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:300;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+    }
+}
+
+/* ── INIT ── */
+buildBodyParts();
+buildSenses();
+buildActions();
+buildNumberTouch();
+buildRhymePairs();
+</script>
+</body>
+</html>

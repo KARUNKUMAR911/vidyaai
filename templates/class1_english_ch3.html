@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VidyaAI - Animals, Birds and Insects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; background: #f0faf4; min-height: 100vh; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: linear-gradient(135deg, #1a6b3a, #2d9e5f);
+            padding: 12px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 15px rgba(26,107,58,0.35);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo  { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-grade { background: rgba(255,255,255,0.25); color: white; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .navbar-right { display: flex; align-items: center; gap: 8px; }
+        .nav-btn { background: rgba(255,255,255,0.22); color: white; border: none; padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .stars-badge { background: rgba(255,215,0,0.3); border: 1px solid rgba(255,215,0,0.5); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+
+        /* ── HERO ── */
+        .hero { background: linear-gradient(135deg, #1a6b3a, #2d9e5f); padding: 16px 20px 32px; text-align: center; color: white; }
+        .hero h2 { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+        .hero p  { font-size: 13px; opacity: 0.85; }
+
+        /* ── PROGRESS ── */
+        .progress-card {
+            background: white; margin: -16px 16px 20px;
+            border-radius: 16px; padding: 14px 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-info { flex: 1; }
+        .progress-info h4 { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
+        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #1a6b3a, #2d9e5f); height: 100%; border-radius: 10px; transition: width 0.5s; }
+        .progress-pct { font-size: 20px; font-weight: 900; color: #1a6b3a; }
+
+        /* ── TABS ── */
+        .tabs { display: flex; padding: 0 16px; margin-bottom: 16px; overflow-x: auto; scrollbar-width: none; gap: 0; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 2px solid #d1fae5; background: white; color: #888; margin-right: 8px; transition: all 0.2s; }
+        .tab.active { background: #1a6b3a; color: white; border-color: #1a6b3a; }
+
+        .content { padding: 0 16px 100px; }
+
+        /* ── ANIMAL CARD ── */
+        .animal-section {
+            background: white; border-radius: 24px; margin-bottom: 16px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 3px solid transparent; transition: all 0.3s;
+        }
+        .animal-section.active-card { border-color: #2d9e5f; box-shadow: 0 8px 25px rgba(45,158,95,0.2); }
+        .animal-header { padding: 16px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer; }
+        .animal-emoji-big { font-size: 62px; line-height: 1; flex-shrink: 0; }
+        .animal-info { flex: 1; }
+        .animal-name { font-family: 'Fredoka One', cursive; font-size: 26px; margin-bottom: 4px; }
+        .animal-category { font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 4px; }
+        .cat-animal   { background: #fef3c7; color: #b45309; }
+        .cat-bird     { background: #dbeafe; color: #1d4ed8; }
+        .cat-insect   { background: #fce7f3; color: #9d174d; }
+        .animal-desc  { font-size: 13px; color: #888; font-weight: 600; }
+        .animal-sound { font-size: 13px; color: #2d9e5f; font-weight: 800; margin-top: 2px; }
+        .speak-btn { width: 40px; height: 40px; background: #f0faf4; border: none; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+        .speak-btn:hover { background: #2d9e5f; }
+
+        .animal-sentence { background: #f0faf4; margin: 0 16px 16px; border-radius: 14px; padding: 10px 16px; font-size: 14px; font-weight: 700; color: #444; border-left: 4px solid #2d9e5f; }
+        .animal-sentence span { color: #1a6b3a; }
+
+        /* ── CATEGORY SECTION HEADER ── */
+        .cat-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; margin-top: 4px;
+            padding: 10px 16px; border-radius: 16px; font-size: 15px; font-weight: 900;
+        }
+        .cat-header.animals { background: #fef9e7; color: #b45309; border: 2px solid #fde68a; }
+        .cat-header.birds   { background: #eff6ff; color: #1d4ed8; border: 2px solid #bfdbfe; }
+        .cat-header.insects { background: #fdf2f8; color: #9d174d; border: 2px solid #fbcfe8; }
+
+        /* ── EXERCISE CARD ── */
+        .exercise-card { background: white; border-radius: 24px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .exercise-title { font-size: 16px; font-weight: 900; color: #1a6b3a; margin-bottom: 4px; }
+        .exercise-instruction { font-size: 13px; color: #666; margin-bottom: 20px; font-weight: 600; }
+
+        /* ── FIRST LETTER EXERCISE ── */
+        .first-letter-row {
+            display: grid; grid-template-columns: 1fr 36px repeat(4, 36px);
+            gap: 8px; align-items: center; margin-bottom: 10px;
+            padding: 8px 10px; border-radius: 12px; background: #f8fafb;
+        }
+        .fl-name { font-size: 14px; font-weight: 800; color: #333; }
+        .fl-emoji { font-size: 22px; text-align: center; }
+        .fl-option {
+            width: 34px; height: 34px; border-radius: 50%; border: 2px solid #d1fae5;
+            background: white; font-family: 'Fredoka One', cursive; font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s; color: #333;
+        }
+        .fl-option:hover { border-color: #2d9e5f; background: #f0faf4; }
+        .fl-option.selected { border-color: #2d9e5f; background: #2d9e5f; color: white; }
+        .fl-option.correct  { border-color: #059669; background: #d1fae5; color: #059669; pointer-events: none; }
+        .fl-option.wrong    { border-color: #dc2626; background: #fee2e2; color: #dc2626; }
+
+        /* ── ODD ONE OUT ── */
+        .odd-row { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; }
+        .odd-label { font-family: 'Fredoka One', cursive; font-size: 18px; color: #1a6b3a; text-align: center; padding: 8px; min-width: 28px; }
+        .odd-item { flex: 1; background: #f8fafb; border-radius: 14px; padding: 10px 6px; text-align: center; border: 3px solid #d1fae5; cursor: pointer; transition: all 0.2s; }
+        .odd-item .item-emoji { font-size: 32px; display: block; margin-bottom: 4px; }
+        .odd-item .item-label { font-size: 11px; font-weight: 700; color: #666; }
+        .odd-item.circled  { border-color: #f77f00; background: #fff3e0; }
+        .odd-item.correct-odd { border-color: #059669; background: #d1fae5; }
+        .odd-item.wrong-odd   { border-color: #dc2626; background: #fee2e2; }
+
+        /* ── WHO AM I ── */
+        .riddle-card { background: linear-gradient(135deg, #f0faf4, #e6f7ef); border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 2px solid #a7f3d0; }
+        .riddle-title { font-size: 16px; font-weight: 900; color: #1a6b3a; margin-bottom: 14px; }
+        .riddle-clue { font-size: 14px; color: #444; font-weight: 600; line-height: 2; margin-bottom: 12px; }
+        .riddle-input { width: 100%; padding: 12px 16px; border: 3px solid #a7f3d0; border-radius: 14px; font-size: 16px; font-weight: 700; font-family: 'Nunito',sans-serif; outline: none; color: #333; }
+        .riddle-input:focus { border-color: #2d9e5f; }
+        .riddle-btn { width: 100%; padding: 12px; margin-top: 10px; background: linear-gradient(135deg, #1a6b3a, #2d9e5f); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; }
+        .riddle-result { margin-top: 10px; padding: 10px; border-radius: 12px; font-size: 14px; font-weight: 700; display: none; text-align: center; }
+        .riddle-result.success { background: #d1fae5; color: #059669; }
+        .riddle-result.fail    { background: #fee2e2; color: #dc2626; }
+
+        /* ── RHYME CARD ── */
+        .rhyme-card { background: linear-gradient(135deg, #f0faf4, #e6f7ef); border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 2px solid #a7f3d0; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+        .rhyme-title { font-size: 14px; font-weight: 800; color: #1a6b3a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .rhyme-lines { line-height: 2.1; font-size: 15px; color: #333; font-weight: 600; }
+        .rhyme-btn { margin-top: 14px; width: 100%; padding: 10px; background: linear-gradient(135deg, #1a6b3a, #2d9e5f); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+        .rhyme-btn:hover { transform: scale(1.02); }
+
+        /* ── TALK BOX ── */
+        .talk-box { background: #f8fafb; border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 2px solid #d1fae5; }
+        .talk-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+        .talk-name { font-weight: 900; color: #1a6b3a; font-size: 14px; min-width: 60px; }
+        .talk-text { font-size: 14px; color: #444; font-weight: 600; line-height: 1.5; }
+        .talk-btn { width: 100%; padding: 10px; background: linear-gradient(135deg, #1a6b3a, #2d9e5f); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+        /* ── RHYMING WORDS ── */
+        .rhyme-pairs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .rhyme-pair-box { background: #f0faf4; border-radius: 14px; padding: 12px 8px; text-align: center; border: 2px solid #a7f3d0; }
+        .rp-words { font-family: 'Fredoka One', cursive; font-size: 18px; color: #1a6b3a; }
+        .rp-label { font-size: 11px; color: #888; font-weight: 700; margin-top: 4px; }
+
+        /* ── CHECK BTN / RESULT ── */
+        .check-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #1a6b3a, #2d9e5f); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: transform 0.2s; }
+        .check-btn:hover { transform: scale(1.02); }
+        .result-box { text-align: center; padding: 12px; border-radius: 12px; margin-top: 12px; font-size: 15px; font-weight: 700; display: none; }
+        .result-box.success { background: #d1fae5; color: #059669; }
+        .result-box.partial { background: #fef3c7; color: #b45309; }
+
+        /* ── QUIZ ── */
+        .quiz-container { min-height: 200px; }
+
+        /* ── COMPLETE ── */
+        .complete-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #059669, #047857); color: white; border: none; border-radius: 16px; font-size: 17px; font-weight: 800; cursor: pointer; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(5,150,105,0.3); transition: transform 0.2s; }
+        .complete-btn:hover { transform: scale(1.02); }
+
+        /* ── CELEBRATION ── */
+        .celeb-overlay { display: none; position: fixed; inset: 0; background: linear-gradient(135deg,rgba(26,107,58,.96),rgba(45,158,95,.96)); z-index: 200; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 30px; }
+        .celeb-overlay.show { display: flex; }
+        .celeb-emoji  { font-size: 80px; animation: bounce 0.5s ease infinite alternate; }
+        .celeb-title  { font-size: 38px; font-weight: 900; color: white; margin: 14px 0 8px; }
+        .celeb-sub    { font-size: 16px; color: rgba(255,255,255,.88); margin-bottom: 28px; line-height: 1.6; }
+        .celeb-stars  { font-size: 32px; margin-bottom: 20px; }
+        .celeb-btn { padding: 16px 44px; background: white; color: #1a6b3a; border: none; border-radius: 50px; font-size: 17px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.22); margin: 6px; }
+        .celeb-btn.secondary { background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); }
+
+        @keyframes bounce { from { transform: translateY(0) scale(1); } to { transform: translateY(-15px) scale(1.08); } }
+        @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-grade">Class 1 • English</div>
+    </div>
+    <div class="navbar-right">
+        <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
+        <a href="/class/1/english" class="nav-btn">← Back</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <h2>Chapter 3 — Animals, Birds &amp; Insects 🦁</h2>
+    <p>Identify the animals • Say their names after the teacher</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-card">
+    <div class="progress-info">
+        <h4>📊 Chapter Progress</h4>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="progress-pct" id="progressPct">0%</div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+    <div class="tab active" onclick="showTab('learn',this)">🦁 Learn</div>
+    <div class="tab" onclick="showTab('exercises',this)">✏️ Exercises</div>
+    <div class="tab" onclick="showTab('rhymes',this)">🎵 Rhymes</div>
+    <div class="tab" onclick="showTab('quiz',this)">🎯 Quiz</div>
+</div>
+
+<div class="content">
+
+    <!-- ── LEARN TAB ── -->
+    <div id="tab-learn">
+        <div class="cat-header animals">🦁 Animals</div>
+        <div id="animalsContainer"></div>
+
+        <div class="cat-header birds">🦜 Birds</div>
+        <div id="birdsContainer"></div>
+
+        <div class="cat-header insects">🐝 Insects</div>
+        <div id="insectsContainer"></div>
+
+        <button class="complete-btn" onclick="completeChapter()">
+            ✅ I've Learned Everything! Complete Chapter →
+        </button>
+    </div>
+
+    <!-- ── EXERCISES TAB ── -->
+    <div id="tab-exercises" style="display:none">
+
+        <!-- Ex 1: Circle the first letter -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 1 — Circle the First Letter 🔵</div>
+            <div class="exercise-instruction">Tap the correct starting letter for each animal or bird!</div>
+            <div id="firstLetterContainer"></div>
+            <button class="check-btn" onclick="checkFirstLetter()">Check Answers ✓</button>
+            <div class="result-box" id="fl-result"></div>
+        </div>
+
+        <!-- Ex 2: Odd one out -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 2 — Pick the Odd One Out 🔵</div>
+            <div class="exercise-instruction">One item in each row doesn't belong. Tap it!</div>
+            <div id="oddContainer"></div>
+            <button class="check-btn" onclick="checkOdd()">Check Answers ✓</button>
+            <div class="result-box" id="odd-result"></div>
+        </div>
+
+        <!-- Ex 3: Who am I riddle -->
+        <div class="riddle-card">
+            <div class="riddle-title">🔍 Who am I? — Read the clues and guess!</div>
+            <div class="riddle-clue">
+                I'm very very big.<br>
+                I like to eat peanuts and hay.<br>
+                I have four legs and two big ears.<br>
+                My long nose is called a trunk.<br>
+                <strong>Who am I?</strong>
+            </div>
+            <input class="riddle-input" id="riddleInput" type="text" placeholder="Type your answer here...">
+            <button class="riddle-btn" onclick="checkRiddle()">Submit Answer 🐾</button>
+            <div class="riddle-result" id="riddle-result"></div>
+        </div>
+
+        <!-- Ex 4: Rhyming word pairs -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 4 — Rhyming Word Pairs 🎶</div>
+            <div class="exercise-instruction">Say these pairs aloud — they rhyme! Tap to hear.</div>
+            <div class="rhyme-pairs" id="rhymePairsGrid"></div>
+        </div>
+
+        <!-- Ex 5: Learn to Talk -->
+        <div class="exercise-card">
+            <div class="exercise-title">Exercise 5 — Learn to Talk 💬</div>
+            <div class="exercise-instruction">Read the conversations below!</div>
+
+            <div class="talk-box">
+                <div class="talk-row"><div class="talk-name">Babu :</div><div class="talk-text">This is my picture book.</div></div>
+                <div class="talk-row"><div class="talk-name">Sunil :</div><div class="talk-text">Fine. What pictures are they?</div></div>
+                <div class="talk-row"><div class="talk-name">Babu :</div><div class="talk-text">Pictures of birds and animals.</div></div>
+                <div class="talk-row"><div class="talk-name">Sunil :</div><div class="talk-text">Can I have a look at them, please?</div></div>
+                <div class="talk-row"><div class="talk-name">Babu :</div><div class="talk-text">Yes, here you are.</div></div>
+                <button class="talk-btn" onclick="speakDialogue1()">🔊 Listen to Conversation</button>
+            </div>
+
+            <div class="talk-box">
+                <div class="talk-row"><div class="talk-name">Lakshmi :</div><div class="talk-text">Which is your favourite bird?</div></div>
+                <div class="talk-row"><div class="talk-name">Reena :</div><div class="talk-text">Sparrow.</div></div>
+                <div class="talk-row"><div class="talk-name">Lakshmi :</div><div class="talk-text">I love parrots.</div></div>
+                <button class="talk-btn" onclick="speakDialogue2()">🔊 Listen to Conversation</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── RHYMES TAB ── -->
+    <div id="tab-rhymes" style="display:none">
+
+        <div class="rhyme-card">
+            <div class="rhyme-title">🐑 Rhyme 1 — Animal Sounds</div>
+            <div class="rhyme-lines">
+                We are the sheep, Baa, baa, baa.<br>
+                We are the crows, Caw, caw, caw.<br>
+                We are the dogs, Bow, bow, bow.<br>
+                We are the cats, Meow, meow, meow.
+            </div>
+            <button class="rhyme-btn" onclick="speakRhyme1()">🔊 Sing This Rhyme!</button>
+        </div>
+
+        <div class="rhyme-card">
+            <div class="rhyme-title">🐊 Rhyme 2 — If I Met a...</div>
+            <div class="rhyme-lines">
+                If I met a crow, I should say caw-caw!<br>
+                If I met a cow, I should say Moo...moo!<br>
+                If I met a dove, I should say Coo-coo!<br>
+                If I met a lamb, I should say Baa-baa!<br>
+                If I met a crocodile!!!<br>
+                What should I say?<br>
+                Why nothing at all!<br>
+                I should just RUN AWAY!
+            </div>
+            <button class="rhyme-btn" onclick="speakRhyme2()">🔊 Sing This Rhyme!</button>
+        </div>
+
+        <div class="rhyme-card">
+            <div class="rhyme-title">🐸 Rhyme 3 — Animals Move!</div>
+            <div class="rhyme-lines">
+                Frogs jump, caterpillars hump,<br>
+                Worms wiggle, bugs jiggle,<br>
+                Rabbits hop, horses clop,<br>
+                Snakes slide, seagulls glide,<br>
+                Mice creep, deer leap,<br>
+                Puppies bounce, kittens pounce,<br>
+                Lions stalk, but I walk.
+            </div>
+            <button class="rhyme-btn" onclick="speakRhyme3()">🔊 Sing This Rhyme!</button>
+        </div>
+
+    </div>
+
+    <!-- ── QUIZ TAB ── -->
+    <div id="tab-quiz" style="display:none">
+        <div class="exercise-card">
+            <div class="exercise-title">🎯 Animals, Birds &amp; Insects Quiz</div>
+            <div class="quiz-container" id="quizContainer">
+                <div style="text-align:center;padding:20px">
+                    <div style="font-size:52px;margin-bottom:12px">🦁🦜🐝</div>
+                    <div style="font-size:14px;color:#888;margin-bottom:20px">Test what you learned!</div>
+                    <button class="check-btn" onclick="startQuiz()" style="max-width:280px;margin:0 auto;display:block">Start Quiz! 🚀</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celebOverlay">
+    <div class="celeb-emoji" id="celebEmoji">🎉</div>
+    <div class="celeb-title" id="celebTitle">Chapter Complete!</div>
+    <div class="celeb-sub"   id="celebSub">You learned animals, birds and insects!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="celeb-btn" onclick="location.href='/class/1/english'">📚 Next Chapter →</button>
+    <button class="celeb-btn secondary" onclick="closeCelebration()">🔄 Practice Again</button>
+</div>
+
+<script>
+/* ── DATA ── */
+const animals = [
+    { name:'lion',     emoji:'🦁', sound:'Roar!',    desc:'King of the jungle.', cat:'animal', color:'#b45309' },
+    { name:'elephant', emoji:'🐘', sound:'Trumpet!', desc:'Largest land animal with a long trunk.', cat:'animal', color:'#6b7280' },
+    { name:'tiger',    emoji:'🐯', sound:'Growl!',   desc:'Has orange fur with black stripes.', cat:'animal', color:'#ea580c' },
+    { name:'fox',      emoji:'🦊', sound:'Bark!',    desc:'Clever animal with a bushy tail.', cat:'animal', color:'#d97706' },
+    { name:'bear',     emoji:'🐻', sound:'Growl!',   desc:'Big and furry — loves honey.', cat:'animal', color:'#92400e' },
+    { name:'giraffe',  emoji:'🦒', sound:'Hum!',     desc:'Has the longest neck of any animal.', cat:'animal', color:'#ca8a04' },
+    { name:'cow',      emoji:'🐄', sound:'Moo!',     desc:'Gives us milk every day.', cat:'animal', color:'#78716c' },
+    { name:'cat',      emoji:'🐱', sound:'Meow!',    desc:'A furry friend who loves to purr.', cat:'animal', color:'#9ca3af' },
+    { name:'dog',      emoji:'🐕', sound:'Bow wow!', desc:'Man\'s best friend.', cat:'animal', color:'#ca8a04' },
+    { name:'goat',     emoji:'🐐', sound:'Baa!',     desc:'Likes to eat leaves and grass.', cat:'animal', color:'#6b7280' },
+    { name:'horse',    emoji:'🐴', sound:'Neigh!',   desc:'Strong and fast — we ride horses.', cat:'animal', color:'#78350f' },
+    { name:'donkey',   emoji:'🫏', sound:'Hee-haw!', desc:'Carries heavy loads patiently.', cat:'animal', color:'#9ca3af' },
+    { name:'monkey',   emoji:'🐒', sound:'Oo-oo!',   desc:'Loves to swing on trees and eat bananas.', cat:'animal', color:'#92400e' },
+];
+
+const birds = [
+    { name:'cock',    emoji:'🐓', sound:'Cock-a-doodle-doo!', desc:'Wakes everyone up in the morning.', cat:'bird', color:'#dc2626' },
+    { name:'duck',    emoji:'🦆', sound:'Quack!',             desc:'Can swim and walk and fly.', cat:'bird', color:'#2563eb' },
+    { name:'crow',    emoji:'🐦‍⬛', sound:'Caw-caw!',         desc:'A clever black bird.', cat:'bird', color:'#374151' },
+    { name:'peacock', emoji:'🦚', sound:'Meow-like cry!',     desc:'National bird of India — has beautiful feathers.', cat:'bird', color:'#0891b2' },
+    { name:'parrot',  emoji:'🦜', sound:'Squawk!',            desc:'A green bird that can talk!', cat:'bird', color:'#16a34a' },
+    { name:'penguin', emoji:'🐧', sound:'Honk!',              desc:'A bird that swims but cannot fly.', cat:'bird', color:'#1e3a5f' },
+    { name:'sparrow', emoji:'🐦', sound:'Chirp!',             desc:'A small brown bird seen everywhere.', cat:'bird', color:'#92400e' },
+    { name:'pigeon',  emoji:'🕊️', sound:'Coo!',               desc:'Often seen in parks and cities.', cat:'bird', color:'#9ca3af' },
+];
+
+const insects = [
+    { name:'fly',        emoji:'🪰', sound:'Buzz!',  desc:'Flies around food — keep it away!', cat:'insect', color:'#374151' },
+    { name:'bee',        emoji:'🐝', sound:'Buzz!',  desc:'Makes honey and helps flowers grow.', cat:'insect', color:'#ca8a04' },
+    { name:'ant',        emoji:'🐜', sound:'—',      desc:'Very strong — can carry 10× its weight!', cat:'insect', color:'#92400e' },
+    { name:'mosquito',   emoji:'🦟', sound:'Whine!', desc:'Bites and spreads disease — use nets!', cat:'insect', color:'#6b7280' },
+    { name:'butterfly',  emoji:'🦋', sound:'—',      desc:'Beautiful wings — starts as a caterpillar.', cat:'insect', color:'#7c3aed' },
+    { name:'cockroach',  emoji:'🪳', sound:'—',      desc:'Comes out at night — keep the kitchen clean!', cat:'insect', color:'#78350f' },
+];
+
+const allCreatures = [...animals, ...birds, ...insects];
+
+let stars = 0, learned = new Set();
+let quizCurrent = 0, quizScore = 0, quizItems = [];
+let flSelections = {};
+let oddSelections = {};
+
+/* ── BUILD LEARN CARDS ── */
+function buildCategory(list, containerId) {
+    const container = document.getElementById(containerId);
+    list.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'animal-section';
+        div.id = `creature-${a.name}`;
+        const catClass = a.cat === 'animal' ? 'cat-animal' : a.cat === 'bird' ? 'cat-bird' : 'cat-insect';
+        div.innerHTML = `
+            <div class="animal-header" onclick="speakCreature('${a.name}')">
+                <div class="animal-emoji-big">${a.emoji}</div>
+                <div class="animal-info">
+                    <span class="animal-category ${catClass}">${a.cat}</span>
+                    <div class="animal-name" style="color:${a.color}">${a.name}</div>
+                    <div class="animal-desc">${a.desc}</div>
+                    <div class="animal-sound">🔊 ${a.sound}</div>
+                </div>
+                <button class="speak-btn" onclick="speakCreature('${a.name}');event.stopPropagation()">🔊</button>
+            </div>
+            <div class="animal-sentence">
+                "<span>This is a ${a.name}. It says "${a.sound}"</span>"
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+/* ── BUILD FIRST LETTER EXERCISE ── */
+const flData = [
+    { name:'ant',      emoji:'🐜', correct:'a', options:['d','a','b','l'] },
+    { name:'bee',      emoji:'🐝', correct:'b', options:['e','b','l','r'] },
+    { name:'cat',      emoji:'🐱', correct:'c', options:['n','m','c','o'] },
+    { name:'dog',      emoji:'🐕', correct:'d', options:['d','n','o','s'] },
+    { name:'elephant', emoji:'🐘', correct:'e', options:['x','o','e','n'] },
+    { name:'fly',      emoji:'🪰', correct:'f', options:['d','m','f','o'] },
+    { name:'goat',     emoji:'🐐', correct:'g', options:['e','g','n','s'] },
+    { name:'cock',     emoji:'🐓', correct:'c', options:['u','e','c','q'] },  // cock
+    { name:'duck',     emoji:'🦆', correct:'d', options:['d','c','o','k'] },
+    { name:'cow',      emoji:'🐄', correct:'c', options:['p','s','c','h'] },
+    { name:'fox',      emoji:'🦊', correct:'f', options:['a','f','n','s'] },
+];
+
+function buildFirstLetter() {
+    const container = document.getElementById('firstLetterContainer');
+    flData.forEach((item, i) => {
+        const row = document.createElement('div');
+        row.className = 'first-letter-row';
+        row.innerHTML = `
+            <div class="fl-name">${item.name}</div>
+            <div class="fl-emoji">${item.emoji}</div>
+            ${item.options.map(opt => `
+                <div class="fl-option" data-row="${i}" data-opt="${opt}" onclick="selectFL(this,${i},'${opt}','${item.correct}')">${opt}</div>
+            `).join('')}
+        `;
+        container.appendChild(row);
+    });
+}
+
+function selectFL(el, rowIdx, opt, correct) {
+    el.closest('.first-letter-row').querySelectorAll('.fl-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    flSelections[rowIdx] = { selected: opt, correct };
+}
+
+function checkFirstLetter() {
+    let correct = 0;
+    Object.entries(flSelections).forEach(([rowIdx, {selected, correct: ans}]) => {
+        const row = document.querySelectorAll('.first-letter-row')[rowIdx];
+        row.querySelectorAll('.fl-option').forEach(el => {
+            el.classList.remove('selected','correct','wrong');
+            if (el.dataset.opt === ans) el.classList.add('correct');
+            else if (el.dataset.opt === selected) el.classList.add('wrong');
+        });
+        if (selected === ans) correct++;
+    });
+    const res = document.getElementById('fl-result');
+    res.style.display = 'block';
+    if (correct === flData.length) {
+        res.className = 'result-box success';
+        res.textContent = `✅ Perfect! All ${correct} correct! +${correct * 2} stars!`;
+        addStars(correct * 2);
+    } else {
+        res.className = 'result-box partial';
+        res.textContent = `${correct}/${flData.length} correct. Green = right answer. Try the rest!`;
+    }
+}
+
+/* ── BUILD ODD ONE OUT ── */
+const oddRows = [
+    { label:'1', items:[{e:'🐕',l:'dog'},{e:'🐱',l:'cat'},{e:'🐄',l:'cow'},{e:'🦁',l:'lion'}], oddIdx:3, note:'lion is wild; others are pets/farm' },
+    { label:'2', items:[{e:'🦆',l:'duck'},{e:'🐑',l:'sheep'},{e:'🐓',l:'cock'},{e:'🦜',l:'parrot'}], oddIdx:1, note:'sheep is an animal; others are birds' },
+    { label:'3', items:[{e:'🐕',l:'dog'},{e:'🐱',l:'cat'},{e:'🐥',l:'chick'},{e:'🐐',l:'goat'}], oddIdx:2, note:'chick is a bird; others are animals' },
+    { label:'4', items:[{e:'🐟',l:'fish'},{e:'🦟',l:'mosquito'},{e:'🐜',l:'ant'},{e:'🪰',l:'fly'}], oddIdx:0, note:'fish is not an insect; others are' },
+];
+
+function buildOddRows() {
+    const container = document.getElementById('oddContainer');
+    oddRows.forEach((row, ri) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'odd-row';
+        rowDiv.innerHTML = `<div class="odd-label">${row.label}.</div>`;
+        row.items.forEach((item, ii) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'odd-item';
+            itemDiv.innerHTML = `<span class="item-emoji">${item.e}</span><span class="item-label">${item.l}</span>`;
+            itemDiv.onclick = () => {
+                rowDiv.querySelectorAll('.odd-item').forEach(d => d.classList.remove('circled'));
+                itemDiv.classList.add('circled');
+                oddSelections[ri] = ii;
+            };
+            rowDiv.appendChild(itemDiv);
+        });
+        container.appendChild(rowDiv);
+    });
+}
+
+function checkOdd() {
+    let correct = 0;
+    oddRows.forEach((row, ri) => {
+        const selected = oddSelections[ri];
+        const rowDiv = document.querySelectorAll('.odd-row')[ri];
+        rowDiv.querySelectorAll('.odd-item').forEach((el, ii) => {
+            el.classList.remove('circled','correct-odd','wrong-odd');
+            if (ii === row.oddIdx) el.classList.add('correct-odd');
+            else if (selected === ii) el.classList.add('wrong-odd');
+        });
+        if (selected === row.oddIdx) correct++;
+    });
+    const res = document.getElementById('odd-result');
+    res.style.display = 'block';
+    if (correct === oddRows.length) {
+        res.className = 'result-box success';
+        res.textContent = `✅ Excellent! All ${correct} correct! +${correct * 3} stars!`;
+        addStars(correct * 3);
+    } else {
+        res.className = 'result-box partial';
+        res.textContent = `${correct}/${oddRows.length} correct. Green = correct. Keep trying!`;
+    }
+}
+
+/* ── RIDDLE ── */
+function checkRiddle() {
+    const val = document.getElementById('riddleInput').value.trim().toLowerCase();
+    const res = document.getElementById('riddle-result');
+    res.style.display = 'block';
+    if (val === 'elephant' || val === 'an elephant') {
+        res.className = 'riddle-result success';
+        res.textContent = '🎉 Correct! I am an ELEPHANT! 🐘 +10 stars!';
+        addStars(10);
+    } else {
+        res.className = 'riddle-result fail';
+        res.textContent = `❌ Not quite — try again! Hint: I have a trunk 🐘`;
+    }
+}
+
+/* ── RHYMING PAIRS ── */
+const rhymePairs = [
+    {a:'cat',b:'rat'},{a:'bee',b:'key'},{a:'fox',b:'box'},
+    {a:'duck',b:'luck'},{a:'sheep',b:'beep'},{a:'ant',b:'pant'},
+    {a:'dog',b:'log'},{a:'fly',b:'sky'},{a:'cow',b:'bow'},
+];
+function buildRhymePairs() {
+    const grid = document.getElementById('rhymePairsGrid');
+    rhymePairs.forEach(pair => {
+        const div = document.createElement('div');
+        div.className = 'rhyme-pair-box';
+        div.innerHTML = `<div class="rp-words">${pair.a} — ${pair.b}</div><div class="rp-label">tap to hear</div>`;
+        div.onclick = () => speak(`${pair.a}... ${pair.b}... ${pair.a}, ${pair.b}!`);
+        grid.appendChild(div);
+    });
+}
+
+/* ── SPEAK ── */
+function speakCreature(name) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const c = allCreatures.find(x => x.name === name);
+    const u = new SpeechSynthesisUtterance(`${name}! ${c.desc} It says, ${c.sound}`);
+    u.rate = 0.8; u.pitch = 1.2; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+    learned.add(name); updateProgress();
+    document.getElementById(`creature-${name}`)?.classList.add('active-card');
+    addStars(1);
+}
+function speak(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.78; u.pitch = 1.2; u.lang = 'en-IN';
+    window.speechSynthesis.speak(u);
+}
+function speakDialogue1() {
+    speak('Babu: This is my picture book. Sunil: Fine. What pictures are they? Babu: Pictures of birds and animals. Sunil: Can I have a look at them, please? Babu: Yes, here you are.');
+}
+function speakDialogue2() {
+    speak('Lakshmi: Which is your favourite bird? Reena: Sparrow. Lakshmi: I love parrots.');
+}
+function speakRhyme1() {
+    speak('We are the sheep. Baa, baa, baa. We are the crows. Caw, caw, caw. We are the dogs. Bow, bow, bow. We are the cats. Meow, meow, meow.');
+}
+function speakRhyme2() {
+    speak('If I met a crow, I should say caw-caw! If I met a cow, I should say Moo moo! If I met a dove, I should say Coo-coo! If I met a lamb, I should say Baa-baa! If I met a crocodile!!! What should I say? Why nothing at all! I should just RUN AWAY!');
+}
+function speakRhyme3() {
+    speak('Frogs jump, caterpillars hump. Worms wiggle, bugs jiggle. Rabbits hop, horses clop. Snakes slide, seagulls glide. Mice creep, deer leap. Puppies bounce, kittens pounce. Lions stalk, but I walk.');
+}
+
+/* ── QUIZ ── */
+function startQuiz() {
+    quizItems = [...allCreatures].sort(() => Math.random() - 0.5).slice(0, 10);
+    quizCurrent = 0; quizScore = 0;
+    showQuizQuestion();
+}
+function showQuizQuestion() {
+    const container = document.getElementById('quizContainer');
+    if (quizCurrent >= quizItems.length) {
+        addStars(quizScore * 3);
+        container.innerHTML = `
+            <div style="text-align:center;padding:20px">
+                <div style="font-size:60px;margin-bottom:12px">🏆</div>
+                <div style="font-size:22px;font-weight:900;color:#333;margin-bottom:8px">Quiz Complete!</div>
+                <div style="font-size:16px;color:#666;margin-bottom:8px">Score: ${quizScore}/${quizItems.length}</div>
+                <div style="font-size:14px;color:#1a6b3a;font-weight:700;margin-bottom:20px">+${quizScore * 3} stars earned!</div>
+                <button class="check-btn" onclick="startQuiz()" style="max-width:280px;margin:0 auto;display:block">🔄 Try Again</button>
+            </div>`;
+        return;
+    }
+    const q = quizItems[quizCurrent];
+    const wrong = allCreatures.filter(c => c.name !== q.name).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [q, ...wrong].sort(() => Math.random() - 0.5);
+    const showEmoji = Math.random() > 0.4;
+    container.innerHTML = `
+        <div style="text-align:center;padding:10px 0 16px">
+            <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:4px">Question ${quizCurrent + 1} of ${quizItems.length}</div>
+            <div style="font-size:72px;margin:10px 0">${showEmoji ? q.emoji : '❓'}</div>
+            <div style="font-size:18px;font-weight:800;color:#333;margin-bottom:20px">
+                ${showEmoji ? `What is this animal/bird/insect?` : `Which emoji is a <span style="color:#1a6b3a">${q.name}</span>?`}
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                ${opts.map(o => `
+                    <button onclick="answerQuiz(this,'${o.name}','${q.name}')"
+                        style="padding:16px;border:3px solid #d1fae5;border-radius:14px;
+                        font-size:${showEmoji ? '16px' : '30px'};font-weight:${showEmoji ? '800' : '400'};
+                        background:white;cursor:pointer;transition:all 0.2s;color:#333;font-family:inherit">
+                        ${showEmoji ? o.name : o.emoji}
+                    </button>
+                `).join('')}
+            </div>
+        </div>`;
+}
+function answerQuiz(btn, selected, correct) {
+    btn.parentElement.querySelectorAll('button').forEach(b => b.onclick = null);
+    if (selected === correct) {
+        btn.style.borderColor = '#059669'; btn.style.background = '#d1fae5'; btn.style.color = '#059669';
+        quizScore++; addStars(3);
+    } else {
+        btn.style.borderColor = '#dc2626'; btn.style.background = '#fee2e2'; btn.style.color = '#dc2626';
+        btn.parentElement.querySelectorAll('button').forEach(b => {
+            if (b.textContent.trim() === correct) { b.style.borderColor = '#059669'; b.style.background = '#d1fae5'; b.style.color = '#059669'; }
+        });
+    }
+    setTimeout(() => { quizCurrent++; showQuizQuestion(); }, 1200);
+}
+
+/* ── PROGRESS / STARS ── */
+function updateProgress() {
+    const pct = Math.round((learned.size / allCreatures.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+}
+function addStars(n) { stars += n; document.getElementById('starsDisplay').textContent = stars; }
+
+/* ── TABS ── */
+function showTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    ['learn','exercises','rhymes','quiz'].forEach(t => {
+        document.getElementById(`tab-${t}`).style.display = t === tab ? 'block' : 'none';
+    });
+}
+
+/* ── COMPLETE ── */
+function completeChapter() {
+    learned = new Set(allCreatures.map(c => c.name));
+    updateProgress(); addStars(50);
+    document.getElementById('celebEmoji').textContent = '🦁';
+    document.getElementById('celebTitle').textContent = 'Chapter Complete!';
+    document.getElementById('celebSub').textContent = `Amazing! You learned ${allCreatures.length} animals, birds and insects!`;
+    document.getElementById('celebStars').textContent = `⭐ ${stars} Stars Earned!`;
+    document.getElementById('celebOverlay').classList.add('show');
+    launchConfetti();
+    speak('Congratulations! You learned all the animals, birds and insects! Lion, elephant, tiger, fox, bear, giraffe, cow, cat, dog, goat, horse, donkey, monkey, cock, duck, crow, peacock, parrot, penguin, sparrow, pigeon, fly, bee, ant, mosquito, butterfly, cockroach!');
+}
+function closeCelebration() { document.getElementById('celebOverlay').classList.remove('show'); }
+
+/* ── CONFETTI ── */
+function launchConfetti() {
+    const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+    for (let i = 0; i < 70; i++) {
+        const c = document.createElement('div');
+        const sz = Math.random() * 14 + 6;
+        c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>0.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:300;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*0.8}s forwards;pointer-events:none;`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+    }
+}
+
+/* ── INIT ── */
+buildCategory(animals,  'animalsContainer');
+buildCategory(birds,    'birdsContainer');
+buildCategory(insects,  'insectsContainer');
+buildFirstLetter();
+buildOddRows();
+buildRhymePairs();
+</script>
+</body>
+</html>

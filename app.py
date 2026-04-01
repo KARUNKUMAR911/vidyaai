@@ -803,18 +803,35 @@ def class1_english_ch1():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_english_ch1.html', student=student)
+    return render_template('class1_english_alphabets.html', student=student)
 
 @app.route('/class/1/english/fruits')
 def class1_english_ch2():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_english_ch2.html', student=student)
+    return render_template('class1_english_ch1.html', student=student)
 
 @app.route('/class/1/english/vegetables')
 def class1_english_vegetables():
-    return redirect(url_for('class1_english'))
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch2.html', student=student)
+
+@app.route('/class/1/english/animals')
+def class1_english_animals():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch3.html', student=student)
+
+@app.route('/class/1/english/body')
+def class1_english_body():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_english_ch4.html', student=student)
 
 
 
