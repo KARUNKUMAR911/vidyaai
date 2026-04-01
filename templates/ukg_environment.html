@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>VidyaAI – UKG Our Environment!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Fredoka One',cursive;overflow:hidden;height:100vh;width:100vw;user-select:none}
+
+.screen{width:100vw;height:100vh;display:flex;flex-direction:column;transition:background .7s ease;position:relative;overflow:hidden}
+
+/* BLOBS */
+.bg-blob{position:absolute;border-radius:50%;background:rgba(255,255,255,0.09);pointer-events:none;animation:floatBlob 8s ease-in-out infinite alternate}
+.bg-blob:nth-child(1){width:240px;height:240px;top:-70px;left:-70px;animation-delay:0s}
+.bg-blob:nth-child(2){width:150px;height:150px;bottom:70px;right:-35px;animation-delay:2.5s}
+.bg-blob:nth-child(3){width:95px;height:95px;top:42%;left:2%;animation-delay:4s}
+@keyframes floatBlob{from{transform:translateY(0) scale(1)}to{transform:translateY(22px) scale(1.1)}}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;z-index:10;position:relative}
+.topbar-btn{background:rgba(255,255,255,0.25);border:3px solid rgba(255,255,255,0.48);color:white;padding:7px 16px;border-radius:50px;font-size:14px;font-family:'Fredoka One',cursive;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:transform .15s,background .15s}
+.topbar-btn:active{transform:scale(.92);background:rgba(255,255,255,.42)}
+.stars-display{background:rgba(255,215,0,0.32);border:3px solid rgba(255,215,0,0.62);color:white;padding:7px 16px;border-radius:50px;font-size:15px;font-family:'Fredoka One',cursive;letter-spacing:1px;transition:transform .2s}
+.sound-pill{background:rgba(255,255,255,0.25);border:3px solid rgba(255,255,255,0.48);color:white;padding:7px 14px;border-radius:50px;font-size:14px;font-family:'Fredoka One',cursive;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:transform .15s,background .2s;white-space:nowrap}
+.sound-pill:active{transform:scale(.92)}
+.sound-pill.muted{background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.5);text-decoration:line-through}
+
+/* TAB BAR */
+.tab-bar{display:flex;justify-content:center;gap:6px;padding:3px 14px 5px;flex-shrink:0;z-index:10;position:relative;flex-wrap:wrap}
+.tab-btn{background:rgba(255,255,255,0.18);border:2.5px solid rgba(255,255,255,0.38);color:white;padding:6px 16px;border-radius:50px;font-size:13px;font-family:'Fredoka One',cursive;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab-btn.active{background:white;color:#333;border-color:white;box-shadow:0 4px 16px rgba(0,0,0,.22)}
+.tab-btn:active{transform:scale(.93)}
+
+/* PROGRESS DOTS */
+.dots-row{display:flex;justify-content:center;gap:5px;padding:4px 16px;flex-wrap:wrap;flex-shrink:0}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.28);transition:all .3s;flex-shrink:0}
+.dot.done{background:rgba(255,255,255,0.68)}
+.dot.current{background:#FFD600;transform:scale(1.65);box-shadow:0 0 9px #FFD600}
+
+/* MAIN CONTENT */
+.main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:6px 20px 0;gap:22px;min-height:0;cursor:pointer;position:relative;z-index:2}
+
+/* LEFT — big illustration frame */
+.left-half{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.scene-frame{width:min(34vw,46vh);height:min(34vw,46vh);border-radius:28px;background:rgba(255,255,255,0.16);border:4px solid rgba(255,255,255,0.44);box-shadow:0 14px 44px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;animation:bounceIn .5s cubic-bezier(.175,.885,.32,1.4) both;transition:transform .12s;flex-shrink:0}
+.scene-frame:active{transform:scale(.94) rotate(-2deg)}
+.scene-frame svg{width:88%;height:88%}
+.frame-ring{position:absolute;inset:-7px;border-radius:34px;border:5px solid rgba(255,255,255,.55);pointer-events:none;opacity:0}
+.frame-ring.pulse{animation:ringPulse .65s ease-out forwards}
+@keyframes ringPulse{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.22);opacity:0}}
+
+.topic-name{font-size:min(8vw,10vh);font-family:'Fredoka One',cursive;color:white;text-shadow:0 4px 16px rgba(0,0,0,.25);animation:popIn .5s cubic-bezier(.175,.885,.32,1.275) both;text-align:center;line-height:1}
+.topic-sub{font-size:min(3vw,3.5vh);font-weight:700;color:rgba(255,255,255,.8);font-family:'Nunito',sans-serif;animation:slideUp .4s ease .15s both;text-align:center;background:rgba(0,0,0,.14);padding:4px 14px;border-radius:20px}
+
+/* RIGHT — info cards */
+.right-half{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;height:100%}
+
+.info-card{background:rgba(255,255,255,0.18);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,0.34);border-radius:22px;padding:12px 16px;width:100%;animation:slideUp .4s ease both;box-shadow:0 6px 22px rgba(0,0,0,0.1)}
+.info-card:nth-child(1){animation-delay:.08s}
+.info-card:nth-child(2){animation-delay:.16s}
+.info-card:nth-child(3){animation-delay:.24s}
+
+.card-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;font-family:'Nunito',sans-serif}
+.card-value{font-size:min(3.2vw,3.8vh);font-weight:800;color:white;line-height:1.25}
+.card-sub{font-size:min(2.4vw,2.9vh);font-weight:600;color:rgba(255,255,255,.75);margin-top:3px;line-height:1.3;font-family:'Nunito',sans-serif}
+
+/* emoji example row */
+.example-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.eg-chip{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);border-radius:20px;padding:4px 11px;font-size:min(2vw,2.6vh);font-weight:700;color:white;display:flex;align-items:center;gap:4px;font-family:'Nunito',sans-serif;cursor:pointer;transition:transform .15s}
+.eg-chip:hover{transform:scale(1.08)}
+
+/* did-you-know pill */
+.dyk-pill{background:rgba(0,0,0,.18);border:2px solid rgba(255,255,255,.28);border-radius:20px;padding:6px 14px;font-size:min(2.5vw,3vh);font-weight:700;color:rgba(255,255,255,.9);font-family:'Nunito',sans-serif;line-height:1.35;cursor:pointer;transition:background .2s}
+.dyk-pill:hover{background:rgba(0,0,0,.28)}
+
+/* BOTTOM BAR */
+.bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:9px 20px 16px;flex-shrink:0;position:relative;z-index:2;gap:10px}
+.nav-btn{background:rgba(255,255,255,.22);border:3px solid rgba(255,255,255,.48);color:white;padding:12px 20px;border-radius:50px;font-size:20px;font-family:'Fredoka One',cursive;cursor:pointer;transition:all .15s;min-width:66px;text-align:center}
+.nav-btn:hover{background:rgba(255,255,255,.38);transform:scale(1.05)}
+.nav-btn:active{transform:scale(.92)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.next-btn{background:white;color:#333;border:none;padding:14px 32px;border-radius:50px;font-size:17px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22),0 0 0 4px rgba(255,255,255,.38);transition:all .18s}
+.next-btn:hover{transform:scale(1.06) translateY(-3px)}
+.next-btn:active{transform:scale(.94)}
+.bottom-center{text-align:center;flex:1}
+.tap-hint{font-size:13px;color:rgba(255,255,255,.82);font-family:'Nunito',sans-serif;font-weight:700;animation:tapWiggle 1.8s ease-in-out infinite}
+@keyframes tapWiggle{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+
+/* SPEAK FAB */
+.speak-fab{position:absolute;bottom:88px;right:16px;width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.26);border:3px solid rgba(255,255,255,.52);color:white;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s;z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.speak-fab:active{transform:scale(.88)}
+.speak-fab.speaking{animation:speakPulse .5s ease infinite alternate}
+@keyframes speakPulse{from{box-shadow:0 0 0 0 rgba(255,255,255,.4)}to{box-shadow:0 0 0 14px rgba(255,255,255,0)}}
+
+/* MOBILE */
+@media(max-width:540px){
+  .main-content{flex-direction:column;gap:8px;padding:4px 12px 0}
+  .left-half,.right-half{flex:none;height:auto;width:100%}
+  .scene-frame{width:min(48vw,26vh);height:min(48vw,26vh)}
+  .topic-name{font-size:min(12vw,8vh)}
+  .info-card{padding:9px 13px}
+  .card-value{font-size:min(4.5vw,3.5vh)}
+  .tab-btn{font-size:11px;padding:5px 11px}
+  .speak-fab{bottom:80px;right:10px;width:48px;height:48px;font-size:20px}
+}
+
+/* PARENT PANEL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.overlay.show{display:flex}
+.panel{background:white;border-radius:28px;padding:26px;width:92%;max-width:400px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.panel h2{font-size:19px;color:#16a34a;margin-bottom:6px;text-align:center;font-family:'Fredoka One',cursive}
+.panel-progress{text-align:center;font-size:13px;color:#666;background:#f0fff4;padding:8px;border-radius:10px;margin-bottom:18px;font-family:'Nunito',sans-serif;font-weight:700}
+.panel-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid #f0f0f0}
+.panel-label{font-size:14px;font-weight:700;color:#333;font-family:'Nunito',sans-serif}
+.panel-sub{font-size:12px;color:#999;margin-top:2px;font-family:'Nunito',sans-serif}
+.toggle{width:48px;height:26px;background:#ddd;border-radius:13px;cursor:pointer;position:relative;transition:background .3s;border:none;flex-shrink:0}
+.toggle.on{background:#16a34a}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;left:3px;transition:left .3s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+.toggle.on::after{left:25px}
+.jump-section{margin-top:14px}
+.jump-section h4{font-size:12px;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;font-family:'Nunito',sans-serif;font-weight:700}
+.jump-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.jump-btn{padding:11px 6px;border:2px solid #e5e7eb;border-radius:14px;font-size:13px;font-weight:800;cursor:pointer;background:white;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Nunito',sans-serif;color:#444;line-height:1.2;text-align:center}
+.jump-btn span.je{font-size:22px}
+.jump-btn:hover{border-color:#16a34a;background:#f0fff4}
+.jump-btn.done{background:#d1fae5;border-color:#a7f3d0;color:#059669}
+.jump-btn.cur{background:#16a34a;color:white;border-color:#16a34a}
+.close-panel-btn{width:100%;padding:13px;background:linear-gradient(135deg,#16a34a,#14532d);color:white;border:none;border-radius:14px;font-size:15px;font-family:'Fredoka One',cursive;cursor:pointer;margin-top:18px;transition:transform .15s}
+.close-panel-btn:active{transform:scale(.96)}
+
+/* QUIZ */
+.quiz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:150;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.quiz-overlay.show{display:flex}
+.quiz-card{background:white;border-radius:28px;padding:24px 22px 28px;width:92%;max-width:460px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popIn .35s cubic-bezier(.175,.885,.32,1.275)}
+.quiz-badge{display:inline-block;background:#f0fff4;color:#16a34a;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;margin-bottom:10px}
+.quiz-emoji-big{font-size:76px;margin-bottom:8px;animation:bounce .5s ease infinite alternate;display:block}
+.quiz-question{font-size:18px;font-weight:800;color:#333;font-family:'Nunito',sans-serif;margin-bottom:16px;line-height:1.4}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{padding:14px 8px;border:3px solid #e5e7eb;border-radius:18px;cursor:pointer;transition:all .2s;background:white;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:'Nunito',sans-serif}
+.quiz-opt-em{font-size:34px;line-height:1}
+.quiz-opt-lbl{font-size:13px;font-weight:800;color:#555}
+.quiz-opt:hover{border-color:#16a34a;background:#f0fff4;transform:scale(1.03)}
+.quiz-opt.correct{border-color:#059669;background:#d1fae5}
+.quiz-opt.correct .quiz-opt-lbl{color:#059669}
+.quiz-opt.wrong{border-color:#dc2626;background:#fee2e2}
+.quiz-opt.wrong .quiz-opt-lbl{color:#dc2626}
+.quiz-opt:disabled{cursor:not-allowed;transform:none}
+.quiz-feedback{margin-top:12px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;min-height:20px}
+.quiz-feedback.good{color:#059669}.quiz-feedback.bad{color:#dc2626}
+.quiz-retry-btn{display:none;margin-top:10px;padding:11px 26px;background:#16a34a;color:white;border:none;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 14px rgba(22,163,74,.4);transition:all .2s}
+.quiz-retry-btn:hover{transform:scale(1.05)}
+
+/* CELEBRATION */
+.celeb-overlay{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#16a34a,#052e16);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+.celeb-overlay.show{display:flex}
+.celeb-stars{display:flex;gap:14px;margin-bottom:14px}
+.celeb-star{font-size:44px;animation:starPop .5s cubic-bezier(.175,.885,.32,1.4) both}
+.celeb-star:nth-child(2){animation-delay:.15s}.celeb-star:nth-child(3){animation-delay:.30s}
+@keyframes starPop{0%{transform:scale(0) rotate(-30deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.celeb-big{font-size:90px;margin-bottom:10px;animation:popIn .6s cubic-bezier(.175,.885,.32,1.4) both}
+.celeb-title{font-size:36px;color:white;margin-bottom:8px;font-family:'Fredoka One',cursive;text-shadow:0 3px 12px rgba(0,0,0,.2)}
+.celeb-sub{font-size:17px;color:rgba(255,255,255,.92);white-space:pre-line;margin-bottom:28px;font-family:'Nunito',sans-serif;font-weight:700}
+.celeb-btn{background:white;color:#16a34a;border:none;padding:18px 44px;border-radius:50px;font-size:19px;font-family:'Fredoka One',cursive;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.22);transition:transform .15s}
+.celeb-btn:active{transform:scale(.94)}
+
+/* FLOAT EMOJI */
+.float-em{position:fixed;font-size:36px;pointer-events:none;z-index:50;animation:floatUp 1.1s ease forwards}
+@keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-80px) scale(1.4);opacity:0}}
+
+/* ANIMATIONS */
+@keyframes popIn{0%{transform:scale(.2) rotate(-15deg);opacity:0}65%{transform:scale(1.12) rotate(3deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes bounceIn{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{transform:translateY(26px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+</style>
+</head>
+<body>
+
+<div class="screen" id="mainScreen">
+  <div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <a href="/ukg" class="topbar-btn" onclick="event.stopPropagation()">🏠 Home</a>
+    <div class="stars-display" id="starsDisplay">⭐ 0</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="sound-pill" id="soundFab" onclick="event.stopPropagation();toggleSound()">🔊 Sound</button>
+      <button class="topbar-btn" onclick="openPanel(event)">⚙️ Parent</button>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar" onclick="event.stopPropagation()">
+    <button class="tab-btn active" id="tab0" onclick="switchTopic(0)">🌍 Earth</button>
+    <button class="tab-btn"        id="tab1" onclick="switchTopic(1)">🌱 Plants</button>
+    <button class="tab-btn"        id="tab2" onclick="switchTopic(2)">🦁 Habitats</button>
+    <button class="tab-btn"        id="tab3" onclick="switchTopic(3)">🌦️ Weather</button>
+    <button class="tab-btn"        id="tab4" onclick="switchTopic(4)">♻️ Care</button>
+  </div>
+
+  <!-- PROGRESS DOTS -->
+  <div class="dots-row" id="dotsRow"></div>
+
+  <!-- MAIN -->
+  <div class="main-content" id="mainContent" onclick="handleTap(event)">
+
+    <!-- LEFT -->
+    <div class="left-half">
+      <div style="position:relative">
+        <div class="scene-frame" id="sceneFrame" onclick="tapFrame(event)">
+          <svg id="sceneSvg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="frame-ring" id="frameRing"></div>
+      </div>
+      <div class="topic-name" id="topicName">Our Earth</div>
+      <div class="topic-sub"  id="topicSub">Land, Water &amp; Air</div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-half" id="rightHalf"></div>
+
+  </div>
+
+  <button class="speak-fab" id="speakFab" onclick="event.stopPropagation();tapSpeak()">🔊</button>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <button class="nav-btn" id="prevBtn" onclick="prev(event)" disabled>← Back</button>
+    <div class="bottom-center">
+      <div class="tap-hint">👆 Tap to continue!</div>
+    </div>
+    <button class="next-btn" onclick="next(event)">Next →</button>
+  </div>
+</div>
+
+<!-- PARENT PANEL -->
+<div class="overlay" id="parentOverlay">
+  <div class="panel">
+    <h2>🌿 Environment Controls</h2>
+    <div class="panel-progress" id="panelProgress">0 topics explored</div>
+    <div class="panel-row">
+      <div><div class="panel-label">🔊 Voice Sound</div><div class="panel-sub">Reads topic aloud</div></div>
+      <button class="toggle on" id="soundToggle" onclick="toggleSound()"></button>
+    </div>
+    <div class="jump-section">
+      <h4>Jump to any topic</h4>
+      <div class="jump-grid" id="jumpGrid"></div>
+    </div>
+    <button class="close-panel-btn" onclick="closePanel()">✅ Keep Exploring!</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-card" id="quizCard">
+    <div class="quiz-badge">🌿 Environment Quiz!</div>
+    <span class="quiz-emoji-big" id="quizEmoji">🌍</span>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-opts" id="quizOpts"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="quiz-retry-btn" id="quizRetryBtn" onclick="retryQuiz()">🔄 Try Again!</button>
+  </div>
+</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-overlay" id="celebOverlay">
+  <div class="celeb-stars"><span class="celeb-star">⭐</span><span class="celeb-star">⭐</span><span class="celeb-star">⭐</span></div>
+  <div class="celeb-big"   id="celebBig">🎉</div>
+  <div class="celeb-title" id="celebTitle">Amazing!</div>
+  <div class="celeb-sub"   id="celebSub"></div>
+  <button class="celeb-btn" onclick="closeCelebration()">Keep Exploring! 🌿</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   SVG SCENE BUILDERS
+══════════════════════════════════════ */
+
+/* Scene: Earth showing land + water + sky */
+function svgEarth(){return`
+  <!-- sky -->
+  <rect x="0" y="0" width="220" height="110" rx="18" fill="#87ceeb"/>
+  <!-- clouds -->
+  <ellipse cx="55" cy="32" rx="30" ry="18" fill="white" opacity=".9"/>
+  <ellipse cx="80" cy="26" rx="22" ry="14" fill="white" opacity=".9"/>
+  <ellipse cx="155" cy="40" rx="26" ry="15" fill="white" opacity=".85"/>
+  <ellipse cx="178" cy="34" rx="20" ry="13" fill="white" opacity=".85"/>
+  <!-- sun -->
+  <circle cx="185" cy="28" r="18" fill="#FFD600"/>
+  <line x1="185" y1="6"  x2="185" y2="1"  stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>
+  <line x1="185" y1="50" x2="185" y2="55" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>
+  <line x1="163" y1="28" x2="158" y2="28" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>
+  <line x1="207" y1="28" x2="212" y2="28" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>
+  <line x1="169" y1="14" x2="165" y2="10" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>
+  <line x1="201" y1="42" x2="205" y2="46" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>
+  <!-- ground -->
+  <rect x="0" y="105" width="220" height="115" rx="0" fill="#5c8a3c"/>
+  <!-- hills -->
+  <ellipse cx="55"  cy="108" rx="55" ry="28" fill="#4a7a30"/>
+  <ellipse cx="165" cy="108" rx="60" ry="26" fill="#3d6e28"/>
+  <!-- water river -->
+  <ellipse cx="110" cy="150" rx="42" ry="16" fill="#4895EF" opacity=".8"/>
+  <ellipse cx="110" cy="150" rx="38" ry="12" fill="#60aff0" opacity=".6"/>
+  <!-- trees -->
+  <rect  x="28"  y="90" width="9" height="22" fill="#5c3317"/>
+  <ellipse cx="32"  cy="84" rx="16" ry="20" fill="#2d8a40"/>
+  <rect  x="168" y="88" width="9" height="22" fill="#5c3317"/>
+  <ellipse cx="172" cy="82" rx="16" ry="20" fill="#2d8a40"/>
+  <!-- bird -->
+  <path d="M96,50 Q100,44 104,50" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M108,46 Q112,40 116,46" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+`}
+
+/* Scene: Plants – seed → sprout → tree */
+function svgPlants(){return`
+  <!-- sky bg -->
+  <rect x="0" y="0" width="220" height="220" rx="18" fill="#e8f5e9"/>
+  <!-- soil bar -->
+  <rect x="0" y="155" width="220" height="65" rx="0" fill="#8d5524"/>
+  <rect x="0" y="148" width="220" height="12" rx="0" fill="#a0522d"/>
+  <!-- seed -->
+  <ellipse cx="36" cy="148" rx="12" ry="8" fill="#a0522d"/>
+  <ellipse cx="36" cy="148" rx="9"  ry="5" fill="#78350f"/>
+  <!-- tiny sprout -->
+  <rect x="86" y="115" width="7" height="35" rx="3" fill="#4caf50"/>
+  <ellipse cx="90" cy="110" rx="12" ry="8" fill="#4caf50" transform="rotate(-20,90,110)"/>
+  <ellipse cx="90" cy="115" rx="11" ry="8" fill="#66bb6a" transform="rotate(20,90,115)"/>
+  <!-- big tree -->
+  <rect  x="148" y="82"  width="14" height="70" rx="5" fill="#5c3317"/>
+  <!-- roots -->
+  <path d="M148,148 Q138,155 130,158" fill="none" stroke="#5c3317" stroke-width="4" stroke-linecap="round"/>
+  <path d="M162,148 Q172,155 178,158" fill="none" stroke="#5c3317" stroke-width="4" stroke-linecap="round"/>
+  <!-- crown -->
+  <ellipse cx="155" cy="74" rx="36" ry="32" fill="#1b7a2f"/>
+  <ellipse cx="138" cy="86" rx="24" ry="20" fill="#2d8a40"/>
+  <ellipse cx="172" cy="82" rx="24" ry="20" fill="#2d8a40"/>
+  <ellipse cx="155" cy="60" rx="22" ry="18" fill="#33a644"/>
+  <!-- sun -->
+  <circle cx="30" cy="30" r="18" fill="#FFD600"/>
+  <!-- rain drops -->
+  <ellipse cx="100" cy="25" rx="4" ry="7" fill="#4895EF" opacity=".7"/>
+  <ellipse cx="115" cy="18" rx="4" ry="7" fill="#4895EF" opacity=".7"/>
+  <ellipse cx="130" cy="28" rx="4" ry="7" fill="#4895EF" opacity=".7"/>
+  <!-- butterfly -->
+  <ellipse cx="58" cy="120" rx="10" ry="7" fill="#f472b6" transform="rotate(-30,58,120)"/>
+  <ellipse cx="44" cy="122" rx="10" ry="7" fill="#fb7185" transform="rotate(30,44,122)"/>
+  <line x1="51" y1="120" x2="51" y2="130" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+`}
+
+/* Scene: Habitat — forest, ocean, desert side by side */
+function svgHabitat(){return`
+  <!-- sky -->
+  <rect x="0" y="0" width="220" height="100" rx="18" fill="#87ceeb"/>
+  <ellipse cx="50"  cy="30" rx="28" ry="16" fill="white" opacity=".85"/>
+  <ellipse cx="160" cy="22" rx="24" ry="14" fill="white" opacity=".85"/>
+  <!-- FOREST third -->
+  <rect x="0"   y="96" width="72" height="124" fill="#3d7a28"/>
+  <rect x="72"  y="96" width="1"  height="124" fill="rgba(0,0,0,.12)"/>
+  <!-- trees in forest -->
+  <rect x="8"  y="75" width="8" height="26" fill="#5c3317"/>
+  <ellipse cx="12" cy="68" rx="16" ry="18" fill="#2d8a40"/>
+  <rect x="34" y="78" width="8" height="22" fill="#5c3317"/>
+  <ellipse cx="38" cy="71" rx="14" ry="17" fill="#33a644"/>
+  <rect x="56" y="80" width="8" height="20" fill="#5c3317"/>
+  <ellipse cx="60" cy="73" rx="13" ry="16" fill="#2d8a40"/>
+  <!-- deer in forest -->
+  <ellipse cx="22" cy="154" rx="12" ry="8"  fill="#c8814a"/>
+  <ellipse cx="30" cy="148" rx="8"  ry="7"  fill="#c8814a"/>
+  <line x1="22" y1="162" x2="18" y2="175" stroke="#c8814a" stroke-width="3" stroke-linecap="round"/>
+  <line x1="26" y1="162" x2="26" y2="175" stroke="#c8814a" stroke-width="3" stroke-linecap="round"/>
+  <line x1="30" y1="162" x2="28" y2="175" stroke="#c8814a" stroke-width="3" stroke-linecap="round"/>
+  <line x1="34" y1="162" x2="36" y2="175" stroke="#c8814a" stroke-width="3" stroke-linecap="round"/>
+  <!-- OCEAN third -->
+  <rect x="73"  y="96" width="74" height="124" fill="#1565c0"/>
+  <rect x="147" y="96" width="1"  height="124" fill="rgba(0,0,0,.12)"/>
+  <!-- waves -->
+  <path d="M73,120 Q90,110 110,120 Q130,130 147,120" fill="none" stroke="#90caf9" stroke-width="3" stroke-linecap="round"/>
+  <path d="M73,148 Q90,138 110,148 Q130,158 147,148" fill="none" stroke="#90caf9" stroke-width="3" stroke-linecap="round"/>
+  <!-- fish -->
+  <ellipse cx="100" cy="175" rx="16" ry="9" fill="#f59e0b"/>
+  <polygon points="116,175 128,168 128,182" fill="#f59e0b"/>
+  <circle cx="94" cy="173" r="2.5" fill="#333"/>
+  <!-- small fish -->
+  <ellipse cx="88" cy="130" rx="10" ry="5" fill="#60aff0"/>
+  <polygon points="98,130 106,125 106,135" fill="#60aff0"/>
+  <!-- DESERT third -->
+  <rect x="148" y="96" width="72" height="124" fill="#c8a46a"/>
+  <!-- sand dunes -->
+  <ellipse cx="184" cy="100" rx="38" ry="16" fill="#d4b07a"/>
+  <ellipse cx="160" cy="108" rx="20" ry="10" fill="#b8913e"/>
+  <!-- cactus -->
+  <rect x="178" y="130" width="10" height="45" rx="4" fill="#4caf50"/>
+  <rect x="158" y="145" width="22" height="8"  rx="4" fill="#4caf50"/>
+  <rect x="158" y="138" width="8"  height="18" rx="3" fill="#4caf50"/>
+  <rect x="188" y="148" width="18" height="8"  rx="4" fill="#4caf50"/>
+  <rect x="196" y="140" width="8"  height="18" rx="3" fill="#4caf50"/>
+  <!-- camel -->
+  <ellipse cx="162" cy="170" rx="13" ry="8" fill="#c8814a"/>
+  <ellipse cx="168" cy="162" rx="7"  ry="9" fill="#c8814a"/>
+  <ellipse cx="162" cy="158" rx="6"  ry="8" fill="#b8703a"/>
+  <line x1="156" y1="177" x2="153" y2="192" stroke="#c8814a" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="162" y1="178" x2="162" y2="192" stroke="#c8814a" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="168" y1="177" x2="171" y2="192" stroke="#c8814a" stroke-width="3.5" stroke-linecap="round"/>
+`}
+
+/* Scene: Weather – four quadrants */
+function svgWeather(){return`
+  <!-- sunny -->
+  <rect x="0"   y="0"   width="108" height="108" rx="18" fill="#87ceeb"/>
+  <circle cx="54"  cy="54"  r="24" fill="#FFD600"/>
+  <line x1="54" y1="22"  x2="54" y2="14"  stroke="#FFD600" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="54" y1="86"  x2="54" y2="94"  stroke="#FFD600" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="22" y1="54"  x2="14" y2="54"  stroke="#FFD600" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="86" y1="54"  x2="94" y2="54"  stroke="#FFD600" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="32" y1="32"  x2="26" y2="26"  stroke="#FFD600" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="76" y1="76"  x2="82" y2="82"  stroke="#FFD600" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- rainy -->
+  <rect x="112" y="0"   width="108" height="108" rx="18" fill="#607d8b"/>
+  <ellipse cx="166" cy="42" rx="32" ry="18" fill="#90a4ae"/>
+  <ellipse cx="148" cy="48" rx="24" ry="15" fill="#b0bec5"/>
+  <line x1="148" y1="68" x2="144" y2="84" stroke="#4895EF" stroke-width="3" stroke-linecap="round"/>
+  <line x1="162" y1="72" x2="158" y2="90" stroke="#4895EF" stroke-width="3" stroke-linecap="round"/>
+  <line x1="176" y1="68" x2="172" y2="84" stroke="#4895EF" stroke-width="3" stroke-linecap="round"/>
+  <!-- windy -->
+  <rect x="0"   y="112" width="108" height="108" rx="18" fill="#e8f5e9"/>
+  <path d="M14,145 Q38,130 68,148 Q84,155 94,145" fill="none" stroke="#90caf9" stroke-width="5" stroke-linecap="round"/>
+  <path d="M14,162 Q44,148 72,162 Q88,170 96,162" fill="none" stroke="#b3e5fc" stroke-width="4" stroke-linecap="round"/>
+  <path d="M14,178 Q40,165 66,178 Q80,184 94,178" fill="none" stroke="#81d4fa" stroke-width="3" stroke-linecap="round"/>
+  <!-- tree bending -->
+  <path d="M70,210 Q74,185 84,165" fill="none" stroke="#5c3317" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="98" cy="155" rx="20" ry="14" fill="#2d8a40" transform="rotate(-30,98,155)"/>
+  <!-- snowy -->
+  <rect x="112" y="112" width="108" height="108" rx="18" fill="#e3f2fd"/>
+  <text x="138" y="152" font-size="22">❄️</text>
+  <text x="162" y="172" font-size="20">❄️</text>
+  <text x="145" y="188" font-size="18">❄️</text>
+  <text x="170" y="148" font-size="16">❄️</text>
+  <!-- snowman -->
+  <circle cx="148" cy="204" r="12" fill="white" stroke="#90caf9" stroke-width="2"/>
+  <circle cx="148" cy="188" r="9"  fill="white" stroke="#90caf9" stroke-width="2"/>
+  <circle cx="146" cy="186" r="2"  fill="#333"/>
+  <circle cx="151" cy="186" r="2"  fill="#333"/>
+  <path d="M145,191 Q148,194 151,191" fill="none" stroke="#f44336" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="139" y1="188" x2="130" y2="182" stroke="#5c3317" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="157" y1="188" x2="166" y2="182" stroke="#5c3317" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- dividers -->
+  <line x1="110" y1="0"   x2="110" y2="220" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+  <line x1="0"   y1="110" x2="220" y2="110" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+`}
+
+/* Scene: Care for Earth – good vs bad */
+function svgCare(){return`
+  <!-- sky -->
+  <rect x="0" y="0" width="220" height="220" rx="18" fill="#e8f5e9"/>
+  <!-- dividing line -->
+  <line x1="110" y1="20" x2="110" y2="200" stroke="rgba(0,0,0,.1)" stroke-width="2" stroke-dasharray="6,4"/>
+  <!-- LEFT = GOOD side -->
+  <!-- happy earth -->
+  <circle cx="55"  cy="60"  r="32" fill="#4895EF"/>
+  <ellipse cx="44" cy="54"  rx="10" ry="14" fill="#2d8a40" transform="rotate(-20,44,54)"/>
+  <ellipse cx="66" cy="48"  rx="8"  ry="11" fill="#2d8a40" transform="rotate(15,66,48)"/>
+  <ellipse cx="60" cy="66"  rx="9"  ry="12" fill="#2d8a40" transform="rotate(-10,60,66)"/>
+  <circle cx="48" cy="57"  r="3.5" fill="#333"/>
+  <circle cx="62" cy="55"  r="3.5" fill="#333"/>
+  <path d="M48,68 Q55,76 62,68" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- recycle bin -->
+  <rect x="18" y="108" width="24" height="30" rx="4" fill="#4caf50"/>
+  <text x="20" y="129" font-size="18">♻️</text>
+  <!-- water saved -->
+  <ellipse cx="68" cy="120" rx="12" ry="16" fill="#4895EF"/>
+  <path d="M56,118 Q68,104 80,118" fill="#4895EF"/>
+  <ellipse cx="68" cy="124" rx="10" ry="8"  fill="#60aff0"/>
+  <!-- tree planted -->
+  <rect  x="28" y="148" width="8" height="36" rx="3" fill="#5c3317"/>
+  <ellipse cx="32" cy="140" rx="20" ry="22" fill="#2d8a40"/>
+  <!-- hands holding earth -->
+  <path d="M14,196 Q34,188 55,190 Q76,192 96,196" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+  <!-- RIGHT = BAD → then FIXED side -->
+  <!-- sad/polluted earth -->
+  <circle cx="165" cy="60" r="32" fill="#607d8b"/>
+  <ellipse cx="154" cy="54" rx="10" ry="14" fill="#37474f" transform="rotate(-20,154,54)"/>
+  <ellipse cx="176" cy="48" rx="8"  ry="11" fill="#37474f" transform="rotate(15,176,48)"/>
+  <circle cx="158" cy="57" r="3.5" fill="#333"/>
+  <circle cx="172" cy="55" r="3.5" fill="#333"/>
+  <path d="M158,70 Q165,66 172,70" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- smoke/pollution -->
+  <ellipse cx="148" cy="110" rx="12" ry="8" fill="#9e9e9e" opacity=".7"/>
+  <ellipse cx="160" cy="104" rx="10" ry="7" fill="#bdbdbd" opacity=".6"/>
+  <ellipse cx="172" cy="110" rx="11" ry="7" fill="#9e9e9e" opacity=".7"/>
+  <!-- factory -->
+  <rect x="142" y="128" width="36" height="36" rx="3" fill="#78909c"/>
+  <rect x="148" y="118" width="10" height="16" rx="2" fill="#607d8b"/>
+  <rect x="162" y="122" width="10" height="12" rx="2" fill="#607d8b"/>
+  <!-- trash on ground -->
+  <text x="126" y="185" font-size="14">🗑️</text>
+  <text x="145" y="190" font-size="12">🧴</text>
+  <text x="162" y="185" font-size="13">🛍️</text>
+  <text x="178" y="190" font-size="11">🥤</text>
+  <!-- big red X over bad side -->
+  <line x1="122" y1="22" x2="208" y2="200" stroke="#ef5350" stroke-width="4" stroke-linecap="round" opacity=".4"/>
+  <line x1="208" y1="22" x2="122" y2="200" stroke="#ef5350" stroke-width="4" stroke-linecap="round" opacity=".4"/>
+  <!-- green check over good side -->
+  <path d="M12,100 Q30,120 48,100" fill="none" stroke="#4caf50" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+`}
+
+/* ══════════════════════════════════════
+   DATA  — 5 topics × 4 cards each
+══════════════════════════════════════ */
+const topics = [
+  /* 0: Our Earth */
+  {
+    id:0, tab:'🌍 Earth', name:'Our Earth', sub:'Land, Water & Air',
+    emoji:'🌍', color:['#2e7d32','#1b5e20'],
+    svgFn: svgEarth,
+    speak:'Our Earth has three main parts: land, water and air. We live on the land. Water fills our oceans, rivers and lakes. Air surrounds us everywhere!',
+    cards:[
+      { label:'🌏 What is Earth?',      value:'Earth is our home planet!',                  sub:'It is the only planet we know of that has life — plants, animals and people all live here.' },
+      { label:'🏔️ Land',                value:'Land covers 29% of Earth',                   sub:'Mountains, deserts, forests and plains are all land. We grow food, build homes and play on land.', chips:['🏔️ Mountains','🌾 Plains','🌵 Deserts','🌲 Forests'] },
+      { label:'💧 Water',               value:'Water covers 71% of Earth!',                 sub:'Most of it is salty ocean water. We drink fresh water from rivers, lakes and rain.', chips:['🌊 Oceans','🏞️ Rivers','🏔️ Lakes','🌧️ Rain'] },
+      { label:'💡 Did You Know?',        value:'',                                            sub:'The air around Earth is called the atmosphere. It protects us from the hot sun and lets us breathe!', dyk:true },
+    ],
+    quiz:{ q:'Where do most animals and people live?', emoji:'🌍', correct:'🏔️ Land', opts:['🏔️ Land','🌊 Ocean','☁️ Clouds','🔥 Fire'] }
+  },
+
+  /* 1: Plants */
+  {
+    id:1, tab:'🌱 Plants', name:'Plants', sub:'Nature\'s Factories',
+    emoji:'🌱', color:['#1565c0','#0d3b6e'],
+    svgFn: svgPlants,
+    speak:'Plants are amazing! They make their own food using sunlight, water and air. A seed grows into a sprout, then a big plant or tree. Plants give us oxygen to breathe and food to eat!',
+    cards:[
+      { label:'🌱 Parts of a Plant',    value:'Roots, Stem, Leaves, Flower!',               sub:'Roots drink water from soil. The stem carries water up. Leaves make food. Flowers make seeds!', chips:['🌿 Roots','🪴 Stem','🍃 Leaves','🌸 Flower'] },
+      { label:'🌞 How Plants Make Food',value:'Sunlight + Water + Air = Food!',              sub:'This is called Photosynthesis. Leaves trap sunlight and use it to make sugar — the plant\'s food!' },
+      { label:'🌳 Why Plants Matter',   value:'Plants give us OXYGEN!',                     sub:'Every breath you take is possible because of plants. They also give us fruits, vegetables, wood and shade.', chips:['🍎 Fruits','🥦 Vegetables','🌬️ Oxygen','🪵 Wood'] },
+      { label:'💡 Did You Know?',        value:'',                                            sub:'A single large tree can absorb CO₂ and produce enough oxygen for two people to breathe for a whole year!', dyk:true },
+    ],
+    quiz:{ q:'What do plants need to make their own food?', emoji:'🌱', correct:'☀️ Sunlight + Water', opts:['☀️ Sunlight + Water','🍕 Pizza','🎮 Games','🧸 Toys'] }
+  },
+
+  /* 2: Habitats */
+  {
+    id:2, tab:'🦁 Habitats', name:'Habitats', sub:'Where Animals Live',
+    emoji:'🏡', color:['#1b5e20','#004d40'],
+    svgFn: svgHabitat,
+    speak:'A habitat is the natural home of an animal or plant. Different animals live in different habitats — forests, oceans, deserts and more. Each animal is built for its home!',
+    cards:[
+      { label:'🌲 Forest Habitat',      value:'Home of deer, foxes & owls',                 sub:'Forests are full of trees. Animals like deer eat leaves. Owls hunt at night. Birds nest in the branches.', chips:['🦌 Deer','🦊 Fox','🦉 Owl','🐦 Birds'] },
+      { label:'🌊 Ocean Habitat',       value:'Home of fish, whales & crabs',               sub:'The ocean is the world\'s biggest habitat! Fish breathe through gills. Whales breathe air but live in water.', chips:['🐠 Fish','🐳 Whale','🦀 Crab','🐙 Octopus'] },
+      { label:'🌵 Desert Habitat',      value:'Home of camels, snakes & lizards',           sub:'Deserts are very hot and dry. Camels store water in their humps. Lizards hide under rocks to stay cool.', chips:['🐪 Camel','🦎 Lizard','🐍 Snake','🦂 Scorpion'] },
+      { label:'💡 Did You Know?',        value:'',                                            sub:'An animal\'s body is perfectly designed for its habitat. A polar bear\'s thick white fur keeps it warm AND hides it in the snow!', dyk:true },
+    ],
+    quiz:{ q:'Which animal lives in the ocean?', emoji:'🦁', correct:'🐠 Fish', opts:['🐠 Fish','🐪 Camel','🦊 Fox','🐘 Elephant'] }
+  },
+
+  /* 3: Weather */
+  {
+    id:3, tab:'🌦️ Weather', name:'Weather', sub:'Sun, Rain, Wind & Snow',
+    emoji:'🌦️', color:['#1565c0','#0d3b6e'],
+    svgFn: svgWeather,
+    speak:'Weather is what the sky and air are like outside. It can be sunny, rainy, windy or snowy. The water cycle is how water moves between the sky and the ground again and again!',
+    cards:[
+      { label:'☀️ Types of Weather',    value:'Sunny · Rainy · Windy · Snowy',              sub:'Weather changes every day! Sunny days are bright and warm. Rainy days bring water for plants. Windy days blow cool air.', chips:['☀️ Sunny','🌧️ Rainy','💨 Windy','❄️ Snowy'] },
+      { label:'💧 The Water Cycle',     value:'Evaporate → Cloud → Rain!',                  sub:'The sun heats water in lakes and oceans. It rises as vapour, forms clouds, then falls back as rain or snow. It goes around and around forever!' },
+      { label:'🌈 After the Rain',      value:'Rainbows appear when rain + sun meet!',      sub:'White sunlight splits into 7 colours through water drops: Red, Orange, Yellow, Green, Blue, Indigo, Violet. That\'s ROY G BIV!', chips:['🔴 Red','🟠 Orange','🟡 Yellow','🟢 Green','🔵 Blue'] },
+      { label:'💡 Did You Know?',        value:'',                                            sub:'Lightning is a giant spark of electricity in the sky! A single bolt can reach 30,000°C — five times hotter than the surface of the sun!', dyk:true },
+    ],
+    quiz:{ q:'What is the order in the water cycle?', emoji:'🌦️', correct:'☁️ Evaporate → Cloud → Rain', opts:['☁️ Evaporate → Cloud → Rain','🌈 Rain → Cloud → Rainbow','❄️ Snow → Ice → Melt','🔥 Heat → Fire → Smoke'] }
+  },
+
+  /* 4: Care for Earth */
+  {
+    id:4, tab:'♻️ Care', name:'Care for Earth', sub:'Protect Our Planet!',
+    emoji:'♻️', color:['#e65100','#bf360c'],
+    svgFn: svgCare,
+    speak:'We must take care of our Earth! Pollution happens when we throw rubbish, burn fuel and waste water. We can help by planting trees, recycling, saving water and using less plastic!',
+    cards:[
+      { label:'😢 What is Pollution?',  value:'Pollution = Harming Earth',                  sub:'Air pollution from smoke and cars makes the sky dirty. Water pollution from trash harms fish. Soil pollution makes plants sick.', chips:['💨 Air Pollution','🌊 Water Pollution','🗑️ Littering','🏭 Smoke'] },
+      { label:'♻️ Reduce, Reuse, Recycle', value:'The 3 Rs save our planet!',              sub:'REDUCE: use less. REUSE: use again. RECYCLE: make old things into new. Every small action counts!', chips:['↙️ Reduce','🔄 Reuse','♻️ Recycle'] },
+      { label:'🌱 What Can YOU Do?',    value:'Kids can save the Earth too!',               sub:'Plant a tree 🌳  · Save water 💧 · Turn off lights 💡 · Carry a cloth bag 🛍️ · Never litter 🗑️ · Be kind to animals 🐾', chips:['🌳 Plant Trees','💧 Save Water','💡 Save Energy','🛍️ Less Plastic'] },
+      { label:'💡 Did You Know?',        value:'',                                            sub:'If every child in India planted one tree, over 400 million trees would be added! That would absorb millions of tonnes of CO₂ every year!', dyk:true },
+    ],
+    quiz:{ q:'What do the 3 Rs stand for?', emoji:'♻️', correct:'♻️ Reduce, Reuse, Recycle', opts:['♻️ Reduce, Reuse, Recycle','🏃 Run, Rest, Race','📖 Read, Revise, Remember','🎨 Red, Rose, Rainbow'] }
+  },
+];
+
+/* STATE */
+let topicIdx = 0;
+let cardIdx  = 0;
+let stars    = 0;
+let soundOn  = true;
+let learned  = new Set();
+
+function topic()  { return topics[topicIdx]; }
+function cards()  { return topic().cards; }
+function allCount(){ return topics.reduce((s,t)=>s+t.cards.length,0); }
+function learnedCount(){ return learned.size; }
+
+/* UPDATE SCREEN */
+function updateScreen(animate=true){
+  const t = topic();
+  const c = cards()[cardIdx];
+
+  document.getElementById('mainScreen').style.background =
+    `linear-gradient(135deg,${t.color[0]} 0%,${t.color[1]} 100%)`;
+
+  // SVG
+  document.getElementById('sceneSvg').innerHTML = t.svgFn();
+  document.getElementById('topicName').textContent = t.name;
+  document.getElementById('topicSub').textContent  = t.sub;
+
+  // info cards
+  buildCards(c, animate);
+
+  document.getElementById('prevBtn').disabled = (topicIdx===0 && cardIdx===0);
+
+  if(animate){
+    const sf = document.getElementById('sceneFrame');
+    sf.style.animation='none'; void sf.offsetWidth;
+    sf.style.animation='bounceIn .5s cubic-bezier(.175,.885,.32,1.4) both';
+    ['topicName','topicSub'].forEach((id,i)=>{
+      const el=document.getElementById(id);
+      el.style.animation='none'; void el.offsetWidth;
+      el.style.animation=i===0
+        ?'popIn .5s cubic-bezier(.175,.885,.32,1.275) both'
+        :'slideUp .4s ease .15s both';
+    });
+  }
+
+  updateDots();
+  if(soundOn) setTimeout(speak,500);
+}
+
+function buildCards(c, animate){
+  const rh = document.getElementById('rightHalf');
+  rh.innerHTML = '';
+
+  // Main relationship card
+  const c1 = mkCard();
+  c1.innerHTML = `<div class="card-label">${c.label}</div>
+    ${c.value ? `<div class="card-value">${c.value}</div>` : ''}
+    <div class="card-sub">${c.sub}</div>
+    ${c.chips ? `<div class="example-row">${c.chips.map(ch=>`<span class="eg-chip" onclick="event.stopPropagation();speakWord('${ch.replace(/'/g,"\\'")}');floatWord('${ch}',event)">${ch}</span>`).join('')}</div>` : ''}`;
+  if(animate) c1.style.animationDelay='.08s';
+  rh.appendChild(c1);
+
+  // Did you know card
+  if(c.dyk){
+    const c2 = mkCard();
+    c2.innerHTML = `<div class="card-label">💡 Did You Know?</div>
+      <div class="dyk-pill" onclick="event.stopPropagation();speakWord(this.textContent)">${c.sub}</div>`;
+    if(animate) c2.style.animationDelay='.18s';
+    rh.appendChild(c2);
+  }
+
+  // Progress in topic
+  const c3 = mkCard();
+  const total = cards().length;
+  const prog  = Math.round(((cardIdx+1)/total)*100);
+  c3.innerHTML = `<div class="card-label">📊 Progress in this topic</div>
+    <div style="background:rgba(255,255,255,.25);border-radius:20px;height:10px;overflow:hidden;margin-top:4px">
+      <div style="height:100%;width:${prog}%;background:white;border-radius:20px;transition:width .5s"></div>
+    </div>
+    <div class="card-sub" style="margin-top:5px">Card ${cardIdx+1} of ${total} · Topic ${topicIdx+1} of ${topics.length}</div>`;
+  if(animate) c3.style.animationDelay='.26s';
+  rh.appendChild(c3);
+}
+
+function mkCard(){
+  const d = document.createElement('div');
+  d.className='info-card';
+  return d;
+}
+
+/* SPEAK */
+function speak(){
+  if(!soundOn||!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const c = cards()[cardIdx];
+  const text = c.value ? `${c.value}. ${c.sub}` : c.sub;
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate=0.8; u.pitch=1.2; u.volume=1;
+  const fab=document.getElementById('speakFab');
+  fab.classList.add('speaking');
+  u.onend=()=>fab.classList.remove('speaking');
+  window.speechSynthesis.speak(u);
+}
+function speakWord(w){
+  if(!soundOn||!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(w);
+  u.rate=0.75; u.pitch=1.3; window.speechSynthesis.speak(u);
+}
+function tapSpeak(){speak();}
+
+/* TAP FRAME */
+function tapFrame(e){
+  e.stopPropagation();
+  const ring=document.getElementById('frameRing');
+  ring.classList.remove('pulse'); void ring.offsetWidth; ring.classList.add('pulse');
+  floatWord(topic().emoji, e);
+  speak();
+}
+function floatWord(emoji, e){
+  const el=document.createElement('div');
+  el.className='float-em'; el.textContent=emoji;
+  const x=e.clientX||window.innerWidth/2;
+  const y=e.clientY||window.innerHeight/2;
+  el.style.left=`${x-18}px`; el.style.top=`${y-18}px`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1200);
+}
+
+/* DOTS */
+function updateDots(){
+  const row=document.getElementById('dotsRow'); row.innerHTML='';
+  cards().forEach((_,i)=>{
+    const d=document.createElement('div');
+    const key=`${topicIdx}-${i}`;
+    d.className=`dot ${i===cardIdx?'current':learned.has(key)?'done':''}`;
+    row.appendChild(d);
+  });
+}
+
+/* NAVIGATE */
+function handleTap(e){next(e);}
+
+function next(e){
+  if(e) e.stopPropagation();
+  const key=`${topicIdx}-${cardIdx}`;
+  learned.add(key);
+  addStars(1);
+
+  // If this is the last card of the topic → show quiz then advance
+  if(cardIdx === cards().length-1){
+    showQuiz(); return;
+  }
+  cardIdx++;
+  updateScreen();
+}
+
+function prev(e){
+  if(e) e.stopPropagation();
+  if(cardIdx>0){ cardIdx--; updateScreen(); return; }
+  if(topicIdx>0){ topicIdx--; cardIdx=cards().length-1; updateScreen(); }
+}
+
+function addStars(n){
+  stars+=n;
+  const el=document.getElementById('starsDisplay');
+  el.textContent=`⭐ ${stars}`;
+  el.style.transform='scale(1.35)';
+  setTimeout(()=>el.style.transform='',200);
+}
+
+/* SWITCH TOPIC via tab */
+function switchTopic(idx){
+  if(idx===topicIdx && cardIdx===0) return;
+  topicIdx=idx; cardIdx=0;
+  topics.forEach((_,i)=>document.getElementById('tab'+i).classList.toggle('active',i===idx));
+  updateScreen(true);
+}
+
+/* PARENT PANEL */
+function openPanel(e){
+  if(e) e.stopPropagation();
+  document.getElementById('panelProgress').textContent=
+    `${learned.size} of ${topics.reduce((s,t)=>s+t.cards.length,0)} cards explored ✅`;
+  buildJumpGrid();
+  document.getElementById('parentOverlay').classList.add('show');
+}
+function closePanel(){document.getElementById('parentOverlay').classList.remove('show');}
+
+function buildJumpGrid(){
+  const grid=document.getElementById('jumpGrid'); grid.innerHTML='';
+  topics.forEach((t,i)=>{
+    const btn=document.createElement('button');
+    const done=t.cards.every((_,ci)=>learned.has(`${i}-${ci}`));
+    const cur=i===topicIdx;
+    btn.className=`jump-btn ${cur?'cur':done?'done':''}`;
+    btn.innerHTML=`<span class="je">${t.emoji}</span>${t.name}`;
+    btn.onclick=()=>{switchTopic(i);closePanel();};
+    grid.appendChild(btn);
+  });
+}
+
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById('soundToggle').classList.toggle('on',soundOn);
+  document.getElementById('speakFab').style.opacity=soundOn?'1':'0.45';
+  const pill=document.getElementById('soundFab');
+  pill.textContent=soundOn?'🔊 Sound':'🔇 Muted';
+  pill.classList.toggle('muted',!soundOn);
+  if(!soundOn) window.speechSynthesis.cancel();
+}
+
+/* QUIZ — shown after completing each topic */
+function showQuiz(){
+  const t = topic();
+  const q = t.quiz;
+  document.getElementById('quizEmoji').textContent = q.emoji || t.emoji;
+  document.getElementById('quizQuestion').textContent = q.q;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizRetryBtn').style.display = 'none';
+
+  const opts = [...q.opts].sort(()=>Math.random()-.5);
+  const container = document.getElementById('quizOpts'); container.innerHTML='';
+  opts.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.innerHTML = `<span class="quiz-opt-em">${opt.split(' ')[0]}</span><span class="quiz-opt-lbl">${opt.split(' ').slice(1).join(' ')}</span>`;
+    btn.onclick = ()=>checkQuiz(btn, opt, q.correct);
+    container.appendChild(btn);
+  });
+
+  document.getElementById('quizOverlay').classList.add('show');
+}
+
+function checkQuiz(btn, selected, correct){
+  document.querySelectorAll('.quiz-opt').forEach(b=>{b.onclick=null;b.disabled=true;});
+  const fb=document.getElementById('quizFeedback');
+
+  if(selected===correct){
+    btn.classList.add('correct');
+    fb.textContent='🎉 Correct! Brilliant!';
+    fb.className='quiz-feedback good';
+    addStars(3);
+    if(soundOn){
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance('Correct! Brilliant!');
+      u.pitch=1.4; window.speechSynthesis.speak(u);
+    }
+    setTimeout(()=>{
+      document.getElementById('quizOverlay').classList.remove('show');
+      afterQuiz();
+    },1400);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{
+      const lbl=b.querySelector('.quiz-opt-lbl');
+      if(b.querySelector('.quiz-opt-em')?.textContent+' '+(lbl?.textContent||'')===correct) b.classList.add('correct');
+    });
+    fb.textContent=`Not quite! The answer is "${correct.split(' ').slice(1).join(' ')}"`;
+    fb.className='quiz-feedback bad';
+    const card=document.getElementById('quizCard');
+    card.style.animation='none'; void card.offsetWidth; card.style.animation='shake .4s ease';
+    if(soundOn){
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance('Not quite! Try again!');
+      u.pitch=1.0; window.speechSynthesis.speak(u);
+    }
+    document.getElementById('quizRetryBtn').style.display='inline-block';
+  }
+}
+
+function retryQuiz(){showQuiz();}
+
+function afterQuiz(){
+  // All topics done?
+  if(topicIdx >= topics.length-1){
+    showCelebration('🌍','Earth Explorer!',
+      'WOW! You completed ALL 5 topics!\nYou know about Earth, Plants, Habitats,\nWeather and how to Care for our Planet!\n🌿 Be a hero for Earth! 🌿');
+    return;
+  }
+  topicIdx++;
+  cardIdx=0;
+  topics.forEach((_,i)=>document.getElementById('tab'+i).classList.toggle('active',i===topicIdx));
+  updateScreen(true);
+  showCelebration(topic().emoji, `${topics[topicIdx-1].name} Done! 🎉`,
+    `Great work! You learned all about ${topics[topicIdx-1].name}!\nNow let's explore ${topic().name}! 🌟`);
+}
+
+/* CELEBRATION */
+function showCelebration(emoji,title,sub){
+  document.getElementById('celebBig').textContent=emoji;
+  document.getElementById('celebTitle').textContent=title;
+  document.getElementById('celebSub').textContent=sub;
+  document.getElementById('celebOverlay').classList.add('show');
+  if(soundOn){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance('Amazing! You are an Earth Explorer!');
+    u.pitch=1.4; u.rate=0.85; window.speechSynthesis.speak(u);
+  }
+  launchConfetti();
+}
+function closeCelebration(){
+  document.getElementById('celebOverlay').classList.remove('show');
+}
+
+/* CONFETTI */
+function launchConfetti(){
+  const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24','#f472b6','#FB923C'];
+  for(let i=0;i<80;i++){
+    const c=document.createElement('div');
+    const sz=Math.random()*16+7;
+    c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[~~(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'4px'};left:${Math.random()*100}vw;top:-24px;z-index:300;animation:confettiFall ${Math.random()*2.2+1.8}s ease ${Math.random()*.8}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+/* INIT */
+updateDots();
+updateScreen(false);
+setTimeout(speak,900);
+</script>
+</body>
+</html>
