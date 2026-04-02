@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ರೇಖಾಭ್ಯಾಸ ಪಾಠಗಳು – ಪಾಠ 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --orange:#f97316;--yellow:#fbbf24;--green:#16a34a;--blue:#3b82f6;
+  --purple:#7c3aed;--red:#ef4444;--pink:#ec4899;
+  --bg:#fffbf0;--card:#ffffff;--text:#1e1b18;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden;}
+
+/* TOP BAR */
+.topbar{background:var(--orange);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99;box-shadow:0 4px 0 #c2410c;}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:20px;color:white;font-weight:900;line-height:1.2;}
+.topbar-title small{font-size:13px;font-weight:700;opacity:.85;display:block;}
+.stars-pill{background:var(--yellow);color:#78350f;padding:8px 16px;border-radius:30px;font-size:17px;font-weight:900;border:3px solid #92400e;box-shadow:0 3px 0 #92400e;}
+
+/* TAB NAV */
+.section-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:12px 10px 8px;background:#fff7ed;border-bottom:3px solid #fed7aa;}
+.snav-btn{background:white;border:3px solid #fed7aa;border-radius:16px;padding:10px 4px 8px;font-size:10px;font-weight:900;color:#9a3412;text-align:center;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:0 3px 0 #fed7aa;}
+.snav-btn .sn-emoji{font-size:24px;}
+.snav-btn.active{background:var(--orange);color:white;border-color:#c2410c;box-shadow:0 3px 0 #c2410c;transform:translateY(-2px);}
+.snav-btn.locked{opacity:.38;cursor:not-allowed;filter:grayscale(1);}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.snav-btn.shaking{animation:shake .35s ease;}
+
+/* PANELS */
+.section{display:none;padding:16px 14px 110px;}
+.section.active{display:block;}
+
+/* BIG HEADING */
+.big-head{text-align:center;font-family:'Baloo 2',cursive;font-size:26px;font-weight:900;color:var(--orange);margin-bottom:6px;}
+.sub-head{text-align:center;font-size:14px;font-weight:800;color:#9ca3af;margin-bottom:20px;}
+
+/* ─── INTRO / LEARN tab ─── */
+.intro-card{background:white;border-radius:24px;border:4px solid #fed7aa;padding:22px 18px;margin-bottom:18px;box-shadow:0 5px 0 #fed7aa;text-align:center;}
+.intro-emoji{font-size:72px;display:block;margin-bottom:8px;}
+.intro-title{font-family:'Baloo 2',cursive;font-size:22px;color:var(--text);font-weight:900;margin-bottom:6px;}
+.intro-desc{font-size:14px;font-weight:700;color:#6b7280;line-height:1.6;}
+
+.stroke-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.stroke-card{background:white;border:4px solid #e0e7ff;border-radius:22px;padding:16px 10px 12px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:0 5px 0 #c7d2fe;user-select:none;position:relative;}
+.stroke-card:active{transform:scale(.95) translateY(4px);box-shadow:0 1px 0 #c7d2fe;}
+.stroke-card.heard{border-color:var(--green);background:#f0fdf4;}
+.stroke-card.heard::after{content:'✓';position:absolute;top:8px;right:10px;font-size:18px;color:var(--green);font-weight:900;}
+.stroke-card.speaking{border-color:var(--yellow);animation:pulse .5s ease infinite alternate;}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+.sc-shape{font-size:52px;line-height:1;display:block;margin-bottom:6px;}
+.sc-name{font-family:'Baloo 2',cursive;font-size:18px;font-weight:900;color:var(--text);}
+.sc-hint{font-size:12px;color:#6b7280;font-weight:700;margin-top:2px;}
+
+/* progress */
+.prog-wrap{margin:14px 0 20px;}
+.prog-label{font-size:14px;font-weight:800;color:#555;margin-bottom:6px;text-align:center;}
+.prog-bar{background:#e5e7eb;border-radius:20px;height:16px;overflow:hidden;border:2px solid #d1d5db;}
+.prog-fill{background:linear-gradient(90deg,#f97316,#fbbf24);height:100%;border-radius:20px;transition:width .5s;}
+
+/* BIG BTN */
+.big-btn{width:100%;padding:18px 14px;font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;border:none;border-radius:20px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 5px 0 #00000030;}
+.big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #00000030;}
+.big-btn.orange{background:var(--orange);color:white;box-shadow:0 5px 0 #c2410c;}
+.big-btn.green{background:var(--green);color:white;box-shadow:0 5px 0 #14532d;}
+.big-btn.blue{background:var(--blue);color:white;box-shadow:0 5px 0 #1d4ed8;}
+.big-btn.yellow{background:var(--yellow);color:#78350f;box-shadow:0 5px 0 #92400e;}
+.big-btn.purple{background:var(--purple);color:white;box-shadow:0 5px 0 #4c1d95;}
+
+/* ─── DRAW tab ─── */
+.draw-card{background:white;border-radius:24px;border:4px solid #fed7aa;padding:18px 14px;margin-bottom:20px;box-shadow:0 5px 0 #fed7aa;}
+.draw-label{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;color:var(--orange);margin-bottom:6px;text-align:center;}
+.draw-desc{font-size:13px;font-weight:700;color:#9ca3af;text-align:center;margin-bottom:14px;}
+.draw-example{text-align:center;font-size:60px;margin-bottom:10px;line-height:1;}
+
+.canvas-wrap{position:relative;border-radius:18px;overflow:hidden;border:3px solid #fed7aa;background:#f8fafc;margin-bottom:12px;}
+canvas{display:block;width:100%;touch-action:none;cursor:crosshair;}
+.canvas-guide{position:absolute;inset:0;pointer-events:none;}
+
+.draw-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+.draw-btn{padding:14px 10px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:900;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;box-shadow:0 4px 0 #00000020;}
+.draw-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #00000020;}
+.draw-btn.clear{background:#fee2e2;color:#dc2626;box-shadow:0 4px 0 #fca5a5;}
+.draw-btn.done{background:var(--green);color:white;box-shadow:0 4px 0 #14532d;}
+.draw-btn.undo{background:#e0e7ff;color:#3730a3;box-shadow:0 4px 0 #c7d2fe;}
+.draw-btn.play{background:var(--blue);color:white;box-shadow:0 4px 0 #1d4ed8;}
+
+.stroke-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;justify-content:center;}
+.stab{padding:8px 16px;border-radius:20px;border:3px solid #e5e7eb;background:white;font-size:13px;font-weight:900;color:#6b7280;cursor:pointer;transition:all .15s;box-shadow:0 3px 0 #e5e7eb;}
+.stab.active{background:var(--orange);color:white;border-color:#c2410c;box-shadow:0 3px 0 #c2410c;}
+.stab.done-tab{border-color:var(--green);color:var(--green);}
+.stab.done-tab::after{content:' ✓';}
+
+.draw-progress{background:#e5e7eb;border-radius:20px;height:12px;overflow:hidden;border:2px solid #d1d5db;margin-bottom:12px;}
+.draw-progress-fill{background:linear-gradient(90deg,#f97316,#fbbf24);height:100%;border-radius:20px;transition:width .5s;}
+
+/* ─── MATCH tab ─── */
+.ex-card{background:white;border-radius:24px;padding:20px 16px;margin-bottom:18px;border:3px solid #e0e7ff;box-shadow:0 4px 0 #c7d2fe;}
+.ex-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:900;color:var(--purple);margin-bottom:4px;}
+.ex-instr{font-size:14px;font-weight:700;color:#6b7280;margin-bottom:16px;line-height:1.5;}
+
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.match-item{background:#f9fafb;border:4px solid #e5e7eb;border-radius:18px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:0 4px 0 #d1d5db;user-select:none;font-size:36px;}
+.match-item .mi-label{font-size:13px;font-weight:900;color:#374151;margin-top:4px;}
+.match-item:active{transform:translateY(3px);box-shadow:0 1px 0 #d1d5db;}
+.match-item.selected{border-color:#f97316;background:#fff7ed;box-shadow:0 4px 0 #c2410c;}
+.match-item.matched{border-color:var(--green);background:#dcfce7;box-shadow:0 4px 0 #15803d;pointer-events:none;}
+.match-item.wrong-flash{border-color:var(--red);background:#fee2e2;box-shadow:0 4px 0 #b91c1c;}
+
+/* ─── QUIZ tab ─── */
+.quiz-num{text-align:center;font-size:14px;font-weight:900;color:#9ca3af;margin-bottom:10px;}
+.quiz-big{font-size:90px;text-align:center;margin:10px 0 6px;line-height:1;}
+.quiz-prompt{text-align:center;font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;color:var(--text);margin-bottom:20px;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.quiz-opt{background:white;border:4px solid #e5e7eb;border-radius:20px;padding:16px 10px;font-size:32px;font-weight:900;cursor:pointer;transition:all .15s;box-shadow:0 4px 0 #d1d5db;text-align:center;}
+.quiz-opt:active{transform:translateY(3px);box-shadow:0 1px 0 #d1d5db;}
+.quiz-opt.correct{border-color:var(--green);background:#dcfce7;box-shadow:0 4px 0 #15803d;}
+.quiz-opt.wrong{border-color:var(--red);background:#fee2e2;box-shadow:0 4px 0 #b91c1c;}
+.quiz-opt .opt-label{font-size:13px;font-weight:900;color:#374151;margin-top:4px;display:block;}
+
+/* CELEBRATION OVERLAY */
+.celeb-overlay{position:fixed;inset:0;background:#00000088;z-index:200;display:none;align-items:center;justify-content:center;padding:24px;}
+.celeb-overlay.show{display:flex;}
+.celeb-box{background:white;border-radius:32px;padding:36px 24px;text-align:center;max-width:360px;width:100%;box-shadow:0 20px 60px #00000040;border:5px solid var(--yellow);}
+.celeb-emoji{font-size:80px;display:block;margin-bottom:10px;}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:30px;font-weight:900;color:var(--text);margin-bottom:6px;}
+.celeb-sub{font-size:15px;font-weight:700;color:#6b7280;margin-bottom:10px;}
+.celeb-stars{font-size:22px;font-weight:900;color:var(--yellow);margin-bottom:24px;}
+.celeb-close{width:100%;padding:18px;font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;border:none;border-radius:20px;background:var(--orange);color:white;cursor:pointer;box-shadow:0 5px 0 #c2410c;}
+.celeb-close:active{transform:translateY(4px);box-shadow:0 1px 0 #c2410c;}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1b18;color:white;padding:12px 24px;border-radius:30px;font-size:15px;font-weight:800;opacity:0;transition:all .3s;z-index:150;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-title">
+    ರೇಖಾಭ್ಯಾಸ ಪಾಠಗಳು
+    <small>ಪಾಠ 5 – Line Practice</small>
+  </div>
+  <div class="stars-pill">⭐ <span id="starsDisplay">0</span></div>
+</div>
+
+<!-- TAB NAV -->
+<div class="section-nav">
+  <button class="snav-btn active" id="nav-learn" onclick="goSection('learn',this)">
+    <span class="sn-emoji">📖</span>Learn
+  </button>
+  <button class="snav-btn locked" id="nav-draw" onclick="goSection('draw',this)">
+    <span class="sn-emoji">✏️</span>Draw<span id="lock-draw">🔒</span>
+  </button>
+  <button class="snav-btn locked" id="nav-match" onclick="goSection('match',this)">
+    <span class="sn-emoji">🔗</span>Match<span id="lock-match">🔒</span>
+  </button>
+  <button class="snav-btn locked" id="nav-quiz" onclick="goSection('quiz',this)">
+    <span class="sn-emoji">🎯</span>Quiz<span id="lock-quiz">🔒</span>
+  </button>
+  <button class="snav-btn locked" id="nav-star" onclick="goSection('star',this)">
+    <span class="sn-emoji">🏆</span>Stars<span id="lock-star">🔒</span>
+  </button>
+</div>
+
+<!-- ═══════════════ LEARN ═══════════════ -->
+<div class="section active" id="s-learn">
+  <div class="big-head">ನೋಡಿ ಕಲಿಯಿರಿ 👀</div>
+  <div class="sub-head">Tap each shape to hear its name!</div>
+
+  <div class="prog-wrap">
+    <div class="prog-label" id="learnProg">0 / 9 shapes heard</div>
+    <div class="prog-bar"><div class="prog-fill" id="learnFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="stroke-grid" id="learnGrid"></div>
+
+  <button class="big-btn orange" onclick="finishLearn()" style="margin-top:6px">
+    ➡️ All Done! Let's Draw!
+  </button>
+</div>
+
+<!-- ═══════════════ DRAW ═══════════════ -->
+<div class="section" id="s-draw">
+  <div class="big-head">ಗೆರೆ ಎಳೆಯಿರಿ ✏️</div>
+  <div class="sub-head">Draw the shapes with your finger!</div>
+
+  <div class="draw-progress"><div class="draw-progress-fill" id="drawFill" style="width:0%"></div></div>
+
+  <!-- stroke selector tabs -->
+  <div class="stroke-tabs" id="strokeTabs"></div>
+
+  <div class="draw-card" id="currentDrawCard">
+    <div class="draw-label" id="drawLabel">Circle (ವೃತ್ತ)</div>
+    <div class="draw-example" id="drawExample">⭕</div>
+    <div class="draw-desc" id="drawDesc">Draw a big circle with your finger!</div>
+    <div class="canvas-wrap">
+      <canvas id="drawCanvas" height="220"></canvas>
+    </div>
+    <div class="draw-btns">
+      <button class="draw-btn undo" onclick="undoStroke()">↩️ Undo</button>
+      <button class="draw-btn clear" onclick="clearCanvas()">🗑️ Clear</button>
+    </div>
+    <button class="draw-btn done" style="width:100%;font-size:17px;padding:16px" onclick="markDrawDone()">
+      ✅ I drew it! Next Shape →
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════ MATCH ═══════════════ -->
+<div class="section" id="s-match">
+  <div class="big-head">ಜೋಡಿ ಮಾಡಿ 🔗</div>
+  <div class="sub-head">Match the shape with its name!</div>
+
+  <div class="ex-card">
+    <div class="ex-title">Set <span id="matchSetNum">1</span> of <span id="matchSetTotal">4</span></div>
+    <div class="ex-instr">Tap a shape on the left, then tap its matching name on the right!</div>
+    <div class="match-grid" id="matchGrid"></div>
+    <div class="draw-progress" style="margin-top:12px"><div class="draw-progress-fill" id="matchFill" style="width:0%"></div></div>
+  </div>
+
+  <button class="big-btn blue" onclick="finishMatch()">➡️ Done! Let's Quiz!</button>
+</div>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<div class="section" id="s-quiz">
+  <div class="big-head">ಪ್ರಶ್ನೋತ್ತರ 🎯</div>
+  <div class="sub-head">Tap the correct shape!</div>
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ═══════════════ STARS ═══════════════ -->
+<div class="section" id="s-star">
+  <div class="big-head">ನಿಮ್ಮ ಸಾಧನೆ 🏆</div>
+  <div class="sub-head">Look how far you've come!</div>
+  <div id="starSummary"></div>
+</div>
+
+<!-- CELEBRATION OVERLAY -->
+<div class="celeb-overlay" id="celebOverlay">
+  <div class="celeb-box">
+    <span class="celeb-emoji" id="celebEmoji">🎉</span>
+    <div class="celeb-title" id="celebTitle">Well Done!</div>
+    <div class="celeb-sub" id="celebSub">Keep going!</div>
+    <div class="celeb-stars" id="celebStars">⭐ 0 Stars!</div>
+    <button class="celeb-close" id="celebClose" onclick="closeCelebration()">Next! →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── DATA ── */
+const shapes = [
+  { id:'circle',   emoji:'⭕', name:'ವೃತ್ತ',      en:'Circle',        hint:'Round and round!' },
+  { id:'arc-up',   emoji:'🌈', name:'ಅರ್ಧ ವೃತ್ತ (↑)', en:'Half-Circle Up', hint:'Like a rainbow!' },
+  { id:'arc-down', emoji:'🌙', name:'ಅರ್ಧ ವೃತ್ತ (↓)', en:'Half-Circle Down',hint:'Like a bowl!' },
+  { id:'arc-right',emoji:'🌛', name:'ಬಲ ಬಾಗು',    en:'Curve Right',   hint:'Like a crescent!' },
+  { id:'arc-left', emoji:'🌜', name:'ಎಡ ಬಾಗು',    en:'Curve Left',    hint:'Other side!' },
+  { id:'hline',    emoji:'➖', name:'ಅಡ್ಡಗೆರೆ',   en:'Horizontal Line',hint:'Left to right!' },
+  { id:'vline',    emoji:'|',  name:'ಉದ್ದಗೆರೆ',   en:'Vertical Line', hint:'Top to bottom!' },
+  { id:'loop8',    emoji:'∞',  name:'ಅನಂತ',       en:'Infinity Loop',  hint:'Like the number 8!' },
+  { id:'wave',     emoji:'〜', name:'ಅಲೆ',        en:'Wave',          hint:'Like ocean waves!' },
+];
+
+let stars = 0;
+let heardSet = new Set();
+let drawDoneSet = new Set();
+let matchScore = 0;
+let matchSet = 0;
+let celebNextTab = null;
+
+/* ── LEARN ── */
+function buildLearnGrid(){
+  const g = document.getElementById('learnGrid');
+  shapes.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'stroke-card';
+    div.id = 'sc-'+s.id;
+    div.innerHTML = `<span class="sc-shape">${s.emoji}</span>
+      <div class="sc-name">${s.name}</div>
+      <div class="sc-hint">${s.en} – ${s.hint}</div>`;
+    div.onclick = () => hearShape(s, div);
+    g.appendChild(div);
+  });
+}
+
+function hearShape(s, el){
+  document.querySelectorAll('.stroke-card').forEach(c=>c.classList.remove('speaking'));
+  el.classList.add('speaking');
+  speak(`${s.en}... ${s.name}`, 0.85, 1.1);
+  setTimeout(()=>{
+    el.classList.remove('speaking');
+    el.classList.add('heard');
+    heardSet.add(s.id);
+    updateLearnProg();
+  }, 1200);
+}
+
+function updateLearnProg(){
+  const n = heardSet.size, total = shapes.length;
+  document.getElementById('learnProg').textContent = `${n} / ${total} shapes heard`;
+  document.getElementById('learnFill').style.width = (n/total*100)+'%';
+}
+
+function finishLearn(){
+  heardSet = new Set(shapes.map(s=>s.id));
+  updateLearnProg();
+  document.querySelectorAll('.stroke-card').forEach(c=>c.classList.add('heard'));
+  addStars(30);
+  unlockTab('draw');
+  celebNextTab='draw';
+  showCeleb('✏️','ಭೇಷ್!','You learned all 9 shapes! Now draw them!',stars,"Let's Draw! ✏️");
+  launchConfetti();
+  speak('Excellent! Now let us draw!', 0.9, 1.2);
+}
+
+/* ── DRAW ── */
+let currentStrokeIdx = 0;
+let drawPaths = [];
+let currentPath = [];
+let isDrawing = false;
+let ctx;
+
+function buildDrawTab(){
+  // tabs
+  const tabs = document.getElementById('strokeTabs');
+  tabs.innerHTML = '';
+  shapes.forEach((s,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'stab' + (i===0?' active':'') + (drawDoneSet.has(s.id)?' done-tab':'');
+    btn.id = 'stab-'+s.id;
+    btn.textContent = s.emoji+' '+s.en;
+    btn.onclick = ()=>switchDraw(i);
+    tabs.appendChild(btn);
+  });
+  initCanvas();
+  loadDrawShape(0);
+}
+
+function switchDraw(i){
+  currentStrokeIdx = i;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  const tb = document.getElementById('stab-'+shapes[i].id);
+  if(tb) tb.classList.add('active');
+  clearCanvas();
+  loadDrawPath(i);
+  loadDrawShape(i);
+}
+
+function loadDrawShape(i){
+  const s = shapes[i];
+  document.getElementById('drawLabel').textContent = `${s.en} (${s.name})`;
+  document.getElementById('drawExample').textContent = s.emoji;
+  document.getElementById('drawDesc').textContent = s.hint;
+}
+
+function initCanvas(){
+  const canvas = document.getElementById('drawCanvas');
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.offsetWidth * window.devicePixelRatio || 320;
+  canvas.height = 220 * window.devicePixelRatio;
+  canvas.style.height = '220px';
+  ctx = canvas.getContext('2d');
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  ctx.strokeStyle = '#f97316';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  drawGuideLines();
+
+  // touch/mouse
+  canvas.addEventListener('touchstart', startDraw, {passive:false});
+  canvas.addEventListener('touchmove',  moveDraw,  {passive:false});
+  canvas.addEventListener('touchend',   endDraw);
+  canvas.addEventListener('mousedown',  e=>startDraw(e));
+  canvas.addEventListener('mousemove',  e=>{ if(isDrawing) moveDraw(e); });
+  canvas.addEventListener('mouseup',    endDraw);
+}
+
+function getPos(e, canvas){
+  const rect = canvas.getBoundingClientRect();
+  if(e.touches){
+    return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+  }
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+
+function startDraw(e){
+  e.preventDefault();
+  isDrawing = true;
+  currentPath = [];
+  const canvas = document.getElementById('drawCanvas');
+  const pos = getPos(e, canvas);
+  currentPath.push(pos);
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+}
+
+function moveDraw(e){
+  e.preventDefault();
+  if(!isDrawing) return;
+  const canvas = document.getElementById('drawCanvas');
+  const pos = getPos(e, canvas);
+  currentPath.push(pos);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+}
+
+function endDraw(e){
+  if(!isDrawing) return;
+  isDrawing = false;
+  if(currentPath.length > 2) drawPaths.push([...currentPath]);
+}
+
+function clearCanvas(){
+  const canvas = document.getElementById('drawCanvas');
+  if(!ctx) return;
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  drawPaths = [];
+  currentPath = [];
+  drawGuideLines();
+}
+
+function undoStroke(){
+  if(drawPaths.length===0) return;
+  drawPaths.pop();
+  const canvas = document.getElementById('drawCanvas');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drawGuideLines();
+  drawPaths.forEach(path=>{
+    ctx.beginPath();
+    path.forEach((p,i)=>{ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
+    ctx.stroke();
+  });
+}
+
+function loadDrawPath(i){
+  // just clear – user draws fresh
+  clearCanvas();
+}
+
+function drawGuideLines(){
+  if(!ctx) return;
+  ctx.save();
+  ctx.strokeStyle = '#fed7aa';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([6,6]);
+  // horizontal mid
+  ctx.beginPath(); ctx.moveTo(0,110); ctx.lineTo(400,110); ctx.stroke();
+  // vertical mid
+  ctx.beginPath(); ctx.moveTo(170,0); ctx.lineTo(170,220); ctx.stroke();
+  ctx.restore();
+  ctx.strokeStyle = '#f97316';
+  ctx.lineWidth = 6;
+  ctx.setLineDash([]);
+}
+
+function markDrawDone(){
+  const s = shapes[currentStrokeIdx];
+  drawDoneSet.add(s.id);
+  addStars(10);
+  const tab = document.getElementById('stab-'+s.id);
+  if(tab){ tab.classList.add('done-tab'); tab.classList.remove('active'); }
+  showToast('✅ Great! +10 stars!');
+  speak('Wonderful!', 0.9, 1.2);
+
+  // update fill
+  const pct = drawDoneSet.size / shapes.length * 100;
+  document.getElementById('drawFill').style.width = pct+'%';
+
+  // next
+  const next = currentStrokeIdx + 1;
+  if(next < shapes.length){
+    switchDraw(next);
+    const nextTab = document.getElementById('stab-'+shapes[next].id);
+    if(nextTab) nextTab.classList.add('active');
+  } else {
+    finishDraw();
+  }
+}
+
+function finishDraw(){
+  addStars(20);
+  unlockTab('match');
+  celebNextTab = 'match';
+  showCeleb('🔗','ತುಂಬಾ ಚೆನ್ನಾಗಿದೆ!','You drew all the shapes! Now let\'s Match!',stars,"Let's Match! 🔗");
+  launchConfetti();
+  speak('Amazing! Now let us match the shapes!', 0.9, 1.2);
+}
+
+/* ── MATCH ── */
+const matchSets = [
+  [shapes[0], shapes[1], shapes[2]],
+  [shapes[3], shapes[4], shapes[5]],
+  [shapes[6], shapes[7], shapes[8]],
+  [shapes[0], shapes[4], shapes[8]], // review round
+];
+let matchSelected = null;
+let matchDone = 0;
+let matchTotalPairs = 0;
+
+function buildMatchSet(idx){
+  const set = matchSets[idx];
+  document.getElementById('matchSetNum').textContent = idx+1;
+  document.getElementById('matchSetTotal').textContent = matchSets.length;
+  matchSelected = null;
+  matchTotalPairs = set.length;
+  matchDone = 0;
+  document.getElementById('matchFill').style.width = '0%';
+
+  const grid = document.getElementById('matchGrid');
+  grid.innerHTML = '';
+
+  // left col = emojis shuffled, right col = names shuffled
+  const leftItems = [...set].sort(()=>Math.random()-.5);
+  const rightItems = [...set].sort(()=>Math.random()-.5);
+
+  // Build 2-col grid: left side emoji items, right side name items
+  const leftCol = document.createElement('div');
+  leftCol.style.display='flex';leftCol.style.flexDirection='column';leftCol.style.gap='10px';
+  const rightCol = document.createElement('div');
+  rightCol.style.display='flex';rightCol.style.flexDirection='column';rightCol.style.gap='10px';
+
+  leftItems.forEach(s=>{
+    const el = document.createElement('div');
+    el.className='match-item';
+    el.dataset.id=s.id; el.dataset.side='emoji';
+    el.innerHTML=`<div style="font-size:38px">${s.emoji}</div><div class="mi-label">${s.en}</div>`;
+    el.onclick=()=>selectMatch(el,'emoji',s.id);
+    leftCol.appendChild(el);
+  });
+  rightItems.forEach(s=>{
+    const el = document.createElement('div');
+    el.className='match-item';
+    el.dataset.id=s.id; el.dataset.side='name';
+    el.innerHTML=`<div class="mi-label" style="font-size:16px;margin:0">${s.name}</div><div style="font-size:13px;color:#9ca3af;font-weight:700">${s.en}</div>`;
+    el.onclick=()=>selectMatch(el,'name',s.id);
+    rightCol.appendChild(el);
+  });
+
+  // wrap in 2-col
+  grid.style.gridTemplateColumns='1fr 1fr';
+  grid.appendChild(leftCol);
+  grid.appendChild(rightCol);
+}
+
+function selectMatch(el, side, id){
+  if(el.classList.contains('matched')) return;
+  if(!matchSelected){
+    matchSelected = {el, side, id};
+    el.classList.add('selected');
+  } else {
+    if(matchSelected.el===el){ matchSelected.el.classList.remove('selected'); matchSelected=null; return; }
+    if(matchSelected.id===id){
+      // correct
+      el.classList.add('matched');
+      matchSelected.el.classList.remove('selected');
+      matchSelected.el.classList.add('matched');
+      matchDone++;
+      addStars(5);
+      speak('Correct!', 0.9, 1.3);
+      matchSelected = null;
+      document.getElementById('matchFill').style.width=(matchDone/matchTotalPairs*100)+'%';
+      if(matchDone===matchTotalPairs){
+        setTimeout(()=>{
+          matchSet++;
+          if(matchSet < matchSets.length){ buildMatchSet(matchSet); }
+          else { showToast('All sets done! 🎉'); }
+        }, 700);
+      }
+    } else {
+      // wrong
+      el.classList.add('wrong-flash');
+      matchSelected.el.classList.add('wrong-flash');
+      speak('Try again!', 0.9, 1);
+      setTimeout(()=>{
+        el.classList.remove('wrong-flash','selected');
+        matchSelected.el.classList.remove('wrong-flash','selected');
+        matchSelected=null;
+      }, 700);
+    }
+  }
+}
+
+function finishMatch(){
+  addStars(20);
+  unlockTab('quiz');
+  celebNextTab='quiz';
+  showCeleb('🎯','ಅದ್ಭುತ!','Great matching! Ready for the Quiz?',stars,"Quiz Time! 🎯");
+  launchConfetti();
+  speak('Superb! Now let us do the quiz!', 0.9, 1.2);
+}
+
+/* ── QUIZ ── */
+let quizItems=[], quizIdx=0, quizScore=0;
+
+function startQuiz(){
+  quizItems=[...shapes].sort(()=>Math.random()-.5).slice(0,8);
+  quizIdx=0; quizScore=0;
+  showQ();
+}
+
+function showQ(){
+  const c=document.getElementById('quizContainer');
+  if(quizIdx>=quizItems.length){
+    const pct=Math.round(quizScore/quizItems.length*100);
+    addStars(quizScore*5);
+    unlockTab('star');
+    c.innerHTML=`<div style="text-align:center;padding:30px 0">
+      <div style="font-size:80px;margin-bottom:12px">${quizScore>=6?'🏆':'✏️'}</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:28px;color:#1e1b18;margin-bottom:8px">${quizScore} out of ${quizItems.length}!</div>
+      <div style="font-size:16px;color:#9ca3af;font-weight:700;margin-bottom:8px">${quizScore>=6?'ತುಂಬಾ ಚೆನ್ನಾಗಿದೆ! 🌟':'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! 💪'}</div>
+      <div style="font-size:18px;color:#f97316;font-weight:900;margin-bottom:28px">+${quizScore*5} stars!</div>
+      <button class="big-btn orange" style="max-width:280px;margin:0 auto 14px;display:flex" onclick="startQuiz()">🔄 Play Again!</button>
+      <button class="big-btn green" style="max-width:280px;margin:0 auto;display:flex" onclick="showStars()">🏆 See My Stars!</button>
+    </div>`;
+    launchConfetti();
+    speak('Congratulations! You finished the quiz!', 0.85, 1.2);
+    return;
+  }
+  const q=quizItems[quizIdx];
+  const wrong=shapes.filter(s=>s.id!==q.id).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[q,...wrong].sort(()=>Math.random()-.5);
+  const showEmoji=quizIdx%2===0;
+
+  c.innerHTML=`
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-big">${showEmoji?q.emoji:'❓'}</div>
+    <div class="quiz-prompt">${showEmoji?'What is this shape?':`Find the <span style="color:#7c3aed">${q.name}</span> (${q.en})`}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`
+        <button class="quiz-opt" onclick="answerQ(this,'${o.id}','${q.id}')">
+          ${showEmoji?`<span>${o.name}</span><span class="opt-label">${o.en}</span>`:o.emoji}
+        </button>`).join('')}
+    </div>`;
+}
+
+function answerQ(btn,sel,correct){
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.onclick=null);
+  if(sel===correct){
+    btn.classList.add('correct');quizScore++;addStars(5);speak('Correct! Well done!',0.9,1.2);
+  } else {
+    btn.classList.add('wrong');speak('Oops! Try the next one!',0.9,1);
+    document.querySelectorAll('.quiz-opt').forEach(b=>{
+      if(b.querySelector('span')&&b.querySelector('span').textContent===shapes.find(s=>s.id===correct)?.name)
+        b.classList.add('correct');
+      // for emoji mode
+      if(b.textContent.trim()===shapes.find(s=>s.id===correct)?.emoji)
+        b.classList.add('correct');
+    });
+  }
+  setTimeout(()=>{quizIdx++;showQ();},1500);
+}
+
+/* ── STARS SUMMARY ── */
+function showStars(){
+  goSection('star', document.getElementById('nav-star'));
+  const s = document.getElementById('starSummary');
+  s.innerHTML=`
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:100px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:36px;color:#f97316;font-weight:900;margin-bottom:8px">⭐ ${stars} Stars!</div>
+      <div style="font-size:16px;font-weight:700;color:#6b7280;margin-bottom:30px">ಅದ್ಭುತ ಕೆಲಸ! You are a Star!</div>
+      <div style="background:white;border-radius:24px;border:4px solid #fed7aa;padding:20px;box-shadow:0 5px 0 #fed7aa;margin-bottom:20px">
+        <div style="font-family:'Baloo 2',cursive;font-size:18px;color:#9a3412;font-weight:900;margin-bottom:16px">What you learned today:</div>
+        ${shapes.map(s=>`<div style="font-size:22px;margin-bottom:8px">${s.emoji} ${s.en} – ${s.name}</div>`).join('')}
+      </div>
+      <button class="big-btn orange" onclick="location.reload()">🔄 Start Again!</button>
+    </div>`;
+  launchConfetti();
+}
+
+/* ── HELPERS ── */
+function speak(text,rate=0.9,pitch=1.1){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=rate; u.pitch=pitch; u.lang='en-IN';
+  window.speechSynthesis.speak(u);
+}
+
+function addStars(n){
+  stars+=n;
+  document.getElementById('starsDisplay').textContent=stars;
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function unlockTab(id){
+  const btn=document.getElementById('nav-'+id);
+  if(!btn) return;
+  btn.classList.remove('locked');
+  const lock=document.getElementById('lock-'+id);
+  if(lock) lock.textContent=' ✅';
+}
+
+const tabOrder=['learn','draw','match','quiz','star'];
+
+function goSection(id, btn){
+  const navBtn=btn||document.getElementById('nav-'+id);
+  if(navBtn&&navBtn.classList.contains('locked')){
+    speak('Finish the previous step first!',0.9);
+    navBtn.classList.add('shaking');
+    setTimeout(()=>navBtn.classList.remove('shaking'),400);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.snav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  if(navBtn) navBtn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='draw') buildDrawTab();
+  if(id==='match'){ matchSet=0; buildMatchSet(0); }
+  if(id==='quiz') startQuiz();
+}
+
+function showCeleb(emoji,title,sub,starCount,btnLabel){
+  document.getElementById('celebEmoji').textContent=emoji;
+  document.getElementById('celebTitle').textContent=title;
+  document.getElementById('celebSub').textContent=sub;
+  document.getElementById('celebStars').textContent=`⭐ ${starCount} Stars!`;
+  document.getElementById('celebClose').textContent=btnLabel;
+  document.getElementById('celebOverlay').classList.add('show');
+}
+
+function closeCelebration(){
+  document.getElementById('celebOverlay').classList.remove('show');
+  if(celebNextTab){
+    const btn=document.getElementById('nav-'+celebNextTab);
+    goSection(celebNextTab,btn);
+    celebNextTab=null;
+  }
+}
+
+function launchConfetti(){
+  const cols=['#f97316','#fbbf24','#16a34a','#3b82f6','#7c3aed','#fff','#ec4899'];
+  for(let i=0;i<80;i++){
+    const c=document.createElement('div');
+    const sz=Math.random()*16+6;
+    c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'4px'};left:${Math.random()*100}vw;top:-20px;z-index:300;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*0.8}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4500);
+  }
+}
+
+/* ── INIT ── */
+buildLearnGrid();
+</script>
+</body>
+</html>

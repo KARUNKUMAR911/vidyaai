@@ -154,7 +154,7 @@
     <div class="progress-section">
         <div class="progress-header">
             <div class="progress-title">📊 My Progress</div>
-            <div class="progress-count" id="progressCount">0 of 6 subjects</div>
+            <div class="progress-count" id="progressCount">0 of 5 subjects</div>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
@@ -190,20 +190,12 @@
             <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-maths"></div></div>
         </a>
 
-        <a href="/class/1/science" class="subject-card c3">
+        <a href="/class/1/evs" class="subject-card c3">
             <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🔬</span>
-            <div class="card-title">Science</div>
-            <div class="card-sub">Nature & Life</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-science"></div></div>
-        </a>
-
-        <a href="/class/1/social" class="subject-card c4">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🌍</span>
-            <div class="card-title">Social Science</div>
-            <div class="card-sub">World Around Us</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-social"></div></div>
+            <span class="card-icon">🌿</span>
+            <div class="card-title">EVS</div>
+            <div class="card-sub">Our Environment</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-evs"></div></div>
         </a>
 
         <a href="/class/1/kannada" class="subject-card c5">
@@ -214,7 +206,7 @@
             <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
         </a>
 
-        <a href="/class/1/hindi" class="subject-card c6">
+        <a href="/class/1/hindi" class="subject-card c6" style="grid-column: span 2;">
             <div class="card-badge">📘 Subject</div>
             <span class="card-icon">🙏</span>
             <div class="card-title">Hindi</div>
@@ -250,7 +242,7 @@ async function loadProgress() {
         const res = await fetch('/api/progress/load?grade=1');
         const data = await res.json();
         let completed = 0;
-        const subjects = ['english','maths','science','social','kannada','hindi'];
+        const subjects = ['english','maths','evs','kannada','hindi'];
         subjects.forEach(s => {
             const p = data[s];
             const bar = document.getElementById(`prog-${s}`);
@@ -260,8 +252,8 @@ async function loadProgress() {
                 if (pct===100) completed++;
             }
         });
-        document.getElementById('progressCount').textContent = `${completed} of 6 subjects`;
-        document.getElementById('progressFill').style.width = `${Math.round((completed/6)*100)}%`;
+        document.getElementById('progressCount').textContent = `${completed} of 5 subjects`;
+        document.getElementById('progressFill').style.width = `${Math.round((completed/5)*100)}%`;
         const stars = Object.values(data).reduce((s,p)=>s+(p.stars||0),0);
         document.getElementById('totalStars').textContent = stars;
     } catch(e) {}
