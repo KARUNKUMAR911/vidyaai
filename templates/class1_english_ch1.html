@@ -1,873 +1,1014 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>VidyaAI - 2. Fruits</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Nunito', sans-serif; background: #fff8f0; min-height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>VidyaAI – Fruits 🍎</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-        /* NAVBAR */
-        .navbar {
-            background: linear-gradient(135deg, #f77f00, #d62828);
-            padding: 12px 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 15px rgba(247,127,0,0.3);
-        }
-        .navbar-left { display: flex; align-items: center; gap: 10px; }
-        .navbar-logo  { font-size: 18px; font-weight: 900; color: white; }
-        .navbar-grade {
-            background: rgba(255,255,255,0.25); color: white;
-            padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
-        }
-        .navbar-right { display: flex; align-items: center; gap: 8px; }
-        .nav-btn {
-            background: rgba(255,255,255,0.22); color: white;
-            border: none; padding: 7px 14px; border-radius: 20px;
-            font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none;
-        }
-        .stars-badge {
-            background: rgba(255,215,0,0.3); border: 1px solid rgba(255,215,0,0.5);
-            color: white; padding: 6px 14px; border-radius: 20px;
-            font-size: 13px; font-weight: 700;
-        }
+:root {
+  --orange:#f77f00;
+  --red:#d62828;
+  --green:#059669;
+  --yellow:#ffd60a;
+  --bg:#fff8f0;
+  --card:#ffffff;
+  --radius:24px;
+}
 
-        /* HERO */
-        .hero {
-            background: linear-gradient(135deg, #f77f00, #d62828);
-            padding: 16px 20px 32px; text-align: center; color: white;
-        }
-        .hero-page { font-size: 12px; opacity: 0.7; margin-bottom: 4px; font-weight: 600; }
-        .hero h2   { font-size: 24px; font-weight: 900; margin-bottom: 4px; }
-        .hero p    { font-size: 13px; opacity: 0.85; font-style: italic; }
+body {
+  font-family:'Baloo 2', cursive;
+  background:var(--bg);
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-        /* PROGRESS */
-        .progress-card {
-            background: white; margin: -16px 16px 20px;
-            border-radius: 16px; padding: 14px 18px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 14px;
-        }
-        .progress-info { flex: 1; }
-        .progress-info h4 { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
-        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 10px; overflow: hidden; }
-        .progress-fill {
-            background: linear-gradient(90deg, #f77f00, #d62828);
-            height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%;
-        }
-        .progress-pct { font-size: 20px; font-weight: 900; color: #f77f00; }
+/* ── HEADER ── */
+.header {
+  background:linear-gradient(135deg,var(--orange),var(--red));
+  padding:14px 18px 44px;
+  text-align:center;
+  color:white;
+  position:relative;
+}
+.header-top {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px;
+}
+.logo { font-family:'Fredoka One',cursive; font-size:20px; }
+.stars-badge {
+  background:rgba(255,255,255,0.25);
+  border-radius:30px; padding:6px 16px;
+  font-size:16px; font-weight:900;
+}
+.chapter-title {
+  font-family:'Fredoka One',cursive;
+  font-size:38px; line-height:1.1;
+  text-shadow:0 3px 12px rgba(0,0,0,0.2);
+}
+.chapter-sub { font-size:15px; opacity:0.85; margin-top:4px; }
 
-        /* TABS */
-        .tabs {
-            display: flex; padding: 0 16px; margin-bottom: 16px;
-            overflow-x: auto; scrollbar-width: none; gap: 8px;
-        }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab {
-            padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700;
-            cursor: pointer; white-space: nowrap;
-            border: 2px solid #e5e7eb; background: white; color: #888; transition: all 0.2s;
-        }
-        .tab.active { background: #f77f00; color: white; border-color: #f77f00; }
+/* ── PROGRESS CARD ── */
+.progress-card {
+  background:white;
+  border-radius:var(--radius);
+  margin:-26px 16px 20px;
+  padding:16px 20px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.12);
+  display:flex; align-items:center; gap:16px;
+}
+.progress-info { flex:1; }
+.progress-label { font-size:13px; font-weight:800; color:#888; margin-bottom:6px; }
+.progress-bar { background:#f0f0f0; border-radius:10px; height:12px; overflow:hidden; }
+.progress-fill {
+  background:linear-gradient(90deg,var(--orange),var(--red));
+  height:100%; border-radius:10px;
+  transition:width 0.6s cubic-bezier(.34,1.56,.64,1);
+  width:0%;
+}
+.progress-pct {
+  font-family:'Fredoka One',cursive;
+  font-size:28px; color:var(--orange);
+}
 
-        /* CONTENT */
-        .content { padding: 0 16px 100px; }
+/* ── STEP PILLS ── */
+.steps-scroll {
+  display:flex; gap:10px;
+  padding:0 16px 14px;
+  overflow-x:auto; scrollbar-width:none;
+}
+.steps-scroll::-webkit-scrollbar { display:none; }
+.step-pill {
+  display:flex; align-items:center; gap:6px;
+  padding:10px 18px;
+  border-radius:30px;
+  border:3px solid #e5e7eb;
+  background:white;
+  color:#aaa;
+  font-size:15px; font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all 0.2s;
+  flex-shrink:0;
+}
+.step-pill.active {
+  background:var(--orange);
+  border-color:var(--orange);
+  color:white;
+  transform:scale(1.05);
+}
+.step-pill.done {
+  background:#d1fae5;
+  border-color:var(--green);
+  color:var(--green);
+}
 
-        /* ===== SECTION CARD ===== */
-        .section-card {
-            background: white; border-radius: 20px; margin-bottom: 16px;
-            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-        }
-        .section-header {
-            padding: 14px 18px 10px;
-            border-bottom: 2px solid #fff3e0;
-        }
-        .section-title {
-            font-size: 16px; font-weight: 900; color: #f77f00; margin-bottom: 2px;
-        }
-        .section-instruction {
-            font-size: 13px; color: #888; font-weight: 600; font-style: italic;
-        }
+/* ── SCREEN ── */
+.screen { display:none; padding:0 16px 110px; }
+.screen.active { display:block; }
 
-        /* FRUITS GRID — Page 17 */
-        .fruits-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 12px; padding: 16px;
-        }
-        .fruit-card {
-            background: #fff8f0; border-radius: 16px; padding: 14px 10px;
-            text-align: center; cursor: pointer; transition: all 0.2s;
-            border: 2px solid #ffe0b2;
-        }
-        .fruit-card:hover { border-color: #f77f00; background: #fff3e0; transform: scale(1.04); }
-        .fruit-card.learned { border-color: #059669; background: #f0fff4; }
-        .fruit-emoji { font-size: 44px; margin-bottom: 8px; display: block; }
-        .fruit-name  { font-size: 13px; font-weight: 800; color: #333; }
+/* ── SECTION HEADER ── */
+.sec-head {
+  background:white;
+  border-radius:var(--radius);
+  padding:18px 20px 14px;
+  margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.07);
+  border-left:6px solid var(--orange);
+}
+.sec-title {
+  font-family:'Fredoka One',cursive;
+  font-size:22px; color:var(--orange);
+}
+.sec-hint {
+  font-size:14px; color:#888; font-weight:700; margin-top:2px;
+}
 
-        /* RIDDLE — Page 18 */
-        .riddle-card {
-            background: linear-gradient(135deg, #fff8f0, #fff3e0);
-            border-radius: 20px; padding: 20px; margin-bottom: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-            border: 2px solid #ffe0b2;
-        }
-        .riddle-title { font-size: 15px; font-weight: 900; color: #f77f00; margin-bottom: 12px; }
-        .riddle-text  {
-            font-size: 15px; line-height: 1.9; color: #444;
-            font-style: italic; margin-bottom: 16px;
-        }
-        .riddle-answer-area {
-            background: white; border-radius: 14px; padding: 14px;
-            border: 2px dashed #f77f00;
-        }
-        .riddle-answer-label { font-size: 13px; color: #888; font-weight: 700; margin-bottom: 10px; }
-        .riddle-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .riddle-opt {
-            padding: 12px; border: 2px solid #ffe0b2; border-radius: 12px;
-            font-size: 15px; font-weight: 700; cursor: pointer;
-            background: white; color: #333; text-align: center;
-            transition: all 0.2s;
-        }
-        .riddle-opt:hover  { border-color: #f77f00; background: #fff3e0; }
-        .riddle-opt.correct { border-color: #059669; background: #d1fae5; color: #059669; }
-        .riddle-opt.wrong   { border-color: #dc2626; background: #fee2e2; color: #dc2626; }
+/* ── FRUIT GRID ── */
+.fruit-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px; margin-bottom:16px;
+}
+.fruit-btn {
+  background:white;
+  border-radius:20px;
+  padding:20px 12px 16px;
+  text-align:center;
+  border:3px solid #ffe0b2;
+  cursor:pointer;
+  transition:all 0.2s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  -webkit-user-select:none; user-select:none;
+}
+.fruit-btn:active { transform:scale(0.94); }
+.fruit-btn.learned {
+  border-color:var(--green);
+  background:#f0fff4;
+}
+.fruit-emoji-big { font-size:56px; display:block; margin-bottom:8px; }
+.fruit-name-big {
+  font-family:'Fredoka One',cursive;
+  font-size:18px; color:#333;
+}
+.fruit-btn.learned .fruit-name-big { color:var(--green); }
+.learned-check {
+  display:none;
+  font-size:22px; margin-top:4px;
+}
+.fruit-btn.learned .learned-check { display:block; }
 
-        /* SONG — Page 18 & 20 */
-        .song-card {
-            background: linear-gradient(135deg, #e8f5e9, #f3e5f5);
-            border-radius: 20px; padding: 20px; margin-bottom: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-            border: 2px solid #c8e6c9;
-        }
-        .song-title {
-            font-size: 14px; font-weight: 900; color: #2e7d32;
-            margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
-        }
-        .song-text {
-            font-size: 15px; line-height: 2; color: #333;
-            font-style: italic;
-        }
-        .song-line { margin-bottom: 2px; }
-        .play-song-btn {
-            margin-top: 14px; padding: 10px 20px;
-            background: #2e7d32; color: white; border: none;
-            border-radius: 20px; font-size: 14px; font-weight: 700;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .play-song-btn:hover { background: #1b5e20; transform: scale(1.03); }
+/* ── BIG CONTINUE BUTTON ── */
+.continue-btn {
+  width:100%;
+  padding:20px;
+  background:linear-gradient(135deg,var(--green),#047857);
+  color:white; border:none;
+  border-radius:20px;
+  font-family:'Fredoka One',cursive;
+  font-size:22px;
+  cursor:pointer;
+  box-shadow:0 8px 24px rgba(5,150,105,0.3);
+  transition:all 0.2s;
+  margin-top:6px;
+}
+.continue-btn:active { transform:scale(0.97); }
 
-        /* LEARN TO TALK — Page 20 */
-        .dialogue-card {
-            background: white; border-radius: 20px; padding: 18px;
-            margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-        }
-        .dialogue-title { font-size: 15px; font-weight: 900; color: #f77f00; margin-bottom: 14px; }
-        .dialogue-row {
-            display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
-        }
-        .dialogue-speaker {
-            font-size: 13px; font-weight: 800; color: #f77f00;
-            min-width: 70px; padding-top: 2px;
-        }
-        .dialogue-bubble {
-            background: #fff8f0; border-radius: 12px; padding: 10px 14px;
-            font-size: 14px; font-weight: 600; color: #333; flex: 1;
-            border: 2px solid #ffe0b2;
-        }
-        .speak-btn {
-            padding: 6px 14px; background: #f77f00; color: white;
-            border: none; border-radius: 20px; font-size: 12px; font-weight: 700;
-            cursor: pointer; margin-top: 10px;
-        }
+/* ── RIDDLE ── */
+.riddle-box {
+  background:linear-gradient(135deg,#fff8f0,#fff3e0);
+  border-radius:var(--radius);
+  padding:24px 20px;
+  border:3px solid #ffe0b2;
+  margin-bottom:16px;
+  text-align:center;
+  box-shadow:0 4px 16px rgba(0,0,0,0.07);
+}
+.riddle-emoji { font-size:64px; margin-bottom:12px; }
+.riddle-poem {
+  font-size:18px; line-height:2;
+  color:#444; font-style:italic;
+  margin-bottom:20px;
+}
+.riddle-question {
+  font-family:'Fredoka One',cursive;
+  font-size:22px; color:var(--orange); margin-bottom:20px;
+}
+.riddle-choices {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.riddle-choice {
+  padding:18px 10px;
+  border:3px solid #ffe0b2;
+  border-radius:18px;
+  font-family:'Fredoka One',cursive;
+  font-size:20px;
+  cursor:pointer;
+  background:white;
+  transition:all 0.2s;
+  text-align:center;
+}
+.riddle-choice:active { transform:scale(0.94); }
+.riddle-choice.correct { border-color:var(--green); background:#d1fae5; color:var(--green); }
+.riddle-choice.wrong   { border-color:#dc2626; background:#fee2e2; color:#dc2626; }
 
-        /* COUNT & WRITE — Page 21 */
-        .count-grid {
-            padding: 16px; display: flex; flex-direction: column; gap: 14px;
-        }
-        .count-row {
-            display: flex; align-items: center; gap: 12px;
-            background: #fff8f0; border-radius: 14px; padding: 12px;
-            border: 2px solid #ffe0b2;
-        }
-        .count-fruits { font-size: 22px; flex: 1; line-height: 1.6; }
-        .count-input {
-            width: 52px; height: 52px; border: 3px solid #f77f00;
-            border-radius: 12px; font-size: 22px; font-weight: 900;
-            text-align: center; color: #333; background: white;
-            font-family: 'Fredoka One', cursive;
-        }
-        .count-input.correct { border-color: #059669; background: #d1fae5; color: #059669; }
-        .count-input.wrong   { border-color: #dc2626; background: #fee2e2; color: #dc2626; }
-        .check-count-btn {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #f77f00, #d62828);
-            color: white; border: none; border-radius: 14px;
-            font-size: 16px; font-weight: 700; cursor: pointer;
-            margin: 0 16px 16px; width: calc(100% - 32px);
-            transition: transform 0.2s;
-        }
-        .check-count-btn:hover { transform: scale(1.02); }
+/* ── SONG ── */
+.song-box {
+  background:linear-gradient(135deg,#e8f5e9,#f1f8e9);
+  border-radius:var(--radius);
+  padding:22px 20px;
+  border:3px solid #c8e6c9;
+  margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.07);
+}
+.song-head {
+  font-family:'Fredoka One',cursive;
+  font-size:20px; color:#2e7d32; margin-bottom:14px;
+  display:flex; align-items:center; gap:8px;
+}
+.song-lyrics {
+  font-size:18px; line-height:2.2;
+  color:#333; font-style:italic;
+  margin-bottom:16px;
+}
+.play-btn {
+  width:100%; padding:16px;
+  background:#2e7d32; color:white;
+  border:none; border-radius:16px;
+  font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer;
+  transition:all 0.2s;
+}
+.play-btn:active { transform:scale(0.97); }
+.play-btn.playing { background:#1b5e20; }
 
-        /* DO AS TEACHER SAYS — Page 22 */
-        .action-grid {
-            padding: 16px; display: flex; flex-direction: column; gap: 12px;
-        }
-        .action-row {
-            display: flex; align-items: center; gap: 14px;
-            background: #fff8f0; border-radius: 14px; padding: 14px;
-            border: 2px solid #ffe0b2; cursor: pointer; transition: all 0.2s;
-        }
-        .action-row:hover { border-color: #f77f00; transform: scale(1.01); }
-        .action-emoji { font-size: 36px; flex-shrink: 0; }
-        .action-text  { font-size: 15px; font-weight: 700; color: #333; flex: 1; }
-        .action-speak { font-size: 20px; }
+/* ── DIALOGUE ── */
+.dialogue-box {
+  background:white;
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.07);
+}
+.dialogue-row {
+  display:flex; gap:10px;
+  margin-bottom:14px; align-items:flex-start;
+}
+.speaker-tag {
+  background:var(--orange); color:white;
+  border-radius:20px; padding:4px 14px;
+  font-size:14px; font-weight:800;
+  white-space:nowrap; margin-top:2px;
+}
+.bubble {
+  background:#fff8f0;
+  border:2px solid #ffe0b2;
+  border-radius:16px;
+  padding:12px 16px;
+  font-size:17px; font-weight:700;
+  color:#333; flex:1;
+  line-height:1.5;
+}
+.listen-btn {
+  width:100%; padding:16px;
+  background:var(--orange); color:white;
+  border:none; border-radius:16px;
+  font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer;
+  transition:all 0.2s;
+  margin-top:4px;
+}
+.listen-btn:active { transform:scale(0.97); }
 
-        /* DROP FRUITS IN BASKET — Page 23 */
-        .basket-game {
-            padding: 16px;
-        }
-        .basket-instruction {
-            font-size: 14px; color: #666; font-weight: 600; margin-bottom: 14px; text-align: center;
-        }
-        .items-area {
-            display: flex; flex-wrap: wrap; gap: 10px;
-            justify-content: center; margin-bottom: 20px;
-            background: #f9f9f9; border-radius: 16px; padding: 14px;
-            border: 2px dashed #ddd;
-        }
-        .drag-item {
-            font-size: 36px; cursor: pointer; padding: 8px;
-            border-radius: 12px; border: 2px solid #e5e7eb;
-            background: white; transition: all 0.2s;
-            user-select: none;
-        }
-        .drag-item:hover { border-color: #f77f00; background: #fff3e0; transform: scale(1.1); }
-        .drag-item.in-basket { opacity: 0.3; pointer-events: none; }
-        .drag-item.not-fruit { border-color: #dc2626; }
-        .basket-area {
-            background: linear-gradient(135deg, #fff8dc, #ffe0b2);
-            border-radius: 20px; padding: 20px; min-height: 120px;
-            border: 3px solid #f77f00; text-align: center;
-        }
-        .basket-label { font-size: 14px; font-weight: 800; color: #f77f00; margin-bottom: 10px; }
-        .basket-fruits { font-size: 36px; line-height: 1.8; min-height: 50px; }
-        .basket-score  { font-size: 14px; font-weight: 700; color: #059669; margin-top: 8px; }
+/* ── FAVOURITE FRUITS ── */
+.fav-label {
+  font-family:'Fredoka One',cursive;
+  font-size:20px; color:var(--orange);
+  text-align:center; margin:20px 0 12px;
+}
+.fav-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px; margin-bottom:16px;
+}
+.fav-btn {
+  background:white; border-radius:16px;
+  padding:14px 8px; text-align:center;
+  border:3px solid #ffe0b2; cursor:pointer;
+  transition:all 0.2s;
+  box-shadow:0 3px 10px rgba(0,0,0,0.06);
+}
+.fav-btn:active { transform:scale(0.92); }
+.fav-btn.chosen { border-color:var(--green); background:#f0fff4; }
+.fav-e { font-size:40px; }
+.fav-n { font-size:13px; font-weight:800; color:#444; margin-top:4px; }
 
-        /* SINGULAR PLURAL — Page 24 */
-        .plural-grid {
-            padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        }
-        .plural-card {
-            background: #fff8f0; border-radius: 14px; padding: 14px;
-            text-align: center; border: 2px solid #ffe0b2;
-        }
-        .plural-emoji  { font-size: 32px; margin-bottom: 6px; }
-        .plural-single { font-size: 15px; font-weight: 800; color: #f77f00; }
-        .plural-arrow  { font-size: 12px; color: #aaa; margin: 4px 0; }
-        .plural-many   { font-size: 15px; font-weight: 800; color: #2e7d32; }
+/* ── COUNT (no typing!) ── */
+.count-row {
+  background:white;
+  border-radius:20px;
+  padding:18px 16px;
+  margin-bottom:12px;
+  border:3px solid #ffe0b2;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+.count-fruits-row {
+  font-size:30px; line-height:1.8;
+  margin-bottom:14px; word-break:break-all;
+  letter-spacing:2px; text-align:center;
+}
+.count-label {
+  font-size:15px; font-weight:800; color:#888;
+  margin-bottom:10px; text-align:center;
+}
+.number-choices {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+.num-btn {
+  padding:14px 4px;
+  border:3px solid #ffe0b2;
+  border-radius:14px;
+  font-family:'Fredoka One',cursive;
+  font-size:22px;
+  cursor:pointer; background:white;
+  text-align:center;
+  transition:all 0.2s;
+}
+.num-btn:active { transform:scale(0.9); }
+.num-btn.selected-correct { border-color:var(--green); background:#d1fae5; color:var(--green); }
+.num-btn.selected-wrong   { border-color:#dc2626; background:#fee2e2; color:#dc2626; }
+.num-btn.disabled { opacity:0.4; pointer-events:none; }
 
-        /* COMPLETE BUTTON */
-        .complete-btn {
-            width: 100%; padding: 16px;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white; border: none; border-radius: 16px;
-            font-size: 17px; font-weight: 800; cursor: pointer;
-            margin-bottom: 16px;
-            box-shadow: 0 6px 20px rgba(5,150,105,0.3);
-            transition: transform 0.2s;
-        }
-        .complete-btn:hover { transform: scale(1.02); }
+/* ── ACTIONS ── */
+.action-card {
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:12px;
+  border:3px solid #ffe0b2;
+  display:flex; align-items:center; gap:16px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  transition:all 0.2s;
+}
+.action-card:active { transform:scale(0.97); }
+.action-card.done-action { border-color:var(--green); background:#f0fff4; }
+.action-e { font-size:52px; flex-shrink:0; }
+.action-text {
+  font-family:'Fredoka One',cursive;
+  font-size:20px; color:#333; flex:1; line-height:1.3;
+}
+.action-speak-icon { font-size:28px; flex-shrink:0; }
 
-        /* CELEBRATION */
-        .celeb-overlay {
-            display: none; position: fixed; inset: 0;
-            background: linear-gradient(135deg,rgba(247,127,0,.96),rgba(214,40,40,.96));
-            z-index: 200; align-items: center; justify-content: center;
-            flex-direction: column; text-align: center; padding: 30px;
-        }
-        .celeb-overlay.show { display: flex; }
-        .celeb-emoji  { font-size: 80px; animation: bounce 0.5s ease infinite alternate; }
-        .celeb-title  { font-size: 36px; font-weight: 900; color: white; margin: 14px 0 8px; }
-        .celeb-sub    { font-size: 16px; color: rgba(255,255,255,.88); margin-bottom: 20px; line-height: 1.6; }
-        .celeb-stars  { font-size: 28px; margin-bottom: 20px; }
-        .celeb-btn {
-            padding: 14px 40px; background: white; color: #f77f00;
-            border: none; border-radius: 50px; font-size: 16px; font-weight: 800;
-            cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.22); margin: 6px;
-        }
-        .celeb-btn.secondary {
-            background: rgba(255,255,255,0.2); color: white;
-            border: 2px solid rgba(255,255,255,0.4);
-        }
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to   { transform: translateY(-15px); }
-        }
-        @keyframes confettiFall {
-            0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
-        }
-    </style>
+/* ── BASKET GAME ── */
+.items-pool {
+  display:flex; flex-wrap:wrap; gap:10px;
+  justify-content:center;
+  background:#f9f9f9;
+  border-radius:18px; padding:16px;
+  border:3px dashed #ddd;
+  margin-bottom:18px;
+}
+.pool-item {
+  font-size:44px; cursor:pointer;
+  padding:8px 10px;
+  border-radius:16px; border:3px solid #e5e7eb;
+  background:white; transition:all 0.2s;
+}
+.pool-item:active { transform:scale(0.85); }
+.pool-item.in-basket { opacity:0.25; pointer-events:none; }
+.pool-item.wrong-shake {
+  border-color:#dc2626; background:#fee2e2;
+  animation:shake 0.4s;
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  75%{transform:translateX(8px)}
+}
+.basket-drop {
+  background:linear-gradient(135deg,#fff8dc,#ffe0b2);
+  border-radius:20px; padding:20px;
+  border:3px solid var(--orange); text-align:center;
+  min-height:120px;
+}
+.basket-drop-label {
+  font-family:'Fredoka One',cursive;
+  font-size:18px; color:var(--orange); margin-bottom:10px;
+}
+.basket-fruits-display { font-size:44px; line-height:1.8; min-height:50px; }
+.basket-score {
+  font-family:'Fredoka One',cursive;
+  font-size:18px; color:var(--green); margin-top:8px;
+}
+
+/* ── PLURAL ── */
+.plural-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px; margin-bottom:16px;
+}
+.plural-card {
+  background:white;
+  border-radius:18px; padding:16px 12px;
+  text-align:center; border:3px solid #ffe0b2;
+  cursor:pointer; transition:all 0.2s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+.plural-card:active { transform:scale(0.94); }
+.plural-emoji { font-size:42px; margin-bottom:8px; }
+.plural-one {
+  font-family:'Fredoka One',cursive;
+  font-size:18px; color:var(--orange);
+}
+.plural-arr { font-size:22px; color:#bbb; margin:4px 0; }
+.plural-many {
+  font-family:'Fredoka One',cursive;
+  font-size:18px; color:var(--green);
+}
+
+/* ── CELEBRATION ── */
+.celeb-overlay {
+  display:none; position:fixed; inset:0;
+  background:linear-gradient(135deg,rgba(247,127,0,.97),rgba(214,40,40,.97));
+  z-index:200; align-items:center; justify-content:center;
+  flex-direction:column; text-align:center; padding:30px;
+}
+.celeb-overlay.show { display:flex; }
+.celeb-big-emoji {
+  font-size:90px;
+  animation:bounce 0.5s ease infinite alternate;
+}
+@keyframes bounce {
+  from{transform:translateY(0)}
+  to{transform:translateY(-18px)}
+}
+.celeb-title {
+  font-family:'Fredoka One',cursive;
+  font-size:42px; color:white; margin:16px 0 8px;
+}
+.celeb-sub {
+  font-size:17px; color:rgba(255,255,255,.9);
+  margin-bottom:16px; line-height:1.6;
+}
+.celeb-stars { font-size:32px; margin-bottom:24px; }
+.celeb-btn {
+  padding:16px 44px; background:white; color:var(--orange);
+  border:none; border-radius:50px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,0.2);
+  margin:8px; transition:all 0.2s;
+}
+.celeb-btn:active { transform:scale(0.96); }
+.celeb-btn.sec {
+  background:rgba(255,255,255,0.22); color:white;
+  border:2px solid rgba(255,255,255,0.4);
+}
+
+@keyframes confettiFall {
+  0%  {transform:translateY(-10px) rotate(0deg);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg);opacity:0}
+}
+
+/* feedback toast */
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:#333; color:white;
+  padding:12px 24px; border-radius:30px;
+  font-family:'Fredoka One',cursive; font-size:18px;
+  z-index:150; transition:transform 0.3s;
+  pointer-events:none; white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.correct-toast { background:var(--green); }
+.toast.wrong-toast   { background:#dc2626; }
+</style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="navbar-left">
-        <div class="navbar-logo">📚 VidyaAI</div>
-        <div class="navbar-grade">Class 1 • English</div>
-    </div>
-    <div class="navbar-right">
-        <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
-        <a href="/class/1/english" class="nav-btn">← Back</a>
-    </div>
-</nav>
-
-<div class="hero">
-    <div class="hero-page">Chapter 1 • Pages 17–28</div>
-    <h2>1. Fruits 🍎</h2>
-    <p>What fruits are these?</p>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo">📚 VidyaAI</div>
+    <div class="stars-badge">⭐ <span id="starsDisplay">0</span></div>
+  </div>
+  <div class="chapter-title">🍎 Fruits</div>
+  <div class="chapter-sub">Class 1 • English • Chapter 1</div>
 </div>
 
+<!-- PROGRESS -->
 <div class="progress-card">
-    <div class="progress-info">
-        <h4>📊 Chapter Progress</h4>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width:0%"></div>
-        </div>
+  <div class="progress-info">
+    <div class="progress-label">Your Progress</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
-    <div class="progress-pct" id="progressPct">0%</div>
+  </div>
+  <div class="progress-pct" id="progressPct">0%</div>
 </div>
 
-<!-- TABS -->
-<div class="tabs">
-    <div class="tab active" onclick="showTab('fruits',this)">🍎 Fruits</div>
-    <div class="tab" onclick="showTab('riddle',this)">🤔 Riddle</div>
-    <div class="tab" onclick="showTab('song',this)">🎵 Songs</div>
-    <div class="tab" onclick="showTab('talk',this)">💬 Talk</div>
-    <div class="tab" onclick="showTab('count',this)">🔢 Count</div>
-    <div class="tab" onclick="showTab('action',this)">🎯 Do It!</div>
-    <div class="tab" onclick="showTab('basket',this)">🧺 Basket</div>
-    <div class="tab" onclick="showTab('plural',this)">📝 One/Many</div>
+<!-- STEP PILLS -->
+<div class="steps-scroll" id="stepPills">
+  <div class="step-pill active" data-step="0" onclick="goStep(0)">🍎 Learn</div>
+  <div class="step-pill" data-step="1" onclick="goStep(1)">🤔 Riddle</div>
+  <div class="step-pill" data-step="2" onclick="goStep(2)">🎵 Song</div>
+  <div class="step-pill" data-step="3" onclick="goStep(3)">💬 Talk</div>
+  <div class="step-pill" data-step="4" onclick="goStep(4)">🔢 Count</div>
+  <div class="step-pill" data-step="5" onclick="goStep(5)">🎯 Do It</div>
+  <div class="step-pill" data-step="6" onclick="goStep(6)">🧺 Basket</div>
+  <div class="step-pill" data-step="7" onclick="goStep(7)">📖 One/Many</div>
 </div>
 
-<div class="content">
+<!-- ═══════ SCREEN 0: LEARN FRUITS ═══════ -->
+<div class="screen active" id="screen-0">
+  <div class="sec-head">
+    <div class="sec-title">🍎 What Fruits Are These?</div>
+    <div class="sec-hint">👆 Tap each fruit to hear its name!</div>
+  </div>
+  <div class="fruit-grid" id="fruitsGrid"></div>
+  <button class="continue-btn" onclick="completeStep(0)">I Know All Fruits! ✅</button>
+</div>
 
-    <!-- ===== PAGE 17: FRUITS ===== -->
-    <div id="tab-fruits">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-title">🍎 What Fruits Are These?</div>
-                <div class="section-instruction">Tap each fruit to learn its name • Page 17</div>
-            </div>
-            <div class="fruits-grid" id="fruitsGrid"></div>
-        </div>
-        <button class="complete-btn" onclick="markTabDone('fruits')">
-            ✅ I Know All Fruits! Continue →
-        </button>
+<!-- ═══════ SCREEN 1: RIDDLE ═══════ -->
+<div class="screen" id="screen-1">
+  <div class="riddle-box">
+    <div class="riddle-emoji">🤔</div>
+    <div class="riddle-poem">
+      I am red and round and sweet.<br>
+      Eat me every day,<br>
+      And keep the doctor away.
     </div>
-
-    <!-- ===== PAGE 18: RIDDLE ===== -->
-    <div id="tab-riddle" style="display:none">
-        <div class="riddle-card">
-            <div class="riddle-title">🤔 Who Am I? • Page 18</div>
-            <div class="riddle-text">
-                I am red and round and sweet.<br>
-                If you eat me everyday,<br>
-                You can keep the doctor away.<br>
-                <strong>Who am I?</strong>
-            </div>
-            <div class="riddle-answer-area">
-                <div class="riddle-answer-label">Choose the right answer:</div>
-                <div class="riddle-options">
-                    <div class="riddle-opt" onclick="answerRiddle(this,'wrong')">🍌 Banana</div>
-                    <div class="riddle-opt" onclick="answerRiddle(this,'correct')">🍎 Apple</div>
-                    <div class="riddle-opt" onclick="answerRiddle(this,'wrong')">🍊 Orange</div>
-                    <div class="riddle-opt" onclick="answerRiddle(this,'wrong')">🍇 Grapes</div>
-                </div>
-            </div>
-        </div>
-        <button class="complete-btn" onclick="markTabDone('riddle')">
-            ✅ I Solved the Riddle! Continue →
-        </button>
+    <div class="riddle-question">Who am I?</div>
+    <div class="riddle-choices">
+      <div class="riddle-choice" onclick="answerRiddle(this,'wrong')">🍌<br>Banana</div>
+      <div class="riddle-choice" onclick="answerRiddle(this,'correct')">🍎<br>Apple</div>
+      <div class="riddle-choice" onclick="answerRiddle(this,'wrong')">🍊<br>Orange</div>
+      <div class="riddle-choice" onclick="answerRiddle(this,'wrong')">🍇<br>Grapes</div>
     </div>
+  </div>
+  <button class="continue-btn" id="riddleNext" style="display:none" onclick="completeStep(1)">Great! Continue ✅</button>
+</div>
 
-    <!-- ===== PAGES 18 & 20: SONGS ===== -->
-    <div id="tab-song" style="display:none">
-
-        <!-- Song 1: Potato song - Page 18 -->
-        <div class="song-card">
-            <div class="song-title">🎵 Enjoy Singing! • Page 18</div>
-            <div class="song-text">
-                <div class="song-line">One potato, two potatoes,</div>
-                <div class="song-line">Three potatoes, four,</div>
-                <div class="song-line">Five potatoes, six potatoes,</div>
-                <div class="song-line">Seven potatoes more.</div>
-            </div>
-            <button class="play-song-btn" onclick="playSong('potato')">🔊 Listen & Sing!</button>
-        </div>
-
-        <!-- Song 2: Apple Tree song - Page 20 -->
-        <div class="song-card">
-            <div class="song-title">🎵 Enjoy Singing! • Page 20</div>
-            <div class="song-text">
-                <div class="song-line">Here is the tree,</div>
-                <div class="song-line">With leaves of green,</div>
-                <div class="song-line">Here are the apples,</div>
-                <div class="song-line">That hang between,</div>
-                <div class="song-line">When the wind blows,</div>
-                <div class="song-line">The apples swing,</div>
-                <div class="song-line">Here is the basket,</div>
-                <div class="song-line">To catch them and bring.</div>
-            </div>
-            <button class="play-song-btn" onclick="playSong('apple')">🔊 Listen & Sing!</button>
-        </div>
-
-        <button class="complete-btn" onclick="markTabDone('song')">
-            ✅ I Learned the Songs! Continue →
-        </button>
+<!-- ═══════ SCREEN 2: SONGS ═══════ -->
+<div class="screen" id="screen-2">
+  <div class="song-box">
+    <div class="song-head">🎵 Potato Song</div>
+    <div class="song-lyrics">
+      One potato, two potatoes,<br>
+      Three potatoes, four,<br>
+      Five potatoes, six potatoes,<br>
+      Seven potatoes more.
     </div>
-
-    <!-- ===== PAGE 20: LEARN TO TALK ===== -->
-    <div id="tab-talk" style="display:none">
-        <div class="dialogue-card">
-            <div class="dialogue-title">💬 Learn to Talk • Page 20</div>
-            <div class="dialogue-instruction" style="font-size:13px;color:#888;margin-bottom:14px;font-style:italic">
-                Say after your teacher:
-            </div>
-
-            <div class="dialogue-row">
-                <div class="dialogue-speaker">Seetha :</div>
-                <div class="dialogue-bubble">Which fruit do you like?</div>
-            </div>
-            <div class="dialogue-row">
-                <div class="dialogue-speaker">Shekhar :</div>
-                <div class="dialogue-bubble">I like oranges.</div>
-            </div>
-            <div class="dialogue-row">
-                <div class="dialogue-speaker">Seetha :</div>
-                <div class="dialogue-bubble">I love guava.<br>I like bananas too.</div>
-            </div>
-
-            <button class="speak-btn" onclick="playDialogue()">🔊 Listen to Dialogue</button>
-        </div>
-
-        <!-- Which fruit do you like? -->
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-title">Which Fruit Do You Like?</div>
-                <div class="section-instruction">Tap your favourite fruit!</div>
-            </div>
-            <div class="fruits-grid" id="favouriteFruits"></div>
-        </div>
-
-        <button class="complete-btn" onclick="markTabDone('talk')">
-            ✅ I Can Talk! Continue →
-        </button>
+    <button class="play-btn" id="playBtn1" onclick="playSong('potato',this)">🔊 Tap to Listen!</button>
+  </div>
+  <div class="song-box">
+    <div class="song-head">🎵 Apple Tree Song</div>
+    <div class="song-lyrics">
+      Here is the tree, with leaves of green,<br>
+      Here are the apples that hang between,<br>
+      When the wind blows the apples swing,<br>
+      Here is the basket to catch them and bring.
     </div>
+    <button class="play-btn" id="playBtn2" onclick="playSong('apple',this)">🔊 Tap to Listen!</button>
+  </div>
+  <button class="continue-btn" onclick="completeStep(2)">I Heard the Songs! ✅</button>
+</div>
 
-    <!-- ===== PAGE 21: COUNT & WRITE ===== -->
-    <div id="tab-count" style="display:none">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-title">🔢 How Many Are There?</div>
-                <div class="section-instruction">Count and write the number • Page 21</div>
-            </div>
-            <div class="count-grid">
-                <div class="count-row">
-                    <div class="count-fruits">🍌🍌🍌🍌🍌🍌</div>
-                    <input class="count-input" id="c1" type="number" min="1" max="20" placeholder="?">
-                </div>
-                <div class="count-row">
-                    <div class="count-fruits">🍐🍐🍐🍐</div>
-                    <input class="count-input" id="c2" type="number" min="1" max="20" placeholder="?">
-                </div>
-                <div class="count-row">
-                    <div class="count-fruits">🍎🍎🍎</div>
-                    <input class="count-input" id="c3" type="number" min="1" max="20" placeholder="?">
-                </div>
-                <div class="count-row">
-                    <div class="count-fruits">🥭🥭🥭🥭🥭</div>
-                    <input class="count-input" id="c4" type="number" min="1" max="20" placeholder="?">
-                </div>
-                <div class="count-row">
-                    <div class="count-fruits">🍊🍊🍊🍊🍊🍊🍊</div>
-                    <input class="count-input" id="c5" type="number" min="1" max="20" placeholder="?">
-                </div>
-                <div class="count-row">
-                    <div class="count-fruits">🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇</div>
-                    <input class="count-input" id="c6" type="number" min="1" max="20" placeholder="?">
-                </div>
-                <div class="count-row">
-                    <div class="count-fruits">🍍🍍🍍🍍🍍🍍🍍🍍</div>
-                    <input class="count-input" id="c7" type="number" min="1" max="20" placeholder="?">
-                </div>
-            </div>
-        </div>
-        <button class="check-count-btn" onclick="checkCount()">Check Answers ✓</button>
-        <button class="complete-btn" onclick="markTabDone('count')" style="margin-top:8px">
-            ✅ I Can Count! Continue →
-        </button>
+<!-- ═══════ SCREEN 3: TALK ═══════ -->
+<div class="screen" id="screen-3">
+  <div class="sec-head">
+    <div class="sec-title">💬 Learn to Talk</div>
+    <div class="sec-hint">Listen how friends talk about fruits!</div>
+  </div>
+  <div class="dialogue-box">
+    <div class="dialogue-row">
+      <div class="speaker-tag">Seetha</div>
+      <div class="bubble">Which fruit do you like?</div>
     </div>
-
-    <!-- ===== PAGE 22: DO AS TEACHER SAYS ===== -->
-    <div id="tab-action" style="display:none">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-title">🎯 Do As Your Teacher Says</div>
-                <div class="section-instruction">Tap each action to hear it • Page 22</div>
-            </div>
-            <div class="action-grid">
-                <div class="action-row" onclick="speakText('Peel the banana, eat it.')">
-                    <div class="action-emoji">🍌</div>
-                    <div class="action-text">Peel the banana, eat it.</div>
-                    <div class="action-speak">🔊</div>
-                </div>
-                <div class="action-row" onclick="speakText('Pluck the grapes, taste it.')">
-                    <div class="action-emoji">🍇</div>
-                    <div class="action-text">Pluck the grapes, taste it.</div>
-                    <div class="action-speak">🔊</div>
-                </div>
-                <div class="action-row" onclick="speakText('Squeeze the lemon, lick it.')">
-                    <div class="action-emoji">🍋</div>
-                    <div class="action-text">Squeeze the lemon, lick it.</div>
-                    <div class="action-speak">🔊</div>
-                </div>
-                <div class="action-row" onclick="speakText('Cut the apple, share it.')">
-                    <div class="action-emoji">🍎</div>
-                    <div class="action-text">Cut the apple, share it.</div>
-                    <div class="action-speak">🔊</div>
-                </div>
-            </div>
-            <div style="padding:16px;text-align:center">
-                <div style="font-size:15px;font-weight:800;color:#f77f00;margin-bottom:10px">
-                    Which fruit do you like? 🤔
-                </div>
-            </div>
-        </div>
-        <button class="complete-btn" onclick="markTabDone('action')">
-            ✅ I Can Do It! Continue →
-        </button>
+    <div class="dialogue-row">
+      <div class="speaker-tag">Shekhar</div>
+      <div class="bubble">I like oranges.</div>
     </div>
-
-    <!-- ===== PAGE 23: DROP FRUITS IN BASKET ===== -->
-    <div id="tab-basket" style="display:none">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-title">🧺 Drop Only the Fruits in the Basket</div>
-                <div class="section-instruction">Tap only the FRUITS — not the vegetables! • Page 23</div>
-            </div>
-            <div class="basket-game">
-                <div class="basket-instruction">Tap the fruits below to put them in the basket!</div>
-                <div class="items-area" id="itemsArea"></div>
-                <div class="basket-area">
-                    <div class="basket-label">🧺 Fruit Basket</div>
-                    <div class="basket-fruits" id="basketFruits"></div>
-                    <div class="basket-score" id="basketScore"></div>
-                </div>
-            </div>
-        </div>
-        <button class="complete-btn" onclick="markTabDone('basket')" style="margin-top:16px">
-            ✅ Great Sorting! Continue →
-        </button>
+    <div class="dialogue-row">
+      <div class="speaker-tag">Seetha</div>
+      <div class="bubble">I love guava. I like bananas too!</div>
     </div>
+    <button class="listen-btn" onclick="playDialogue()">🔊 Listen to the Dialogue</button>
+  </div>
+  <div class="fav-label">Which fruit do YOU like? 👇</div>
+  <div class="fav-grid" id="favGrid"></div>
+  <button class="continue-btn" onclick="completeStep(3)">I Can Talk! ✅</button>
+</div>
 
-    <!-- ===== PAGE 24: SINGULAR/PLURAL ===== -->
-    <div id="tab-plural" style="display:none">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-title">📝 One and Many • Page 24</div>
-                <div class="section-instruction">Say after your teacher — singular and plural</div>
-            </div>
-            <div class="plural-grid">
-                <div class="plural-card" onclick="speakText('grape, grapes')">
-                    <div class="plural-emoji">🍇</div>
-                    <div class="plural-single">grape</div>
-                    <div class="plural-arrow">↓ many =</div>
-                    <div class="plural-many">grapes</div>
-                </div>
-                <div class="plural-card" onclick="speakText('banana, bananas')">
-                    <div class="plural-emoji">🍌</div>
-                    <div class="plural-single">banana</div>
-                    <div class="plural-arrow">↓ many =</div>
-                    <div class="plural-many">bananas</div>
-                </div>
-                <div class="plural-card" onclick="speakText('orange, oranges')">
-                    <div class="plural-emoji">🍊</div>
-                    <div class="plural-single">orange</div>
-                    <div class="plural-arrow">↓ many =</div>
-                    <div class="plural-many">oranges</div>
-                </div>
-                <div class="plural-card" onclick="speakText('apple, apples')">
-                    <div class="plural-emoji">🍎</div>
-                    <div class="plural-single">apple</div>
-                    <div class="plural-arrow">↓ many =</div>
-                    <div class="plural-many">apples</div>
-                </div>
-                <div class="plural-card" onclick="speakText('papaya, papayas')">
-                    <div class="plural-emoji">🍈</div>
-                    <div class="plural-single">papaya</div>
-                    <div class="plural-arrow">↓ many =</div>
-                    <div class="plural-many">papayas</div>
-                </div>
-                <div class="plural-card" onclick="speakText('mango, mangoes')">
-                    <div class="plural-emoji">🥭</div>
-                    <div class="plural-single">mango</div>
-                    <div class="plural-arrow">↓ many =</div>
-                    <div class="plural-many">mangoes</div>
-                </div>
-            </div>
-        </div>
+<!-- ═══════ SCREEN 4: COUNT (all tap-based) ═══════ -->
+<div class="screen" id="screen-4">
+  <div class="sec-head">
+    <div class="sec-title">🔢 How Many Are There?</div>
+    <div class="sec-hint">👆 Tap the correct number!</div>
+  </div>
+  <div id="countQuestions"></div>
+  <button class="continue-btn" onclick="completeStep(4)">I Can Count! ✅</button>
+</div>
 
-        <button class="complete-btn" onclick="completeChapter()">
-            🎉 Complete Chapter! Finish →
-        </button>
+<!-- ═══════ SCREEN 5: ACTIONS ═══════ -->
+<div class="screen" id="screen-5">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Do As Teacher Says</div>
+    <div class="sec-hint">👆 Tap each action to hear it!</div>
+  </div>
+  <div class="action-card" onclick="doAction(this,'Peel the banana, eat it.')">
+    <div class="action-e">🍌</div>
+    <div class="action-text">Peel the banana, eat it.</div>
+    <div class="action-speak-icon">🔊</div>
+  </div>
+  <div class="action-card" onclick="doAction(this,'Pluck the grapes, taste it.')">
+    <div class="action-e">🍇</div>
+    <div class="action-text">Pluck the grapes, taste it.</div>
+    <div class="action-speak-icon">🔊</div>
+  </div>
+  <div class="action-card" onclick="doAction(this,'Squeeze the lemon, lick it.')">
+    <div class="action-e">🍋</div>
+    <div class="action-text">Squeeze the lemon, lick it.</div>
+    <div class="action-speak-icon">🔊</div>
+  </div>
+  <div class="action-card" onclick="doAction(this,'Cut the apple, share it.')">
+    <div class="action-e">🍎</div>
+    <div class="action-text">Cut the apple, share it.</div>
+    <div class="action-speak-icon">🔊</div>
+  </div>
+  <button class="continue-btn" onclick="completeStep(5)">I Can Do It! ✅</button>
+</div>
+
+<!-- ═══════ SCREEN 6: BASKET ═══════ -->
+<div class="screen" id="screen-6">
+  <div class="sec-head">
+    <div class="sec-title">🧺 Fill the Fruit Basket!</div>
+    <div class="sec-hint">Tap ONLY the fruits — not vegetables!</div>
+  </div>
+  <div class="items-pool" id="itemsPool"></div>
+  <div class="basket-drop">
+    <div class="basket-drop-label">🧺 Fruit Basket</div>
+    <div class="basket-fruits-display" id="basketFruitsDisplay"></div>
+    <div class="basket-score" id="basketScore"></div>
+  </div>
+  <button class="continue-btn" style="margin-top:16px" onclick="completeStep(6)">Great Sorting! ✅</button>
+</div>
+
+<!-- ═══════ SCREEN 7: PLURAL ═══════ -->
+<div class="screen" id="screen-7">
+  <div class="sec-head">
+    <div class="sec-title">📖 One and Many</div>
+    <div class="sec-hint">👆 Tap each card to hear one and many!</div>
+  </div>
+  <div class="plural-grid">
+    <div class="plural-card" onclick="speakText('grape... grapes')">
+      <div class="plural-emoji">🍇</div>
+      <div class="plural-one">grape</div>
+      <div class="plural-arr">↓</div>
+      <div class="plural-many">grapes</div>
     </div>
-
+    <div class="plural-card" onclick="speakText('banana... bananas')">
+      <div class="plural-emoji">🍌</div>
+      <div class="plural-one">banana</div>
+      <div class="plural-arr">↓</div>
+      <div class="plural-many">bananas</div>
+    </div>
+    <div class="plural-card" onclick="speakText('orange... oranges')">
+      <div class="plural-emoji">🍊</div>
+      <div class="plural-one">orange</div>
+      <div class="plural-arr">↓</div>
+      <div class="plural-many">oranges</div>
+    </div>
+    <div class="plural-card" onclick="speakText('apple... apples')">
+      <div class="plural-emoji">🍎</div>
+      <div class="plural-one">apple</div>
+      <div class="plural-arr">↓</div>
+      <div class="plural-many">apples</div>
+    </div>
+    <div class="plural-card" onclick="speakText('papaya... papayas')">
+      <div class="plural-emoji">🍈</div>
+      <div class="plural-one">papaya</div>
+      <div class="plural-arr">↓</div>
+      <div class="plural-many">papayas</div>
+    </div>
+    <div class="plural-card" onclick="speakText('mango... mangoes')">
+      <div class="plural-emoji">🥭</div>
+      <div class="plural-one">mango</div>
+      <div class="plural-arr">↓</div>
+      <div class="plural-many">mangoes</div>
+    </div>
+  </div>
+  <button class="continue-btn" style="background:linear-gradient(135deg,var(--orange),var(--red))" onclick="finishChapter()">🎉 Finish Chapter!</button>
 </div>
 
 <!-- CELEBRATION -->
 <div class="celeb-overlay" id="celebOverlay">
-    <div class="celeb-emoji">🍎</div>
-    <div class="celeb-title">Chapter Complete!</div>
-    <div class="celeb-sub">Amazing! You learned all about Fruits!<br>jackfruit, orange, guava, lemon, pineapple, pomegranate, papaya, mango, grapes, watermelon, banana!</div>
-    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
-    <button class="celeb-btn" onclick="location.href='/class/1/english'">📚 Next Chapter →</button>
-    <button class="celeb-btn secondary" onclick="document.getElementById('celebOverlay').classList.remove('show')">🔄 Practice Again</button>
+  <div class="celeb-big-emoji">🏆</div>
+  <div class="celeb-title">You Did It!</div>
+  <div class="celeb-sub">Amazing! You learned all about Fruits!<br>🍎🍌🍊🥭🍇🍉🍋🍍</div>
+  <div class="celeb-stars" id="celebStars">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="location.reload()">🔄 Play Again</button>
+  <button class="celeb-btn sec" onclick="document.getElementById('celebOverlay').classList.remove('show')">📚 Back</button>
 </div>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-/* ====== DATA ====== */
+/* ══ DATA ══ */
 const fruits = [
-    {name:'jackfruit', e:'🍈', color:'#f9c74f'},
-    {name:'orange',    e:'🍊', color:'#f77f00'},
-    {name:'guava',     e:'🍐', color:'#2dc653'},
-    {name:'lemon',     e:'🍋', color:'#ffd60a'},
-    {name:'pineapple', e:'🍍', color:'#f9c74f'},
-    {name:'pomegranate',e:'🍎',color:'#d62828'},
-    {name:'papaya',    e:'🍈', color:'#f4a261'},
-    {name:'mango',     e:'🥭', color:'#f77f00'},
-    {name:'grapes',    e:'🍇', color:'#9b5de5'},
-    {name:'watermelon',e:'🍉', color:'#2dc653'},
-    {name:'banana',    e:'🍌', color:'#ffd60a'},
+  {name:'Jackfruit', e:'🍈'},
+  {name:'Orange',    e:'🍊'},
+  {name:'Guava',     e:'🍐'},
+  {name:'Lemon',     e:'🍋'},
+  {name:'Pineapple', e:'🍍'},
+  {name:'Pomegranate',e:'🍎'},
+  {name:'Papaya',    e:'🍈'},
+  {name:'Mango',     e:'🥭'},
+  {name:'Grapes',    e:'🍇'},
+  {name:'Watermelon',e:'🍉'},
+  {name:'Banana',    e:'🍌'},
 ];
 
 const basketItems = [
-    {e:'🍌',name:'banana',  isFruit:true},
-    {e:'🥦',name:'broccoli',isFruit:false},
-    {e:'🍎',name:'apple',   isFruit:true},
-    {e:'🧅',name:'onion',   isFruit:false},
-    {e:'🍇',name:'grapes',  isFruit:true},
-    {e:'🥕',name:'carrot',  isFruit:false},
-    {e:'🍊',name:'orange',  isFruit:true},
-    {e:'🍅',name:'tomato',  isFruit:true},
-    {e:'🥭',name:'mango',   isFruit:true},
-    {e:'🥬',name:'cabbage', isFruit:false},
-    {e:'🍍',name:'pineapple',isFruit:true},
-    {e:'🌽',name:'corn',    isFruit:false},
-    {e:'🍉',name:'watermelon',isFruit:true},
-    {e:'🥑',name:'avocado', isFruit:true},
+  {e:'🍌',name:'banana',   isFruit:true},
+  {e:'🥦',name:'broccoli', isFruit:false},
+  {e:'🍎',name:'apple',    isFruit:true},
+  {e:'🧅',name:'onion',    isFruit:false},
+  {e:'🍇',name:'grapes',   isFruit:true},
+  {e:'🥕',name:'carrot',   isFruit:false},
+  {e:'🍊',name:'orange',   isFruit:true},
+  {e:'🥭',name:'mango',    isFruit:true},
+  {e:'🥬',name:'cabbage',  isFruit:false},
+  {e:'🍍',name:'pineapple',isFruit:true},
+  {e:'🌽',name:'corn',     isFruit:false},
+  {e:'🍉',name:'watermelon',isFruit:true},
 ];
 
-/* STATE */
-let stars        = 0;
-let tabsDone     = new Set();
-let learnedFruits= new Set();
-let basketCount  = 0;
-let riddleDone   = false;
+const countQ = [
+  {fruits:'🍌🍌🍌🍌🍌🍌', answer:6, choices:[4,5,6,7,8]},
+  {fruits:'🍐🍐🍐🍐',       answer:4, choices:[2,3,4,5,6]},
+  {fruits:'🍎🍎🍎',          answer:3, choices:[1,2,3,4,5]},
+  {fruits:'🥭🥭🥭🥭🥭',     answer:5, choices:[3,4,5,6,7]},
+  {fruits:'🍊🍊🍊🍊🍊🍊🍊', answer:7, choices:[5,6,7,8,9]},
+  {fruits:'🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇', answer:12, choices:[10,11,12,13,14]},
+  {fruits:'🍍🍍🍍🍍🍍🍍🍍🍍', answer:8, choices:[6,7,8,9,10]},
+];
 
-/* BUILD FRUITS */
-function buildFruits() {
-    const grid = document.getElementById('fruitsGrid');
-    fruits.forEach(f => {
-        const card = document.createElement('div');
-        card.className = 'fruit-card';
-        card.id = 'fruit-' + f.name;
-        card.innerHTML = `<span class="fruit-emoji">${f.e}</span><div class="fruit-name">${f.name}</div>`;
-        card.onclick = () => {
-            speakText(f.name);
-            learnedFruits.add(f.name);
-            card.classList.add('learned');
-            addStars(1);
-            updateProgress();
-        };
-        grid.appendChild(card);
-    });
+/* ══ STATE ══ */
+let stars         = 0;
+let currentStep   = 0;
+let learnedFruits = new Set();
+let basketCount   = 0;
+let totalProgress = 0;
 
-    // Favourite fruits
-    const fav = document.getElementById('favouriteFruits');
-    fruits.forEach(f => {
-        const card = document.createElement('div');
-        card.className = 'fruit-card';
-        card.innerHTML = `<span class="fruit-emoji">${f.e}</span><div class="fruit-name">${f.name}</div>`;
-        card.onclick = () => {
-            speakText('I like ' + f.name);
-            card.style.borderColor = '#059669';
-            card.style.background  = '#f0fff4';
-            addStars(1);
-        };
-        fav.appendChild(card);
-    });
-}
-
-/* BUILD BASKET */
-function buildBasket() {
-    const area = document.getElementById('itemsArea');
-    basketItems.sort(() => Math.random() - 0.5).forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'drag-item' + (item.isFruit ? '' : ' not-fruit');
-        div.textContent = item.e;
-        div.title = item.name;
-        div.onclick = () => {
-            if (item.isFruit) {
-                div.classList.add('in-basket');
-                document.getElementById('basketFruits').textContent += item.e + ' ';
-                basketCount++;
-                addStars(2);
-                document.getElementById('basketScore').textContent =
-                    `✅ ${basketCount} fruits in basket!`;
-                speakText('Yes! ' + item.name + ' is a fruit!');
-            } else {
-                div.style.borderColor = '#dc2626';
-                div.style.background  = '#fee2e2';
-                speakText('No! ' + item.name + ' is a vegetable!');
-                setTimeout(() => {
-                    div.style.borderColor = '';
-                    div.style.background  = '';
-                }, 1500);
-            }
-        };
-        area.appendChild(div);
-    });
-}
-
-/* SPEAK */
+/* ══ SPEAK ══ */
 function speakText(text) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.8; u.pitch = 1.2; u.lang = 'en-IN';
-    window.speechSynthesis.speak(u);
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
 }
 
-function playSong(song) {
-    const lyrics = song === 'potato'
-        ? 'One potato, two potatoes, three potatoes, four, five potatoes, six potatoes, seven potatoes more!'
-        : 'Here is the tree, with leaves of green. Here are the apples that hang between. When the wind blows the apples swing. Here is the basket to catch them and bring.';
-    speakText(lyrics);
-    addStars(5);
+/* ══ TOAST ══ */
+let toastTimer;
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type ? type+'-toast' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = 'toast', 2200);
 }
 
-function playDialogue() {
-    speakText('Seetha says: Which fruit do you like? Shekhar says: I like oranges. Seetha says: I love guava. I like bananas too.');
-}
-
-/* RIDDLE */
-function answerRiddle(el, result) {
-    document.querySelectorAll('.riddle-opt').forEach(o => o.onclick = null);
-    if (result === 'correct') {
-        el.classList.add('correct');
-        speakText('Correct! An apple a day keeps the doctor away!');
-        addStars(10);
-        riddleDone = true;
-    } else {
-        el.classList.add('wrong');
-        document.querySelectorAll('.riddle-opt').forEach(o => {
-            if (o.textContent.includes('Apple')) o.classList.add('correct');
-        });
-        speakText('Try again! The answer is Apple!');
-    }
-}
-
-/* COUNT */
-const countAnswers = {c1:6, c2:4, c3:3, c4:5, c5:7, c6:12, c7:8};
-function checkCount() {
-    let correct = 0;
-    Object.entries(countAnswers).forEach(([id, ans]) => {
-        const input = document.getElementById(id);
-        const val   = parseInt(input.value);
-        if (val === ans) {
-            input.classList.add('correct');
-            input.classList.remove('wrong');
-            correct++;
-            addStars(2);
-        } else if (input.value !== '') {
-            input.classList.add('wrong');
-            input.classList.remove('correct');
-        }
-    });
-    speakText(correct + ' correct answers! Well done!');
-}
-
-/* PROGRESS */
-function updateProgress() {
-    const pct = Math.round((learnedFruits.size / fruits.length) * 100);
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressPct').textContent  = pct + '%';
-}
-
+/* ══ STARS ══ */
 function addStars(n) {
-    stars += n;
-    document.getElementById('starsDisplay').textContent = stars;
+  stars += n;
+  document.getElementById('starsDisplay').textContent = stars;
 }
 
-/* TABS */
-function showTab(tab, el) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    const tabs = ['fruits','riddle','song','talk','count','action','basket','plural'];
-    tabs.forEach(t => {
-        document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
-    });
+/* ══ PROGRESS ══ */
+const TOTAL_STEPS = 8;
+function updateProgress(fraction) {
+  totalProgress = Math.max(totalProgress, (currentStep / TOTAL_STEPS) + (fraction || 0) / TOTAL_STEPS);
+  const pct = Math.min(100, Math.round(totalProgress * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
 }
 
-function markTabDone(tab) {
-    tabsDone.add(tab);
+/* ══ NAVIGATION ══ */
+function goStep(idx) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + idx).classList.add('active');
+  document.querySelectorAll('.step-pill').forEach(p => {
+    const i = parseInt(p.dataset.step);
+    p.classList.remove('active');
+    if (i === idx) p.classList.add('active');
+  });
+  currentStep = idx;
+  window.scrollTo({top:0, behavior:'smooth'});
+  updateProgress(0);
+}
+
+function completeStep(idx) {
+  addStars(10);
+  showToast('⭐ +10 Stars! Great job!', 'correct');
+  document.querySelectorAll('.step-pill')[idx].classList.add('done');
+  speakText('Great job! Keep going!');
+  if (idx < TOTAL_STEPS - 1) {
+    setTimeout(() => goStep(idx + 1), 800);
+  }
+  updateProgress(1);
+}
+
+/* ══ BUILD FRUITS ══ */
+function buildFruits() {
+  const grid = document.getElementById('fruitsGrid');
+  fruits.forEach(f => {
+    const btn = document.createElement('div');
+    btn.className = 'fruit-btn';
+    btn.innerHTML = `<span class="fruit-emoji-big">${f.e}</span><div class="fruit-name-big">${f.name}</div><div class="learned-check">✅</div>`;
+    btn.onclick = () => {
+      speakText(f.name);
+      if (!learnedFruits.has(f.name)) {
+        learnedFruits.add(f.name);
+        btn.classList.add('learned');
+        addStars(1);
+        showToast(f.e + ' ' + f.name + '!');
+        updateProgress(learnedFruits.size / fruits.length);
+      }
+    };
+    grid.appendChild(btn);
+  });
+
+  // Fav grid
+  const fav = document.getElementById('favGrid');
+  fruits.forEach(f => {
+    const btn = document.createElement('div');
+    btn.className = 'fav-btn';
+    btn.innerHTML = `<div class="fav-e">${f.e}</div><div class="fav-n">${f.name}</div>`;
+    btn.onclick = () => {
+      speakText('I like ' + f.name + '!');
+      document.querySelectorAll('.fav-btn').forEach(b => b.classList.remove('chosen'));
+      btn.classList.add('chosen');
+      addStars(1);
+      showToast('I like ' + f.name + '! 😊', 'correct');
+    };
+    fav.appendChild(btn);
+  });
+}
+
+/* ══ RIDDLE ══ */
+function answerRiddle(el, result) {
+  document.querySelectorAll('.riddle-choice').forEach(o => o.onclick = null);
+  if (result === 'correct') {
+    el.classList.add('correct');
+    speakText('Correct! An apple a day keeps the doctor away!');
+    showToast('🎉 Correct! Well done!', 'correct');
     addStars(10);
-    speakText('Great job! Keep going!');
-    // Auto move to next tab
-    const order = ['fruits','riddle','song','talk','count','action','basket','plural'];
-    const idx   = order.indexOf(tab);
-    if (idx < order.length - 1) {
-        const nextTab = order[idx + 1];
-        const nextBtn = document.querySelectorAll('.tab')[idx + 1];
-        showTab(nextTab, nextBtn);
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
+    setTimeout(() => {
+      document.getElementById('riddleNext').style.display = 'block';
+    }, 600);
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.riddle-choice').forEach(o => {
+      if (o.textContent.includes('Apple')) o.classList.add('correct');
+    });
+    speakText('Try again! The answer is Apple!');
+    showToast('Not quite! The answer is 🍎 Apple!', 'wrong');
+    setTimeout(() => {
+      document.getElementById('riddleNext').style.display = 'block';
+    }, 1200);
+  }
 }
 
-/* COMPLETE */
-function completeChapter() {
-    addStars(50);
-    document.getElementById('celebStars').textContent = `⭐ ${stars} Stars Earned!`;
-    document.getElementById('celebOverlay').classList.add('show');
-    speakText('Congratulations! You completed the Fruits chapter! You are amazing!');
-    launchConfetti();
+/* ══ SONG ══ */
+function playSong(song, btn) {
+  const lyrics = song === 'potato'
+    ? 'One potato, two potatoes, three potatoes, four, five potatoes, six potatoes, seven potatoes more!'
+    : 'Here is the tree, with leaves of green. Here are the apples that hang between. When the wind blows the apples swing. Here is the basket to catch them and bring.';
+  btn.textContent = '🎵 Playing...';
+  speakText(lyrics);
+  addStars(3);
+  setTimeout(() => btn.textContent = '🔊 Tap to Listen!', 4000);
 }
 
-/* CONFETTI */
+/* ══ DIALOGUE ══ */
+function playDialogue() {
+  speakText('Seetha says: Which fruit do you like? Shekhar says: I like oranges. Seetha says: I love guava. I like bananas too!');
+  addStars(2);
+}
+
+/* ══ ACTIONS ══ */
+function doAction(card, text) {
+  speakText(text);
+  card.classList.add('done-action');
+  addStars(2);
+  showToast('👏 ' + text);
+}
+
+/* ══ BUILD COUNT ══ */
+function buildCount() {
+  const area = document.getElementById('countQuestions');
+  countQ.forEach((q, qi) => {
+    const row = document.createElement('div');
+    row.className = 'count-row';
+
+    const shuffled = [...q.choices].sort(() => Math.random() - 0.5);
+    const nums = shuffled.map(n =>
+      `<div class="num-btn" onclick="pickNum(this,${qi},${n},${q.answer})">${n}</div>`
+    ).join('');
+
+    row.innerHTML = `
+      <div class="count-fruits-row">${q.fruits}</div>
+      <div class="count-label">How many? 👇</div>
+      <div class="number-choices" id="cq${qi}">${nums}</div>
+    `;
+    area.appendChild(row);
+  });
+}
+
+function pickNum(btn, qi, val, ans) {
+  const group = document.getElementById('cq' + qi);
+  group.querySelectorAll('.num-btn').forEach(b => b.classList.add('disabled'));
+  if (val === ans) {
+    btn.classList.add('selected-correct');
+    btn.classList.remove('disabled');
+    speakText('Correct! ' + ans + '!');
+    showToast('✅ Correct! ' + ans + '!', 'correct');
+    addStars(3);
+  } else {
+    btn.classList.add('selected-wrong');
+    group.querySelectorAll('.num-btn').forEach(b => {
+      const bv = parseInt(b.textContent);
+      if (bv === ans) { b.classList.add('selected-correct'); b.classList.remove('disabled'); }
+    });
+    speakText('The answer is ' + ans);
+    showToast('The answer is ' + ans, 'wrong');
+  }
+}
+
+/* ══ BUILD BASKET ══ */
+function buildBasket() {
+  const pool = document.getElementById('itemsPool');
+  [...basketItems].sort(() => Math.random() - 0.5).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'pool-item';
+    div.textContent = item.e;
+    div.title = item.name;
+    div.onclick = () => {
+      if (item.isFruit) {
+        div.classList.add('in-basket');
+        document.getElementById('basketFruitsDisplay').textContent += item.e + ' ';
+        basketCount++;
+        document.getElementById('basketScore').textContent = '✅ ' + basketCount + ' fruits in basket!';
+        speakText('Yes! ' + item.name + ' is a fruit!');
+        addStars(2);
+        showToast('🍎 ' + item.name + ' is a fruit!', 'correct');
+      } else {
+        div.classList.add('wrong-shake');
+        speakText(item.name + ' is a vegetable!');
+        showToast('🥦 ' + item.name + ' is a vegetable!', 'wrong');
+        setTimeout(() => div.classList.remove('wrong-shake'), 600);
+      }
+    };
+    pool.appendChild(div);
+  });
+}
+
+/* ══ FINISH ══ */
+function finishChapter() {
+  addStars(50);
+  document.getElementById('celebStars').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebOverlay').classList.add('show');
+  speakText('Congratulations! You finished the Fruits chapter! You are amazing!');
+  launchConfetti();
+}
+
+/* ══ CONFETTI ══ */
 function launchConfetti() {
-    const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
-    for (let i = 0; i < 70; i++) {
-        const c = document.createElement('div');
-        const sz = Math.random() * 14 + 6;
-        c.style.cssText = `
-            position:fixed;width:${sz}px;height:${sz}px;
-            background:${cols[Math.floor(Math.random()*cols.length)]};
-            border-radius:${Math.random()>0.5?'50%':'3px'};
-            left:${Math.random()*100}vw;top:-20px;z-index:300;
-            animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*0.8}s forwards;
-            pointer-events:none;
-        `;
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 4500);
-    }
+  const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random() * 16 + 7;
+    c.style.cssText = `
+      position:fixed;width:${sz}px;height:${sz}px;
+      background:${cols[Math.floor(Math.random()*cols.length)]};
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+      left:${Math.random()*100}vw;top:-20px;z-index:300;
+      animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*0.8}s forwards;
+      pointer-events:none;
+    `;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
 }
 
-/* INIT */
+/* ══ INIT ══ */
 buildFruits();
+buildCount();
 buildBasket();
 </script>
 </body>
