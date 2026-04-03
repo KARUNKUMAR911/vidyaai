@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 2: Solids Around Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff3e0; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#bf360c,#e64a19);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.25); border:2px solid rgba(255,215,0,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#bf360c,#f4511e); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.82); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#bf360c,#ff7043); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e64a19; border-color:#ffccbc; }
+.step-tab.active   { background:#bf360c; color:#fff; border-color:#bf360c; box-shadow:0 4px 14px rgba(191,54,12,.4); }
+.step-tab.done     { background:#fbe9e7; color:#bf360c; border-color:#ff7043; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── SHAPE CARDS ── */
+.shape-intro-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.shape-card {
+  background:#fff; border-radius:20px; padding:20px 14px; text-align:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid transparent;
+  transition:all .3s; cursor:pointer;
+}
+.shape-card:active { transform:scale(.95); }
+.shape-card .s-emoji { font-size:56px; display:block; margin-bottom:8px; }
+.shape-card .s-name { font-family:'Fredoka One',cursive; font-size:20px; }
+.shape-card .s-desc { font-size:12px; font-weight:800; color:#777; margin-top:4px; }
+
+/* ── SCENARIO CARDS ── */
+.scenario-card {
+  background:#fff; border-radius:24px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent;
+  transition:border-color .3s, background .3s;
+}
+.scenario-card.done { border-color:#ff7043; background:#fff3e0; }
+.scene-top { padding:16px 16px 10px; display:flex; align-items:center; gap:12px; }
+.scene-emojis { font-size:48px; line-height:1; }
+.scene-label { font-family:'Fredoka One',cursive; font-size:15px; color:#555; text-transform:uppercase; letter-spacing:.5px; }
+.scene-sentence { font-size:18px; font-weight:900; color:#222; line-height:1.4; }
+.scene-sentence .kw { color:#bf360c; font-size:20px; }
+.scene-bottom { border-top:2px dashed #e0e0e0; padding:12px 16px; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; }
+.choice-btn {
+  flex:1; min-width:80px; padding:14px 10px; border-radius:16px; border:3px solid #ffccbc;
+  background:#fff3e0; font-family:'Fredoka One',cursive; font-size:18px; color:#e64a19;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn .cb-emoji { font-size:32px; }
+.choice-btn .cb-word { font-size:15px; }
+.choice-btn.correct { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#c8e6c9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#bf360c,#e64a19); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.green { background:linear-gradient(135deg,#1b5e20,#2e7d32); color:#fff; }
+
+/* ── QUIZ ── */
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:64px; text-align:center; margin:10px 0; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#bf360c; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff; border:3px solid #ffccbc; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive; font-size:16px; color:#bf360c;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.quiz-opt .qo-emoji { font-size:28px; }
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+
+/* ── SORT GAME ── */
+.sort-tray { background:#fff; border-radius:20px; padding:16px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.sort-tray-title { font-family:'Fredoka One',cursive; font-size:18px; color:#bf360c; margin-bottom:12px; text-align:center; }
+.sort-bins { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
+.sort-bin {
+  border-radius:16px; padding:12px 8px; text-align:center; min-height:90px;
+  border:3px dashed #ccc; background:#fafafa; transition:all .3s;
+}
+.sort-bin .bin-label { font-family:'Fredoka One',cursive; font-size:13px; margin-bottom:6px; }
+.sort-bin .bin-emoji { font-size:28px; }
+.sort-items-pool { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.sort-item {
+  background:#fff; border:3px solid #ffccbc; border-radius:14px; padding:10px 14px;
+  font-size:30px; cursor:pointer; transition:all .2s; user-select:none;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+}
+.sort-item .si-lbl { font-size:11px; font-weight:900; color:#e64a19; font-family:'Fredoka One',cursive; }
+.sort-item:active { transform:scale(.9); }
+.sort-item.placed { opacity:.4; pointer-events:none; }
+
+/* ── MATCH GAME ── */
+.match-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.match-col-title { font-family:'Fredoka One',cursive; font-size:16px; color:#bf360c; text-align:center; margin-bottom:8px; }
+.match-item {
+  background:#fff; border:3px solid #ffccbc; border-radius:16px; padding:14px 10px;
+  text-align:center; cursor:pointer; transition:all .25s; margin-bottom:8px;
+  font-family:'Fredoka One',cursive; font-size:16px; color:#e64a19;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.match-item .mi-emoji { font-size:36px; }
+.match-item:active { transform:scale(.93); }
+.match-item.selected { border-color:#bf360c; background:#fbe9e7; }
+.match-item.matched  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.match-item.wrong-flash { border-color:#c62828; background:#ffcdd2; animation:flashNo .4s; }
+@keyframes flashNo { 0%,100%{transform:scale(1)} 50%{transform:scale(.92)} }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(191,54,12,.93); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; }
+.celeb-sub   { font-size:16px; color:rgba(255,255,255,.85); font-weight:800; margin-bottom:8px; text-align:center; padding:0 30px; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#bf360c; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+/* ── MOVE DEMO ── */
+.move-demo { display:flex; gap:10px; margin-bottom:16px; }
+.move-box {
+  flex:1; background:#fff; border-radius:20px; padding:16px; text-align:center;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.move-box .mb-emoji { font-size:56px; display:block; margin-bottom:6px; }
+.move-box .mb-title { font-family:'Fredoka One',cursive; font-size:20px; color:#bf360c; }
+.move-box .mb-desc { font-size:12px; font-weight:800; color:#777; margin-top:4px; }
+.rolling { animation:roll 2s linear infinite; }
+.sliding { animation:slide 2s ease-in-out infinite; }
+@keyframes roll { 0%{transform:translateX(-10px) rotate(0deg)} 100%{transform:translateX(10px) rotate(360deg)} }
+@keyframes slide { 0%,100%{transform:translateX(-10px)} 50%{transform:translateX(10px)} }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #ff7043;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#bf360c; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── SHAPE DRAW AREA ── */
+.draw-shapes { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.draw-shape-card {
+  background:#fff; border-radius:16px; padding:14px; text-align:center;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.draw-shape-card canvas { border:2px dashed #ccc; border-radius:10px; }
+.draw-shape-card .ds-name { font-family:'Fredoka One',cursive; font-size:16px; color:#bf360c; margin-bottom:8px; }
+
+/* ── DOT-TRACE ── */
+.trace-wrap { background:#fff; border-radius:20px; padding:16px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.trace-title { font-family:'Fredoka One',cursive; font-size:18px; color:#bf360c; margin-bottom:12px; text-align:center; }
+.shape-trace-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.trace-item { text-align:center; }
+.trace-item .ti-name { font-family:'Fredoka One',cursive; font-size:16px; color:#bf360c; margin-top:6px; }
+.trace-item svg { border:2px dashed #ccc; border-radius:12px; background:#fffde7; }
+
+/* ── OBJECTS GALLERY ── */
+.obj-gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
+.obj-card {
+  background:#fff; border-radius:14px; padding:10px 6px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08); cursor:pointer; transition:all .2s;
+  border:2px solid transparent;
+}
+.obj-card:active { transform:scale(.93); }
+.obj-card .oc-emoji { font-size:36px; }
+.obj-card .oc-name { font-size:11px; font-weight:900; color:#555; margin-top:4px; }
+.obj-card.selected-obj { border-color:#bf360c; background:#fff3e0; }
+.obj-card.grouped { border-color:#2e7d32; background:#c8e6c9; }
+
+.progress-dots { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:14px; height:14px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#ff7043; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🧊 Chapter 2 — Solids Around Us</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🔷</span>
+  <h1>Solids Around Us</h1>
+  <p>Sort shapes • Match objects • Roll vs Slide • Learn flat shapes!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start learning!</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="intro"    onclick="tabClick('intro')">🔷 Shapes</div>
+  <div class="step-tab locked" data-tab="sort"     onclick="tabClick('sort')">🗂️ Sort</div>
+  <div class="step-tab locked" data-tab="move"     onclick="tabClick('move')">🎳 Roll &amp; Slide</div>
+  <div class="step-tab locked" data-tab="flat"     onclick="tabClick('flat')">🔴 Flat Shapes</div>
+  <div class="step-tab locked" data-tab="match"    onclick="tabClick('match')">🔗 Match</div>
+  <div class="step-tab locked" data-tab="quiz"     onclick="tabClick('quiz')">🎯 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — INTRO: SHAPES AROUND US
+══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ff8f00,#ffc107)">
+    <span class="banner-emoji">🧊</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Solids Around Us!</div>
+      <div class="banner-sub" style="color:#fff">Objects have different SHAPES. Let's learn them!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">What is a SOLID?</div>
+    <div class="ic-text">Everything around us has a shape. A <strong>ball</strong> is round. A <strong>box</strong> is a cube. A <strong>can</strong> is a cylinder. These are called <strong>SOLIDS</strong>!</div>
+  </div>
+
+  <!-- 5 shape groups from PDF -->
+  <div style="font-family:'Fredoka One',cursive;font-size:17px;color:#bf360c;margin-bottom:10px;text-align:center;">TAP each shape to learn about it! 👇</div>
+
+  <div class="shape-intro-grid">
+    <div class="shape-card" id="sc-sphere" onclick="learnShape('sphere')" style="border-color:#e53935">
+      <span class="s-emoji">⚽</span>
+      <div class="s-name" style="color:#e53935">SPHERE</div>
+      <div class="s-desc">Round like a ball</div>
+    </div>
+    <div class="shape-card" id="sc-cube" onclick="learnShape('cube')" style="border-color:#1976d2">
+      <span class="s-emoji">🎲</span>
+      <div class="s-name" style="color:#1976d2">CUBE</div>
+      <div class="s-desc">All sides equal (like a dice!)</div>
+    </div>
+    <div class="shape-card" id="sc-cuboid" onclick="learnShape('cuboid')" style="border-color:#388e3c">
+      <span class="s-emoji">📦</span>
+      <div class="s-name" style="color:#388e3c">CUBOID</div>
+      <div class="s-desc">Like a box or brick</div>
+    </div>
+    <div class="shape-card" id="sc-cylinder" onclick="learnShape('cylinder')" style="border-color:#7b1fa2">
+      <span class="s-emoji">🥫</span>
+      <div class="s-name" style="color:#7b1fa2">CYLINDER</div>
+      <div class="s-desc">Round like a tin can</div>
+    </div>
+    <div class="shape-card" id="sc-cone" onclick="learnShape('cone')" style="border-color:#f57c00">
+      <span class="s-emoji">🍦</span>
+      <div class="s-name" style="color:#f57c00">CONE</div>
+      <div class="s-desc">Pointy on top (like ice cream!)</div>
+    </div>
+    <div class="shape-card" id="sc-none" style="border-color:#ccc;background:#f5f5f5">
+      <span class="s-emoji" id="learnEmoji">👆</span>
+      <div class="s-name" id="learnName" style="color:#999">Tap a shape!</div>
+      <div class="s-desc" id="learnDesc">to learn more</div>
+    </div>
+  </div>
+
+  <!-- progress dots for 5 taps -->
+  <div class="progress-dots" id="introDotsRow">
+    <div class="pdot" id="dot-sphere"></div>
+    <div class="pdot" id="dot-cube"></div>
+    <div class="pdot" id="dot-cuboid"></div>
+    <div class="pdot" id="dot-cylinder"></div>
+    <div class="pdot" id="dot-cone"></div>
+  </div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap all 5 shapes to unlock next step!</div>
+
+  <button class="big-btn primary" id="introNextBtn" disabled onclick="completeTab('intro','sort','Shapes','Sort')">Next: Sort Shapes! 🗂️</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — SORT SHAPES
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-sort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1565c0,#1976d2)">
+    <span class="banner-emoji">🗂️</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Sort the Shapes!</div>
+      <div class="banner-sub" style="color:#fff">Objects of the same shape can be grouped!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">Group Objects by Shape 👀</div>
+    <div class="ic-text">A <strong>football</strong>, an <strong>apple</strong> and a <strong>lollipop</strong> are all <strong>round (sphere)</strong>! Tap an object, then tap the bin it belongs to!</div>
+  </div>
+
+  <div class="sort-tray">
+    <div class="sort-tray-title">Drag objects into the right group!</div>
+
+    <!-- Bins -->
+    <div class="sort-bins">
+      <div class="sort-bin" id="bin-sphere" onclick="dropIntoBin('sphere')">
+        <div class="bin-label" style="color:#e53935">⚽ SPHERE</div>
+        <div id="bin-sphere-items" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;font-size:24px"></div>
+      </div>
+      <div class="sort-bin" id="bin-cube" onclick="dropIntoBin('cube')">
+        <div class="bin-label" style="color:#1976d2">🎲 CUBE</div>
+        <div id="bin-cube-items" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;font-size:24px"></div>
+      </div>
+      <div class="sort-bin" id="bin-cylinder" onclick="dropIntoBin('cylinder')">
+        <div class="bin-label" style="color:#7b1fa2">🥫 CYLINDER</div>
+        <div id="bin-cylinder-items" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;font-size:24px"></div>
+      </div>
+      <div class="sort-bin" id="bin-cuboid" onclick="dropIntoBin('cuboid')" style="grid-column:1">
+        <div class="bin-label" style="color:#388e3c">📦 CUBOID</div>
+        <div id="bin-cuboid-items" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;font-size:24px"></div>
+      </div>
+      <div class="sort-bin" id="bin-cone" onclick="dropIntoBin('cone')" style="grid-column:2/4">
+        <div class="bin-label" style="color:#f57c00">🍦 CONE</div>
+        <div id="bin-cone-items" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;font-size:24px"></div>
+      </div>
+    </div>
+
+    <!-- Items pool -->
+    <div class="sort-items-pool" id="sortPool">
+      <div class="sort-item" data-shape="sphere" data-id="s1" onclick="selectSortItem(this)">
+        <span>⚽</span><span class="si-lbl">Football</span>
+      </div>
+      <div class="sort-item" data-shape="sphere" data-id="s2" onclick="selectSortItem(this)">
+        <span>🍎</span><span class="si-lbl">Apple</span>
+      </div>
+      <div class="sort-item" data-shape="sphere" data-id="s3" onclick="selectSortItem(this)">
+        <span>🍭</span><span class="si-lbl">Lollipop</span>
+      </div>
+      <div class="sort-item" data-shape="cube" data-id="s4" onclick="selectSortItem(this)">
+        <span>🎲</span><span class="si-lbl">Dice</span>
+      </div>
+      <div class="sort-item" data-shape="cube" data-id="s5" onclick="selectSortItem(this)">
+        <span>🧊</span><span class="si-lbl">Ice cube</span>
+      </div>
+      <div class="sort-item" data-shape="cylinder" data-id="s6" onclick="selectSortItem(this)">
+        <span>🥫</span><span class="si-lbl">Tin can</span>
+      </div>
+      <div class="sort-item" data-shape="cylinder" data-id="s7" onclick="selectSortItem(this)">
+        <span>🕯️</span><span class="si-lbl">Candle</span>
+      </div>
+      <div class="sort-item" data-shape="cylinder" data-id="s8" onclick="selectSortItem(this)">
+        <span>🥛</span><span class="si-lbl">Milk can</span>
+      </div>
+      <div class="sort-item" data-shape="cuboid" data-id="s9" onclick="selectSortItem(this)">
+        <span>📦</span><span class="si-lbl">Box</span>
+      </div>
+      <div class="sort-item" data-shape="cuboid" data-id="s10" onclick="selectSortItem(this)">
+        <span>📚</span><span class="si-lbl">Book</span>
+      </div>
+      <div class="sort-item" data-shape="cuboid" data-id="s11" onclick="selectSortItem(this)">
+        <span>🧼</span><span class="si-lbl">Soap</span>
+      </div>
+      <div class="sort-item" data-shape="cone" data-id="s12" onclick="selectSortItem(this)">
+        <span>🍦</span><span class="si-lbl">Ice cream</span>
+      </div>
+      <div class="sort-item" data-shape="cone" data-id="s13" onclick="selectSortItem(this)">
+        <span>🥕</span><span class="si-lbl">Carrot</span>
+      </div>
+    </div>
+    <div id="sortFeedback" class="fb-box" style="margin-top:10px"></div>
+  </div>
+
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Sort all 13 objects to unlock next step! (<span id="sortCount">0</span>/13)</div>
+  <button class="big-btn primary" id="sortNextBtn" disabled onclick="completeTab('sort','move','Sort','Roll &amp; Slide')">Next: Roll &amp; Slide! 🎳</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — ROLL & SLIDE
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-move">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a237e,#3949ab)">
+    <span class="banner-emoji">🎳</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Roll &amp; Slide!</div>
+      <div class="banner-sub" style="color:#fff">Different shapes move in different ways!</div>
+    </div>
+  </div>
+
+  <!-- Demo animation -->
+  <div class="move-demo">
+    <div class="move-box">
+      <span class="mb-emoji rolling">⚽</span>
+      <div class="mb-title">ROLLING</div>
+      <div class="mb-desc">Round objects ROLL! (sphere, cylinder)</div>
+    </div>
+    <div class="move-box">
+      <span class="mb-emoji sliding">📦</span>
+      <div class="mb-title">SLIDING</div>
+      <div class="mb-desc">Flat objects SLIDE! (cube, cuboid)</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎯 The Secret Rule!</div>
+    <div class="ic-text">
+      <strong>ROUND objects → ROLL</strong> (Sphere, Cylinder, Cone can roll!)<br>
+      <strong>FLAT-SIDED objects → SLIDE</strong> (Cube, Cuboid slide!)<br>
+      Some shapes like <strong>Cylinder</strong> can BOTH roll AND slide!
+    </div>
+  </div>
+
+  <!-- Questions: tick the roller, colour the slider -->
+  <div style="font-family:'Fredoka One',cursive;font-size:17px;color:#bf360c;margin:14px 0 10px;text-align:center">
+    ✅ Tap objects that ROLL!
+  </div>
+
+  <div id="rollQuestions"></div>
+  <div id="rollFeedback" class="fb-box"></div>
+
+  <div style="font-family:'Fredoka One',cursive;font-size:17px;color:#1976d2;margin:16px 0 10px;text-align:center">
+    🖍️ Tap objects that SLIDE!
+  </div>
+
+  <div id="slideQuestions"></div>
+  <div id="slideFeedback" class="fb-box"></div>
+
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin:8px 0 10px">Answer all questions to unlock next step! (<span id="moveCount">0</span>/8)</div>
+  <button class="big-btn primary" id="moveNextBtn" disabled onclick="completeTab('move','flat','Roll &amp; Slide','Flat Shapes')">Next: Flat Shapes! 🔴</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 4 — FLAT SHAPES (2D)
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-flat">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#4a148c,#7b1fa2)">
+    <span class="banner-emoji">🔴</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Flat Shapes!</div>
+      <div class="banner-sub" style="color:#fff">Top surfaces show us flat 2D shapes!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">2D = FLAT Shapes!</div>
+    <div class="ic-text">When we look at the <strong>top</strong> of an object, we see a <strong>flat shape</strong>! A coin top → <strong>Circle</strong>. A box top → <strong>Square</strong> or <strong>Rectangle</strong>. A sandwich → <strong>Triangle</strong>!</div>
+  </div>
+
+  <!-- 4 flat shapes showcase -->
+  <div class="shape-intro-grid" style="margin-bottom:16px">
+    <div class="shape-card" onclick="learnFlat('circle')" id="fc-circle" style="border-color:#e53935">
+      <span class="s-emoji">🔴</span>
+      <div class="s-name" style="color:#e53935">CIRCLE</div>
+      <div class="s-desc">Perfectly round, no corners!</div>
+    </div>
+    <div class="shape-card" onclick="learnFlat('triangle')" id="fc-triangle" style="border-color:#388e3c">
+      <span class="s-emoji">🔺</span>
+      <div class="s-name" style="color:#388e3c">TRIANGLE</div>
+      <div class="s-desc">3 sides, 3 corners!</div>
+    </div>
+    <div class="shape-card" onclick="learnFlat('rectangle')" id="fc-rectangle" style="border-color:#1976d2">
+      <span class="s-emoji">🟦</span>
+      <div class="s-name" style="color:#1976d2">RECTANGLE</div>
+      <div class="s-desc">2 long + 2 short sides!</div>
+    </div>
+    <div class="shape-card" onclick="learnFlat('square')" id="fc-square" style="border-color:#f57c00">
+      <span class="s-emoji">🟧</span>
+      <div class="s-name" style="color:#f57c00">SQUARE</div>
+      <div class="s-desc">4 equal sides!</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="flatDotsRow">
+    <div class="pdot" id="fdot-circle"></div>
+    <div class="pdot" id="fdot-triangle"></div>
+    <div class="pdot" id="fdot-rectangle"></div>
+    <div class="pdot" id="fdot-square"></div>
+  </div>
+
+  <!-- Find flat shapes on real objects -->
+  <div style="font-family:'Fredoka One',cursive;font-size:17px;color:#bf360c;margin:14px 0 10px;text-align:center">
+    What flat shape is on top? Tap the correct answer! 👇
+  </div>
+
+  <div id="flatQuestions"></div>
+
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin:8px 0 10px">Tap all 4 shapes + answer all questions! (<span id="flatCount">0</span>/8)</div>
+  <button class="big-btn primary" id="flatNextBtn" disabled onclick="completeTab('flat','match','Flat Shapes','Match')">Next: Match Shapes! 🔗</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 5 — MATCH SHAPES TO OBJECTS
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#00695c,#00897b)">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Match the Shape!</div>
+      <div class="banner-sub" style="color:#fff">Tap the shape, then tap the matching object!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">How to play 🎮</div>
+    <div class="ic-text">Tap a <strong>shape</strong> on the left, then tap the <strong>real object</strong> on the right that has that shape! Match all pairs to win!</div>
+  </div>
+
+  <div id="matchArea"></div>
+  <div id="matchFeedback" class="fb-box"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin:8px 0 10px">Match all 6 pairs to unlock Quiz! (<span id="matchCount">0</span>/6)</div>
+  <button class="big-btn primary" id="matchNextBtn" disabled onclick="completeTab('match','quiz','Match','Quiz')">Next: Final Quiz! 🎯</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 6 — FINAL QUIZ
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#c62828)">
+    <span class="banner-emoji">🎯</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about shapes!</div>
+    </div>
+  </div>
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center;padding:20px">
+      <div style="font-size:64px">🎯</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:#bf360c;margin:10px 0">Ready for the Quiz?</div>
+      <div style="font-size:15px;color:#666;font-weight:800;margin-bottom:20px">10 questions • Shapes &amp; Objects!</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:260px;margin:0 auto">Start Quiz! 🚀</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Chapter 2 Complete!</div>
+  <div class="celeb-sub" id="celebS"></div>
+  <div class="celeb-stars" id="celebStar"></div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 Yay!</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let stars = 0;
+let tabDone = { intro:false, sort:false, move:false, flat:false, match:false };
+const tabOrder = ['intro','sort','move','flat','match','quiz'];
+
+let introLearned = new Set();
+let flatLearned  = new Set();
+let sortPlaced   = 0;
+let moveAnswered = 0;
+let flatQAnswered= 0;
+let matchPaired  = 0;
+let quizIdx=0, quizScore=0, quizItems=[];
+
+// total progress items
+const TOTAL_PROGRESS = 13 + 8 + 8 + 6; // sort + move + flat + match
+
+// ─────────────────────────────────────────
+// TAB NAVIGATION
+// ─────────────────────────────────────────
+function tabClick(tab) {
+  const idx = tabOrder.indexOf(tab);
+  const cur = tabOrder.findIndex(t => !tabDone[t] && t !== 'quiz') ;
+  const tabs = document.querySelectorAll('.step-tab');
+
+  // check if locked
+  let accessible = false;
+  if (idx === 0) { accessible = true; }
+  else {
+    const prev = tabOrder[idx-1];
+    if (tabDone[prev] || (prev && tabDone[prev])) accessible = true;
+    // also if it's already done
+    if (tabDone[tab]) accessible = true;
+  }
+  // Special: quiz accessible only after match done
+  if (tab === 'quiz' && !tabDone['match']) accessible = false;
+
+  if (!accessible) {
+    tabs.forEach(t => {
+      if (t.dataset.tab === tab) {
+        t.classList.add('shaking');
+        setTimeout(() => t.classList.remove('shaking'), 600);
+      }
+    });
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  switchTab(tab);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.step-tab').forEach(t => {
+    t.classList.remove('active');
+    if (t.dataset.tab === tab) t.classList.add('active');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─────────────────────────────────────────
+// COMPLETE TAB → UNLOCK NEXT
+// ─────────────────────────────────────────
+function completeTab(cur, next, curLabel, nextLabel) {
+  tabDone[cur] = true;
+  addStars(20);
+
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab === cur) {
+      t.className = 'step-tab done';
+      t.innerHTML = '✅ ' + curLabel;
+    }
+    if (t.dataset.tab === next) {
+      t.className = 'step-tab unlocked';
+    }
+  });
+  switchTab(next);
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab === next) t.classList.add('active');
+  });
+  updateProgress();
+
+  if (next === 'quiz') speak('Amazing! Now let\'s do the final quiz!');
+  else speak('Great job! Now let\'s learn about ' + nextLabel + '!');
+}
+
+// ─────────────────────────────────────────
+// PROGRESS BAR
+// ─────────────────────────────────────────
+let totalAnswered = 0;
+function bumpProgress(n) {
+  totalAnswered += n;
+  const pct = Math.min(100, Math.round((totalAnswered / TOTAL_PROGRESS) * 100));
+  document.getElementById('progFill').style.width = pct + '%';
+  const done = tabDone['quiz'] ? TOTAL_PROGRESS : totalAnswered;
+  document.getElementById('progLabel').textContent = pct >= 100 ? '🎉 All done!' : `${pct}% complete`;
+}
+function updateProgress() {
+  const tabs = Object.values(tabDone).filter(Boolean).length;
+  const pct = Math.round((tabs / Object.keys(tabDone).length) * 80);
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+// ─────────────────────────────────────────
+// TAB 1 — INTRO SHAPES
+// ─────────────────────────────────────────
+const shapeInfo = {
+  sphere:   { emoji:'⚽', name:'SPHERE', real:'Ball, Apple, Orange, Earth!', color:'#e53935', fact:'A sphere is perfectly round in all directions!' },
+  cube:     { emoji:'🎲', name:'CUBE', real:'Dice, Sugar cube, Rubik\'s cube!', color:'#1976d2', fact:'A cube has 6 square faces all the same size!' },
+  cuboid:   { emoji:'📦', name:'CUBOID', real:'Box, Book, Matchbox, Brick!', color:'#388e3c', fact:'A cuboid is like a stretched cube — a rectangular box!' },
+  cylinder: { emoji:'🥫', name:'CYLINDER', real:'Tin can, Candle, Pipe, Milk can!', color:'#7b1fa2', fact:'A cylinder has 2 flat circles and 1 curved side!' },
+  cone:     { emoji:'🍦', name:'CONE', real:'Ice cream, Carrot, Party hat!', color:'#f57c00', fact:'A cone has 1 flat circle and 1 pointy top!' },
+};
+
+function learnShape(s) {
+  const info = shapeInfo[s];
+  document.getElementById('learnEmoji').textContent = info.emoji;
+  document.getElementById('learnName').textContent = info.name;
+  document.getElementById('learnName').style.color = info.color;
+  document.getElementById('learnDesc').textContent = info.real;
+
+  document.getElementById('sc-'+s).style.background = '#fff9c4';
+  document.getElementById('dot-'+s).classList.add('done');
+  introLearned.add(s);
+  addStars(3);
+  speak(info.name + '! ' + info.fact + ' Examples: ' + info.real);
+
+  if (introLearned.size === 5) {
+    document.getElementById('introNextBtn').disabled = false;
+    showToast('🎉 You learned all 5 shapes!');
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 2 — SORT SHAPES
+// ─────────────────────────────────────────
+let selectedSortItem = null;
+
+function selectSortItem(el) {
+  if (el.classList.contains('placed')) return;
+  document.querySelectorAll('.sort-item').forEach(i => i.style.borderColor = '#ffccbc');
+  el.style.borderColor = '#bf360c';
+  el.style.background = '#fff3e0';
+  selectedSortItem = el;
+  speak('Now tap the right group!');
+}
+
+function dropIntoBin(binShape) {
+  if (!selectedSortItem) {
+    showToast('First tap an object to pick it up!');
+    speak('First tap an object!');
+    return;
+  }
+  const itemShape = selectedSortItem.dataset.shape;
+  const emoji = selectedSortItem.querySelector('span').textContent;
+  const lbl = selectedSortItem.querySelector('.si-lbl').textContent;
+
+  if (itemShape === binShape) {
+    // correct
+    const binItems = document.getElementById('bin-'+binShape+'-items');
+    binItems.innerHTML += `<span title="${lbl}">${emoji}</span>`;
+    selectedSortItem.classList.add('placed');
+    selectedSortItem.style.borderColor = '#2e7d32';
+    selectedSortItem.style.background = '#c8e6c9';
+    showFeedback('sortFeedback','ok','✅ Correct! ' + lbl + ' is a ' + binShape.toUpperCase() + '!');
+    addStars(2);
+    speak('Correct! ' + lbl + ' is a ' + binShape + '!');
+    sortPlaced++;
+    document.getElementById('sortCount').textContent = sortPlaced;
+    bumpProgress(1);
+    if (sortPlaced >= 13) {
+      document.getElementById('sortNextBtn').disabled = false;
+    }
+  } else {
+    showFeedback('sortFeedback','no','❌ Oops! Try the correct group for ' + lbl + '!');
+    selectedSortItem.style.borderColor = '#c62828';
+    speak('Oops! Try a different group!');
+    setTimeout(() => {
+      if (selectedSortItem) selectedSortItem.style.borderColor = '#bf360c';
+    }, 800);
+  }
+  selectedSortItem = null;
+}
+
+// ─────────────────────────────────────────
+// TAB 3 — ROLL & SLIDE
+// ─────────────────────────────────────────
+const rollItems  = [{e:'🎲',n:'Dice',r:false},{e:'⚽',n:'Ball',r:true},{e:'🍦',n:'Ice cream',r:true},{e:'🚗',n:'Wheel',r:true}];
+const slideItems = [{e:'⚽',n:'Ball',s:false},{e:'📦',n:'Box',s:true},{e:'📦',n:'Trunk',s:true},{e:'🥫',n:'Can (slide)',s:true}];
+let moveAnsws = {};
+
+function buildMoveQuestions() {
+  let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">';
+  rollItems.forEach((item,i) => {
+    html += `<div class="quiz-opt" id="roll-${i}" onclick="answerMove('roll',${i},${item.r})">
+      <div class="qo-emoji">${item.e}</div><div>${item.n}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('rollQuestions').innerHTML = html;
+
+  let html2 = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">';
+  slideItems.forEach((item,i) => {
+    html2 += `<div class="quiz-opt" id="slide-${i}" onclick="answerMove('slide',${i},${item.s})">
+      <div class="qo-emoji">${item.e}</div><div>${item.n}</div>
+    </div>`;
+  });
+  html2 += '</div>';
+  document.getElementById('slideQuestions').innerHTML = html2;
+}
+
+function answerMove(type, idx, correct) {
+  const key = type+'-'+idx;
+  if (moveAnsws[key]) return;
+  const el = document.getElementById(key);
+  if (correct) {
+    el.classList.add('right');
+    addStars(2); speak('Yes! Correct!');
+    showFeedback('rollFeedback','ok','✅ Correct!');
+  } else {
+    el.classList.add('wrong');
+    speak('Oops! Try again!');
+    showFeedback('slideFeedback','no','❌ That one does not ' + type + '!');
+  }
+  moveAnsws[key] = true;
+  moveAnswered++;
+  document.getElementById('moveCount').textContent = moveAnswered;
+  bumpProgress(1);
+  if (moveAnswered >= 8) {
+    document.getElementById('moveNextBtn').disabled = false;
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 4 — FLAT SHAPES
+// ─────────────────────────────────────────
+const flatInfo = {
+  circle:    { emoji:'🔴', name:'Circle', sides:0, corners:0, example:'Coin, CD, Wheel top', color:'#e53935' },
+  triangle:  { emoji:'🔺', name:'Triangle', sides:3, corners:3, example:'Samosa, Traffic sign', color:'#388e3c' },
+  rectangle: { emoji:'🟦', name:'Rectangle', sides:4, corners:4, example:'Book top, Postcard, Ruler', color:'#1976d2' },
+  square:    { emoji:'🟧', name:'Square', sides:4, corners:4, example:'Biscuit, Photo frame', color:'#f57c00' },
+};
+
+const flatQs = [
+  {e:'🪙', obj:'Coin', ans:'circle',  opts:['circle','square','triangle','rectangle']},
+  {e:'🍕', obj:'Pizza slice', ans:'triangle', opts:['triangle','circle','square','rectangle']},
+  {e:'📒', obj:'Notebook top', ans:'rectangle', opts:['rectangle','circle','triangle','square']},
+  {e:'🟧', obj:'Cracker biscuit', ans:'square', opts:['square','triangle','circle','rectangle']},
+];
+let flatQAnsws = {};
+
+function learnFlat(s) {
+  const info = flatInfo[s];
+  addStars(3);
+  flatLearned.add(s);
+  document.getElementById('fc-'+s).style.background = '#fff9c4';
+  document.getElementById('fdot-'+s).classList.add('done');
+  speak(info.name + '! It has ' + info.sides + ' sides. Examples: ' + info.example);
+  showToast('✅ ' + info.name + ': ' + info.example);
+  checkFlatUnlock();
+}
+
+function buildFlatQuestions() {
+  let html = '';
+  flatQs.forEach((q,i) => {
+    html += `<div class="quiz-box-wrap" id="fq-${i}">
+      <div class="quiz-scene">${q.e}</div>
+      <div class="quiz-question">The top of a ${q.obj} is a ___?</div>
+      <div class="quiz-opts">
+        ${q.opts.map(o => `<div class="quiz-opt" onclick="answerFlat(${i},this,'${o}','${q.ans}')">
+          <div class="qo-emoji">${flatInfo[o].emoji}</div>
+          <div>${flatInfo[o].name}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  document.getElementById('flatQuestions').innerHTML = html;
+}
+
+function answerFlat(qi, el, sel, correct) {
+  if (flatQAnsws[qi]) return;
+  flatQAnsws[qi] = true;
+  document.querySelectorAll(`#fq-${qi} .quiz-opt`).forEach(b => b.onclick = null);
+  if (sel === correct) {
+    el.classList.add('right'); addStars(3);
+    speak('Correct! It is a ' + correct + '!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll(`#fq-${qi} .quiz-opt`).forEach(b => {
+      if (b.textContent.includes(flatInfo[correct].name)) b.classList.add('right');
+    });
+    speak('Oops! It is a ' + correct + '!');
+  }
+  flatQAnswered++;
+  bumpProgress(1);
+  document.getElementById('flatCount').textContent = flatLearned.size + flatQAnswered;
+  checkFlatUnlock();
+}
+
+function checkFlatUnlock() {
+  document.getElementById('flatCount').textContent = flatLearned.size + flatQAnswered;
+  if (flatLearned.size >= 4 && flatQAnswered >= 4) {
+    document.getElementById('flatNextBtn').disabled = false;
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 5 — MATCH
+// ─────────────────────────────────────────
+const matchPairs = [
+  { shape:'⚽ Sphere',   shapeKey:'sphere',    obj:'🍎 Apple',     objKey:'apple'   },
+  { shape:'📦 Cuboid',   shapeKey:'cuboid',    obj:'📚 Book',      objKey:'book'    },
+  { shape:'🥫 Cylinder', shapeKey:'cylinder',  obj:'🕯️ Candle',   objKey:'candle'  },
+  { shape:'🍦 Cone',     shapeKey:'cone',       obj:'🥕 Carrot',   objKey:'carrot'  },
+  { shape:'🎲 Cube',     shapeKey:'cube',       obj:'🧊 Ice cube', objKey:'icecube' },
+  { shape:'🔴 Circle',   shapeKey:'circle2d',   obj:'🪙 Coin',     objKey:'coin'    },
+];
+let selShape = null, selObj = null;
+let matchedPairs = new Set();
+
+function buildMatchArea() {
+  const shuffledShapes = [...matchPairs].sort(() => Math.random()-.5);
+  const shuffledObjs   = [...matchPairs].sort(() => Math.random()-.5);
+  let html = `<div class="match-grid">
+    <div>
+      <div class="match-col-title">🔷 SHAPE</div>
+      ${shuffledShapes.map(p => `<div class="match-item" id="ms-${p.shapeKey}" onclick="pickMatch('shape','${p.shapeKey}')">
+        <div class="mi-emoji">${p.shape.split(' ')[0]}</div>
+        <div>${p.shape.split(' ').slice(1).join(' ')}</div>
+      </div>`).join('')}
+    </div>
+    <div>
+      <div class="match-col-title">📦 OBJECT</div>
+      ${shuffledObjs.map(p => `<div class="match-item" id="mo-${p.objKey}" onclick="pickMatch('obj','${p.objKey}')">
+        <div class="mi-emoji">${p.obj.split(' ')[0]}</div>
+        <div>${p.obj.split(' ').slice(1).join(' ')}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+  document.getElementById('matchArea').innerHTML = html;
+}
+
+function pickMatch(type, key) {
+  if (type === 'shape') {
+    document.querySelectorAll('[id^="ms-"]').forEach(e => e.classList.remove('selected'));
+    selShape = key;
+    document.getElementById('ms-'+key).classList.add('selected');
+    speak('Good! Now tap the matching object!');
+  } else {
+    selObj = key;
+    if (!selShape) { speak('First tap a shape!'); return; }
+    // find pair
+    const pair = matchPairs.find(p => p.shapeKey === selShape);
+    if (!pair) return;
+    if (pair.objKey === selObj) {
+      document.getElementById('ms-'+selShape).classList.add('matched');
+      document.getElementById('mo-'+selObj).classList.add('matched');
+      document.getElementById('ms-'+selShape).classList.remove('selected');
+      addStars(4);
+      showFeedback('matchFeedback','ok','✅ Great match! ' + pair.shape + ' → ' + pair.obj);
+      speak('Correct match!');
+      matchedPairs.add(selShape);
+      matchPaired = matchedPairs.size;
+      document.getElementById('matchCount').textContent = matchPaired;
+      bumpProgress(1);
+      if (matchPaired >= 6) {
+        document.getElementById('matchNextBtn').disabled = false;
+        speak('Amazing! You matched all shapes! Ready for the quiz!');
+      }
+    } else {
+      document.getElementById('ms-'+selShape).classList.add('wrong-flash');
+      document.getElementById('mo-'+selObj).classList.add('wrong-flash');
+      setTimeout(() => {
+        document.getElementById('ms-'+selShape).classList.remove('wrong-flash','selected');
+        document.getElementById('mo-'+selObj).classList.remove('wrong-flash');
+      }, 500);
+      showFeedback('matchFeedback','no','❌ Oops! Try again!');
+      speak('Try again!');
+    }
+    selShape = null; selObj = null;
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 6 — QUIZ
+// ─────────────────────────────────────────
+const quizData = [
+  {q:'A football is shaped like a ___.',e:'⚽',opts:[{t:'Sphere',e:'⚽'},{t:'Cube',e:'🎲'},{t:'Cone',e:'🍦'},{t:'Cylinder',e:'🥫'}],ans:'Sphere'},
+  {q:'A dice is shaped like a ___.',e:'🎲',opts:[{t:'Sphere',e:'⚽'},{t:'Cube',e:'🎲'},{t:'Cuboid',e:'📦'},{t:'Cone',e:'🍦'}],ans:'Cube'},
+  {q:'A tin can is shaped like a ___.',e:'🥫',opts:[{t:'Cone',e:'🍦'},{t:'Sphere',e:'⚽'},{t:'Cylinder',e:'🥫'},{t:'Cube',e:'🎲'}],ans:'Cylinder'},
+  {q:'An ice cream cone is shaped like a ___.',e:'🍦',opts:[{t:'Cube',e:'🎲'},{t:'Cone',e:'🍦'},{t:'Sphere',e:'⚽'},{t:'Cuboid',e:'📦'}],ans:'Cone'},
+  {q:'A matchbox is shaped like a ___.',e:'🧰',opts:[{t:'Cylinder',e:'🥫'},{t:'Cuboid',e:'📦'},{t:'Cone',e:'🍦'},{t:'Sphere',e:'⚽'}],ans:'Cuboid'},
+  {q:'A coin top is a flat ___.',e:'🪙',opts:[{t:'Circle',e:'🔴'},{t:'Square',e:'🟧'},{t:'Triangle',e:'🔺'},{t:'Rectangle',e:'🟦'}],ans:'Circle'},
+  {q:'A book top is a flat ___.',e:'📚',opts:[{t:'Circle',e:'🔴'},{t:'Triangle',e:'🔺'},{t:'Rectangle',e:'🟦'},{t:'Square',e:'🟧'}],ans:'Rectangle'},
+  {q:'A round ball ___ down a slope.',e:'⛰️',opts:[{t:'Slides',e:'📦'},{t:'Rolls',e:'⚽'},{t:'Flies',e:'🐦'},{t:'Stops',e:'🛑'}],ans:'Rolls'},
+  {q:'A wooden box ___ down a slope.',e:'📦',opts:[{t:'Rolls',e:'⚽'},{t:'Slides',e:'📦'},{t:'Jumps',e:'🦘'},{t:'Flies',e:'🐦'}],ans:'Slides'},
+  {q:'A square has ___ sides.',e:'🟧',opts:[{t:'3',e:'🔺'},{t:'0',e:'🔴'},{t:'2',e:'↕️'},{t:'4',e:'🟧'}],ans:'4'},
+  {q:'A triangle has ___ corners.',e:'🔺',opts:[{t:'4',e:'🟧'},{t:'3',e:'🔺'},{t:'0',e:'🔴'},{t:'2',e:'↕️'}],ans:'3'},
+  {q:'Which object ROLLS?',e:'🎲',opts:[{t:'Dice',e:'🎲'},{t:'Ball',e:'⚽'},{t:'Book',e:'📚'},{t:'Box',e:'📦'}],ans:'Ball'},
+  {q:'Which shape has NO corners?',e:'🔴',opts:[{t:'Square',e:'🟧'},{t:'Triangle',e:'🔺'},{t:'Circle',e:'🔴'},{t:'Rectangle',e:'🟦'}],ans:'Circle'},
+  {q:'A carrot is shaped like a ___.',e:'🥕',opts:[{t:'Sphere',e:'⚽'},{t:'Cube',e:'🎲'},{t:'Cone',e:'🍦'},{t:'Cylinder',e:'🥫'}],ans:'Cone'},
+  {q:'An apple is shaped like a ___.',e:'🍎',opts:[{t:'Cube',e:'🎲'},{t:'Sphere',e:'⚽'},{t:'Cone',e:'🍦'},{t:'Cuboid',e:'📦'}],ans:'Sphere'},
+];
+
+function startQuiz() {
+  quizItems = [...quizData].sort(() => Math.random()-.5).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#bf360c;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Chapter!</button>
+      <button class="big-btn green" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = [...q.opts].sort(() => Math.random()-.5);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o => `<div class="quiz-opt" onclick="answerQ(this,'${o.t}','${q.ans}')">
+        <div class="qo-emoji">${o.e}</div><div>${o.t}</div>
+      </div>`).join('')}
+    </div>
+  `;
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => b.onclick = null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.querySelector('div:last-child') && b.querySelector('div:last-child').textContent.trim() === correct) b.classList.add('right');
+    });
+    speak('Oops! The answer is ' + correct + '!');
+  }
+  setTimeout(() => { quizIdx++; showQ(); }, 1700);
+}
+
+// ─────────────────────────────────────────
+// FEEDBACK HELPER
+// ─────────────────────────────────────────
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'fb-box ' + (type === 'ok' ? 'ok' : 'no');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2500);
+}
+
+// ─────────────────────────────────────────
+// END LESSON
+// ─────────────────────────────────────────
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Chapter 2 Complete!';
+  document.getElementById('celebS').textContent = 'Amazing! You learned Sphere, Cube, Cuboid, Cylinder, Cone — and flat shapes Circle, Triangle, Rectangle, Square!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Chapter 2 Solids Around Us! You are a superstar!');
+}
+function closeCeleb() { document.getElementById('celebScreen').classList.remove('show'); }
+
+// ─────────────────────────────────────────
+// STARS & SPEAK
+// ─────────────────────────────────────────
+function addStars(n) { stars += n; document.getElementById('starsNum').textContent = stars; }
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+
+// ─────────────────────────────────────────
+// CONFETTI
+// ─────────────────────────────────────────
+function launchConfetti() {
+  const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#ffffff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+}
+const s2 = document.createElement('style');
+s2.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+buildMoveQuestions();
+buildFlatQuestions();
+buildMatchArea();
+
+setTimeout(() => speak('Welcome to Chapter 2! Solids Around Us! Let\'s learn about shapes!'), 600);
+</script>
+</body>
+</html>

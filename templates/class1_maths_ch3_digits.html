@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 3: Digits (1-9)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#388e3c);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.25); border:2px solid rgba(255,215,0,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.82); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#66bb6a); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#388e3c; border-color:#c8e6c9; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#f1f8e9; color:#33691e; border-color:#8bc34a; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── NUMBER CARDS ── */
+.num-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.num-card {
+  background:#fff; border-radius:20px; padding:16px 10px; text-align:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #c8e6c9;
+  transition:all .3s; cursor:pointer; user-select:none;
+}
+.num-card:active { transform:scale(.93); }
+.num-card .nc-num { font-family:'Fredoka One',cursive; font-size:48px; color:#1b5e20; line-height:1; }
+.num-card .nc-word { font-family:'Fredoka One',cursive; font-size:16px; color:#388e3c; margin-top:4px; }
+.num-card .nc-dots { font-size:22px; letter-spacing:2px; margin-top:4px; min-height:28px; }
+
+/* ── MORE LESS ── */
+.ml-card {
+  background:#fff; border-radius:20px; padding:14px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent;
+}
+.ml-card.done { border-color:#66bb6a; }
+.ml-row { display:flex; gap:10px; justify-content:center; margin-bottom:12px; }
+.ml-box {
+  flex:1; max-width:140px; background:#f9fbe7; border:3px solid #c8e6c9; border-radius:16px;
+  padding:12px 8px; text-align:center; cursor:pointer; transition:all .2s; user-select:none;
+}
+.ml-box:active { transform:scale(.93); }
+.ml-box .ml-emoji { font-size:36px; display:block; }
+.ml-box .ml-count { font-family:'Fredoka One',cursive; font-size:28px; color:#333; }
+.ml-box.selected { border-color:#1b5e20; background:#c8e6c9; }
+.ml-box.correct  { border-color:#2e7d32; background:#c8e6c9; }
+.ml-box.wrong    { border-color:#c62828; background:#ffcdd2; }
+
+/* ── MATCH GAME ── */
+.match-area { display:flex; gap:10px; margin-bottom:14px; }
+.match-col { flex:1; display:flex; flex-direction:column; gap:8px; }
+.match-item {
+  background:#fff; border:3px solid #c8e6c9; border-radius:16px; padding:12px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; user-select:none;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#333;
+}
+.match-item.selected { border-color:#1b5e20; background:#e8f5e9; transform:scale(1.05); }
+.match-item.matched  { border-color:#66bb6a; background:#c8e6c9; pointer-events:none; }
+.match-item.wrong-flash { background:#ffcdd2; border-color:#c62828; }
+
+/* ── BEFORE / AFTER ── */
+.ba-card {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent;
+}
+.ba-card.done { border-color:#66bb6a; }
+.ba-row { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.ba-num-box {
+  width:64px; height:64px; border-radius:16px; border:3px solid #c8e6c9;
+  background:#f9fbe7; display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:32px; color:#1b5e20;
+}
+.ba-choice-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.ba-choice {
+  width:54px; height:54px; border-radius:14px; border:3px solid #c8e6c9;
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:26px; color:#388e3c;
+  cursor:pointer; transition:all .2s; user-select:none;
+}
+.ba-choice:active { transform:scale(.9); }
+.ba-choice.correct { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; }
+.ba-choice.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.ba-blank {
+  width:64px; height:64px; border-radius:16px; border:3px dashed #aaa;
+  background:#f5f5f5; display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:32px; color:#999;
+}
+
+/* ── COUNT QUIZ ── */
+.count-card {
+  background:#fff; border-radius:20px; padding:20px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent; text-align:center;
+}
+.count-card.done { border-color:#66bb6a; }
+.count-emoji-row { font-size:40px; letter-spacing:4px; margin-bottom:14px; min-height:48px; word-break:break-all; line-height:1.3; }
+.count-q { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; margin-bottom:14px; }
+.count-opts { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.count-opt {
+  padding:14px 8px; border-radius:14px; border:3px solid #c8e6c9;
+  background:#f9fbe7; font-family:'Fredoka One',cursive; font-size:24px; color:#388e3c;
+  cursor:pointer; transition:all .2s; user-select:none; text-align:center;
+}
+.count-opt:active { transform:scale(.93); }
+.count-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.count-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── BIG/SMALL COMPARE ── */
+.cmp-card {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent; text-align:center;
+}
+.cmp-card.done { border-color:#66bb6a; }
+.cmp-nums { display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:14px; }
+.cmp-num {
+  width:80px; height:80px; border-radius:20px; border:3px solid #c8e6c9;
+  background:#f9fbe7; display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:44px; color:#1b5e20;
+  cursor:pointer; transition:all .2s; user-select:none;
+}
+.cmp-num:active { transform:scale(.93); }
+.cmp-num.correct { border-color:#2e7d32; background:#c8e6c9; }
+.cmp-num.wrong   { border-color:#c62828; background:#ffcdd2; }
+.cmp-q { font-family:'Fredoka One',cursive; font-size:18px; color:#388e3c; margin-bottom:10px; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#c8e6c9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#1b5e20,#388e3c); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f57f17,#fbc02d); color:#fff; }
+
+/* ── SECTION HEADING ── */
+.sec-head {
+  font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20;
+  background:#f1f8e9; border-left:5px solid #66bb6a; padding:10px 14px;
+  border-radius:10px; margin-bottom:12px;
+}
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:900;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-box {
+  background:#fff; border-radius:30px; padding:32px 24px; text-align:center;
+  max-width:340px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3);
+  transform:scale(.8); transition:transform .4s;
+}
+.celeb-screen.show .celeb-box { transform:scale(1); }
+#celebE { font-size:80px; display:block; margin-bottom:10px; }
+#celebT { font-family:'Fredoka One',cursive; font-size:28px; color:#1b5e20; margin-bottom:8px; }
+#celebS { font-size:15px; font-weight:800; color:#555; line-height:1.5; margin-bottom:12px; }
+#celebStar { font-size:22px; font-weight:900; color:#f57f17; margin-bottom:20px; }
+
+/* ── INFO BOX ── */
+.info-box {
+  background:#f1f8e9; border:2px solid #a5d6a7; border-radius:16px;
+  padding:14px; margin-bottom:14px; font-size:15px; font-weight:800; color:#2e7d32; line-height:1.6;
+}
+.info-box .ib-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+
+/* ── PROGRESS DOTS ── */
+.prog-dots { display:flex; justify-content:center; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.prog-dot { width:16px; height:16px; border-radius:50%; background:#c8e6c9; border:2px solid #a5d6a7; transition:all .3s; }
+.prog-dot.done { background:#1b5e20; border-color:#1b5e20; }
+.prog-dot.active { background:#66bb6a; border-color:#388e3c; transform:scale(1.3); }
+
+/* ── QUIZ ── */
+.quiz-q  { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; text-align:center; margin-bottom:14px; line-height:1.4; }
+.quiz-scene { font-size:64px; text-align:center; margin:10px 0; }
+.quiz-num-label { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-opts-g { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff; border:3px solid #c8e6c9; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive; font-size:20px; color:#388e3c;
+  display:flex; flex-direction:column; align-items:center; gap:4px; user-select:none;
+}
+.quiz-opt .qo-e { font-size:30px; }
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">📗 Maths · Lesson 3</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🔢</span>
+  <h1>Digits (1 to 9)</h1>
+  <p>Chapter 3 · Class 1 Maths</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="0" onclick="tryTab(0)">🔢 Learn Numbers</div>
+  <div class="step-tab locked" data-tab="1" onclick="tryTab(1)">⚖️ More or Less</div>
+  <div class="step-tab locked" data-tab="2" onclick="tryTab(2)">🔗 Match Equal</div>
+  <div class="step-tab locked" data-tab="3" onclick="tryTab(3)">🔙🔜 Before &amp; After</div>
+  <div class="step-tab locked" data-tab="4" onclick="tryTab(4)">🔢 Count &amp; Write</div>
+  <div class="step-tab locked" data-tab="5" onclick="tryTab(5)">🆚 Big &amp; Small</div>
+  <div class="step-tab locked" data-tab="6" onclick="tryTab(6)">🏆 Final Quiz</div>
+</div>
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ══════════════════════════════════
+     TAB 0 — LEARN NUMBERS 1-9
+     ══════════════════════════════════ -->
+<div class="tab-panel active" id="tab0">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🔢</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Numbers 1 to 9</div>
+      <div class="banner-sub" style="color:#388e3c;">Tap each number to say it out loud!</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="ib-title">📖 What you will learn:</div>
+    Count objects from 1 to 9 · Identify, read and write numbers from 1 to 9 · Match objects having equal number · Identify more and less
+  </div>
+
+  <div class="num-grid" id="numGrid"></div>
+
+  <div class="sec-head">🎵 Come, Let us Count! (1 to 9 Apples)</div>
+  <div class="info-box" style="font-size:14px; line-height:2;">
+    <b>1</b> — One red apple is on the table 🍎<br>
+    <b>2</b> — Two red apples with me and you 🍎🍎<br>
+    <b>3</b> — Three red apples hanging from the finger 🍎🍎🍎<br>
+    <b>4</b> — Four red apples placed in a basket 🍎🍎🍎🍎<br>
+    <b>5</b> — Five red apples, pick up any apple 🍎🍎🍎🍎🍎<br>
+    <b>6</b> — Six apples inside the sack 🍎🍎🍎🍎🍎🍎<br>
+    <b>7</b> — Seven apples, no apple is thrown 🍎🍎🍎🍎🍎🍎🍎<br>
+    <b>8</b> — Eight apples, be ready to eat 🍎🍎🍎🍎🍎🍎🍎🍎<br>
+    <b>9</b> — Nine apples, taste is very fine! 🍎🍎🍎🍎🍎🍎🍎🍎🍎
+  </div>
+
+  <div class="sec-head">🎯 Tap the CORRECT Number of Objects!</div>
+  <div id="tap9Area"></div>
+
+  <div id="fb0" class="fb-box"></div>
+  <button class="big-btn primary" id="btn0" onclick="completeTab(0)" disabled>Next: More or Less ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 1 — MORE OR LESS
+     ══════════════════════════════════ -->
+<div class="tab-panel" id="tab1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#fff176);">
+    <div class="banner-emoji">⚖️</div>
+    <div>
+      <div class="banner-title" style="color:#f57f17;">More or Less</div>
+      <div class="banner-sub" style="color:#f9a825;">Tap the box that has MORE or LESS!</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="ib-title">💡 Remember:</div>
+    <b>MORE</b> means the bigger number of things.<br>
+    <b>LESS</b> means the smaller number of things.
+  </div>
+
+  <div id="mlArea"></div>
+  <div id="fb1" class="fb-box"></div>
+  <button class="big-btn primary" id="btn1" onclick="completeTab(1)" disabled>Next: Match Equal ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 2 — MATCH EQUAL GROUPS
+     ══════════════════════════════════ -->
+<div class="tab-panel" id="tab2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#1565c0;">Match Equal Groups</div>
+      <div class="banner-sub" style="color:#1976d2;">Tap a number on the left, then tap the matching group on the right!</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="border-color:#90caf9; background:#e3f2fd;">
+    <div class="ib-title" style="color:#1565c0;">💡 How to play:</div>
+    <span style="color:#1565c0;">Tap a star group (left), then tap the matching picture group (right). If they have the SAME number, they match! ✅</span>
+  </div>
+
+  <div id="matchArea" style="margin-bottom:14px;"></div>
+  <div id="fb2" class="fb-box"></div>
+  <button class="big-btn primary" id="btn2" onclick="completeTab(2)" disabled>Next: Before &amp; After ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 3 — BEFORE & AFTER
+     ══════════════════════════════════ -->
+<div class="tab-panel" id="tab3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🔙🔜</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Before &amp; After</div>
+      <div class="banner-sub" style="color:#ad1457;">Choose the number that comes BEFORE or AFTER!</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="border-color:#f48fb1; background:#fce4ec;">
+    <div class="ib-title" style="color:#880e4f;">💡 The Number Train:</div>
+    <div style="color:#880e4f; font-size:18px; text-align:center; letter-spacing:4px;">1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9</div>
+    <div style="color:#ad1457; margin-top:6px; font-size:13px;">BEFORE means the number just before · AFTER means the number just after</div>
+  </div>
+
+  <div id="baArea"></div>
+  <div id="fb3" class="fb-box"></div>
+  <button class="big-btn primary" id="btn3" onclick="completeTab(3)" disabled>Next: Count &amp; Write ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 4 — COUNT & WRITE
+     ══════════════════════════════════ -->
+<div class="tab-panel" id="tab4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <div class="banner-emoji">🔢</div>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">Count &amp; Write</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Count the things and choose the right number!</div>
+    </div>
+  </div>
+
+  <div id="cwArea"></div>
+  <div id="fb4" class="fb-box"></div>
+  <button class="big-btn primary" id="btn4" onclick="completeTab(4)" disabled>Next: Big &amp; Small ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 5 — BIG & SMALL
+     ══════════════════════════════════ -->
+<div class="tab-panel" id="tab5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);">
+    <div class="banner-emoji">🆚</div>
+    <div>
+      <div class="banner-title" style="color:#006064;">Big &amp; Small Numbers</div>
+      <div class="banner-sub" style="color:#00838f;">Tap the BIGGER or SMALLER number!</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="border-color:#80deea; background:#e0f7fa;">
+    <div class="ib-title" style="color:#006064;">💡 Remember:</div>
+    <span style="color:#006064;">9 is the <b>BIGGEST</b> · 1 is the <b>SMALLEST</b> · The number that comes LATER is always BIGGER!</span>
+  </div>
+
+  <div id="bsArea"></div>
+  <div id="fb5" class="fb-box"></div>
+  <button class="big-btn primary" id="btn5" onclick="completeTab(5)" disabled>Next: Final Quiz 🏆</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 6 — FINAL QUIZ
+     ══════════════════════════════════ -->
+<div class="tab-panel" id="tab6">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082);">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Final Quiz!</div>
+      <div class="banner-sub" style="color:#f57f17;">Show what you know about Digits 1-9!</div>
+    </div>
+  </div>
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center; padding:20px;">
+      <div style="font-size:60px; margin-bottom:10px;">🚀</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:22px; color:#1b5e20; margin-bottom:8px;">Ready for the Quiz?</div>
+      <div style="font-size:14px; font-weight:800; color:#777; margin-bottom:16px;">10 questions about Digits 1-9!</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:260px; margin:0 auto;">Start Quiz! 🎯</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span id="celebE">🏆</span>
+    <div id="celebT">Chapter 3 Complete!</div>
+    <div id="celebS">Amazing! You learned all about Digits 1 to 9!</div>
+    <div id="celebStar">⭐ 0 Stars!</div>
+    <button class="big-btn primary" onclick="closeCeleb()">🎉 Yay!</button>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let stars = 0;
+let currentTab = 0;
+const tabDone = [false,false,false,false,false,false,false];
+const TAB_COUNT = 7;
+
+const NUM_DATA = [
+  {n:1, word:'One',   dots:'🔴',                         emoji:'☀️',  things:'1 Sun, 1 Tree, 1 Horse'},
+  {n:2, word:'Two',   dots:'🔴🔴',                       emoji:'🐢',  things:'2 Birds, 2 Oxen, 2 Dogs'},
+  {n:3, word:'Three', dots:'🔴🔴🔴',                     emoji:'🐔',  things:'3 Hens, 3 Trees, 3 Houses'},
+  {n:4, word:'Four',  dots:'🔴🔴🔴🔴',                   emoji:'🚗',  things:'4 Pots, 4 Vessels, 4 Plates'},
+  {n:5, word:'Five',  dots:'🔴🔴🔴🔴🔴',                 emoji:'🪁',  things:'5 Cars, 5 Balls, 5 Kites'},
+  {n:6, word:'Six',   dots:'🔴🔴🔴🔴🔴🔴',               emoji:'😺',  things:'6 Children, 6 Dolls, 6 Fans'},
+  {n:7, word:'Seven', dots:'🔴🔴🔴🔴🔴🔴🔴',             emoji:'🦋',  things:'7 Jugs, 7 Flower pots, 7 Pots'},
+  {n:8, word:'Eight', dots:'🔴🔴🔴🔴🔴🔴🔴🔴',           emoji:'🐦',  things:'8 Children, 8 Plates, 8 Buckets'},
+  {n:9, word:'Nine',  dots:'🔴🔴🔴🔴🔴🔴🔴🔴🔴',         emoji:'🌸',  things:'9 Balls, 9 Stars, 9 Mangoes'},
+];
+
+// ─────────────────────────────────────────
+// TAB NAVIGATION
+// ─────────────────────────────────────────
+function tryTab(idx) {
+  // Locked?
+  if (idx > 0 && !tabDone[idx-1]) {
+    const tab = document.querySelector('[data-tab="'+idx+'"]');
+    tab.classList.add('shaking');
+    setTimeout(() => tab.classList.remove('shaking'), 600);
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  if (idx === currentTab) return;
+  // Hide current
+  document.getElementById('tab'+currentTab).classList.remove('active');
+  document.querySelector('[data-tab="'+currentTab+'"]').classList.remove('active');
+  // Show new
+  currentTab = idx;
+  document.getElementById('tab'+idx).classList.add('active');
+  const tabs = document.querySelectorAll('.step-tab');
+  tabs.forEach((t,i) => {
+    t.classList.remove('active');
+    if (i === idx) t.classList.add('active');
+  });
+  updateProgress();
+  speak(document.querySelector('[data-tab="'+idx+'"]').textContent.trim());
+}
+
+function completeTab(idx) {
+  tabDone[idx] = true;
+  addStars(10);
+  // Update tabs
+  const tabs = document.querySelectorAll('.step-tab');
+  tabs[idx].classList.remove('active');
+  tabs[idx].classList.add('done');
+  tabs[idx].querySelector ? null : null;
+  if (idx+1 < TAB_COUNT) {
+    tabs[idx+1].classList.remove('locked');
+    tabs[idx+1].classList.add('unlocked');
+    speak('Great job! Moving to the next step!');
+    setTimeout(() => tryTab(idx+1), 400);
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = tabDone.filter(Boolean).length;
+  document.getElementById('progFill').style.width = (done / TAB_COUNT * 100) + '%';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ─────────────────────────────────────────
+// TAB 0 — NUMBER GRID
+// ─────────────────────────────────────────
+function buildNumGrid() {
+  const grid = document.getElementById('numGrid');
+  NUM_DATA.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'num-card';
+    card.innerHTML = `<div class="nc-num">${d.n}</div><div class="nc-word">${d.word}</div><div class="nc-dots">${d.dots}</div>`;
+    card.onclick = () => { speak(d.n + ' — ' + d.word); card.style.background='#c8e6c9'; setTimeout(()=>card.style.background='',600); };
+    grid.appendChild(card);
+  });
+}
+
+// ── TAP 9 ACTIVITY — Tap the correct number of objects
+const tap9Questions = [
+  { q:'How many 🍎 do you see?', emojis:'🍎🍎🍎', answer:3, opts:[2,3,5] },
+  { q:'How many 🐶 do you see?', emojis:'🐶🐶🐶🐶🐶', answer:5, opts:[4,5,7] },
+  { q:'How many ⭐ do you see?', emojis:'⭐⭐⭐⭐⭐⭐⭐', answer:7, opts:[6,7,9] },
+  { q:'How many 🌸 do you see?', emojis:'🌸🌸', answer:2, opts:[1,2,3] },
+  { q:'How many 🎈 do you see?', emojis:'🎈🎈🎈🎈🎈🎈🎈🎈🎈', answer:9, opts:[8,9,7] },
+  { q:'How many 🌳 do you see?', emojis:'🌳🌳🌳🌳', answer:4, opts:[3,4,6] },
+  { q:'How many 🦋 do you see?', emojis:'🦋🦋🦋🦋🦋🦋', answer:6, opts:[5,6,8] },
+  { q:'How many 🥭 do you see?', emojis:'🥭', answer:1, opts:[1,2,3] },
+  { q:'How many 🐦 do you see?', emojis:'🐦🐦🐦🐦🐦🐦🐦🐦', answer:8, opts:[7,8,9] },
+];
+let tap9Done = 0;
+
+function buildTap9() {
+  const area = document.getElementById('tap9Area');
+  area.innerHTML = '';
+  tap9Done = 0;
+  // Show all 9 as count cards
+  tap9Questions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'count-card';
+    card.id = 'tap9_'+idx;
+    const shuffled = [...q.opts].sort(()=>Math.random()-.5);
+    card.innerHTML = `
+      <div class="count-emoji-row">${q.emojis}</div>
+      <div class="count-q">${q.q}</div>
+      <div class="count-opts" id="tap9opts_${idx}">
+        ${shuffled.map(o => `<div class="count-opt" onclick="answerTap9(${idx},${o},${q.answer})">${o}</div>`).join('')}
+      </div>
+    `;
+    area.appendChild(card);
+  });
+}
+
+function answerTap9(idx, sel, correct) {
+  const opts = document.querySelectorAll('#tap9opts_'+idx+' .count-opt');
+  opts.forEach(o => {
+    o.onclick = null;
+    if(parseInt(o.textContent) === correct) o.classList.add('right');
+  });
+  const card = document.getElementById('tap9_'+idx);
+  if(sel === correct) {
+    opts.forEach(o => { if(parseInt(o.textContent)===sel) o.classList.add('right'); });
+    card.classList.add('done');
+    addStars(2);
+    speak('Correct! '+correct+'!');
+    tap9Done++;
+    if(tap9Done === tap9Questions.length) {
+      document.getElementById('btn0').disabled = false;
+      showFeedback('fb0','ok','🎉 Amazing! You counted all numbers correctly!');
+      speak('Amazing! You counted all numbers correctly!');
+    }
+  } else {
+    opts.forEach(o => { if(parseInt(o.textContent)===sel) o.classList.add('wrong'); });
+    speak('Oops! Count again! The answer is '+correct+'!');
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 1 — MORE / LESS
+// ─────────────────────────────────────────
+const mlQuestions = [
+  { ask:'MORE', a:{e:'🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀🏀',c:16}, b:{e:'🏀🏀🏀🏀🏀🏀🏀🏀',c:8}, correct:'a' },
+  { ask:'MORE', a:{e:'🍭🍭🍭🍭🍭',c:5}, b:{e:'🍭🍭🍭🍭🍭🍭🍭🍭',c:8}, correct:'b' },
+  { ask:'LESS', a:{e:'🧢🧢🧢',c:3}, b:{e:'🧢🧢🧢🧢',c:4}, correct:'a' },
+  { ask:'MORE', a:{e:'🌼🌼🌼🌼',c:4}, b:{e:'🌼',c:1}, correct:'a' },
+  { ask:'LESS', a:{e:'🐕🐕🐕🐕🐕',c:5}, b:{e:'🐕🐕',c:2}, correct:'b' },
+  { ask:'MORE', a:{e:'✏️✏️✏️✏️✏️✏️✏️✏️✏️',c:9}, b:{e:'✏️✏️✏️✏️✏️✏️✏️',c:7}, correct:'a' },
+  { ask:'LESS', a:{e:'🍦🍦🍦🍦🍦🍦',c:6}, b:{e:'🍦🍦🍦',c:3}, correct:'b' },
+  { ask:'MORE', a:{e:'👕👕',c:2}, b:{e:'👕👕👕👕👕',c:5}, correct:'b' },
+];
+let mlDone = 0;
+
+function buildML() {
+  const area = document.getElementById('mlArea');
+  area.innerHTML = '';
+  mlDone = 0;
+  mlQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'ml-card';
+    card.id = 'ml_'+idx;
+    card.innerHTML = `
+      <div class="sec-head" style="font-size:16px; margin-bottom:10px;">Tap the box that has <span style="color:#c62828;">${q.ask}</span></div>
+      <div class="ml-row">
+        <div class="ml-box" id="mla_${idx}" onclick="answerML(${idx},'a','${q.correct}')">
+          <span class="ml-emoji">${q.a.e}</span>
+          <div class="ml-count">${q.a.c}</div>
+        </div>
+        <div class="ml-box" id="mlb_${idx}" onclick="answerML(${idx},'b','${q.correct}')">
+          <span class="ml-emoji">${q.b.e}</span>
+          <div class="ml-count">${q.b.c}</div>
+        </div>
+      </div>
+    `;
+    area.appendChild(card);
+  });
+}
+
+function answerML(idx, sel, correct) {
+  const a = document.getElementById('mla_'+idx);
+  const b = document.getElementById('mlb_'+idx);
+  a.onclick = null; b.onclick = null;
+  const card = document.getElementById('ml_'+idx);
+  if(sel === correct) {
+    (sel==='a'?a:b).classList.add('correct');
+    card.classList.add('done');
+    addStars(2);
+    speak('Correct!');
+    mlDone++;
+    if(mlDone === mlQuestions.length) {
+      document.getElementById('btn1').disabled = false;
+      showFeedback('fb1','ok','🎉 Well done! You know More and Less!');
+      speak('Well done! You know More and Less!');
+    }
+  } else {
+    (sel==='a'?a:b).classList.add('wrong');
+    speak('Oops! Try again!');
+    setTimeout(() => {
+      (sel==='a'?a:b).classList.remove('wrong','selected');
+      a.onclick = () => answerML(idx,'a',correct);
+      b.onclick = () => answerML(idx,'b',correct);
+    }, 800);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 2 — MATCH EQUAL GROUPS
+// ─────────────────────────────────────────
+const matchData = [
+  { stars:3, emoji:'🥭🥭🥭🥭',     count:4  },
+  { stars:2, emoji:'🐰🐰',         count:2  },
+  { stars:4, emoji:'🚗🚗🚗🚗',     count:4  },
+  { stars:1, emoji:'🦚',            count:1  },
+  { stars:5, emoji:'🌸🌸🌸🌸🌸',  count:5  },
+  { stars:3, emoji:'🍊🍊🍊',       count:3  },
+];
+// actually let's use cleaner match data matching from PDF
+const matchPairs = [
+  { left:{dots:'⭐⭐⭐', n:3},    right:{emoji:'🥕🥕🥕',       n:3} },
+  { left:{dots:'⭐⭐', n:2},      right:{emoji:'🐰🐰',          n:2} },
+  { left:{dots:'⭐⭐⭐⭐', n:4}, right:{emoji:'🌸🌸🌸🌸',      n:4} },
+  { left:{dots:'⭐', n:1},        right:{emoji:'🦚',             n:1} },
+  { left:{dots:'⭐⭐⭐⭐⭐',n:5},right:{emoji:'🦋🦋🦋🦋🦋',   n:5} },
+];
+let matchSel = null;
+let matchPairsDone = 0;
+
+function buildMatch() {
+  const area = document.getElementById('matchArea');
+  // Shuffle right side
+  const rights = [...matchPairs].map((p,i)=>({...p.right, origIdx:i})).sort(()=>Math.random()-.5);
+  const lefts  = matchPairs.map((p,i)=>({...p.left, origIdx:i}));
+
+  let html = `<div class="match-area"><div class="match-col" id="matchLeft">`;
+  lefts.forEach((l,i) => {
+    html += `<div class="match-item" id="ml_left_${i}" onclick="selectMatch('left',${i},${l.origIdx})">${l.dots}<br><span style="font-size:14px;color:#888;">${l.n}</span></div>`;
+  });
+  html += `</div><div class="match-col" id="matchRight">`;
+  rights.forEach((r,i) => {
+    html += `<div class="match-item" id="ml_right_${i}" onclick="selectMatch('right',${i},${r.origIdx})">${r.emoji}<br><span style="font-size:14px;color:#888;">${r.n}</span></div>`;
+  });
+  html += `</div></div>`;
+  area.innerHTML = html;
+  matchSel = null;
+  matchPairsDone = 0;
+  // store origIdx for right items
+  area._rights = rights;
+}
+
+let matchSelSide=null, matchSelIdx=null, matchSelOrig=null;
+
+function selectMatch(side, i, origIdx) {
+  if (!matchSelSide) {
+    matchSelSide = side; matchSelIdx = i; matchSelOrig = origIdx;
+    document.getElementById('ml_'+side+'_'+i).classList.add('selected');
+    speak('Selected!');
+  } else {
+    if(matchSelSide === side) {
+      // Deselect
+      document.getElementById('ml_'+matchSelSide+'_'+matchSelIdx).classList.remove('selected');
+      matchSelSide=null; matchSelIdx=null; matchSelOrig=null;
+      if(side!==matchSelSide) { selectMatch(side,i,origIdx); return; }
+      return;
+    }
+    // We have one from each side — check if origIdx match
+    const leftOrig  = side==='right' ? matchSelOrig : origIdx;
+    const rightOrig = side==='right' ? origIdx : matchSelOrig;
+    const leftEl  = document.getElementById('ml_left_'+(side==='right'?matchSelIdx:i));
+    const rightEl = document.getElementById('ml_right_'+(side==='right'?i:matchSelIdx));
+    if(leftOrig === rightOrig) {
+      leftEl.classList.remove('selected'); leftEl.classList.add('matched');
+      rightEl.classList.remove('selected'); rightEl.classList.add('matched');
+      addStars(3);
+      speak('Matched!');
+      matchPairsDone++;
+      if(matchPairsDone === matchPairs.length) {
+        document.getElementById('btn2').disabled = false;
+        showFeedback('fb2','ok','🎉 Excellent! You matched all equal groups!');
+        speak('Excellent! You matched all equal groups!');
+      }
+    } else {
+      leftEl.classList.remove('selected'); leftEl.classList.add('wrong-flash');
+      rightEl.classList.add('wrong-flash');
+      speak('Not the same number! Try again!');
+      setTimeout(() => {
+        leftEl.classList.remove('wrong-flash');
+        rightEl.classList.remove('wrong-flash');
+      }, 600);
+    }
+    matchSelSide=null; matchSelIdx=null; matchSelOrig=null;
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 3 — BEFORE & AFTER
+// ─────────────────────────────────────────
+const baQuestions = [
+  { type:'after',  given:3, answer:4, opts:[2,4,6] },
+  { type:'after',  given:6, answer:7, opts:[5,7,8] },
+  { type:'after',  given:2, answer:3, opts:[1,3,5] },
+  { type:'before', given:5, answer:4, opts:[3,4,6] },
+  { type:'before', given:9, answer:8, opts:[7,8,6] },
+  { type:'after',  given:7, answer:8, opts:[6,8,9] },
+  { type:'before', given:7, answer:6, opts:[5,6,8] },
+  { type:'after',  given:4, answer:5, opts:[3,5,6] },
+  { type:'before', given:2, answer:1, opts:[1,3,4] },
+  { type:'before', given:6, answer:5, opts:[4,5,7] },
+  { type:'after',  given:8, answer:9, opts:[7,9,6] },
+  { type:'before', given:8, answer:7, opts:[6,7,9] },
+];
+let baDone = 0;
+
+function buildBA() {
+  const area = document.getElementById('baArea');
+  area.innerHTML = '';
+  baDone = 0;
+  baQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'ba-card';
+    card.id = 'ba_'+idx;
+    const shuffled = [...q.opts].sort(()=>Math.random()-.5);
+    if(q.type === 'after') {
+      card.innerHTML = `
+        <div style="font-family:'Fredoka One',cursive; font-size:16px; color:#880e4f; margin-bottom:10px; text-align:center;">Which number comes AFTER <b>${q.given}</b>?</div>
+        <div class="ba-row">
+          <div class="ba-num-box">${q.given}</div>
+          <div style="font-size:28px; color:#888;">→</div>
+          <div class="ba-blank" id="ba_blank_${idx}">?</div>
+        </div>
+        <div class="ba-choice-row">
+          ${shuffled.map(o=>`<div class="ba-choice" onclick="answerBA(${idx},${o},${q.answer})">${o}</div>`).join('')}
+        </div>
+      `;
+    } else {
+      card.innerHTML = `
+        <div style="font-family:'Fredoka One',cursive; font-size:16px; color:#880e4f; margin-bottom:10px; text-align:center;">Which number comes BEFORE <b>${q.given}</b>?</div>
+        <div class="ba-row">
+          <div class="ba-blank" id="ba_blank_${idx}">?</div>
+          <div style="font-size:28px; color:#888;">→</div>
+          <div class="ba-num-box">${q.given}</div>
+        </div>
+        <div class="ba-choice-row">
+          ${shuffled.map(o=>`<div class="ba-choice" onclick="answerBA(${idx},${o},${q.answer})">${o}</div>`).join('')}
+        </div>
+      `;
+    }
+    area.appendChild(card);
+  });
+}
+
+function answerBA(idx, sel, correct) {
+  const card = document.getElementById('ba_'+idx);
+  const choices = card.querySelectorAll('.ba-choice');
+  choices.forEach(c => c.onclick = null);
+  const blank = document.getElementById('ba_blank_'+idx);
+  if(sel === correct) {
+    blank.textContent = correct;
+    blank.style.background = '#c8e6c9';
+    blank.style.borderColor = '#2e7d32';
+    blank.style.color = '#1b5e20';
+    choices.forEach(c => { if(parseInt(c.textContent)===correct) c.classList.add('correct'); });
+    card.classList.add('done');
+    addStars(2);
+    speak('Correct! '+correct+'!');
+    baDone++;
+    if(baDone === baQuestions.length) {
+      document.getElementById('btn3').disabled = false;
+      showFeedback('fb3','ok','🎉 Brilliant! You know Before and After numbers!');
+      speak('Brilliant! You know Before and After numbers!');
+    }
+  } else {
+    choices.forEach(c => { if(parseInt(c.textContent)===sel) c.classList.add('wrong'); });
+    speak('Oops! Think about the number train! Try again!');
+    setTimeout(() => {
+      choices.forEach(c => {
+        c.classList.remove('wrong','correct');
+        c.onclick = () => answerBA(idx, parseInt(c.textContent), correct);
+      });
+    }, 800);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 4 — COUNT & WRITE
+// ─────────────────────────────────────────
+const cwQuestions = [
+  { emojis:'🔔🔔',         answer:2, opts:[1,2,3] },
+  { emojis:'🌳🌳🌳🌳🌳',  answer:5, opts:[4,5,6] },
+  { emojis:'🫙',            answer:1, opts:[1,2,3] },
+  { emojis:'🪑🪑🪑🪑',    answer:4, opts:[3,4,5] },
+  { emojis:'🪔🪔🪔🪔🪔🪔🪔🪔🪔', answer:9, opts:[8,9,7] },
+  { emojis:'🐭🐭🐭🐭🐭🐭', answer:6, opts:[5,6,7] },
+  { emojis:'🪀🪀🪀🪀🪀',   answer:5, opts:[4,5,6] },
+  { emojis:'🔔🔔🔔🔔🔔🔔🔔🔔', answer:8, opts:[7,8,9] },
+  { emojis:'🌼🌼🌼🌼🌼🌼🌼', answer:7, opts:[6,7,8] },
+  { emojis:'🦎🦎🦎',        answer:3, opts:[2,3,4] },
+];
+let cwDone = 0;
+
+function buildCW() {
+  const area = document.getElementById('cwArea');
+  area.innerHTML = '';
+  cwDone = 0;
+  cwQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'count-card';
+    card.id = 'cw_'+idx;
+    const sh = [...q.opts].sort(()=>Math.random()-.5);
+    card.innerHTML = `
+      <div class="count-emoji-row">${q.emojis}</div>
+      <div class="count-q">How many do you count?</div>
+      <div class="count-opts" id="cwopts_${idx}">
+        ${sh.map(o=>`<div class="count-opt" onclick="answerCW(${idx},${o},${q.answer})">${o}</div>`).join('')}
+      </div>
+    `;
+    area.appendChild(card);
+  });
+}
+
+function answerCW(idx, sel, correct) {
+  const opts = document.querySelectorAll('#cwopts_'+idx+' .count-opt');
+  opts.forEach(o => o.onclick = null);
+  const card = document.getElementById('cw_'+idx);
+  if(sel === correct) {
+    opts.forEach(o => { if(parseInt(o.textContent)===correct) o.classList.add('right'); });
+    card.classList.add('done');
+    addStars(2);
+    speak('Correct! '+correct+'!');
+    cwDone++;
+    if(cwDone === cwQuestions.length) {
+      document.getElementById('btn4').disabled = false;
+      showFeedback('fb4','ok','🎉 Super! You can count from 1 to 9!');
+      speak('Super! You can count from 1 to 9!');
+    }
+  } else {
+    opts.forEach(o => { if(parseInt(o.textContent)===sel) o.classList.add('wrong'); });
+    speak('Count again! The answer is '+correct+'!');
+    setTimeout(() => {
+      opts.forEach(o => {
+        o.classList.remove('wrong','right');
+        o.onclick = () => answerCW(idx, parseInt(o.textContent), correct);
+      });
+    }, 900);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 5 — BIG & SMALL
+// ─────────────────────────────────────────
+const bsQuestions = [
+  { ask:'BIGGER', a:4, b:2, correct:'a' },
+  { ask:'SMALLER', a:6, b:9, correct:'a' },
+  { ask:'BIGGER', a:9, b:5, correct:'a' },
+  { ask:'SMALLER', a:8, b:7, correct:'b' },
+  { ask:'BIGGER', a:1, b:3, correct:'b' },
+  { ask:'SMALLER', a:3, b:7, correct:'a' },
+  { ask:'BIGGER', a:8, b:7, correct:'a' },
+  { ask:'SMALLER', a:5, b:4, correct:'b' },
+  { ask:'BIGGER', a:6, b:9, correct:'b' },
+  { ask:'SMALLER', a:9, b:4, correct:'b' },
+];
+let bsDone = 0;
+
+function buildBS() {
+  const area = document.getElementById('bsArea');
+  area.innerHTML = '';
+  bsDone = 0;
+  bsQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'cmp-card';
+    card.id = 'bs_'+idx;
+    card.innerHTML = `
+      <div class="cmp-q">Tap the <b style="color:#c62828;">${q.ask}</b> number!</div>
+      <div class="cmp-nums">
+        <div class="cmp-num" onclick="answerBS(${idx},'a','${q.correct}')">${q.a}</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#aaa;">or</div>
+        <div class="cmp-num" onclick="answerBS(${idx},'b','${q.correct}')">${q.b}</div>
+      </div>
+    `;
+    area.appendChild(card);
+  });
+}
+
+function answerBS(idx, sel, correct) {
+  const card = document.getElementById('bs_'+idx);
+  const nums = card.querySelectorAll('.cmp-num');
+  nums.forEach(n => n.onclick = null);
+  if(sel === correct) {
+    nums[sel==='a'?0:1].classList.add('correct');
+    card.classList.add('done');
+    addStars(2);
+    speak('Correct!');
+    bsDone++;
+    if(bsDone === bsQuestions.length) {
+      document.getElementById('btn5').disabled = false;
+      showFeedback('fb5','ok','🎉 You can compare numbers like a champion!');
+      speak('You can compare numbers like a champion!');
+    }
+  } else {
+    nums[sel==='a'?0:1].classList.add('wrong');
+    speak('Try again!');
+    setTimeout(() => {
+      nums[sel==='a'?0:1].classList.remove('wrong');
+      nums.forEach((n,i) => n.onclick = () => answerBS(idx, i===0?'a':'b', correct));
+    }, 700);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 6 — FINAL QUIZ
+// ─────────────────────────────────────────
+const quizBank = [
+  {q:'How many? 🍎🍎🍎',     scene:'🍎🍎🍎',    opts:['2','3','4','5'],   ans:'3'},
+  {q:'What comes AFTER 5?',  scene:'5 → ?',       opts:['4','6','7','8'],   ans:'6'},
+  {q:'What comes BEFORE 4?', scene:'? → 4',       opts:['2','3','5','6'],   ans:'3'},
+  {q:'Which is MORE? 3 or 7',scene:'3 🆚 7',      opts:['3','7'],           ans:'7'},
+  {q:'Which is LESS? 8 or 2', scene:'8 🆚 2',     opts:['8','2'],           ans:'2'},
+  {q:'How many? ⭐⭐⭐⭐⭐⭐⭐', scene:'⭐⭐⭐⭐⭐⭐⭐', opts:['5','6','7','8'],  ans:'7'},
+  {q:'Number AFTER 8 is?',   scene:'8 → ?',       opts:['7','9','6','5'],   ans:'9'},
+  {q:'Number BEFORE 9 is?',  scene:'? → 9',       opts:['8','7','6','5'],   ans:'8'},
+  {q:'How many? 🐶🐶',       scene:'🐶🐶',         opts:['1','2','3','4'],   ans:'2'},
+  {q:'Which is BIGGER: 4 or 6?', scene:'4 🆚 6',  opts:['4','6'],           ans:'6'},
+  {q:'How many? 🌸🌸🌸🌸🌸🌸🌸🌸🌸', scene:'🌸×9', opts:['7','8','9','6'],  ans:'9'},
+  {q:'What comes AFTER 1?',  scene:'1 → ?',       opts:['2','3','4','0'],   ans:'2'},
+  {q:'Which is SMALLER: 5 or 3?', scene:'5 🆚 3', opts:['5','3'],           ans:'3'},
+  {q:'How many? 🎈🎈🎈🎈',   scene:'🎈🎈🎈🎈',   opts:['3','4','5','6'],   ans:'4'},
+  {q:'Number BEFORE 6 is?',  scene:'? → 6',       opts:['4','5','7','8'],   ans:'5'},
+];
+let quizItems=[], quizIdx=0, quizScore=0;
+
+function startQuiz() {
+  quizItems = [...quizBank].sort(()=>Math.random()-.5).slice(0,10);
+  quizIdx=0; quizScore=0;
+  showQ();
+}
+
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if(quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#1b5e20;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#555;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#388e3c;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Chapter!</button>
+      <button class="big-btn gold" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = [...q.opts].sort(()=>Math.random()-.5);
+  box.innerHTML = `
+    <div class="quiz-num-label">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.scene}</div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts-g">
+      ${opts.map(o=>`<div class="quiz-opt" onclick="answerQ(this,'${o}','${q.ans}')">
+        <div class="qo-e">${isNaN(o) ? o : NUM_DATA[parseInt(o)-1]?.dots||o}</div>
+        <div>${o}</div>
+      </div>`).join('')}
+    </div>
+  `;
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.onclick=null);
+  if(sel===correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! '+correct+'!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{
+      if(b.querySelector('div:last-child')&&b.querySelector('div:last-child').textContent.trim()===correct) b.classList.add('right');
+    });
+    speak('Oops! The answer is '+correct+'!');
+  }
+  setTimeout(()=>{ quizIdx++; showQ(); }, 1700);
+}
+
+// ─────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = 'fb-box '+(type==='ok'?'ok':'no');
+  el.textContent = msg;
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none', 3000);
+}
+
+function addStars(n) { stars+=n; document.getElementById('starsNum').textContent=stars; }
+
+function speak(text) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate=0.82; u.pitch=1.2; u.lang='en-IN';
+  window.speechSynthesis.speak(u);
+}
+
+function endLesson() {
+  document.getElementById('celebE').textContent='🏆';
+  document.getElementById('celebT').textContent='Chapter 3 Complete!';
+  document.getElementById('celebS').textContent='Amazing! You learned all about Digits 1 to 9 — More, Less, Before, After, Count, Compare — you are a SUPERSTAR!';
+  document.getElementById('celebStar').textContent='⭐ '+stars+' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Chapter 3! Digits 1 to 9! You are a superstar!');
+}
+function closeCeleb() { document.getElementById('celebScreen').classList.remove('show'); }
+
+function launchConfetti() {
+  const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#ffffff','#fbbf24','#66bb6a'];
+  for(let i=0;i<80;i++) {
+    const c=document.createElement('div');
+    const sz=Math.random()*14+6;
+    c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+const s2=document.createElement('style');
+s2.textContent=`@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+buildNumGrid();
+buildTap9();
+buildML();
+buildMatch();
+buildBA();
+buildCW();
+buildBS();
+updateProgress();
+
+setTimeout(()=>speak('Welcome to Chapter 3! Digits 1 to 9! Let\'s count and learn!'), 600);
+</script>
+</body>
+</html>

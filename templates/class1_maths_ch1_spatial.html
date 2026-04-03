@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 1: Spatial Understanding</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f0ff; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1a237e,#283593);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.25); border:2px solid rgba(255,215,0,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1a237e,#3949ab); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.82); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1a237e,#7986cb); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#3949ab; border-color:#9fa8da; }
+.step-tab.active   { background:#1a237e; color:#fff; border-color:#1a237e; box-shadow:0 4px 14px rgba(26,35,126,.4); }
+.step-tab.done     { background:#e8eaf6; color:#283593; border-color:#7986cb; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON INTRO BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── SCENARIO CARDS ── */
+.scenario-card {
+  background:#fff; border-radius:24px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent;
+  transition:border-color .3s, background .3s;
+}
+.scenario-card.done { border-color:#7986cb; background:#f3f4ff; }
+.scene-top { padding:16px 16px 10px; display:flex; align-items:center; gap:12px; }
+.scene-emojis { font-size:48px; line-height:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.scene-emojis .small { font-size:22px; }
+.scene-label { font-family:'Fredoka One',cursive; font-size:15px; color:#555; text-transform:uppercase; letter-spacing:.5px; }
+.scene-sentence { font-size:18px; font-weight:900; color:#222; line-height:1.4; }
+.scene-sentence .kw { color:#1a237e; font-size:20px; }
+.scene-bottom { border-top:2px dashed #e0e0e0; padding:12px 16px; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; }
+.choice-btn {
+  flex:1; min-width:80px; padding:14px 10px; border-radius:16px; border:3px solid #c5cae9;
+  background:#f3f4ff; font-family:'Fredoka One',cursive; font-size:18px; color:#3949ab;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn .cb-emoji { font-size:32px; }
+.choice-btn .cb-word { font-size:15px; }
+.choice-btn.correct { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#c8e6c9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── COMPLETE BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#1a237e,#3949ab); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.orange { background:linear-gradient(135deg,#e65100,#f57c00); color:#fff; }
+
+/* ── QUIZ ── */
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:64px; text-align:center; margin:10px 0; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#1a237e; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff; border:3px solid #c5cae9; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive; font-size:18px; color:#1a237e;
+}
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(26,35,126,.93); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; }
+.celeb-sub   { font-size:16px; color:rgba(255,255,255,.85); font-weight:800; margin-bottom:8px; text-align:center; padding:0 30px; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#1a237e; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+/* ── SECTION BADGE ── */
+.sec-badge { display:inline-block; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:900; margin-bottom:10px; }
+.badge-done { background:#c8e6c9; color:#1b5e20; }
+.badge-todo { background:#e8eaf6; color:#3949ab; }
+
+/* ── PROGRESS DOTS ── */
+.dot-row { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0; }
+.dot { width:14px; height:14px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done { background:#3949ab; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">📐 Maths — Class 1</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">📦</span>
+  <h1>Lesson 1: Spatial Understanding</h1>
+  <p>Learn positions using fun pictures!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start! Tap the first step 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="topbottom">⬆️ Top &amp; Bottom</div>
+  <div class="step-tab locked"  data-tab="onunder">🪑 On &amp; Under</div>
+  <div class="step-tab locked"  data-tab="inout">📦 Inside &amp; Outside</div>
+  <div class="step-tab locked"  data-tab="abovebelow">💡 Above &amp; Below</div>
+  <div class="step-tab locked"  data-tab="nearfar">🌲 Near &amp; Far</div>
+  <div class="step-tab locked"  data-tab="beforeafter">🕯️ Before &amp; After</div>
+  <div class="step-tab locked"  data-tab="quiz">🎯 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════
+     TAB 1 — TOP & BOTTOM
+══════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-topbottom">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">⬆️</div>
+    <div>
+      <div class="banner-title" style="color:#0d47a1">Top &amp; Bottom</div>
+      <div class="banner-sub" style="color:#1565c0">Which is at the TOP? Which is at the BOTTOM? Tap the right answer!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="tb1">
+    <div class="scene-top">
+      <div style="font-size:56px; display:flex; flex-direction:column; align-items:center; gap:0">
+        <div>🦅</div><div style="font-size:18px">🌳</div>
+      </div>
+      <div>
+        <div class="scene-label">Question 1</div>
+        <div class="scene-sentence">The bird is at the <span class="kw">___</span> of the tree.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('tb1',this,'top')"><div class="cb-emoji">⬆️</div><div class="cb-word">TOP</div></div>
+        <div class="choice-btn" onclick="answer('tb1',this,'bottom')"><div class="cb-emoji">⬇️</div><div class="cb-word">BOTTOM</div></div>
+      </div>
+      <div class="fb-box" id="fb-tb1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="tb2">
+    <div class="scene-top">
+      <div style="font-size:56px; display:flex; flex-direction:column; align-items:center; gap:0">
+        <div style="font-size:18px">🏠</div><div>🔥</div>
+      </div>
+      <div>
+        <div class="scene-label">Question 2</div>
+        <div class="scene-sentence">Fire touches the <span class="kw">___</span> of the pot.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('tb2',this,'top')"><div class="cb-emoji">⬆️</div><div class="cb-word">TOP</div></div>
+        <div class="choice-btn" onclick="answer('tb2',this,'bottom')"><div class="cb-emoji">⬇️</div><div class="cb-word">BOTTOM</div></div>
+      </div>
+      <div class="fb-box" id="fb-tb2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="tb3">
+    <div class="scene-top">
+      <div style="font-size:56px; display:flex; flex-direction:column; align-items:center; gap:0">
+        <div>🐒</div><div style="font-size:18px">🏛️</div>
+      </div>
+      <div>
+        <div class="scene-label">Question 3</div>
+        <div class="scene-sentence">Monkey sits at the <span class="kw">___</span> of the pillar.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('tb3',this,'top')"><div class="cb-emoji">⬆️</div><div class="cb-word">TOP</div></div>
+        <div class="choice-btn" onclick="answer('tb3',this,'bottom')"><div class="cb-emoji">⬇️</div><div class="cb-word">BOTTOM</div></div>
+      </div>
+      <div class="fb-box" id="fb-tb3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="tb4">
+    <div class="scene-top">
+      <div style="font-size:56px; display:flex; flex-direction:column; align-items:center; gap:0">
+        <div>🌸</div><div style="font-size:18px">🪴</div>
+      </div>
+      <div>
+        <div class="scene-label">Question 4</div>
+        <div class="scene-sentence">The flower pot is at the <span class="kw">___</span>.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('tb4',this,'top')"><div class="cb-emoji">⬆️</div><div class="cb-word">TOP</div></div>
+        <div class="choice-btn" onclick="answer('tb4',this,'bottom')"><div class="cb-emoji">⬇️</div><div class="cb-word">BOTTOM</div></div>
+      </div>
+      <div class="fb-box" id="fb-tb4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="tb5">
+    <div class="scene-top">
+      <div style="font-size:56px; display:flex; flex-direction:column; align-items:center; gap:0">
+        <div style="font-size:18px">🥛</div><div>🥛</div>
+      </div>
+      <div>
+        <div class="scene-label">Question 5</div>
+        <div class="scene-sentence">Milk is at the <span class="kw">___</span> of the glass.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('tb5',this,'top')"><div class="cb-emoji">⬆️</div><div class="cb-word">TOP</div></div>
+        <div class="choice-btn" onclick="answer('tb5',this,'bottom')"><div class="cb-emoji">⬇️</div><div class="cb-word">BOTTOM</div></div>
+      </div>
+      <div class="fb-box" id="fb-tb5"></div>
+    </div>
+  </div>
+
+  <div class="dot-row" id="dots-topbottom"></div>
+  <button class="big-btn primary" id="btn-topbottom" disabled onclick="completeTab('topbottom','onunder','⬆️ Top &amp; Bottom','🪑 On &amp; Under')">Next: On &amp; Under ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 — ON & UNDER
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-onunder">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🪑</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f">On &amp; Under</div>
+      <div class="banner-sub" style="color:#ad1457">Is it ON something or UNDER something? Tap!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ou1">
+    <div class="scene-top">
+      <div style="font-size:56px">📺</div>
+      <div>
+        <div class="scene-label">Question 1</div>
+        <div class="scene-sentence">The television is <span class="kw">___</span> the table.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ou1',this,'on')"><div class="cb-emoji">⬆️</div><div class="cb-word">ON</div></div>
+        <div class="choice-btn" onclick="answer('ou1',this,'under')"><div class="cb-emoji">⬇️</div><div class="cb-word">UNDER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ou1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ou2">
+    <div class="scene-top">
+      <div style="font-size:56px">🐕</div>
+      <div>
+        <div class="scene-label">Question 2</div>
+        <div class="scene-sentence">The dog is <span class="kw">___</span> the table.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ou2',this,'on')"><div class="cb-emoji">⬆️</div><div class="cb-word">ON</div></div>
+        <div class="choice-btn" onclick="answer('ou2',this,'under')"><div class="cb-emoji">⬇️</div><div class="cb-word">UNDER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ou2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ou3">
+    <div class="scene-top">
+      <div style="font-size:56px">🖼️</div>
+      <div>
+        <div class="scene-label">Question 3</div>
+        <div class="scene-sentence">The photograph is <span class="kw">___</span> the wall.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ou3',this,'on')"><div class="cb-emoji">⬆️</div><div class="cb-word">ON</div></div>
+        <div class="choice-btn" onclick="answer('ou3',this,'under')"><div class="cb-emoji">⬇️</div><div class="cb-word">UNDER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ou3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ou4">
+    <div class="scene-top">
+      <div style="font-size:56px">🐈</div>
+      <div>
+        <div class="scene-label">Question 4</div>
+        <div class="scene-sentence">The cat is <span class="kw">___</span> the cage.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ou4',this,'on')"><div class="cb-emoji">⬆️</div><div class="cb-word">ON</div></div>
+        <div class="choice-btn" onclick="answer('ou4',this,'under')"><div class="cb-emoji">⬇️</div><div class="cb-word">UNDER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ou4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ou5">
+    <div class="scene-top">
+      <div style="font-size:56px">🌊</div>
+      <div>
+        <div class="scene-label">Question 5</div>
+        <div class="scene-sentence">The river flows <span class="kw">___</span> the bridge.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ou5',this,'on')"><div class="cb-emoji">⬆️</div><div class="cb-word">ON</div></div>
+        <div class="choice-btn" onclick="answer('ou5',this,'under')"><div class="cb-emoji">⬇️</div><div class="cb-word">UNDER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ou5"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ou6">
+    <div class="scene-top">
+      <div style="font-size:56px">🪷</div>
+      <div>
+        <div class="scene-label">Question 6</div>
+        <div class="scene-sentence">The mat is <span class="kw">___</span> the floor.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ou6',this,'on')"><div class="cb-emoji">⬆️</div><div class="cb-word">ON</div></div>
+        <div class="choice-btn" onclick="answer('ou6',this,'under')"><div class="cb-emoji">⬇️</div><div class="cb-word">UNDER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ou6"></div>
+    </div>
+  </div>
+
+  <div class="dot-row" id="dots-onunder"></div>
+  <button class="big-btn primary" id="btn-onunder" disabled onclick="completeTab('onunder','inout','🪑 On &amp; Under','📦 Inside &amp; Outside')">Next: Inside &amp; Outside ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 — INSIDE & OUTSIDE
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-inout">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">📦</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20">Inside &amp; Outside</div>
+      <div class="banner-sub" style="color:#2e7d32">Is it INSIDE or OUTSIDE? Tap the right word!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="io1">
+    <div class="scene-top">
+      <div style="font-size:56px">🍎</div>
+      <div>
+        <div class="scene-label">Question 1</div>
+        <div class="scene-sentence">Fruits are <span class="kw">___</span> the basket.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('io1',this,'inside')"><div class="cb-emoji">🏠</div><div class="cb-word">INSIDE</div></div>
+        <div class="choice-btn" onclick="answer('io1',this,'outside')"><div class="cb-emoji">🌳</div><div class="cb-word">OUTSIDE</div></div>
+      </div>
+      <div class="fb-box" id="fb-io1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="io2">
+    <div class="scene-top">
+      <div style="font-size:56px">🍃</div>
+      <div>
+        <div class="scene-label">Question 2</div>
+        <div class="scene-sentence">Leaves are <span class="kw">___</span> the basket.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('io2',this,'inside')"><div class="cb-emoji">🏠</div><div class="cb-word">INSIDE</div></div>
+        <div class="choice-btn" onclick="answer('io2',this,'outside')"><div class="cb-emoji">🌳</div><div class="cb-word">OUTSIDE</div></div>
+      </div>
+      <div class="fb-box" id="fb-io2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="io3">
+    <div class="scene-top">
+      <div style="font-size:56px">👩</div>
+      <div>
+        <div class="scene-label">Question 3</div>
+        <div class="scene-sentence">Mother is <span class="kw">___</span> the house.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('io3',this,'inside')"><div class="cb-emoji">🏠</div><div class="cb-word">INSIDE</div></div>
+        <div class="choice-btn" onclick="answer('io3',this,'outside')"><div class="cb-emoji">🌳</div><div class="cb-word">OUTSIDE</div></div>
+      </div>
+      <div class="fb-box" id="fb-io3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="io4">
+    <div class="scene-top">
+      <div style="font-size:56px">👨</div>
+      <div>
+        <div class="scene-label">Question 4</div>
+        <div class="scene-sentence">Father is <span class="kw">___</span> the house.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('io4',this,'inside')"><div class="cb-emoji">🏠</div><div class="cb-word">INSIDE</div></div>
+        <div class="choice-btn" onclick="answer('io4',this,'outside')"><div class="cb-emoji">🌳</div><div class="cb-word">OUTSIDE</div></div>
+      </div>
+      <div class="fb-box" id="fb-io4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="io5">
+    <div class="scene-top">
+      <div style="font-size:56px">🐣</div>
+      <div>
+        <div class="scene-label">Question 5</div>
+        <div class="scene-sentence">Chickens are <span class="kw">___</span> the basket.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('io5',this,'inside')"><div class="cb-emoji">🏠</div><div class="cb-word">INSIDE</div></div>
+        <div class="choice-btn" onclick="answer('io5',this,'outside')"><div class="cb-emoji">🌳</div><div class="cb-word">OUTSIDE</div></div>
+      </div>
+      <div class="fb-box" id="fb-io5"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="io6">
+    <div class="scene-top">
+      <div style="font-size:56px">🐶</div>
+      <div>
+        <div class="scene-label">Question 6</div>
+        <div class="scene-sentence">The dog is <span class="kw">___</span> the kennel.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('io6',this,'inside')"><div class="cb-emoji">🏠</div><div class="cb-word">INSIDE</div></div>
+        <div class="choice-btn" onclick="answer('io6',this,'outside')"><div class="cb-emoji">🌳</div><div class="cb-word">OUTSIDE</div></div>
+      </div>
+      <div class="fb-box" id="fb-io6"></div>
+    </div>
+  </div>
+
+  <div class="dot-row" id="dots-inout"></div>
+  <button class="big-btn primary" id="btn-inout" disabled onclick="completeTab('inout','abovebelow','📦 Inside &amp; Outside','💡 Above &amp; Below')">Next: Above &amp; Below ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 — ABOVE & BELOW
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-abovebelow">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <div class="banner-emoji">💡</div>
+    <div>
+      <div class="banner-title" style="color:#e65100">Above &amp; Below</div>
+      <div class="banner-sub" style="color:#bf360c">Is it ABOVE or BELOW? Tap the right word!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ab1">
+    <div class="scene-top">
+      <div style="font-size:56px; display:flex; flex-direction:column; align-items:center">
+        <div>💡</div><div style="font-size:24px">🪑</div>
+      </div>
+      <div>
+        <div class="scene-label">Question 1</div>
+        <div class="scene-sentence">The lamp is <span class="kw">___</span> the table.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ab1',this,'above')"><div class="cb-emoji">☝️</div><div class="cb-word">ABOVE</div></div>
+        <div class="choice-btn" onclick="answer('ab1',this,'below')"><div class="cb-emoji">👇</div><div class="cb-word">BELOW</div></div>
+      </div>
+      <div class="fb-box" id="fb-ab1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ab2">
+    <div class="scene-top">
+      <div style="font-size:56px">👁️</div>
+      <div>
+        <div class="scene-label">Question 2</div>
+        <div class="scene-sentence">The eyes are <span class="kw">___</span> the eyebrows.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ab2',this,'above')"><div class="cb-emoji">☝️</div><div class="cb-word">ABOVE</div></div>
+        <div class="choice-btn" onclick="answer('ab2',this,'below')"><div class="cb-emoji">👇</div><div class="cb-word">BELOW</div></div>
+      </div>
+      <div class="fb-box" id="fb-ab2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ab3">
+    <div class="scene-top">
+      <div style="font-size:56px">👃</div>
+      <div>
+        <div class="scene-label">Question 3</div>
+        <div class="scene-sentence">The nose is <span class="kw">___</span> the mouth.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ab3',this,'above')"><div class="cb-emoji">☝️</div><div class="cb-word">ABOVE</div></div>
+        <div class="choice-btn" onclick="answer('ab3',this,'below')"><div class="cb-emoji">👇</div><div class="cb-word">BELOW</div></div>
+      </div>
+      <div class="fb-box" id="fb-ab3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ab4">
+    <div class="scene-top">
+      <div style="font-size:56px">🦅</div>
+      <div>
+        <div class="scene-label">Question 4</div>
+        <div class="scene-sentence">The bird is flying <span class="kw">___</span> the tree.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ab4',this,'above')"><div class="cb-emoji">☝️</div><div class="cb-word">ABOVE</div></div>
+        <div class="choice-btn" onclick="answer('ab4',this,'below')"><div class="cb-emoji">👇</div><div class="cb-word">BELOW</div></div>
+      </div>
+      <div class="fb-box" id="fb-ab4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ab5">
+    <div class="scene-top">
+      <div style="font-size:56px">🪁</div>
+      <div>
+        <div class="scene-label">Question 5</div>
+        <div class="scene-sentence">The bird is flying <span class="kw">___</span> the kite.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ab5',this,'above')"><div class="cb-emoji">☝️</div><div class="cb-word">ABOVE</div></div>
+        <div class="choice-btn" onclick="answer('ab5',this,'below')"><div class="cb-emoji">👇</div><div class="cb-word">BELOW</div></div>
+      </div>
+      <div class="fb-box" id="fb-ab5"></div>
+    </div>
+  </div>
+
+  <div class="dot-row" id="dots-abovebelow"></div>
+  <button class="big-btn primary" id="btn-abovebelow" disabled onclick="completeTab('abovebelow','nearfar','💡 Above &amp; Below','🌲 Near &amp; Far')">Next: Near &amp; Far ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 — NEAR & FAR
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-nearfar">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <div class="banner-emoji">🌲</div>
+    <div>
+      <div class="banner-title" style="color:#4a148c">Near &amp; Far</div>
+      <div class="banner-sub" style="color:#6a1b9a">Is it NEAR or FAR? Tap the right word!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="nf1">
+    <div class="scene-top">
+      <div style="font-size:56px">👩‍👦</div>
+      <div>
+        <div class="scene-label">Question 1</div>
+        <div class="scene-sentence">Mother is <span class="kw">___</span> the child.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('nf1',this,'near')"><div class="cb-emoji">🤝</div><div class="cb-word">NEAR</div></div>
+        <div class="choice-btn" onclick="answer('nf1',this,'far')"><div class="cb-emoji">🌌</div><div class="cb-word">FAR</div></div>
+      </div>
+      <div class="fb-box" id="fb-nf1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="nf2">
+    <div class="scene-top">
+      <div style="font-size:56px">🌕</div>
+      <div>
+        <div class="scene-label">Question 2</div>
+        <div class="scene-sentence">The moon is <span class="kw">___</span> from the child.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('nf2',this,'near')"><div class="cb-emoji">🤝</div><div class="cb-word">NEAR</div></div>
+        <div class="choice-btn" onclick="answer('nf2',this,'far')"><div class="cb-emoji">🌌</div><div class="cb-word">FAR</div></div>
+      </div>
+      <div class="fb-box" id="fb-nf2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="nf3">
+    <div class="scene-top">
+      <div style="font-size:56px">🐦</div>
+      <div>
+        <div class="scene-label">Question 3</div>
+        <div class="scene-sentence">The bird is <span class="kw">___</span> the tree.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('nf3',this,'near')"><div class="cb-emoji">🤝</div><div class="cb-word">NEAR</div></div>
+        <div class="choice-btn" onclick="answer('nf3',this,'far')"><div class="cb-emoji">🌌</div><div class="cb-word">FAR</div></div>
+      </div>
+      <div class="fb-box" id="fb-nf3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="nf4">
+    <div class="scene-top">
+      <div style="font-size:56px">🐑</div>
+      <div>
+        <div class="scene-label">Question 4</div>
+        <div class="scene-sentence">The sheep is <span class="kw">___</span> the pond.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('nf4',this,'near')"><div class="cb-emoji">🤝</div><div class="cb-word">NEAR</div></div>
+        <div class="choice-btn" onclick="answer('nf4',this,'far')"><div class="cb-emoji">🌌</div><div class="cb-word">FAR</div></div>
+      </div>
+      <div class="fb-box" id="fb-nf4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="nf5">
+    <div class="scene-top">
+      <div style="font-size:56px">🧒</div>
+      <div>
+        <div class="scene-label">Question 5</div>
+        <div class="scene-sentence">Ravi is standing <span class="kw">___</span> the swing.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('nf5',this,'near')"><div class="cb-emoji">🤝</div><div class="cb-word">NEAR</div></div>
+        <div class="choice-btn" onclick="answer('nf5',this,'far')"><div class="cb-emoji">🌌</div><div class="cb-word">FAR</div></div>
+      </div>
+      <div class="fb-box" id="fb-nf5"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="nf6">
+    <div class="scene-top">
+      <div style="font-size:56px">👧</div>
+      <div>
+        <div class="scene-label">Question 6</div>
+        <div class="scene-sentence">Mary is standing <span class="kw">___</span> from the swing.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('nf6',this,'near')"><div class="cb-emoji">🤝</div><div class="cb-word">NEAR</div></div>
+        <div class="choice-btn" onclick="answer('nf6',this,'far')"><div class="cb-emoji">🌌</div><div class="cb-word">FAR</div></div>
+      </div>
+      <div class="fb-box" id="fb-nf6"></div>
+    </div>
+  </div>
+
+  <div class="dot-row" id="dots-nearfar"></div>
+  <button class="big-btn primary" id="btn-nearfar" disabled onclick="completeTab('nearfar','beforeafter','🌲 Near &amp; Far','🕯️ Before &amp; After')">Next: Before &amp; After ➡️</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 6 — BEFORE & AFTER
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-beforeafter">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);">
+    <div class="banner-emoji">🕯️</div>
+    <div>
+      <div class="banner-title" style="color:#006064">Before &amp; After</div>
+      <div class="banner-sub" style="color:#00838f">What comes BEFORE? What comes AFTER? Tap!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ba1">
+    <div class="scene-top">
+      <div style="font-size:56px">🕯️</div>
+      <div>
+        <div class="scene-label">Question 1</div>
+        <div class="scene-sentence">A tall candle — this is <span class="kw">___</span> lighting.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ba1',this,'before')"><div class="cb-emoji">⏮️</div><div class="cb-word">BEFORE</div></div>
+        <div class="choice-btn" onclick="answer('ba1',this,'after')"><div class="cb-emoji">⏭️</div><div class="cb-word">AFTER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ba1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ba2">
+    <div class="scene-top">
+      <div style="font-size:56px">🔥</div>
+      <div>
+        <div class="scene-label">Question 2</div>
+        <div class="scene-sentence">A melted candle — this is <span class="kw">___</span> lighting.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ba2',this,'before')"><div class="cb-emoji">⏮️</div><div class="cb-word">BEFORE</div></div>
+        <div class="choice-btn" onclick="answer('ba2',this,'after')"><div class="cb-emoji">⏭️</div><div class="cb-word">AFTER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ba2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ba3">
+    <div class="scene-top">
+      <div style="font-size:56px">🥭</div>
+      <div>
+        <div class="scene-label">Question 3</div>
+        <div class="scene-sentence">Wash the mango — this is done <span class="kw">___</span> eating.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ba3',this,'before')"><div class="cb-emoji">⏮️</div><div class="cb-word">BEFORE</div></div>
+        <div class="choice-btn" onclick="answer('ba3',this,'after')"><div class="cb-emoji">⏭️</div><div class="cb-word">AFTER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ba3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ba4">
+    <div class="scene-top">
+      <div style="font-size:56px">😋</div>
+      <div>
+        <div class="scene-label">Question 4</div>
+        <div class="scene-sentence">Eat the mango — this is done <span class="kw">___</span> washing.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ba4',this,'before')"><div class="cb-emoji">⏮️</div><div class="cb-word">BEFORE</div></div>
+        <div class="choice-btn" onclick="answer('ba4',this,'after')"><div class="cb-emoji">⏭️</div><div class="cb-word">AFTER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ba4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ba5">
+    <div class="scene-top">
+      <div style="font-size:56px">😴</div>
+      <div>
+        <div class="scene-label">Question 5</div>
+        <div class="scene-sentence">Waking up — this comes <span class="kw">___</span> brushing teeth.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ba5',this,'before')"><div class="cb-emoji">⏮️</div><div class="cb-word">BEFORE</div></div>
+        <div class="choice-btn" onclick="answer('ba5',this,'after')"><div class="cb-emoji">⏭️</div><div class="cb-word">AFTER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ba5"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="ba6">
+    <div class="scene-top">
+      <div style="font-size:56px">🍽️</div>
+      <div>
+        <div class="scene-label">Question 6</div>
+        <div class="scene-sentence">Eating food — this comes <span class="kw">___</span> cooking.</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ba6',this,'before')"><div class="cb-emoji">⏮️</div><div class="cb-word">BEFORE</div></div>
+        <div class="choice-btn" onclick="answer('ba6',this,'after')"><div class="cb-emoji">⏭️</div><div class="cb-word">AFTER</div></div>
+      </div>
+      <div class="fb-box" id="fb-ba6"></div>
+    </div>
+  </div>
+
+  <div class="dot-row" id="dots-beforeafter"></div>
+  <button class="big-btn primary" id="btn-beforeafter" disabled onclick="completeTab('beforeafter','quiz','🕯️ Before &amp; After','🎯 Final Quiz')">Go to Final Quiz 🎯</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 7 — FINAL QUIZ
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#fff9c4);">
+    <div class="banner-emoji">🎯</div>
+    <div>
+      <div class="banner-title" style="color:#b71c1c">Final Quiz!</div>
+      <div class="banner-sub" style="color:#c62828">Let's see how much you learned! 10 questions!</div>
+    </div>
+  </div>
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center; padding:20px">
+      <div style="font-size:64px; margin-bottom:12px">🚀</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:22px; color:#1a237e; margin-bottom:16px">Ready for the Quiz?</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:260px; margin:0 auto">Start Quiz! 🎯</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCKED TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Lesson Complete!</div>
+  <div class="celeb-sub" id="celebS">Amazing work! You know all the positions!</div>
+  <div class="celeb-stars" id="celebStar">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="closeCeleb()">Yay! 🎉</button>
+</div>
+
+<script>
+// ─────────── DATA ───────────
+const ANSWERS = {
+  tb1:'top', tb2:'bottom', tb3:'top', tb4:'bottom', tb5:'bottom',
+  ou1:'on', ou2:'under', ou3:'on', ou4:'under', ou5:'under', ou6:'on',
+  io1:'inside', io2:'outside', io3:'inside', io4:'outside', io5:'inside', io6:'inside',
+  ab1:'above', ab2:'below', ab3:'above', ab4:'above', ab5:'below',
+  nf1:'near', nf2:'far', nf3:'near', nf4:'near', nf5:'near', nf6:'far',
+  ba1:'before', ba2:'after', ba3:'before', ba4:'after', ba5:'before', ba6:'after'
+};
+
+const TAB_QUESTIONS = {
+  topbottom: ['tb1','tb2','tb3','tb4','tb5'],
+  onunder:   ['ou1','ou2','ou3','ou4','ou5','ou6'],
+  inout:     ['io1','io2','io3','io4','io5','io6'],
+  abovebelow:['ab1','ab2','ab3','ab4','ab5'],
+  nearfar:   ['nf1','nf2','nf3','nf4','nf5','nf6'],
+  beforeafter:['ba1','ba2','ba3','ba4','ba5','ba6']
+};
+
+const TAB_ORDER = ['topbottom','onunder','inout','abovebelow','nearfar','beforeafter','quiz'];
+
+let stars = 0;
+let answered = {}; // qid: true/false
+let tabDone = {};
+let quizItems = [], quizIdx = 0, quizScore = 0;
+
+// ─────────── INIT DOTS ───────────
+function initDots() {
+  Object.keys(TAB_QUESTIONS).forEach(tab => {
+    const container = document.getElementById('dots-'+tab);
+    if (!container) return;
+    TAB_QUESTIONS[tab].forEach(qid => {
+      const d = document.createElement('div');
+      d.className = 'dot';
+      d.id = 'dot-'+qid;
+      container.appendChild(d);
+    });
+  });
+}
+initDots();
+
+// ─────────── ANSWER LOGIC ───────────
+function answer(qid, btn, choice) {
+  if (answered[qid]) return;
+  const correct = ANSWERS[qid];
+  const card = document.getElementById(qid);
+  const fb = document.getElementById('fb-'+qid);
+  const allBtns = btn.closest('.choice-row').querySelectorAll('.choice-btn');
+
+  allBtns.forEach(b => b.classList.add('locked-choice'));
+
+  if (choice === correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb-box ok';
+    fb.textContent = '✅ Correct! Well done! 🎉';
+    addStars(5);
+    speak('Correct! Well done!');
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'fb-box no';
+    fb.textContent = '❌ Oops! The answer is: ' + correct.toUpperCase() + '!';
+    allBtns.forEach(b => {
+      const bWord = b.querySelector('.cb-word').textContent.toLowerCase().trim();
+      if (bWord === correct) b.classList.add('correct');
+    });
+    speak('Oops! Try to remember: ' + correct + '!');
+  }
+
+  answered[qid] = true;
+  card.classList.add('done');
+  document.getElementById('dot-'+qid).classList.add('done');
+
+  // check if tab complete
+  const tabId = getTabForQ(qid);
+  checkTabButton(tabId);
+  updateProgress();
+}
+
+function getTabForQ(qid) {
+  for (const tab in TAB_QUESTIONS) {
+    if (TAB_QUESTIONS[tab].includes(qid)) return tab;
+  }
+  return null;
+}
+
+function checkTabButton(tabId) {
+  if (!tabId || !TAB_QUESTIONS[tabId]) return;
+  const allDone = TAB_QUESTIONS[tabId].every(q => answered[q] !== undefined);
+  if (allDone) {
+    document.getElementById('btn-'+tabId).disabled = false;
+  }
+}
+
+// ─────────── TAB SWITCHING ───────────
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+tabId).classList.add('active');
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab === tabId) t.classList.add('active');
+    else if (!t.classList.contains('locked')) t.classList.remove('active');
+  });
+  window.scrollTo(0,0);
+}
+
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.classList.contains('locked')) {
+      tab.classList.remove('shaking');
+      void tab.offsetWidth;
+      tab.classList.add('shaking');
+      setTimeout(() => tab.classList.remove('shaking'), 600);
+      showToast('🔒 Finish the previous step first!');
+      speak('Finish the previous step first!');
+    } else {
+      switchTab(tab.dataset.tab);
+      document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    }
+  });
+});
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─────────── COMPLETE TAB → UNLOCK NEXT ───────────
+function completeTab(currentTab, nextTab, currentLabel, nextLabel) {
+  tabDone[currentTab] = true;
+  addStars(20);
+
+  // Update current tab visual
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab === currentTab) {
+      t.className = 'step-tab done';
+      t.innerHTML = '✅ ' + currentLabel;
+    }
+    if (t.dataset.tab === nextTab) {
+      t.className = 'step-tab unlocked';
+    }
+  });
+
+  switchTab(nextTab);
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab === nextTab) t.classList.add('active');
+  });
+
+  updateProgress();
+  speak('Great job! Now let\'s learn ' + nextTab.replace(/([A-Z])/g,' $1') + '!');
+}
+
+// ─────────── PROGRESS ───────────
+function updateProgress() {
+  const total = Object.keys(ANSWERS).length;
+  const done = Object.keys(answered).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progLabel').textContent =
+    done === total ? '🎉 All questions done!' : `${done} of ${total} questions answered`;
+}
+
+// ─────────── QUIZ ───────────
+const quizData = [
+  {q:'The bird is sitting at the ___ of the tree.',opts:['TOP','BOTTOM','NEAR','FAR'],ans:'TOP',e:'🦅🌳'},
+  {q:'The dog is ___ the table.',opts:['ON','UNDER','ABOVE','INSIDE'],ans:'UNDER',e:'🐕🪑'},
+  {q:'Fruits are ___ the basket.',opts:['OUTSIDE','FAR','INSIDE','BELOW'],ans:'INSIDE',e:'🍎📦'},
+  {q:'The lamp is ___ the table.',opts:['BELOW','UNDER','ABOVE','ON'],ans:'ABOVE',e:'💡🪑'},
+  {q:'Mother is ___ the child.',opts:['FAR','NEAR','ABOVE','OUTSIDE'],ans:'NEAR',e:'👩‍👦'},
+  {q:'Wash the mango ___ eating.',opts:['AFTER','BELOW','BEFORE','INSIDE'],ans:'BEFORE',e:'🥭💧'},
+  {q:'The river flows ___ the bridge.',opts:['ON','ABOVE','NEAR','UNDER'],ans:'UNDER',e:'🌊🌉'},
+  {q:'Milk is at the ___ of the glass.',opts:['TOP','NEAR','BOTTOM','OUTSIDE'],ans:'BOTTOM',e:'🥛'},
+  {q:'Father is ___ the house.',opts:['INSIDE','NEAR','ABOVE','OUTSIDE'],ans:'OUTSIDE',e:'👨🏠'},
+  {q:'Eyes are ___ the eyebrows.',opts:['ABOVE','BELOW','ON','FAR'],ans:'BELOW',e:'👁️'},
+  {q:'The moon is ___ away from the child.',opts:['NEAR','FAR','ABOVE','INSIDE'],ans:'FAR',e:'🌕'},
+  {q:'Eat the mango ___ washing.',opts:['BEFORE','UNDER','AFTER','NEAR'],ans:'AFTER',e:'😋🥭'},
+  {q:'Monkey sits at the ___ of the pillar.',opts:['BOTTOM','FAR','TOP','UNDER'],ans:'TOP',e:'🐒🏛️'},
+  {q:'The photograph is ___ the wall.',opts:['UNDER','ON','BELOW','INSIDE'],ans:'ON',e:'🖼️'},
+  {q:'The sheep is ___ the pond.',opts:['FAR','ABOVE','NEAR','OUTSIDE'],ans:'NEAR',e:'🐑💧'},
+];
+
+function startQuiz() {
+  quizItems = [...quizData].sort(() => Math.random()-.5).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    box.innerHTML = `
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:80px;margin-bottom:10px">🏆</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+        <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+        <div style="font-size:15px;color:#1a237e;font-weight:900;margin-bottom:20px">+${bonus} bonus stars!</div>
+        <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Lesson!</button>
+        <button class="big-btn orange" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+      </div>`;
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = [...q.opts].sort(() => Math.random()-.5);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o => `<div class="quiz-opt" onclick="answerQ(this,'${o}','${q.ans}')">${o}</div>`).join('')}
+    </div>
+  `;
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => b.onclick = null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.textContent.trim() === correct) b.classList.add('right');
+    });
+    speak('Oops! The answer is ' + correct);
+  }
+  setTimeout(() => { quizIdx++; showQ(); }, 1600);
+}
+
+// ─────────── END ───────────
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Lesson 1 Complete!';
+  document.getElementById('celebS').textContent = 'Amazing! You learned Top-Bottom, On-Under, Inside-Outside, Above-Below, Near-Far and Before-After!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Lesson 1! You are a superstar!');
+}
+function closeCeleb() { document.getElementById('celebScreen').classList.remove('show'); }
+
+// ─────────── STARS ───────────
+function addStars(n) { stars += n; document.getElementById('starsNum').textContent = stars; }
+
+// ─────────── SPEAK ───────────
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.80; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+
+// ─────────── CONFETTI ───────────
+function launchConfetti() {
+  const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#ffffff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+}
+
+// add confetti animation
+const style = document.createElement('style');
+style.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(style);
+
+// welcome speech
+setTimeout(() => speak('Welcome to Lesson 1! Spatial Understanding. Let\'s start with Top and Bottom!'), 500);
+</script>
+</body>
+</html>

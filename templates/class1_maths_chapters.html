@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - Class 1 Maths</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fff8f0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #bf360c, #e64a19);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(191,54,12,0.35);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-subject {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .back-btn {
+            background: white; color: #bf360c;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #bf360c, #e64a19);
+            padding: 20px 20px 35px; text-align: center; color: white;
+        }
+        .hero-icon { font-size: 56px; margin-bottom: 8px; }
+        .hero h2   { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p    { font-size: 13px; opacity: 0.9; }
+
+        /* Progress card */
+        .progress-card {
+            background: white; margin: -18px 16px 20px;
+            border-radius: 18px; padding: 14px 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-circle {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, #bf360c, #e64a19);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
+        }
+        .progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
+        .progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+        .progress-bar-wrap {
+            flex: 1; background: #f0f0f0;
+            border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
+        }
+        .progress-bar-inner {
+            height: 100%; background: linear-gradient(90deg, #bf360c, #ff7043);
+            border-radius: 10px; width: 0%; transition: width 0.5s;
+        }
+
+        /* Section label */
+        .section-label {
+            padding: 8px 16px 6px;
+            font-size: 12px; font-weight: 800;
+            color: #888; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* Chapter list */
+        .chapters-list {
+            padding: 0 16px 100px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        /* Chapter card */
+        .chapter-card {
+            background: white; border-radius: 18px;
+            padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            cursor: pointer; transition: all 0.25s;
+            text-decoration: none; position: relative; overflow: hidden;
+        }
+        .chapter-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .chapter-card:active { transform: scale(0.98); }
+        .chapter-card.locked { opacity: 0.6; cursor: not-allowed; }
+        .chapter-card.completed  { border-left: 4px solid #059669; }
+        .chapter-card.inprogress { border-left: 4px solid #f59e0b; }
+        .chapter-card.notstarted { border-left: 4px solid #e5e7eb; }
+
+        .chapter-num {
+            width: 42px; height: 42px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; font-weight: 900;
+        }
+        .chapter-info { flex: 1; }
+        .chapter-title { font-size: 15px; font-weight: 800; color: #333; margin-bottom: 3px; }
+        .chapter-meta  { font-size: 12px; color: #888; font-weight: 600; }
+        .chapter-status { font-size: 18px; flex-shrink: 0; }
+
+        /* Page badge */
+        .page-badge {
+            background: #fff3e0; color: #e64a19;
+            padding: 2px 8px; border-radius: 10px;
+            font-size: 11px; font-weight: 800;
+            margin-left: 6px; white-space: nowrap;
+        }
+
+        /* Individual chapter colors */
+        .spatial-card   .chapter-num { background: #fce4ec; }
+        .solids-card    .chapter-num { background: #fff3e0; }
+        .digits-card    .chapter-num { background: #e8f5e9; }
+        .zero-card      .chapter-num { background: #e3f2fd; }
+        .add1-card      .chapter-num { background: #f3e5f5; }
+        .sub1-card      .chapter-num { background: #fbe9e7; }
+        .num10-card     .chapter-num { background: #e0f7fa; }
+        .units-card     .chapter-num { background: #f9fbe7; }
+        .num1120-card   .chapter-num { background: #fce4ec; }
+        .add2-card      .chapter-num { background: #e8f5e9; }
+        .sub2-card      .chapter-num { background: #fff3e0; }
+        .num2199-card   .chapter-num { background: #e3f2fd; }
+        .mental-card    .chapter-num { background: #f3e5f5; }
+        .money-card     .chapter-num { background: #fbe9e7; }
+        .length-card    .chapter-num { background: #e0f7fa; }
+        .weight-card    .chapter-num { background: #f9fbe7; }
+        .time-card      .chapter-num { background: #fce4ec; }
+        .data-card      .chapter-num { background: #e8f5e9; }
+        .pattern-card   .chapter-num { background: #fff3e0; }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#bf360c; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-subject">Class 1 • Maths</div>
+    </div>
+    <a href="/class/1" class="back-btn">← Back</a>
+</nav>
+
+<div class="hero">
+    <div class="hero-icon">🔢</div>
+    <h2>Mathematics</h2>
+    <p>Class 1 • Karnataka State Board • All Chapters</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-card">
+    <div class="progress-circle" id="progressNum">0%</div>
+    <div class="progress-info" style="flex:1">
+        <h4>My Progress</h4>
+        <p id="progressText">0 of 19 chapters completed</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Chapters -->
+<div class="section-label">📐 All Chapters</div>
+
+<div class="chapters-list">
+
+    <!-- Chapter 1 -->
+    <a href="/class/1/maths/spatial" class="chapter-card spatial-card notstarted">
+        <div class="chapter-num">🧭</div>
+        <div class="chapter-info">
+            <div class="chapter-title">1. Spatial Understanding <span class="page-badge">Pg 1–15</span></div>
+            <div class="chapter-meta">Top, Bottom, Near, Far • Inside, Outside</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 2 -->
+    <a href="/class/1/maths/solids" class="chapter-card solids-card notstarted">
+        <div class="chapter-num">🔷</div>
+        <div class="chapter-info">
+            <div class="chapter-title">2. Solids Around Us <span class="page-badge">Pg 16–24</span></div>
+            <div class="chapter-meta">Shapes, Sorting • Roll &amp; Slide • Flat Shapes</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 3 -->
+    <a href="/class/1/maths/digits" class="chapter-card digits-card notstarted">
+        <div class="chapter-num">🔢</div>
+        <div class="chapter-info">
+            <div class="chapter-title">3. Digits (1–9) <span class="page-badge">Pg 25–62</span></div>
+            <div class="chapter-meta">Counting, Writing &amp; Reading Numbers 1 to 9</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 4 -->
+    <a href="#" onclick="return false;" class="chapter-card zero-card locked">
+        <div class="chapter-num">0️⃣</div>
+        <div class="chapter-info">
+            <div class="chapter-title">4. Zero <span class="page-badge">Pg 63–66</span></div>
+            <div class="chapter-meta">Understanding Zero • Nothing means 0</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 5 -->
+    <a href="#" onclick="return false;" class="chapter-card add1-card locked">
+        <div class="chapter-num">➕</div>
+        <div class="chapter-info">
+            <div class="chapter-title">5. Addition (Sum ≤ 9) <span class="page-badge">Pg 67–77</span></div>
+            <div class="chapter-meta">Adding numbers • Sum not more than 9</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 6 -->
+    <a href="#" onclick="return false;" class="chapter-card sub1-card locked">
+        <div class="chapter-num">➖</div>
+        <div class="chapter-info">
+            <div class="chapter-title">6. Subtraction <span class="page-badge">Pg 78–85</span></div>
+            <div class="chapter-meta">Taking away • Difference of numbers</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 7 -->
+    <a href="#" onclick="return false;" class="chapter-card num10-card locked">
+        <div class="chapter-num">🔟</div>
+        <div class="chapter-info">
+            <div class="chapter-title">7. Number 10 <span class="page-badge">Pg 86–98</span></div>
+            <div class="chapter-meta">Understanding 10 • Counting to ten</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 8 -->
+    <a href="#" onclick="return false;" class="chapter-card units-card locked">
+        <div class="chapter-num">🏗️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">8. Units and Tens <span class="page-badge">Pg 99–103</span></div>
+            <div class="chapter-meta">Place value • Ones and Tens</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 9 -->
+    <a href="#" onclick="return false;" class="chapter-card num1120-card locked">
+        <div class="chapter-num">🔢</div>
+        <div class="chapter-info">
+            <div class="chapter-title">9. Numbers 11 to 20 <span class="page-badge">Pg 104–118</span></div>
+            <div class="chapter-meta">Counting &amp; writing numbers 11 to 20</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 10 -->
+    <a href="#" onclick="return false;" class="chapter-card add2-card locked">
+        <div class="chapter-num">➕</div>
+        <div class="chapter-info">
+            <div class="chapter-title">10. Addition (Sum ≤ 20) <span class="page-badge">Pg 1–5</span></div>
+            <div class="chapter-meta">Adding numbers • Sum not more than 20</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 11 -->
+    <a href="#" onclick="return false;" class="chapter-card sub2-card locked">
+        <div class="chapter-num">➖</div>
+        <div class="chapter-info">
+            <div class="chapter-title">11. Subtraction (Diff ≤ 20) <span class="page-badge">Pg 6–8</span></div>
+            <div class="chapter-meta">Subtraction within 20</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 12 -->
+    <a href="#" onclick="return false;" class="chapter-card num2199-card locked">
+        <div class="chapter-num">💯</div>
+        <div class="chapter-info">
+            <div class="chapter-title">12. Numbers 21 to 99 <span class="page-badge">Pg 9–29</span></div>
+            <div class="chapter-meta">Counting &amp; reading two-digit numbers</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 13 -->
+    <a href="#" onclick="return false;" class="chapter-card mental-card locked">
+        <div class="chapter-num">🧠</div>
+        <div class="chapter-info">
+            <div class="chapter-title">13. Mental Arithmetic <span class="page-badge">Pg 30–35</span></div>
+            <div class="chapter-meta">Quick calculations in your head!</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 14 -->
+    <a href="#" onclick="return false;" class="chapter-card money-card locked">
+        <div class="chapter-num">💰</div>
+        <div class="chapter-info">
+            <div class="chapter-title">14. Money <span class="page-badge">Pg 36–52</span></div>
+            <div class="chapter-meta">Coins &amp; notes • Buying &amp; selling</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 15 -->
+    <a href="#" onclick="return false;" class="chapter-card length-card locked">
+        <div class="chapter-num">📏</div>
+        <div class="chapter-info">
+            <div class="chapter-title">15. Length <span class="page-badge">Pg 53–66</span></div>
+            <div class="chapter-meta">Long &amp; short • Measuring length</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 16 -->
+    <a href="#" onclick="return false;" class="chapter-card weight-card locked">
+        <div class="chapter-num">⚖️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">16. Weight <span class="page-badge">Pg 67–72</span></div>
+            <div class="chapter-meta">Heavy &amp; light • Comparing weights</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 17 -->
+    <a href="#" onclick="return false;" class="chapter-card time-card locked">
+        <div class="chapter-num">🕐</div>
+        <div class="chapter-info">
+            <div class="chapter-title">17. Time <span class="page-badge">Pg 73–84</span></div>
+            <div class="chapter-meta">Morning, afternoon, night • Clock reading</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 18 -->
+    <a href="#" onclick="return false;" class="chapter-card data-card locked">
+        <div class="chapter-num">📊</div>
+        <div class="chapter-info">
+            <div class="chapter-title">18. Data Handling <span class="page-badge">Pg 85–88</span></div>
+            <div class="chapter-meta">Sorting &amp; grouping • Simple pictographs</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 19 -->
+    <a href="#" onclick="return false;" class="chapter-card pattern-card locked">
+        <div class="chapter-num">🔁</div>
+        <div class="chapter-info">
+            <div class="chapter-title">19. Patterns <span class="page-badge">Pg 89–94</span></div>
+            <div class="chapter-meta">Repeating patterns • What comes next?</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+    <a href="/class/1" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">🔢</div>
+        <div class="nav-label">Maths</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=1');
+        const data = await res.json();
+        const chapters = [
+            'spatial','solids','digits','zero',
+            'addition1','subtraction1','number10','units-tens',
+            'numbers11to20','addition2','subtraction2','numbers21to99',
+            'mental-arithmetic','money','length','weight',
+            'time','data-handling','patterns'
+        ];
+        let completed = 0;
+        chapters.forEach(ch => {
+            const p = data[`maths_${ch}`];
+            if (p && p.total > 0 && p.completed === p.total) completed++;
+        });
+        const total = 19;
+        const pct = Math.round((completed / total) * 100);
+        document.getElementById('progressNum').textContent  = `${pct}%`;
+        document.getElementById('progressText').textContent = `${completed} of ${total} chapters completed`;
+        document.getElementById('progressBar').style.width  = `${pct}%`;
+    } catch(e) {}
+}
+loadProgress();
+</script>
+</body>
+</html>
