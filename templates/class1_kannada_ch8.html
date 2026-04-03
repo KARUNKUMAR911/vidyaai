@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಅಕ್ಷರ ಪಾಠ - ಪದ ಓದು ಅಕ್ಷರ ಕಲಿ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #1e90d4;
+  --sky-dark: #0a6bad;
+  --sun: #ffd93d;
+  --orange: #ff6b35;
+  --green: #2ec075;
+  --green-dark: #1a8a50;
+  --pink: #f72585;
+  --purple: #7b2ff7;
+  --cream: #fffdf0;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --lock-gray: #b0b8c1;
+  --lock-bg: #e8edf2;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans Kannada', sans-serif;
+  background: linear-gradient(160deg, #e3f4ff 0%, #f0fff8 60%, #fffef0 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(135deg, #0a4d8a 0%, #1e90d4 60%, #2ec075 100%);
+  color: white;
+  text-align: center;
+  padding: 22px 20px 18px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '☀️';
+  position: absolute;
+  font-size: 60px;
+  top: -10px; right: -10px;
+  opacity: 0.3;
+  animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+header .badge {
+  display: inline-block;
+  background: var(--sun);
+  color: #0a4d8a;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 16px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+header h1 {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: clamp(22px, 7vw, 40px);
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+header .sub { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+
+/* ===== STARS PROGRESS ===== */
+.stars-bar {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.star-item {
+  font-size: 20px;
+  transition: all 0.4s;
+  filter: grayscale(1) opacity(0.4);
+}
+.star-item.earned { filter: none; animation: popIn 0.5s ease; }
+@keyframes popIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ===== TABS ===== */
+.tab-scroll {
+  overflow-x: auto;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  position: sticky; top: 0; z-index: 50;
+  padding: 0 8px;
+}
+.tab-row {
+  display: flex;
+  min-width: max-content;
+  gap: 0;
+}
+.tab-btn {
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  position: relative;
+}
+.tab-btn.active {
+  color: var(--sky-dark);
+  border-bottom-color: var(--sky-dark);
+  background: rgba(30,144,212,0.06);
+}
+.tab-btn.locked {
+  color: var(--lock-gray);
+  cursor: not-allowed;
+}
+.tab-btn.done {
+  color: var(--green-dark);
+}
+.tab-btn .lock-icon { font-size: 12px; }
+.tab-btn.shake {
+  animation: shake 0.5s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #1a1a1a;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  z-index: 999;
+  transition: all 0.3s;
+  text-align: center;
+  pointer-events: none;
+  max-width: 280px;
+}
+.toast.show { transform: translate(-50%, -50%) scale(1); }
+
+/* ===== SECTIONS ===== */
+.section {
+  display: none;
+  padding: 20px 16px 40px;
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-title {
+  background: linear-gradient(135deg, #0a4d8a, #1e90d4);
+  color: white;
+  padding: 14px 20px;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.section-title .letters-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.section-title .big-letter {
+  font-size: 36px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  background: var(--sun);
+  color: #0a4d8a;
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ===== INSTRUCTION STRIP ===== */
+.instruction {
+  background: rgba(255,217,61,0.25);
+  border-left: 4px solid var(--sun);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5a4a00;
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.instruction .icon { font-size: 22px; }
+
+/* ===== PICTURE-WORD CARDS ===== */
+.pic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.pic-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s;
+  cursor: pointer;
+  border: 3px solid transparent;
+}
+.pic-card:hover { transform: translateY(-4px); }
+.pic-card .emoji-box {
+  font-size: 56px;
+  padding: 18px 10px 10px;
+  background: linear-gradient(135deg, #f0f9ff, #e8fff3);
+  display: block;
+}
+.pic-card .kn-word {
+  font-size: 20px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  color: var(--sky-dark);
+  padding: 10px 6px 14px;
+}
+.pic-card.selected {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(46,192,117,0.3);
+}
+
+/* ===== CHOICE QUIZ ===== */
+.quiz-box {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
+}
+.quiz-q {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.quiz-q .q-letter {
+  font-size: 34px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--sky), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.choice-btn {
+  padding: 14px 10px;
+  border: 3px solid #e0e8f0;
+  border-radius: 14px;
+  background: #f8fafd;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  color: #333;
+}
+.choice-btn:hover { border-color: var(--sky); background: #eef6ff; transform: scale(1.03); }
+.choice-btn.correct { border-color: var(--green); background: #e7fff2; color: var(--green-dark); animation: correctPop 0.4s ease; }
+.choice-btn.wrong { border-color: #ff4d4d; background: #fff0f0; color: #cc0000; animation: wrongShake 0.4s ease; }
+@keyframes correctPop { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes wrongShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.choice-btn:disabled { cursor: default; }
+
+.feedback-msg {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 10px;
+  min-height: 30px;
+}
+.feedback-msg.ok { color: var(--green-dark); }
+.feedback-msg.no { color: #cc0000; }
+
+/* ===== WORD LIST ===== */
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.word-tile {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 19px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  color: var(--sky-dark);
+}
+.word-tile:hover { border-color: var(--sky); transform: scale(1.05); }
+.word-tile.played { border-color: var(--green); background: #e7fff2; color: var(--green-dark); }
+
+/* ===== FILL IN THE BLANK ===== */
+.fill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.fill-row {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.fill-row .part {
+  font-size: 20px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  color: #333;
+}
+.fill-row .options-inline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.opt-btn {
+  padding: 8px 14px;
+  border: 2.5px solid #c9dff0;
+  border-radius: 10px;
+  background: #f0f8ff;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
+}
+.opt-btn:hover { border-color: var(--sky); background: #ddf0ff; }
+.opt-btn.correct { border-color: var(--green); background: #e7fff2; color: var(--green-dark); }
+.opt-btn.wrong { border-color: #ff4d4d; background: #fff0f0; color: #cc0000; }
+.opt-btn:disabled { cursor: default; }
+.fill-row .result-word {
+  font-size: 20px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  color: var(--green-dark);
+  display: none;
+}
+.fill-row.answered .result-word { display: block; }
+
+/* ===== MATCH GAME ===== */
+.match-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.match-col { display: flex; flex-direction: column; gap: 10px; }
+.match-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 20px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  cursor: pointer;
+  border: 3px solid #e0e8f0;
+  transition: all 0.25s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.match-item:hover { border-color: var(--sky); transform: scale(1.03); }
+.match-item.selected { border-color: var(--orange); background: #fff3ee; }
+.match-item.matched { border-color: var(--green); background: #e7fff2; color: var(--green-dark); pointer-events: none; }
+.match-item.wrong-flash { border-color: #ff4d4d; background: #fff0f0; animation: wrongShake 0.4s ease; }
+
+/* ===== PROGRESS BTN ===== */
+.next-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
+  color: white;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 6px 20px rgba(46,192,117,0.35);
+  margin-top: 20px;
+}
+.next-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(46,192,117,0.45); }
+.next-btn:disabled { background: #ccc; box-shadow: none; cursor: default; transform: none; }
+
+/* ===== COMPLETION CARD ===== */
+.complete-card {
+  background: linear-gradient(135deg, #0a4d8a, #1e90d4, #2ec075);
+  color: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  margin-top: 20px;
+  display: none;
+}
+.complete-card.show { display: block; animation: fadeIn 0.6s ease; }
+.complete-card .trophy { font-size: 64px; margin-bottom: 10px; animation: bounce 1s ease infinite alternate; }
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+.complete-card h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+.complete-card p { opacity: 0.9; font-size: 15px; }
+
+/* ===== SCORECARD ===== */
+.score-bar {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.score-pill {
+  background: white;
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ===== LETTER TRACE VISUAL ===== */
+.trace-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  justify-content: center;
+}
+.trace-letter {
+  width: 70px; height: 70px;
+  border-radius: 14px;
+  border: 2.5px dashed #b0c8e0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-weight: 700;
+  color: #c0d8ee;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.trace-letter.model {
+  background: linear-gradient(135deg, #eef6ff, #e0fff5);
+  border-color: var(--sky);
+  color: var(--sky-dark);
+}
+.trace-letter.traced {
+  border-style: solid;
+  border-color: var(--green);
+  color: var(--green-dark);
+  background: #e7fff2;
+}
+.trace-letter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(46,192,117,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.trace-letter.traced::after { opacity: 1; }
+
+/* ===== SENTENCE READER ===== */
+.sentence-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.sentence-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border: 2.5px solid transparent;
+  transition: all 0.2s;
+}
+.sentence-card:hover { border-color: var(--sky); transform: translateX(4px); }
+.sentence-card.read { border-color: var(--green); background: #f0fff8; }
+.sentence-card .num {
+  background: var(--sky-dark);
+  color: white;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+}
+.sentence-card.read .num { background: var(--green-dark); }
+.sentence-card .sent-text {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.5;
+}
+.sentence-card .tick {
+  margin-left: auto;
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sentence-card.read .tick { opacity: 1; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 400px) {
+  .pic-grid { grid-template-columns: repeat(2, 1fr); }
+  .choices { grid-template-columns: 1fr; }
+  .section-title .big-letter { width: 46px; height: 46px; font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">ಅಕ್ಷರ ಪಾಠ | ಪಾಠ ೮</div>
+  <h1>ಪದ ಓದು – ಅಕ್ಷರ ಕಲಿ</h1>
+  <p class="sub">ಸಮಿತಿ ರಚನೆ | ಓದಿಸಿ-ಬರೆಯಿಸಿ</p>
+  <div class="stars-bar" id="starsBar"></div>
+</header>
+
+<div class="tab-scroll">
+  <div class="tab-row" id="tabRow"></div>
+</div>
+
+<div id="toastMsg" class="toast"></div>
+
+<!-- SECTIONS -->
+<div id="sections"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const tabs = [
+  { id: 'ab1', label: 'ಅ-೧: ರ ಗ ಸ ದ ಅ', emoji: '🌟' },
+  { id: 'ab2', label: 'ಅ-೨: ಜ ವ ಮ ಬ ನ', emoji: '🌈' },
+  { id: 'ab3', label: 'ಅ-೩: ಪ ಯ ಉ ಡ ಟ ಚ', emoji: '🎯' },
+  { id: 'ab4', label: 'ಅ-೪: ಲ ಈ ಊ ಕ', emoji: '🌻' },
+  { id: 'ab5', label: 'ಅ-೫: ಎ ಏ ಇ ಆ ತ ಳ', emoji: '🎪' },
+  { id: 'ab6', label: 'ಅ-೬: ಓ ಔ ಹ ಶ ಷ', emoji: '🦋' },
+  { id: 'ab7', label: 'ಅ-೭: ಐ ಋ ಣ ಛ ಔ', emoji: '🏆' },
+  { id: 'ab8', label: 'ಅ-೮: ಧ ಥ ಢ ಭ', emoji: '🌙' },
+  { id: 'ab9', label: 'ಅ-೯: ಘ ಠ ಫ ಝ ಖ', emoji: '⭐' },
+  { id: 'ab10', label: 'ಅ-೧೦: ಅಂ ಅಃ ಙ ಞ', emoji: '🎊' },
+];
+
+const sectionsData = [
+  // ===== SECTION 1: ರ ಗ ಸ ದ ಅ =====
+  {
+    id: 'ab1',
+    letters: ['ರ','ಗ','ಸ','ದ','ಅ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'🍉', word:'ರಸ', letter:'ರ', hint:'ರ ಇಂದ ಶುರುವಾಗುವ ಪದ' },
+          { emoji:'🪚', word:'ಗರಗಸ', letter:'ಗ', hint:'ಗ ಇಂದ ಶುರುವಾಗುವ ಪದ' },
+          { emoji:'📿', word:'ಸರ', letter:'ಸ', hint:'ಸ ಇಂದ ಶುರುವಾಗುವ ಪದ' },
+          { emoji:'🏰', word:'ದಸರ', letter:'ದ', hint:'ದ ಇಂದ ಶುರುವಾಗುವ ಪದ' },
+          { emoji:'🪛', word:'ಅರ', letter:'ಅ', hint:'ಅ ಇಂದ ಶುರುವಾಗುವ ಪದ' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ನಕಲು ಮಾಡಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರದ ಮೇಲೆ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ರ','ಗ','ಸ','ದ','ಅ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಓದಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಅರ','ಗರ','ಸರ','ರಸ','ದರ','ಸಗರ','ದಸರ','ಅರಸ','ಸರಸ','ಸದರ','ಗರಗರ','ಗರಗಸ','ಸರಸರ','ದರದರ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'ಗ', blank:'_', after:'ಗಸ', correct:'ರ', options:['ರ','ದ','ಅ'], result:'ಗರಗಸ' },
+          { before:'ಸ', blank:'_', after:'ರ', correct:'ಗ', options:['ರ','ಗ','ಸ'], result:'ಸಗರ' },
+          { before:'ಅರ', blank:'_', after:'', correct:'ಸ', options:['ರ','ಸ','ದ'], result:'ಅರಸ' },
+          { before:'', blank:'_', after:'ಸರ', correct:'ದ', options:['ಸ','ದ','ಗ'], result:'ದಸರ' },
+          { before:'', blank:'_', after:'ರ', correct:'ಗ', options:['ಸ','ಗ','ರ'], result:'ಗರ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 2: ಜ ವ ಮ ಬ ನ =====
+  {
+    id: 'ab2',
+    letters: ['ಜ','ವ','ಮ','ಬ','ನ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಗುರುತಿಸಿ!',
+        items: [
+          { emoji:'👨‍👩‍👧‍👦', word:'ಜನ', letter:'ಜ', hint:'ಜ ಇಂದ ಶುರು' },
+          { emoji:'🌳', word:'ವನ', letter:'ವ', hint:'ವ ಇಂದ ಶುರು' },
+          { emoji:'🌲', word:'ಮರ', letter:'ಮ', hint:'ಮ ಇಂದ ಶುರು' },
+          { emoji:'🐂', word:'ಬಸವ', letter:'ಬ', hint:'ಬ ಇಂದ ಶುರು' },
+          { emoji:'🏙️', word:'ನಗರ', letter:'ನ', hint:'ನ ಇಂದ ಶುರು' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ಬರೆಯಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಜ','ವ','ಮ','ಬ','ನ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಜನ','ಜವ','ಜಗ','ವನ','ವರ','ವನಜ','ಮನ','ಮರ','ಮಗ','ಬನ','ಬರ','ನವ','ನರ','ನಗ','ಅಜ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'ಗ', blank:'_', after:'', correct:'ಜ', options:['ಜ','ಅ','ವ'], result:'ಗಜ' },
+          { before:'ಬಸ', blank:'_', after:'', correct:'ವ', options:['ಜ','ವ','ಅ'], result:'ಬಸವ' },
+          { before:'ರ', blank:'_', after:'', correct:'ವ', options:['ವ','ಬ','ಸ'], result:'ರವ' },
+          { before:'', blank:'_', after:'ರ', correct:'ಬ', options:['ಬ','ರ','ಜ'], result:'ಬರ' },
+          { before:'ಜ', blank:'_', after:'', correct:'ನ', options:['ನ','ಅ','ಬ'], result:'ಜನ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 3: ಪ ಯ ಉ ಡ ಟ ಚ =====
+  {
+    id: 'ab3',
+    letters: ['ಪ','ಯ','ಉ','ಡ','ಟ','ಚ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'🪁', word:'ಪಟ', letter:'ಪ', hint:'ಪ ಇಂದ ಶುರು' },
+          { emoji:'🧑‍🌾', word:'ಯಮ', letter:'ಯ', hint:'ಯ ಇಂದ ಶುರು' },
+          { emoji:'🦎', word:'ಉಡ', letter:'ಉ', hint:'ಉ ಇಂದ ಶುರು' },
+          { emoji:'🥁', word:'ಡಮಡಮ', letter:'ಡ', hint:'ಡ ಇಂದ ಶುರು' },
+          { emoji:'💧', word:'ಟಪಟಪ', letter:'ಟ', hint:'ಟ ಇಂದ ಶುರು' },
+          { emoji:'🥄', word:'ಚಮಚ', letter:'ಚ', hint:'ಚ ಇಂದ ಶುರು' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ನಕಲು ಮಾಡಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಪ','ಯ','ಉ','ಡ','ಟ','ಚ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಪದ','ಪಟ','ಜಪ','ಪಚನ','ಪದರ','ನಯ','ಜಯ','ನಯನ','ಉಡ','ಉದಯ','ಉರಗ','ಡಬಡಬ','ಟಪಟಪ','ಚರ','ಚದರ','ವಚನ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'', blank:'_', after:'ಟ', correct:'ಡ', options:['ಡ','ಪ','ಯ'], result:'ಡಟ' },
+          { before:'ನ', blank:'_', after:'ನ', correct:'ಯ', options:['ಚ','ಪ','ಯ'], result:'ನಯನ' },
+          { before:'', blank:'_', after:'ರ ಗ', correct:'ಉ', options:['ಉ','ಯ','ಚ'], result:'ಉರಗ' },
+          { before:'ಬ', blank:'_', after:'ವ', correct:'ಸ', options:['ಬ','ಸ','ಜ'], result:'ಬಸವ' },
+          { before:'ಉ', blank:'_', after:'ಯ', correct:'ದ', options:['ಡ','ದ','ಟ'], result:'ಉದಯ' },
+          { before:'ವ', blank:'_', after:'ನ', correct:'ಚ', options:['ಉ','ಚ','ಯ'], result:'ವಚನ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 4: ಲ ಈ ಊ ಕ =====
+  {
+    id: 'ab4',
+    letters: ['ಲ','ಈ','ಊ','ಕ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'🌴', word:'ಈಚಲ', letter:'ಈ', hint:'ಈ ಇಂದ ಶುರು' },
+          { emoji:'🍽️', word:'ಊಟ', letter:'ಊ', hint:'ಊ ಇಂದ ಶುರು' },
+          { emoji:'📿', word:'ಕಡಗ', letter:'ಕ', hint:'ಕ ಇಂದ ಶುರು' },
+          { emoji:'ಲ', word:'ಲ', letter:'ಲ', hint:'ಲ ಅಕ್ಷರ' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ನಕಲು ಮಾಡಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಲ','ಈ','ಊ','ಕ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಲವ','ಅಗಲ','ಕಲರವ','ಲಕಲಕ','ಈಗ','ಈರ','ಈಚಲ','ಊಟ','ಊನ','ಕದ','ಕರ','ಕದನ','ಕರಗ','ಕಟಕ','ಕರಟ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'', blank:'_', after:'ದ', correct:'ಕ', options:['ಕ','ಲ','ಊ'], result:'ಕದ' },
+          { before:'', blank:'_', after:'ಗ', correct:'ಈ', options:['ಕ','ಈ','ಲ'], result:'ಈಗ' },
+          { before:'', blank:'_', after:'ಟಕ', correct:'ಕ', options:['ಕ','ಈ','ಲ'], result:'ಕಟಕ' },
+          { before:'', blank:'_', after:'ರಟ', correct:'ಕ', options:['ಈ','ಕ','ಲ'], result:'ಕರಟ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 5: ಎ ಏ ಇ ಆ ತ ಳ =====
+  {
+    id: 'ab5',
+    letters: ['ಎ','ಏ','ಇ','ಆ','ತ','ಳ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'⚗️', word:'ಎರಕ', letter:'ಎ', hint:'ಎ ಇಂದ ಶುರು' },
+          { emoji:'🚜', word:'ಏತ', letter:'ಏ', hint:'ಏ ಇಂದ ಶುರು' },
+          { emoji:'🌄', word:'ಇನ', letter:'ಇ', hint:'ಇ ಇಂದ ಶುರು' },
+          { emoji:'🌳', word:'ಆಲ', letter:'ಆ', hint:'ಆ ಇಂದ ಶುರು' },
+          { emoji:'🥁', word:'ತಬಲ', letter:'ತ', hint:'ತ ಇಂದ ಶುರು' },
+          { emoji:'🚰', word:'ನಳ', letter:'ಳ', hint:'ಳ ಇಂದ ಶುರು' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ನಕಲು ಮಾಡಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಎ','ಏ','ಇ','ಆ','ತ','ಳ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಎರಕ','ಎಡಬಲ','ಏತ','ಏಕದಳ','ಇನ','ಆಳ','ಆತ','ಆಲ','ಆಗಸ','ತಬಲ','ತವಕ','ತನಯ','ನಳ','ಸಳ','ಕಳಸ','ಬಳಪ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'ಆ', blank:'_', after:'', correct:'ಟ', options:['ಟ','ದ','ಪ'], result:'ಆಟ' },
+          { before:'ತ', blank:'_', after:'', correct:'ಳ', options:['ಎ','ಳ','ಯ'], result:'ತಳ' },
+          { before:'ಏ', blank:'_', after:'', correct:'ತ', options:['ತ','ಆ','ಕ'], result:'ಏತ' },
+          { before:'ದ', blank:'_', after:'', correct:'ಳ', options:['ಳ','ಎ','ಇ'], result:'ದಳ' },
+          { before:'ಇ', blank:'_', after:'', correct:'ನ', options:['ಟ','ನ','ಪ'], result:'ಇನ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 6: ಓ ಔ ಹ ಶ ಷ =====
+  {
+    id: 'ab6',
+    letters: ['ಓ','ಔ','ಹ','ಶ','ಷ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'🏃', word:'ಓಟ', letter:'ಓ', hint:'ಓ ಇಂದ ಶುರು' },
+          { emoji:'🌿', word:'ಔಡಲ', letter:'ಔ', hint:'ಔ ಇಂದ ಶುರು' },
+          { emoji:'🐴', word:'ಹಯ', letter:'ಹ', hint:'ಹ ಇಂದ ಶುರು' },
+          { emoji:'🏹', word:'ಶರ', letter:'ಶ', hint:'ಶ ಇಂದ ಶುರು' },
+          { emoji:'ಷ', word:'ಷ', letter:'ಷ', hint:'ಷ ಅಕ್ಷರ' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ನಕಲು ಮಾಡಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಓ','ಔ','ಹ','ಶ','ಷ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಓಟ','ಓಲಗ','ಔಡಲ','ಔರಸ','ಹರ','ಹದ','ಹಯ','ಹವಳ','ಶಕ','ಶರ','ಶಕಟ','ಶಯನ','ಶಬರ','ಉಷ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'ಹ', blank:'_', after:'ಯ', correct:'ಅ', options:['ಅ','ಓ','ಶ'], result:'ಹಅಯ' },
+          { before:'', blank:'_', after:'ಲಗ', correct:'ಓ', options:['ಓ','ಹ','ಶ'], result:'ಓಲಗ' },
+          { before:'ಶ', blank:'_', after:'ರ', correct:'ಕ', options:['ಕ','ಓ','ಔ'], result:'ಶಕರ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 7: ಐ ಋ ಣ ಛ ಔ =====
+  {
+    id: 'ab7',
+    letters: ['ಐ','ಋ','ಣ','ಛ','ಔ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'🌺', word:'ಐದಳ', letter:'ಐ', hint:'ಐ ಇಂದ ಶುರು' },
+          { emoji:'🕳️', word:'ಕಣ', letter:'ಣ', hint:'ಣ ಅಕ್ಷರ' },
+          { emoji:'🌵', word:'ಔಣಮರ', letter:'ಔ', hint:'ಔ ಇಂದ ಶುರು' },
+          { emoji:'💦', word:'ಛ', letter:'ಛ', hint:'ಛ ಅಕ್ಷರ' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ನಕಲು ಮಾಡಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಐ','ಋ','ಣ','ಛ','ಔ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಹೇಳಿಸಿ ಮತ್ತು ಬರೆಯಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಐದಳ','ಋಣ','ಕಣ','ಬಡಗಣ','ಛಲ','ಔಣಮರ','ಋತ','ಮಣ','ಔನ','ಕಣಜ']
+      },
+      {
+        type: 'sentences',
+        title: 'ಸರಳ ವಾಕ್ಯಗಳನ್ನು ಓದಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ವಾಕ್ಯ ಒತ್ತಿ ಓದಿ!',
+        sentences: [
+          'ಅವಳ ಸರ',
+          'ಅವಳ ಸರ ಹವಳದ ಸರ',
+          'ತರ ತರದ ಹವಳದ ಸರ',
+          'ಅವನ ಪಟ',
+          'ಅವನ ಪಟ ತರತರದ ಪಟ',
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 8: ಧ ಥ ಢ ಭ =====
+  {
+    id: 'ab8',
+    letters: ['ಧ','ಥ','ಢ','ಭ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'💰', word:'ಧನ', letter:'ಧ', hint:'ಧ ಇಂದ ಶುರು' },
+          { emoji:'🛕', word:'ರಥ', letter:'ಥ', hint:'ಥ ಇಂದ ಶುರು' },
+          { emoji:'🔔', word:'ಢಣಢಣ', letter:'ಢ', hint:'ಢ ಇಂದ ಶುರು' },
+          { emoji:'⚔️', word:'ಭಟ', letter:'ಭ', hint:'ಭ ಇಂದ ಶುರು' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ಬರೆಯಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಧ','ಥ','ಢ','ಭ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಧನ','ಔಡಲ','ಥಳಥಳ','ಪಥ','ಕಥನ','ಢರಢರ','ಭಯ','ಭರತ','ಧವಳ','ಧಗಧಗ','ಮಥನ','ಶಪಥ','ಭವ','ಭಜನ','ಢಣಢಣ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'', blank:'_', after:'ನ', correct:'ಧ', options:['ಧ','ಭ','ಢ'], result:'ಧನ' },
+          { before:'ರ', blank:'_', after:'', correct:'ಥ', options:['ಥ','ಢ','ಭ'], result:'ರಥ' },
+          { before:'', blank:'_', after:'ಣ', correct:'ಢ', options:['ಧ','ಢ','ಭ'], result:'ಢಣ' },
+          { before:'', blank:'_', after:'ಯ', correct:'ಭ', options:['ಭ','ಥ','ಢ'], result:'ಭಯ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 9: ಘ ಠ ಫ ಝ ಖ =====
+  {
+    id: 'ab9',
+    letters: ['ಘ','ಠ','ಫ','ಝ','ಖ'],
+    parts: [
+      {
+        type: 'pictures',
+        title: 'ಚಿತ್ರ ತೋರಿಸಿ ಪದ ಹೇಳಿಸಿ',
+        instruction: '👆 ಚಿತ್ರ ನೋಡಿ ಪದ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { emoji:'🪣', word:'ಘಟ', letter:'ಘ', hint:'ಘ ಇಂದ ಶುರು' },
+          { emoji:'🏛️', word:'ಜಠರ', letter:'ಠ', hint:'ಠ ಇಂದ ಶುರು' },
+          { emoji:'🍎', word:'ಫಲ', letter:'ಫ', hint:'ಫ ಇಂದ ಶುರು' },
+          { emoji:'🪙', word:'ಝಣಝಣ', letter:'ಝ', hint:'ಝ ಇಂದ ಶುರು' },
+          { emoji:'🦅', word:'ಖಗ', letter:'ಖ', hint:'ಖ ಇಂದ ಶುರು' },
+        ]
+      },
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ಬರೆಯಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಘ','ಠ','ಫ','ಝ','ಖ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಜಠರ','ಮಠ','ಹಠ','ಪಠಣ','ಠಣಠಣ','ಘಟ','ಘನ','ಘಟಕ','ಓಘ','ಫಲ','ಫಳಫಳ','ಕಫ','ಸಫಲ','ಝಳ','ಖಗ','ಖರ','ಖಳ','ನಖ','ಸಖ']
+      },
+      {
+        type: 'fillin',
+        title: 'ಖಾಲಿ ಜಾಗ ತುಂಬಿಸಿ',
+        instruction: '🤔 ಸರಿಯಾದ ಅಕ್ಷರ ಆಯ್ಕೆ ಮಾಡಿ!',
+        items: [
+          { before:'', blank:'_', after:'ಟ', correct:'ಘ', options:['ಘ','ಫ','ಖ'], result:'ಘಟ' },
+          { before:'', blank:'_', after:'ಲ', correct:'ಫ', options:['ಝ','ಫ','ಠ'], result:'ಫಲ' },
+          { before:'', blank:'_', after:'ಗ', correct:'ಖ', options:['ಘ','ಠ','ಖ'], result:'ಖಗ' },
+          { before:'ಝ', blank:'_', after:'ಝಣ', correct:'ಣ', options:['ಣ','ಘ','ಫ'], result:'ಝಣಝಣ' },
+        ]
+      }
+    ]
+  },
+
+  // ===== SECTION 10: ಅಂ ಅಃ ಙ ಞ =====
+  {
+    id: 'ab10',
+    letters: ['ಅಂ','ಅಃ','ಙ','ಞ'],
+    parts: [
+      {
+        type: 'trace',
+        title: 'ಅಕ್ಷರಗಳನ್ನು ಗುಂಡಾಗಿ ಬರೆಯಿಸಿ',
+        instruction: '✏️ ಪ್ರತಿ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!',
+        letters: ['ಅಂ','ಅಃ','ಙ','ಞ']
+      },
+      {
+        type: 'wordread',
+        title: 'ಈ ಪದಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಉಚ್ಚರಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ಪದ ಒತ್ತಿ ಓದಿ!',
+        words: ['ಅಂಕ','ಅಂಗ','ಅಂಡ','ಅಂದ','ಅಂತ','ಅಂಚಲ','ಅಂಗಳ','ಅಂಜನ','ಅಂತಃಪುರ','ಕಂಬ','ಕಂಪನ','ಮಂಗ','ಕಂಠ']
+      },
+      {
+        type: 'sentences',
+        title: 'ಸರಳ ವಾಕ್ಯಗಳನ್ನು ಓದಿಸಿ',
+        instruction: '👆 ಪ್ರತಿ ವಾಕ್ಯ ಒತ್ತಿ ಓದಿ!',
+        sentences: [
+          'ಉರಗ',
+          'ಉರಗದ ಓಟ',
+          'ಉರಗದ ಓಟ ಸರಸರ',
+          'ನಯನಳ ಸರ',
+          'ನಯನಳ ಸರ ಫಳಫಳ',
+          'ಔಟದ ಆಟ',
+          'ಈಗ ಆಟದ ಸಮಯ',
+          'ಅಮರನ ಆಟ ಓಟದ ಆಟ',
+          'ಅಜ ಗಜ ಮಜ',
+          'ಔ ಅಜ ಈ ಗಜ',
+        ]
+      }
+    ]
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let completedTabs = new Set();
+let currentTab = 0;
+let sectionState = {}; // track progress per section
+
+// ============================================================
+// BUILD UI
+// ============================================================
+function buildTabs() {
+  const row = document.getElementById('tabRow');
+  const starsBar = document.getElementById('starsBar');
+  row.innerHTML = '';
+  starsBar.innerHTML = '';
+
+  tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : ' locked');
+    btn.id = 'tab-' + i;
+    const lockIcon = i === 0 ? '' : '<span class="lock-icon">🔒</span>';
+    btn.innerHTML = `${t.emoji} ${t.label} ${lockIcon}`;
+    btn.onclick = () => handleTabClick(i);
+    row.appendChild(btn);
+
+    const star = document.createElement('span');
+    star.className = 'star-item' + (completedTabs.has(i) ? ' earned' : '');
+    star.textContent = '⭐';
+    star.id = 'star-' + i;
+    starsBar.appendChild(star);
+  });
+}
+
+function handleTabClick(i) {
+  if (i === currentTab) return;
+  if (!completedTabs.has(i - 1) && i > 0) {
+    // locked
+    const btn = document.getElementById('tab-' + i);
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+    return;
+  }
+  showSection(i);
+}
+
+function showSection(i) {
+  currentTab = i;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + i).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach((b, bi) => {
+    b.classList.remove('active');
+    if (bi === i) b.classList.add('active');
+  });
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toastMsg');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function markTabDone(i) {
+  completedTabs.add(i);
+  const star = document.getElementById('star-' + i);
+  if (star) star.classList.add('earned');
+
+  const btn = document.getElementById('tab-' + (i + 1));
+  if (btn) {
+    btn.classList.remove('locked');
+    btn.innerHTML = btn.innerHTML.replace('<span class="lock-icon">🔒</span>', '');
+  }
+  const doneBtn = document.getElementById('tab-' + i);
+  if (doneBtn) doneBtn.classList.add('done');
+}
+
+// ============================================================
+// BUILD SECTIONS
+// ============================================================
+function buildSections() {
+  const container = document.getElementById('sections');
+  container.innerHTML = '';
+
+  sectionsData.forEach((sec, si) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (si === 0 ? ' active' : '');
+    div.id = 'section-' + si;
+
+    // Title banner
+    let lettersHTML = sec.letters.map(l => `<div class="big-letter">${l}</div>`).join('');
+    div.innerHTML = `
+      <div class="section-title">
+        ಅಕ್ಷರಾಭ್ಯಾಸ-${si+1}
+        <div class="letters-row">${lettersHTML}</div>
+      </div>
+    `;
+
+    sectionState[si] = { partsDone: 0, totalParts: sec.parts.length };
+
+    sec.parts.forEach((part, pi) => {
+      const partDiv = document.createElement('div');
+      partDiv.id = `sec${si}-part${pi}`;
+      partDiv.innerHTML = buildPart(part, si, pi);
+      div.appendChild(partDiv);
+    });
+
+    // Next tab button (appears when all parts done)
+    const nextDiv = document.createElement('div');
+    nextDiv.id = `sec${si}-complete`;
+    nextDiv.className = 'complete-card';
+    const isLast = si === sectionsData.length - 1;
+    nextDiv.innerHTML = `
+      <div class="trophy">🏆</div>
+      <h2>${isLast ? '🎉 ಅಭಿನಂದನೆಗಳು! ಎಲ್ಲ ಅಕ್ಷರಗಳು ಕಲಿತಿರಿ!' : '⭐ ಶಾಬಾಷ್! ಮುಂದಿನ ಹಂತಕ್ಕೆ ಹೋಗಿ!'}</h2>
+      <p>${isLast ? 'ನೀವು ಪಾಠ ೮ ಮುಗಿಸಿದ್ದೀರಿ! You finished Chapter 8!' : 'ಈ ಹಂತ ಮುಗಿಸಿದ್ದೀರಿ! Great job!'}</p>
+      ${!isLast ? `<button class="next-btn" style="margin-top:18px" onclick="goNextTab(${si})">➡️ ಮುಂದಿನ ಹಂತ →</button>` : ''}
+    `;
+    div.appendChild(nextDiv);
+
+    container.appendChild(div);
+  });
+}
+
+function buildPart(part, si, pi) {
+  let html = `<div class="instruction"><span class="icon">${part.instruction.split(' ')[0]}</span><span>${part.instruction.split(' ').slice(1).join(' ')}</span></div>`;
+  html += `<h3 style="font-size:15px;font-weight:700;color:#0a4d8a;margin-bottom:12px;">${part.title}</h3>`;
+
+  if (part.type === 'pictures') {
+    html += `<div class="pic-grid" id="pg-${si}-${pi}">`;
+    part.items.forEach((item, ii) => {
+      html += `
+        <div class="pic-card" id="pc-${si}-${pi}-${ii}" onclick="picPicked(${si},${pi},${ii})">
+          <span class="emoji-box">${item.emoji}</span>
+          <div class="kn-word">${item.word}</div>
+        </div>`;
+    });
+    html += `</div>`;
+    html += `<div class="score-bar"><div class="score-pill" id="pic-score-${si}-${pi}">👆 ಎಲ್ಲ ಚಿತ್ರ ಒತ್ತಿ ನೋಡಿ!</div></div>`;
+
+  } else if (part.type === 'trace') {
+    html += `<div class="trace-row" id="tr-${si}-${pi}">`;
+    part.letters.forEach((l, li) => {
+      html += `<div class="trace-letter model" id="tl-${si}-${pi}-${li}" onclick="traceLetter(${si},${pi},${li})">${l}</div>`;
+    });
+    // Dotted practice boxes
+    for (let r = 0; r < 3; r++) {
+      part.letters.forEach((l, li) => {
+        html += `<div class="trace-letter" id="tprac-${si}-${pi}-${r}-${li}" onclick="pracLetter(${si},${pi},${r},${li})">${l}</div>`;
+      });
+    }
+    html += `</div>`;
+    html += `<div class="score-bar"><div class="score-pill" id="trace-score-${si}-${pi}">✏️ ಎಲ್ಲ ಅಕ್ಷರ ಒತ್ತಿ ಅಭ್ಯಾಸ ಮಾಡಿ!</div></div>`;
+
+  } else if (part.type === 'wordread') {
+    html += `<div class="word-grid" id="wg-${si}-${pi}">`;
+    part.words.forEach((w, wi) => {
+      html += `<div class="word-tile" id="wt-${si}-${pi}-${wi}" onclick="readWord(${si},${pi},${wi})">${w}</div>`;
+    });
+    html += `</div>`;
+    html += `<div class="score-bar"><div class="score-pill" id="word-score-${si}-${pi}">📖 ಎಲ್ಲ ಪದ ಒತ್ತಿ ಓದಿ!</div></div>`;
+
+  } else if (part.type === 'fillin') {
+    html += `<div class="fill-group">`;
+    part.items.forEach((item, ii) => {
+      html += `
+        <div class="fill-row" id="fr-${si}-${pi}-${ii}">
+          <span class="part">${item.before}</span>
+          <span class="part" style="color:#aaa;font-size:22px">___</span>
+          <span class="part">${item.after}</span>
+          <div class="options-inline">`;
+      item.options.forEach(opt => {
+        html += `<button class="opt-btn" onclick="fillAnswer(${si},${pi},${ii},'${opt}')">${opt}</button>`;
+      });
+      html += `</div>
+          <span class="result-word">✅ ${item.result}</span>
+        </div>`;
+    });
+    html += `</div>`;
+    html += `<div class="score-bar"><div class="score-pill" id="fill-score-${si}-${pi}">🤔 ಎಲ್ಲ ಖಾಲಿ ತುಂಬಿಸಿ!</div></div>`;
+
+  } else if (part.type === 'sentences') {
+    html += `<div class="sentence-wrap">`;
+    part.sentences.forEach((sent, si2) => {
+      html += `
+        <div class="sentence-card" id="sc-${si}-${pi}-${si2}" onclick="readSentence(${si},${pi},${si2})">
+          <div class="num">${si2+1}</div>
+          <div class="sent-text">${sent}</div>
+          <div class="tick">✅</div>
+        </div>`;
+    });
+    html += `</div>`;
+    html += `<div class="score-bar"><div class="score-pill" id="sent-score-${si}-${pi}">📚 ಎಲ್ಲ ವಾಕ್ಯ ಒತ್ತಿ ಓದಿ!</div></div>`;
+  }
+
+  return html;
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+
+// Track per-part completion
+const partDone = {}; // key: "si-pi" => bool
+
+function checkPartDone(si, pi) {
+  const key = `${si}-${pi}`;
+  if (partDone[key]) return;
+  partDone[key] = true;
+  sectionState[si].partsDone++;
+  if (sectionState[si].partsDone >= sectionState[si].totalParts) {
+    const card = document.getElementById(`sec${si}-complete`);
+    if (card) card.classList.add('show');
+    markTabDone(si);
+  }
+}
+
+// PICTURES
+const picClicked = {};
+function picPicked(si, pi, ii) {
+  const key = `${si}-${pi}-${ii}`;
+  const card = document.getElementById(`pc-${si}-${pi}-${ii}`);
+  if (!card) return;
+  card.classList.add('selected');
+  picClicked[key] = true;
+  showToast(`🌟 ${sectionsData[si].parts[pi].items[ii].word}!`);
+
+  // check all clicked
+  const items = sectionsData[si].parts[pi].items;
+  const allDone = items.every((_, i) => picClicked[`${si}-${pi}-${i}`]);
+  if (allDone) {
+    document.getElementById(`pic-score-${si}-${pi}`).textContent = '✅ ಶಾಬಾಷ್!';
+    checkPartDone(si, pi);
+  } else {
+    const left = items.filter((_, i) => !picClicked[`${si}-${pi}-${i}`]).length;
+    document.getElementById(`pic-score-${si}-${pi}`).textContent = `${left} ಇನ್ನೂ ಬಾಕಿ...`;
+  }
+}
+
+// TRACE
+const traceClicked = {};
+function traceLetter(si, pi, li) {
+  showToast(`🌟 ${sectionsData[si].parts[pi].letters[li]}!`);
+}
+function pracLetter(si, pi, r, li) {
+  const el = document.getElementById(`tprac-${si}-${pi}-${r}-${li}`);
+  if (!el) return;
+  el.classList.add('traced');
+  const key = `${si}-${pi}-${r}-${li}`;
+  traceClicked[key] = true;
+  checkTraceAll(si, pi);
+}
+function checkTraceAll(si, pi) {
+  const letters = sectionsData[si].parts[pi].letters;
+  const allDone = [0,1,2].every(r => letters.every((_, li) => traceClicked[`${si}-${pi}-${r}-${li}`]));
+  if (allDone) {
+    document.getElementById(`trace-score-${si}-${pi}`).textContent = '✅ ಎಲ್ಲ ಅಕ್ಷರ ಅಭ್ಯಾಸ ಆಯ್ತು!';
+    checkPartDone(si, pi);
+  }
+}
+
+// WORD READ
+const wordClicked = {};
+function readWord(si, pi, wi) {
+  const el = document.getElementById(`wt-${si}-${pi}-${wi}`);
+  if (!el) return;
+  el.classList.add('played');
+  const key = `${si}-${pi}-${wi}`;
+  wordClicked[key] = true;
+  const words = sectionsData[si].parts[pi].words;
+  const allDone = words.every((_, i) => wordClicked[`${si}-${pi}-${i}`]);
+  if (allDone) {
+    document.getElementById(`word-score-${si}-${pi}`).textContent = '✅ ಎಲ್ಲ ಪದ ಓದಿದ್ದೀರಿ!';
+    checkPartDone(si, pi);
+  } else {
+    const left = words.filter((_, i) => !wordClicked[`${si}-${pi}-${i}`]).length;
+    document.getElementById(`word-score-${si}-${pi}`).textContent = `${left} ಪದ ಇನ್ನೂ ಬಾಕಿ`;
+  }
+}
+
+// FILL IN
+const fillDone = {};
+const fillCorrect = {};
+function fillAnswer(si, pi, ii, choice) {
+  const item = sectionsData[si].parts[pi].items[ii];
+  const row = document.getElementById(`fr-${si}-${pi}-${ii}`);
+  if (!row || fillDone[`${si}-${pi}-${ii}`]) return;
+  const btns = row.querySelectorAll('.opt-btn');
+  btns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === item.correct) b.classList.add('correct');
+    else if (b.textContent === choice && choice !== item.correct) b.classList.add('wrong');
+  });
+  if (choice === item.correct) {
+    fillDone[`${si}-${pi}-${ii}`] = true;
+    fillCorrect[`${si}-${pi}-${ii}`] = true;
+    row.classList.add('answered');
+    showToast(`✅ ಸರಿ! ${item.result}`);
+  } else {
+    showToast(`❌ ತಪ್ಪು! ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ`);
+    // re-enable after delay
+    setTimeout(() => {
+      btns.forEach(b => { b.disabled = false; b.classList.remove('wrong','correct'); });
+    }, 1000);
+    return;
+  }
+  const items = sectionsData[si].parts[pi].items;
+  const allDone = items.every((_, i) => fillDone[`${si}-${pi}-${i}`]);
+  if (allDone) {
+    document.getElementById(`fill-score-${si}-${pi}`).textContent = '✅ ಎಲ್ಲ ಖಾಲಿ ತುಂಬಿತು!';
+    checkPartDone(si, pi);
+  }
+}
+
+// SENTENCES
+const sentRead = {};
+function readSentence(si, pi, idx) {
+  const el = document.getElementById(`sc-${si}-${pi}-${idx}`);
+  if (!el) return;
+  el.classList.add('read');
+  const key = `${si}-${pi}-${idx}`;
+  sentRead[key] = true;
+  const sents = sectionsData[si].parts[pi].sentences;
+  const allDone = sents.every((_, i) => sentRead[`${si}-${pi}-${i}`]);
+  if (allDone) {
+    document.getElementById(`sent-score-${si}-${pi}`).textContent = '✅ ಎಲ್ಲ ವಾಕ್ಯ ಓದಿದ್ದೀರಿ!';
+    checkPartDone(si, pi);
+  } else {
+    const left = sents.filter((_, i) => !sentRead[`${si}-${pi}-${i}`]).length;
+    document.getElementById(`sent-score-${si}-${pi}`).textContent = `${left} ವಾಕ್ಯ ಇನ್ನೂ ಬಾಕಿ`;
+  }
+}
+
+// NEXT TAB
+function goNextTab(si) {
+  const next = si + 1;
+  if (next < tabs.length) showSection(next);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildTabs();
+buildSections();
+</script>
+</body>
+</html>

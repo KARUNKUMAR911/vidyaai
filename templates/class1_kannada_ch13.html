@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಅಬ್ಬಾಸ್ ಹಣ್ಣಿನ ಅಂಗಡಿ - ಪಾಠ ೧೩</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #0d3320;
+    --green-mid: #1a6b3a;
+    --green-light: #4caf73;
+    --green-pale: #e0ffee;
+    --yellow: #ffd93d;
+    --orange: #ff6b35;
+    --cream: #fffdf0;
+    --white: #ffffff;
+    --text: #1a1a1a;
+    --pink: #f72585;
+    --red: #e63946;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans Kannada', sans-serif;
+    background: linear-gradient(160deg, #0a2a14 0%, #0d3320 50%, #0f3d28 100%);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '🍎 🍌 🍊 🍇 🍐 🥭 🍈 🍎 🍌 🍊 🍇 🍐 🥭';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    font-size: 22px;
+    color: rgba(255,255,255,0.05);
+    letter-spacing: 28px;
+    line-height: 60px;
+    pointer-events: none;
+    z-index: 0;
+    word-break: break-all;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: linear-gradient(135deg, #061a0c 0%, #0d3320 100%);
+    color: white;
+    text-align: center;
+    padding: 24px 20px 16px;
+    position: relative;
+    border-bottom: 3px solid var(--yellow);
+    z-index: 1;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--green-deep);
+    font-weight: 800;
+    font-size: 12px;
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  header h1 {
+    font-family: 'Noto Serif Kannada', serif;
+    font-size: clamp(20px, 6vw, 36px);
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    line-height: 1.3;
+  }
+  header .icon { font-size: 36px; display: block; margin-bottom: 6px; }
+  header .sub { font-size: 13px; opacity: 0.85; margin-top: 4px; color: #aaffcc; }
+  header .kavi {
+    margin-top: 6px;
+    font-size: 12px;
+    background: rgba(255,255,255,0.12);
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 12px;
+    color: var(--yellow);
+  }
+
+  /* ===== PROGRESS ===== */
+  .progress-wrap {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    height: 8px;
+    margin: 12px 20px 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf73, #ffd93d);
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-label {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  /* ===== TAB BAR ===== */
+  .tab-bar {
+    display: flex;
+    background: #061a0c;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--yellow);
+    gap: 2px;
+    padding: 0 4px;
+    justify-content: center;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 10px 18px 8px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    position: relative;
+  }
+  .tab-btn .tab-icon { font-size: 18px; }
+  .tab-btn.active {
+    color: var(--yellow);
+    border-bottom-color: var(--yellow);
+    background: rgba(255,255,255,0.08);
+  }
+  .tab-btn.done { color: rgba(255,255,255,0.8); }
+  .tab-btn.done .tab-icon::after { content: ' ✅'; font-size: 10px; }
+  .tab-btn.locked {
+    color: rgba(255,255,255,0.2);
+    cursor: not-allowed;
+  }
+  .tab-btn.locked .tab-icon { filter: grayscale(1) opacity(0.35); }
+
+  .lock-icon {
+    position: absolute;
+    top: 5px; right: 5px;
+    font-size: 10px;
+    opacity: 0.5;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    15%      { transform: translateX(-6px) rotate(-2deg); }
+    30%      { transform: translateX(6px) rotate(2deg); }
+    45%      { transform: translateX(-5px); }
+    60%      { transform: translateX(5px); }
+    75%      { transform: translateX(-3px); }
+    90%      { transform: translateX(3px); }
+  }
+  .shake { animation: shake 0.5s ease; }
+
+  /* ===== LOCK TOAST ===== */
+  #lockToast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #e63946;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    text-align: center;
+    max-width: 90vw;
+  }
+  #lockToast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section { display: none; padding: 18px 16px 80px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .section.active { display: block; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .sec-title {
+    font-family: 'Noto Serif Kannada', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--green-mid);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ===== TIP BOX ===== */
+  .tip-box {
+    background: rgba(76,175,115,0.15);
+    border: 1.5px solid var(--green-light);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #aaffcc;
+    margin-bottom: 16px;
+  }
+
+  /* ===== TAB 1: INTRO / STORY ===== */
+  .story-scene {
+    background: linear-gradient(135deg, #0d2a18, #1a4a2a);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 2px solid var(--green-mid);
+  }
+  .scene-emoji {
+    text-align: center;
+    font-size: 64px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  }
+  .scene-text {
+    background: rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 16px;
+    color: #e0ffee;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  .scene-text strong { color: var(--yellow); }
+
+  /* dialogue */
+  .dialogue-box {
+    background: #061a0c;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1.5px solid #1a6b3a;
+  }
+  .dialogue-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .dialogue-row:last-child { margin-bottom: 0; }
+  .speaker-tag {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .sp-shankar { background: #1565c0; color: white; }
+  .sp-gauri   { background: #ad1457; color: white; }
+  .sp-abbas   { background: #2e7d32; color: white; }
+  .dialogue-text {
+    color: #e0ffee;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .dialogue-text em { color: var(--yellow); font-style: normal; font-weight: 700; }
+
+  /* intro proceed btn */
+  .proceed-btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #1a6b3a, #4caf73);
+    color: white;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 16px rgba(76,175,115,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .proceed-btn:active { transform: scale(0.97); }
+
+  /* ===== TAB 2: VOCAB ===== */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .vocab-card {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 16px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .vocab-card:active { transform: scale(0.96); }
+  .vocab-card.open { border-color: var(--yellow); background: #0d2a18; }
+  .vocab-emoji { font-size: 40px; margin-bottom: 8px; display: block; }
+  .vocab-word {
+    font-size: 17px;
+    font-weight: 800;
+    color: #e0ffee;
+    margin-bottom: 6px;
+  }
+  .vocab-meaning {
+    font-size: 13px;
+    color: var(--yellow);
+    font-weight: 600;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .vocab-card.open .vocab-meaning { max-height: 60px; }
+  .tap-hint { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+  .vocab-done-btn {
+    display: none;
+    width: 100%;
+    background: linear-gradient(135deg, #1a6b3a, #4caf73);
+    color: white;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 16px;
+    padding: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 16px rgba(76,175,115,0.3);
+  }
+  .vocab-done-btn.show { display: block; }
+
+  /* ===== TAB 3: FRUIT MATCH ===== */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .fruit-card {
+    background: #0d2a18;
+    border: 2.5px solid #1a6b3a;
+    border-radius: 16px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .fruit-card .fruit-emoji { font-size: 44px; display: block; margin-bottom: 8px; }
+  .fruit-card .fruit-name { font-size: 16px; font-weight: 800; color: #e0ffee; }
+  .fruit-card .fruit-price { font-size: 13px; color: #aaffcc; margin-top: 4px; }
+
+  /* MCQ style for fruit questions */
+  .fq-item {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .fq-q {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e0ffee;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .fq-num {
+    background: var(--green-mid);
+    color: var(--yellow);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .fq-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .fq-btn {
+    background: #061a0c;
+    border: 2px solid #1a6b3a;
+    border-radius: 12px;
+    color: #e0ffee;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .fq-btn:active { transform: scale(0.98); }
+  .fq-btn.correct { background: #1a5c2a; border-color: #4caf73; color: white; }
+  .fq-btn.wrong   { background: #5c1a1a; border-color: #e63946; }
+  .fq-btn.answered { opacity: 0.4; pointer-events: none; }
+  .fq-btn .opt-icon { font-size: 20px; flex-shrink: 0; }
+
+  /* ===== TAB 4: NUMBERS ===== */
+  .num-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .num-item {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .num-digit {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--yellow);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .num-word {
+    font-size: 18px;
+    color: #e0ffee;
+    font-weight: 700;
+  }
+
+  .num-quiz-item {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .num-quiz-q {
+    font-size: 17px;
+    font-weight: 700;
+    color: #e0ffee;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .num-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .num-btn {
+    background: #061a0c;
+    border: 2px solid #1a6b3a;
+    border-radius: 12px;
+    color: #e0ffee;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .num-btn.correct { background: #1a5c2a; border-color: #4caf73; color: white; }
+  .num-btn.wrong   { background: #5c1a1a; border-color: #e63946; }
+  .num-btn.answered { opacity: 0.4; pointer-events: none; }
+
+  /* ===== TAB 5: SHOPPING MATH ===== */
+  .shop-scene {
+    background: linear-gradient(135deg, #0d2a18, #1a4a2a);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    border: 2px solid var(--green-mid);
+  }
+  .shop-emoji { font-size: 56px; }
+  .shop-title { font-size: 18px; font-weight: 800; color: var(--yellow); margin-top: 8px; }
+
+  .price-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .price-card {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .price-emoji { font-size: 36px; display: block; }
+  .price-name { font-size: 14px; font-weight: 700; color: #aaffcc; margin: 6px 0 4px; }
+  .price-val { font-size: 22px; font-weight: 800; color: var(--yellow); }
+  .price-unit { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  .math-item {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .math-q {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e0ffee;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .math-q .highlight { color: var(--yellow); font-weight: 800; }
+  .math-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .math-btn {
+    background: #061a0c;
+    border: 2px solid #1a6b3a;
+    border-radius: 12px;
+    color: #e0ffee;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .math-btn.correct { background: #1a5c2a; border-color: #4caf73; color: white; }
+  .math-btn.wrong   { background: #5c1a1a; border-color: #e63946; }
+  .math-btn.answered { opacity: 0.4; pointer-events: none; }
+
+  /* ===== TAB 6: QA ===== */
+  .qa-item {
+    background: #0d2a18;
+    border: 2px solid #1a6b3a;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .qa-q {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e0ffee;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .qa-num {
+    background: var(--green-mid);
+    color: var(--yellow);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .qa-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .qa-btn {
+    background: #061a0c;
+    border: 2px solid #1a6b3a;
+    border-radius: 12px;
+    color: #e0ffee;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .qa-btn:active { transform: scale(0.98); }
+  .qa-btn.correct { background: #1a5c2a; border-color: #4caf73; color: white; }
+  .qa-btn.wrong   { background: #5c1a1a; border-color: #e63946; }
+  .qa-btn.answered { opacity: 0.4; pointer-events: none; }
+
+  /* ===== RESULT BANNER ===== */
+  .result-banner {
+    display: none;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 800;
+    padding: 14px 20px;
+    border-radius: 16px;
+    margin-top: 16px;
+  }
+  .result-banner.show { display: block; animation: fadeUp 0.3s ease; }
+  .result-banner.good { background: #1a5c2a; border: 2px solid #4caf73; color: #e0ffee; }
+
+  /* ===== COMPLETE CARD ===== */
+  .complete-card {
+    display: none;
+    background: linear-gradient(135deg, #0d2a18, #1a4a2a);
+    border: 3px solid var(--yellow);
+    border-radius: 24px;
+    padding: 28px 20px;
+    text-align: center;
+    margin-top: 20px;
+    animation: fadeUp 0.4s ease;
+  }
+  .complete-card.show { display: block; }
+  .complete-card .trophy { font-size: 60px; margin-bottom: 12px; }
+  .complete-card h2 { font-size: 20px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; }
+  .complete-card p { color: #aaffcc; font-size: 15px; }
+
+  @media (min-width: 768px) {
+    .section { padding: 32px 48px 80px; }
+    .vocab-grid { grid-template-columns: repeat(3, 1fr); }
+    .match-grid { grid-template-columns: repeat(3, 1fr); }
+    .fq-choices { flex-direction: row; flex-wrap: wrap; }
+    .fq-btn { flex: 1 1 calc(33% - 8px); }
+    .num-grid { grid-template-columns: repeat(5, 1fr); }
+    .price-cards { grid-template-columns: repeat(4, 1fr); }
+    .math-choices { flex-direction: row; }
+    .math-btn { flex: 1; }
+    .qa-choices { flex-direction: row; flex-wrap: wrap; }
+    .qa-btn { flex: 1 1 calc(33% - 8px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="badge">ಪ್ರಥಮ ತರಗತಿ · ಕನ್ನಡ</div>
+  <span class="icon">🛒</span>
+  <h1>ಅಬ್ಬಾಸ್ ಹಣ್ಣಿನ ಅಂಗಡಿ</h1>
+  <div class="sub">ಪಾಠ ೧೩ · ಗದ್ಯ (ಸಮಿತಿ ರಚನೆ)</div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill" style="width:14%"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">ಹಂತ ೧ / ೬</div>
+</header>
+
+<!-- ===== TAB BAR ===== -->
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-intro" onclick="tryTab('intro',this)">
+    <span class="tab-icon">📖</span>ಕಥೆ
+  </button>
+  <button class="tab-btn locked" id="tab-vocab" onclick="tryTab('vocab',this)">
+    <span class="tab-icon">🍎</span>ಪದಗಳು
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-fruits" onclick="tryTab('fruits',this)">
+    <span class="tab-icon">🛍️</span>ಅಂಗಡಿ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-numbers" onclick="tryTab('numbers',this)">
+    <span class="tab-icon">🔢</span>ಸಂಖ್ಯೆ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-math" onclick="tryTab('math',this)">
+    <span class="tab-icon">💰</span>ಬೆಲೆ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-qa" onclick="tryTab('qa',this)">
+    <span class="tab-icon">❓</span>ಪ್ರಶ್ನೆ
+    <span class="lock-icon">🔒</span>
+  </button>
+</div>
+
+<div id="lockToast"></div>
+
+<!-- ====================================================== -->
+<!-- TAB 1: INTRO / STORY                                   -->
+<!-- ====================================================== -->
+<div class="section active" id="intro">
+  <div class="sec-title"><span>📖</span> ಕಥೆ ಓದೋಣ</div>
+  <div class="tip-box">👇 ಕಥೆ ಓದಿ ನೋಡಿ — ಶಂಕರಣ್ಣ ಏನು ಕೊಳ್ಳಲು ಹೋದರು?</div>
+
+  <div class="story-scene">
+    <div class="scene-emoji">🏪🍎🍊🍌</div>
+    <div class="scene-text">
+      <strong>ಶಂಕರಣ್ಣ</strong> ತಮ್ಮ ಮಗಳು <strong>ಗೌರಿ</strong>ಯೊಂದಿಗೆ <strong>ಅಬ್ಬಾಸರ ಹಣ್ಣಿನ ಅಂಗಡಿ</strong>ಗೆ ಬರುತ್ತಾರೆ. 🛒
+    </div>
+  </div>
+
+  <div class="dialogue-box">
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-shankar">ಶಂಕರಣ್ಣ</span>
+      <span class="dialogue-text">ನಮಸ್ಕಾರ ಅಬ್ಬಾಸ್ ಅಣ್ಣ 🙏</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-gauri">ಗೌರಿ</span>
+      <span class="dialogue-text">ನಮಸ್ತೆ, ಅಬ್ಬಾಸ್ ಅಂಕಲ್ 👋</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-abbas">ಅಬ್ಬಾಸ್</span>
+      <span class="dialogue-text">ನಮಸ್ಕಾರ ಶಂಕರಣ್ಣ ಬನ್ನಿ, ಬಾ ಗೌರಿ, <em>ಏನು ಬೇಕು?</em></span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-shankar">ಶಂಕರಣ್ಣ</span>
+      <span class="dialogue-text">ನಮಗೆ <em>ಪರಂಗಿಹಣ್ಣು</em> ಬೇಕು 🍈</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-abbas">ಅಬ್ಬಾಸ್</span>
+      <span class="dialogue-text">ಪರಂಗಿ ಒಂದಕ್ಕೆ <em>ಇಪ್ಪತ್ತು ರೂಪಾಯಿ.</em> ನಿಮಗೆ ಎಷ್ಟು ಪರಂಗಿ ಹಣ್ಣುಗಳು ಬೇಕು?</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-shankar">ಶಂಕರಣ್ಣ</span>
+      <span class="dialogue-text">ಒಂದು ಪರಂಗಿಹಣ್ಣು ಸಾಕು. ಈ <em>ಮೂಸಂಬಿ</em> ಹಣ್ಣಿನ ಬೆಲೆ ಎಷ್ಟು?</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-abbas">ಅಬ್ಬಾಸ್</span>
+      <span class="dialogue-text">ಮೂಸಂಬಿ ಒಂದಕ್ಕೆ <em>ಐದು ರೂಪಾಯಿಗಳು.</em> ಎಷ್ಟು ಹಣ್ಣುಗಳನ್ನು ಕೊಡಲಿ?</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-shankar">ಶಂಕರಣ್ಣ</span>
+      <span class="dialogue-text">ಚೆನ್ನಾಗಿರುವ ಮೂರು ಮೂಸಂಬಿ ಹಣ್ಣುಗಳನ್ನು ಕೊಡಿ. ನಿಮ್ಮಲ್ಲಿ <em>ಸೀಬೆಹಣ್ಣು</em> ಇವೆಯೇ?</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-abbas">ಅಬ್ಬಾಸ್</span>
+      <span class="dialogue-text">ನೋಡಿ ಇಲ್ಲಿವೆ. ಸೀಬೆಹಣ್ಣು ಒಂದಕ್ಕೆ <em>ಮೂರು ರೂಪಾಯಿ</em> ಮಾತ್ರ. ಎಷ್ಟು ಹಣ್ಣುಗಳನ್ನು ಕೊಡಲಿ?</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-gauri">ಗೌರಿ</span>
+      <span class="dialogue-text">ಎರಡು ಸೀಬೆಹಣ್ಣು ಸಾಕು ಅಲ್ಲವೇ, ಅಪ್ಪಾ? 😊</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-shankar">ಶಂಕರಣ್ಣ</span>
+      <span class="dialogue-text">ಎರಡು ಸೀಬೆ ಹಣ್ಣು ಕೊಡಿ, ಇವು ಇಷ್ಟೇ ಸಾಕು. ಒಟ್ಟು <em>ಎಷ್ಟು ರೂಪಾಯಿ</em> ಆಯಿತು?</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-abbas">ಅಬ್ಬಾಸ್</span>
+      <span class="dialogue-text">ಎಲ್ಲ ಸೇರಿ <em>ನಲವತ್ತೊಂದು ರೂಪಾಯಿ</em> ಶಂಕರಣ್ಣ. 🙂</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-shankar">ಶಂಕರಣ್ಣ</span>
+      <span class="dialogue-text">ಇಗೋ, ಹಣವನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ. ಹಣ್ಣುಗಳು ಬೇಕಾದಾಗ ಬರುತ್ತೇವೆ. 👋</span>
+    </div>
+    <div class="dialogue-row">
+      <span class="speaker-tag sp-abbas">ಅಬ್ಬಾಸ್</span>
+      <span class="dialogue-text">ಸರಿ, ಹಣ್ಣುಗಳು ಬೇಕಾದಾಗ ಬರುತ್ತಿರಿ ಶಂಕರಣ್ಣ. 🙏</span>
+    </div>
+  </div>
+
+  <button class="proceed-btn" onclick="completeTab('intro','vocab')">
+    ✅ ಕಥೆ ಓದಿದೆ! ಮುಂದೆ ಹೋಗಿ →
+  </button>
+</div>
+
+<!-- ====================================================== -->
+<!-- TAB 2: VOCABULARY                                       -->
+<!-- ====================================================== -->
+<div class="section" id="vocab">
+  <div class="sec-title"><span>🍎</span> ಹೊಸ ಪದಗಳು</div>
+  <div class="tip-box">👆 ಒಂದೊಂದು ಕಾರ್ಡ್ ಮುಟ್ಟಿ ಅರ್ಥ ನೋಡಿ!</div>
+
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">🍈</span>
+      <div class="vocab-word">ಪರಂಗಿಹಣ್ಣು</div>
+      <div class="vocab-meaning">Papaya (ಪಪ್ಪಾಯಿ) 🍈</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">🍊</span>
+      <div class="vocab-word">ಮೂಸಂಬಿ</div>
+      <div class="vocab-meaning">Sweet Lime / Mosambi 🍊</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">🍐</span>
+      <div class="vocab-word">ಸೀಬೆಹಣ್ಣು</div>
+      <div class="vocab-meaning">Guava (ಗುಜ್ಜೆ ಹಣ್ಣು) 🍐</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">💰</span>
+      <div class="vocab-word">ಬೆಲೆ</div>
+      <div class="vocab-meaning">Price / Cost 💰</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">🏪</span>
+      <div class="vocab-word">ಅಂಗಡಿ</div>
+      <div class="vocab-meaning">Shop / Store 🏪</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">🙏</span>
+      <div class="vocab-word">ನಮಸ್ಕಾರ</div>
+      <div class="vocab-meaning">Greeting / Hello 🙏</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">👨‍👧</span>
+      <div class="vocab-word">ಮಗಳು</div>
+      <div class="vocab-meaning">Daughter 👧</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+    <div class="vocab-card" onclick="tapVocab(this)">
+      <span class="vocab-emoji">✨</span>
+      <div class="vocab-word">ಚೆನ್ನಾಗಿರುವ</div>
+      <div class="vocab-meaning">Good quality / Nice ✨</div>
+      <div class="tap-hint">ಮುಟ್ಟಿ ನೋಡಿ 👆</div>
+    </div>
+  </div>
+
+  <button class="vocab-done-btn" id="vocabDoneBtn" onclick="completeTab('vocab','fruits')">
+    ✅ ಎಲ್ಲ ಪದ ನೋಡಿದೆ! ಮುಂದೆ ಹೋಗಿ →
+  </button>
+</div>
+
+<!-- ====================================================== -->
+<!-- TAB 3: FRUIT SHOP QUIZ                                  -->
+<!-- ====================================================== -->
+<div class="section" id="fruits">
+  <div class="sec-title"><span>🛍️</span> ಅಂಗಡಿ ಆಟ</div>
+  <div class="tip-box">🛒 ಕಥೆ ನೆನಪಿಸಿ — <strong>ಸರಿಯಾದ ಉತ್ತರ ಆರಿಸಿ!</strong></div>
+
+  <!-- Q1 -->
+  <div class="fq-item">
+    <div class="fq-q">
+      <div class="fq-num">೧</div>
+      <div>ಶಂಕರಣ್ಣ ಮೊದಲು ಯಾವ ಹಣ್ಣು ಕೇಳಿದರು? 🤔</div>
+    </div>
+    <div class="fq-choices" id="fq1">
+      <button class="fq-btn" onclick="pickFQ(this,'fq1')"><span class="opt-icon">🍊</span> ಮೂಸಂಬಿ</button>
+      <button class="fq-btn" data-correct="true" onclick="pickFQ(this,'fq1')"><span class="opt-icon">🍈</span> ಪರಂಗಿಹಣ್ಣು</button>
+      <button class="fq-btn" onclick="pickFQ(this,'fq1')"><span class="opt-icon">🍐</span> ಸೀಬೆಹಣ್ಣು</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="fq-item">
+    <div class="fq-q">
+      <div class="fq-num">೨</div>
+      <div>ಗೌರಿ ಶಂಕರಣ್ಣನ ಏನು? 👨‍👧</div>
+    </div>
+    <div class="fq-choices" id="fq2">
+      <button class="fq-btn" onclick="pickFQ(this,'fq2')"><span class="opt-icon">👩</span> ಪತ್ನಿ</button>
+      <button class="fq-btn" onclick="pickFQ(this,'fq2')"><span class="opt-icon">👩</span> ಸೋದರಿ</button>
+      <button class="fq-btn" data-correct="true" onclick="pickFQ(this,'fq2')"><span class="opt-icon">👧</span> ಮಗಳು</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="fq-item">
+    <div class="fq-q">
+      <div class="fq-num">೩</div>
+      <div>ಶಂಕರಣ್ಣ ಎಷ್ಟು ಮೂಸಂಬಿ ಹಣ್ಣು ತೆಗೆದುಕೊಂಡರು? 🍊</div>
+    </div>
+    <div class="fq-choices" id="fq3">
+      <button class="fq-btn" onclick="pickFQ(this,'fq3')"><span class="opt-icon">2️⃣</span> ಎರಡು</button>
+      <button class="fq-btn" data-correct="true" onclick="pickFQ(this,'fq3')"><span class="opt-icon">3️⃣</span> ಮೂರು</button>
+      <button class="fq-btn" onclick="pickFQ(this,'fq3')"><span class="opt-icon">4️⃣</span> ನಾಲ್ಕು</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="fq-item">
+    <div class="fq-q">
+      <div class="fq-num">೪</div>
+      <div>ಸೀಬೆಹಣ್ಣು ಎಷ್ಟು ತೆಗೆದುಕೊಂಡರು? 🍐</div>
+    </div>
+    <div class="fq-choices" id="fq4">
+      <button class="fq-btn" data-correct="true" onclick="pickFQ(this,'fq4')"><span class="opt-icon">2️⃣</span> ಎರಡು</button>
+      <button class="fq-btn" onclick="pickFQ(this,'fq4')"><span class="opt-icon">3️⃣</span> ಮೂರು</button>
+      <button class="fq-btn" onclick="pickFQ(this,'fq4')"><span class="opt-icon">5️⃣</span> ಐದು</button>
+    </div>
+  </div>
+
+  <div class="result-banner" id="result-fruits"></div>
+</div>
+
+<!-- ====================================================== -->
+<!-- TAB 4: NUMBERS                                          -->
+<!-- ====================================================== -->
+<div class="section" id="numbers">
+  <div class="sec-title"><span>🔢</span> ಸಂಖ್ಯೆ ಕಲಿಯೋಣ</div>
+  <div class="tip-box">📚 ಕಥೆಯಲ್ಲಿ ಬಂದ ಸಂಖ್ಯೆಗಳು — ಹೆಸರು ಕಲಿಯಿರಿ!</div>
+
+  <div class="num-grid">
+    <div class="num-item"><span class="num-digit">೧</span><div class="num-word">ಒಂದು</div></div>
+    <div class="num-item"><span class="num-digit">೨</span><div class="num-word">ಎರಡು</div></div>
+    <div class="num-item"><span class="num-digit">೩</span><div class="num-word">ಮೂರು</div></div>
+    <div class="num-item"><span class="num-digit">೫</span><div class="num-word">ಐದು</div></div>
+    <div class="num-item"><span class="num-digit">೬</span><div class="num-word">ಆರು</div></div>
+    <div class="num-item"><span class="num-digit">೭</span><div class="num-word">ಏಳು</div></div>
+    <div class="num-item"><span class="num-digit">೮</span><div class="num-word">ಎಂಟು</div></div>
+    <div class="num-item"><span class="num-digit">೯</span><div class="num-word">ಒಂಬತ್ತು</div></div>
+    <div class="num-item"><span class="num-digit">೧೦</span><div class="num-word">ಹತ್ತು</div></div>
+    <div class="num-item"><span class="num-digit">೨೦</span><div class="num-word">ಇಪ್ಪತ್ತು</div></div>
+  </div>
+
+  <div class="sec-title" style="margin-top:20px"><span>🎮</span> ಸಂಖ್ಯೆ ಕ್ವಿಜ್</div>
+
+  <!-- NQ1 -->
+  <div class="num-quiz-item">
+    <div class="num-quiz-q"><div class="fq-num">೧</div> &nbsp; "ಮೂರು" ಎಂದರೆ ಯಾವ ಅಂಕಿ? 🔢</div>
+    <div class="num-choices" id="nq1">
+      <button class="num-btn" onclick="pickNum(this,'nq1')">2</button>
+      <button class="num-btn" data-correct="true" onclick="pickNum(this,'nq1')">3</button>
+      <button class="num-btn" onclick="pickNum(this,'nq1')">5</button>
+    </div>
+  </div>
+
+  <!-- NQ2 -->
+  <div class="num-quiz-item">
+    <div class="num-quiz-q"><div class="fq-num">೨</div> &nbsp; "20" ಎಂದರೆ ಕನ್ನಡದಲ್ಲಿ ಏನು? 💬</div>
+    <div class="num-choices" id="nq2">
+      <button class="num-btn" onclick="pickNum(this,'nq2')">ಹತ್ತು</button>
+      <button class="num-btn" onclick="pickNum(this,'nq2')">ಮೂವತ್ತು</button>
+      <button class="num-btn" data-correct="true" onclick="pickNum(this,'nq2')">ಇಪ್ಪತ್ತು</button>
+    </div>
+  </div>
+
+  <!-- NQ3 -->
+  <div class="num-quiz-item">
+    <div class="num-quiz-q"><div class="fq-num">೩</div> &nbsp; "ಐದು" ಎಂದರೆ ಯಾವ ಅಂಕಿ? 🔢</div>
+    <div class="num-choices" id="nq3">
+      <button class="num-btn" onclick="pickNum(this,'nq3')">3</button>
+      <button class="num-btn" data-correct="true" onclick="pickNum(this,'nq3')">5</button>
+      <button class="num-btn" onclick="pickNum(this,'nq3')">7</button>
+    </div>
+  </div>
+
+  <!-- NQ4 -->
+  <div class="num-quiz-item">
+    <div class="num-quiz-q"><div class="fq-num">೪</div> &nbsp; "ಎರಡು" ಎಂದರೆ ಯಾವ ಅಂಕಿ? 🔢</div>
+    <div class="num-choices" id="nq4">
+      <button class="num-btn" data-correct="true" onclick="pickNum(this,'nq4')">2</button>
+      <button class="num-btn" onclick="pickNum(this,'nq4')">4</button>
+      <button class="num-btn" onclick="pickNum(this,'nq4')">6</button>
+    </div>
+  </div>
+
+  <div class="result-banner" id="result-numbers"></div>
+</div>
+
+<!-- ====================================================== -->
+<!-- TAB 5: PRICE / SHOPPING MATH                           -->
+<!-- ====================================================== -->
+<div class="section" id="math">
+  <div class="sec-title"><span>💰</span> ಬೆಲೆ ಲೆಕ್ಕ</div>
+  <div class="tip-box">🧮 ಅಂಗಡಿಯ ಬೆಲೆ ನೋಡಿ ಉತ್ತರ ಹೇಳಿ!</div>
+
+  <!-- Price reference cards -->
+  <div class="price-cards">
+    <div class="price-card">
+      <span class="price-emoji">🍈</span>
+      <div class="price-name">ಪರಂಗಿಹಣ್ಣು</div>
+      <div class="price-val">₹೨೦</div>
+      <div class="price-unit">ಒಂದಕ್ಕೆ</div>
+    </div>
+    <div class="price-card">
+      <span class="price-emoji">🍊</span>
+      <div class="price-name">ಮೂಸಂಬಿ</div>
+      <div class="price-val">₹೫</div>
+      <div class="price-unit">ಒಂದಕ್ಕೆ</div>
+    </div>
+    <div class="price-card">
+      <span class="price-emoji">🍐</span>
+      <div class="price-name">ಸೀಬೆಹಣ್ಣು</div>
+      <div class="price-val">₹೩</div>
+      <div class="price-unit">ಒಂದಕ್ಕೆ</div>
+    </div>
+    <div class="price-card">
+      <span class="price-emoji">🛒</span>
+      <div class="price-name">ಒಟ್ಟು</div>
+      <div class="price-val">₹೪೧</div>
+      <div class="price-unit">ಎಲ್ಲ ಸೇರಿ</div>
+    </div>
+  </div>
+
+  <!-- Math Q1 -->
+  <div class="math-item">
+    <div class="math-q">
+      🍈 <span class="highlight">ಒಂದು</span> ಪರಂಗಿಹಣ್ಣಿನ ಬೆಲೆ ಎಷ್ಟು?
+    </div>
+    <div class="math-choices" id="mq1">
+      <button class="math-btn" onclick="pickMath(this,'mq1')">₹ ೧೦</button>
+      <button class="math-btn" data-correct="true" onclick="pickMath(this,'mq1')">₹ ೨೦</button>
+      <button class="math-btn" onclick="pickMath(this,'mq1')">₹ ೩೦</button>
+    </div>
+  </div>
+
+  <!-- Math Q2 -->
+  <div class="math-item">
+    <div class="math-q">
+      🍊 <span class="highlight">ಮೂರು</span> ಮೂಸಂಬಿ ಹಣ್ಣಿನ ಒಟ್ಟು ಬೆಲೆ ಎಷ್ಟು? (ಒಂದಕ್ಕೆ ₹೫)
+    </div>
+    <div class="math-choices" id="mq2">
+      <button class="math-btn" onclick="pickMath(this,'mq2')">₹ ೧೦</button>
+      <button class="math-btn" data-correct="true" onclick="pickMath(this,'mq2')">₹ ೧೫</button>
+      <button class="math-btn" onclick="pickMath(this,'mq2')">₹ ೨೦</button>
+    </div>
+  </div>
+
+  <!-- Math Q3 -->
+  <div class="math-item">
+    <div class="math-q">
+      🍐 <span class="highlight">ಎರಡು</span> ಸೀಬೆಹಣ್ಣಿನ ಒಟ್ಟು ಬೆಲೆ ಎಷ್ಟು? (ಒಂದಕ್ಕೆ ₹೩)
+    </div>
+    <div class="math-choices" id="mq3">
+      <button class="math-btn" onclick="pickMath(this,'mq3')">₹ ೩</button>
+      <button class="math-btn" data-correct="true" onclick="pickMath(this,'mq3')">₹ ೬</button>
+      <button class="math-btn" onclick="pickMath(this,'mq3')">₹ ೯</button>
+    </div>
+  </div>
+
+  <!-- Math Q4 -->
+  <div class="math-item">
+    <div class="math-q">
+      🛒 ಶಂಕರಣ್ಣ ಒಟ್ಟು ಎಷ್ಟು ರೂಪಾಯಿ ಕೊಟ್ಟರು?
+    </div>
+    <div class="math-choices" id="mq4">
+      <button class="math-btn" onclick="pickMath(this,'mq4')">₹ ೩೫</button>
+      <button class="math-btn" data-correct="true" onclick="pickMath(this,'mq4')">₹ ೪೧</button>
+      <button class="math-btn" onclick="pickMath(this,'mq4')">₹ ೫೦</button>
+    </div>
+  </div>
+
+  <div class="result-banner" id="result-math"></div>
+</div>
+
+<!-- ====================================================== -->
+<!-- TAB 6: Q&A                                             -->
+<!-- ====================================================== -->
+<div class="section" id="qa">
+  <div class="sec-title"><span>❓</span> ಪ್ರಶ್ನೆ–ಉತ್ತರ</div>
+  <div class="tip-box">🧠 ಕಥೆ ನೆನಪಿಸಿ — ಸರಿಯಾದ ಉತ್ತರ ಆರಿಸಿ!</div>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <div class="qa-num">೧</div>
+      <div>ಶಂಕರಣ್ಣನ ಮಗಳ ಹೆಸರೇನು? 👧</div>
+    </div>
+    <div class="qa-choices" id="qa1">
+      <button class="qa-btn" onclick="pickQA(this,'qa1')">ಲಕ್ಷ್ಮಿ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQA(this,'qa1')">ಗೌರಿ</button>
+      <button class="qa-btn" onclick="pickQA(this,'qa1')">ಸರಸ್ವತಿ</button>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <div class="qa-num">೨</div>
+      <div>ಒಂದು ಮೂಸಂಬಿ ಹಣ್ಣಿನ ಬೆಲೆ ಎಷ್ಟು? 🍊</div>
+    </div>
+    <div class="qa-choices" id="qa2">
+      <button class="qa-btn" onclick="pickQA(this,'qa2')">ಮೂರು ರೂಪಾಯಿ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQA(this,'qa2')">ಐದು ರೂಪಾಯಿ</button>
+      <button class="qa-btn" onclick="pickQA(this,'qa2')">ಹತ್ತು ರೂಪಾಯಿ</button>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <div class="qa-num">೩</div>
+      <div>ಯಾವ ಹಣ್ಣಿನ ಬೆಲೆ ಮೂರು ರೂಪಾಯಿ? 💰</div>
+    </div>
+    <div class="qa-choices" id="qa3">
+      <button class="qa-btn" onclick="pickQA(this,'qa3')">ಮೂಸಂಬಿ</button>
+      <button class="qa-btn" onclick="pickQA(this,'qa3')">ಪರಂಗಿಹಣ್ಣು</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQA(this,'qa3')">ಸೀಬೆಹಣ್ಣು</button>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <div class="qa-num">೪</div>
+      <div>ಶಂಕರಣ್ಣ ಯಾವ ರೀತಿಯ ಮೂಸಂಬಿ ಕೇಳಿದರು? ✨</div>
+    </div>
+    <div class="qa-choices" id="qa4">
+      <button class="qa-btn" onclick="pickQA(this,'qa4')">ದೊಡ್ಡ ಗಾತ್ರದ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQA(this,'qa4')">ಚೆನ್ನಾಗಿರುವ</button>
+      <button class="qa-btn" onclick="pickQA(this,'qa4')">ಸಿಹಿಯಾದ</button>
+    </div>
+  </div>
+
+  <div class="result-banner" id="result-qa"></div>
+
+  <div class="complete-card" id="completeCard">
+    <div class="trophy">🏆</div>
+    <h2>ಶಾಭಾಷ್! ಪಾಠ ೧೩ ಮುಗಿಸಿದಿರಿ! 🎉</h2>
+    <p>ಅಬ್ಬಾಸ್ ಹಣ್ಣಿನ ಅಂಗಡಿ ತುಂಬಾ ಚೆನ್ನಾಗಿ ಕಲಿತಿರಿ! 🍎🍊🍐</p>
+    <p style="margin-top:8px;font-size:13px;opacity:0.7">ಈಗ ನೀವು ಅಂಗಡಿಯಲ್ಲಿ ಹಣ್ಣು ಕೊಳ್ಳಲು ಗೊತ್ತಾಯಿತು! 🛒</p>
+  </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- JAVASCRIPT                                             -->
+<!-- ====================================================== -->
+<script>
+  const tabOrder = ['intro','vocab','fruits','numbers','math','qa'];
+  const unlockedTabs = new Set(['intro']);
+  let currentTab = 'intro';
+  const progress = { intro:14, vocab:28, fruits:43, numbers:57, math:71, qa:100 };
+  const stepLabel = { intro:'೧', vocab:'೨', fruits:'೩', numbers:'೪', math:'೫', qa:'೬' };
+
+  // vocab tracking
+  let vocabTapped = new Set();
+  const vocabTotal = 8;
+
+  // quiz counters
+  let fqCorrect = 0; const fqTotal = 4;
+  let nqCorrect = 0; const nqTotal = 4;
+  let mqCorrect = 0; const mqTotal = 4;
+  let qaCorrect = 0; const qaTotal = 4;
+
+  // ===== TAB NAV =====
+  function tryTab(id, btn) {
+    if (unlockedTabs.has(id)) {
+      showTab(id);
+    } else {
+      btn.classList.remove('shake');
+      void btn.offsetWidth;
+      btn.classList.add('shake');
+      btn.addEventListener('animationend', () => btn.classList.remove('shake'), {once:true});
+      showToast('🔒 ಮೊದಲಿನ ಹಂತ ಮುಗಿಸಿ!');
+    }
+  }
+
+  function showTab(id) {
+    tabOrder.forEach(t => {
+      document.getElementById(t).classList.remove('active');
+      document.getElementById('tab-'+t).classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+    document.getElementById('tab-'+id).classList.add('active');
+    document.getElementById('progressFill').style.width = progress[id] + '%';
+    document.getElementById('progressLabel').textContent = 'ಹಂತ ' + stepLabel[id] + ' / ೬';
+    currentTab = id;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function completeTab(current, next) {
+    const curBtn = document.getElementById('tab-'+current);
+    curBtn.classList.remove('active');
+    curBtn.classList.add('done');
+    const nextBtn = document.getElementById('tab-'+next);
+    nextBtn.classList.remove('locked');
+    const lockEl = nextBtn.querySelector('.lock-icon');
+    if (lockEl) lockEl.remove();
+    unlockedTabs.add(next);
+    showTab(next);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('lockToast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  function showResult(id) {
+    const el = document.getElementById(id);
+    el.textContent = '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಸರಿಯಾಗಿವೆ!';
+    el.className = 'result-banner show good';
+  }
+
+  // ===== VOCAB =====
+  function tapVocab(card) {
+    card.classList.toggle('open');
+    const word = card.querySelector('.vocab-word').textContent;
+    vocabTapped.add(word);
+    if (vocabTapped.size >= vocabTotal) {
+      document.getElementById('vocabDoneBtn').classList.add('show');
+    }
+  }
+
+  // ===== FRUIT SHOP QUIZ =====
+  function pickFQ(btn, groupId) {
+    const group = document.getElementById(groupId);
+    if (group.dataset.answered) return;
+    const isCorrect = btn.dataset.correct === 'true';
+    if (isCorrect) {
+      btn.classList.add('correct');
+      group.querySelectorAll('.fq-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+      group.dataset.answered = 'true';
+      fqCorrect++;
+      if (fqCorrect === fqTotal) {
+        setTimeout(() => {
+          showResult('result-fruits');
+          setTimeout(() => completeTab('fruits','numbers'), 1200);
+        }, 300);
+      }
+    } else {
+      btn.classList.add('wrong');
+      setTimeout(() => btn.classList.remove('wrong'), 700);
+    }
+  }
+
+  // ===== NUMBERS QUIZ =====
+  function pickNum(btn, groupId) {
+    const group = document.getElementById(groupId);
+    if (group.dataset.answered) return;
+    const isCorrect = btn.dataset.correct === 'true';
+    if (isCorrect) {
+      btn.classList.add('correct');
+      group.querySelectorAll('.num-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+      group.dataset.answered = 'true';
+      nqCorrect++;
+      if (nqCorrect === nqTotal) {
+        setTimeout(() => {
+          showResult('result-numbers');
+          setTimeout(() => completeTab('numbers','math'), 1200);
+        }, 300);
+      }
+    } else {
+      btn.classList.add('wrong');
+      setTimeout(() => btn.classList.remove('wrong'), 700);
+    }
+  }
+
+  // ===== MATH QUIZ =====
+  function pickMath(btn, groupId) {
+    const group = document.getElementById(groupId);
+    if (group.dataset.answered) return;
+    const isCorrect = btn.dataset.correct === 'true';
+    if (isCorrect) {
+      btn.classList.add('correct');
+      group.querySelectorAll('.math-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+      group.dataset.answered = 'true';
+      mqCorrect++;
+      if (mqCorrect === mqTotal) {
+        setTimeout(() => {
+          showResult('result-math');
+          setTimeout(() => completeTab('math','qa'), 1200);
+        }, 300);
+      }
+    } else {
+      btn.classList.add('wrong');
+      setTimeout(() => btn.classList.remove('wrong'), 700);
+    }
+  }
+
+  // ===== QA =====
+  function pickQA(btn, groupId) {
+    const group = document.getElementById(groupId);
+    if (group.dataset.answered) return;
+    const isCorrect = btn.dataset.correct === 'true';
+    if (isCorrect) {
+      btn.classList.add('correct');
+      group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+      group.dataset.answered = 'true';
+      qaCorrect++;
+      if (qaCorrect === qaTotal) {
+        setTimeout(() => {
+          showResult('result-qa');
+          document.getElementById('completeCard').classList.add('show');
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('tab-qa').classList.add('done');
+        }, 400);
+      }
+    } else {
+      btn.classList.add('wrong');
+      setTimeout(() => btn.classList.remove('wrong'), 700);
+    }
+  }
+</script>
+</body>
+</html>
