@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ಕನ್ನಡ ಪದ್ಯಗಳು - UKG Kannada</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+
+  :root { --bg: #0a1628; --topbar: #0d1f3c; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo Tamma 2', cursive;
+    background: var(--bg); min-height: 100vh; color: #f0f4ff;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(77,150,255,0.13) 0%, transparent 50%),
+      radial-gradient(circle at 90% 70%, rgba(253,203,110,0.1) 0%, transparent 50%);
+  }
+
+  .topbar {
+    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .topbar-title {
+    font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(90deg, #fdcb6e, #e17055);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sound-btn {
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
+    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .sound-btn:hover { background: rgba(255,255,255,0.22); }
+  .sound-btn.off { opacity: 0.5; }
+
+  .hero { text-align: center; padding: 26px 20px 12px; }
+  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: notes 2s ease-in-out infinite; }
+  @keyframes notes { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-10px) rotate(5deg)} }
+  .hero h1 {
+    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
+    background: linear-gradient(135deg, #fdcb6e, #e17055, #ff6fd8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p { font-size: 0.92rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  .tts-notice {
+    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
+    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
+    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
+    max-width: 900px; margin: 12px auto 16px;
+  }
+
+  /* RHYME LIST */
+  .rhymes-list {
+    display: flex; flex-direction: column; gap: 20px;
+    padding: 4px 24px 52px; max-width: 900px; margin: 0 auto;
+  }
+
+  .rhyme-card {
+    border-radius: 24px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.45s both;
+  }
+  @keyframes popIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .rhyme-card:nth-child(1){animation-delay:0.05s} .rhyme-card:nth-child(2){animation-delay:0.12s}
+  .rhyme-card:nth-child(3){animation-delay:0.19s} .rhyme-card:nth-child(4){animation-delay:0.26s}
+  .rhyme-card:nth-child(5){animation-delay:0.33s} .rhyme-card:nth-child(6){animation-delay:0.40s}
+  .rhyme-card:hover { transform: translateY(-5px); box-shadow: 0 18px 48px rgba(0,0,0,0.55); }
+
+  .rhyme-header {
+    display: flex; align-items: center; gap: 16px; padding: 18px 20px 16px;
+  }
+  .rhyme-emoji { font-size: 2.8rem; flex-shrink: 0; }
+  .rhyme-meta { flex: 1; }
+  .rhyme-title { font-size: 1.25rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .rhyme-subtitle { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 2px; font-style: italic; }
+  .rhyme-lines-count { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 3px; }
+
+  .play-btn {
+    background: rgba(255,255,255,0.18); border: none; border-radius: 50%;
+    width: 48px; height: 48px; font-size: 1.4rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s; color: white;
+  }
+  .play-btn:hover { background: rgba(255,255,255,0.32); transform: scale(1.1); }
+  .play-btn.playing-btn { background: rgba(255,255,255,0.35); animation: spin-play 1s linear infinite; }
+  @keyframes spin-play { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+  /* line-by-line karaoke area */
+  .karaoke-wrap {
+    background: rgba(0,0,0,0.3); padding: 0 20px 0;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.3s;
+  }
+  .karaoke-wrap.open { max-height: 600px; padding: 16px 20px 20px; }
+
+  .lyric-line {
+    font-size: 1.05rem; font-weight: 600; color: rgba(255,255,255,0.55);
+    line-height: 2; letter-spacing: 0.3px; cursor: pointer;
+    border-radius: 8px; padding: 2px 8px; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lyric-line:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
+  .lyric-line.active-line {
+    color: #fdcb6e; font-weight: 800;
+    background: rgba(253,203,110,0.12);
+    border-left: 3px solid #fdcb6e; padding-left: 10px;
+  }
+  .lyric-num { font-size: 0.65rem; color: rgba(255,255,255,0.2); min-width: 16px; }
+
+  .toggle-btn {
+    background: none; border: none; color: rgba(255,255,255,0.4);
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.82rem;
+    cursor: pointer; padding: 8px 20px 14px; display: flex;
+    align-items: center; gap: 5px; transition: color 0.2s;
+  }
+  .toggle-btn:hover { color: rgba(255,255,255,0.75); }
+
+  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+
+  @media(max-width:480px){
+    .rhymes-list { padding: 4px 14px 40px; gap: 16px; }
+    .rhyme-title { font-size: 1.05rem; }
+    .rhyme-emoji { font-size: 2.2rem; }
+    .lyric-line { font-size: 0.95rem; }
+    .hero h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/class/ukg/kannada" class="back-btn">←</a>
+    <span class="topbar-title">ಕನ್ನಡ ಪದ್ಯಗಳು</span>
+  </div>
+  <div class="topbar-right">
+    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+      <span id="soundIcon">🔊</span>
+      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">🎵</div>
+  <h1>ಕನ್ನಡ ಪದ್ಯಗಳು</h1>
+  <p>ಜೊತೆಗೆ ಹಾಡಿ! • ▶ ಒತ್ತಿ ಕೇಳಿ, ಸಾಲು ಒತ್ತಿ ಪುನರಾವರ್ತಿಸಿ!</p>
+</div>
+
+<div class="tts-notice">
+  <span>📱</span>
+  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+</div>
+
+<div class="rhymes-list" id="rhymesList"></div>
+<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+
+<script>
+const rhymes = [
+  {
+    title: 'ರಾಷ್ಟ್ರಗೀತೆ - ಜನ ಗಣ ಮನ',
+    subtitle: 'National Anthem – Jana Gana Mana',
+    emoji: '🇮🇳',
+    bg: 'linear-gradient(135deg,#0d3b8e,#1a5276)',
+    lines: [
+      'ಜನ ಗಣ ಮನ ಅಧಿನಾಯಕ ಜಯ ಹೇ',
+      'ಭಾರತ ಭಾಗ್ಯ ವಿಧಾತಾ',
+      'ಪಂಜಾಬ ಸಿಂಧು ಗುಜರಾತ ಮರಾಠಾ',
+      'ದ್ರಾವಿಡ ಉತ್ಕಲ ವಂಗ',
+      'ವಿಂಧ್ಯ ಹಿಮಾಚಲ ಯಮುನಾ ಗಂಗಾ',
+      'ಉಚ್ಛಲ ಜಲಧಿ ತರಂಗ',
+      'ತವ ಶುಭ ನಾಮೇ ಜಾಗೇ',
+      'ತವ ಶುಭ ಆಶಿಷ ಮಾಗೇ',
+      'ಗಾಹೇ ತವ ಜಯ ಗಾಥಾ',
+      'ಜನ ಗಣ ಮಂಗಲದಾಯಕ ಜಯ ಹೇ',
+      'ಭಾರತ ಭಾಗ್ಯ ವಿಧಾತಾ',
+      'ಜಯ ಹೇ! ಜಯ ಹೇ! ಜಯ ಹೇ!',
+      'ಜಯ ಜಯ ಜಯ ಜಯ ಹೇ!',
+    ]
+  },
+  {
+    title: 'ಚಂದಮಾಮ',
+    subtitle: 'Chandamama – Moon Rhyme',
+    emoji: '🌙',
+    bg: 'linear-gradient(135deg,#1a1a4e,#2d2d8e)',
+    lines: [
+      'ಚಂದಮಾಮ ಬಾ ಬಾ',
+      'ಜೋಳದ ರೊಟ್ಟಿ ತಾ ತಾ',
+      'ತುಪ್ಪದಲ್ಲಿ ಅದ್ದಿ ತಾ',
+      'ಬಾಯಲ್ಲಿ ತುರುಕಿಸು',
+      'ಮಳೆಯಲ್ಲಿ ನೆಂದರೆ',
+      'ಛತ್ರಿ ಹಿಡಿದು ಬಾ',
+      'ಚಂದಮಾಮ ಬಾ ಬಾ',
+    ]
+  },
+  {
+    title: 'ಚಿಟ್ಟೆ ಚಿಟ್ಟೆ',
+    subtitle: 'Chiṭṭe – Butterfly Rhyme',
+    emoji: '🦋',
+    bg: 'linear-gradient(135deg,#3a1a5e,#5a2a8e)',
+    lines: [
+      'ಚಿಟ್ಟೆ ಚಿಟ್ಟೆ ಬಣ್ಣದ ಚಿಟ್ಟೆ',
+      'ಹೂವಿನ ಮೇಲೆ ಕುಳಿತ ಚಿಟ್ಟೆ',
+      'ಹಾರಿ ಹಾರಿ ಬರುವ ಚಿಟ್ಟೆ',
+      'ಮಕ್ಕಳ ಮನ ಗೆಲ್ಲುವ ಚಿಟ್ಟೆ',
+      'ಕೆಂಪು ನೀಲಿ ಹಳದಿ ಬಣ್ಣ',
+      'ಎಷ್ಟು ಸುಂದರ ಚಿಟ್ಟೆ ತಂದೆ',
+    ]
+  },
+  {
+    title: 'ನಮ್ಮ ಭಾರತ',
+    subtitle: 'Namma Bhārata – Our India',
+    emoji: '🗺️',
+    bg: 'linear-gradient(135deg,#1a4a1a,#2e6e2e)',
+    lines: [
+      'ಭಾರತ ನಮ್ಮ ದೇಶ',
+      'ಸುಂದರ ನಮ್ಮ ದೇಶ',
+      'ಹಸಿರು ಗಿರಿ ಕಾಡು',
+      'ನದಿ ಕೆರೆ ಬಾವಿ',
+      'ಎಲ್ಲರೂ ಬಾಳ್ವೆ ಮಾಡುವ ದೇಶ',
+      'ಭಾರತ ನಮ್ಮ ದೇಶ',
+    ]
+  },
+  {
+    title: 'ಮರದ ಮೇಲೆ',
+    subtitle: 'Marada Mēle – On the Tree',
+    emoji: '🌳',
+    bg: 'linear-gradient(135deg,#1e3a2a,#2e5a3e)',
+    lines: [
+      'ಮರದ ಮೇಲೆ ಕುಳಿತ ಗಿಳಿ',
+      'ಚಿಲಿಪಿಲಿ ಹಾಡುತ ಇತ್ತು',
+      'ಮಕ್ಕಳೆಲ್ಲ ಕೇಳುತ ನಿಂತರು',
+      'ಹಾಡು ನಿಲ್ಲಿಸಬೇಡ ಎಂದರು',
+      'ಗಿಳಿಯು ಮತ್ತೆ ಹಾಡಿತು',
+      'ಮಕ್ಕಳೆಲ್ಲ ನಕ್ಕರು',
+    ]
+  },
+  {
+    title: 'ನಾವು ಮಕ್ಕಳು',
+    subtitle: 'Nāvu Makkaḷu – We are Children',
+    emoji: '👶',
+    bg: 'linear-gradient(135deg,#2a1a3e,#4a2a5e)',
+    lines: [
+      'ನಾವು ಮಕ್ಕಳು ಚಿಣ್ಣರು',
+      'ಓದಿ ಬರೆದು ಕಲಿಯುವೆವು',
+      'ಆಟ ಆಡಿ ನಲಿಯುವೆವು',
+      'ದೊಡ್ಡವರಿಗೆ ನಮಸ್ಕರಿಸುವೆವು',
+      'ಭಾರತ ತಾಯಿ ಮಕ್ಕಳು ನಾವು',
+      'ದೇಶ ಕಟ್ಟುವ ಶಕ್ತಿ ನಾವು',
+    ]
+  },
+];
+
+let soundOn = true;
+let currentPlayBtn = null;
+let currentLineEls = [];
+let lineTimer = null;
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
+  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+  if (!soundOn && window.speechSynthesis) { window.speechSynthesis.cancel(); stopAllPlaying(); }
+}
+
+function getKnVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  return voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn')) || null;
+}
+
+function stopAllPlaying() {
+  if (currentPlayBtn) { currentPlayBtn.textContent = '▶'; currentPlayBtn.classList.remove('playing-btn'); currentPlayBtn = null; }
+  currentLineEls.forEach(el => el.classList.remove('active-line'));
+  currentLineEls = [];
+  if (lineTimer) { clearTimeout(lineTimer); lineTimer = null; }
+}
+
+function speakLine(text, lineEl) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const kn = getKnVoice();
+  if (!kn) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kn-IN'; u.rate = 0.78; u.pitch = 1.15; u.voice = kn;
+  currentLineEls.forEach(el => el.classList.remove('active-line'));
+  if (lineEl) lineEl.classList.add('active-line');
+  window.speechSynthesis.speak(u);
+}
+
+function speakFullRhyme(lines, btn, lineEls) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const kn = getKnVoice();
+  if (!kn) return;
+
+  stopAllPlaying();
+  btn.textContent = '⏹'; btn.classList.add('playing-btn');
+  currentPlayBtn = btn; currentLineEls = lineEls;
+
+  let i = 0;
+  function speakNext() {
+    if (i >= lines.length) { stopAllPlaying(); return; }
+    lineEls.forEach(el => el.classList.remove('active-line'));
+    lineEls[i].classList.add('active-line');
+    lineEls[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const u = new SpeechSynthesisUtterance(lines[i]);
+    u.lang = 'kn-IN'; u.rate = 0.78; u.pitch = 1.15; u.voice = kn;
+    u.onend = () => { i++; lineTimer = setTimeout(speakNext, 300); };
+    window.speechSynthesis.speak(u);
+  }
+  speakNext();
+}
+
+function buildRhymes() {
+  const list = document.getElementById('rhymesList');
+  rhymes.forEach((r, ri) => {
+    const card = document.createElement('div');
+    card.className = 'rhyme-card';
+    const karaokeId = `kk-${ri}`;
+    const lyricsHTML = r.lines.map((l, li) =>
+      `<div class="lyric-line" id="line-${ri}-${li}" data-ri="${ri}" data-li="${li}">
+        <span class="lyric-num">${li+1}</span>${l}
+       </div>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="rhyme-header" style="background:${r.bg};">
+        <div class="rhyme-emoji">${r.emoji}</div>
+        <div class="rhyme-meta">
+          <div class="rhyme-title">${r.title}</div>
+          <div class="rhyme-subtitle">${r.subtitle}</div>
+          <div class="rhyme-lines-count">📝 ${r.lines.length} ಸಾಲುಗಳು</div>
+        </div>
+        <button class="play-btn" id="playbtn-${ri}" onclick="handlePlay(event,${ri})">▶</button>
+      </div>
+      <button class="toggle-btn" onclick="toggleKaraoke('${karaokeId}',this)">📖 ಸಾಲುಗಳು ತೋರಿಸು ▾</button>
+      <div class="karaoke-wrap" id="${karaokeId}">${lyricsHTML}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  // attach line-click handlers
+  rhymes.forEach((r, ri) => {
+    r.lines.forEach((l, li) => {
+      const el = document.getElementById(`line-${ri}-${li}`);
+      if (el) el.addEventListener('click', () => speakLine(l, el));
+    });
+  });
+}
+
+function handlePlay(e, ri) {
+  e.stopPropagation();
+  const btn = document.getElementById(`playbtn-${ri}`);
+  if (btn.classList.contains('playing-btn')) { window.speechSynthesis.cancel(); stopAllPlaying(); return; }
+  // open karaoke if closed
+  const kk = document.getElementById(`kk-${ri}`);
+  if (!kk.classList.contains('open')) {
+    kk.classList.add('open');
+    const tb = kk.previousElementSibling;
+    if (tb) tb.textContent = '📖 ಸಾಲುಗಳು ಮುಚ್ಚು ▴';
+  }
+  const lineEls = rhymes[ri].lines.map((_, li) => document.getElementById(`line-${ri}-${li}`));
+  speakFullRhyme(rhymes[ri].lines, btn, lineEls);
+}
+
+function toggleKaraoke(id, btn) {
+  const el = document.getElementById(id);
+  const open = el.classList.toggle('open');
+  btn.textContent = open ? '📖 ಸಾಲುಗಳು ಮುಚ್ಚು ▴' : '📖 ಸಾಲುಗಳು ತೋರಿಸು ▾';
+}
+
+if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
+buildRhymes();
+</script>
+</body>
+</html>

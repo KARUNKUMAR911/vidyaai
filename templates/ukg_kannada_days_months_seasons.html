@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ವಾರ ತಿಂಗಳು ಋತು - UKG Kannada</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+
+  :root { --bg: #0a1a0a; --topbar: #0d200d; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo Tamma 2', cursive;
+    background: var(--bg); min-height: 100vh; color: #f0fff0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(107,203,119,0.13) 0%, transparent 50%),
+      radial-gradient(circle at 85% 70%, rgba(77,150,255,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 50% 95%, rgba(253,203,110,0.08) 0%, transparent 40%);
+  }
+
+  .topbar {
+    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .topbar-title {
+    font-size: 1.15rem; font-weight: 800;
+    background: linear-gradient(90deg, #6bcb77, #4d96ff, #fdcb6e);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sound-btn {
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
+    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .sound-btn:hover { background: rgba(255,255,255,0.22); }
+  .sound-btn.off { opacity: 0.5; }
+
+  .hero { text-align: center; padding: 26px 20px 10px; }
+  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: flip 3s ease-in-out infinite; }
+  @keyframes flip { 0%,100%{transform:rotateY(0)} 50%{transform:rotateY(180deg)} }
+  .hero h1 {
+    font-size: 2rem; font-weight: 800; margin-top: 8px;
+    background: linear-gradient(135deg, #6bcb77, #4d96ff, #fdcb6e);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    padding: 12px 20px 4px; max-width: 1000px; margin: 0 auto;
+  }
+  .tab {
+    padding: 9px 18px; border-radius: 14px;
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
+  }
+  .tab.active-days    { background: linear-gradient(135deg,#6bcb77,#00b894); color:white; box-shadow:0 4px 16px rgba(107,203,119,0.4); }
+  .tab.active-months  { background: linear-gradient(135deg,#4d96ff,#0984e3); color:white; box-shadow:0 4px 16px rgba(77,150,255,0.4); }
+  .tab.active-seasons { background: linear-gradient(135deg,#fdcb6e,#e17055); color:white; box-shadow:0 4px 16px rgba(253,203,110,0.4); }
+  .tab:hover:not([class*='active']) { background: rgba(255,255,255,0.13); color:white; }
+
+  .tts-notice {
+    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
+    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
+    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
+    max-width: 1000px; margin: 12px auto 4px;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+    gap: 14px; padding: 16px 24px 52px; max-width: 1000px; margin: 0 auto;
+  }
+
+  .card {
+    border-radius: 20px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.4s both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
+  .card:nth-child(1){animation-delay:0.02s} .card:nth-child(2){animation-delay:0.05s}
+  .card:nth-child(3){animation-delay:0.08s} .card:nth-child(4){animation-delay:0.11s}
+  .card:nth-child(5){animation-delay:0.14s} .card:nth-child(6){animation-delay:0.17s}
+  .card:nth-child(7){animation-delay:0.20s} .card:nth-child(8){animation-delay:0.23s}
+  .card:nth-child(9){animation-delay:0.26s} .card:nth-child(10){animation-delay:0.29s}
+  .card:nth-child(11){animation-delay:0.32s} .card:nth-child(12){animation-delay:0.35s}
+
+  .card:hover { transform: translateY(-7px) scale(1.05); box-shadow: 0 18px 44px rgba(0,0,0,0.55); }
+  .card:active { transform: scale(0.94); }
+  .card.playing { animation: dpulse 0.5s ease !important; }
+  @keyframes dpulse { 0%{transform:scale(1)} 40%{transform:scale(1.13)} 100%{transform:scale(1)} }
+
+  .item-face {
+    height: 96px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px; position: relative;
+  }
+  .item-num  { font-size: 1.8rem; font-weight: 800; color: rgba(255,255,255,0.9); line-height: 1; }
+  .item-emoji{ font-size: 1.4rem; }
+
+  .card-info {
+    padding: 9px 8px 13px; text-align: center;
+    background: rgba(0,0,0,0.38); backdrop-filter: blur(4px);
+  }
+  .card-kn { font-size: 0.98rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .card-en { font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.4); margin-top: 2px; font-style: italic; }
+  .card-extra { font-size: 0.65rem; color: rgba(255,255,255,0.28); margin-top: 3px; }
+
+  /* SEASONS special layout */
+  .seasons-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px; padding: 16px 24px 52px; max-width: 1000px; margin: 0 auto;
+  }
+  .season-card {
+    border-radius: 22px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.4s both;
+  }
+  .season-card:nth-child(1){animation-delay:0.04s}
+  .season-card:nth-child(2){animation-delay:0.10s}
+  .season-card:nth-child(3){animation-delay:0.16s}
+  .season-card:nth-child(4){animation-delay:0.22s}
+  .season-card:nth-child(5){animation-delay:0.28s}
+  .season-card:nth-child(6){animation-delay:0.34s}
+
+  .season-card:hover { transform: translateY(-7px) scale(1.03); box-shadow: 0 18px 44px rgba(0,0,0,0.55); }
+  .season-card:active { transform: scale(0.95); }
+  .season-card.playing { animation: dpulse 0.5s ease !important; }
+
+  .season-header {
+    padding: 20px 18px 16px; display: flex; align-items: center; gap: 14px;
+  }
+  .season-emoji-big { font-size: 3rem; flex-shrink: 0; }
+  .season-meta { flex: 1; }
+  .season-kn   { font-size: 1.3rem; font-weight: 800; color: #fff; }
+  .season-en   { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-style: italic; }
+  .season-months{ font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 3px; }
+
+  .season-features {
+    background: rgba(0,0,0,0.3); padding: 12px 18px 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .season-feat-item {
+    font-size: 0.78rem; color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+  }
+
+  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+
+  @media(max-width:480px){
+    .grid { grid-template-columns: repeat(3,1fr); gap: 10px; padding: 12px 12px 32px; }
+    .item-face { height: 76px; } .item-num { font-size: 1.4rem; }
+    .card-kn { font-size: 0.85rem; }
+    .hero h1 { font-size: 1.7rem; }
+    .seasons-grid { grid-template-columns: 1fr; padding: 12px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/class/ukg/kannada" class="back-btn">←</a>
+    <span class="topbar-title">ವಾರ ತಿಂಗಳು ಋತು</span>
+  </div>
+  <div class="topbar-right">
+    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+      <span id="soundIcon">🔊</span>
+      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">📅</div>
+  <h1>ವಾರ ತಿಂಗಳು ಋತು</h1>
+  <p>ಕ್ಯಾಲೆಂಡರ್ ಮತ್ತು ಋತುಗಳು • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active-days"   id="tab-days"    onclick="switchTab('days')">📆 ವಾರದ ದಿನಗಳು</button>
+  <button class="tab"               id="tab-months"  onclick="switchTab('months')">🗓️ ತಿಂಗಳುಗಳು</button>
+  <button class="tab"               id="tab-seasons" onclick="switchTab('seasons')">🌦️ ಋತುಗಳು</button>
+</div>
+
+<div class="tts-notice">
+  <span>📱</span>
+  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="seasons-grid" id="seasonsGrid" style="display:none;"></div>
+<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+
+<script>
+const days = [
+  { kn:'ಭಾನುವಾರ',  en:'Sunday',    num:'1', emoji:'☀️', extra:'ರಜಾ ದಿನ',    bg:'linear-gradient(145deg,#e67e22,#ca6f1e)' },
+  { kn:'ಸೋಮವಾರ',   en:'Monday',    num:'2', emoji:'🌙', extra:'ಶಾಲೆ ಪ್ರಾರಂಭ', bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
+  { kn:'ಮಂಗಳವಾರ',  en:'Tuesday',   num:'3', emoji:'🔴', extra:'',             bg:'linear-gradient(145deg,#c0392b,#922b21)' },
+  { kn:'ಬುಧವಾರ',   en:'Wednesday', num:'4', emoji:'💚', extra:'',             bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
+  { kn:'ಗುರುವಾರ',  en:'Thursday',  num:'5', emoji:'🟡', extra:'',             bg:'linear-gradient(145deg,#d4ac0d,#b7950b)' },
+  { kn:'ಶುಕ್ರವಾರ', en:'Friday',    num:'6', emoji:'⚪', extra:'',             bg:'linear-gradient(145deg,#7f8c8d,#616a6b)' },
+  { kn:'ಶನಿವಾರ',   en:'Saturday',  num:'7', emoji:'🟣', extra:'ಅರ್ಧ ರಜಾ',   bg:'linear-gradient(145deg,#8e44ad,#6c3483)' },
+];
+
+const months = [
+  { kn:'ಜನವರಿ',     en:'January',   num:'೧',  emoji:'❄️', extra:'31 ದಿನ',  bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
+  { kn:'ಫೆಬ್ರವರಿ',  en:'February',  num:'೨',  emoji:'💝', extra:'28/29 ದಿನ',bg:'linear-gradient(145deg,#e84393,#a0205e)' },
+  { kn:'ಮಾರ್ಚ್',    en:'March',     num:'೩',  emoji:'🌸', extra:'31 ದಿನ',  bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
+  { kn:'ಏಪ್ರಿಲ್',   en:'April',     num:'೪',  emoji:'🌧️', extra:'30 ದಿನ', bg:'linear-gradient(145deg,#2980b9,#1a6fa0)' },
+  { kn:'ಮೇ',        en:'May',       num:'೫',  emoji:'🌺', extra:'31 ದಿನ',  bg:'linear-gradient(145deg,#e67e22,#ca6f1e)' },
+  { kn:'ಜೂನ್',      en:'June',      num:'೬',  emoji:'⛈️', extra:'30 ದಿನ', bg:'linear-gradient(145deg,#1a5276,#154360)' },
+  { kn:'ಜುಲೈ',      en:'July',      num:'೭',  emoji:'🌈', extra:'31 ದಿನ',  bg:'linear-gradient(145deg,#117a65,#0e6655)' },
+  { kn:'ಆಗಸ್ಟ್',    en:'August',    num:'೮',  emoji:'🏳️', extra:'31 ದಿನ', bg:'linear-gradient(145deg,#e74c3c,#c0392b)' },
+  { kn:'ಸೆಪ್ಟೆಂಬರ್', en:'September', num:'೯',  emoji:'🍂', extra:'30 ದಿನ', bg:'linear-gradient(145deg,#d35400,#b7460e)' },
+  { kn:'ಅಕ್ಟೋಬರ್',  en:'October',   num:'೧೦', emoji:'🎃', extra:'31 ದಿನ',  bg:'linear-gradient(145deg,#e67e22,#b7460e)' },
+  { kn:'ನವೆಂಬರ್',   en:'November',  num:'೧೧', emoji:'🍁', extra:'30 ದಿನ', bg:'linear-gradient(145deg,#8e44ad,#6c3483)' },
+  { kn:'ಡಿಸೆಂಬರ್',  en:'December',  num:'೧೨', emoji:'🎄', extra:'31 ದಿನ',  bg:'linear-gradient(145deg,#27ae60,#1a7a40)' },
+];
+
+const seasons = [
+  {
+    kn:'ಬೇಸಿಗೆ ಋತು',   en:'Summer',     emoji:'☀️',
+    months:'ಮಾರ್ಚ್ – ಮೇ',
+    bg:'linear-gradient(135deg,#e67e22,#d35400)',
+    features:['🌡️ ತುಂಬಾ ಬಿಸಿ ಇರುತ್ತದೆ','🍋 ಹಣ್ಣುಗಳ ಸಮಯ','🏖️ ಶಾಲೆ ರಜಾ ಬರುತ್ತದೆ','💧 ನೀರು ಹೆಚ್ಚು ಕುಡಿಯಬೇಕು']
+  },
+  {
+    kn:'ಮಳೆ ಋತು',      en:'Rainy Season', emoji:'🌧️',
+    months:'ಜೂನ್ – ಸೆಪ್ಟೆಂಬರ್',
+    bg:'linear-gradient(135deg,#1a5276,#0d3b8e)',
+    features:['🌧️ ಮಳೆ ಬೀಳುತ್ತದೆ','🌈 ಮಳೆಬಿಲ್ಲು ಕಾಣಿಸುತ್ತದೆ','🐸 ಕಪ್ಪೆ ವಟ ವಟ ಎನ್ನುತ್ತದೆ','☂️ ಛತ್ರಿ ಬೇಕಾಗುತ್ತದೆ']
+  },
+  {
+    kn:'ಶರದ್ ಋತು',     en:'Autumn',      emoji:'🍂',
+    months:'ಅಕ್ಟೋಬರ್ – ನವೆಂಬರ್',
+    bg:'linear-gradient(135deg,#d35400,#922b21)',
+    features:['🍂 ಎಲೆಗಳು ಉದುರುತ್ತವೆ','🎃 ಹಬ್ಬದ ಸಮಯ','🌤️ ಹವಾಮಾನ ಸಮಾಧಾನ','🌾 ಬೆಳೆ ಕೊಯ್ಲಿನ ಸಮಯ']
+  },
+  {
+    kn:'ಹೇಮಂತ ಋತು',    en:'Winter',      emoji:'❄️',
+    months:'ಡಿಸೆಂಬರ್ – ಜನವರಿ',
+    bg:'linear-gradient(135deg,#1a3a5e,#0d2a4e)',
+    features:['🥶 ಚಳಿ ಇರುತ್ತದೆ','🧥 ಬೆಚ್ಚನೆ ಬಟ್ಟೆ ಹಾಕುತ್ತೇವೆ','☕ ಬಿಸಿ ಪಾನೀಯ ಕುಡಿಯುತ್ತೇವೆ','🎄 ಕ್ರಿಸ್ಮಸ್ ಬರುತ್ತದೆ']
+  },
+  {
+    kn:'ವಸಂತ ಋತು',     en:'Spring',      emoji:'🌸',
+    months:'ಫೆಬ್ರವರಿ – ಮಾರ್ಚ್',
+    bg:'linear-gradient(135deg,#27ae60,#1e8449)',
+    features:['🌸 ಹೂಗಳು ಅರಳುತ್ತವೆ','🦋 ಚಿಟ್ಟೆಗಳು ಹಾರುತ್ತವೆ','🌿 ಹೊಸ ಎಲೆಗಳು ಚಿಗುರುತ್ತವೆ','🐦 ಪಕ್ಷಿಗಳು ಹಾಡುತ್ತವೆ']
+  },
+  {
+    kn:'ಗ್ರೀಷ್ಮ ಋತು',   en:'Hot Season',  emoji:'🔆',
+    months:'ಮೇ – ಜೂನ್',
+    bg:'linear-gradient(135deg,#f39c12,#d35400)',
+    features:['🌞 ಬಿಸಿಲು ತೀವ್ರ ಇರುತ್ತದೆ','🍹 ಜ್ಯೂಸ್ ಮತ್ತು ಐಸ್ಕ್ರೀಂ ಸಮಯ','🌵 ಗಿಡಗಳು ಒಣಗುತ್ತವೆ','😎 ಟೋಪಿ ಹಾಕಿ ಹೋಗಿ']
+  },
+];
+
+let soundOn = true;
+let activeTab = 'days';
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
+  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+}
+
+function speak(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
+  const voices = window.speechSynthesis.getVoices();
+  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
+  if (!kn) return;
+  u.voice = kn;
+  window.speechSynthesis.speak(u);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-days').className    = 'tab' + (tab==='days'    ? ' active-days'    : '');
+  document.getElementById('tab-months').className  = 'tab' + (tab==='months'  ? ' active-months'  : '');
+  document.getElementById('tab-seasons').className = 'tab' + (tab==='seasons' ? ' active-seasons'  : '');
+
+  const grid = document.getElementById('grid');
+  const sg   = document.getElementById('seasonsGrid');
+
+  if (tab === 'seasons') {
+    grid.style.display = 'none';
+    sg.style.display = 'grid';
+    buildSeasons();
+  } else {
+    grid.style.display = 'grid';
+    sg.style.display = 'none';
+    buildGrid();
+  }
+}
+
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const data = activeTab === 'days' ? days : months;
+  data.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="item-face" style="background:${item.bg};">
+        <div class="item-num">${item.num}</div>
+        <div class="item-emoji">${item.emoji}</div>
+      </div>
+      <div class="card-info">
+        <div class="card-kn">${item.kn}</div>
+        <div class="card-en">${item.en}</div>
+        ${item.extra ? `<div class="card-extra">${item.extra}</div>` : ''}
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+      speak(item.kn);
+      setTimeout(() => card.classList.remove('playing'), 500);
+    });
+    grid.appendChild(card);
+  });
+}
+
+function buildSeasons() {
+  const sg = document.getElementById('seasonsGrid');
+  sg.innerHTML = '';
+  seasons.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'season-card';
+    card.innerHTML = `
+      <div class="season-header" style="background:${s.bg};">
+        <div class="season-emoji-big">${s.emoji}</div>
+        <div class="season-meta">
+          <div class="season-kn">${s.kn}</div>
+          <div class="season-en">${s.en}</div>
+          <div class="season-months">📅 ${s.months}</div>
+        </div>
+      </div>
+      <div class="season-features">
+        ${s.features.map(f => `<div class="season-feat-item">${f}</div>`).join('')}
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+      speak(s.kn);
+      setTimeout(() => card.classList.remove('playing'), 500);
+    });
+    sg.appendChild(card);
+  });
+}
+
+if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
+buildGrid();
+</script>
+</body>
+</html>

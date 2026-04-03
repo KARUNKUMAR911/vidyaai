@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ನನ್ನ ಕುಟುಂಬ - UKG Kannada</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+
+  :root { --bg: #1a0a00; --topbar: #231000; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo Tamma 2', cursive;
+    background: var(--bg); min-height: 100vh; color: #fff8f0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(253,167,60,0.13) 0%, transparent 50%),
+      radial-gradient(circle at 85% 75%, rgba(232,67,147,0.1) 0%, transparent 50%);
+  }
+
+  .topbar {
+    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .topbar-title {
+    font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(90deg, #fda73c, #e84393);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sound-btn {
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
+    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .sound-btn:hover { background: rgba(255,255,255,0.22); }
+  .sound-btn.off { opacity: 0.5; }
+
+  .hero { text-align: center; padding: 26px 20px 10px; }
+  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: heartbeat 1.8s ease-in-out infinite; }
+  @keyframes heartbeat {
+    0%,100%{transform:scale(1)} 14%{transform:scale(1.18)}
+    28%{transform:scale(1)} 42%{transform:scale(1.12)} 56%{transform:scale(1)}
+  }
+  .hero h1 {
+    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
+    background: linear-gradient(135deg, #fda73c, #e84393, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    padding: 12px 20px 4px; max-width: 1100px; margin: 0 auto;
+  }
+  .tab {
+    padding: 9px 18px; border-radius: 14px;
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
+  }
+  .tab.active-nuclear  { background: linear-gradient(135deg,#fda73c,#e17055); color:white; box-shadow:0 4px 16px rgba(253,167,60,0.4); }
+  .tab.active-extended { background: linear-gradient(135deg,#e84393,#c0336f); color:white; box-shadow:0 4px 16px rgba(232,67,147,0.4); }
+  .tab.active-sentences{ background: linear-gradient(135deg,#a29bfe,#6c5ce7); color:white; box-shadow:0 4px 16px rgba(162,155,254,0.4); }
+  .tab:hover:not([class*='active']) { background: rgba(255,255,255,0.13); color:white; }
+
+  .tts-notice {
+    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
+    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
+    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
+    max-width: 1100px; margin: 12px auto 4px;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
+  }
+
+  .card {
+    border-radius: 22px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.42s both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
+  .card:nth-child(1){animation-delay:0.02s} .card:nth-child(2){animation-delay:0.05s}
+  .card:nth-child(3){animation-delay:0.08s} .card:nth-child(4){animation-delay:0.11s}
+  .card:nth-child(5){animation-delay:0.14s} .card:nth-child(6){animation-delay:0.17s}
+  .card:nth-child(7){animation-delay:0.20s} .card:nth-child(8){animation-delay:0.23s}
+  .card:nth-child(9){animation-delay:0.26s} .card:nth-child(10){animation-delay:0.29s}
+  .card:nth-child(11){animation-delay:0.32s} .card:nth-child(12){animation-delay:0.35s}
+
+  .card:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 48px rgba(0,0,0,0.55); }
+  .card:active { transform: scale(0.94); }
+  .card.playing { animation: fpulse 0.5s ease !important; }
+  @keyframes fpulse { 0%{transform:scale(1)} 40%{transform:scale(1.13)} 100%{transform:scale(1)} }
+
+  .item-face {
+    height: 108px; display: flex; align-items: center; justify-content: center;
+    font-size: 3.6rem; position: relative;
+  }
+  .item-face::after { content:'❤️'; position:absolute; bottom:6px; right:10px; font-size:0.85rem; opacity:0.55; }
+
+  .card-info {
+    padding: 11px 10px 15px; text-align: center;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+  }
+  .card-kn { font-size: 1.1rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .card-en { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.42); margin-top: 2px; font-style: italic; }
+  .card-relation { font-size: 0.68rem; color: rgba(255,255,255,0.28); margin-top: 4px; }
+  .card-side {
+    font-size: 0.65rem; margin-top: 3px;
+    padding: 2px 8px; border-radius: 8px; display: inline-block;
+    font-weight: 700;
+  }
+  .side-paternal { background: rgba(77,150,255,0.2); color: #74b9ff; }
+  .side-maternal { background: rgba(232,67,147,0.2); color: #fd79a8; }
+
+  /* SENTENCES TAB */
+  .sentences-wrap {
+    padding: 16px 24px 52px; max-width: 900px; margin: 0 auto;
+    display: none;
+  }
+  .sentences-wrap.active { display: block; }
+
+  .sentence-group-title {
+    font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.35);
+    letter-spacing: 1px; text-transform: uppercase; margin: 16px 0 10px;
+  }
+
+  .sentence-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 14px 18px; margin-bottom: 10px;
+    cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: flex-start; gap: 12px;
+    animation: popIn 0.4s both;
+  }
+  .sentence-card:hover { background: rgba(255,255,255,0.1); transform: translateX(6px); }
+  .sentence-card.playing { background: rgba(255,200,100,0.15); border-color: rgba(255,200,100,0.3); }
+  .s-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+  .s-kn { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.5; }
+  .s-en { font-size: 0.73rem; color: rgba(255,255,255,0.38); font-style: italic; margin-top: 2px; }
+
+  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+
+  @media(max-width:480px){
+    .grid { grid-template-columns: repeat(3,1fr); gap: 11px; padding: 10px 13px 32px; }
+    .item-face { height: 84px; font-size: 2.8rem; }
+    .card-kn { font-size: 0.9rem; }
+    .hero h1 { font-size: 1.75rem; }
+    .sentences-wrap { padding: 12px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/class/ukg/kannada" class="back-btn">←</a>
+    <span class="topbar-title">ನನ್ನ ಕುಟುಂಬ</span>
+  </div>
+  <div class="topbar-right">
+    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+      <span id="soundIcon">🔊</span>
+      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">👨‍👩‍👧‍👦</div>
+  <h1>ನನ್ನ ಕುಟುಂಬ</h1>
+  <p>ಸಂಬಂಧಗಳು • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active-nuclear" id="tab-nuclear"   onclick="switchTab('nuclear')">🏠 ತಕ್ಷಣದ ಕುಟುಂಬ</button>
+  <button class="tab" id="tab-extended" onclick="switchTab('extended')">👨‍👩‍👧 ವಿಸ್ತೃತ ಕುಟುಂಬ</button>
+  <button class="tab" id="tab-sentences" onclick="switchTab('sentences')">📝 ವಾಕ್ಯಗಳು</button>
+</div>
+
+<div class="tts-notice">
+  <span>📱</span>
+  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="sentences-wrap" id="sentencesWrap"></div>
+<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+
+<script>
+const nuclear = [
+  { kn:'ಅಪ್ಪ',       en:'Father',         emoji:'👨', relation:'ತಂದೆ',         side:'', bg:'linear-gradient(145deg,#1a5276,#1a3a5e)' },
+  { kn:'ಅಮ್ಮ',       en:'Mother',         emoji:'👩', relation:'ತಾಯಿ',         side:'', bg:'linear-gradient(145deg,#e84393,#a0205e)' },
+  { kn:'ಅಣ್ಣ',       en:'Elder Brother',  emoji:'👦', relation:'ಹಿರಿಯ ಸಹೋದರ', side:'', bg:'linear-gradient(145deg,#2874a6,#1a5276)' },
+  { kn:'ಅಕ್ಕ',       en:'Elder Sister',   emoji:'👧', relation:'ಹಿರಿಯ ಸಹೋದರಿ',side:'', bg:'linear-gradient(145deg,#c0396b,#922b51)' },
+  { kn:'ತಮ್ಮ',       en:'Younger Brother',emoji:'🧒', relation:'ಕಿರಿಯ ಸಹೋದರ', side:'', bg:'linear-gradient(145deg,#117a65,#0e6655)' },
+  { kn:'ತಂಗಿ',       en:'Younger Sister', emoji:'👶', relation:'ಕಿರಿಯ ಸಹೋದರಿ',side:'', bg:'linear-gradient(145deg,#d4619a,#a0397a)' },
+];
+
+const extended = [
+  { kn:'ತಾತ (ಅಪ್ಪನ)',  en:'Paternal Grandfather', emoji:'👴', relation:'ಅಪ್ಪನ ತಂದೆ',   side:'paternal', bg:'linear-gradient(145deg,#6e4a2a,#4e2a0a)' },
+  { kn:'ಅಜ್ಜಿ (ಅಪ್ಪನ)', en:'Paternal Grandmother',emoji:'👵', relation:'ಅಪ್ಪನ ತಾಯಿ',   side:'paternal', bg:'linear-gradient(145deg,#8e5a3a,#6e3a1a)' },
+  { kn:'ತಾತ (ಅಮ್ಮನ)',  en:'Maternal Grandfather', emoji:'👴', relation:'ಅಮ್ಮನ ತಂದೆ',   side:'maternal', bg:'linear-gradient(145deg,#5a3a6e,#3a1a4e)' },
+  { kn:'ಅಜ್ಜಿ (ಅಮ್ಮನ)', en:'Maternal Grandmother',emoji:'👵', relation:'ಅಮ್ಮನ ತಾಯಿ',   side:'maternal', bg:'linear-gradient(145deg,#9a4a7e,#7a2a5e)' },
+  { kn:'ಚಿಕ್ಕಪ್ಪ',     en:'Uncle (Paternal)',     emoji:'🧔', relation:'ಅಪ್ಪನ ತಮ್ಮ',   side:'paternal', bg:'linear-gradient(145deg,#1f618d,#17496e)' },
+  { kn:'ಚಿಕ್ಕಮ್ಮ',     en:'Aunt (Paternal)',      emoji:'👩‍🦱',relation:'ಚಿಕ್ಕಪ್ಪನ ಹೆಂಡತಿ',side:'paternal', bg:'linear-gradient(145deg,#a93277,#7d1f57)' },
+  { kn:'ಮಾವ',          en:'Uncle (Maternal)',     emoji:'🧓', relation:'ಅಮ್ಮನ ಅಣ್ಣ/ತಮ್ಮ',side:'maternal', bg:'linear-gradient(145deg,#1e8bc3,#1a6fa0)' },
+  { kn:'ಅತ್ತೆ',        en:'Aunt (Maternal)',      emoji:'👩', relation:'ಅಮ್ಮನ ಅಕ್ಕ/ತಂಗಿ', side:'maternal', bg:'linear-gradient(145deg,#e8407a,#c0305a)' },
+  { kn:'ಅಣ್ಣನ ಮಗ',    en:'Nephew',               emoji:'👦', relation:'ಅಣ್ಣ/ಅಕ್ಕನ ಮಗ', side:'', bg:'linear-gradient(145deg,#2874a6,#1a5276)' },
+  { kn:'ಅಣ್ಣನ ಮಗಳು',  en:'Niece',                emoji:'👧', relation:'ಅಣ್ಣ/ಅಕ್ಕನ ಮಗಳು',side:'', bg:'linear-gradient(145deg,#c0396b,#922b51)' },
+  { kn:'ಸೋದರ ಮಾವ',    en:'Cousin Brother',       emoji:'🧒', relation:'ಚಿಕ್ಕಪ್ಪ/ಮಾವನ ಮಗ',side:'', bg:'linear-gradient(145deg,#117a65,#0e6655)' },
+  { kn:'ಸೋದರ ಸೊಸೆ',   en:'Cousin Sister',        emoji:'👧', relation:'ಚಿಕ್ಕಪ್ಪ/ಮಾವನ ಮಗಳು',side:'', bg:'linear-gradient(145deg,#d4619a,#a0397a)' },
+];
+
+const sentenceGroups = [
+  {
+    title: '🏠 ತಕ್ಷಣದ ಕುಟುಂಬ',
+    items: [
+      { emoji:'👨', kn:'ಇವರು ನನ್ನ ಅಪ್ಪ. ಅವರು ನನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತಾರೆ.', en:'This is my father. He loves me.' },
+      { emoji:'👩', kn:'ಇವರು ನನ್ನ ಅಮ್ಮ. ಅವರು ನನಗೆ ಅಡುಗೆ ಮಾಡುತ್ತಾರೆ.', en:'This is my mother. She cooks for me.' },
+      { emoji:'👦', kn:'ಇವರು ನನ್ನ ಅಣ್ಣ. ಅವರು ನನಗೆ ಓದಲು ಸಹಾಯ ಮಾಡುತ್ತಾರೆ.', en:'This is my brother. He helps me study.' },
+      { emoji:'👨‍👩‍👧‍👦', kn:'ನಾವು ಒಂದು ಸುಖಿ ಕುಟುಂಬ.', en:'We are a happy family.' },
+    ]
+  },
+  {
+    title: '👴 ಅಜ್ಜ ಅಜ್ಜಿ',
+    items: [
+      { emoji:'👴', kn:'ಇವರು ನನ್ನ ತಾತ. ಅವರು ನನಗೆ ಕಥೆ ಹೇಳುತ್ತಾರೆ.', en:'This is my grandfather. He tells me stories.' },
+      { emoji:'👵', kn:'ಇವರು ನನ್ನ ಅಜ್ಜಿ. ಅವರು ನನಗೆ ತಿಂಡಿ ಮಾಡಿ ಕೊಡುತ್ತಾರೆ.', en:'This is my grandmother. She makes snacks for me.' },
+      { emoji:'🏡', kn:'ನಾನು ರಜೆಯಲ್ಲಿ ತಾತ ಅಜ್ಜಿ ಮನೆಗೆ ಹೋಗುತ್ತೇನೆ.', en:'I go to grandparents\' home during holidays.' },
+    ]
+  },
+  {
+    title: '❤️ ಕುಟುಂಬ ಮೌಲ್ಯಗಳು',
+    items: [
+      { emoji:'🙏', kn:'ನಾನು ಹಿರಿಯರಿಗೆ ನಮಸ್ಕಾರ ಮಾಡುತ್ತೇನೆ.', en:'I bow to elders with respect.' },
+      { emoji:'🤝', kn:'ಕುಟುಂಬದಲ್ಲಿ ಎಲ್ಲರೂ ಒಟ್ಟಿಗೆ ಇರುತ್ತೇವೆ.', en:'In family, we all stay together.' },
+      { emoji:'💝', kn:'ಕುಟುಂಬ ದೇವರ ಕೊಡುಗೆ.', en:'Family is a gift from God.' },
+    ]
+  },
+];
+
+let soundOn = true;
+let activeTab = 'nuclear';
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
+  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+}
+
+function speak(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
+  const voices = window.speechSynthesis.getVoices();
+  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
+  if (!kn) return;
+  u.voice = kn;
+  window.speechSynthesis.speak(u);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-nuclear').className    = 'tab' + (tab==='nuclear'    ? ' active-nuclear'   : '');
+  document.getElementById('tab-extended').className   = 'tab' + (tab==='extended'   ? ' active-extended'  : '');
+  document.getElementById('tab-sentences').className  = 'tab' + (tab==='sentences'  ? ' active-sentences' : '');
+
+  const grid = document.getElementById('grid');
+  const sw   = document.getElementById('sentencesWrap');
+
+  if (tab === 'sentences') {
+    grid.style.display = 'none';
+    sw.classList.add('active');
+    buildSentences();
+  } else {
+    grid.style.display = 'grid';
+    sw.classList.remove('active');
+    buildGrid();
+  }
+}
+
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const data = activeTab === 'nuclear' ? nuclear : extended;
+  data.forEach(f => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const sideClass = f.side === 'paternal' ? 'side-paternal' : f.side === 'maternal' ? 'side-maternal' : '';
+    const sideLabel = f.side === 'paternal' ? '🔵 ಅಪ್ಪನ ಕಡೆ' : f.side === 'maternal' ? '🩷 ಅಮ್ಮನ ಕಡೆ' : '';
+    card.innerHTML = `
+      <div class="item-face" style="background:${f.bg};">${f.emoji}</div>
+      <div class="card-info">
+        <div class="card-kn">${f.kn}</div>
+        <div class="card-en">${f.en}</div>
+        <div class="card-relation">${f.relation}</div>
+        ${sideLabel ? `<div class="card-side ${sideClass}">${sideLabel}</div>` : ''}
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+      speak(f.kn);
+      setTimeout(() => card.classList.remove('playing'), 500);
+    });
+    grid.appendChild(card);
+  });
+}
+
+function buildSentences() {
+  const sw = document.getElementById('sentencesWrap');
+  sw.innerHTML = '';
+  sentenceGroups.forEach(group => {
+    const title = document.createElement('div');
+    title.className = 'sentence-group-title';
+    title.textContent = group.title;
+    sw.appendChild(title);
+    group.items.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'sentence-card';
+      div.style.animationDelay = (i * 0.06) + 's';
+      div.innerHTML = `
+        <div class="s-emoji">${s.emoji}</div>
+        <div>
+          <div class="s-kn">${s.kn}</div>
+          <div class="s-en">${s.en}</div>
+        </div>
+      `;
+      div.addEventListener('click', () => {
+        div.classList.add('playing');
+        speak(s.kn);
+        setTimeout(() => div.classList.remove('playing'), 2500);
+      });
+      sw.appendChild(div);
+    });
+  });
+}
+
+if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
+buildGrid();
+</script>
+</body>
+</html>

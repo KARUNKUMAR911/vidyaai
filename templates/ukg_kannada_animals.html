@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ಪ್ರಾಣಿಗಳು - UKG Kannada</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+
+  :root { --bg: #0d1f14; --topbar: #112018; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo Tamma 2', cursive;
+    background: var(--bg); min-height: 100vh; color: #f0fff0;
+    background-image:
+      radial-gradient(circle at 15% 25%, rgba(107,203,119,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 85% 70%, rgba(253,203,110,0.1) 0%, transparent 50%);
+  }
+
+  .topbar {
+    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .topbar-title {
+    font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(90deg, #6bcb77, #fdcb6e);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sound-btn {
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
+    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .sound-btn:hover { background: rgba(255,255,255,0.22); }
+  .sound-btn.off { opacity: 0.5; }
+
+  .hero { text-align: center; padding: 28px 20px 12px; }
+  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: wobble 2.5s ease-in-out infinite; }
+  @keyframes wobble { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg) scale(1.1)} }
+  .hero h1 {
+    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
+    background: linear-gradient(135deg, #6bcb77, #fdcb6e, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p { font-size: 0.92rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    padding: 12px 20px 4px; max-width: 1100px; margin: 0 auto;
+  }
+  .tab {
+    padding: 9px 18px; border-radius: 14px;
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
+  }
+  .tab.active-wild   { background: linear-gradient(135deg,#e17055,#c0392b); color:white; box-shadow:0 4px 16px rgba(225,112,85,0.4); }
+  .tab.active-farm   { background: linear-gradient(135deg,#6bcb77,#27ae60); color:white; box-shadow:0 4px 16px rgba(107,203,119,0.4); }
+  .tab.active-birds  { background: linear-gradient(135deg,#4d96ff,#2980b9); color:white; box-shadow:0 4px 16px rgba(77,150,255,0.4); }
+  .tab.active-water  { background: linear-gradient(135deg,#00cec9,#0984e3); color:white; box-shadow:0 4px 16px rgba(0,206,201,0.4); }
+  .tab:hover:not([class*='active']) { background: rgba(255,255,255,0.13); color: white; }
+
+  .tts-notice {
+    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
+    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
+    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
+    max-width: 1100px; margin: 12px auto 4px;
+  }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
+  }
+
+  .card {
+    border-radius: 22px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.4s both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
+  .card:nth-child(1){animation-delay:0.02s} .card:nth-child(2){animation-delay:0.04s}
+  .card:nth-child(3){animation-delay:0.06s} .card:nth-child(4){animation-delay:0.08s}
+  .card:nth-child(5){animation-delay:0.10s} .card:nth-child(6){animation-delay:0.12s}
+  .card:nth-child(7){animation-delay:0.14s} .card:nth-child(8){animation-delay:0.16s}
+  .card:nth-child(9){animation-delay:0.18s} .card:nth-child(10){animation-delay:0.20s}
+  .card:nth-child(11){animation-delay:0.22s} .card:nth-child(12){animation-delay:0.24s}
+
+  .card:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 48px rgba(0,0,0,0.55); }
+  .card:active { transform: scale(0.94); }
+  .card.playing { animation: apulse 0.5s ease !important; }
+  @keyframes apulse { 0%{transform:scale(1)} 40%{transform:scale(1.13)} 100%{transform:scale(1)} }
+
+  .animal-face {
+    height: 108px; display: flex; align-items: center; justify-content: center;
+    font-size: 3.6rem; position: relative;
+  }
+  /* habitat badge */
+  .habitat-badge {
+    position: absolute; top: 7px; right: 8px;
+    background: rgba(0,0,0,0.4); border-radius: 8px;
+    padding: 2px 6px; font-size: 0.65rem; font-weight: 700;
+    color: rgba(255,255,255,0.75); letter-spacing: 0.3px;
+  }
+
+  .card-info {
+    padding: 10px 10px 14px; text-align: center;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+  }
+  .card-kn { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .card-en { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.42); margin-top: 2px; font-style: italic; }
+  .card-sound {
+    font-size: 0.72rem; color: rgba(255,255,255,0.55);
+    margin-top: 5px; background: rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 3px 8px; display: inline-block;
+  }
+  .card-habitat {
+    font-size: 0.68rem; color: rgba(255,255,255,0.3);
+    margin-top: 4px;
+  }
+
+  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+
+  @media(max-width:480px){
+    .grid { grid-template-columns: repeat(3,1fr); gap: 11px; padding: 10px 13px 40px; }
+    .animal-face { height: 82px; font-size: 2.8rem; }
+    .card-kn { font-size: 0.88rem; }
+    .hero h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/class/ukg/kannada" class="back-btn">←</a>
+    <span class="topbar-title">ಪ್ರಾಣಿಗಳು</span>
+  </div>
+  <div class="topbar-right">
+    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+      <span id="soundIcon">🔊</span>
+      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">🐾</div>
+  <h1>ಪ್ರಾಣಿಗಳು</h1>
+  <p>ಶಬ್ದ ಮತ್ತು ವಾಸಸ್ಥಾನ • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active-wild" id="tab-wild"  onclick="switchTab('wild')">🌳 ಕಾಡು</button>
+  <button class="tab" id="tab-farm"  onclick="switchTab('farm')">🏡 ಸಾಕು</button>
+  <button class="tab" id="tab-birds" onclick="switchTab('birds')">🐦 ಪಕ್ಷಿಗಳು</button>
+  <button class="tab" id="tab-water" onclick="switchTab('water')">🌊 ನೀರು</button>
+</div>
+
+<div class="tts-notice">
+  <span>📱</span>
+  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+
+<script>
+const wild = [
+  { kn:'ಆನೆ',     en:'Elephant', emoji:'🐘', sound:'ಘೀಳು ಇಡುತ್ತದೆ',   habitat:'ಕಾಡು',   bg:'linear-gradient(145deg,#4a5568,#2d3748)' },
+  { kn:'ಸಿಂಹ',    en:'Lion',     emoji:'🦁', sound:'ಘರ್ಜಿಸುತ್ತದೆ',    habitat:'ಹುಲ್ಲುಗಾವಲು', bg:'linear-gradient(145deg,#c8962a,#a07020)' },
+  { kn:'ಹುಲಿ',    en:'Tiger',    emoji:'🐯', sound:'ಘರ್ಜಿಸುತ್ತದೆ',    habitat:'ಕಾಡು',   bg:'linear-gradient(145deg,#d4692a,#b05020)' },
+  { kn:'ಜಿರಾಫೆ',  en:'Giraffe',  emoji:'🦒', sound:'ಮೌನವಾಗಿರುತ್ತದೆ', habitat:'ಹುಲ್ಲುಗಾವಲು', bg:'linear-gradient(145deg,#c8a020,#a07818)' },
+  { kn:'ಕರಡಿ',    en:'Bear',     emoji:'🐻', sound:'ಗರ್ಜಿಸುತ್ತದೆ',    habitat:'ಕಾಡು',   bg:'linear-gradient(145deg,#6b4226,#4a2e1a)' },
+  { kn:'ಕೋತಿ',    en:'Monkey',   emoji:'🐒', sound:'ಚೀರುತ್ತದೆ',      habitat:'ಕಾಡು',   bg:'linear-gradient(145deg,#8b6914,#6b4f10)' },
+  { kn:'ಆಮೆ',     en:'Tortoise', emoji:'🐢', sound:'ಮೌನವಾಗಿರುತ್ತದೆ', habitat:'ಕಾಡು/ನೀರು', bg:'linear-gradient(145deg,#4a7a3a,#2a5a1a)' },
+  { kn:'ಹಾವು',    en:'Snake',    emoji:'🐍', sound:'ಉಸ್ಸ್ ಎನ್ನುತ್ತದೆ', habitat:'ಕಾಡು',  bg:'linear-gradient(145deg,#5a7a2a,#3a5a0a)' },
+  { kn:'ಜಿಂಕೆ',   en:'Deer',     emoji:'🦌', sound:'ಕೂಗುತ್ತದೆ',       habitat:'ಕಾಡು',   bg:'linear-gradient(145deg,#a07040,#7a5020)' },
+  { kn:'ಚಿರತೆ',   en:'Leopard',  emoji:'🐆', sound:'ಘರ್ಜಿಸುತ್ತದೆ',    habitat:'ಕಾಡು',   bg:'linear-gradient(145deg,#c8a020,#8a6010)' },
+  { kn:'ಮೊಸಳೆ',   en:'Crocodile',emoji:'🐊', sound:'ಗರ್ಜಿಸುತ್ತದೆ',    habitat:'ನದಿ',    bg:'linear-gradient(145deg,#3a6a2a,#1a4a0a)' },
+  { kn:'ಆನೆ ಆಮೆ', en:'Hippo',    emoji:'🦛', sound:'ಗುರುಗುಡುತ್ತದೆ',  habitat:'ನದಿ',    bg:'linear-gradient(145deg,#6a7a8a,#4a5a6a)' },
+];
+
+const farm = [
+  { kn:'ಹಸು',    en:'Cow',     emoji:'🐄', sound:'ಅಂಬಾ ಎನ್ನುತ್ತದೆ',  habitat:'ಹಟ್ಟಿ',  bg:'linear-gradient(145deg,#5a8a6a,#3a6a4a)' },
+  { kn:'ಆಡು',    en:'Goat',    emoji:'🐐', sound:'ಮೇ ಮೇ ಎನ್ನುತ್ತದೆ', habitat:'ಹಟ್ಟಿ',  bg:'linear-gradient(145deg,#7a9e6a,#5a7e4a)' },
+  { kn:'ನಾಯಿ',   en:'Dog',     emoji:'🐕', sound:'ಬೊಗಳುತ್ತದೆ',       habitat:'ಮನೆ',    bg:'linear-gradient(145deg,#8b7355,#6b5335)' },
+  { kn:'ಬೆಕ್ಕು', en:'Cat',     emoji:'🐈', sound:'ಮ್ಯಾಂವ್ ಎನ್ನುತ್ತದೆ', habitat:'ಮನೆ',   bg:'linear-gradient(145deg,#9e7a9e,#7e5a7e)' },
+  { kn:'ಕುದುರೆ', en:'Horse',   emoji:'🐴', sound:'ಕೆನೆಯುತ್ತದೆ',      habitat:'ಲಾಯ',    bg:'linear-gradient(145deg,#7a6a5a,#5a4a3a)' },
+  { kn:'ಕೋಳಿ',   en:'Hen',     emoji:'🐔', sound:'ಕ್ಕ್ ಕ್ಕ್ ಎನ್ನುತ್ತದೆ', habitat:'ಕೊಟ್ಟಿಗೆ', bg:'linear-gradient(145deg,#c8762a,#a05620)' },
+  { kn:'ಕತ್ತೆ',  en:'Donkey',  emoji:'🫏', sound:'ಹ್ಯಾಂ ಹ್ಯಾಂ ಎನ್ನುತ್ತದೆ', habitat:'ಹಟ್ಟಿ', bg:'linear-gradient(145deg,#8a7a6a,#6a5a4a)' },
+  { kn:'ಮೊಲ',    en:'Rabbit',  emoji:'🐇', sound:'ಮೆಲ್ಲಗೆ ಕೂಗುತ್ತದೆ', habitat:'ಮನೆ',   bg:'linear-gradient(145deg,#c8b4a0,#a09480)' },
+  { kn:'ಕುರಿ',   en:'Sheep',   emoji:'🐑', sound:'ಮೇ ಎನ್ನುತ್ತದೆ',     habitat:'ಹಟ್ಟಿ',  bg:'linear-gradient(145deg,#c0b0a0,#908070)' },
+  { kn:'ಹಂದಿ',   en:'Pig',     emoji:'🐷', sound:'ಗುರ್ ಗುರ್ ಎನ್ನುತ್ತದೆ', habitat:'ಕೊಟ್ಟಿಗೆ', bg:'linear-gradient(145deg,#e8a0a0,#c07070)' },
+];
+
+const birds = [
+  { kn:'ನವಿಲು',   en:'Peacock',  emoji:'🦚', sound:'ಕೇಕಾ ಹಾಕುತ್ತದೆ',   habitat:'ಕಾಡು',    bg:'linear-gradient(145deg,#1a8a6a,#0a6a4a)' },
+  { kn:'ಗಿಣಿ',    en:'Parrot',   emoji:'🦜', sound:'ಮಾತಾಡುತ್ತದೆ',      habitat:'ಮನೆ/ಕಾಡು', bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
+  { kn:'ಕಾಗೆ',    en:'Crow',     emoji:'🐦‍⬛',sound:'ಕಾ ಕಾ ಎನ್ನುತ್ತದೆ',  habitat:'ಎಲ್ಲೆಡೆ',  bg:'linear-gradient(145deg,#2a2a3a,#1a1a2a)' },
+  { kn:'ಗುಬ್ಬಿ',  en:'Sparrow',  emoji:'🐦', sound:'ಚಿಲಿಪಿಲಿ ಎನ್ನುತ್ತದೆ', habitat:'ಮನೆ ಸಮೀಪ', bg:'linear-gradient(145deg,#9e7a4a,#7e5a2a)' },
+  { kn:'ಗೂಬೆ',    en:'Owl',      emoji:'🦉', sound:'ಹೂ ಹೂ ಎನ್ನುತ್ತದೆ', habitat:'ಕಾಡು',    bg:'linear-gradient(145deg,#6a5a3a,#4a3a1a)' },
+  { kn:'ಹದ್ದು',   en:'Eagle',    emoji:'🦅', sound:'ಚೀರುತ್ತದೆ',         habitat:'ಬೆಟ್ಟ',   bg:'linear-gradient(145deg,#5a4a3a,#3a2a1a)' },
+  { kn:'ಹಂಸ',     en:'Swan',     emoji:'🦢', sound:'ಹೂಂಕರಿಸುತ್ತದೆ',    habitat:'ಕೆರೆ',    bg:'linear-gradient(145deg,#d0d0d0,#a0a0a0)' },
+  { kn:'ಫ್ಲೆಮಿಂಗೋ',en:'Flamingo', emoji:'🦩', sound:'ಕೂಗುತ್ತದೆ',        habitat:'ಕೆರೆ',    bg:'linear-gradient(145deg,#e84393,#c02070)' },
+];
+
+const water = [
+  { kn:'ಮೀನು',    en:'Fish',     emoji:'🐟', sound:'ಮೌನ',              habitat:'ನದಿ/ಸಮುದ್ರ', bg:'linear-gradient(145deg,#2a7ec8,#1a5ea0)' },
+  { kn:'ಆಕ್ಟೋಪಸ್',en:'Octopus',  emoji:'🐙', sound:'ಮೌನ',              habitat:'ಸಮುದ್ರ',  bg:'linear-gradient(145deg,#e84393,#a02060)' },
+  { kn:'ತಿಮಿಂಗಿಲ', en:'Whale',   emoji:'🐋', sound:'ಹಾಡುತ್ತದೆ',        habitat:'ಸಮುದ್ರ',  bg:'linear-gradient(145deg,#1a5276,#0d3d5e)' },
+  { kn:'ಡಾಲ್ಫಿನ್', en:'Dolphin',  emoji:'🐬', sound:'ಚೀರುತ್ತದೆ',        habitat:'ಸಮುದ್ರ',  bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
+  { kn:'ಏಡಿ',      en:'Crab',     emoji:'🦀', sound:'ಮೌನ',              habitat:'ಸಮುದ್ರ',  bg:'linear-gradient(145deg,#e17055,#c0392b)' },
+  { kn:'ಕಪ್ಪೆ',    en:'Frog',     emoji:'🐸', sound:'ವಟ ವಟ ಎನ್ನುತ್ತದೆ', habitat:'ಕೆರೆ/ನದಿ', bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
+  { kn:'ಜೆಲ್ಲಿ ಮೀನು',en:'Jellyfish',emoji:'🪼',sound:'ಮೌನ',             habitat:'ಸಮುದ್ರ',  bg:'linear-gradient(145deg,#a29bfe,#7c6fe0)' },
+  { kn:'ಸಿಗಡಿ',    en:'Shrimp',   emoji:'🦐', sound:'ಮೌನ',              habitat:'ಸಮುದ್ರ',  bg:'linear-gradient(145deg,#e17055,#b05030)' },
+];
+
+const tabMap = { wild, farm, birds, water };
+let soundOn = true;
+let activeTab = 'wild';
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
+  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+}
+
+function speak(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
+  const voices = window.speechSynthesis.getVoices();
+  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
+  if (!kn) return;
+  u.voice = kn;
+  window.speechSynthesis.speak(u);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  ['wild','farm','birds','water'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    el.className = 'tab' + (t === tab ? ' active-' + t : '');
+  });
+  buildGrid();
+}
+
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  tabMap[activeTab].forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="animal-face" style="background:${a.bg};">
+        ${a.emoji}
+        <div class="habitat-badge">📍 ${a.habitat}</div>
+      </div>
+      <div class="card-info">
+        <div class="card-kn">${a.kn}</div>
+        <div class="card-en">${a.en}</div>
+        <div class="card-sound">🔊 ${a.sound}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+      speak(`${a.kn} ${a.sound}`);
+      setTimeout(() => card.classList.remove('playing'), 500);
+    });
+    grid.appendChild(card);
+  });
+}
+
+if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
+buildGrid();
+</script>
+</body>
+</html>

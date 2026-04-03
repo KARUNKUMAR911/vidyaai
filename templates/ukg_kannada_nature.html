@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ನನ್ನ ಪರಿಸರ - UKG Kannada</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+
+  :root { --bg: #071a0e; --topbar: #0a2012; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo Tamma 2', cursive;
+    background: var(--bg); min-height: 100vh; color: #f0fff4;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(39,174,96,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 90% 70%, rgba(41,128,185,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 95%, rgba(253,203,110,0.08) 0%, transparent 40%);
+  }
+
+  .topbar {
+    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .topbar-title {
+    font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(90deg, #6bcb77, #fdcb6e, #4d96ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sound-btn {
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
+    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .sound-btn:hover { background: rgba(255,255,255,0.22); }
+  .sound-btn.off { opacity: 0.5; }
+
+  .hero { text-align: center; padding: 26px 20px 10px; }
+  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: spin 4s linear infinite; }
+  @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+  .hero h1 {
+    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
+    background: linear-gradient(135deg, #6bcb77, #4d96ff, #fdcb6e);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    padding: 12px 20px 4px; max-width: 1100px; margin: 0 auto;
+  }
+  .tab {
+    padding: 9px 16px; border-radius: 14px;
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
+  }
+  .tab.active-sky    { background: linear-gradient(135deg,#4d96ff,#2980b9); color:white; box-shadow:0 4px 14px rgba(77,150,255,0.4); }
+  .tab.active-land   { background: linear-gradient(135deg,#6bcb77,#27ae60); color:white; box-shadow:0 4px 14px rgba(107,203,119,0.4); }
+  .tab.active-water  { background: linear-gradient(135deg,#00cec9,#0984e3); color:white; box-shadow:0 4px 14px rgba(0,206,201,0.4); }
+  .tab.active-plants { background: linear-gradient(135deg,#fdcb6e,#e17055); color:white; box-shadow:0 4px 14px rgba(253,203,110,0.4); }
+  .tab.active-care   { background: linear-gradient(135deg,#e84393,#c0336f); color:white; box-shadow:0 4px 14px rgba(232,67,147,0.4); }
+  .tab:hover:not([class*='active']) { background: rgba(255,255,255,0.13); color:white; }
+
+  .tts-notice {
+    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
+    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
+    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
+    max-width: 1100px; margin: 12px auto 4px;
+  }
+
+  /* GRID */
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
+  }
+
+  .card {
+    border-radius: 22px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.4s both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
+  .card:nth-child(1){animation-delay:0.02s} .card:nth-child(2){animation-delay:0.05s}
+  .card:nth-child(3){animation-delay:0.08s} .card:nth-child(4){animation-delay:0.11s}
+  .card:nth-child(5){animation-delay:0.14s} .card:nth-child(6){animation-delay:0.17s}
+  .card:nth-child(7){animation-delay:0.20s} .card:nth-child(8){animation-delay:0.23s}
+  .card:nth-child(9){animation-delay:0.26s} .card:nth-child(10){animation-delay:0.29s}
+  .card:nth-child(11){animation-delay:0.32s} .card:nth-child(12){animation-delay:0.35s}
+
+  .card:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 48px rgba(0,0,0,0.55); }
+  .card:active { transform: scale(0.94); }
+  .card.playing { animation: npulse 0.5s ease !important; }
+  @keyframes npulse { 0%{transform:scale(1)} 40%{transform:scale(1.13)} 100%{transform:scale(1)} }
+
+  .item-face {
+    height: 106px; display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; position: relative;
+  }
+  .fact-pill {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
+    font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.8);
+    padding: 3px 6px; text-align: center; line-height: 1.3;
+  }
+
+  .card-info {
+    padding: 10px 10px 14px; text-align: center;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+  }
+  .card-kn { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .card-en { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.42); margin-top: 2px; font-style: italic; }
+
+  /* CARE tab — special card layout */
+  .care-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
+  }
+  .care-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 20px; cursor: pointer;
+    transition: all 0.18s; animation: popIn 0.4s both;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .care-card:nth-child(1){animation-delay:0.03s} .care-card:nth-child(2){animation-delay:0.07s}
+  .care-card:nth-child(3){animation-delay:0.11s} .care-card:nth-child(4){animation-delay:0.15s}
+  .care-card:nth-child(5){animation-delay:0.19s} .care-card:nth-child(6){animation-delay:0.23s}
+  .care-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+  .care-card.playing { background: rgba(107,203,119,0.12); border-color: rgba(107,203,119,0.3); }
+  .care-emoji { font-size: 2.2rem; flex-shrink: 0; }
+  .care-kn   { font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.3; }
+  .care-en   { font-size: 0.72rem; color: rgba(255,255,255,0.4); font-style: italic; margin-top: 2px; }
+  .care-desc { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 5px; line-height: 1.5; }
+
+  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+
+  @media(max-width:480px){
+    .grid { grid-template-columns: repeat(3,1fr); gap: 11px; padding: 10px 13px 32px; }
+    .item-face { height: 82px; font-size: 2.8rem; }
+    .card-kn { font-size: 0.88rem; }
+    .hero h1 { font-size: 1.75rem; }
+    .care-grid { grid-template-columns: 1fr; padding: 12px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/class/ukg/kannada" class="back-btn">←</a>
+    <span class="topbar-title">ನನ್ನ ಪರಿಸರ</span>
+  </div>
+  <div class="topbar-right">
+    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+      <span id="soundIcon">🔊</span>
+      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">🌍</div>
+  <h1>ನನ್ನ ಪರಿಸರ</h1>
+  <p>ನಮ್ಮ ಸುತ್ತಲಿನ ಪ್ರಕೃತಿ • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active-sky"   id="tab-sky"   onclick="switchTab('sky')">☁️ ಆಕಾಶ</button>
+  <button class="tab" id="tab-land"   onclick="switchTab('land')">🌳 ಭೂಮಿ</button>
+  <button class="tab" id="tab-water"  onclick="switchTab('water')">💧 ನೀರು</button>
+  <button class="tab" id="tab-plants" onclick="switchTab('plants')">🌿 ಸಸ್ಯಗಳು</button>
+  <button class="tab" id="tab-care"   onclick="switchTab('care')">💚 ಪರಿಸರ ರಕ್ಷಣೆ</button>
+</div>
+
+<div class="tts-notice">
+  <span>📱</span>
+  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="care-grid" id="careGrid" style="display:none;"></div>
+<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+
+<script>
+const sky = [
+  { kn:'ಸೂರ್ಯ',    en:'Sun',      emoji:'☀️', fact:'ಬೆಳಕು ಮತ್ತು ಉಷ್ಣ ನೀಡುತ್ತದೆ', bg:'linear-gradient(145deg,#e67e22,#d35400)' },
+  { kn:'ಚಂದ್ರ',    en:'Moon',     emoji:'🌙', fact:'ರಾತ್ರಿ ಬೆಳಕು ನೀಡುತ್ತದೆ',     bg:'linear-gradient(145deg,#7f8c8d,#5d6d7e)' },
+  { kn:'ನಕ್ಷತ್ರ',  en:'Star',     emoji:'⭐', fact:'ರಾತ್ರಿ ಆಕಾಶದಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ', bg:'linear-gradient(145deg,#1a1a4e,#2d2d8e)' },
+  { kn:'ಮೋಡ',      en:'Cloud',    emoji:'☁️', fact:'ಮಳೆ ತರುತ್ತದೆ',              bg:'linear-gradient(145deg,#85c1e9,#5d9cca)' },
+  { kn:'ಮಳೆ',      en:'Rain',     emoji:'🌧️', fact:'ಗಿಡ ಬೆಳೆಯಲು ಸಹಾಯ',         bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
+  { kn:'ಮಳೆಬಿಲ್ಲು', en:'Rainbow',  emoji:'🌈', fact:'ಮಳೆ ನಂತರ ಕಾಣಿಸುತ್ತದೆ',      bg:'linear-gradient(145deg,#8e44ad,#2980b9)' },
+  { kn:'ಗಾಳಿ',     en:'Wind',     emoji:'💨', fact:'ಉಸಿರಾಡಲು ಅಗತ್ಯ',            bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
+  { kn:'ಮಿಂಚು',    en:'Lightning',emoji:'⚡', fact:'ಮೋಡದಿಂದ ಬರುತ್ತದೆ',          bg:'linear-gradient(145deg,#f39c12,#d35400)' },
+];
+
+const land = [
+  { kn:'ಬೆಟ್ಟ',     en:'Mountain', emoji:'⛰️', fact:'ತುಂಬಾ ಎತ್ತರವಾಗಿದೆ',        bg:'linear-gradient(145deg,#5d6d7e,#2e4057)' },
+  { kn:'ಕಾಡು',      en:'Forest',   emoji:'🌲', fact:'ಪ್ರಾಣಿಗಳ ಮನೆ',             bg:'linear-gradient(145deg,#27ae60,#1a7a3c)' },
+  { kn:'ಮರಳುಗಾಡು',  en:'Desert',   emoji:'🏜️', fact:'ತುಂಬಾ ಬಿಸಿ ಮತ್ತು ಒಣ',      bg:'linear-gradient(145deg,#e67e22,#ca6f1e)' },
+  { kn:'ಹುಲ್ಲುಗಾವಲು',en:'Grassland',emoji:'🌾', fact:'ಪ್ರಾಣಿಗಳಿಗೆ ಮೇವು',          bg:'linear-gradient(145deg,#d4ac0d,#a07818)' },
+  { kn:'ಮಣ್ಣು',     en:'Soil',     emoji:'🟫', fact:'ಗಿಡ ಬೆಳೆಯಲು ಬೇಕು',          bg:'linear-gradient(145deg,#784212,#5d3310)' },
+  { kn:'ಕಲ್ಲು',     en:'Rock',     emoji:'🪨', fact:'ಭೂಮಿಯ ಭಾಗ',               bg:'linear-gradient(145deg,#5d6d7e,#4a4a4a)' },
+  { kn:'ಗದ್ದೆ',     en:'Field',    emoji:'🌾', fact:'ಭತ್ತ ಬೆಳೆಯುತ್ತಾರೆ',          bg:'linear-gradient(145deg,#27ae60,#239b56)' },
+  { kn:'ಗುಡ್ಡ',     en:'Hill',     emoji:'🏔️', fact:'ಸಣ್ಣ ಬೆಟ್ಟ',               bg:'linear-gradient(145deg,#6d8c6e,#4a6b4a)' },
+];
+
+const water = [
+  { kn:'ನದಿ',      en:'River',    emoji:'🏞️', fact:'ಹರಿಯುವ ನೀರು',             bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
+  { kn:'ಕೆರೆ',     en:'Lake',     emoji:'🏞️', fact:'ನಿಂತ ನೀರು',               bg:'linear-gradient(145deg,#117a65,#0e6655)' },
+  { kn:'ಸಮುದ್ರ',   en:'Sea',      emoji:'🌊', fact:'ಉಪ್ಪು ನೀರು',               bg:'linear-gradient(145deg,#1a5276,#154360)' },
+  { kn:'滝ಜಲಪಾತ', en:'Waterfall',emoji:'💦', fact:'ಎತ್ತರದಿಂದ ಬೀಳುವ ನೀರು',     bg:'linear-gradient(145deg,#2980b9,#2e86c1)' },
+  { kn:'ಬಾವಿ',     en:'Well',     emoji:'🪣', fact:'ನೆಲದಿಂದ ನೀರು ತೆಗೆಯುತ್ತಾರೆ', bg:'linear-gradient(145deg,#5d6d7e,#3a4a5a)' },
+  { kn:'ಮಳೆ ನೀರು', en:'Rainwater',emoji:'🌧️', fact:'ಸಂಗ್ರಹಿಸಿ ಉಪಯೋಗಿಸಬೇಕು',    bg:'linear-gradient(145deg,#2980b9,#1a6a9e)' },
+  { kn:'ಹಿಮ',      en:'Snow',     emoji:'❄️', fact:'ಚಳಿಯಲ್ಲಿ ಮಳೆ ಹೆಪ್ಪುಗಟ್ಟುತ್ತದೆ', bg:'linear-gradient(145deg,#d0e8f0,#a0c8e0)' },
+  { kn:'ಝರಿ',      en:'Stream',   emoji:'🏔️', fact:'ಸಣ್ಣ ನದಿ',                 bg:'linear-gradient(145deg,#1e8bc3,#1a6fa0)' },
+];
+
+const plants = [
+  { kn:'ಮರ',       en:'Tree',     emoji:'🌳', fact:'ಆಮ್ಲಜನಕ ನೀಡುತ್ತದೆ',         bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
+  { kn:'ಹೂಗಿಡ',    en:'Flower Plant',emoji:'🌺',fact:'ಸುಂದರ ಹೂ ಬಿಡುತ್ತದೆ',     bg:'linear-gradient(145deg,#e84393,#c0336f)' },
+  { kn:'ಹುಲ್ಲು',   en:'Grass',    emoji:'🌿', fact:'ಹಸಿರು ನೆಲ ಮಾಡುತ್ತದೆ',       bg:'linear-gradient(145deg,#6bcb77,#27ae60)' },
+  { kn:'ಕ್ಯಾಕ್ಟಸ್', en:'Cactus',   emoji:'🌵', fact:'ಮರಳುಗಾಡಿನಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ',  bg:'linear-gradient(145deg,#27ae60,#196f3d)' },
+  { kn:'ಬಳ್ಳಿ',    en:'Creeper',  emoji:'🍃', fact:'ಗೋಡೆ ಮತ್ತು ಮರ ಹಿಡಿದು ಬೆಳೆಯುತ್ತದೆ', bg:'linear-gradient(145deg,#1e8449,#145a32)' },
+  { kn:'ಬೀಜ',      en:'Seed',     emoji:'🌱', fact:'ಗಿಡ ಹುಟ್ಟುವ ಮೂಲ',            bg:'linear-gradient(145deg,#8e6020,#6e4010)' },
+  { kn:'ಎಲೆ',      en:'Leaf',     emoji:'🍃', fact:'ಆಹಾರ ತಯಾರಿಸುತ್ತದೆ',          bg:'linear-gradient(145deg,#27ae60,#1a7a3c)' },
+  { kn:'ಬೇರು',     en:'Root',     emoji:'🌿', fact:'ನೀರು ಮತ್ತು ಪೋಷಣೆ ಹೀರುತ್ತದೆ', bg:'linear-gradient(145deg,#784212,#5d3310)' },
+  { kn:'ಹೂ',       en:'Flower',   emoji:'🌸', fact:'ಪರಾಗ ಸ್ಪರ್ಶ ಮಾಡುತ್ತದೆ',      bg:'linear-gradient(145deg,#e84393,#a02060)' },
+  { kn:'ಕಾಂಡ',     en:'Stem',     emoji:'🌿', fact:'ನೀರು ಎಲ್ಲ ಭಾಗಕ್ಕೆ ಸಾಗಿಸುತ್ತದೆ', bg:'linear-gradient(145deg,#6bcb77,#239b56)' },
+];
+
+const care = [
+  { emoji:'🌳', kn:'ಗಿಡ ನೆಡಿ', en:'Plant trees', desc:'ಒಂದು ಮರ ನೆಟ್ಟರೆ ಲಕ್ಷ ಜೀವ ಉಳಿಯುತ್ತದೆ. ಮನೆ ಸುತ್ತ ಗಿಡ ನೆಡಿ.' },
+  { emoji:'💧', kn:'ನೀರು ಉಳಿಸಿ', en:'Save water', desc:'ನೀರು ವ್ಯರ್ಥ ಮಾಡಬೇಡಿ. ತೆರೆದ ನಲ್ಲಿ ಮುಚ್ಚಿ.' },
+  { emoji:'🗑️', kn:'ಕಸ ಎಸೆಯಬೇಡಿ', en:'Don\'t litter', desc:'ಕಸವನ್ನು ಕಸದ ಬುಟ್ಟಿಯಲ್ಲಿ ಹಾಕಿ. ರಸ್ತೆ ಮೇಲೆ ಎಸೆಯಬೇಡಿ.' },
+  { emoji:'♻️', kn:'ಮರು ಬಳಕೆ', en:'Recycle', desc:'ಹಳೆ ವಸ್ತುಗಳನ್ನು ಮರು ಬಳಕೆ ಮಾಡಿ. ಪ್ಲಾಸ್ಟಿಕ್ ಕಡಿಮೆ ಬಳಸಿ.' },
+  { emoji:'🚶', kn:'ನಡೆದು ಹೋಗಿ', en:'Walk more', desc:'ಹತ್ತಿರ ಇದ್ದರೆ ನಡೆದು ಹೋಗಿ. ವಾಹನ ಹೊಗೆ ಕಡಿಮೆ ಮಾಡಿ.' },
+  { emoji:'💡', kn:'ವಿದ್ಯುತ್ ಉಳಿಸಿ', en:'Save electricity', desc:'ಬಳಸದ ದೀಪ ಆರಿಸಿ. ಸೂರ್ಯ ಬೆಳಕು ಬಳಸಿ.' },
+  { emoji:'🐾', kn:'ಪ್ರಾಣಿ ಕಾಪಾಡಿ', en:'Protect animals', desc:'ಪ್ರಾಣಿಗಳನ್ನು ಕಷ್ಟ ಮಾಡಬೇಡಿ. ಅವು ಪರಿಸರದ ಭಾಗ.' },
+  { emoji:'🌞', kn:'ಸೌರ ಶಕ್ತಿ', en:'Solar energy', desc:'ಸೂರ್ಯನ ಬೆಳಕಿನಿಂದ ವಿದ್ಯುತ್ ತಯಾರಿಸಬಹುದು.' },
+];
+
+const tabData = { sky, land, water, plants };
+let soundOn = true;
+let activeTab = 'sky';
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
+  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+}
+
+function speak(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
+  const voices = window.speechSynthesis.getVoices();
+  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
+  if (!kn) return;
+  u.voice = kn;
+  window.speechSynthesis.speak(u);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  ['sky','land','water','plants','care'].forEach(t => {
+    document.getElementById('tab-'+t).className = 'tab' + (t===tab ? ' active-'+t : '');
+  });
+  const grid = document.getElementById('grid');
+  const cg   = document.getElementById('careGrid');
+  if (tab === 'care') {
+    grid.style.display = 'none'; cg.style.display = 'grid'; buildCare();
+  } else {
+    grid.style.display = 'grid'; cg.style.display = 'none'; buildGrid();
+  }
+}
+
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  tabData[activeTab].forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="item-face" style="background:${item.bg};">
+        ${item.emoji}
+        <div class="fact-pill">💡 ${item.fact}</div>
+      </div>
+      <div class="card-info">
+        <div class="card-kn">${item.kn}</div>
+        <div class="card-en">${item.en}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+      speak(`${item.kn}. ${item.fact}`);
+      setTimeout(() => card.classList.remove('playing'), 600);
+    });
+    grid.appendChild(card);
+  });
+}
+
+function buildCare() {
+  const cg = document.getElementById('careGrid');
+  cg.innerHTML = '';
+  care.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'care-card';
+    div.style.animationDelay = (i * 0.06) + 's';
+    div.innerHTML = `
+      <div class="care-emoji">${c.emoji}</div>
+      <div>
+        <div class="care-kn">${c.kn}</div>
+        <div class="care-en">${c.en}</div>
+        <div class="care-desc">${c.desc}</div>
+      </div>
+    `;
+    div.addEventListener('click', () => {
+      div.classList.add('playing');
+      speak(`${c.kn}. ${c.desc}`);
+      setTimeout(() => div.classList.remove('playing'), 2500);
+    });
+    cg.appendChild(div);
+  });
+}
+
+if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
+buildGrid();
+</script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ಸಂಖ್ಯೆಗಳು - UKG Kannada</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+
+  :root { --bg: #0d0d2b; --topbar: #1a1a40; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo Tamma 2', cursive;
+    background: var(--bg); min-height: 100vh; color: #f0f0ff;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(77,150,255,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 85% 75%, rgba(255,107,216,0.1) 0%, transparent 50%);
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .back-btn {
+    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
+    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .topbar-title {
+    font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(90deg, #ffd93d, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sound-btn {
+    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
+    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .sound-btn:hover { background: rgba(255,255,255,0.22); }
+  .sound-btn.off { opacity: 0.5; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 28px 20px 12px; }
+  .hero-emoji { font-size: 3rem; display: inline-block; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .hero h1 {
+    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
+    background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p { font-size: 0.92rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 8px; justify-content: center;
+    padding: 12px 20px 4px; max-width: 1100px; margin: 0 auto; flex-wrap: wrap;
+  }
+  .tab {
+    padding: 9px 18px; border-radius: 14px;
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
+  }
+  .tab.active {
+    background: linear-gradient(135deg, #ffd93d, #e17055);
+    color: white; box-shadow: 0 4px 16px rgba(255,217,61,0.35);
+  }
+  .tab:hover:not(.active) { background: rgba(255,255,255,0.13); color: white; }
+
+  /* TTS NOTICE */
+  .tts-notice {
+    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
+    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
+    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
+    max-width: 1100px; margin: 12px auto 4px;
+  }
+
+  /* NUMBER GRID */
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 14px; padding: 16px 24px 32px; max-width: 1100px; margin: 0 auto;
+  }
+
+  .card {
+    border-radius: 18px; padding: 14px 8px 12px; text-align: center;
+    cursor: pointer; position: relative; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: popIn 0.4s both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+  .card:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 14px 36px rgba(0,0,0,0.45); }
+  .card:active { transform: scale(0.95); }
+  .card.playing { animation: npulse 0.5s ease !important; }
+  @keyframes npulse { 0%{transform:scale(1)} 40%{transform:scale(1.14)} 100%{transform:scale(1)} }
+
+  .card::before {
+    content: ''; position: absolute; top: -30%; left: -30%;
+    width: 60%; height: 60%; background: rgba(255,255,255,0.15);
+    border-radius: 50%; pointer-events: none;
+  }
+
+  .card-numeral { font-size: 2rem; font-weight: 800; color: rgba(0,0,0,0.75); line-height: 1; }
+  .card-divider { width: 30px; height: 2px; background: rgba(0,0,0,0.2); border-radius: 2px; margin: 5px auto; }
+  .card-word { font-size: 0.82rem; font-weight: 700; color: rgba(0,0,0,0.75); line-height: 1.2; }
+  .card-arabic { font-size: 0.68rem; color: rgba(0,0,0,0.45); margin-top: 3px; font-weight: 600; }
+
+  /* ADDITION SECTION */
+  .addition-wrap {
+    padding: 8px 24px 52px; max-width: 900px; margin: 0 auto;
+  }
+  .addition-title {
+    text-align: center; font-size: 1rem; font-weight: 700;
+    color: rgba(255,255,255,0.35); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+
+  /* Interactive addition calculator */
+  .adder {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px; padding: 24px 20px; margin-bottom: 20px; text-align: center;
+    animation: popIn 0.5s both;
+  }
+  .adder-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .num-input {
+    background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 14px; color: white; font-family: 'Baloo Tamma 2', cursive;
+    font-size: 1.6rem; font-weight: 800; width: 80px; height: 64px;
+    text-align: center; outline: none; transition: border-color 0.2s;
+  }
+  .num-input:focus { border-color: #ffd93d; }
+  .adder-op { font-size: 2rem; font-weight: 800; color: #ffd93d; }
+  .adder-eq { font-size: 2rem; font-weight: 800; color: rgba(255,255,255,0.5); }
+  .adder-result {
+    font-size: 2.4rem; font-weight: 800; min-width: 90px;
+    background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .adder-result-kn { font-size: 1rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  .speak-result-btn {
+    background: linear-gradient(135deg, #ffd93d, #e17055);
+    border: none; border-radius: 14px; color: white;
+    font-family: 'Baloo Tamma 2', cursive; font-size: 0.95rem; font-weight: 700;
+    padding: 10px 24px; cursor: pointer; margin-top: 8px; transition: transform 0.15s;
+  }
+  .speak-result-btn:hover { transform: scale(1.05); }
+
+  /* Addition cards */
+  .add-cards {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .add-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px; padding: 16px; text-align: center; cursor: pointer;
+    transition: all 0.18s; animation: popIn 0.4s both;
+  }
+  .add-card:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); }
+  .add-card.playing { background: rgba(255,217,61,0.15); border-color: rgba(255,217,61,0.4); }
+  .add-eq { font-size: 1.15rem; font-weight: 800; color: #ffd93d; }
+  .add-kn { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 5px; }
+
+  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+
+  @media(max-width:480px){
+    .grid { grid-template-columns: repeat(4,1fr); gap: 10px; padding: 12px 13px 24px; }
+    .card-numeral { font-size: 1.5rem; }
+    .card-word { font-size: 0.72rem; }
+    .hero h1 { font-size: 1.8rem; }
+    .add-cards { grid-template-columns: repeat(2,1fr); }
+    .num-input { width: 65px; height: 54px; font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/class/ukg/kannada" class="back-btn">←</a>
+    <span class="topbar-title">ಸಂಖ್ಯೆಗಳು</span>
+  </div>
+  <div class="topbar-right">
+    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+      <span id="soundIcon">🔊</span>
+      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
+    </button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">🔢</div>
+  <h1>ಸಂಖ್ಯೆಗಳು</h1>
+  <p>೧ ರಿಂದ ೫೦ + ಕೂಡುವಿಕೆ • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" id="tab-1-10"  onclick="switchTab('1-10')">೧–೧೦</button>
+  <button class="tab"        id="tab-11-20" onclick="switchTab('11-20')">೧೧–೨೦</button>
+  <button class="tab"        id="tab-21-30" onclick="switchTab('21-30')">೨೧–೩೦</button>
+  <button class="tab"        id="tab-31-40" onclick="switchTab('31-40')">೩೧–೪೦</button>
+  <button class="tab"        id="tab-41-50" onclick="switchTab('41-50')">೪೧–೫೦</button>
+  <button class="tab"        id="tab-add"   onclick="switchTab('add')">➕ ಕೂಡುವಿಕೆ</button>
+</div>
+
+<div class="tts-notice">
+  <span>📱</span>
+  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="addition-wrap" id="addWrap" style="display:none;"></div>
+<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+
+<script>
+const numbers = [
+  {n:'೧',w:'ಒಂದು',a:1},{n:'೨',w:'ಎರಡು',a:2},{n:'೩',w:'ಮೂರು',a:3},
+  {n:'೪',w:'ನಾಲ್ಕು',a:4},{n:'೫',w:'ಐದು',a:5},{n:'೬',w:'ಆರು',a:6},
+  {n:'೭',w:'ಏಳು',a:7},{n:'೮',w:'ಎಂಟು',a:8},{n:'೯',w:'ಒಂಬತ್ತು',a:9},
+  {n:'೧೦',w:'ಹತ್ತು',a:10},{n:'೧೧',w:'ಹನ್ನೊಂದು',a:11},{n:'೧೨',w:'ಹನ್ನೆರಡು',a:12},
+  {n:'೧೩',w:'ಹದಿಮೂರು',a:13},{n:'೧೪',w:'ಹದಿನಾಲ್ಕು',a:14},{n:'೧೫',w:'ಹದಿನೈದು',a:15},
+  {n:'೧೬',w:'ಹದಿನಾರು',a:16},{n:'೧೭',w:'ಹದಿನೇಳು',a:17},{n:'೧೮',w:'ಹದಿನೆಂಟು',a:18},
+  {n:'೧೯',w:'ಹತ್ತೊಂಬತ್ತು',a:19},{n:'೨೦',w:'ಇಪ್ಪತ್ತು',a:20},
+  {n:'೨೧',w:'ಇಪ್ಪತ್ತೊಂದು',a:21},{n:'೨೨',w:'ಇಪ್ಪತ್ತೆರಡು',a:22},{n:'೨೩',w:'ಇಪ್ಪತ್ತಮೂರು',a:23},
+  {n:'೨೪',w:'ಇಪ್ಪತ್ತನಾಲ್ಕು',a:24},{n:'೨೫',w:'ಇಪ್ಪತ್ತೈದು',a:25},{n:'೨೬',w:'ಇಪ್ಪತ್ತಾರು',a:26},
+  {n:'೨೭',w:'ಇಪ್ಪತ್ತೇಳು',a:27},{n:'೨೮',w:'ಇಪ್ಪತ್ತೆಂಟು',a:28},{n:'೨೯',w:'ಇಪ್ಪತ್ತೊಂಬತ್ತು',a:29},
+  {n:'೩೦',w:'ಮೂವತ್ತು',a:30},{n:'೩೧',w:'ಮೂವತ್ತೊಂದು',a:31},{n:'೩೨',w:'ಮೂವತ್ತೆರಡು',a:32},
+  {n:'೩೩',w:'ಮೂವತ್ತಮೂರು',a:33},{n:'೩೪',w:'ಮೂವತ್ತನಾಲ್ಕು',a:34},{n:'೩೫',w:'ಮೂವತ್ತೈದು',a:35},
+  {n:'೩೬',w:'ಮೂವತ್ತಾರು',a:36},{n:'೩೭',w:'ಮೂವತ್ತೇಳು',a:37},{n:'೩೮',w:'ಮೂವತ್ತೆಂಟು',a:38},
+  {n:'೩೯',w:'ಮೂವತ್ತೊಂಬತ್ತು',a:39},{n:'೪೦',w:'ನಲ್ವತ್ತು',a:40},
+  {n:'೪೧',w:'ನಲ್ವತ್ತೊಂದು',a:41},{n:'೪೨',w:'ನಲ್ವತ್ತೆರಡು',a:42},{n:'೪೩',w:'ನಲ್ವತ್ತಮೂರು',a:43},
+  {n:'೪೪',w:'ನಲ್ವತ್ತನಾಲ್ಕು',a:44},{n:'೪೫',w:'ನಲ್ವತ್ತೈದು',a:45},{n:'೪೬',w:'ನಲ್ವತ್ತಾರು',a:46},
+  {n:'೪೭',w:'ನಲ್ವತ್ತೇಳು',a:47},{n:'೪೮',w:'ನಲ್ವತ್ತೆಂಟು',a:48},{n:'೪೯',w:'ನಲ್ವತ್ತೊಂಬತ್ತು',a:49},
+  {n:'೫೦',w:'ಐವತ್ತು',a:50},
+];
+
+// colour palette cycling for cards
+const palettes = [
+  'linear-gradient(145deg,#ff6b6b,#ff9e6b)',
+  'linear-gradient(145deg,#ffd93d,#ffb347)',
+  'linear-gradient(145deg,#6bcb77,#00c9a7)',
+  'linear-gradient(145deg,#4d96ff,#6bb5ff)',
+  'linear-gradient(145deg,#ff6fd8,#c77dff)',
+  'linear-gradient(145deg,#a29bfe,#74b9ff)',
+  'linear-gradient(145deg,#fd79a8,#ff6b6b)',
+  'linear-gradient(145deg,#00cec9,#6bcb77)',
+  'linear-gradient(145deg,#fdcb6e,#e17055)',
+  'linear-gradient(145deg,#55efc4,#00b894)',
+];
+
+const additionExamples = [
+  {eq:'೧ + ೧ = ೨', kn:'ಒಂದು ಮತ್ತು ಒಂದು ಎರಡು', speak:'ಒಂದು ಮತ್ತು ಒಂದು ಸಮ ಎರಡು'},
+  {eq:'೨ + ೩ = ೫', kn:'ಎರಡು ಮತ್ತು ಮೂರು ಐದು', speak:'ಎರಡು ಮತ್ತು ಮೂರು ಸಮ ಐದು'},
+  {eq:'೪ + ೨ = ೬', kn:'ನಾಲ್ಕು ಮತ್ತು ಎರಡು ಆರು', speak:'ನಾಲ್ಕು ಮತ್ತು ಎರಡು ಸಮ ಆರು'},
+  {eq:'೫ + ೫ = ೧೦', kn:'ಐದು ಮತ್ತು ಐದು ಹತ್ತು', speak:'ಐದು ಮತ್ತು ಐದು ಸಮ ಹತ್ತು'},
+  {eq:'೧೦ + ೫ = ೧೫', kn:'ಹತ್ತು ಮತ್ತು ಐದು ಹದಿನೈದು', speak:'ಹತ್ತು ಮತ್ತು ಐದು ಸಮ ಹದಿನೈದು'},
+  {eq:'೬ + ೪ = ೧೦', kn:'ಆರು ಮತ್ತು ನಾಲ್ಕು ಹತ್ತು', speak:'ಆರು ಮತ್ತು ನಾಲ್ಕು ಸಮ ಹತ್ತು'},
+  {eq:'೮ + ೨ = ೧೦', kn:'ಎಂಟು ಮತ್ತು ಎರಡು ಹತ್ತು', speak:'ಎಂಟು ಮತ್ತು ಎರಡು ಸಮ ಹತ್ತು'},
+  {eq:'೩ + ೭ = ೧೦', kn:'ಮೂರು ಮತ್ತು ಏಳು ಹತ್ತು', speak:'ಮೂರು ಮತ್ತು ಏಳು ಸಮ ಹತ್ತು'},
+];
+
+let soundOn = true;
+let activeTab = '1-10';
+
+const tabRanges = {'1-10':[0,10],'11-20':[10,20],'21-30':[20,30],'31-40':[30,40],'41-50':[40,50]};
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
+  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+}
+
+function speak(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
+  const voices = window.speechSynthesis.getVoices();
+  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
+  if (!kn) return;
+  u.voice = kn;
+  window.speechSynthesis.speak(u);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  ['1-10','11-20','21-30','31-40','41-50','add'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'add') {
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('addWrap').style.display = 'block';
+    buildAddition();
+  } else {
+    document.getElementById('grid').style.display = 'grid';
+    document.getElementById('addWrap').style.display = 'none';
+    buildGrid();
+  }
+}
+
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const [start, end] = tabRanges[activeTab];
+  numbers.slice(start, end).forEach((num, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.background = palettes[i % palettes.length];
+    card.style.animationDelay = (i * 0.03) + 's';
+    card.innerHTML = `
+      <div class="card-numeral">${num.n}</div>
+      <div class="card-divider"></div>
+      <div class="card-word">${num.w}</div>
+      <div class="card-arabic">${num.a}</div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+      speak(num.w);
+      setTimeout(() => card.classList.remove('playing'), 500);
+    });
+    grid.appendChild(card);
+  });
+}
+
+function buildAddition() {
+  const wrap = document.getElementById('addWrap');
+  wrap.innerHTML = `
+    <div class="addition-title">➕ ಕೂಡುವಿಕೆ ಅಭ್ಯಾಸ</div>
+    <div class="adder">
+      <div style="font-size:0.9rem;color:rgba(255,255,255,0.45);margin-bottom:12px;">ಸಂಖ್ಯೆ ಟೈಪ್ ಮಾಡಿ ಉತ್ತರ ಕಾಣಿ</div>
+      <div class="adder-row">
+        <input class="num-input" id="numA" type="number" min="0" max="50" value="5" oninput="calcResult()"/>
+        <span class="adder-op">+</span>
+        <input class="num-input" id="numB" type="number" min="0" max="50" value="3" oninput="calcResult()"/>
+        <span class="adder-eq">=</span>
+        <div>
+          <div class="adder-result" id="resultNum">8</div>
+          <div class="adder-result-kn" id="resultKn">ಎಂಟು</div>
+        </div>
+      </div>
+      <button class="speak-result-btn" onclick="speakResult()">🔊 ಉತ್ತರ ಕೇಳಿ</button>
+    </div>
+    <div class="addition-title" style="margin-top:8px;">📚 ಉದಾಹರಣೆಗಳು</div>
+    <div class="add-cards" id="addCards"></div>
+  `;
+
+  const addCards = document.getElementById('addCards');
+  additionExamples.forEach(ex => {
+    const div = document.createElement('div');
+    div.className = 'add-card';
+    div.innerHTML = `<div class="add-eq">${ex.eq}</div><div class="add-kn">${ex.kn}</div>`;
+    div.addEventListener('click', () => {
+      div.classList.add('playing');
+      speak(ex.speak);
+      setTimeout(() => div.classList.remove('playing'), 2000);
+    });
+    addCards.appendChild(div);
+  });
+}
+
+function calcResult() {
+  const a = parseInt(document.getElementById('numA').value) || 0;
+  const b = parseInt(document.getElementById('numB').value) || 0;
+  const result = a + b;
+  document.getElementById('resultNum').textContent = result <= 50 ? toKannadaNumeral(result) : result;
+  document.getElementById('resultKn').textContent = result <= 50 && numbers[result-1] ? numbers[result-1].w : '?';
+}
+
+function speakResult() {
+  const a = parseInt(document.getElementById('numA').value) || 0;
+  const b = parseInt(document.getElementById('numB').value) || 0;
+  const result = a + b;
+  const aW = a <= 50 && numbers[a-1] ? numbers[a-1].w : a;
+  const bW = b <= 50 && numbers[b-1] ? numbers[b-1].w : b;
+  const rW = result <= 50 && numbers[result-1] ? numbers[result-1].w : result;
+  speak(`${aW} ಮತ್ತು ${bW} ಸಮ ${rW}`);
+}
+
+function toKannadaNumeral(n) {
+  const knDigits = ['೦','೧','೨','೩','೪','೫','೬','೭','೮','೯'];
+  return String(n).split('').map(d => knDigits[parseInt(d)]).join('');
+}
+
+if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
+buildGrid();
+</script>
+</body>
+</html>
