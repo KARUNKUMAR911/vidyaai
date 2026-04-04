@@ -3,371 +3,401 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ಪ್ರಾಣಿಗಳು - LKG Kannada</title>
+<title>ಪ್ರಾಣಿಗಳು - LKG ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --radius: 30px; --top-h: 70px; }
 
-  :root {
-    --bg: #0d1f14;
-    --topbar: #112018;
-    --text-light: #f0f0ff;
-  }
+body {
+  font-family: 'Baloo Tamma 2', cursive;
+  background: #f0f4ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--top-h);
+  background: #1a1a2e;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 300;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+.topbar-title {
+  font-size: 1.55rem; font-weight: 900;
+  background: linear-gradient(90deg, #FFD93D, #FF6B35, #FF6B9D);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.top-right { display: flex; align-items: center; gap: 10px; }
+.score-pill {
+  background: #FFD93D; color: #1a1a2e;
+  font-weight: 900; font-size: 1rem;
+  padding: 7px 18px; border-radius: 50px;
+  box-shadow: 0 4px 14px rgba(255,217,61,0.45);
+  white-space: nowrap;
+}
+.sound-btn {
+  background: rgba(255,255,255,0.13);
+  border: 2px solid rgba(255,255,255,0.22);
+  color: white; border-radius: 12px;
+  padding: 8px 14px; font-size: 1.2rem;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s;
+}
+.sound-btn:hover { background: rgba(255,255,255,0.22); }
+.sound-btn.off { opacity: 0.4; }
 
-  body {
-    font-family: 'Baloo Tamma 2', cursive;
-    background: var(--bg);
-    min-height: 100vh;
-    color: var(--text-light);
-    background-image:
-      radial-gradient(circle at 15% 25%, rgba(107,203,119,0.12) 0%, transparent 50%),
-      radial-gradient(circle at 85% 70%, rgba(253,203,110,0.1) 0%, transparent 50%),
-      radial-gradient(circle at 50% 90%, rgba(0,206,201,0.07) 0%, transparent 40%);
-  }
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  background: #1a1a2e;
+  padding: 0 12px 14px;
+  gap: 8px;
+  overflow-x: auto; scrollbar-width: none;
+  position: sticky; top: var(--top-h); z-index: 200;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 20px; border-radius: 18px; border: none;
+  cursor: pointer; font-family: 'Baloo Tamma 2', cursive;
+  font-weight: 800; color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.07);
+  transition: all 0.22s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap; position: relative;
+}
+.tab-btn .t-icon { font-size: 1.7rem; line-height: 1; }
+.tab-btn .t-kn   { font-size: 0.95rem; }
+.tab-btn .t-en   { font-size: 0.68rem; opacity: 0.55; font-weight: 600; }
+.tab-btn.active  { color: #1a1a2e; transform: translateY(-3px) scale(1.06); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+.tab-btn[data-t="wild"].active  { background: linear-gradient(135deg,#43e97b,#38f9d7); }
+.tab-btn[data-t="farm"].active  { background: linear-gradient(135deg,#f9d423,#f83600); color:white; }
+.tab-btn[data-t="water"].active { background: linear-gradient(135deg,#4facfe,#00f2fe); }
+.tab-btn[data-t="birds"].active { background: linear-gradient(135deg,#fa709a,#fee140); }
+.tab-btn[data-t="small"].active { background: linear-gradient(135deg,#a18cd1,#fbc2eb); }
+.tab-count {
+  position: absolute; top: 5px; right: 7px;
+  background: rgba(255,255,255,0.22); border-radius: 50px;
+  padding: 1px 6px; font-size: 0.62rem; font-weight: 900;
+}
+.tab-btn.active .tab-count { background: rgba(0,0,0,0.12); }
 
-  /* TOPBAR */
-  .topbar {
-    background: var(--topbar);
-    border-bottom: 2px solid rgba(255,255,255,0.07);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 64px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; }
 
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
+/* ── PANEL HERO ── */
+.panel-hero {
+  padding: 30px 24px 18px; text-align: center; position: relative; overflow: hidden;
+}
+.panel-hero h2 { font-size: 2.8rem; font-weight: 900; line-height: 1.1; margin-bottom: 5px; }
+.panel-hero p  { font-size: 1.05rem; font-weight: 700; opacity: 0.6; margin-bottom: 13px; }
+.tap-hint {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 2.5px dashed currentColor; border-radius: 50px;
+  padding: 7px 20px; font-size: 0.98rem; font-weight: 800; opacity: 0.7;
+  animation: wag 2s ease-in-out infinite;
+}
+@keyframes wag { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+.hf {
+  position: absolute; font-size: 3.5rem;
+  animation: fy 4s ease-in-out infinite; pointer-events: none; opacity: 0.16;
+}
+@keyframes fy { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-18px) rotate(8deg);} }
 
-  .back-btn {
-    background: rgba(255,255,255,0.1);
-    border: none;
-    border-radius: 10px;
-    color: white;
-    padding: 8px 14px;
-    font-size: 18px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.2); }
+/* ── GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 22px; padding: 14px 26px 60px;
+  max-width: 1300px; margin: 0 auto;
+}
 
-  .topbar-title {
-    font-size: 1.3rem;
-    font-weight: 800;
-    background: linear-gradient(90deg, #6bcb77, #fdcb6e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ── CARD ── */
+.card {
+  border-radius: var(--radius); background: white;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+  cursor: pointer; overflow: hidden;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  border: 3.5px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.5) rotate(-6deg); }
+  to   { opacity:1; transform:scale(1); }
+}
+.card:hover { transform:translateY(-12px) scale(1.04) rotate(.8deg); box-shadow:0 24px 56px rgba(0,0,0,0.15); }
+.card:active { transform:scale(0.91); }
+.card.playing { animation: cb .5s cubic-bezier(.34,1.56,.64,1) !important; }
+@keyframes cb { 0%{transform:scale(1);} 30%{transform:scale(1.22) rotate(-4deg);} 65%{transform:scale(.94) rotate(2deg);} 100%{transform:scale(1);} }
 
-  .sound-btn {
-    background: rgba(255,255,255,0.12);
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 12px;
-    color: white;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-family: 'Baloo Tamma 2', cursive;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s;
-  }
-  .sound-btn:hover { background: rgba(255,255,255,0.22); }
-  .sound-btn.off { opacity: 0.5; }
+.card-face {
+  height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5.5rem; position: relative;
+}
+.star-pop {
+  position: absolute; top: 8px; right: 12px;
+  font-size: 1.6rem; transform: scale(0); opacity: 0;
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1); pointer-events: none;
+}
+.card.playing .star-pop { transform: scale(1) rotate(25deg); opacity: 1; }
+.card.learned .star-pop { transform: scale(0.85); opacity: 0.55; }
 
-  /* HERO */
-  .hero {
-    text-align: center;
-    padding: 32px 20px 16px;
-  }
-  .hero-emoji {
-    font-size: 3.2rem;
-    display: inline-block;
-    animation: wobble 2.5s ease-in-out infinite;
-  }
-  @keyframes wobble {
-    0%,100% { transform: rotate(-8deg); }
-    50%      { transform: rotate(8deg) scale(1.1); }
-  }
-  .hero h1 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-top: 8px;
-    background: linear-gradient(135deg, #6bcb77, #fdcb6e, #ff6b6b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero p {
-    font-size: 0.95rem;
-    color: rgba(255,255,255,0.4);
-    margin-top: 4px;
-  }
+.card-info { padding: 15px 12px 20px; text-align: center; border-top: 3px solid rgba(0,0,0,0.05); }
+.kn-word { font-size: 1.85rem; font-weight: 900; color: #1a1a2e; line-height: 1.1; }
+.en-word { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 3px; opacity: 0.4; }
+.sound-pill {
+  display: inline-block; margin-top: 9px; border-radius: 50px;
+  padding: 5px 16px; font-size: 0.88rem; font-weight: 800; color: white;
+}
 
-  /* TTS NOTICE */
-  .tts-notice {
-    background: rgba(255,209,61,0.1);
-    border: 1px solid rgba(255,209,61,0.28);
-    border-radius: 14px;
-    padding: 10px 16px;
-    font-size: 0.8rem;
-    color: rgba(255,209,61,0.85);
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    max-width: 1100px;
-    margin: 0 auto 16px;
-  }
+/* ── CONFETTI ── */
+.cf { position:fixed; border-radius:3px; top:-20px; pointer-events:none; z-index:9999; animation:cff 1.4s ease-in forwards; }
+@keyframes cff { to { transform: translateY(110vh) rotate(600deg); opacity:0; } }
 
-  /* GRID */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 18px;
-    padding: 8px 24px 52px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .card {
-    border-radius: 22px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    transition: transform 0.18s, box-shadow 0.18s;
-    animation: popIn 0.45s both;
-    position: relative;
-  }
-
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.65); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-
-  .card:nth-child(1)  { animation-delay: 0.02s; }
-  .card:nth-child(2)  { animation-delay: 0.04s; }
-  .card:nth-child(3)  { animation-delay: 0.06s; }
-  .card:nth-child(4)  { animation-delay: 0.08s; }
-  .card:nth-child(5)  { animation-delay: 0.10s; }
-  .card:nth-child(6)  { animation-delay: 0.12s; }
-  .card:nth-child(7)  { animation-delay: 0.14s; }
-  .card:nth-child(8)  { animation-delay: 0.16s; }
-  .card:nth-child(9)  { animation-delay: 0.18s; }
-  .card:nth-child(10) { animation-delay: 0.20s; }
-  .card:nth-child(11) { animation-delay: 0.22s; }
-  .card:nth-child(12) { animation-delay: 0.24s; }
-  .card:nth-child(13) { animation-delay: 0.26s; }
-  .card:nth-child(14) { animation-delay: 0.28s; }
-  .card:nth-child(15) { animation-delay: 0.30s; }
-  .card:nth-child(16) { animation-delay: 0.32s; }
-  .card:nth-child(17) { animation-delay: 0.34s; }
-  .card:nth-child(18) { animation-delay: 0.36s; }
-  .card:nth-child(19) { animation-delay: 0.38s; }
-  .card:nth-child(20) { animation-delay: 0.40s; }
-
-  .card:hover {
-    transform: translateY(-8px) scale(1.05);
-    box-shadow: 0 20px 48px rgba(0,0,0,0.55);
-  }
-  .card:active { transform: scale(0.94); }
-
-  .card.playing {
-    animation: pulse 0.5s ease !important;
-  }
-  @keyframes pulse {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.13); }
-    100% { transform: scale(1); }
-  }
-
-  /* Emoji area */
-  .animal-face {
-    height: 108px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.6rem;
-    position: relative;
-  }
-
-  /* jungle leaf deco */
-  .animal-face::before {
-    content: '🌿';
-    position: absolute;
-    top: 6px; left: 8px;
-    font-size: 1rem;
-    opacity: 0.5;
-  }
-  .animal-face::after {
-    content: '🌿';
-    position: absolute;
-    bottom: 6px; right: 8px;
-    font-size: 1rem;
-    opacity: 0.5;
-    transform: scaleX(-1);
-  }
-
-  .card-info {
-    padding: 12px 10px 16px;
-    text-align: center;
-    background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(4px);
-  }
-
-  .card-kn {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #fff;
-    line-height: 1.2;
-  }
-  .card-en {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.45);
-    margin-top: 2px;
-    font-style: italic;
-  }
-  .card-sound {
-    font-size: 0.72rem;
-    margin-top: 5px;
-    color: rgba(255,255,255,0.3);
-    letter-spacing: 0.3px;
-  }
-
-  .footer {
-    text-align: center;
-    padding: 14px;
-    color: rgba(255,255,255,0.18);
-    font-size: 0.78rem;
-  }
-
-  @media (max-width: 480px) {
-    .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 8px 14px 40px; }
-    .animal-face { height: 82px; font-size: 2.8rem; }
-    .card-kn { font-size: 0.92rem; }
-    .hero h1 { font-size: 1.8rem; }
-  }
+/* ── RESPONSIVE ── */
+@media (max-width: 580px) {
+  .grid { grid-template-columns: repeat(2,1fr); gap:13px; padding:10px 12px 44px; }
+  .card-face { height:115px; font-size:3.8rem; }
+  .kn-word { font-size:1.35rem; }
+  .panel-hero h2 { font-size:2rem; }
+}
+@media (min-width:900px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); }
+  .card-face { height:175px; font-size:6rem; }
+  .kn-word { font-size:2.1rem; }
+}
 </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <a href="/class/lkg/kannada" class="back-btn">←</a>
-    <span class="topbar-title">ಪ್ರಾಣಿಗಳು</span>
-  </div>
-  <div class="topbar-right">
-    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
-      <span id="soundIcon">🔊</span>
-      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
-    </button>
+  <div class="topbar-title">🐾 ಪ್ರಾಣಿಗಳು</div>
+  <div class="top-right">
+    <div class="score-pill" id="scorePill">⭐ 0 / 24</div>
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
   </div>
 </div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-emoji">🐾</div>
-  <h1>ಪ್ರಾಣಿಗಳು</h1>
-  <p>ಕಾಡು ಮತ್ತು ಸಾಕು ಪ್ರಾಣಿಗಳು • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-t="wild" onclick="switchTab('wild',this)">
+    <span class="t-icon">🌿</span><span class="t-kn">ಕಾಡು</span><span class="t-en">Wild</span>
+    <span class="tab-count" id="cnt-wild">0/8</span>
+  </button>
+  <button class="tab-btn" data-t="farm" onclick="switchTab('farm',this)">
+    <span class="t-icon">🏡</span><span class="t-kn">ಸಾಕು</span><span class="t-en">Farm</span>
+    <span class="tab-count" id="cnt-farm">0/6</span>
+  </button>
+  <button class="tab-btn" data-t="water" onclick="switchTab('water',this)">
+    <span class="t-icon">🌊</span><span class="t-kn">ನೀರು</span><span class="t-en">Water</span>
+    <span class="tab-count" id="cnt-water">0/4</span>
+  </button>
+  <button class="tab-btn" data-t="birds" onclick="switchTab('birds',this)">
+    <span class="t-icon">🪶</span><span class="t-kn">ಪಕ್ಷಿ</span><span class="t-en">Birds</span>
+    <span class="tab-count" id="cnt-birds">0/3</span>
+  </button>
+  <button class="tab-btn" data-t="small" onclick="switchTab('small',this)">
+    <span class="t-icon">🐛</span><span class="t-kn">ಚಿಕ್ಕ</span><span class="t-en">Small</span>
+    <span class="tab-count" id="cnt-small">0/3</span>
+  </button>
+</nav>
+
+<!-- PANELS -->
+<div class="panel active" id="panel-wild">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#d4f5df,#b2f5ea);">
+    <span class="hf" style="top:8px;left:4%;">🌳</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🌿</span>
+    <h2 style="color:#1b5e20;">🦁 ಕಾಡು ಪ್ರಾಣಿಗಳು</h2>
+    <p style="color:#2e7d32;">Wild Animals</p>
+    <span class="tap-hint" style="color:#2e7d32;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-wild"></div>
 </div>
 
-<!-- TTS NOTICE -->
-<div class="tts-notice">
-  <span>📱</span>
-  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+<div class="panel" id="panel-farm">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fff3cd,#ffe0b2);">
+    <span class="hf" style="top:8px;left:4%;">🌾</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🏠</span>
+    <h2 style="color:#e65100;">🐄 ಸಾಕು ಪ್ರಾಣಿಗಳು</h2>
+    <p style="color:#bf360c;">Farm / Domestic Animals</p>
+    <span class="tap-hint" style="color:#e65100;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-farm"></div>
 </div>
 
-<!-- GRID -->
-<div class="grid" id="grid"></div>
+<div class="panel" id="panel-water">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#b3e5fc,#e1f5fe);">
+    <span class="hf" style="top:8px;left:4%;">💧</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🫧</span>
+    <h2 style="color:#01579b;">🐟 ನೀರು ಪ್ರಾಣಿಗಳು</h2>
+    <p style="color:#0277bd;">Water Animals</p>
+    <span class="tap-hint" style="color:#01579b;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-water"></div>
+</div>
 
-<div class="footer">VidyaAI • LKG ಕನ್ನಡ</div>
+<div class="panel" id="panel-birds">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fce4ec,#fff9c4);">
+    <span class="hf" style="top:8px;left:4%;">☁️</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🌸</span>
+    <h2 style="color:#880e4f;">🦚 ಪಕ್ಷಿಗಳು</h2>
+    <p style="color:#ad1457;">Birds</p>
+    <span class="tap-hint" style="color:#880e4f;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-birds"></div>
+</div>
+
+<div class="panel" id="panel-small">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#ede7f6,#f3e5f5);">
+    <span class="hf" style="top:8px;left:4%;">🍃</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🌱</span>
+    <h2 style="color:#4a148c;">🐸 ಚಿಕ್ಕ ಪ್ರಾಣಿಗಳು</h2>
+    <p style="color:#6a1b9a;">Small Animals</p>
+    <span class="tap-hint" style="color:#4a148c;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-small"></div>
+</div>
 
 <script>
-const animals = [
-  { kn: 'ಆನೆ',      en: 'Elephant',  emoji: '🐘', sound: 'ಘೀಳು',   bg: 'linear-gradient(145deg,#4a5568,#2d3748)' },
-  { kn: 'ಸಿಂಹ',     en: 'Lion',      emoji: '🦁', sound: 'ಘರ್ಜನೆ', bg: 'linear-gradient(145deg,#c8962a,#a07020)' },
-  { kn: 'ಹುಲಿ',     en: 'Tiger',     emoji: '🐯', sound: 'ಘರ್ಜನೆ', bg: 'linear-gradient(145deg,#d4692a,#b05020)' },
-  { kn: 'ಕೋತಿ',     en: 'Monkey',    emoji: '🐒', sound: 'ಚೀರಾಟ',  bg: 'linear-gradient(145deg,#8b6914,#6b4f10)' },
-  { kn: 'ಜಿರಾಫೆ',   en: 'Giraffe',   emoji: '🦒', sound: 'ಶಬ್ದ',   bg: 'linear-gradient(145deg,#c8a020,#a07818)' },
-  { kn: 'ಕರಡಿ',     en: 'Bear',      emoji: '🐻', sound: 'ಗರ್ಜನೆ', bg: 'linear-gradient(145deg,#6b4226,#4a2e1a)' },
-  { kn: 'ಆಡು',      en: 'Goat',      emoji: '🐐', sound: 'ಮೇ ಮೇ',  bg: 'linear-gradient(145deg,#7a9e6a,#5a7e4a)' },
-  { kn: 'ಹಸು',      en: 'Cow',       emoji: '🐄', sound: 'ಅಂಬಾ',   bg: 'linear-gradient(145deg,#5a8a6a,#3a6a4a)' },
-  { kn: 'ನಾಯಿ',     en: 'Dog',       emoji: '🐕', sound: 'ಬೊಗಳು',  bg: 'linear-gradient(145deg,#8b7355,#6b5335)' },
-  { kn: 'ಬೆಕ್ಕು',   en: 'Cat',       emoji: '🐈', sound: 'ಮ್ಯಾಂವ್', bg: 'linear-gradient(145deg,#9e7a9e,#7e5a7e)' },
-  { kn: 'ಕುದುರೆ',   en: 'Horse',     emoji: '🐴', sound: 'ಕೆನೆತ',  bg: 'linear-gradient(145deg,#7a6a5a,#5a4a3a)' },
-  { kn: 'ಕೋಳಿ',     en: 'Hen',       emoji: '🐔', sound: 'ಕ್ಕ್ ಕ್ಕ್', bg: 'linear-gradient(145deg,#c8762a,#a05620)' },
-  { kn: 'ಮೀನು',     en: 'Fish',      emoji: '🐟', sound: 'ಶಬ್ದವಿಲ್ಲ', bg: 'linear-gradient(145deg,#2a7ec8,#1a5ea0)' },
-  { kn: 'ಮೊಲ',      en: 'Rabbit',    emoji: '🐇', sound: 'ಶಬ್ದ',   bg: 'linear-gradient(145deg,#c8b4a0,#a09480)' },
-  { kn: 'ನವಿಲು',    en: 'Peacock',   emoji: '🦚', sound: 'ಕೂಗು',   bg: 'linear-gradient(145deg,#1a8a6a,#0a6a4a)' },
-  { kn: 'ಆಮೆ',      en: 'Tortoise',  emoji: '🐢', sound: 'ಶಬ್ದ',   bg: 'linear-gradient(145deg,#4a7a3a,#2a5a1a)' },
-  { kn: 'ಕಪ್ಪೆ',    en: 'Frog',      emoji: '🐸', sound: 'ವಟ ವಟ',  bg: 'linear-gradient(145deg,#3a9a3a,#1a7a1a)' },
-  { kn: 'ಹಾವು',     en: 'Snake',     emoji: '🐍', sound: 'ಉಸ್ಸ್',  bg: 'linear-gradient(145deg,#5a7a2a,#3a5a0a)' },
-  { kn: 'ಆಕಳು',     en: 'Ox',        emoji: '🐂', sound: 'ಅಂಬಾ',   bg: 'linear-gradient(145deg,#4a6a5a,#2a4a3a)' },
-  { kn: 'ಕತ್ತೆ',    en: 'Donkey',    emoji: '🫏', sound: 'ಕೂಗು',   bg: 'linear-gradient(145deg,#8a7a6a,#6a5a4a)' },
-];
+const DATA = {
+  wild: [
+    {kn:'ಆನೆ',    en:'Elephant', emoji:'🐘', sound:'ಪ್ಘ್!',     bg:'#e8f5e9', border:'#4CAF50', pill:'#388E3C'},
+    {kn:'ಸಿಂಹ',   en:'Lion',     emoji:'🦁', sound:'ಗರ್ಜನೆ!',  bg:'#fff8e1', border:'#FFC107', pill:'#F57F17'},
+    {kn:'ಹುಲಿ',   en:'Tiger',    emoji:'🐯', sound:'ಘರ್ಜನೆ!',  bg:'#fff3e0', border:'#FF9800', pill:'#E65100'},
+    {kn:'ಕೋತಿ',   en:'Monkey',   emoji:'🐒', sound:'ಊ ಊ ಊ!',   bg:'#fbe9e7', border:'#FF5722', pill:'#BF360C'},
+    {kn:'ಜಿರಾಫೆ', en:'Giraffe',  emoji:'🦒', sound:'ಮೌನ ✨',    bg:'#fffde7', border:'#FFEB3B', pill:'#F9A825'},
+    {kn:'ಕರಡಿ',   en:'Bear',     emoji:'🐻', sound:'ಗ್ರ್ರ್!',  bg:'#efebe9', border:'#795548', pill:'#4E342E'},
+    {kn:'ಆಕಳು',   en:'Ox',       emoji:'🐂', sound:'ಅಂಬಾ!',    bg:'#e8eaf6', border:'#5C6BC0', pill:'#283593'},
+    {kn:'ಕುದುರೆ', en:'Horse',    emoji:'🐎', sound:'ಕೆನೆತ!',   bg:'#ede7f6', border:'#9C27B0', pill:'#6A1B9A'},
+  ],
+  farm: [
+    {kn:'ಹಸು',    en:'Cow',     emoji:'🐄', sound:'ಅಂಬಾ!',    bg:'#e3f2fd', border:'#2196F3', pill:'#0D47A1'},
+    {kn:'ನಾಯಿ',   en:'Dog',     emoji:'🐕', sound:'ಬೌ ಬೌ!',  bg:'#fff8e1', border:'#FFC107', pill:'#FF8F00'},
+    {kn:'ಬೆಕ್ಕು', en:'Cat',     emoji:'🐈', sound:'ಮ್ಯಾಂವ್!', bg:'#fce4ec', border:'#E91E63', pill:'#880E4F'},
+    {kn:'ಮೇಕೆ',   en:'Goat',    emoji:'🐐', sound:'ಮೇ ಮೇ!',   bg:'#f1f8e9', border:'#8BC34A', pill:'#33691E'},
+    {kn:'ಕೋಳಿ',   en:'Hen',     emoji:'🐓', sound:'ಕ್ಕ್ ಕ್ಕ್!',bg:'#fff3e0',border:'#FF9800', pill:'#E65100'},
+    {kn:'ಕತ್ತೆ',  en:'Donkey',  emoji:'🫏', sound:'ಹೀ ಹಾ!',   bg:'#f3e5f5', border:'#9C27B0', pill:'#6A1B9A'},
+  ],
+  water: [
+    {kn:'ಮೀನು',   en:'Fish',     emoji:'🐟', sound:'ಮೌನ 🫧',  bg:'#e1f5fe', border:'#03A9F4', pill:'#01579B'},
+    {kn:'ಕಪ್ಪೆ',  en:'Frog',     emoji:'🐸', sound:'ವಟ ವಟ!',  bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20'},
+    {kn:'ಆಮೆ',    en:'Tortoise', emoji:'🐢', sound:'ಮೌನ 🐢',  bg:'#f1f8e9', border:'#8BC34A', pill:'#33691E'},
+    {kn:'ಮೊಸಳೆ',  en:'Crocodile',emoji:'🐊', sound:'ಶ್...',   bg:'#e0f2f1', border:'#009688', pill:'#004D40'},
+  ],
+  birds: [
+    {kn:'ನವಿಲು',  en:'Peacock', emoji:'🦚', sound:'ಮ್ಯಾವ್!',    bg:'#e0f2f1', border:'#009688', pill:'#004D40'},
+    {kn:'ಗಿಳಿ',   en:'Parrot',  emoji:'🦜', sound:'ಹಾಯ್!',      bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20'},
+    {kn:'ಗುಬ್ಬಿ', en:'Sparrow', emoji:'🐦', sound:'ಚಿವ್ ಚಿವ್!', bg:'#fff8e1', border:'#FFC107', pill:'#F57F17'},
+  ],
+  small: [
+    {kn:'ಮೊಲ',    en:'Rabbit',    emoji:'🐇', sound:'ಮ್ ಮ್!',   bg:'#fce4ec', border:'#E91E63', pill:'#880E4F'},
+    {kn:'ಹಾವು',   en:'Snake',     emoji:'🐍', sound:'ಉಸ್ಸ್...', bg:'#f9fbe7', border:'#CDDC39', pill:'#558B2F'},
+    {kn:'ಚಿಟ್ಟೆ', en:'Butterfly', emoji:'🦋', sound:'ಮೌನ 🦋',   bg:'#fff3e0', border:'#FF9800', pill:'#E65100'},
+  ],
+};
+
+const TOTAL = Object.values(DATA).reduce((s,a)=>s+a.length,0);
+document.getElementById('scorePill').textContent = `⭐ 0 / ${TOTAL}`;
 
 let soundOn = true;
+const learned = {};
+Object.keys(DATA).forEach(k => learned[k] = new Set());
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+}
 
 function toggleSound() {
   soundOn = !soundOn;
-  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
-  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
-  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+  const b = document.getElementById('soundBtn');
+  b.textContent = soundOn ? '🔊' : '🔇';
+  b.classList.toggle('off', !soundOn);
 }
 
 function speak(text) {
   if (!soundOn || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'kn-IN';
-  u.rate = 0.85;
-  u.pitch = 1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const knVoice = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
-  if (!knVoice) return;
-  u.voice = knVoice;
+  u.lang='kn-IN'; u.rate=0.82; u.pitch=1.1;
+  const v = window.speechSynthesis.getVoices().find(x=>x.lang==='kn-IN'||x.lang.startsWith('kn'));
+  if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 
-function buildGrid() {
-  const grid = document.getElementById('grid');
-  animals.forEach(a => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="animal-face" style="background:${a.bg};">${a.emoji}</div>
-      <div class="card-info">
-        <div class="card-kn">${a.kn}</div>
-        <div class="card-en">${a.en}</div>
-        <div class="card-sound">${a.sound}</div>
-      </div>
-    `;
-    card.addEventListener('click', () => {
-      card.classList.remove('playing');
-      void card.offsetWidth;
-      card.classList.add('playing');
-      speak(a.kn);
-      setTimeout(() => card.classList.remove('playing'), 500);
-    });
-    grid.appendChild(card);
+function updateScore() {
+  const tot = Object.values(learned).reduce((s,st)=>s+st.size,0);
+  document.getElementById('scorePill').textContent = `⭐ ${tot} / ${TOTAL}`;
+}
+
+function updateCnt(tid) {
+  document.getElementById('cnt-'+tid).textContent = `${learned[tid].size}/${DATA[tid].length}`;
+}
+
+const CC = ['#FFD93D','#FF6B35','#06D6A0','#FF6B9D','#9B5DE5','#118AB2','#43e97b'];
+function confetti(x,y) {
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='cf';
+    el.style.cssText=`left:${x+(Math.random()-.5)*160}px;background:${CC[i%CC.length]};animation-duration:${.9+Math.random()*.9}s;animation-delay:${Math.random()*.2}s;width:${6+Math.random()*10}px;height:${8+Math.random()*14}px;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2200);
+  }
+}
+
+let di=0;
+function makeCard(a, tid) {
+  const card = document.createElement('div');
+  card.className='card';
+  card.style.animationDelay=(di++*0.045)+'s';
+  card.style.borderColor=a.border;
+  card.innerHTML=`
+    <div class="card-face" style="background:${a.bg};">
+      <span class="star-pop">⭐</span>
+      <span style="filter:drop-shadow(0 6px 14px rgba(0,0,0,0.2));line-height:1;">${a.emoji}</span>
+    </div>
+    <div class="card-info">
+      <div class="kn-word">${a.kn}</div>
+      <div class="en-word">${a.en}</div>
+      <div class="sound-pill" style="background:${a.pill};">${a.sound}</div>
+    </div>`;
+  card.addEventListener('click', e=>{
+    card.classList.remove('playing');
+    void card.offsetWidth;
+    card.classList.add('playing');
+    speak(a.kn);
+    setTimeout(()=>card.classList.remove('playing'),520);
+    if(!learned[tid].has(a.kn)){
+      learned[tid].add(a.kn);
+      card.classList.add('learned');
+      updateScore(); updateCnt(tid);
+      const r=card.getBoundingClientRect();
+      confetti(r.left+r.width/2, r.top+r.height/2);
+    }
   });
+  return card;
 }
 
-if (window.speechSynthesis) {
-  window.speechSynthesis.onvoiceschanged = () => {};
+Object.entries(DATA).forEach(([tid,animals])=>{
+  const grid=document.getElementById('grid-'+tid);
+  animals.forEach(a=>grid.appendChild(makeCard(a,tid)));
+  updateCnt(tid);
+});
+
+if(window.speechSynthesis){
   window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
 }
-
-buildGrid();
 </script>
 </body>
 </html>

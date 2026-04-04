@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EVS Class 1 — Lesson 5: Do We Need Food?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#388e3c);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.back-btn {
+  background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5);
+  color:#fff; padding:6px 12px; border-radius:20px; font-size:14px;
+  font-weight:900; cursor:pointer; text-decoration:none;
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#a5d6a7); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#2e7d32; border-color:#a5d6a7; }
+.step-tab.active   { background:#2e7d32; color:#fff; border-color:#2e7d32; box-shadow:0 4px 14px rgba(46,125,50,.4); }
+.step-tab.done     { background:#f1f8e9; color:#1b5e20; border-color:#81c784; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #2e7d32;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── LIST ROW ── */
+.list-row {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.list-row .lr-title { font-family:'Fredoka One',cursive; font-size:17px; color:#2e7d32; margin-bottom:10px; }
+.list-item { display:flex; align-items:center; gap:12px; margin-bottom:10px; padding:10px 12px; background:#f1f8e9; border-radius:12px; }
+.list-icon { font-size:30px; }
+.list-text { font-family:'Fredoka One',cursive; font-size:14px; color:#1b5e20; text-align:left; line-height:1.4; }
+
+/* ── FOOD GRID ── */
+.food-grid {
+  display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px;
+}
+.food-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.food-card .fc-icon { font-size:42px; display:block; margin-bottom:6px; }
+.food-card .fc-name { font-family:'Fredoka One',cursive; font-size:14px; color:#2e7d32; }
+.food-card .fc-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ── 3-COL GRID ── */
+.food-grid3 {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;
+}
+.food-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+.food-card3 .fc-icon { font-size:34px; display:block; margin-bottom:4px; }
+.food-card3 .fc-name { font-family:'Fredoka One',cursive; font-size:12px; color:#2e7d32; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:19px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:17px;
+  border:3px solid #a5d6a7; background:#f1f8e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#2e7d32; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:16px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; border:none; cursor:pointer; margin-top:10px; transition:all .2s;
+}
+.nav-btn:active { transform:scale(.97); }
+.nav-btn-green { background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff; box-shadow:0 6px 20px rgba(27,94,32,.4); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+  background:linear-gradient(135deg,#f1f8e9,#dcedc8); border:3px solid #81c784;
+  border-radius:18px; padding:14px 16px; margin-bottom:14px; text-align:center;
+}
+.highlight-box .hb-text { font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; line-height:1.5; }
+
+/* ── SONG CARD ── */
+.song-card {
+  background:linear-gradient(135deg,#f1f8e9,#dcedc8); border:3px solid #81c784;
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; text-align:center;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.song-card .song-title { font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; margin-bottom:12px; }
+.song-line { font-family:'Fredoka One',cursive; font-size:14px; color:#1b5e20; margin-bottom:5px; line-height:1.6; }
+
+/* ── ANIMALS GRID ── */
+.animals-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.animal-card {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7; animation:cardPop .4s ease both;
+}
+.animal-card .ac-icon { font-size:36px; display:block; margin-bottom:4px; }
+.animal-card .ac-name { font-family:'Fredoka One',cursive; font-size:12px; color:#2e7d32; }
+.animal-card .ac-food { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ── BIG FACT BOX ── */
+.big-fact {
+  background:linear-gradient(135deg,#2e7d32,#43a047); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; text-align:center; box-shadow:0 6px 20px rgba(46,125,50,.35);
+}
+.big-fact .bf-icon { font-size:52px; display:block; margin-bottom:8px; }
+.big-fact .bf-text { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; line-height:1.4; }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:999;
+  display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;
+  transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-box {
+  background:#fff; border-radius:32px; padding:32px 24px; text-align:center;
+  max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.4);
+  animation:celebPop .4s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes celebPop { from{transform:scale(.5)} to{transform:scale(1)} }
+.celeb-emoji { font-size:72px; display:block; margin-bottom:8px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#2e7d32; margin-bottom:10px; }
+.celeb-sub { font-size:14px; font-weight:800; color:#555; line-height:1.8; white-space:pre-line; margin-bottom:12px; }
+.celeb-stars { font-family:'Fredoka One',cursive; font-size:20px; color:#f9a825; margin-bottom:18px; }
+
+/* ── WHY FOOD ROW ── */
+.why-row {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.why-item { display:flex; align-items:center; gap:12px; margin-bottom:10px; padding:12px 14px; border-radius:14px; }
+.why-icon { font-size:36px; }
+.why-text { font-family:'Fredoka One',cursive; font-size:15px; color:#1b5e20; line-height:1.4; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="javascript:history.back()">← Back</a>
+    <span class="topbar-title">🥦 EVS Ch.5 — Do We Need Food?</span>
+  </div>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🍽️</span>
+  <h1>Do We Need Food?</h1>
+  <p>Let's find out why ALL living things need food!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress 🌱</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  id="tab-why"     onclick="tryTab('why')">🌟 Why Food?</div>
+  <div class="step-tab locked"  id="tab-foods"   onclick="tryTab('foods')">🥦 Healthy Foods</div>
+  <div class="step-tab locked"  id="tab-animals" onclick="tryTab('animals')">🐄 Animals & Food</div>
+  <div class="step-tab locked"  id="tab-veggies" onclick="tryTab('veggies')">🥕 Veggies Song</div>
+  <div class="step-tab locked"  id="tab-quiz"    onclick="tryTab('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1 — WHY DO WE NEED FOOD ══════════════ -->
+<div class="tab-panel active" id="panel-why">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">🌟</span>
+    <div>
+      <div class="banner-title" style="color:#2e7d32">Why Do We Need Food?</div>
+      <div class="banner-sub" style="color:#1b5e20">Food makes us healthy and strong!</div>
+    </div>
+  </div>
+
+  <div class="big-fact">
+    <span class="bf-icon">💪</span>
+    <div class="bf-text">We need food to be HEALTHY and STRONG!</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌟 What Does Food Do For Us?</div>
+    <div class="ic-text">Just like a car needs petrol to run, our body needs <b>food</b> to work! 🚗⛽<br><br>Without food we feel <b>tired, weak and sad</b> 😔<br><br>With food we feel <b>bright, strong and happy</b> 😄✨</div>
+  </div>
+
+  <div class="why-row">
+    <div class="lr-title" style="font-family:'Fredoka One',cursive;font-size:17px;color:#2e7d32;margin-bottom:10px;">🍽️ Food Helps Us To...</div>
+    <div class="why-item" style="background:#e8f5e9;">
+      <span class="why-icon">⚡</span>
+      <span class="why-text">Get ENERGY to play, run and jump all day!</span>
+    </div>
+    <div class="why-item" style="background:#f1f8e9;">
+      <span class="why-icon">📚</span>
+      <span class="why-text">THINK clearly and study well at school!</span>
+    </div>
+    <div class="why-item" style="background:#e8f5e9;">
+      <span class="why-icon">💪</span>
+      <span class="why-text">Build STRONG muscles and healthy bones!</span>
+    </div>
+    <div class="why-item" style="background:#f1f8e9;">
+      <span class="why-icon">🌱</span>
+      <span class="why-text">GROW tall and big like a healthy tree!</span>
+    </div>
+    <div class="why-item" style="background:#e8f5e9;">
+      <span class="why-icon">🛡️</span>
+      <span class="why-text">PROTECT us from getting sick and ill!</span>
+    </div>
+    <div class="why-item" style="background:#f1f8e9;">
+      <span class="why-icon">😊</span>
+      <span class="why-text">Stay HAPPY, bright and cheerful always!</span>
+    </div>
+  </div>
+
+  <div class="song-card">
+    <div class="song-title">🎵 Sing and Enjoy!</div>
+    <div class="song-line">I found him sitting on the couch,</div>
+    <div class="song-line">before I went to bed.</div>
+    <div class="song-line">He seemed so tired without food</div>
+    <div class="song-line">And this is what I said,</div>
+    <div class="song-line" style="color:#2e7d32;font-size:16px;">"Go friend eat your dinner right</div>
+    <div class="song-line" style="color:#2e7d32;font-size:16px;">And see you'll sure feel bright".</div>
+    <div class="song-line">He then ate rice and dal and grains.</div>
+    <div class="song-line" style="font-size:16px;color:#1b5e20;">Which made him bright and strong! 💪</div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🎯 Remember:<br>Without food → tired and weak 😔<br>With food → bright and strong! 💪😄</div>
+  </div>
+
+  <div class="q-dots" id="whyDots"></div>
+  <div id="whySteps"></div>
+  <button class="nav-btn nav-btn-green" id="whyNextBtn" disabled onclick="unlockAndGo('why','foods')">Next: Healthy Foods 🥦 →</button>
+</div>
+
+<!-- ══════════════ TAB 2 — HEALTHY FOODS ══════════════ -->
+<div class="tab-panel" id="panel-foods">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f2f1,#b2dfdb)">
+    <span class="banner-emoji">🥦</span>
+    <div>
+      <div class="banner-title" style="color:#004d40">Healthy Foods for Us!</div>
+      <div class="banner-sub" style="color:#00695c">Fruits, veggies, milk and grains keep us fit!</div>
+    </div>
+  </div>
+
+  <div class="song-card" style="background:linear-gradient(135deg,#e0f2f1,#b2dfdb);border-color:#80cbc4;">
+    <div class="song-title" style="color:#004d40;">🎵 Sing and Enjoy!</div>
+    <div class="song-line" style="color:#004d40;">Fruits, veggies, milk and cheese</div>
+    <div class="song-line" style="color:#004d40;">Eat them everyday!</div>
+    <div class="song-line" style="color:#00695c;font-size:16px;">It's good for health</div>
+    <div class="song-line" style="color:#00695c;font-size:16px;">And makes you fit! 🏃</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#00897b;">
+    <div class="ic-title" style="color:#00695c;">🍎 Foods That Make Us Healthy!</div>
+    <div class="ic-text">The book shows us many healthy foods we must eat every day! 😋<br><br>Look at the pictures below — <b>fruits, vegetables, grains, milk, eggs</b> — all help our body grow healthy and strong! 🌟</div>
+  </div>
+
+  <div class="food-grid">
+    <div class="food-card"><span class="fc-icon">🍚</span><div class="fc-name">Rice & Roti</div><div class="fc-desc">Gives us energy!</div></div>
+    <div class="food-card"><span class="fc-icon">🥛</span><div class="fc-name">Milk</div><div class="fc-desc">Strong bones!</div></div>
+    <div class="food-card"><span class="fc-icon">🍎</span><div class="fc-name">Fruits</div><div class="fc-desc">Vitamins & health!</div></div>
+    <div class="food-card"><span class="fc-icon">🥦</span><div class="fc-name">Vegetables</div><div class="fc-desc">Makes us strong!</div></div>
+    <div class="food-card"><span class="fc-icon">🥚</span><div class="fc-name">Eggs</div><div class="fc-desc">Protein power!</div></div>
+    <div class="food-card"><span class="fc-icon">🍗</span><div class="fc-name">Chicken</div><div class="fc-desc">Makes muscles!</div></div>
+    <div class="food-card"><span class="fc-icon">🫘</span><div class="fc-name">Dal (Lentils)</div><div class="fc-desc">Healthy & filling!</div></div>
+    <div class="food-card"><span class="fc-icon">🧀</span><div class="fc-name">Cheese</div><div class="fc-desc">Good for body!</div></div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🌟 Eat These EVERY Day!</div>
+    <div class="list-item"><span class="list-icon">🍎</span><span class="list-text">Fruits — apples, bananas, mangoes, grapes!</span></div>
+    <div class="list-item"><span class="list-icon">🥦</span><span class="list-text">Vegetables — carrots, tomatoes, greens, peas!</span></div>
+    <div class="list-item"><span class="list-icon">🥛</span><span class="list-text">Milk — drink a glass every morning!</span></div>
+    <div class="list-item"><span class="list-icon">🧀</span><span class="list-text">Cheese and curd — good for your bones!</span></div>
+    <div class="list-item"><span class="list-icon">🍚</span><span class="list-text">Rice, roti and grains — gives you energy to play!</span></div>
+    <div class="list-item"><span class="list-icon">🫘</span><span class="list-text">Dal — makes you bright and strong!</span></div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🎯 Lesson Goal: Know the need for food 🍽️<br>Fruits, veggies, milk and cheese —<br>Eat them EVERYDAY to stay FIT! 🏃💪</div>
+  </div>
+
+  <div class="q-dots" id="foodsDots"></div>
+  <div id="foodsSteps"></div>
+  <button class="nav-btn nav-btn-green" id="foodsNextBtn" disabled onclick="unlockAndGo('foods','animals')">Next: Animals & Food 🐄 →</button>
+</div>
+
+<!-- ══════════════ TAB 3 — ANIMALS & FOOD ══════════════ -->
+<div class="tab-panel" id="panel-animals">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3)">
+    <span class="banner-emoji">🐄</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">Animals Need Food Too!</div>
+      <div class="banner-sub" style="color:#bf360c">ALL living things need food to survive!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#f57c00;">
+    <div class="ic-title" style="color:#e65100;">🌍 All Living Things Need Food!</div>
+    <div class="ic-text">The book shows us that it's not just humans who need food — <b>ALL living things need food</b>! 🌿<br><br>Look at the pictures in your book — babies, children, birds, cows and goats — they ALL eat food to stay healthy! 🐦🐄🐐</div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#e65100,#f57c00);">
+    <span class="bf-icon">🌏</span>
+    <div class="bf-text">ALL living things — people, animals, birds — NEED FOOD! 🐄🐦👶</div>
+  </div>
+
+  <div class="animals-grid">
+    <div class="animal-card"><span class="ac-icon">👶</span><div class="ac-name">Baby</div><div class="ac-food">Drinks milk 🥛</div></div>
+    <div class="animal-card"><span class="ac-icon">🧒</span><div class="ac-name">Child</div><div class="ac-food">Eats rice & dal 🍚</div></div>
+    <div class="animal-card"><span class="ac-icon">🐦</span><div class="ac-name">Bird</div><div class="ac-food">Eats worms & seeds 🌾</div></div>
+    <div class="animal-card"><span class="ac-icon">🐄</span><div class="ac-name">Cow</div><div class="ac-food">Eats grass 🌿</div></div>
+    <div class="animal-card"><span class="ac-icon">🐐</span><div class="ac-name">Goat</div><div class="ac-food">Eats leaves & grass</div></div>
+    <div class="animal-card"><span class="ac-icon">🐟</span><div class="ac-name">Fish</div><div class="ac-food">Eats tiny plants 🌱</div></div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">👀 Observe the Pictures in Your Book!</div>
+    <div class="list-item"><span class="list-icon">👩</span><span class="list-text">Mother feeds her baby — babies drink milk to grow!</span></div>
+    <div class="list-item"><span class="list-icon">🧒</span><span class="list-text">A boy eats food sitting on a mat — food makes him bright!</span></div>
+    <div class="list-item"><span class="list-icon">🐦</span><span class="list-text">A mother bird feeds baby birds in a nest — even birds need food!</span></div>
+    <div class="list-item"><span class="list-icon">🐦</span><span class="list-text">Small birds peck at seeds on the ground — all birds eat!</span></div>
+    <div class="list-item"><span class="list-icon">🐄</span><span class="list-text">A cow grazes and eats grass — animals eat too!</span></div>
+    <div class="list-item"><span class="list-icon">🐐</span><span class="list-text">A goat eats leaves from plants — goats love leaves!</span></div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text" style="color:#e65100;">🌿 Humans eat food 🍽️<br>Animals eat food 🐄<br>Birds eat food 🐦<br>ALL living things need FOOD! 💚</div>
+  </div>
+
+  <div class="q-dots" id="animalsDots"></div>
+  <div id="animalsSteps"></div>
+  <button class="nav-btn nav-btn-green" id="animalsNextBtn" disabled onclick="unlockAndGo('animals','veggies')">Next: Veggies Song 🥕 →</button>
+</div>
+
+<!-- ══════════════ TAB 4 — VEGGIES SONG ══════════════ -->
+<div class="tab-panel" id="panel-veggies">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">
+    <span class="banner-emoji">🥕</span>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a">Types of Veggies!</div>
+      <div class="banner-sub" style="color:#7b1fa2">Learn about all our healthy vegetables!</div>
+    </div>
+  </div>
+
+  <div class="song-card" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-color:#ce93d8;">
+    <div class="song-title" style="color:#6a1b9a;">🎵 Veggies, Veggies, Veggies!</div>
+    <div class="song-line" style="color:#6a1b9a;">Types and Types of Veggies;</div>
+    <div class="song-line" style="color:#7b1fa2;">Like a finger is ladysfinger 🫑</div>
+    <div class="song-line" style="color:#7b1fa2;">Like a stick is drumstick. 🥢</div>
+    <div class="song-line" style="color:#6a1b9a;">Like a snake is snakegourd, 🐍</div>
+    <div class="song-line" style="color:#6a1b9a;">Tasting bitter is bittergourd. 🤢</div>
+    <div class="song-line" style="color:#7b1fa2;margin-top:8px;">Tomatoes make your cheek go red, 🍅</div>
+    <div class="song-line" style="color:#7b1fa2;">Carrots make your jump ahead. 🥕</div>
+    <div class="song-line" style="color:#6a1b9a;">Greens make you very strong 🥬</div>
+    <div class="song-line" style="color:#6a1b9a;">Peas make you sing along 🫛</div>
+    <div class="song-line" style="color:#7b1fa2;font-size:16px;margin-top:8px;">Veggies, Veggies, Veggies 🥦</div>
+    <div class="song-line" style="color:#7b1fa2;font-size:16px;">Types and types of veggies! 🎶</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#8e24aa;">
+    <div class="ic-title" style="color:#7b1fa2;">🥦 Different Types of Vegetables!</div>
+    <div class="ic-text">Vegetables come in many shapes, sizes and colours! 🌈<br><br>They are called by their <b>shape, size or taste</b>! Can you see why?<br>Ladysfinger looks like a finger! 🫑<br>Drumstick looks like a stick! 🥢<br>Snakegourd is long like a snake! 🐍</div>
+  </div>
+
+  <div class="food-grid3">
+    <div class="food-card3"><span class="fc-icon">🍅</span><div class="fc-name">Tomato</div></div>
+    <div class="food-card3"><span class="fc-icon">🥕</span><div class="fc-name">Carrot</div></div>
+    <div class="food-card3"><span class="fc-icon">🥬</span><div class="fc-name">Greens</div></div>
+    <div class="food-card3"><span class="fc-icon">🫛</span><div class="fc-name">Peas</div></div>
+    <div class="food-card3"><span class="fc-icon">🫑</span><div class="fc-name">Ladysfinger</div></div>
+    <div class="food-card3"><span class="fc-icon">🥦</span><div class="fc-name">Drumstick</div></div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title" style="color:#7b1fa2;">🥗 What Each Veggie Does!</div>
+    <div class="list-item" style="background:#f3e5f5;"><span class="list-icon">🍅</span><span class="list-text" style="color:#6a1b9a;">Tomatoes — make your cheeks go red and rosy!</span></div>
+    <div class="list-item" style="background:#f3e5f5;"><span class="list-icon">🥕</span><span class="list-text" style="color:#6a1b9a;">Carrots — help your eyes see well and make you jump ahead!</span></div>
+    <div class="list-item" style="background:#f3e5f5;"><span class="list-icon">🥬</span><span class="list-text" style="color:#6a1b9a;">Greens — make you very strong like a superhero!</span></div>
+    <div class="list-item" style="background:#f3e5f5;"><span class="list-icon">🫛</span><span class="list-text" style="color:#6a1b9a;">Peas — full of vitamins, make you sing along!</span></div>
+    <div class="list-item" style="background:#f3e5f5;"><span class="list-icon">🫑</span><span class="list-text" style="color:#6a1b9a;">Ladysfinger — looks like a finger, tastes yummy in curry!</span></div>
+    <div class="list-item" style="background:#f3e5f5;"><span class="list-icon">🥒</span><span class="list-text" style="color:#6a1b9a;">Bittergourd — tastes bitter but very good for health!</span></div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-color:#ce93d8;">
+    <div class="hb-text" style="color:#6a1b9a;">🎵 Sing and ENACT the veggie song!<br>Add more vegetables that YOU know! 🥦🌽🧅</div>
+  </div>
+
+  <div class="q-dots" id="veggiesDots"></div>
+  <div id="veggiesSteps"></div>
+  <button class="nav-btn nav-btn-green" id="veggiesNextBtn" disabled onclick="unlockAndGo('veggies','quiz')">Go to Big Quiz! 🏆 →</button>
+</div>
+
+<!-- ══════════════ TAB 5 — BIG QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">Big Food Quiz!</div>
+      <div class="banner-sub" style="color:#bf360c">Show everything you learned in Lesson 5!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="nav-btn nav-btn-green" id="qFinishBtn" disabled onclick="showCelebration()">🎉 Finish! →</button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🥦</span>
+    <div class="celeb-title">Food Champion! 🏆</div>
+    <div class="celeb-sub" id="celebSub"></div>
+    <div class="celeb-stars" id="celebStars"></div>
+    <button class="nav-btn nav-btn-green" onclick="restartAll()">🔄 Play Again!</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════ STATE ══════════════ */
+let stars = 0;
+const doneTabs = new Set();
+const unlockedTabs = new Set(['why']);
+const tabOrder = ['why','foods','animals','veggies','quiz'];
+
+function updateProgress(){
+  const pct = Math.round((doneTabs.size / tabOrder.length)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+/* ══════════════ TAB NAVIGATION ══════════════ */
+function tryTab(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.getElementById('tab-'+id);
+    el.classList.add('shaking');
+    setTimeout(()=>el.classList.remove('shaking'),500);
+    const toast = document.getElementById('lockToast');
+    toast.textContent = '🔒 Finish the previous step first!';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),2500);
+    return;
+  }
+  tabOrder.forEach(t=>{
+    const tab = document.getElementById('tab-'+t);
+    const panel = document.getElementById('panel-'+t);
+    if(t===id){
+      tab.className='step-tab active';
+      panel.classList.add('active');
+    } else {
+      panel.classList.remove('active');
+      if(doneTabs.has(t)) tab.className='step-tab done';
+      else if(unlockedTabs.has(t)) tab.className='step-tab unlocked';
+      else tab.className='step-tab locked';
+    }
+  });
+}
+
+function unlockAndGo(from, to){
+  doneTabs.add(from);
+  unlockedTabs.add(to);
+  updateProgress();
+  document.getElementById('tab-'+from).className='step-tab done';
+  document.getElementById('tab-'+to).className='step-tab unlocked';
+  tryTab(to);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════ QUESTION ENGINE ══════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ(this,${i},${q.correct},'${containerID}','${dotsID}','${nextBtnID}')">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  window['answerQ'] = function(el, chosen, correct, cid, did, nid){
+    if(cid !== containerID) return;
+    const opts = document.querySelectorAll('#'+cid+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+
+  render();
+}
+
+/* ══════════════ TAB 1 — WHY DO WE NEED FOOD ══════════════ */
+renderQuestions({
+  containerID:'whySteps', dotsID:'whyDots', nextBtnID:'whyNextBtn',
+  questions:[
+    {visual:'💪',question:'We need food to be\nhealthy and ___.',options:['😴 Sleepy','💪 Strong','😔 Sad','🥱 Lazy'],correct:1},
+    {visual:'😔',question:'Without food, we feel\ntired and ___.',options:['💪 Strong','⚡ Energetic','😊 Happy','😫 Weak'],correct:3},
+    {visual:'🍚',question:'In the song, he ate rice\nand dal and ___.',options:['🍎 Apples','🌾 Grains','🥛 Milk','🍗 Chicken'],correct:1},
+    {visual:'⚡',question:'After eating food, the\nboy felt bright and ___.',options:['😴 Sleepy','🤢 Sick','💪 Strong','😔 Sad'],correct:2},
+    {visual:'🍽️',question:'What does food give\nus to play and study?',options:['💧 Water','😴 Sleep','⚡ Energy','🎮 Games'],correct:2},
+  ]
+});
+
+/* ══════════════ TAB 2 — HEALTHY FOODS ══════════════ */
+renderQuestions({
+  containerID:'foodsSteps', dotsID:'foodsDots', nextBtnID:'foodsNextBtn',
+  questions:[
+    {visual:'🥛',question:'Which food is very good\nfor strong bones?',options:['🍬 Candy','🥛 Milk','🎮 Games','💧 Only water'],correct:1},
+    {visual:'🍎',question:'Which healthy foods\nshould we eat EVERY day?',options:['🍬 Only sweets','🍟 Only chips','🍎 Fruits and veggies','🎂 Only cakes'],correct:2},
+    {visual:'🥦',question:'The song says: "Fruits,\nveggies, milk and ___"',options:['🍬 Sugar','🧀 Cheese','🍰 Cake','🧃 Juice'],correct:1},
+    {visual:'🏃',question:'Eating healthy food\nmakes you ___.',options:['😴 Sleepy only','🤢 Sick','🏃 Fit and healthy','😔 Sad'],correct:2},
+    {visual:'🫘',question:'Dal (lentils) belongs\nto which food group?',options:['🍬 Sweets','🫘 Healthy grains & legumes','🎂 Desserts','🎮 Games'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 3 — ANIMALS & FOOD ══════════════ */
+renderQuestions({
+  containerID:'animalsSteps', dotsID:'animalsDots', nextBtnID:'animalsNextBtn',
+  questions:[
+    {visual:'🐄',question:'A cow eats ___ to\nstay healthy.',options:['🍕 Pizza','🌿 Grass','🍰 Cake','🎮 Nothing'],correct:1},
+    {visual:'🐦',question:'A mother bird feeds\nher babies in a ___.',options:['🏠 House','🐉 Cave','🪹 Nest','🏫 School'],correct:2},
+    {visual:'👶',question:'Babies drink ___ to\ngrow healthy.',options:['🧃 Juice only','🍵 Tea','🥛 Milk','💧 Water only'],correct:2},
+    {visual:'🌍',question:'Do animals also\nneed food to live?',options:['❌ No, only humans','✅ Yes, ALL living things!','🤷 Maybe sometimes','💧 They only need water'],correct:1},
+    {visual:'🐐',question:'A goat eats ___\nfrom plants.',options:['🍕 Pizza','🌿 Leaves and grass','🎂 Cake','🐟 Fish'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 4 — VEGGIES ══════════════ */
+renderQuestions({
+  containerID:'veggiesSteps', dotsID:'veggiesDots', nextBtnID:'veggiesNextBtn',
+  questions:[
+    {visual:'🫑',question:'Which vegetable looks\njust like a finger?',options:['🍅 Tomato','🥕 Carrot','🫑 Ladysfinger','🥦 Broccoli'],correct:2},
+    {visual:'🥢',question:'Which vegetable is\nlong like a stick?',options:['🥕 Carrot','🥢 Drumstick','🍅 Tomato','🥒 Cucumber'],correct:1},
+    {visual:'🐍',question:'Which vegetable is\nlong like a snake?',options:['🫛 Peas','🥦 Broccoli','🐍 Snakegourd','🥕 Carrot'],correct:2},
+    {visual:'🥕',question:'Carrots are good for\nyour ___ and help you see!',options:['👂 Ears','👁️ Eyes','🦷 Teeth','🦴 Bones'],correct:1},
+    {visual:'🥬',question:'Which vegetable makes\nyou very strong?',options:['🍬 Candy','🥬 Greens','🎂 Cake','🍟 Chips'],correct:1},
+    {visual:'🍅',question:'Tomatoes make your\ncheeks go ___.',options:['🔵 Blue','🟡 Yellow','🔴 Red','⬛ Black'],correct:2},
+  ]
+});
+
+/* ══════════════ TAB 5 — BIG QUIZ ══════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🏆💪',question:'🏆 We need food to be\nhealthy and ___.',options:['😴 Sleepy','😔 Sad','💪 Strong','🥱 Lazy'],correct:2},
+    {visual:'🏆🌍',question:'🏆 Do animals need food\njust like humans?',options:['❌ No','✅ Yes, ALL living things!','🤷 Only some animals','💧 They only drink water'],correct:1},
+    {visual:'🏆🫑',question:'🏆 Ladysfinger is named\nbecause it looks like a ___.',options:['🐍 Snake','🥢 Stick','🫑 Finger','🥕 Carrot'],correct:2},
+    {visual:'🏆🥛',question:'🏆 Milk is very good for\nyour ___.',options:['🎮 Gaming skills','🦴 Bones and body','😴 Sleep only','🍬 Sweet tooth'],correct:1},
+    {visual:'🏆🥕',question:'🏆 Carrots help your ___ and help you see well.',options:['🦷 Teeth','👂 Ears','👁️ Eyes','🦴 Bones'],correct:2},
+    {visual:'🏆🐦',question:'🏆 A mother bird feeds\nbaby birds in a ___.',options:['🏠 House','🪹 Nest','🏫 School','🐉 Cave'],correct:1},
+    {visual:'🏆🎵',question:'🏆 The song says: "Fruits,\nveggies, milk and ___"',options:['🍰 Cake','🍬 Candy','🧀 Cheese','🍟 Chips'],correct:2},
+    {visual:'🏆🍚',question:'🏆 In the song, he ate rice,\ndal and ___ and felt strong.',options:['🍎 Fruits','🥛 Milk','🌾 Grains','🍗 Chicken'],correct:2},
+    {visual:'🏆🐄',question:'🏆 A cow eats ___ in the field.',options:['🍕 Pizza','🌿 Grass','🎂 Cake','🍚 Rice'],correct:1},
+    {visual:'🏆🥬',question:'🏆 Which food makes you\nvery strong in the veggies song?',options:['🍬 Candy','🍅 Tomato','🥬 Greens','🥕 Carrot'],correct:2},
+    {visual:'🏆⚡',question:'🏆 What does food give us\nso we can play and study?',options:['😴 Sleep','⚡ Energy','💧 Water','🎮 Fun'],correct:1},
+    {visual:'🏆👶',question:'🏆 What do babies drink\nto grow healthy?',options:['🧃 Juice','🍵 Tea','🥛 Milk','🥤 Soda'],correct:2},
+  ]
+});
+
+/* ══════════════ CELEBRATION ══════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know WHY we need food to be healthy! 💪\nYou know fruits, veggies, milk and cheese keep us fit! 🥦\nYou know ALL living things — people and animals — need food! 🐄🐦\nYou know the Veggies song and all the vegetables! 🥕🍅\nYou are a FOOD CHAMPION! 🍽️🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,15);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ══════════════ RESTART ══════════════ */
+function restartAll(){
+  location.reload();
+}
+</script>
+</body>
+</html>

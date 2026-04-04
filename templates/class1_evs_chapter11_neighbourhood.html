@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EVS Class 1 — Lesson 11: Neighbourhood</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#388e3c);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.back-btn {
+  background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5);
+  color:#fff; padding:6px 12px; border-radius:20px; font-size:14px;
+  font-weight:900; cursor:pointer; text-decoration:none;
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#81c784); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#66bb6a; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1b5e20;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── GRID ── */
+.two-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.grid-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.grid-card .gc-icon { font-size:44px; display:block; margin-bottom:6px; }
+.grid-card .gc-name { font-family:'Fredoka One',cursive; font-size:15px; color:#1b5e20; }
+.grid-card .gc-desc { font-size:11px; font-weight:800; color:#888; margin-top:3px; line-height:1.4; }
+
+/* ── STORY STRIP ── */
+.story-strip {
+  background:#fff; border-radius:16px; padding:14px 16px; margin-bottom:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,.09); display:flex; align-items:center; gap:14px; border-left:5px solid #43a047;
+}
+.ss-emoji { font-size:40px; }
+.ss-info { flex:1; }
+.ss-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1b5e20; }
+.ss-desc { font-size:12px; font-weight:800; color:#666; margin-top:3px; line-height:1.5; }
+
+/* ── BIG FACT BOX ── */
+.big-fact {
+  background:linear-gradient(135deg,#1b5e20,#43a047); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; text-align:center; box-shadow:0 6px 20px rgba(27,94,32,.35);
+}
+.big-fact .bf-icon { font-size:52px; display:block; margin-bottom:8px; }
+.big-fact .bf-text { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; line-height:1.4; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+  background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border:3px solid #66bb6a;
+  border-radius:18px; padding:14px 16px; margin-bottom:14px; text-align:center;
+}
+.highlight-box .hb-text { font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; line-height:1.5; }
+
+/* ── SONG CARD ── */
+.song-card {
+  background:linear-gradient(135deg,#1b5e20,#43a047); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; text-align:center; box-shadow:0 6px 20px rgba(27,94,32,.35);
+}
+.song-card .sc-icon { font-size:44px; display:block; margin-bottom:8px; }
+.song-card .sc-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; margin-bottom:10px; }
+.song-card .sc-lyrics { font-size:15px; font-weight:800; color:rgba(255,255,255,.95); line-height:1.9; text-align:left; background:rgba(255,255,255,.15); border-radius:12px; padding:14px 16px; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:19px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:16px;
+  border:3px solid #a5d6a7; background:#e8f5e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1b5e20; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:16px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; border:none; cursor:pointer; margin-top:10px; transition:all .2s;
+}
+.nav-btn:active { transform:scale(.97); }
+.nav-btn-green { background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff; box-shadow:0 6px 20px rgba(27,94,32,.4); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:999;
+  display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;
+  transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-box {
+  background:#fff; border-radius:32px; padding:32px 24px; text-align:center;
+  max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.4);
+  animation:celebPop .4s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes celebPop { from{transform:scale(.5)} to{transform:scale(1)} }
+.celeb-emoji { font-size:72px; display:block; margin-bottom:8px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#1b5e20; margin-bottom:10px; }
+.celeb-sub { font-size:14px; font-weight:800; color:#555; line-height:1.8; white-space:pre-line; margin-bottom:12px; }
+.celeb-stars { font-family:'Fredoka One',cursive; font-size:20px; color:#f9a825; margin-bottom:18px; }
+.restart-btn {
+  background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff; border:none;
+  padding:14px 30px; border-radius:20px; font-family:'Fredoka One',cursive; font-size:18px;
+  cursor:pointer; box-shadow:0 6px 20px rgba(27,94,32,.4);
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="javascript:history.back()">← Back</a>
+    <span class="topbar-title">🏘️ EVS Ch.11 — Neighbourhood</span>
+  </div>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🏘️</span>
+  <h1>My Neighbourhood!</h1>
+  <p>Learn about neighbours, cooperation & keeping clean!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress 🌟</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  id="tab-nb"      onclick="tryTab('nb')">🏘️ My Neighbours!</div>
+  <div class="step-tab locked"  id="tab-clean"   onclick="tryTab('clean')">🧹 Keep It Clean!</div>
+  <div class="step-tab locked"  id="tab-help"    onclick="tryTab('help')">🤝 Helping Together!</div>
+  <div class="step-tab locked"  id="tab-work"    onclick="tryTab('work')">🌱 Our Work!</div>
+  <div class="step-tab locked"  id="tab-quiz"    onclick="tryTab('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════ TAB 1 — MY NEIGHBOURS ══════════ -->
+<div class="tab-panel active" id="panel-nb">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">🏘️</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20">My Neighbourhood!</div>
+      <div class="banner-sub" style="color:#388e3c">People who live near my house!</div>
+    </div>
+  </div>
+
+  <div class="big-fact">
+    <span class="bf-icon">🏠</span>
+    <div class="bf-text">People who live NEAR our house are called NEIGHBOURS!</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏘️ What is a Neighbourhood?</div>
+    <div class="ic-text">The area around our house is called our <b>NEIGHBOURHOOD</b>!<br><br>Our neighbourhood has many houses 🏠, taps 🚰, roads 🛣️, trees 🌳, and people!<br><br>Our neighbours are like a BIG FAMILY to us! ❤️</div>
+  </div>
+
+  <div class="two-grid">
+    <div class="grid-card">
+      <span class="gc-icon">🏠</span>
+      <div class="gc-name">Houses</div>
+      <div class="gc-desc">Many families live in houses near each other</div>
+    </div>
+    <div class="grid-card">
+      <span class="gc-icon">👨‍👩‍👧</span>
+      <div class="gc-name">Neighbours</div>
+      <div class="gc-desc">People living near our house are neighbours</div>
+    </div>
+    <div class="grid-card">
+      <span class="gc-icon">🛣️</span>
+      <div class="gc-name">Roads &amp; Paths</div>
+      <div class="gc-desc">We walk on roads in the neighbourhood</div>
+    </div>
+    <div class="grid-card">
+      <span class="gc-icon">🌳</span>
+      <div class="gc-name">Trees &amp; Plants</div>
+      <div class="gc-desc">Trees give us shade and fresh air</div>
+    </div>
+    <div class="grid-card">
+      <span class="gc-icon">🚰</span>
+      <div class="gc-name">Common Tap</div>
+      <div class="gc-desc">Neighbours share the tap for water</div>
+    </div>
+    <div class="grid-card">
+      <span class="gc-icon">👫</span>
+      <div class="gc-name">Friends to Play!</div>
+      <div class="gc-desc">Neighbours play games with us every day</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🎮 We play games with our neighbours!<br>🎵 We sing songs with our neighbours!<br>They are our best friends near home! ❤️</div>
+  </div>
+
+  <div class="q-dots" id="nbDots"></div>
+  <div id="nbSteps"></div>
+  <button class="nav-btn nav-btn-green" id="nbNextBtn" disabled onclick="unlockAndGo('nb','clean')">Next: Keep It Clean! 🧹 →</button>
+</div>
+
+<!-- ══════════ TAB 2 — KEEP IT CLEAN ══════════ -->
+<div class="tab-panel" id="panel-clean">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#fff59d)">
+    <span class="banner-emoji">🧹</span>
+    <div>
+      <div class="banner-title" style="color:#f57f17">Keep It Clean!</div>
+      <div class="banner-sub" style="color:#f9a825">A clean neighbourhood is a happy neighbourhood!</div>
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#f57f17,#ffa000)">
+    <span class="bf-icon">🧹</span>
+    <div class="bf-text">We must SWEEP and CLEAN our neighbourhood to keep it TIDY!</div>
+  </div>
+
+  <!-- Story: Dirt in front of house -->
+  <div class="info-card" style="border-left-color:#f57f17">
+    <div class="ic-title" style="color:#f57f17">📖 Story Time: Dirt in Front!</div>
+    <div class="ic-text">One day a child saw <b>DIRT</b> in front of the house 😟<br><br>The child called the neighbour: <b>"Kamala, come let's sweep!"</b> 🧹<br><br>Together they swept the front of the house — now it looks <b>CLEAN!</b> ✨</div>
+  </div>
+
+  <div class="story-strip" style="border-left-color:#f57f17">
+    <span class="ss-emoji">🏠</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#f57f17">Before — Dirty! 😟</div>
+      <div class="ss-desc">There is <b>DIRT</b> in front of the house. It looks very messy and bad.</div>
+    </div>
+  </div>
+  <div class="story-strip" style="border-left-color:#43a047">
+    <span class="ss-emoji">🧹</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#1b5e20">After — Clean! ✨</div>
+      <div class="ss-desc">Kamala and the child swept together. <b>Now it looks CLEAN!</b> ✅</div>
+    </div>
+  </div>
+
+  <!-- Story: Water near tap -->
+  <div class="info-card" style="border-left-color:#1565c0">
+    <div class="ic-title" style="color:#1565c0">📖 Story Time: Water Near the Tap!</div>
+    <div class="ic-text">There was <b>WATER</b> all around the tap 💦 It was very dirty and wet!<br><br>Neighbours worked together and cleaned the area near the tap 🧹<br><br>Now the place near the tap is <b>CLEAN!</b> ✨</div>
+  </div>
+
+  <div class="story-strip" style="border-left-color:#1565c0">
+    <span class="ss-emoji">🚰</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#1565c0">Problem — Water Everywhere! 💦</div>
+      <div class="ss-desc">There is water around the tap. The place looks dirty and slippery.</div>
+    </div>
+  </div>
+  <div class="story-strip" style="border-left-color:#43a047">
+    <span class="ss-emoji">✅</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#1b5e20">Solution — Now It Looks Clean! ✅</div>
+      <div class="ss-desc">Neighbours cleaned together. The place near the tap is now neat and dry!</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fff9c4,#fff59d);border-color:#ffd54f">
+    <div class="hb-text" style="color:#f57f17">🧹 Sweeping keeps our home front CLEAN!<br>🚰 Cleaning near the tap stops dirt &amp; germs!<br>A clean neighbourhood = a HEALTHY neighbourhood! 💚</div>
+  </div>
+
+  <div class="q-dots" id="cleanDots"></div>
+  <div id="cleanSteps"></div>
+  <button class="nav-btn nav-btn-green" id="cleanNextBtn" disabled onclick="unlockAndGo('clean','help')" style="background:linear-gradient(135deg,#f57f17,#ffa000)">Next: Helping Together! 🤝 →</button>
+</div>
+
+<!-- ══════════ TAB 3 — HELPING TOGETHER ══════════ -->
+<div class="tab-panel" id="panel-help">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <span class="banner-emoji">🤝</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f">Helping Together!</div>
+      <div class="banner-sub" style="color:#c2185b">Neighbours help and care for each other!</div>
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#880e4f,#e91e63)">
+    <span class="bf-icon">🤝</span>
+    <div class="bf-text">NEIGHBOURS CO-OPERATE! They help each other in happy and sad times!</div>
+  </div>
+
+  <!-- Story: Decoration -->
+  <div class="info-card" style="border-left-color:#880e4f">
+    <div class="ic-title" style="color:#880e4f">📖 Story: Rama Calls Everyone!</div>
+    <div class="ic-text"><b>Rama</b> called all the neighbours — <b>Sarasu, Kamala, Uma</b> — to come and help! 🙋<br><br>They all came together and <b>decorated the room</b> with flowers and rangoli! 🌸<br><br><b>"We have decorated this room quickly, haven't we?"</b> — they said happily! 😊</div>
+  </div>
+
+  <div class="two-grid">
+    <div class="grid-card" style="border-color:#f8bbd0">
+      <span class="gc-icon">🌸</span>
+      <div class="gc-name">Decorating</div>
+      <div class="gc-desc">Neighbours help decorate for festivals together!</div>
+    </div>
+    <div class="grid-card" style="border-color:#f8bbd0">
+      <span class="gc-icon">🎨</span>
+      <div class="gc-name">Rangoli</div>
+      <div class="gc-desc">Making beautiful rangoli with neighbours!</div>
+    </div>
+  </div>
+
+  <!-- Story: Ravi crying -->
+  <div class="info-card" style="border-left-color:#1565c0">
+    <div class="ic-title" style="color:#1565c0">📖 Story: Ravi Falls Down!</div>
+    <div class="ic-text"><b>Ravi</b> fell down and started crying — <b>"Oh! Amma!"</b> 😢<br><br>A kind neighbour came quickly and said: <b>"Don't cry dear!"</b> 💕<br><br>The neighbour comforted Ravi — and Ravi <b>stopped crying!</b> 😊<br>This is how NEIGHBOURS CARE for each other!</div>
+  </div>
+
+  <div class="story-strip" style="border-left-color:#e53935">
+    <span class="ss-emoji">😢</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#e53935">Ravi Falls and Cries!</div>
+      <div class="ss-desc">Ravi fell down and cried "Oh! Amma!" He is hurt and scared.</div>
+    </div>
+  </div>
+  <div class="story-strip" style="border-left-color:#43a047">
+    <span class="ss-emoji">💕</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#1b5e20">Neighbour Says "Don't Cry Dear!"</div>
+      <div class="ss-desc">A kind neighbour came and comforted Ravi. He stopped crying! Neighbours CARE! ❤️</div>
+    </div>
+  </div>
+
+  <!-- Kite flying -->
+  <div class="info-card" style="border-left-color:#43a047">
+    <div class="ic-title" style="color:#1b5e20">🪁 Playing Together!</div>
+    <div class="ic-text">Neighbours also play <b>KITE FLYING</b> together! 🪁<br><br>Families come out together — parents and children fly kites in the open sky!<br><br>They laugh, run, and enjoy together as a BIG neighbourhood family! 😄🎉</div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);border-color:#f06292">
+    <div class="hb-text" style="color:#880e4f">🤝 CO-OPERATION means working together!<br>❤️ Neighbours help in happy AND sad times!<br>🪁 We play games with our neighbours too!</div>
+  </div>
+
+  <div class="q-dots" id="helpDots"></div>
+  <div id="helpSteps"></div>
+  <button class="nav-btn nav-btn-green" id="helpNextBtn" disabled onclick="unlockAndGo('help','work')" style="background:linear-gradient(135deg,#880e4f,#e91e63)">Next: Our Work! 🌱 →</button>
+</div>
+
+<!-- ══════════ TAB 4 — OUR WORK ══════════ -->
+<div class="tab-panel" id="panel-work">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <span class="banner-emoji">🌱</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1">Our Work!</div>
+      <div class="banner-sub" style="color:#1565c0">Work done by children and elders at home!</div>
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#0d47a1,#1976d2)">
+    <span class="bf-icon">💪</span>
+    <div class="bf-text">Children and Elders BOTH do helpful work at home and in the neighbourhood!</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0d47a1">
+    <div class="ic-title" style="color:#0d47a1">👦👧 What do CHILDREN do?</div>
+    <div class="ic-text">Children can do many helpful things!<br><br>🧹 <b>Sweeping</b> the front of the house<br>🌸 <b>Watering plants</b> in the garden<br>🪣 <b>Getting water</b> from the well or tap<br>💐 <b>Picking flowers</b> to help at home<br>🍽️ <b>Serving food</b> to family members<br>⚽ <b>Playing games</b> with neighbours</div>
+  </div>
+
+  <div class="two-grid">
+    <div class="grid-card" style="border-color:#bbdefb">
+      <span class="gc-icon">🧹</span>
+      <div class="gc-name">Sweeping</div>
+      <div class="gc-desc">Children sweep the house front and yard</div>
+    </div>
+    <div class="grid-card" style="border-color:#bbdefb">
+      <span class="gc-icon">🌸</span>
+      <div class="gc-name">Watering Plants</div>
+      <div class="gc-desc">Children water the plants and garden</div>
+    </div>
+    <div class="grid-card" style="border-color:#bbdefb">
+      <span class="gc-icon">🪣</span>
+      <div class="gc-name">Getting Water</div>
+      <div class="gc-desc">Children help get water from the tap or well</div>
+    </div>
+    <div class="grid-card" style="border-color:#bbdefb">
+      <span class="gc-icon">💐</span>
+      <div class="gc-name">Picking Flowers</div>
+      <div class="gc-desc">Children pick flowers for puja or decoration</div>
+    </div>
+    <div class="grid-card" style="border-color:#bbdefb">
+      <span class="gc-icon">🍽️</span>
+      <div class="gc-name">Serving Food</div>
+      <div class="gc-desc">Children help serve food at mealtimes</div>
+    </div>
+    <div class="grid-card" style="border-color:#bbdefb">
+      <span class="gc-icon">⚽</span>
+      <div class="gc-name">Playing Games</div>
+      <div class="gc-desc">Children play games with neighbour friends</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e91e63">
+    <div class="ic-title" style="color:#e91e63">👩👨 What do ELDERS do?</div>
+    <div class="ic-text">Elders do bigger tasks to help the neighbourhood!<br><br>🧹 <b>Sweeping the road</b> and common areas<br>🚰 <b>Cleaning near the tap</b> to keep it neat<br>💧 <b>Carrying water pots</b> on their heads<br>🌸 <b>Decorating for festivals</b> with flowers<br>🤝 <b>Helping neighbours</b> in times of need</div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-color:#42a5f5">
+    <div class="hb-text" style="color:#0d47a1">💪 EVERYONE helps — children AND elders!<br>🏘️ Together we keep our neighbourhood CLEAN!<br>We all COOPERATE for a happy neighbourhood! 🤝</div>
+  </div>
+
+  <div class="q-dots" id="workDots"></div>
+  <div id="workSteps"></div>
+  <button class="nav-btn nav-btn-green" id="workNextBtn" disabled onclick="unlockAndGo('work','quiz')" style="background:linear-gradient(135deg,#0d47a1,#1976d2)">Next: Big Quiz! 🏆 →</button>
+</div>
+
+<!-- ══════════ TAB 5 — BIG QUIZ ══════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">Big Neighbourhood Quiz!</div>
+      <div class="banner-sub" style="color:#ef6c00">Show what you know about your neighbourhood!</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);border-color:#ffa000">
+    <div class="hb-text" style="color:#e65100">🏆 You have learned so much!<br>Let's answer 10 questions!<br>You CAN do it! 💪🌟</div>
+  </div>
+
+  <div class="q-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="nav-btn nav-btn-green" id="qFinishBtn" disabled onclick="showCelebration()" style="background:linear-gradient(135deg,#e65100,#ffa000)">🎉 I'm Done! Show my Result!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🎊</span>
+    <div class="celeb-title">Amazing! You Did It! 🏆</div>
+    <div class="celeb-sub" id="celebSub"></div>
+    <div class="celeb-stars" id="celebStars"></div>
+    <button class="restart-btn" onclick="restartAll()">🔁 Play Again!</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════ STATE ══════════════ */
+let stars = 0;
+const tabOrder = ['nb','clean','help','work','quiz'];
+const doneTabs = new Set();
+let currentTab = 'nb';
+
+/* ══════════════ TAB NAVIGATION ══════════════ */
+function tryTab(name){
+  const idx = tabOrder.indexOf(name);
+  const curIdx = tabOrder.indexOf(currentTab);
+  if(name === currentTab) return;
+  if(idx > curIdx && !doneTabs.has(tabOrder[idx-1])){
+    const tabEl = document.getElementById('tab-'+name);
+    tabEl.classList.add('shaking');
+    setTimeout(()=>tabEl.classList.remove('shaking'),550);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  switchTab(name);
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>{ t.classList.remove('active'); });
+  document.getElementById('panel-'+name).classList.add('active');
+  const tabEl = document.getElementById('tab-'+name);
+  tabEl.classList.remove('locked','unlocked','done');
+  tabEl.classList.add('active');
+  currentTab = name;
+  tabEl.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function unlockAndGo(doneTab, nextTab){
+  doneTabs.add(doneTab);
+  const doneEl = document.getElementById('tab-'+doneTab);
+  doneEl.classList.remove('active');
+  doneEl.classList.add('done');
+  const nextEl = document.getElementById('tab-'+nextTab);
+  nextEl.classList.remove('locked');
+  nextEl.classList.add('unlocked');
+  updateProgress();
+  switchTab(nextTab);
+}
+
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ══════════════ TOAST ══════════════ */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+/* ══════════════ QUESTION ENGINE ══════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ_${containerID}(this,${i},${q.correct})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  window['answerQ_'+containerID] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+
+  render();
+}
+
+/* ══════════════ TAB 1 — MY NEIGHBOURS ══════════════ */
+renderQuestions({
+  containerID:'nbSteps', dotsID:'nbDots', nextBtnID:'nbNextBtn',
+  questions:[
+    {visual:'🏘️',question:'People who live NEAR\nour house are called ___.',options:['🏫 Teachers','👨‍👩‍👧 Neighbours!','🐶 Pets','🚗 Drivers'],correct:1},
+    {visual:'🏠',question:'The area AROUND\nour house is called\nour ___.',options:['🏫 School','🌊 Sea','🏘️ Neighbourhood!','🏔️ Mountain'],correct:2},
+    {visual:'🚰',question:'Neighbours SHARE the\ncommon ___ for water.',options:['🛒 Shop','🚰 Tap!','🍕 Pizza','🚗 Car'],correct:1},
+    {visual:'🎮',question:'We ___ games\nwith our neighbours.',options:['😡 Fight in','😴 Sleep in','🎮 Play!','🍕 Cook'],correct:2},
+    {visual:'🎵',question:'We also ___ songs\nthat we sing\nwith neighbours.',options:['🎵 Sing!','🙈 Forget','😡 Shout','😴 Sleep'],correct:0},
+  ]
+});
+
+/* ══════════════ TAB 2 — KEEP IT CLEAN ══════════════ */
+renderQuestions({
+  containerID:'cleanSteps', dotsID:'cleanDots', nextBtnID:'cleanNextBtn',
+  questions:[
+    {visual:'🏠',question:'What was there in FRONT\nof the house?',options:['🌸 Flowers','🍕 Food','🧹 Dirt!','💧 Water only'],correct:2},
+    {visual:'🧹',question:'Who did the child\ncall to help SWEEP?',options:['👨 Father','🐶 Dog','👧 Kamala!','🏫 Teacher'],correct:2},
+    {visual:'🚰',question:'What was the\nPROBLEM near\nthe tap?',options:['🔥 Fire','💧 Water all around!','🐍 Snake','🐜 Ants'],correct:1},
+    {visual:'✅',question:'After cleaning together,\nhow did the place\nnear the tap look?',options:['😟 More dirty','🌊 Flooded','✅ Clean!','🔥 Hot'],correct:2},
+    {visual:'🤝',question:'The neighbours cleaned\ntogether. This\nshows ___.',options:['😡 Fighting','🤝 Co-operation!','😴 Laziness','🙈 Ignoring'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 3 — HELPING TOGETHER ══════════════ */
+renderQuestions({
+  containerID:'helpSteps', dotsID:'helpDots', nextBtnID:'helpNextBtn',
+  questions:[
+    {visual:'📢',question:'Who called all the\nneighbours to come\nand help?',options:['👧 Kamala','👨 Father','👩 Rama!','👦 Ravi'],correct:2},
+    {visual:'🌸',question:'What did Sarasu,\nKamala and Uma\nhelp to do?',options:['🍕 Cook food','🌸 Decorate the room!','🚗 Drive car','😴 Sleep'],correct:1},
+    {visual:'😢',question:'Why was RAVI crying?',options:['🍕 No food','😢 He fell down!','😴 No sleep','😡 Someone fought'],correct:1},
+    {visual:'💕',question:'What did the\nneighbour say\nto Ravi?',options:['😡 Go away!','😴 Be quiet!','💕 Don\'t cry dear!','🙈 Ignore him'],correct:2},
+    {visual:'🪁',question:'What game do\nneighbours play\ntogether?',options:['🎮 Video games only','🪁 Kite flying!','🚗 Driving','😴 Sleeping'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 4 — OUR WORK ══════════════ */
+renderQuestions({
+  containerID:'workSteps', dotsID:'workDots', nextBtnID:'workNextBtn',
+  questions:[
+    {visual:'🌸',question:'What do CHILDREN do\nfor plants at home?',options:['🌸 Water the plants!','🔥 Burn them','🙈 Ignore them','🐛 Eat them'],correct:0},
+    {visual:'🪣',question:'Children also help\nby getting ___ from\nthe tap or well.',options:['🍕 Food','🪣 Water!','🛒 Vegetables','💡 Light'],correct:1},
+    {visual:'💐',question:'Children pick\n___ to help\nat home.',options:['🪨 Rocks','💐 Flowers!','🐟 Fish','🚗 Cars'],correct:1},
+    {visual:'🍽️',question:'Children help by\n___ food to\nfamily members.',options:['😡 Throwing','😴 Hiding','🍽️ Serving!','🔥 Burning'],correct:2},
+    {visual:'👩',question:'Elders carry water\npots on their ___.',options:['🦶 Feet','✋ Hands','👩 Head!','🚗 Car'],correct:2},
+  ]
+});
+
+/* ══════════════ TAB 5 — BIG QUIZ ══════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🏆🏘️',question:'🏆 People living NEAR\nour house are called ___.',options:['🏫 Teachers','👨‍👩‍👧 Neighbours!','🐶 Pets','🚗 Drivers'],correct:1},
+    {visual:'🏆🧹',question:'🏆 Kamala and the child\nswept the ___\ntogether.',options:['🏫 School','🌊 River','🏠 Front of the house!','🚗 Road only'],correct:2},
+    {visual:'🏆🚰',question:'🏆 What problem was\nthere NEAR the tap?',options:['🔥 Fire','💧 Water all around!','🐍 Snake','🌵 No water'],correct:1},
+    {visual:'🏆📢',question:'🏆 Who called Sarasu,\nKamala and Uma\nto help?',options:['👩 Rama!','👦 Ravi','👨 Father','👧 Kamala'],correct:0},
+    {visual:'🏆😢',question:'🏆 Ravi cried\n"Oh! Amma!" because ___.',options:['🍕 No food','😢 He fell down!','😴 No sleep','🙈 He was bored'],correct:1},
+    {visual:'🏆💕',question:'🏆 The neighbour told\ncrying Ravi: ___.',options:['😡 Go away!','🙈 Be quiet!','💕 Don\'t cry dear!','😴 Sleep now!'],correct:2},
+    {visual:'🏆🪁',question:'🏆 Neighbours fly\n___ together\nas a game.',options:['🎮 Video games','🪁 Kites!','🚗 Cars','🛩️ Aeroplanes'],correct:1},
+    {visual:'🏆🌸',question:'🏆 Children help at home\nby ___ the plants.',options:['🔥 Burning','🌸 Watering!','🙈 Ignoring','🐛 Eating'],correct:1},
+    {visual:'🏆🤝',question:'🏆 Working and helping\ntogether is called ___.',options:['🏆 Competition','🤝 Co-operation!','😡 Fighting','🙈 Ignoring'],correct:1},
+    {visual:'🏆👩',question:'🏆 Elders carry water\npots on their ___.',options:['🦶 Feet','✋ Hands only','👩 Head!','🚗 Car'],correct:2},
+  ]
+});
+
+/* ══════════════ CELEBRATION ══════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know what a NEIGHBOURHOOD is! 🏘️\nYou know how to keep it CLEAN! 🧹\nYou know how neighbours CO-OPERATE! 🤝\nYou know the work done at HOME! 💪\nYou are a NEIGHBOURHOOD CHAMPION! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,15);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ══════════════ RESTART ══════════════ */
+function restartAll(){
+  location.reload();
+}
+</script>
+</body>
+</html>

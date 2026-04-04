@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EVS Class 1 — Lesson 6: My House</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e3f2fd; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.back-btn {
+  background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5);
+  color:#fff; padding:6px 12px; border-radius:20px; font-size:14px;
+  font-weight:900; cursor:pointer; text-decoration:none;
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#0d47a1,#1e88e5); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#0d47a1,#90caf9); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1565c0; border-color:#90caf9; }
+.step-tab.active   { background:#1565c0; color:#fff; border-color:#1565c0; box-shadow:0 4px 14px rgba(21,101,192,.4); }
+.step-tab.done     { background:#e3f2fd; color:#0d47a1; border-color:#64b5f6; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1565c0;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1565c0; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── LIST ROW ── */
+.list-row {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.list-row .lr-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1565c0; margin-bottom:10px; }
+.list-item { display:flex; align-items:center; gap:12px; margin-bottom:10px; padding:10px 12px; background:#e3f2fd; border-radius:12px; }
+.list-icon { font-size:30px; }
+.list-text { font-family:'Fredoka One',cursive; font-size:14px; color:#0d47a1; text-align:left; line-height:1.4; }
+
+/* ── ICON GRID 2 ── */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:42px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:14px; color:#1565c0; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ── 3-COL GRID ── */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:32px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:12px; color:#1565c0; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:19px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:17px;
+  border:3px solid #90caf9; background:#e3f2fd; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1565c0; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:16px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; border:none; cursor:pointer; margin-top:10px; transition:all .2s;
+}
+.nav-btn:active { transform:scale(.97); }
+.nav-btn-blue { background:linear-gradient(135deg,#0d47a1,#1e88e5); color:#fff; box-shadow:0 6px 20px rgba(13,71,161,.4); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+  background:linear-gradient(135deg,#e3f2fd,#bbdefb); border:3px solid #64b5f6;
+  border-radius:18px; padding:14px 16px; margin-bottom:14px; text-align:center;
+}
+.highlight-box .hb-text { font-family:'Fredoka One',cursive; font-size:16px; color:#0d47a1; line-height:1.5; }
+
+/* ── BIG FACT BOX ── */
+.big-fact {
+  background:linear-gradient(135deg,#1565c0,#1e88e5); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; text-align:center; box-shadow:0 6px 20px rgba(21,101,192,.35);
+}
+.big-fact .bf-icon { font-size:52px; display:block; margin-bottom:8px; }
+.big-fact .bf-text { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; line-height:1.4; }
+
+/* ── DISTANCE TABLE ── */
+.dist-table { background:#fff; border-radius:20px; padding:16px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.dist-table .dt-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1565c0; margin-bottom:12px; text-align:center; }
+.dist-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; padding:10px 12px; border-radius:12px; }
+.dist-badge { font-family:'Fredoka One',cursive; font-size:11px; padding:4px 10px; border-radius:20px; white-space:nowrap; }
+.dist-label { font-family:'Fredoka One',cursive; font-size:14px; color:#333; }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:999;
+  display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;
+  transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-box {
+  background:#fff; border-radius:32px; padding:32px 24px; text-align:center;
+  max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.4);
+  animation:celebPop .4s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes celebPop { from{transform:scale(.5)} to{transform:scale(1)} }
+.celeb-emoji { font-size:72px; display:block; margin-bottom:8px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#1565c0; margin-bottom:10px; }
+.celeb-sub { font-size:14px; font-weight:800; color:#555; line-height:1.8; white-space:pre-line; margin-bottom:12px; }
+.celeb-stars { font-family:'Fredoka One',cursive; font-size:20px; color:#f9a825; margin-bottom:18px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="javascript:history.back()">← Back</a>
+    <span class="topbar-title">🏠 EVS Ch.6 — My House</span>
+  </div>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🏠</span>
+  <h1>My House!</h1>
+  <p>Learn about your house and what's near and far from it!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress 🌱</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  id="tab-house"    onclick="tryTab('house')">🏠 My House</div>
+  <div class="step-tab locked"  id="tab-family"   onclick="tryTab('family')">👨‍👩‍👧 My Family</div>
+  <div class="step-tab locked"  id="tab-near"     onclick="tryTab('near')">📍 Near &amp; Far</div>
+  <div class="step-tab locked"  id="tab-places"   onclick="tryTab('places')">🏫 Places Around</div>
+  <div class="step-tab locked"  id="tab-quiz"     onclick="tryTab('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1 — MY HOUSE ══════════════ -->
+<div class="tab-panel active" id="panel-house">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <span class="banner-emoji">🏠</span>
+    <div>
+      <div class="banner-title" style="color:#1565c0">This Is My House!</div>
+      <div class="banner-sub" style="color:#0d47a1">Every person lives in a house!</div>
+    </div>
+  </div>
+
+  <div class="big-fact">
+    <span class="bf-icon">🏠</span>
+    <div class="bf-text">Our house is where we LIVE, EAT, SLEEP and feel SAFE!</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏠 What Is a House?</div>
+    <div class="ic-text">A house is a place where we live with our family! 👨‍👩‍👧<br><br>A house has <b>walls, a roof, doors and windows</b>! 🚪🪟<br><br>We sleep, eat, play and stay safe in our house! 😊</div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🚪 Parts of a House!</div>
+    <div class="list-item"><span class="list-icon">🚪</span><span class="list-text">Door — we enter and go out through the door!</span></div>
+    <div class="list-item"><span class="list-icon">🪟</span><span class="list-text">Window — windows let in light and fresh air!</span></div>
+    <div class="list-item"><span class="list-icon">🏠</span><span class="list-text">Roof — the roof protects us from rain and sun!</span></div>
+    <div class="list-item"><span class="list-icon">🧱</span><span class="list-text">Walls — walls make our house strong and safe!</span></div>
+    <div class="list-item"><span class="list-icon">🏡</span><span class="list-text">Yard — some houses have a yard outside to play!</span></div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card">
+      <span class="ic-icon">🚪</span>
+      <div class="ic-name">Door</div>
+      <div class="ic-desc">We enter here</div>
+    </div>
+    <div class="icon-card">
+      <span class="ic-icon">🪟</span>
+      <div class="ic-name">Window</div>
+      <div class="ic-desc">Light & fresh air</div>
+    </div>
+    <div class="icon-card">
+      <span class="ic-icon">🏠</span>
+      <div class="ic-name">Roof</div>
+      <div class="ic-desc">Keeps rain away</div>
+    </div>
+    <div class="icon-card">
+      <span class="ic-icon">🧱</span>
+      <div class="ic-name">Walls</div>
+      <div class="ic-desc">Make house strong</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🏠 Radha's house has doors and windows!<br>Can you count the doors and windows in YOUR house? 🪟🚪</div>
+  </div>
+
+  <div class="q-dots" id="houseDots"></div>
+  <div id="houseSteps"></div>
+  <button class="nav-btn nav-btn-blue" id="houseNextBtn" disabled onclick="unlockAndGo('house','family')">Next: My Family 👨‍👩‍👧 →</button>
+</div>
+
+<!-- ══════════════ TAB 2 — MY FAMILY ══════════════ -->
+<div class="tab-panel" id="panel-family">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9)">
+    <span class="banner-emoji">👨‍👩‍👧</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f">My Family!</div>
+      <div class="banner-sub" style="color:#ad1457">The people who live in my house!</div>
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#880e4f,#e91e63)">
+    <span class="bf-icon">❤️</span>
+    <div class="bf-text">Family members LOVE each other and LIVE together!</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e91e63">
+    <div class="ic-title" style="color:#880e4f">👨‍👩‍👧 Who Is in Radha's Family?</div>
+    <div class="ic-text">Look at the picture of Radha's house!<br><br>There are <b>family members</b> doing different things 🏠<br>Some are <b>sitting, cooking, playing and working!</b> 🍳<br><br>Every family is special and every home is different! 🌟</div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title" style="color:#880e4f">👨‍👩‍👧 Family Members!</div>
+    <div class="list-item" style="background:#fce4ec"><span class="list-icon">👩</span><span class="list-text" style="color:#880e4f">Mother — she loves and cares for the family!</span></div>
+    <div class="list-item" style="background:#fce4ec"><span class="list-icon">👨</span><span class="list-text" style="color:#880e4f">Father — he works and looks after the family!</span></div>
+    <div class="list-item" style="background:#fce4ec"><span class="list-icon">👧</span><span class="list-text" style="color:#880e4f">Sister — she plays and helps at home!</span></div>
+    <div class="list-item" style="background:#fce4ec"><span class="list-icon">👦</span><span class="list-text" style="color:#880e4f">Brother — he plays and studies hard!</span></div>
+    <div class="list-item" style="background:#fce4ec"><span class="list-icon">👴</span><span class="list-text" style="color:#880e4f">Grandfather — he tells us stories and guides us!</span></div>
+    <div class="list-item" style="background:#fce4ec"><span class="list-icon">👵</span><span class="list-text" style="color:#880e4f">Grandmother — she cooks and loves us so much!</span></div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e91e63">
+    <div class="ic-title" style="color:#880e4f">🐕 Domestic Animals!</div>
+    <div class="ic-text">Some families also have <b>domestic animals</b> at home! 🐄🐕🐈<br><br>These animals live with us and we take care of them! 💚<br><br>Like — a <b>dog, cow, cat, goat or hen</b> at home!</div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3" style="border-color:#f48fb1">
+      <span class="ic-icon">🐕</span>
+      <div class="ic-name" style="color:#880e4f">Dog</div>
+    </div>
+    <div class="icon-card3" style="border-color:#f48fb1">
+      <span class="ic-icon">🐈</span>
+      <div class="ic-name" style="color:#880e4f">Cat</div>
+    </div>
+    <div class="icon-card3" style="border-color:#f48fb1">
+      <span class="ic-icon">🐄</span>
+      <div class="ic-name" style="color:#880e4f">Cow</div>
+    </div>
+    <div class="icon-card3" style="border-color:#f48fb1">
+      <span class="ic-icon">🐐</span>
+      <div class="ic-name" style="color:#880e4f">Goat</div>
+    </div>
+    <div class="icon-card3" style="border-color:#f48fb1">
+      <span class="ic-icon">🐓</span>
+      <div class="ic-name" style="color:#880e4f">Hen</div>
+    </div>
+    <div class="icon-card3" style="border-color:#f48fb1">
+      <span class="ic-icon">🐇</span>
+      <div class="ic-name" style="color:#880e4f">Rabbit</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);border-color:#f48fb1">
+    <div class="hb-text" style="color:#880e4f">❓ Who are the members of YOUR family?<br>Do you have a pet at home? 🐕🐈</div>
+  </div>
+
+  <div class="q-dots" id="familyDots"></div>
+  <div id="familySteps"></div>
+  <button class="nav-btn nav-btn-blue" id="familyNextBtn" disabled onclick="unlockAndGo('family','near')" style="background:linear-gradient(135deg,#880e4f,#e91e63)">Next: Near &amp; Far 📍 →</button>
+</div>
+
+<!-- ══════════════ TAB 3 — NEAR & FAR ══════════════ -->
+<div class="tab-panel" id="panel-near">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">📍</span>
+    <div>
+      <div class="banner-title" style="color:#2e7d32">Near and Far!</div>
+      <div class="banner-sub" style="color:#1b5e20">Learn how close or far places are from YOUR house!</div>
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#2e7d32,#43a047)">
+    <span class="bf-icon">🗺️</span>
+    <div class="bf-text">We can say if a place is VERY NEAR, NEAR, FAR or VERY FAR!</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#2e7d32">
+    <div class="ic-title" style="color:#2e7d32">📍 What Do Near and Far Mean?</div>
+    <div class="ic-text">Look at Raja's house in the picture! 🏠<br><br><b>Very Near</b> — you can walk there in a few steps! 🚶<br><b>Near</b> — a little walk away! 🚶🚶<br><b>Far</b> — you need to walk more! 🚶🚶🚶<br><b>Very Far</b> — you may need a vehicle to go there! 🚌</div>
+  </div>
+
+  <div class="dist-table">
+    <div class="dt-title">🏠 From Raja's House...</div>
+    <div class="dist-row" style="background:#e8f5e9">
+      <span class="dist-badge" style="background:#4caf50;color:#fff">Very Near 🟢</span>
+      <span class="dist-label">The Well 🪣</span>
+    </div>
+    <div class="dist-row" style="background:#f1f8e9">
+      <span class="dist-badge" style="background:#8bc34a;color:#fff">Near 🟡</span>
+      <span class="dist-label">The Big Tree 🌳</span>
+    </div>
+    <div class="dist-row" style="background:#fff8e1">
+      <span class="dist-badge" style="background:#ff9800;color:#fff">Far 🟠</span>
+      <span class="dist-label">The School 🏫</span>
+    </div>
+    <div class="dist-row" style="background:#fce4ec">
+      <span class="dist-badge" style="background:#f44336;color:#fff">Very Far 🔴</span>
+      <span class="dist-label">The Mountains 🏔️</span>
+    </div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card" style="border-color:#4caf50">
+      <span class="ic-icon">🪣</span>
+      <div class="ic-name" style="color:#2e7d32">Well / Hand Pump</div>
+      <div class="ic-desc" style="color:#4caf50">💧 Very Near!</div>
+    </div>
+    <div class="icon-card" style="border-color:#8bc34a">
+      <span class="ic-icon">🏫</span>
+      <div class="ic-name" style="color:#2e7d32">School</div>
+      <div class="ic-desc" style="color:#8bc34a">📚 Near or Far</div>
+    </div>
+    <div class="icon-card" style="border-color:#ff9800">
+      <span class="ic-icon">🏥</span>
+      <div class="ic-name" style="color:#e65100">Hospital</div>
+      <div class="ic-desc" style="color:#ff9800">🏥 Far</div>
+    </div>
+    <div class="icon-card" style="border-color:#f44336">
+      <span class="ic-icon">🚌</span>
+      <div class="ic-name" style="color:#b71c1c">Bus Station</div>
+      <div class="ic-desc" style="color:#f44336">🔴 Very Far!</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-color:#81c784">
+    <div class="hb-text" style="color:#1b5e20">🏠 Keep YOUR house as the starting point!<br>Think — what is very near your house? 🪣<br>What is very far from your house? 🚌</div>
+  </div>
+
+  <div class="q-dots" id="nearDots"></div>
+  <div id="nearSteps"></div>
+  <button class="nav-btn nav-btn-blue" id="nearNextBtn" disabled onclick="unlockAndGo('near','places')" style="background:linear-gradient(135deg,#2e7d32,#43a047)">Next: Places Around 🏫 →</button>
+</div>
+
+<!-- ══════════════ TAB 4 — PLACES AROUND ══════════════ -->
+<div class="tab-panel" id="panel-places">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082)">
+    <span class="banner-emoji">🏫</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">Places Around Us!</div>
+      <div class="banner-sub" style="color:#bf360c">Learn the important places near your house!</div>
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#e65100,#ff6d00)">
+    <span class="bf-icon">🗺️</span>
+    <div class="bf-text">Different places in our locality serve different purposes!</div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title" style="color:#e65100">🏘️ Important Places!</div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🏫</span><span class="list-text" style="color:#e65100">School — where we LEARN and study every day!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🏥</span><span class="list-text" style="color:#e65100">Hospital / Office — where we go when we are sick!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🏪</span><span class="list-text" style="color:#e65100">Shop — where we buy things we need!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🚌</span><span class="list-text" style="color:#e65100">Bus Station — where we catch buses to travel far!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🏡</span><span class="list-text" style="color:#e65100">Anganawadi — a special school for small children!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🪣</span><span class="list-text" style="color:#e65100">Hand Pump / Street Tap — where we get water!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🤝</span><span class="list-text" style="color:#e65100">Friend's House — where we visit and play!</span></div>
+    <div class="list-item" style="background:#fff8e1"><span class="list-icon">🪨</span><span class="list-text" style="color:#e65100">Well — a hole in the ground with water inside!</span></div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3" style="border-color:#ffe082">
+      <span class="ic-icon">🏫</span>
+      <div class="ic-name" style="color:#e65100">School</div>
+    </div>
+    <div class="icon-card3" style="border-color:#ffe082">
+      <span class="ic-icon">🏥</span>
+      <div class="ic-name" style="color:#e65100">Hospital</div>
+    </div>
+    <div class="icon-card3" style="border-color:#ffe082">
+      <span class="ic-icon">🏪</span>
+      <div class="ic-name" style="color:#e65100">Shop</div>
+    </div>
+    <div class="icon-card3" style="border-color:#ffe082">
+      <span class="ic-icon">🚌</span>
+      <div class="ic-name" style="color:#e65100">Bus Station</div>
+    </div>
+    <div class="icon-card3" style="border-color:#ffe082">
+      <span class="ic-icon">🏡</span>
+      <div class="ic-name" style="color:#e65100">Anganawadi</div>
+    </div>
+    <div class="icon-card3" style="border-color:#ffe082">
+      <span class="ic-icon">🪣</span>
+      <div class="ic-name" style="color:#e65100">Hand Pump</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#ff6d00">
+    <div class="ic-title" style="color:#e65100">📏 How Far Are These Places?</div>
+    <div class="ic-text">Different children will have different answers — it depends on WHERE you live!<br><br>For example: your <b>friend's house</b> might be very near!<br>But the <b>bus station</b> might be very far! 🚌<br><br>Always keep <b>YOUR house</b> as the starting point! 🏠</div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fff8e1,#ffe082);border-color:#ffd54f">
+    <div class="hb-text" style="color:#e65100">✅ The table in your book has 8 places!<br>Friend's house 🤝 · Hand pump 🪣 · School 🏫 · Shop 🏪<br>Anganawadi 🏡 · Well 🪨 · Bus station 🚌 · Office/Hospital 🏥<br>Can you say which are near and which are far? 📏</div>
+  </div>
+
+  <div class="q-dots" id="placesDots"></div>
+  <div id="placesSteps"></div>
+  <button class="nav-btn nav-btn-blue" id="placesNextBtn" disabled onclick="unlockAndGo('places','quiz')" style="background:linear-gradient(135deg,#e65100,#ff6d00)">Go to Big Quiz! 🏆 →</button>
+</div>
+
+<!-- ══════════════ TAB 5 — BIG QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#1565c0">Big House Quiz!</div>
+      <div class="banner-sub" style="color:#0d47a1">Show everything you learned in Lesson 6!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="nav-btn nav-btn-blue" id="qFinishBtn" disabled onclick="showCelebration()">🎉 Finish! →</button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏠</span>
+    <div class="celeb-title">House Champion! 🏆</div>
+    <div class="celeb-sub" id="celebSub"></div>
+    <div class="celeb-stars" id="celebStars"></div>
+    <button class="nav-btn nav-btn-blue" onclick="restartAll()">🔄 Play Again!</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════ STATE ══════════════ */
+let stars = 0;
+const doneTabs = new Set();
+const unlockedTabs = new Set(['house']);
+const tabOrder = ['house','family','near','places','quiz'];
+
+function updateProgress(){
+  const pct = Math.round((doneTabs.size / tabOrder.length)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+/* ══════════════ TAB NAVIGATION ══════════════ */
+function tryTab(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.getElementById('tab-'+id);
+    el.classList.add('shaking');
+    setTimeout(()=>el.classList.remove('shaking'),500);
+    const toast = document.getElementById('lockToast');
+    toast.textContent = '🔒 Finish the previous step first!';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),2500);
+    return;
+  }
+  tabOrder.forEach(t=>{
+    const tab   = document.getElementById('tab-'+t);
+    const panel = document.getElementById('panel-'+t);
+    if(t===id){
+      tab.className='step-tab active';
+      panel.classList.add('active');
+    } else {
+      panel.classList.remove('active');
+      if(doneTabs.has(t))         tab.className='step-tab done';
+      else if(unlockedTabs.has(t)) tab.className='step-tab unlocked';
+      else                         tab.className='step-tab locked';
+    }
+  });
+}
+
+function unlockAndGo(from, to){
+  doneTabs.add(from);
+  unlockedTabs.add(to);
+  updateProgress();
+  document.getElementById('tab-'+from).className='step-tab done';
+  document.getElementById('tab-'+to).className='step-tab unlocked';
+  tryTab(to);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════ QUESTION ENGINE ══════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ_${containerID}(this,${i},${q.correct})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  window['answerQ_'+containerID] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+
+  render();
+}
+
+/* ══════════════ TAB 1 — MY HOUSE ══════════════ */
+renderQuestions({
+  containerID:'houseSteps', dotsID:'houseDots', nextBtnID:'houseNextBtn',
+  questions:[
+    {visual:'🚪',question:'What do we use to\nenter our house?',options:['🪟 Window','🚪 Door','🏠 Roof','🧱 Wall'],correct:1},
+    {visual:'🪟',question:'What lets LIGHT and\nfresh AIR into our house?',options:['🚪 Door','🏠 Roof','🪟 Window','🧱 Wall'],correct:2},
+    {visual:'🏠',question:'What protects us from\nRAIN and SUN?',options:['🪟 Window','🚪 Door','🧱 Wall','🏠 Roof'],correct:3},
+    {visual:'😊',question:'We feel SAFE and HAPPY\nin our ___.',options:['🏫 School','🏪 Shop','🏠 House','🚌 Bus'],correct:2},
+    {visual:'🧱',question:'What makes our\nhouse STRONG?',options:['🌿 Plants','🧱 Walls','💧 Water','⭐ Stars'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 2 — MY FAMILY ══════════════ */
+renderQuestions({
+  containerID:'familySteps', dotsID:'familyDots', nextBtnID:'familyNextBtn',
+  questions:[
+    {visual:'👨‍👩‍👧',question:'Who are the people\nthat LIVE with us?',options:['👨‍👩‍👧 Family','🐝 Insects','🌳 Trees','⭐ Stars'],correct:0},
+    {visual:'🐕',question:'A dog that lives in\nour house is called a ___ animal.',options:['🌿 Wild','🐕 Domestic','🌊 Sea','🐦 Flying'],correct:1},
+    {visual:'👵',question:'Who tells us stories\nand guides the family?',options:['🐕 Dog','🏪 Shopkeeper','👴👵 Grandparents','🌳 Tree'],correct:2},
+    {visual:'❤️',question:'Family members ___ each\nother and live together.',options:['😡 Fight','❤️ Love','😴 Ignore','🏃 Run from'],correct:1},
+    {visual:'🐄',question:'Which of these is a\ndomestic animal?',options:['🦁 Lion','🐯 Tiger','🐘 Elephant','🐄 Cow'],correct:3},
+  ]
+});
+
+/* ══════════════ TAB 3 — NEAR & FAR ══════════════ */
+renderQuestions({
+  containerID:'nearSteps', dotsID:'nearDots', nextBtnID:'nearNextBtn',
+  questions:[
+    {visual:'🏠',question:'When we say something\nis NEAR, it means...',options:['🚀 In space','🏠 Close to home','🌊 In the sea','🌋 Very far'],correct:1},
+    {visual:'🪣',question:'In the picture, what is\nVERY NEAR to Raja\'s house?',options:['🏔️ Mountains','🚌 Bus station','🪣 Well','✈️ Airport'],correct:2},
+    {visual:'🏠',question:'We keep OUR ___ as the\nstarting point to measure distance.',options:['🏫 School','🏥 Hospital','🏠 House','🌳 Tree'],correct:2},
+    {visual:'🚌',question:'To go somewhere VERY FAR,\nwe might need a ___.',options:['🦶 Feet only','🚌 Vehicle','🌿 Leaf','💧 Water'],correct:1},
+    {visual:'🗺️',question:'Which word means\nFURTHEST from home?',options:['🟢 Very Near','🟡 Near','🟠 Far','🔴 Very Far'],correct:3},
+  ]
+});
+
+/* ══════════════ TAB 4 — PLACES AROUND ══════════════ */
+renderQuestions({
+  containerID:'placesSteps', dotsID:'placesDots', nextBtnID:'placesNextBtn',
+  questions:[
+    {visual:'🏫',question:'Where do we go\nto LEARN every day?',options:['🏪 Shop','🏫 School','🚌 Bus station','🏥 Hospital'],correct:1},
+    {visual:'🏥',question:'Where do we go\nwhen we are SICK?',options:['🏫 School','🏪 Shop','🏥 Hospital','🌳 Park'],correct:2},
+    {visual:'🪣',question:'A hand pump or street\ntap gives us ___.',options:['🍕 Food','💧 Water','📚 Books','🎮 Games'],correct:1},
+    {visual:'🏡',question:'An ANGANAWADI is a\nspecial place for ___.',options:['🚌 Buses','🐕 Animals','👶 Small children','🍕 Food'],correct:2},
+    {visual:'🚌',question:'Where do we go to\ncatch a BUS to travel?',options:['🏫 School','🏥 Hospital','🏪 Shop','🚌 Bus Station'],correct:3},
+    {visual:'🤝',question:'When we visit and\nPLAY, we go to a ___.',options:['🏥 Hospital','🤝 Friend\'s house','🚌 Bus station','🏫 School'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 5 — BIG QUIZ ══════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🏆🚪',question:'🏆 What part of the house\ndo we ENTER through?',options:['🪟 Window','🏠 Roof','🚪 Door','🧱 Wall'],correct:2},
+    {visual:'🏆❤️',question:'🏆 Family members LIVE\ntogether and ___ each other.',options:['😡 Fight','❤️ Love','😴 Ignore','🏃 Race'],correct:1},
+    {visual:'🏆🪣',question:'🏆 What is VERY NEAR\nto Raja\'s house?',options:['🏔️ Mountains','🏫 School','🪣 Well','✈️ Airport'],correct:2},
+    {visual:'🏆🐕',question:'🏆 A dog or cat that lives\nin your home is called a ___ animal.',options:['🌿 Wild','🐕 Domestic','🦁 Forest','🌊 Sea'],correct:1},
+    {visual:'🏆🏫',question:'🏆 Where do we go to\nSTUDY every day?',options:['🏥 Hospital','🏪 Shop','🏫 School','🚌 Bus station'],correct:2},
+    {visual:'🏆🪟',question:'🏆 What lets LIGHT and\nfresh AIR into the house?',options:['🚪 Door','🏠 Roof','🧱 Wall','🪟 Window'],correct:3},
+    {visual:'🏆🗺️',question:'🏆 We keep our ___ as\nthe base to find near/far places.',options:['🏫 School','🏠 House','🏥 Hospital','🚌 Bus'],correct:1},
+    {visual:'🏆💧',question:'🏆 A HAND PUMP gives us\nwhat we need every day?',options:['🍕 Food','📚 Books','💧 Water','🎮 Games'],correct:2},
+    {visual:'🏆🏡',question:'🏆 An ANGANAWADI is a\nspecial place for whom?',options:['🐄 Cows','🚌 Buses','👶 Small children','🌳 Trees'],correct:2},
+    {visual:'🏆🔴',question:'🏆 A BUS STATION is usually\n___ from home.',options:['🟢 Very Near','🟡 Near','🔴 Very Far','🏠 Inside home'],correct:2},
+  ]
+});
+
+/* ══════════════ CELEBRATION ══════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know all the parts of a house! 🏠🚪🪟\nYou know your family members! 👨‍👩‍👧❤️\nYou know what NEAR and FAR means! 📍🗺️\nYou know all the important places! 🏫🏥🚌\nYou are a HOUSE CHAMPION! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,15);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ══════════════ RESTART ══════════════ */
+function restartAll(){
+  location.reload();
+}
+</script>
+</body>
+</html>

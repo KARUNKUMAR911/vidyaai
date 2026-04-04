@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EVS Class 1 — Lesson 4: Delicious Food</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff8e1; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#f57c00);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.back-btn {
+  background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5);
+  color:#fff; padding:6px 12px; border-radius:20px; font-size:14px;
+  font-weight:900; cursor:pointer; text-decoration:none;
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#bf360c,#f57c00); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffb300); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffcc80; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#fff8e1; color:#bf360c; border-color:#ffb74d; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #e65100;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── FOOD GRID ── */
+.food-grid {
+  display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px;
+}
+.food-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #ffcc80;
+  animation:cardPop .4s ease both;
+}
+.food-card:nth-child(1){animation-delay:.05s} .food-card:nth-child(2){animation-delay:.1s}
+.food-card:nth-child(3){animation-delay:.15s} .food-card:nth-child(4){animation-delay:.2s}
+.food-card:nth-child(5){animation-delay:.25s} .food-card:nth-child(6){animation-delay:.3s}
+.food-card:nth-child(7){animation-delay:.35s} .food-card:nth-child(8){animation-delay:.4s}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.food-card .fc-icon { font-size:42px; display:block; margin-bottom:6px; }
+.food-card .fc-name { font-family:'Fredoka One',cursive; font-size:14px; color:#e65100; }
+.food-card .fc-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ── 3-COL GRID ── */
+.food-grid3 {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;
+}
+.food-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #ffcc80;
+  animation:cardPop .4s ease both;
+}
+.food-card3 .fc-icon { font-size:34px; display:block; margin-bottom:4px; }
+.food-card3 .fc-name { font-family:'Fredoka One',cursive; font-size:12px; color:#e65100; }
+
+/* ── LIST ROW ── */
+.list-row {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.list-row .lr-title { font-family:'Fredoka One',cursive; font-size:17px; color:#e65100; margin-bottom:10px; }
+.list-item { display:flex; align-items:center; gap:12px; margin-bottom:10px; padding:10px 12px; background:#fff8e1; border-radius:12px; }
+.list-icon { font-size:30px; }
+.list-text { font-family:'Fredoka One',cursive; font-size:14px; color:#bf360c; text-align:left; line-height:1.4; }
+
+/* ── MATCH ACTIVITY ── */
+.match-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.match-card .mc-title { font-family:'Fredoka One',cursive; font-size:17px; color:#e65100; margin-bottom:12px; text-align:center; }
+.match-row { display:flex; align-items:center; justify-content:space-between; background:#fff8e1; border-radius:14px; padding:10px 14px; margin-bottom:8px; border:2px solid #ffcc80; }
+.match-left, .match-right { font-family:'Fredoka One',cursive; font-size:15px; color:#333; }
+.match-arrow { font-size:18px; color:#e65100; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:19px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:17px;
+  border:3px solid #ffcc80; background:#fff8e1; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#e65100; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:16px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; border:none; cursor:pointer; margin-top:10px; transition:all .2s;
+}
+.nav-btn:active { transform:scale(.97); }
+.nav-btn-orange { background:linear-gradient(135deg,#e65100,#f57c00); color:#fff; box-shadow:0 6px 20px rgba(230,81,0,.4); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:999;
+  display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;
+  transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-box {
+  background:#fff; border-radius:32px; padding:32px 24px; text-align:center;
+  max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.4);
+  animation:celebPop .4s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes celebPop { from{transform:scale(.5)} to{transform:scale(1)} }
+.celeb-emoji { font-size:72px; display:block; margin-bottom:8px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#e65100; margin-bottom:10px; }
+.celeb-sub { font-size:14px; font-weight:800; color:#555; line-height:1.8; white-space:pre-line; margin-bottom:12px; }
+.celeb-stars { font-family:'Fredoka One',cursive; font-size:20px; color:#f9a825; margin-bottom:18px; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+  background:linear-gradient(135deg,#fff8e1,#ffe0b2); border:3px solid #ffb74d;
+  border-radius:18px; padding:14px 16px; margin-bottom:14px; text-align:center;
+}
+.highlight-box .hb-text { font-family:'Fredoka One',cursive; font-size:16px; color:#bf360c; line-height:1.5; }
+
+/* ── SONG CARD ── */
+.song-card {
+  background:linear-gradient(135deg,#fff8e1,#ffe0b2); border:3px solid #ffb74d;
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; text-align:center;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.song-card .song-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:12px; }
+.song-line { font-family:'Fredoka One',cursive; font-size:15px; color:#bf360c; margin-bottom:6px; line-height:1.6; }
+
+/* ── RAW/COOKED GRID ── */
+.rc-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.rc-col { background:#fff; border-radius:16px; padding:14px 10px; box-shadow:0 3px 10px rgba(0,0,0,.1); }
+.rc-col .rc-title { font-family:'Fredoka One',cursive; font-size:16px; text-align:center; margin-bottom:10px; }
+.rc-item { display:flex; align-items:center; gap:8px; margin-bottom:8px; background:#fff8e1; border-radius:10px; padding:8px 10px; }
+.rc-item .ri-icon { font-size:26px; }
+.rc-item .ri-text { font-family:'Fredoka One',cursive; font-size:13px; color:#333; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="javascript:history.back()">← Back</a>
+    <span class="topbar-title">🍛 EVS Ch.4 — Delicious Food</span>
+  </div>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🍛</span>
+  <h1>Delicious Food!</h1>
+  <p>Learn about the food we eat every day!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress 🍽️</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  id="tab-food"    onclick="tryTab('food')">🍽️ Our Food</div>
+  <div class="step-tab locked"  id="tab-grains"  onclick="tryTab('grains')">🌾 Food Grains</div>
+  <div class="step-tab locked"  id="tab-rawcooked" onclick="tryTab('rawcooked')">🥗 Raw & Cooked</div>
+  <div class="step-tab locked"  id="tab-match"   onclick="tryTab('match')">🔗 Food & Ingredients</div>
+  <div class="step-tab locked"  id="tab-quiz"    onclick="tryTab('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1 — OUR FOOD ══════════════ -->
+<div class="tab-panel active" id="panel-food">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <span class="banner-emoji">🍽️</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">What Do We Eat?</div>
+      <div class="banner-sub" style="color:#bf360c">We eat many different and delicious foods every day!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌍 Food Is Available in Our Locality!</div>
+    <div class="ic-text">We eat food every single day! 🌟<br><br>Food gives us <b>energy</b> ⚡ to play, run and study.<br><br>Different places have different types of food. Let's learn about the <b>delicious food</b> available in our locality! 😋</div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🎯 Lesson Goal: Know the food available in your locality 🏘️<br>Identify food grains grown near you 🌾<br>Know the food which you eat every day! 🍴</div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🍛 Popular Foods We Eat</div>
+    <div class="list-item"><span class="list-icon">🍚</span><span class="list-text">Idli — soft, steamed rice cakes made from rice and dal!</span></div>
+    <div class="list-item"><span class="list-icon">🫓</span><span class="list-text">Roti / Chapati — flat bread made from wheat flour!</span></div>
+    <div class="list-item"><span class="list-icon">🍳</span><span class="list-text">Dosa — thin, crispy pancake made from rice and dal!</span></div>
+    <div class="list-item"><span class="list-icon">🍱</span><span class="list-text">Rice — cooked rice eaten with dal, sambar or curry!</span></div>
+    <div class="list-item"><span class="list-icon">🥣</span><span class="list-text">Poha / Chitranna — flattened rice dish made with spices!</span></div>
+    <div class="list-item"><span class="list-icon">🍞</span><span class="list-text">Bread — made from wheat, eaten as toast or sandwich!</span></div>
+    <div class="list-item"><span class="list-icon">🐟</span><span class="list-text">Fish — caught from rivers and seas, cooked in many ways!</span></div>
+    <div class="list-item"><span class="list-icon">🥚</span><span class="list-text">Eggs — boiled, scrambled or used in cooking!</span></div>
+    <div class="list-item"><span class="list-icon">🥛</span><span class="list-text">Milk — from cows and buffaloes, very healthy to drink!</span></div>
+    <div class="list-item"><span class="list-icon">🍮</span><span class="list-text">Curd — made from milk, eaten with rice or as lassi!</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎊 Festival Special Foods!</div>
+    <div class="ic-text">On special days and festivals we make extra-special dishes!<br><br>🪔 <b>Diwali</b> — sweets and ladoos! 🍬<br>🌾 <b>Sankranti</b> — til pongal and ellu bella! 🍯<br>🎉 <b>Ugadi</b> — bevu bella! 🌿<br>🕌 <b>Eid</b> — biryani and sewain! 🍚<br>⛪ <b>Christmas</b> — cake and plum pudding! 🎂</div>
+  </div>
+
+  <div class="q-dots" id="foodDots"></div>
+  <div id="foodSteps"></div>
+  <button class="nav-btn nav-btn-orange" id="foodNextBtn" disabled onclick="unlockAndGo('food','grains')">Next: Food Grains 🌾 →</button>
+</div>
+
+<!-- ══════════════ TAB 2 — FOOD GRAINS ══════════════ -->
+<div class="tab-panel" id="panel-grains">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">
+    <span class="banner-emoji">🌾</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c">Food Grains & Ingredients!</div>
+      <div class="banner-sub" style="color:#6a1b9a">Grains, fruits, vegetables and more!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#7b1fa2">
+    <div class="ic-title" style="color:#7b1fa2">🌾 What Are Food Grains?</div>
+    <div class="ic-text">Food grains are the seeds of plants that we eat! 🌱<br><br>Farmers <b>grow</b> food grains in their fields 🌾.<br>They harvest them and bring them to our homes.<br><br>Rice, wheat and ragi are some food grains grown in <b>Karnataka</b>! 🏡</div>
+  </div>
+
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="fc-icon">🍚</span>
+      <div class="fc-name">Rice</div>
+      <div class="fc-desc">Grown in water-logged fields!</div>
+    </div>
+    <div class="food-card">
+      <span class="fc-icon">🌾</span>
+      <div class="fc-name">Wheat</div>
+      <div class="fc-desc">Makes roti and bread!</div>
+    </div>
+    <div class="food-card">
+      <span class="fc-icon">🟤</span>
+      <div class="fc-name">Ragi</div>
+      <div class="fc-desc">Makes mudde and roti!</div>
+    </div>
+    <div class="food-card">
+      <span class="fc-icon">🌽</span>
+      <div class="fc-name">Corn / Maize</div>
+      <div class="fc-desc">Can be eaten roasted or boiled!</div>
+    </div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🥬 Vegetables in Our Locality</div>
+    <div class="list-item"><span class="list-icon">🍆</span><span class="list-text">Brinjal (Baingan) — purple vegetable, made into curry!</span></div>
+    <div class="list-item"><span class="list-icon">🥕</span><span class="list-text">Carrot — orange, can eat raw or cooked in sabzi!</span></div>
+    <div class="list-item"><span class="list-icon">🍅</span><span class="list-text">Tomato — red, used in almost every dish!</span></div>
+    <div class="list-item"><span class="list-icon">🧅</span><span class="list-text">Onion — adds taste to all curries!</span></div>
+    <div class="list-item"><span class="list-icon">🥦</span><span class="list-text">Okra (Lady's finger) — green, eaten as stir-fry!</span></div>
+    <div class="list-item"><span class="list-icon">🥔</span><span class="list-text">Potato — used in so many dishes everywhere!</span></div>
+    <div class="list-item"><span class="list-icon">🫚</span><span class="list-text">Radish (Mooli) — white root vegetable, eaten raw!</span></div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🍎 Fruits We Love</div>
+    <div class="list-item"><span class="list-icon">🍌</span><span class="list-text">Banana — sweet, easy to peel and eat anytime!</span></div>
+    <div class="list-item"><span class="list-icon">🥭</span><span class="list-text">Mango — the king of fruits! Sweet and juicy! 🤩</span></div>
+    <div class="list-item"><span class="list-icon">🍇</span><span class="list-text">Grapes — small, sweet and juicy little fruits!</span></div>
+    <div class="list-item"><span class="list-icon">🍎</span><span class="list-text">Apple — red and crunchy, very healthy!</span></div>
+    <div class="list-item"><span class="list-icon">🍈</span><span class="list-text">Papaya — orange inside, sweet and healthy!</span></div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🥛 Other Food Items</div>
+    <div class="list-item"><span class="list-icon">🥛</span><span class="list-text">Milk — from cows and buffaloes! Builds strong bones!</span></div>
+    <div class="list-item"><span class="list-icon">🍮</span><span class="list-text">Curd (Mosaru) — made from milk, eaten with rice!</span></div>
+    <div class="list-item"><span class="list-icon">🐟</span><span class="list-text">Fish — from rivers and sea, good source of protein!</span></div>
+    <div class="list-item"><span class="list-icon">🥩</span><span class="list-text">Meat — chicken, mutton eaten as curry or fry!</span></div>
+    <div class="list-item"><span class="list-icon">🫚</span><span class="list-text">Ginger — root used as spice to add taste to food!</span></div>
+  </div>
+
+  <div class="q-dots" id="grainsDots"></div>
+  <div id="grainsSteps"></div>
+  <button class="nav-btn nav-btn-orange" id="grainsNextBtn" disabled onclick="unlockAndGo('grains','rawcooked')">Next: Raw &amp; Cooked 🥗 →</button>
+</div>
+
+<!-- ══════════════ TAB 3 — RAW & COOKED ══════════════ -->
+<div class="tab-panel" id="panel-rawcooked">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">🥗</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20">Raw Food & Cooked Food!</div>
+      <div class="banner-sub" style="color:#2e7d32">Some foods we eat as-is, some need cooking!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#388e3c">
+    <div class="ic-title" style="color:#388e3c">🌿 Two Types of Food!</div>
+    <div class="ic-text">Some foods can be eaten <b>raw</b> — just wash and eat! 🥗<br><br>Some foods must be <b>cooked</b> before eating — we use fire to cook them! 🔥<br><br>Can you guess which is which? Let's find out!</div>
+  </div>
+
+  <div class="rc-grid">
+    <div class="rc-col" style="border:3px solid #a5d6a7">
+      <div class="rc-title" style="color:#2e7d32">🥗 Eat RAW<br><span style="font-size:11px;font-weight:800;color:#888">Just wash &amp; eat!</span></div>
+      <div class="rc-item"><span class="ri-icon">🥒</span><span class="ri-text">Cucumber</span></div>
+      <div class="rc-item"><span class="ri-icon">🍌</span><span class="ri-text">Banana</span></div>
+      <div class="rc-item"><span class="ri-icon">🍎</span><span class="ri-text">Apple</span></div>
+      <div class="rc-item"><span class="ri-icon">🥭</span><span class="ri-text">Mango</span></div>
+      <div class="rc-item"><span class="ri-icon">🍇</span><span class="ri-text">Grapes</span></div>
+      <div class="rc-item"><span class="ri-icon">🫚</span><span class="ri-text">Radish</span></div>
+      <div class="rc-item"><span class="ri-icon">🍅</span><span class="ri-text">Tomato</span></div>
+    </div>
+    <div class="rc-col" style="border:3px solid #ffcc80">
+      <div class="rc-title" style="color:#e65100">🔥 Must COOK<br><span style="font-size:11px;font-weight:800;color:#888">Cook before eating!</span></div>
+      <div class="rc-item"><span class="ri-icon">🍚</span><span class="ri-text">Rice</span></div>
+      <div class="rc-item"><span class="ri-icon">🐟</span><span class="ri-text">Fish</span></div>
+      <div class="rc-item"><span class="ri-icon">🍆</span><span class="ri-text">Brinjal</span></div>
+      <div class="rc-item"><span class="ri-icon">🌽</span><span class="ri-text">Corn</span></div>
+      <div class="rc-item"><span class="ri-icon">🥚</span><span class="ri-text">Egg</span></div>
+      <div class="rc-item"><span class="ri-icon">🥩</span><span class="ri-text">Meat</span></div>
+      <div class="rc-item"><span class="ri-icon">🥔</span><span class="ri-text">Potato</span></div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🌟 Remember!<br>Fruits &amp; most vegetables = eat RAW 🥗<br>Rice, fish, eggs, meat = need COOKING 🔥<br>Some veggies can be eaten both ways! 😊</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#388e3c">
+    <div class="ic-title" style="color:#388e3c">🌱 Do You Have Plants at Home?</div>
+    <div class="ic-text">Your book asks: <b>"Do you have plants of vegetables and fruits in your house?"</b> 🏡<br><br>Many families grow vegetables like <b>tomato</b> 🍅, <b>chilli</b> 🌶️ and <b>curry leaves</b> 🌿 in their homes!<br><br>We can grow our own food! 🌱✨</div>
+  </div>
+
+  <div class="q-dots" id="rawcookedDots"></div>
+  <div id="rawcookedSteps"></div>
+  <button class="nav-btn nav-btn-orange" id="rawcookedNextBtn" disabled onclick="unlockAndGo('rawcooked','match')">Next: Food &amp; Ingredients 🔗 →</button>
+</div>
+
+<!-- ══════════════ TAB 4 — FOOD & INGREDIENTS ══════════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f">Food & What It's Made From!</div>
+      <div class="banner-sub" style="color:#ad1457">Every dish needs special ingredients!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#c2185b">
+    <div class="ic-title" style="color:#c2185b">🍳 From Grain to Dish!</div>
+    <div class="ic-text">Your book shows a fun activity where the <b>outer circle</b> has the food we eat, and the <b>inner circle</b> has the grains and ingredients used to make them!<br><br>Let's learn what each dish is made from! 🌾➡️🍽️</div>
+  </div>
+
+  <div class="match-card">
+    <div class="mc-title">🔗 Match: Food ↔ What It's Made From!</div>
+    <div class="match-row">
+      <span class="match-left">🍚 Rice</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🌾 Rice grain (chawal)</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🫓 Roti / Chapati</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🌾 Wheat</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🍚 Idli</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🍚 Rice + Urad dal</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🟡 Chitranna / Poha</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🍚 Flattened rice (poha)</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🍳 Dosa</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🍚 Rice + Urad dal</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🥣 Ragi Mudde</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🟤 Ragi (finger millet)</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🍮 Curd (Mosaru)</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🥛 Milk</span>
+    </div>
+    <div class="match-row">
+      <span class="match-left">🍲 Dal / Sambar</span>
+      <span class="match-arrow">←</span>
+      <span class="match-right">🟤 Lentils (dal/masoor)</span>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#c2185b">
+    <div class="ic-title" style="color:#c2185b">🎯 The Ingredients Game!</div>
+    <div class="ic-text">Your book says: Stand in a circle with your friends. 🤸<br><br>One person names their <b>favourite dish</b>. 🍛<br>Another person names the <b>ingredients</b> needed to make it! 🌾<br><br>If you don't know — ask your <b>friends or elders at home</b>! 🧓💬<br><br>This is a fun way to learn about food! 😄</div>
+  </div>
+
+  <div class="list-row">
+    <div class="lr-title">🍯 Favourite Dishes & Why We Love Them!</div>
+    <div class="list-item"><span class="list-icon">🍩</span><span class="list-text">Jalebi — round, orange, sweet and crispy! Made on festivals!</span></div>
+    <div class="list-item"><span class="list-icon">🟡</span><span class="list-text">Ladoo — round sweet ball, made from besan or rava!</span></div>
+    <div class="list-item"><span class="list-icon">🍳</span><span class="list-text">Dosa — crispy pancake, best with coconut chutney!</span></div>
+    <div class="list-item"><span class="list-icon">🍞</span><span class="list-text">Bread — soft and fluffy, easy to eat anytime!</span></div>
+  </div>
+
+  <div class="q-dots" id="matchDots"></div>
+  <div id="matchSteps"></div>
+  <button class="nav-btn nav-btn-orange" id="matchNextBtn" disabled onclick="unlockAndGo('match','quiz')">Go to Big Quiz! 🏆 →</button>
+</div>
+
+<!-- ══════════════ TAB 5 — BIG QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">Big Food Quiz!</div>
+      <div class="banner-sub" style="color:#bf360c">Show everything you know about delicious food!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="nav-btn nav-btn-orange" id="qFinishBtn" disabled onclick="showCelebration()">🎉 Finish! →</button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🍛</span>
+    <div class="celeb-title">Food Champion! 🏆</div>
+    <div class="celeb-sub" id="celebSub"></div>
+    <div class="celeb-stars" id="celebStars"></div>
+    <button class="nav-btn nav-btn-orange" onclick="restartAll()">🔄 Play Again!</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════ STATE ══════════════ */
+let stars = 0;
+const doneTabs = new Set();
+const unlockedTabs = new Set(['food']);
+const tabOrder = ['food','grains','rawcooked','match','quiz'];
+
+function updateProgress(){
+  const pct = Math.round((doneTabs.size / tabOrder.length)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+/* ══════════════ TAB NAVIGATION ══════════════ */
+function tryTab(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.getElementById('tab-'+id);
+    el.classList.add('shaking');
+    setTimeout(()=>el.classList.remove('shaking'),500);
+    const toast = document.getElementById('lockToast');
+    toast.textContent = '🔒 Finish the previous step first!';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),2500);
+    return;
+  }
+  tabOrder.forEach(t=>{
+    const tab = document.getElementById('tab-'+t);
+    const panel = document.getElementById('panel-'+t);
+    if(t===id){
+      tab.className='step-tab active';
+      panel.classList.add('active');
+    } else {
+      panel.classList.remove('active');
+      if(doneTabs.has(t)) tab.className='step-tab done';
+      else if(unlockedTabs.has(t)) tab.className='step-tab unlocked';
+      else tab.className='step-tab locked';
+    }
+  });
+}
+
+function unlockAndGo(from, to){
+  doneTabs.add(from);
+  unlockedTabs.add(to);
+  updateProgress();
+  document.getElementById('tab-'+from).className='step-tab done';
+  document.getElementById('tab-'+to).className='step-tab unlocked';
+  tryTab(to);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════ QUESTION ENGINE ══════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ(this,${i},${q.correct},'${containerID}','${dotsID}','${nextBtnID}')">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  window['answerQ'] = function(el, chosen, correct, cid, did, nid){
+    if(cid !== containerID) return;
+    const opts = document.querySelectorAll('#'+cid+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+
+  render();
+}
+
+/* ══════════════ TAB 1 — OUR FOOD ══════════════ */
+renderQuestions({
+  containerID:'foodSteps', dotsID:'foodDots', nextBtnID:'foodNextBtn',
+  questions:[
+    {visual:'🍛',question:'What gives us energy to\nplay, study and run?',options:['💧 Water only','🍽️ Food','🛏️ Sleep only','🎮 Games'],correct:1},
+    {visual:'🍚',question:'Idli is a soft, steamed cake\nmade from rice and ___.',options:['🌽 Corn','🌾 Wheat','🫘 Dal (urad)','🥕 Carrot'],correct:2},
+    {visual:'🫓',question:'Roti and chapati are made\nfrom ___ flour.',options:['🍚 Rice','🌾 Wheat','🟤 Ragi','🌽 Corn'],correct:1},
+    {visual:'🎊',question:'On festivals, families make\n___ special dishes.',options:['😐 Normal everyday','🎊 Extra special','🤢 Unpleasant','🛒 Bought ready-made'],correct:1},
+    {visual:'🥛',question:'Milk comes from which animals?',options:['🐟 Fish and crabs','🐄 Cows and buffaloes','🐦 Birds and parrots','🐕 Dogs and cats'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 2 — FOOD GRAINS ══════════════ */
+renderQuestions({
+  containerID:'grainsSteps', dotsID:'grainsDots', nextBtnID:'grainsNextBtn',
+  questions:[
+    {visual:'🌾',question:'Food grains are the ___ of plants\nthat we eat.',options:['🌸 Flowers','🍃 Leaves','🌱 Roots','🌾 Seeds'],correct:3},
+    {visual:'🍚',question:'Rice is grown in ___\nfields.',options:['🏜️ Dry, sandy','💧 Water-logged','🏔️ Snowy mountain','🏙️ City cement'],correct:1},
+    {visual:'🟤',question:'Ragi is used to make ___.',options:['🍕 Pizza','🥣 Mudde and roti','🎂 Birthday cake','🍭 Lollipops'],correct:1},
+    {visual:'🥕',question:'Carrots can be eaten ___ or cooked.',options:['🔥 Only cooked','🥗 Raw','🧊 Frozen only','☁️ After drying'],correct:1},
+    {visual:'🥭',question:'Mango is called the ___\nof fruits.',options:['🤴 King','👸 Queen','🐔 Chicken','🌟 Star'],correct:0},
+    {visual:'🌾',question:'Who grows food grains in fields\nfor all of us?',options:['🏫 Teachers','🌾 Farmers','🛒 Shopkeepers','🚒 Firemen'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 3 — RAW & COOKED ══════════════ */
+renderQuestions({
+  containerID:'rawcookedSteps', dotsID:'rawcookedDots', nextBtnID:'rawcookedNextBtn',
+  questions:[
+    {visual:'🥒',question:'Can we eat cucumber\nwithout cooking?',options:['✅ Yes, eat it raw!','❌ No, must cook it','🔥 Fry it first','🧊 Freeze it first'],correct:0},
+    {visual:'🍚',question:'Rice must be ___ before we eat it.',options:['🥗 Eaten raw','🔥 Cooked in water','🧊 Frozen','🌬️ Air-dried only'],correct:1},
+    {visual:'🐟',question:'Fish must be ___ before eating.',options:['✅ Eaten raw always','🔥 Cooked or fried','🧊 Kept frozen and eaten','🌿 Mixed with leaves'],correct:1},
+    {visual:'🍌',question:'Banana is a fruit we eat ___.',options:['🔥 After cooking','🥗 Raw, just peel it!','🧊 After freezing','🫕 After boiling'],correct:1},
+    {visual:'🥚',question:'Eggs need to be ___ before eating.',options:['🥗 Eaten raw always','🔥 Cooked — boiled or fried','🧊 Frozen then eaten','💧 Washed and eaten raw'],correct:1},
+    {visual:'🍎',question:'Apple is a fruit we eat ___.',options:['🔥 After cooking only','🥗 Raw, wash and bite!','🫕 After boiling','🧁 Only in cakes'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 4 — FOOD & INGREDIENTS ══════════════ */
+renderQuestions({
+  containerID:'matchSteps', dotsID:'matchDots', nextBtnID:'matchNextBtn',
+  questions:[
+    {visual:'🫓',question:'Roti is made from ___ flour.',options:['🍚 Rice','🌾 Wheat','🟤 Ragi','🌽 Corn'],correct:1},
+    {visual:'🍮',question:'Curd (Mosaru) is made from ___.',options:['💧 Water','🌾 Wheat','🥛 Milk','🍚 Rice'],correct:2},
+    {visual:'🍚',question:'Idli is made from rice and ___.',options:['🌽 Corn','🟤 Ragi','🫘 Urad dal','🥕 Carrot'],correct:2},
+    {visual:'🥣',question:'Ragi Mudde is made from ___ millet.',options:['🌾 Wheat','🌽 Corn','🟤 Ragi (finger)','🍚 Rice'],correct:2},
+    {visual:'🎯',question:'In the ingredients game, if you\ndon\'t know, you should ask your ___.',options:['🎮 Games console','🧓 Friends or elders at home','📺 Television','🛒 Shopkeeper'],correct:1},
+    {visual:'🍲',question:'Dal and Sambar are made\nfrom ___.',options:['🍎 Fruits','🟤 Lentils (dal)','🌽 Corn','🍚 Cooked rice'],correct:1},
+  ]
+});
+
+/* ══════════════ TAB 5 — BIG QUIZ ══════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🏆🍛',question:'🏆 Food gives us ___ to play\nand study.',options:['😴 Sleep','⚡ Energy','💧 Water only','🎮 Games'],correct:1},
+    {visual:'🏆🌾',question:'🏆 Food grains are the ___\nof plants.',options:['🍃 Leaves','🌸 Flowers','🌾 Seeds','🌱 Roots'],correct:2},
+    {visual:'🏆🍚',question:'🏆 Idli is made from rice and ___.',options:['🌽 Corn','🌾 Wheat','🫘 Urad dal','🥕 Carrot'],correct:2},
+    {visual:'🏆🥒',question:'🏆 Cucumber can be eaten ___.',options:['🔥 Only cooked','🥗 Raw','🧊 Frozen only','🫕 Only boiled'],correct:1},
+    {visual:'🏆🌾',question:'🏆 Who grows food grains in fields?',options:['🏫 Teachers','🌾 Farmers','🚒 Firemen','🛒 Shopkeepers'],correct:1},
+    {visual:'🏆🫓',question:'🏆 Roti is made from which grain?',options:['🍚 Rice','🟤 Ragi','🌽 Corn','🌾 Wheat'],correct:3},
+    {visual:'🏆🥛',question:'🏆 Milk comes from ___.',options:['🐟 Fish','🐦 Birds','🐄 Cows and buffaloes','🐕 Dogs'],correct:2},
+    {visual:'🏆🐟',question:'🏆 Fish must be ___ before eating.',options:['🥗 Eaten raw','🔥 Cooked','🧊 Frozen only','🌬️ Air dried'],correct:1},
+    {visual:'🏆🥭',question:'🏆 Mango is called the ___\nof fruits.',options:['🤴 King','👸 Queen','🌟 Star','🎁 Gift'],correct:0},
+    {visual:'🏆🍮',question:'🏆 Curd is made from ___.',options:['💧 Water','🥛 Milk','🌾 Wheat','🍚 Rice'],correct:1},
+    {visual:'🏆🎊',question:'🏆 On festivals we make ___\nspecial dishes at home.',options:['😐 Normal everyday','❌ No food','🎊 Extra special traditional','🛒 Only bought food'],correct:2},
+    {visual:'🏆🟤',question:'🏆 Ragi Mudde is made from ___.',options:['🌾 Wheat','🍚 Rice','🌽 Corn','🟤 Ragi millet'],correct:3},
+  ]
+});
+
+/* ══════════════ CELEBRATION ══════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know the foods available in your locality! 🏘️\nYou know food grains like rice, wheat and ragi! 🌾\nYou know which foods are eaten raw and cooked! 🥗🔥\nYou know what ingredients make your favourite dishes! 🍛\nYou are a FOOD CHAMPION! 🍽️🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,15);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ══════════════ RESTART ══════════════ */
+function restartAll(){
+  location.reload();
+}
+</script>
+</body>
+</html>
