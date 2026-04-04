@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 12: Numbers 21 to 99</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e3f2fd; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#0d47a1,#1e88e5); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#0d47a1,#90caf9); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#0d47a1; border-color:#bbdefb; }
+.step-tab.active   { background:#1976d2; color:#fff; border-color:#1976d2; box-shadow:0 4px 14px rgba(25,118,210,.4); }
+.step-tab.done     { background:#e3f2fd; color:#0d47a1; border-color:#90caf9; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1976d2;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#0d47a1; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.choice-btn {
+  flex:1; min-width:70px; max-width:130px; padding:14px 8px; border-radius:16px; border:3px solid #bbdefb;
+  background:#e3f2fd; font-family:'Fredoka One',cursive; font-size:22px; color:#0d47a1;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn.correct { border-color:#1976d2; background:#bbdefb; color:#0d47a1; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#e3f2fd; color:#0d47a1; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#0d47a1,#1e88e5); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f9a825,#fdd835); color:#fff; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#1976d2; }
+
+/* ── QUIZ / PRACTICE CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #bbdefb; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:18px; color:#333; text-align:center; margin-bottom:14px; line-height:1.5; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#e3f2fd; border:3px solid #bbdefb; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:24px; color:#0d47a1; user-select:none;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#1976d2; background:#bbdefb; color:#0d47a1; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── TENS-UNITS BOX ── */
+.tu-display {
+  display:flex; gap:0; border:4px solid #1976d2; border-radius:16px; overflow:hidden;
+  margin:14px auto; width:fit-content;
+}
+.tu-col { text-align:center; padding:10px 24px; }
+.tu-col.tens-col  { background:#1976d2; }
+.tu-col.units-col { background:#e3f2fd; }
+.tu-label { font-size:12px; font-weight:900; color:rgba(255,255,255,.85); }
+.units-col .tu-label { color:#1976d2; }
+.tu-val   { font-family:'Fredoka One',cursive; font-size:36px; color:#fff; margin-top:4px; }
+.units-col .tu-val   { color:#1976d2; }
+
+/* ── NUMBER CARDS ── */
+.num-card {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #bbdefb; text-align:center;
+}
+.num-big { font-family:'Fredoka One',cursive; font-size:72px; color:#1976d2; line-height:1; margin:6px 0; }
+.num-word { font-size:16px; font-weight:900; color:#555; margin-top:4px; }
+
+/* ── TRAIN VISUAL ── */
+.train-row { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin:12px 0; }
+.train-car {
+  background:#fff; border:3px solid #1976d2; border-radius:12px; padding:8px 14px;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#0d47a1;
+  position:relative; cursor:default;
+}
+.train-car.missing {
+  background:#e3f2fd; border-style:dashed; color:#bbb; cursor:pointer;
+}
+.train-car.missing:active { transform:scale(.93); }
+
+/* ── MATCH VISUAL ── */
+.match-row { display:flex; align-items:center; gap:10px; margin:10px 0; flex-wrap:wrap; }
+.match-num-box {
+  font-family:'Fredoka One',cursive; font-size:28px; color:#0d47a1; background:#e3f2fd;
+  border:3px solid #1976d2; border-radius:12px; padding:8px 20px; min-width:70px; text-align:center;
+}
+.match-desc {
+  font-size:15px; font-weight:900; color:#444; background:#fff;
+  border:3px solid #bbdefb; border-radius:12px; padding:8px 14px;
+}
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(13,71,161,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s; padding:24px;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; text-align:center; }
+.celeb-sub   { font-size:15px; color:rgba(255,255,255,.9); font-weight:800; margin-bottom:8px; text-align:center; line-height:1.7; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#0d47a1; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+/* ── NUMBER DISPLAY CARD ── */
+.show-card {
+  background:#fff; border-radius:24px; padding:20px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #bbdefb;
+}
+.show-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1976d2; text-align:center; margin-bottom:12px; }
+.show-number { font-family:'Fredoka One',cursive; font-size:80px; color:#0d47a1; text-align:center; line-height:1; }
+.show-desc { font-size:15px; font-weight:800; color:#555; text-align:center; margin-top:8px; }
+.show-visual { font-size:26px; text-align:center; letter-spacing:2px; margin:10px 0; line-height:1.7; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🔢 Lesson 12 — Numbers 21 to 99</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🔢</span>
+  <h1>Numbers 21 to 99!</h1>
+  <p>Identify and Write Numbers • Tens &amp; Units • Forward &amp; Backward!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's learn big numbers! 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="intro"    onclick="tabClick('intro')">🔢 Numbers!</div>
+  <div class="step-tab locked"  data-tab="tensunits" onclick="tabClick('tensunits')">📦 Tens &amp; Units</div>
+  <div class="step-tab locked"  data-tab="counting"  onclick="tabClick('counting')">🚂 Counting</div>
+  <div class="step-tab locked"  data-tab="match"     onclick="tabClick('match')">🔗 Match It!</div>
+  <div class="step-tab locked"  data-tab="quiz"      onclick="tabClick('quiz')">🏆 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ════════════════════════════════════════════════════
+     TAB 1 : NUMBERS — pick the number shown
+════════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#0d47a1,#1e88e5)">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Identify the Number!</div>
+      <div class="banner-sub" style="color:#fff">Look at the objects and tap the right number!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 Numbers 21 to 99</div>
+    <div class="ic-text">
+      Big numbers are made of <strong>TENS</strong> and <strong>UNITS</strong>!<br>
+      <strong>21 = 2 TENS + 1 UNIT</strong> &nbsp;🍇🍇 + 🍇<br>
+      <strong>35 = 3 TENS + 5 UNITS</strong> &nbsp;🍇🍇🍇 + 🍇🍇🍇🍇🍇<br>
+      We can identify and write numbers from <strong>21 to 99</strong>!
+    </div>
+  </div>
+
+  <div id="introSteps"></div>
+  <div class="progress-dots" id="introDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct number!</div>
+  <button class="big-btn primary" id="introNextBtn" disabled onclick="completeTab('intro','tensunits','Numbers!','Tens &amp; Units')">Next: Tens &amp; Units! 📦</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 2 : TENS & UNITS
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-tensunits">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc)">
+    <span class="banner-emoji">📦</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Tens and Units!</div>
+      <div class="banner-sub" style="color:#fff">How many TENS? How many UNITS?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Tens and Units!</div>
+    <div class="ic-text">
+      Every big number has <strong>TENS</strong> (bundles of 10) and <strong>UNITS</strong> (single ones)!<br><br>
+      <strong>26 → 2 TENS + 6 UNITS</strong><br>
+      <strong>43 → 4 TENS + 3 UNITS</strong><br>
+      <strong>80 → 8 TENS + 0 UNITS</strong><br><br>
+      The <strong>TENS digit</strong> is on the left. The <strong>UNITS digit</strong> is on the right!
+    </div>
+  </div>
+
+  <div id="tensSteps"></div>
+  <div class="progress-dots" id="tensDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct TENS or UNITS!</div>
+  <button class="big-btn primary" id="tensNextBtn" disabled onclick="completeTab('tensunits','counting','Tens &amp; Units','Counting')">Next: Counting! 🚂</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 3 : FORWARD & BACKWARD COUNTING
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-counting">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff8f00)">
+    <span class="banner-emoji">🚂</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Forward &amp; Backward!</div>
+      <div class="banner-sub" style="color:#fff">Fill in the missing numbers on the train!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Counting!</div>
+    <div class="ic-text">
+      <strong>Forward counting</strong> → numbers go UP: 21, 22, 23, 24 …<br>
+      <strong>Backward counting</strong> → numbers go DOWN: 30, 29, 28, 27 …<br><br>
+      Each number is <strong>1 more</strong> (forward) or <strong>1 less</strong> (backward) than the one before!
+    </div>
+  </div>
+
+  <div id="countSteps"></div>
+  <div class="progress-dots" id="countDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the missing number!</div>
+  <button class="big-btn primary" id="countNextBtn" disabled onclick="completeTab('counting','match','Counting','Match It!')">Next: Match It! 🔗</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 4 : MATCH — number to tens+units description
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#43a047)">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Match the Number!</div>
+      <div class="banner-sub" style="color:#fff">Which description matches the number?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Before · After · Between!</div>
+    <div class="ic-text">
+      <strong>Comes before 52</strong> → the number just before it = <strong>51</strong><br>
+      <strong>Comes after 63</strong> → the number just after it = <strong>64</strong><br>
+      <strong>Comes in between 51 and 53</strong> → the number between = <strong>52</strong><br><br>
+      Also: match a number to how many <strong>TENS + UNITS</strong> it has!
+    </div>
+  </div>
+
+  <div id="matchSteps"></div>
+  <div class="progress-dots" id="matchDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="matchNextBtn" disabled onclick="completeTab('match','quiz','Match It!','Final Quiz')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 5 : FINAL QUIZ
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#e53935)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about 21–99!</div>
+    </div>
+  </div>
+
+  <div id="quizSteps"></div>
+  <div class="progress-dots" id="quizDots"></div>
+  <button class="big-btn gold" id="quizFinishBtn" disabled onclick="showCelebration()">🎉 Finish!</button>
+</div>
+
+</div><!-- .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🎉</div>
+  <div class="celeb-title">Amazing Work!</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">Play Again! 🔄</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let stars = 0;
+const TAB_ORDER = ['intro','tensunits','counting','match','quiz'];
+const unlockedTabs = new Set(['intro']);
+const doneTabs    = new Set();
+
+/* ═══════════════════════════════════════════
+   TAB NAVIGATION
+═══════════════════════════════════════════ */
+function tabClick(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.querySelector(`[data-tab="${id}"]`);
+    el.classList.remove('shaking');
+    void el.offsetWidth;
+    el.classList.add('shaking');
+    el.addEventListener('animationend',()=>el.classList.remove('shaking'),{once:true});
+    const t = document.getElementById('lockToast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2000);
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>{
+    t.classList.remove('active');
+    if(doneTabs.has(t.dataset.tab)) t.className='step-tab done';
+    else if(unlockedTabs.has(t.dataset.tab)) t.className='step-tab unlocked';
+    else t.className='step-tab locked';
+  });
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelector(`[data-tab="${id}"]`).className='step-tab active';
+  updateProgress();
+}
+
+function completeTab(cur, next, curName, nextName){
+  doneTabs.add(cur);
+  unlockedTabs.add(next);
+  tabClick(next);
+}
+
+function updateProgress(){
+  const pct = Math.round(doneTabs.size / TAB_ORDER.length * 100);
+  document.getElementById('progFill').style.width = pct+'%';
+  const labels = ['Let\'s start counting! 🚀','Numbers done! 📦 Next: Tens & Units!',
+    'Tens & Units done! 🚂 Now count!','Counting done! 🔗 Match them!','Almost there! 🏆 Final Quiz!'];
+  document.getElementById('progLabel').textContent = labels[doneTabs.size] || 'All done! 🎉';
+}
+
+function addStars(n){ stars+=n; document.getElementById('starsNum').textContent=stars; }
+
+/* ═══════════════════════════════════════════
+   GENERIC QUESTION RENDERER
+═══════════════════════════════════════════ */
+function renderQuestions({ containerID, dotsID, nextBtnID, questions }){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let done = 0;
+  container.innerHTML = '';
+  dotsEl.innerHTML    = '';
+
+  questions.forEach((q, qi)=>{
+    // dot
+    const dot = document.createElement('div');
+    dot.className = 'pdot'; dot.id = `dot_${containerID}_${qi}`;
+    dotsEl.appendChild(dot);
+
+    // card
+    const card = document.createElement('div');
+    card.className = 'prac-card';
+
+    let qHTML = `<div class="prac-q">${q.question}</div>`;
+    if(q.visual) qHTML += `<div class="show-visual">${q.visual}</div>`;
+    if(q.tuShow) qHTML += buildTUBox(q.tuShow.tens, q.tuShow.units);
+    qHTML += `<div class="prac-opts" id="opts_${containerID}_${qi}">`;
+    q.options.forEach((opt,oi)=>{
+      qHTML += `<div class="prac-opt" onclick="answerQ('${containerID}',${qi},${oi},${q.correct},'${nextBtnID}')" id="opt_${containerID}_${qi}_${oi}">${opt}</div>`;
+    });
+    qHTML += `</div><div class="fb-box" id="fb_${containerID}_${qi}"></div>`;
+    card.innerHTML = qHTML;
+    container.appendChild(card);
+  });
+
+  window[`_done_${containerID}`] = 0;
+  window[`_total_${containerID}`] = questions.length;
+}
+
+function answerQ(cid, qi, oi, correct, nextBtnID){
+  const chosen = document.getElementById(`opt_${cid}_${qi}_${oi}`);
+  if(!chosen || chosen.classList.contains('right') || chosen.classList.contains('wrong')) return;
+  const fb = document.getElementById(`fb_${cid}_${qi}`);
+  // lock all opts in this question
+  document.querySelectorAll(`#opts_${cid}_${qi} .prac-opt`).forEach(o=>o.style.pointerEvents='none');
+  if(oi === correct){
+    chosen.classList.add('right');
+    fb.className='fb-box ok'; fb.textContent='✅ Correct! Great job!';
+    addStars(1);
+    window[`_done_${cid}`]++;
+    document.getElementById(`dot_${cid}_${qi}`).classList.add('done');
+    if(window[`_done_${cid}`] >= window[`_total_${cid}`]){
+      document.getElementById(nextBtnID).disabled = false;
+    }
+  } else {
+    chosen.classList.add('wrong');
+    document.getElementById(`opt_${cid}_${qi}_${correct}`).classList.add('right');
+    fb.className='fb-box no'; fb.textContent='❌ Not quite! The right answer is highlighted!';
+    // still count as done so they can proceed
+    window[`_done_${cid}`]++;
+    document.getElementById(`dot_${cid}_${qi}`).classList.add('done');
+    if(window[`_done_${cid}`] >= window[`_total_${cid}`]){
+      document.getElementById(nextBtnID).disabled = false;
+    }
+  }
+}
+
+function buildTUBox(tens, units){
+  return `<div class="tu-display">
+    <div class="tu-col tens-col"><div class="tu-label">TENS</div><div class="tu-val">${tens}</div></div>
+    <div class="tu-col units-col"><div class="tu-label">UNITS</div><div class="tu-val">${units}</div></div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1: IDENTIFY THE NUMBER (21-99)
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'introSteps', dotsID:'introDots', nextBtnID:'introNextBtn',
+  questions:[
+    {
+      question:'🍇 There are 2 groups of 10 grapes and 1 more grape. What number is this?',
+      visual:'🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇 🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇 🍇',
+      options:['12','21','20','31'], correct:1
+    },
+    {
+      question:'📦 There are 3 bundles of 10 pencils and 5 more. What number is this?',
+      visual:'✏️✏️✏️✏️✏️✏️✏️✏️✏️✏️ ✏️✏️✏️✏️✏️✏️✏️✏️✏️✏️ ✏️✏️✏️✏️✏️✏️✏️✏️✏️✏️ ✏️✏️✏️✏️✏️',
+      options:['53','30','35','45'], correct:2
+    },
+    {
+      question:'🌿 I see 4 bundles of 10 leaves and 1 more leaf. Which number am I?',
+      visual:'🌿×40 + 🌿×1',
+      options:['14','40','41','44'], correct:2
+    },
+    {
+      question:'🔢 Which number is made of 6 TENS and 2 UNITS?',
+      options:['26','62','26','72'], correct:1
+    },
+    {
+      question:'🔢 Which number is made of 7 TENS and 8 UNITS?',
+      options:['87','70','78','77'], correct:2
+    },
+    {
+      question:'🔢 Which number has 9 TENS and 1 UNIT?',
+      options:['19','99','90','91'], correct:3
+    },
+    {
+      question:'🔢 Which number is made of 5 TENS and 0 UNITS?',
+      options:['05','55','50','15'], correct:2
+    },
+    {
+      question:'🔢 Look: 8 TENS + 3 UNITS. What is the number?',
+      options:['38','83','80','93'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 2: TENS & UNITS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'tensSteps', dotsID:'tensDots', nextBtnID:'tensNextBtn',
+  questions:[
+    {
+      question:'How many TENS does 26 have?',
+      tuShow:{tens:'?', units:'6'},
+      options:['1','2','6','3'], correct:1
+    },
+    {
+      question:'How many UNITS does 34 have?',
+      tuShow:{tens:'3', units:'?'},
+      options:['3','0','4','9'], correct:2
+    },
+    {
+      question:'How many TENS does 50 have?',
+      tuShow:{tens:'?', units:'0'},
+      options:['0','5','10','1'], correct:1
+    },
+    {
+      question:'How many UNITS does 72 have?',
+      tuShow:{tens:'7', units:'?'},
+      options:['7','0','2','9'], correct:2
+    },
+    {
+      question:'Which box correctly shows the number 45?',
+      options:['TENS=5  UNITS=4','TENS=4  UNITS=5','TENS=9  UNITS=0','TENS=0  UNITS=5'], correct:1
+    },
+    {
+      question:'Which box correctly shows the number 99?',
+      options:['TENS=9  UNITS=0','TENS=0  UNITS=9','TENS=9  UNITS=9','TENS=1  UNITS=9'], correct:2
+    },
+    {
+      question:'5 TENS + 3 UNITS = ?',
+      options:['35','53','55','30'], correct:1
+    },
+    {
+      question:'8 TENS + 1 UNIT = ?',
+      options:['18','80','81','88'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 3: FORWARD & BACKWARD COUNTING
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'countSteps', dotsID:'countDots', nextBtnID:'countNextBtn',
+  questions:[
+    {
+      question:'🚂 Forward counting: 21 → 22 → 23 → ? → 25',
+      options:['20','26','24','14'], correct:2
+    },
+    {
+      question:'🚂 Forward counting: 25 → 27 → ? (skip counting by 2)',
+      options:['28','29','30','26'], correct:1
+    },
+    {
+      question:'🚂 Backward counting: 30 → 28 → 26 → ? → 22',
+      options:['25','21','24','23'], correct:2
+    },
+    {
+      question:'🚂 What number comes AFTER 59?',
+      options:['58','61','60','51'], correct:2
+    },
+    {
+      question:'🚂 What number comes BEFORE 52?',
+      options:['53','50','51','49'], correct:2
+    },
+    {
+      question:'🚂 What number comes IN BETWEEN 51 and 53?',
+      options:['50','54','52','55'], correct:2
+    },
+    {
+      question:'🚂 What number comes IN BETWEEN 64 and 66?',
+      options:['63','67','68','65'], correct:3
+    },
+    {
+      question:'🚂 Backward counting: 70 → 69 → 68 → ?',
+      options:['71','66','67','65'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 4: MATCH / BEFORE-AFTER-BETWEEN
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'matchSteps', dotsID:'matchDots', nextBtnID:'matchNextBtn',
+  questions:[
+    {
+      question:'Match: 26 = ?',
+      options:['2 TENS + 4 UNITS','2 TENS + 6 UNITS','6 TENS + 2 UNITS','2 TENS + 3 UNITS'], correct:1
+    },
+    {
+      question:'Match: 21 = ?',
+      options:['1 TEN + 2 UNITS','2 TENS + 0 UNITS','2 TENS + 1 UNIT','12 UNITS'], correct:2
+    },
+    {
+      question:'Match: 28 = ?',
+      options:['8 TENS + 2 UNITS','2 TENS + 8 UNITS','3 TENS + 8 UNITS','2 TENS + 9 UNITS'], correct:1
+    },
+    {
+      question:'Which number has the SMALLEST value? 71, 79, 88, 82',
+      options:['88','82','79','71'], correct:3
+    },
+    {
+      question:'Which number has the BIGGEST value? 89, 75, 76, 84',
+      options:['75','84','76','89'], correct:3
+    },
+    {
+      question:'Which number has the SMALLEST value? 89, 75, 76, 84',
+      options:['89','75','84','76'], correct:1
+    },
+    {
+      question:'Which number has the BIGGEST value? 89, 86, 73, 81',
+      options:['73','81','86','89'], correct:3
+    },
+    {
+      question:'Which number has the BIGGEST value? 84, 72, 74, 90',
+      options:['84','72','90','74'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 5: FINAL QUIZ
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'quizSteps', dotsID:'quizDots', nextBtnID:'quizFinishBtn',
+  questions:[
+    {
+      question:'🏆 What is 3 TENS + 1 UNIT?',
+      options:['13','31','30','33'], correct:1
+    },
+    {
+      question:'🏆 What number comes after 99?',
+      options:['98','100','90','101'], correct:1
+    },
+    {
+      question:'🏆 How many UNITS does 47 have?',
+      options:['4','0','7','10'], correct:2
+    },
+    {
+      question:'🏆 Forward counting: 55 → 56 → 57 → ?',
+      options:['54','59','58','60'], correct:2
+    },
+    {
+      question:'🏆 Which number is BETWEEN 66 and 68?',
+      options:['65','69','67','70'], correct:2
+    },
+    {
+      question:'🏆 5 TENS + 9 UNITS = ?',
+      options:['95','50','59','55'], correct:2
+    },
+    {
+      question:'🏆 Which is the BIGGEST number? 78, 87, 77, 88',
+      options:['78','77','87','88'], correct:3
+    },
+    {
+      question:'🏆 9 TENS + 9 UNITS = ?',
+      options:['90','98','97','99'], correct:3
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    `You learned numbers 21 to 99!\nYou know Tens & Units!\nYou can count forward & backward!\nYou can match and compare numbers!`;
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function restartAll(){
+  stars=0;
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('intro');
+  // Re-render all tabs
+  renderQuestions({containerID:'introSteps', dotsID:'introDots', nextBtnID:'introNextBtn', questions:[
+    {question:'🍇 There are 2 groups of 10 grapes and 1 more grape. What number is this?',visual:'🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇 🍇🍇🍇🍇🍇🍇🍇🍇🍇🍇 🍇',options:['12','21','20','31'],correct:1},
+    {question:'📦 There are 3 bundles of 10 pencils and 5 more. What number is this?',visual:'✏️✏️✏️✏️✏️✏️✏️✏️✏️✏️ ✏️✏️✏️✏️✏️✏️✏️✏️✏️✏️ ✏️✏️✏️✏️✏️✏️✏️✏️✏️✏️ ✏️✏️✏️✏️✏️',options:['53','30','35','45'],correct:2},
+    {question:'🌿 I see 4 bundles of 10 leaves and 1 more leaf. Which number am I?',visual:'🌿×40 + 🌿×1',options:['14','40','41','44'],correct:2},
+    {question:'🔢 Which number is made of 6 TENS and 2 UNITS?',options:['26','62','26','72'],correct:1},
+    {question:'🔢 Which number is made of 7 TENS and 8 UNITS?',options:['87','70','78','77'],correct:2},
+    {question:'🔢 Which number has 9 TENS and 1 UNIT?',options:['19','99','90','91'],correct:3},
+    {question:'🔢 Which number is made of 5 TENS and 0 UNITS?',options:['05','55','50','15'],correct:2},
+    {question:'🔢 Look: 8 TENS + 3 UNITS. What is the number?',options:['38','83','80','93'],correct:1},
+  ]});
+  document.getElementById('introNextBtn').disabled = true;
+  renderQuestions({containerID:'tensSteps', dotsID:'tensDots', nextBtnID:'tensNextBtn', questions:[
+    {question:'How many TENS does 26 have?',tuShow:{tens:'?',units:'6'},options:['1','2','6','3'],correct:1},
+    {question:'How many UNITS does 34 have?',tuShow:{tens:'3',units:'?'},options:['3','0','4','9'],correct:2},
+    {question:'How many TENS does 50 have?',tuShow:{tens:'?',units:'0'},options:['0','5','10','1'],correct:1},
+    {question:'How many UNITS does 72 have?',tuShow:{tens:'7',units:'?'},options:['7','0','2','9'],correct:2},
+    {question:'Which box correctly shows the number 45?',options:['TENS=5  UNITS=4','TENS=4  UNITS=5','TENS=9  UNITS=0','TENS=0  UNITS=5'],correct:1},
+    {question:'Which box correctly shows the number 99?',options:['TENS=9  UNITS=0','TENS=0  UNITS=9','TENS=9  UNITS=9','TENS=1  UNITS=9'],correct:2},
+    {question:'5 TENS + 3 UNITS = ?',options:['35','53','55','30'],correct:1},
+    {question:'8 TENS + 1 UNIT = ?',options:['18','80','81','88'],correct:2},
+  ]});
+  document.getElementById('tensNextBtn').disabled = true;
+  renderQuestions({containerID:'countSteps', dotsID:'countDots', nextBtnID:'countNextBtn', questions:[
+    {question:'🚂 Forward counting: 21 → 22 → 23 → ? → 25',options:['20','26','24','14'],correct:2},
+    {question:'🚂 Forward counting: 25 → 27 → ? (skip counting by 2)',options:['28','29','30','26'],correct:1},
+    {question:'🚂 Backward counting: 30 → 28 → 26 → ? → 22',options:['25','21','24','23'],correct:2},
+    {question:'🚂 What number comes AFTER 59?',options:['58','61','60','51'],correct:2},
+    {question:'🚂 What number comes BEFORE 52?',options:['53','50','51','49'],correct:2},
+    {question:'🚂 What number comes IN BETWEEN 51 and 53?',options:['50','54','52','55'],correct:2},
+    {question:'🚂 What number comes IN BETWEEN 64 and 66?',options:['63','67','68','65'],correct:3},
+    {question:'🚂 Backward counting: 70 → 69 → 68 → ?',options:['71','66','67','65'],correct:2},
+  ]});
+  document.getElementById('countNextBtn').disabled = true;
+  renderQuestions({containerID:'matchSteps', dotsID:'matchDots', nextBtnID:'matchNextBtn', questions:[
+    {question:'Match: 26 = ?',options:['2 TENS + 4 UNITS','2 TENS + 6 UNITS','6 TENS + 2 UNITS','2 TENS + 3 UNITS'],correct:1},
+    {question:'Match: 21 = ?',options:['1 TEN + 2 UNITS','2 TENS + 0 UNITS','2 TENS + 1 UNIT','12 UNITS'],correct:2},
+    {question:'Match: 28 = ?',options:['8 TENS + 2 UNITS','2 TENS + 8 UNITS','3 TENS + 8 UNITS','2 TENS + 9 UNITS'],correct:1},
+    {question:'Which number has the SMALLEST value? 71, 79, 88, 82',options:['88','82','79','71'],correct:3},
+    {question:'Which number has the BIGGEST value? 89, 75, 76, 84',options:['75','84','76','89'],correct:3},
+    {question:'Which number has the SMALLEST value? 89, 75, 76, 84',options:['89','75','84','76'],correct:1},
+    {question:'Which number has the BIGGEST value? 89, 86, 73, 81',options:['73','81','86','89'],correct:3},
+    {question:'Which number has the BIGGEST value? 84, 72, 74, 90',options:['84','72','90','74'],correct:2},
+  ]});
+  document.getElementById('matchNextBtn').disabled = true;
+  renderQuestions({containerID:'quizSteps', dotsID:'quizDots', nextBtnID:'quizFinishBtn', questions:[
+    {question:'🏆 What is 3 TENS + 1 UNIT?',options:['13','31','30','33'],correct:1},
+    {question:'🏆 What number comes after 99?',options:['98','100','90','101'],correct:1},
+    {question:'🏆 How many UNITS does 47 have?',options:['4','0','7','10'],correct:2},
+    {question:'🏆 Forward counting: 55 → 56 → 57 → ?',options:['54','59','58','60'],correct:2},
+    {question:'🏆 Which number is BETWEEN 66 and 68?',options:['65','69','67','70'],correct:2},
+    {question:'🏆 5 TENS + 9 UNITS = ?',options:['95','50','59','55'],correct:2},
+    {question:'🏆 Which is the BIGGEST number? 78, 87, 77, 88',options:['78','77','87','88'],correct:3},
+    {question:'🏆 9 TENS + 9 UNITS = ?',options:['90','98','97','99'],correct:3},
+  ]});
+  document.getElementById('quizFinishBtn').disabled = true;
+  tabClick('intro');
+}
+</script>
+</body>
+</html>

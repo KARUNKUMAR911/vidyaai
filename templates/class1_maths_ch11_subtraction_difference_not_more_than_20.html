@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 11: Subtraction (Difference not more than 20)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#388e3c);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:19px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#a5d6a7); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1b5e20; border-color:#c8e6c9; }
+.step-tab.active   { background:#388e3c; color:#fff; border-color:#388e3c; box-shadow:0 4px 14px rgba(56,142,60,.4); }
+.step-tab.done     { background:#f1f8e9; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #388e3c;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── SUBTRACTION DISPLAY ── */
+.sub-display {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center; border:3px solid #a5d6a7;
+}
+.sub-objects { font-size:32px; letter-spacing:3px; line-height:1.7; margin:10px 0; min-height:50px; }
+.sub-equation { font-family:'Fredoka One',cursive; font-size:34px; color:#333; margin:10px 0; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+.sub-num { background:#388e3c; color:#fff; border-radius:12px; padding:6px 18px; }
+.sub-op  { color:#888; }
+.sub-eq  { color:#555; }
+.sub-blank { border:4px dashed #43a047; background:#f1f8e9; border-radius:12px; padding:6px 18px; color:#bbb; min-width:60px; }
+.sub-blank.filled { border-style:solid; border-color:#388e3c; background:#c8e6c9; color:#1b5e20; }
+
+/* ── TENS-UNITS BOX ── */
+.tens-units-box {
+  display:flex; gap:0; border:4px solid #388e3c; border-radius:16px; overflow:hidden;
+  margin:14px auto; width:fit-content;
+}
+.tu-col { text-align:center; padding:10px 20px; }
+.tu-col:first-child { background:#388e3c; }
+.tu-col:last-child  { background:#f1f8e9; }
+.tu-label { font-size:12px; font-weight:900; color:rgba(255,255,255,.85); }
+.tu-col:last-child .tu-label { color:#388e3c; }
+.tu-val   { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-top:4px; }
+.tu-col:last-child .tu-val   { color:#388e3c; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.choice-btn {
+  flex:1; min-width:70px; max-width:130px; padding:14px 8px; border-radius:16px; border:3px solid #a5d6a7;
+  background:#f1f8e9; font-family:'Fredoka One',cursive; font-size:22px; color:#1b5e20;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn.correct { border-color:#388e3c; background:#c8e6c9; color:#1b5e20; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#e8f5e9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f9a825,#fdd835); color:#fff; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#388e3c; }
+
+/* ── PRAC CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #a5d6a7; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:18px; color:#333; text-align:center; margin-bottom:14px; line-height:1.4; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#f1f8e9; border:3px solid #a5d6a7; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:24px; color:#1b5e20; user-select:none;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#388e3c; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── QUIZ ── */
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:40px; text-align:center; margin:10px 0; letter-spacing:3px; line-height:1.5; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#f1f8e9; border:3px solid #a5d6a7; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive;
+  font-size:24px; color:#1b5e20; user-select:none;
+}
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#388e3c; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── EGG / OBJECT VISUAL ── */
+.visual-row { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:12px 0; }
+.obj-item { font-size:28px; transition:all .3s; }
+.obj-item.crossed { opacity:.25; text-decoration:line-through; filter:grayscale(1); }
+
+/* ── VERTICAL SUM BOX ── */
+.vert-box {
+  display:inline-block; background:#f1f8e9; border:3px solid #a5d6a7;
+  border-radius:16px; padding:14px 24px; text-align:center; margin:10px auto;
+}
+.vert-top  { font-family:'Fredoka One',cursive; font-size:30px; color:#1b5e20; }
+.vert-mid  { font-family:'Fredoka One',cursive; font-size:30px; color:#c62828; display:flex; align-items:center; gap:6px; justify-content:center; }
+.vert-line { border-top:3px solid #388e3c; margin:6px 0; }
+.vert-ans  { font-family:'Fredoka One',cursive; font-size:36px; color:#388e3c; }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(27,94,32,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s; padding:24px;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; text-align:center; }
+.celeb-sub   { font-size:15px; color:rgba(255,255,255,.9); font-weight:800; margin-bottom:8px; text-align:center; line-height:1.7; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#1b5e20; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">➖ Lesson 11 — Subtraction</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">➖</span>
+  <h1>Subtraction!</h1>
+  <p>Difference not more than 20 • Take Away • Tens and Units!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start subtracting! 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="intro"   onclick="tabClick('intro')">➖ Subtract!</div>
+  <div class="step-tab locked" data-tab="takeaway" onclick="tabClick('takeaway')">🥚 Take Away</div>
+  <div class="step-tab locked" data-tab="tens"     onclick="tabClick('tens')">📦 Tens &amp; Units</div>
+  <div class="step-tab locked" data-tab="solve"    onclick="tabClick('solve')">✏️ Solve!</div>
+  <div class="step-tab locked" data-tab="quiz"     onclick="tabClick('quiz')">🏆 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ════ TAB 1: SUBTRACT ════ -->
+<div class="tab-panel active" id="tab-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#43a047)">
+    <span class="banner-emoji">➖</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Subtraction!</div>
+      <div class="banner-sub" style="color:#fff">Tap the correct difference!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 What is Subtraction?</div>
+    <div class="ic-text">When we <strong>take away</strong> from a group, we <strong>subtract</strong>! The answer is called the <strong>difference</strong>! The difference here is <strong>not more than 20</strong>!<br><br>
+    Example: <strong>10 − 6 = 4</strong> (6 out of 10 eggs were used — 4 are left!)</div>
+  </div>
+
+  <div id="introSteps"></div>
+  <div class="progress-dots" id="introDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct difference!</div>
+  <button class="big-btn primary" id="introNextBtn" disabled onclick="completeTab('intro','takeaway','Subtract!','Take Away')">Next: Take Away! 🥚</button>
+</div>
+
+<!-- ════ TAB 2: TAKE AWAY (VISUAL) ════ -->
+<div class="tab-panel" id="tab-takeaway">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff8f00)">
+    <span class="banner-emoji">🥚</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Take Away!</div>
+      <div class="banner-sub" style="color:#fff">Watch the objects disappear!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 How to Take Away!</div>
+    <div class="ic-text">Start with the <strong>big number</strong>. Cross out the ones you <strong>take away</strong>. Count what is <strong>left</strong>. That is your <strong>difference</strong>!<br><br>
+    Like 6 out of 10 eggs were used — cross out 6 eggs — <strong>4 eggs are left!</strong></div>
+  </div>
+
+  <div id="takeawaySteps"></div>
+  <div class="progress-dots" id="takeawayDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="takeawayNextBtn" disabled onclick="completeTab('takeaway','tens','Take Away','Tens &amp; Units')">Next: Tens &amp; Units! 📦</button>
+</div>
+
+<!-- ════ TAB 3: TENS AND UNITS ════ -->
+<div class="tab-panel" id="tab-tens">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1565c0,#1976d2)">
+    <span class="banner-emoji">📦</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Tens and Units!</div>
+      <div class="banner-sub" style="color:#fff">What is the TENS? What are the UNITS?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Tens and Units!</div>
+    <div class="ic-text">After we subtract, we look at the answer!<br>
+    If the answer is <strong>10 or more</strong> → it has a <strong>TEN</strong> and <strong>UNITS</strong>!<br>
+    If the answer is <strong>less than 10</strong> → TENS = <strong>0</strong>, UNITS = the answer!<br><br>
+    Example: <strong>17 − 6 = 11 → 1 TEN, 1 UNIT</strong><br>
+    Example: <strong>12 − 5 = 7 → 0 TENS, 7 UNITS</strong></div>
+  </div>
+
+  <div id="tensSteps"></div>
+  <div class="progress-dots" id="tensDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct TENS or UNITS!</div>
+  <button class="big-btn primary" id="tensNextBtn" disabled onclick="completeTab('tens','solve','Tens &amp; Units','Solve!')">Next: Solve! ✏️</button>
+</div>
+
+<!-- ════ TAB 4: SOLVE ════ -->
+<div class="tab-panel" id="tab-solve">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#6a1b9a,#8e24aa)">
+    <span class="banner-emoji">✏️</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Solve!</div>
+      <div class="banner-sub" style="color:#fff">Subtract and tap the answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Let's Solve Subtraction Problems!</div>
+    <div class="ic-text">These are the problems from the book! Subtract the bottom number from the top number. Tap the correct answer!<br><br>
+    Remember: <strong>Subtract = Take Away = Minus = −</strong></div>
+  </div>
+
+  <div id="solveSteps"></div>
+  <div class="progress-dots" id="solveDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="solveNextBtn" disabled onclick="completeTab('solve','quiz','Solve!','Final Quiz')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ════ TAB 5: FINAL QUIZ ════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f57f17,#fbc02d)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Subtraction!</div>
+    </div>
+  </div>
+
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center;padding:20px;">
+      <div style="font-size:80px;margin-bottom:14px;">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#333;margin-bottom:8px;">Ready for the Quiz?</div>
+      <div style="font-size:15px;color:#666;font-weight:800;margin-bottom:20px;">10 subtraction questions! Difference not more than 20!</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:280px;margin:0 auto;">🚀 Start Quiz!</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Lesson 11 Complete!</div>
+  <div class="celeb-sub" id="celebS"></div>
+  <div class="celeb-stars" id="celebStar">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 Awesome!</button>
+</div>
+
+<script>
+// ── STATE ──
+let stars = 0;
+const tabOrder = ['intro','takeaway','tens','solve','quiz'];
+const tabDone  = { intro:false, takeaway:false, tens:false, solve:false, quiz:false };
+
+// ── HELPERS ──
+function addStars(n){ stars += n; document.getElementById('starsNum').textContent = stars; }
+function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'fb-box ' + (type==='ok'?'ok':'no');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(()=>{ if(el) el.style.display='none'; }, 2800);
+}
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── TAB LOGIC ──
+function tabClick(tab) {
+  const el = document.querySelector(`[data-tab="${tab}"]`);
+  if (el.classList.contains('locked')) {
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 550);
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0,0);
+  const msgs = {
+    intro:'Subtract the two numbers! Tap the correct difference!',
+    takeaway:'Watch the objects and take away! Count what is left!',
+    tens:'Find the Tens and Units in the answer!',
+    solve:'Solve all the subtraction problems from the book!',
+    quiz:'Quiz time! Show what you know about subtraction!'
+  };
+  speak(msgs[tab] || '');
+}
+
+function completeTab(current, next, currentName, nextName) {
+  tabDone[current] = true;
+  const curEl = document.querySelector(`[data-tab="${current}"]`);
+  if(curEl){ curEl.classList.remove('active'); curEl.classList.add('done'); curEl.innerHTML = '✅ ' + currentName; }
+  const nextEl = document.querySelector(`[data-tab="${next}"]`);
+  if(nextEl){ nextEl.classList.remove('locked'); nextEl.classList.add('unlocked'); }
+  updateProgress();
+  tabClick(next);
+}
+
+function updateProgress() {
+  const done = Object.values(tabDone).filter(Boolean).length;
+  const total = tabOrder.length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = [
+    'Let\'s start subtracting! 🚀',
+    'Great start! Keep going! 🌱',
+    'Halfway there! 🔥',
+    'Amazing! Almost there! ⭐',
+    'One step to finish! 🌟',
+    '🏆 Lesson Complete! You are a star!'
+  ];
+  document.getElementById('progLabel').textContent = labels[done] || labels[0];
+}
+
+// ═══════════════════════════════════
+// TAB 1 — SIMPLE SUBTRACT (intro)
+// From book: 10−6, 12−5, 14−8, 15−5, 11−7, 17−6, 19−9, 18−4
+// ═══════════════════════════════════
+const introData = [
+  { a:10, b:6,  emoji:'🥚🥚🥚🥚🥚🥚🥚🥚🥚🥚', desc:'10 eggs, 6 were used!', ans:4 },
+  { a:12, b:5,  emoji:'🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕', desc:'12 carrots, take away 5!', ans:7 },
+  { a:14, b:8,  emoji:'🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎', desc:'14 apples, take away 8!', ans:6 },
+  { a:15, b:5,  emoji:'🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟', desc:'15 stars, subtract 5!', ans:10 },
+  { a:11, b:7,  emoji:'🍬🍬🍬🍬🍬🍬🍬🍬🍬🍬🍬', desc:'11 candies, take away 7!', ans:4 },
+  { a:17, b:6,  emoji:'🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓', desc:'17 strawberries, subtract 6!', ans:11 },
+  { a:19, b:9,  emoji:'🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸', desc:'19 flowers, take away 9!', ans:10 },
+  { a:18, b:4,  emoji:'🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈', desc:'18 balloons, subtract 4!', ans:14 },
+];
+
+let introDone = 0;
+function buildIntroSteps(){
+  const dots = document.getElementById('introDots');
+  dots.innerHTML = introData.map((_,i)=>`<div class="pdot" id="idot-${i}"></div>`).join('');
+  showIntro(0);
+}
+function makeChoices(ans, range) {
+  let opts = [ans];
+  while(opts.length < 4) {
+    let r = ans + (Math.floor(Math.random()*range*2)-range);
+    r = Math.max(0, Math.min(20, r));
+    if (!opts.includes(r)) opts.push(r);
+  }
+  return shuffle(opts);
+}
+function showIntro(i) {
+  const box = document.getElementById('introSteps');
+  if (i >= introData.length) {
+    document.getElementById('introNextBtn').disabled = false;
+    box.innerHTML = `<div class="sub-display" style="background:#f1f8e9;border-color:#388e3c">
+      <div style="font-size:60px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#1b5e20;margin-top:8px;">You can subtract numbers!</div>
+      <div style="font-size:16px;font-weight:800;color:#555;margin-top:6px;">Tap Next to continue!</div>
+    </div>`;
+    speak('Wonderful! You can subtract! Tap next!');
+    return;
+  }
+  const d = introData[i];
+  const opts = makeChoices(d.ans, 3);
+  box.innerHTML = `<div class="sub-display" id="icard-${i}">
+    <div style="font-size:13px;font-weight:900;color:#388e3c;margin-bottom:4px;">Question ${i+1} of ${introData.length}</div>
+    <div style="font-size:14px;font-weight:800;color:#666;margin-bottom:8px;">${d.desc}</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin:12px 0;">
+      <span style="background:#1b5e20;color:#fff;border-radius:10px;padding:4px 16px;">${d.a}</span>
+      <span style="color:#c62828;margin:0 6px;">−</span>
+      <span style="background:#c62828;color:#fff;border-radius:10px;padding:4px 16px;">${d.b}</span>
+      <span style="color:#555;margin:0 6px;">=</span>
+      <span style="border:4px dashed #43a047;background:#f1f8e9;border-radius:10px;padding:4px 16px;color:#bbb;">?</span>
+    </div>
+    <div class="choice-row" style="margin-top:14px;">
+      ${opts.map(o=>`<button class="choice-btn" onclick="answerIntro(this,${o},${d.ans},${i})">${o}</button>`).join('')}
+    </div>
+    <div class="fb-box" id="ifb-${i}"></div>
+  </div>`;
+  speak(`${d.desc} ${d.a} minus ${d.b} equals what?`);
+}
+function answerIntro(el, chosen, ans, i) {
+  document.querySelectorAll(`#icard-${i} .choice-btn`).forEach(b=>b.classList.add('locked-choice'));
+  if (chosen === ans) {
+    el.classList.add('correct'); addStars(2);
+    document.getElementById(`idot-${i}`).classList.add('done');
+    showFeedback(`ifb-${i}`,'ok',`✅ ${introData[i].a} − ${introData[i].b} = ${ans}! Correct! 🎉`);
+    speak(`Correct! ${introData[i].a} minus ${introData[i].b} equals ${ans}!`);
+    setTimeout(()=>showIntro(i+1), 1500);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`ifb-${i}`,'no',`❌ Oops! Try again! Count carefully!`);
+    speak('Oops! Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#icard-${i} .choice-btn`).forEach(b=>b.classList.remove('locked-choice','wrong')); },900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 2 — TAKE AWAY (visual objects)
+// Book: 10−6 eggs, 12−5 tally, 14−8 carrots, 15−5 tally, 11−7 tally, 17−6 tally, 19−9, 18−4
+// ═══════════════════════════════════
+const takeData = [
+  { a:10, b:6,  emoji:'🥚', label:'10 eggs', story:'6 eggs were used! How many left?', ans:4 },
+  { a:12, b:5,  emoji:'🥕', label:'12 carrots', story:'Take away 5 carrots!', ans:7 },
+  { a:14, b:8,  emoji:'🍎', label:'14 apples', story:'Take away 8 apples!', ans:6 },
+  { a:15, b:5,  emoji:'🍋', label:'15 lemons', story:'Subtract 5 lemons!', ans:10 },
+  { a:11, b:7,  emoji:'🌻', label:'11 flowers', story:'Take away 7 flowers!', ans:4 },
+  { a:17, b:6,  emoji:'🍓', label:'17 strawberries', story:'Subtract 6 strawberries!', ans:11 },
+  { a:19, b:9,  emoji:'🌸', label:'19 flowers', story:'Take away 9 flowers!', ans:10 },
+  { a:18, b:4,  emoji:'🎈', label:'18 balloons', story:'Subtract 4 balloons!', ans:14 },
+];
+
+function buildTakeawaySteps(){
+  const dots = document.getElementById('takeawayDots');
+  dots.innerHTML = takeData.map((_,i)=>`<div class="pdot" id="tdot-${i}"></div>`).join('');
+  showTakeaway(0);
+}
+function showTakeaway(i) {
+  const box = document.getElementById('takeawaySteps');
+  if (i >= takeData.length) {
+    document.getElementById('takeawayNextBtn').disabled = false;
+    box.innerHTML = `<div class="sub-display" style="background:#f1f8e9;border-color:#388e3c">
+      <div style="font-size:60px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#1b5e20;margin-top:8px;">You can take away!</div>
+    </div>`;
+    speak('Brilliant! You can take away! Tap next!');
+    return;
+  }
+  const d = takeData[i];
+  const opts = makeChoices(d.ans, 3);
+  // Build object row
+  let objRow = '';
+  for(let k=0; k<d.a; k++){
+    objRow += `<span class="obj-item" id="tobj-${i}-${k}">${d.emoji}</span>`;
+  }
+  box.innerHTML = `<div class="prac-card" id="tcard-${i}">
+    <div style="font-size:13px;font-weight:900;color:#388e3c;text-align:center;margin-bottom:4px;">Question ${i+1} of ${takeData.length}</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#333;text-align:center;margin-bottom:10px;">${d.story}</div>
+    <div class="visual-row">${objRow}</div>
+    <div style="font-size:13px;font-weight:800;color:#c62828;text-align:center;margin:6px 0;">↑ ${d.b} are crossed out ↑</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:26px;color:#333;text-align:center;margin:10px 0;">
+      <span style="background:#1b5e20;color:#fff;border-radius:10px;padding:4px 14px;">${d.a}</span>
+      <span style="color:#c62828;margin:0 6px;">−</span>
+      <span style="background:#c62828;color:#fff;border-radius:10px;padding:4px 14px;">${d.b}</span>
+      <span style="color:#555;margin:0 6px;">=</span>
+      <span style="border:4px dashed #43a047;background:#f1f8e9;border-radius:10px;padding:4px 14px;color:#bbb;">?</span>
+    </div>
+    <div class="prac-opts">${opts.map(o=>`<div class="prac-opt" onclick="answerTakeaway(this,${o},${d.ans},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="tfb-${i}"></div>
+  </div>`;
+  // Cross out items
+  for(let k=0; k<d.b; k++){
+    const el = document.getElementById(`tobj-${i}-${k}`);
+    if(el) el.classList.add('crossed');
+  }
+  speak(`${d.story} ${d.a} minus ${d.b} equals what? Count the ones left!`);
+}
+function answerTakeaway(el, chosen, ans, i) {
+  document.querySelectorAll(`#tcard-${i} .prac-opt`).forEach(b=>b.classList.add('locked-choice'));
+  if (chosen === ans) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`tdot-${i}`).classList.add('done');
+    showFeedback(`tfb-${i}`,'ok',`✅ ${takeData[i].a} − ${takeData[i].b} = ${ans}! Correct! 🎉`);
+    speak(`Correct! ${ans} are left!`);
+    setTimeout(()=>showTakeaway(i+1), 1500);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`tfb-${i}`,'no',`❌ Oops! Count the ones that are NOT crossed out!`);
+    speak('Oops! Count only the ones left!');
+    setTimeout(()=>{ document.querySelectorAll(`#tcard-${i} .prac-opt`).forEach(b=>b.classList.remove('locked-choice','wrong')); },900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 3 — TENS AND UNITS
+// Book shows TENS|UNITS table for answers
+// ═══════════════════════════════════
+const tensData = [
+  { problem:'10 − 6', a:10, b:6, ans:4,  tens:0, units:4,  askWhat:'units', question:'10 − 6 = 4. How many UNITS?' },
+  { problem:'12 − 5', a:12, b:5, ans:7,  tens:0, units:7,  askWhat:'units', question:'12 − 5 = 7. How many UNITS?' },
+  { problem:'14 − 8', a:14, b:8, ans:6,  tens:0, units:6,  askWhat:'units', question:'14 − 8 = 6. How many UNITS?' },
+  { problem:'15 − 5', a:15, b:5, ans:10, tens:1, units:0,  askWhat:'tens',  question:'15 − 5 = 10. How many TENS?' },
+  { problem:'11 − 7', a:11, b:7, ans:4,  tens:0, units:4,  askWhat:'tens',  question:'11 − 7 = 4. How many TENS?' },
+  { problem:'17 − 6', a:17, b:6, ans:11, tens:1, units:1,  askWhat:'units', question:'17 − 6 = 11. How many UNITS?' },
+  { problem:'19 − 9', a:19, b:9, ans:10, tens:1, units:0,  askWhat:'tens',  question:'19 − 9 = 10. How many TENS?' },
+  { problem:'18 − 4', a:18, b:4, ans:14, tens:1, units:4,  askWhat:'units', question:'18 − 4 = 14. How many UNITS?' },
+];
+
+function buildTensSteps(){
+  const dots = document.getElementById('tensDots');
+  dots.innerHTML = tensData.map((_,i)=>`<div class="pdot" id="qdot-${i}"></div>`).join('');
+  showTens(0);
+}
+function showTens(i) {
+  const box = document.getElementById('tensSteps');
+  if (i >= tensData.length) {
+    document.getElementById('tensNextBtn').disabled = false;
+    box.innerHTML = `<div class="sub-display" style="background:#f1f8e9;border-color:#388e3c">
+      <div style="font-size:60px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#1b5e20;margin-top:8px;">You know Tens and Units!</div>
+    </div>`;
+    speak('Excellent! You know tens and units! Tap next!');
+    return;
+  }
+  const d = tensData[i];
+  const correctAns = d.askWhat === 'tens' ? d.tens : d.units;
+  const opts = makeChoices(correctAns, 2).map(v=>Math.max(0,Math.min(9,v)));
+  const uniqueOpts = [...new Set(opts)];
+  while(uniqueOpts.length < 4) { uniqueOpts.push(Math.floor(Math.random()*10)); }
+
+  box.innerHTML = `<div class="prac-card" id="qcard-${i}">
+    <div style="font-size:13px;font-weight:900;color:#388e3c;text-align:center;margin-bottom:4px;">Question ${i+1} of ${tensData.length}</div>
+    <div style="text-align:center;margin:10px 0;">
+      <div class="vert-box">
+        <div class="vert-top">${d.a}</div>
+        <div class="vert-mid">− <span>${d.b}</span></div>
+        <div class="vert-line"></div>
+        <div class="vert-ans">${d.ans}</div>
+      </div>
+    </div>
+    <div class="tens-units-box" style="margin:14px auto;">
+      <div class="tu-col"><div class="tu-label">TENS</div><div class="tu-val">${d.askWhat==='tens'?'?':d.tens}</div></div>
+      <div class="tu-col"><div class="tu-label">UNITS</div><div class="tu-val" style="color:#1b5e20;">${d.askWhat==='units'?'?':d.units}</div></div>
+    </div>
+    <div class="prac-q">${d.question}</div>
+    <div class="prac-opts">${shuffle([...uniqueOpts]).slice(0,4).map(o=>`<div class="prac-opt" onclick="answerTens(this,${o},${correctAns},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="qfb-${i}"></div>
+  </div>`;
+  speak(d.question);
+}
+function answerTens(el, chosen, ans, i) {
+  document.querySelectorAll(`#qcard-${i} .prac-opt`).forEach(b=>b.classList.add('locked-choice'));
+  const d = tensData[i];
+  if (chosen === ans) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`qdot-${i}`).classList.add('done');
+    showFeedback(`qfb-${i}`,'ok',`✅ Correct! ${d.problem} = ${d.ans} → TENS: ${d.tens}, UNITS: ${d.units} 🎉`);
+    speak(`Correct! ${d.problem} equals ${d.ans}! Tens ${d.tens}, Units ${d.units}!`);
+    setTimeout(()=>showTens(i+1), 1600);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`qfb-${i}`,'no',`❌ Oops! The answer is ${d.ans}. Count the ${d.askWhat}!`);
+    speak('Oops! Look at the answer and count the tens and units!');
+    setTimeout(()=>{ document.querySelectorAll(`#qcard-${i} .prac-opt`).forEach(b=>b.classList.remove('locked-choice','wrong')); },900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 4 — SOLVE (all book problems from page 8)
+// 8−5, 9−6, 7−7, 9−2, 18−3, 16−5, 11−11, 10−4
+// Also: 17−11, 12−12, 13−0, 16−6
+// ═══════════════════════════════════
+const solveData = [
+  { a:8,  b:5,  ans:3,  story:'8 take away 5', emoji:'🍎' },
+  { a:9,  b:6,  ans:3,  story:'9 take away 6', emoji:'🌟' },
+  { a:7,  b:7,  ans:0,  story:'7 take away 7! Nothing left!', emoji:'🎈' },
+  { a:9,  b:2,  ans:7,  story:'9 take away 2', emoji:'🥕' },
+  { a:18, b:3,  ans:15, story:'18 minus 3', emoji:'🍓' },
+  { a:16, b:5,  ans:11, story:'16 minus 5', emoji:'🌸' },
+  { a:11, b:11, ans:0,  story:'11 take away 11! Zero left!', emoji:'🍬' },
+  { a:10, b:4,  ans:6,  story:'10 minus 4', emoji:'🍋' },
+  { a:17, b:11, ans:6,  story:'Take away 11 from 17', emoji:'🏆' },
+  { a:12, b:12, ans:0,  story:'Take away 12 from 12! Zero left!', emoji:'⭐' },
+  { a:13, b:0,  ans:13, story:'Take away 0 from 13! Same number stays!', emoji:'🔵' },
+  { a:16, b:6,  ans:10, story:'Take away 6 from 16', emoji:'🌻' },
+];
+
+function buildSolveSteps(){
+  const dots = document.getElementById('solveDots');
+  dots.innerHTML = solveData.map((_,i)=>`<div class="pdot" id="vdot-${i}"></div>`).join('');
+  showSolve(0);
+}
+function showSolve(i) {
+  const box = document.getElementById('solveSteps');
+  if (i >= solveData.length) {
+    document.getElementById('solveNextBtn').disabled = false;
+    box.innerHTML = `<div class="sub-display" style="background:#f1f8e9;border-color:#388e3c">
+      <div style="font-size:60px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#1b5e20;margin-top:8px;">You solved all problems!</div>
+    </div>`;
+    speak('Amazing! You solved all the problems! Tap next for the quiz!');
+    return;
+  }
+  const d = solveData[i];
+  const opts = makeChoices(d.ans, 3);
+  box.innerHTML = `<div class="prac-card" id="vcard-${i}">
+    <div style="font-size:13px;font-weight:900;color:#388e3c;text-align:center;margin-bottom:4px;">Problem ${i+1} of ${solveData.length}</div>
+    <div style="font-size:14px;font-weight:800;color:#555;text-align:center;margin-bottom:8px;">${d.story}</div>
+    <div style="text-align:center;margin:10px 0;">
+      <div class="vert-box">
+        <div class="vert-top">${d.a}</div>
+        <div class="vert-mid">− <span>${d.b}</span></div>
+        <div class="vert-line"></div>
+        <div class="vert-ans">?</div>
+      </div>
+    </div>
+    <div class="prac-opts">${opts.map(o=>`<div class="prac-opt" onclick="answerSolve(this,${o},${d.ans},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="vfb-${i}"></div>
+  </div>`;
+  speak(`${d.story}. ${d.a} minus ${d.b} equals what?`);
+}
+function answerSolve(el, chosen, ans, i) {
+  document.querySelectorAll(`#vcard-${i} .prac-opt`).forEach(b=>b.classList.add('locked-choice'));
+  const d = solveData[i];
+  if (chosen === ans) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`vdot-${i}`).classList.add('done');
+    showFeedback(`vfb-${i}`,'ok',`✅ ${d.a} − ${d.b} = ${ans}! Correct! 🎉`);
+    speak(`Correct! ${d.a} minus ${d.b} equals ${ans}!`);
+    setTimeout(()=>showSolve(i+1), 1500);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`vfb-${i}`,'no',`❌ Oops! Try again! Think carefully!`);
+    speak('Oops! Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#vcard-${i} .prac-opt`).forEach(b=>b.classList.remove('locked-choice','wrong')); },900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 5 — FINAL QUIZ
+// ═══════════════════════════════════
+const quizData = [
+  { q:'10 − 6 = ?', e:'🥚🥚🥚🥚🥚🥚🥚🥚🥚🥚 (6 used)', opts:['3','4','5','6'], ans:'4' },
+  { q:'12 − 5 = ?', e:'🥕×12, take away 5', opts:['5','6','7','8'], ans:'7' },
+  { q:'14 − 8 = ?', e:'🍎×14, take away 8', opts:['4','5','6','7'], ans:'6' },
+  { q:'15 − 5 = ?', e:'🌟×15, subtract 5', opts:['8','9','10','11'], ans:'10' },
+  { q:'11 − 7 = ?', e:'🍬×11, take away 7', opts:['3','4','5','6'], ans:'4' },
+  { q:'17 − 6 = ?', e:'🍓×17, subtract 6', opts:['9','10','11','12'], ans:'11' },
+  { q:'19 − 9 = ?', e:'🌸×19, take away 9', opts:['8','9','10','11'], ans:'10' },
+  { q:'18 − 4 = ?', e:'🎈×18, subtract 4', opts:['12','13','14','15'], ans:'14' },
+  { q:'8 − 5 = ?', e:'🍎×8, take away 5', opts:['2','3','4','5'], ans:'3' },
+  { q:'11 − 11 = ?', e:'All taken away! Nothing left!', opts:['0','1','2','3'], ans:'0' },
+  { q:'13 − 0 = ?', e:'Take away 0! Nothing is removed!', opts:['12','13','14','15'], ans:'13' },
+  { q:'16 − 6 = ?', e:'🌻×16, take away 6', opts:['8','9','10','11'], ans:'10' },
+];
+
+let quizItems = [], quizIdx = 0, quizScore = 0;
+
+function startQuiz(){
+  quizItems = shuffle([...quizData]).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ(){
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    tabDone['quiz'] = true;
+    updateProgress();
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#1b5e20;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Lesson!</button>
+      <button class="big-btn gold" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    speak('Quiz done! You scored ' + quizScore + ' out of ' + quizItems.length + '! Tap complete lesson!');
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = shuffle([...q.opts]);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`<div class="quiz-opt" onclick="answerQ(this,'${o}','${q.ans}')">${o}</div>`).join('')}
+    </div>`;
+  speak(q.q);
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.onclick=null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{ if(b.textContent.trim()===correct) b.classList.add('right'); });
+    speak('Oops! The answer is ' + correct);
+  }
+  setTimeout(()=>{ quizIdx++; showQ(); }, 1700);
+}
+
+// ── CELEBRATE ──
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Lesson 11 Complete!';
+  document.getElementById('celebS').textContent =
+    'Amazing! You learned:\n➖ Subtract numbers (difference not more than 20)\n🥚 Take Away objects\n📦 Tens and Units\n✏️ Solve subtraction problems\n⭐ Great job, superstar!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Lesson 11! Subtraction! You are a superstar!');
+}
+
+function closeCeleb() {
+  document.getElementById('celebScreen').classList.remove('show');
+}
+
+function launchConfetti() {
+  const cols = ['#4CAF50','#8BC34A','#CDDC39','#FFC107','#FF5722','#ffffff','#81C784'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 5000);
+  }
+}
+const s2 = document.createElement('style');
+s2.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ── INIT ──
+buildIntroSteps();
+buildTakeawaySteps();
+buildTensSteps();
+buildSolveSteps();
+updateProgress();
+setTimeout(()=>speak("Welcome to Lesson 11! Subtraction! Difference not more than twenty! Let's subtract! Let's go!"), 700);
+</script>
+</body>
+</html>

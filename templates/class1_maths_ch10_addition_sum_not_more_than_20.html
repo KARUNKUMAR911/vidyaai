@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 10: Addition (Sum not more than 20)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff8e1; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#f57c00);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:19px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#e65100,#ff8f00); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffd54f); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffe0b2; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#fff8e1; color:#e65100; border-color:#ffcc80; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #ff8f00;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── CONCEPT CARD ── */
+.concept-card {
+  background:#fff; border-radius:24px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); overflow:hidden; border:3px solid #ffcc80;
+}
+.concept-top { padding:18px 16px 12px; text-align:center; }
+.concept-bottom { background:#fff8e1; padding:14px 16px; }
+
+/* ── ADDITION DISPLAY ── */
+.add-display {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center; border:3px solid #ffcc80;
+}
+.add-objects { font-size:32px; letter-spacing:3px; line-height:1.7; margin:10px 0; min-height:50px; }
+.add-equation { font-family:'Fredoka One',cursive; font-size:34px; color:#333; margin:10px 0; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+.add-num { background:#e65100; color:#fff; border-radius:12px; padding:6px 18px; }
+.add-op  { color:#888; }
+.add-eq  { color:#555; }
+.add-blank { border:4px dashed #ff8f00; background:#fff8e1; border-radius:12px; padding:6px 18px; color:#bbb; min-width:60px; }
+.add-blank.filled { border-style:solid; border-color:#e65100; background:#ffe0b2; color:#e65100; }
+
+/* ── TENS-UNITS BOX ── */
+.tens-units-box {
+  display:flex; gap:0; border:4px solid #e65100; border-radius:16px; overflow:hidden;
+  margin:14px auto; width:fit-content;
+}
+.tu-col { text-align:center; padding:10px 20px; }
+.tu-col:first-child { background:#e65100; }
+.tu-col:last-child  { background:#fff3e0; }
+.tu-label { font-size:12px; font-weight:900; color:rgba(255,255,255,.85); }
+.tu-col:last-child .tu-label { color:#e65100; }
+.tu-val   { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-top:4px; }
+.tu-col:last-child .tu-val   { color:#e65100; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.choice-btn {
+  flex:1; min-width:70px; max-width:130px; padding:14px 8px; border-radius:16px; border:3px solid #ffcc80;
+  background:#fff8e1; font-family:'Fredoka One',cursive; font-size:22px; color:#e65100;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn.correct { border-color:#e65100; background:#ffe0b2; color:#bf360c; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#e8f5e9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#e65100,#ff8f00); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f9a825,#fdd835); color:#fff; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#ff8f00; }
+
+/* ── PRAC CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #ffcc80; }
+.prac-scene { font-size:36px; text-align:center; margin-bottom:10px; line-height:1.6; letter-spacing:3px; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:18px; color:#333; text-align:center; margin-bottom:14px; line-height:1.4; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#fff8e1; border:3px solid #ffcc80; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:24px; color:#e65100; user-select:none;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#e65100; background:#ffe0b2; color:#bf360c; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── MATCH LINES ── */
+.match-wrap { background:#fff; border-radius:24px; padding:20px 14px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #ffcc80; }
+.match-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; text-align:center; margin-bottom:14px; }
+.match-row { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
+.match-left { font-family:'Fredoka One',cursive; font-size:22px; color:#333; background:#fff8e1; border:3px solid #ffcc80; border-radius:14px; padding:10px 14px; min-width:90px; text-align:center; }
+.match-ans-opts { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.match-ans-btn {
+  font-family:'Fredoka One',cursive; font-size:22px; color:#e65100;
+  background:#fff8e1; border:3px solid #ffcc80; border-radius:14px; padding:10px 14px;
+  cursor:pointer; transition:all .2s; user-select:none;
+}
+.match-ans-btn:active { transform:scale(.91); }
+.match-ans-btn.correct { border-color:#e65100; background:#ffe0b2; color:#bf360c; pointer-events:none; }
+.match-ans-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.match-ans-btn.used    { background:#f5f5f5; color:#bbb; border-color:#e0e0e0; pointer-events:none; }
+
+/* ── QUIZ ── */
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:44px; text-align:center; margin:10px 0; letter-spacing:3px; line-height:1.5; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#e65100; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff8e1; border:3px solid #ffcc80; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive;
+  font-size:24px; color:#e65100; user-select:none;
+}
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#e65100; background:#ffe0b2; color:#bf360c; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(230,81,0,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s; padding:24px;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; text-align:center; }
+.celeb-sub   { font-size:15px; color:rgba(255,255,255,.9); font-weight:800; margin-bottom:8px; text-align:center; line-height:1.7; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#bf360c; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">➕ Lesson 10 — Addition</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">➕</span>
+  <h1>Addition!</h1>
+  <p>Sum not more than 20 • Count • Add • Group and Add!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start adding! 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="simple"   onclick="tabClick('simple')">➕ Add!</div>
+  <div class="step-tab locked"  data-tab="countadd" onclick="tabClick('countadd')">🔢 Count &amp; Add</div>
+  <div class="step-tab locked"  data-tab="tens"     onclick="tabClick('tens')">📦 Tens &amp; Units</div>
+  <div class="step-tab locked"  data-tab="groupadd" onclick="tabClick('groupadd')">🔗 Group &amp; Add</div>
+  <div class="step-tab locked"  data-tab="match"    onclick="tabClick('match')">🔀 Add &amp; Match</div>
+  <div class="step-tab locked"  data-tab="quiz"     onclick="tabClick('quiz')">🏆 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ════════════════ TAB 1 — SIMPLE ADD ════════════════ -->
+<div class="tab-panel active" id="tab-simple">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff8f00)">
+    <span class="banner-emoji">➕</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Add!</div>
+      <div class="banner-sub" style="color:#fff">Tap the correct sum!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 What is Addition?</div>
+    <div class="ic-text">When we put two groups <strong>together</strong> we <strong>add</strong> them! The answer is called the <strong>sum</strong>! The sum here is <strong>not more than 20</strong>!</div>
+  </div>
+
+  <div id="simpleSteps"></div>
+  <div class="progress-dots" id="simpleDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct sum!</div>
+  <button class="big-btn primary" id="simpleNextBtn" disabled onclick="completeTab('simple','countadd','Add!','Count &amp; Add')">Next: Count &amp; Add! 🔢</button>
+</div>
+
+<!-- ════════════════ TAB 2 — COUNT AND ADD ════════════════ -->
+<div class="tab-panel" id="tab-countadd">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#6a1b9a,#8e24aa)">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Count and Add!</div>
+      <div class="banner-sub" style="color:#fff">Count the objects, then tap the sum!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 How to Count and Add!</div>
+    <div class="ic-text">Count the objects in <strong>Group 1</strong>. Then count the objects in <strong>Group 2</strong>. Now <strong>put them together</strong> and count them all! That is your sum!</div>
+  </div>
+
+  <div id="countAddSteps"></div>
+  <div class="progress-dots" id="countAddDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Count all and tap the answer!</div>
+  <button class="big-btn primary" id="countAddNextBtn" disabled onclick="completeTab('countadd','tens','Count &amp; Add','Tens &amp; Units')">Next: Tens &amp; Units! 📦</button>
+</div>
+
+<!-- ════════════════ TAB 3 — TENS AND UNITS ════════════════ -->
+<div class="tab-panel" id="tab-tens">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1565c0,#1976d2)">
+    <span class="banner-emoji">📦</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Tens and Units!</div>
+      <div class="banner-sub" style="color:#fff">Group 10 to make a TEN!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Tens and Units!</div>
+    <div class="ic-text">When we add numbers and get <strong>more than 9</strong>, we make a group of <strong>10 (one TEN)</strong>! The ones left over are the <strong>UNITS</strong>!<br>Example: <strong>7 + 4 = 11 = 1 TEN 1 UNIT</strong><br>Example: <strong>8 + 5 = 13 = 1 TEN 3 UNITS</strong></div>
+  </div>
+
+  <div id="tensSteps"></div>
+  <div class="progress-dots" id="tensDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct sum!</div>
+  <button class="big-btn primary" id="tensNextBtn" disabled onclick="completeTab('tens','groupadd','Tens &amp; Units','Group &amp; Add')">Next: Group &amp; Add! 🔗</button>
+</div>
+
+<!-- ════════════════ TAB 4 — GROUP AND ADD ════════════════ -->
+<div class="tab-panel" id="tab-groupadd">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#2e7d32,#388e3c)">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Group and Add!</div>
+      <div class="banner-sub" style="color:#fff">Group the lines into Tens and Units!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Group and Add!</div>
+    <div class="ic-text">Draw lines (tally marks) for each number. <strong>Group 10 lines together</strong> to make <strong>1 TEN</strong>. The remaining lines are <strong>UNITS</strong>! Count tens and units to find the sum!</div>
+  </div>
+
+  <div id="groupAddSteps"></div>
+  <div class="progress-dots" id="groupAddDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Find the Tens and Units, then the sum!</div>
+  <button class="big-btn primary" id="groupAddNextBtn" disabled onclick="completeTab('groupadd','match','Group &amp; Add','Add &amp; Match')">Next: Add &amp; Match! 🔀</button>
+</div>
+
+<!-- ════════════════ TAB 5 — ADD AND MATCH ════════════════ -->
+<div class="tab-panel" id="tab-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#bf360c,#e64a19)">
+    <span class="banner-emoji">🔀</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Add and Match!</div>
+      <div class="banner-sub" style="color:#fff">Find equal sums — match the pairs!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Match the equal sums!</div>
+    <div class="ic-text">Two different additions can give the <strong>same answer</strong>! For example: <strong>5 + 8 = 13</strong> and <strong>9 + 4 = 13</strong> — they are <strong>equal</strong>! Find the pairs!</div>
+  </div>
+
+  <div id="matchSteps"></div>
+  <div class="progress-dots" id="matchDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the addition that gives the same answer!</div>
+  <button class="big-btn primary" id="matchNextBtn" disabled onclick="completeTab('match','quiz','Add &amp; Match','Final Quiz')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ════════════════ TAB 6 — QUIZ ════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f57f17,#fbc02d)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Addition!</div>
+    </div>
+  </div>
+
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center;padding:20px;">
+      <div style="font-size:80px;margin-bottom:14px;">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#333;margin-bottom:8px;">Ready for the Quiz?</div>
+      <div style="font-size:15px;color:#666;font-weight:800;margin-bottom:20px;">10 addition questions! Sum not more than 20!</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:280px;margin:0 auto;">🚀 Start Quiz!</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Lesson 10 Complete!</div>
+  <div class="celeb-sub" id="celebS"></div>
+  <div class="celeb-stars" id="celebStar">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 Awesome!</button>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────
+let stars = 0;
+const tabOrder = ['simple','countadd','tens','groupadd','match','quiz'];
+const tabDone  = { simple:false, countadd:false, tens:false, groupadd:false, match:false, quiz:false };
+
+// ── HELPERS ────────────────────────────────
+function addStars(n){ stars += n; document.getElementById('starsNum').textContent = stars; }
+function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'fb-box ' + (type==='ok'?'ok':'no');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(()=>{ if(el) el.style.display='none'; }, 2800);
+}
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── TAB LOGIC ──────────────────────────────
+function tabClick(tab) {
+  const el = document.querySelector(`[data-tab="${tab}"]`);
+  if (el.classList.contains('locked')) {
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 550);
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0,0);
+  const msgs = {
+    simple:'Add the two numbers! Tap the correct sum!',
+    countadd:'Count the objects in both groups and add them!',
+    tens:'Add the numbers! When we get more than nine, we make a ten!',
+    groupadd:'Group the tally marks into tens and units to find the sum!',
+    match:'Find two additions that give the same answer!',
+    quiz:'Quiz time! Show what you know about addition!'
+  };
+  speak(msgs[tab] || '');
+}
+
+function completeTab(current, next, currentName, nextName) {
+  tabDone[current] = true;
+  const curEl = document.querySelector(`[data-tab="${current}"]`);
+  if(curEl){ curEl.classList.remove('active'); curEl.classList.add('done'); curEl.innerHTML = '✅ ' + currentName; }
+  const nextEl = document.querySelector(`[data-tab="${next}"]`);
+  if(nextEl){ nextEl.classList.remove('locked'); nextEl.classList.add('unlocked'); }
+  updateProgress();
+  tabClick(next);
+}
+
+function updateProgress() {
+  const done = Object.values(tabDone).filter(Boolean).length;
+  const total = tabOrder.length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = [
+    'Let\'s start adding! 🚀',
+    'Great start! Keep going! 🌱',
+    'Halfway there! 🔥',
+    'Amazing! Almost there! ⭐',
+    'So close! Keep going! 🏅',
+    'One step to finish! 🌟',
+    '🏆 Lesson Complete! You are a star!'
+  ];
+  document.getElementById('progLabel').textContent = labels[done] || labels[0];
+}
+
+// ═══════════════════════════════════
+// TAB 1: SIMPLE ADD (from textbook page 1)
+// 4+5, 7+2, 0+7, 3+6, 1+3, 0+6, 1+8, 3+5, 4+4
+// ═══════════════════════════════════
+const simpleData = [
+  { a:4, b:5, emoji:'🍎🍎🍎🍎 + 🍎🍎🍎🍎🍎', ans:9 },
+  { a:7, b:2, emoji:'⭐⭐⭐⭐⭐⭐⭐ + ⭐⭐', ans:9 },
+  { a:0, b:7, emoji:'(nothing) + 🌸🌸🌸🌸🌸🌸🌸', ans:7 },
+  { a:3, b:6, emoji:'🔵🔵🔵 + 🔵🔵🔵🔵🔵🔵', ans:9 },
+  { a:1, b:3, emoji:'🌟 + 🌟🌟🌟', ans:4 },
+  { a:0, b:6, emoji:'(nothing) + 🎈🎈🎈🎈🎈🎈', ans:6 },
+  { a:1, b:8, emoji:'🍬 + 🍬🍬🍬🍬🍬🍬🍬🍬', ans:9 },
+  { a:3, b:5, emoji:'🏆🏆🏆 + 🏆🏆🏆🏆🏆', ans:8 },
+  { a:4, b:4, emoji:'🐣🐣🐣🐣 + 🐣🐣🐣🐣', ans:8 },
+];
+
+function buildSimpleSteps(){
+  const dots = document.getElementById('simpleDots');
+  dots.innerHTML = simpleData.map((_,i)=>`<div class="pdot" id="sdot-${i}"></div>`).join('');
+  showSimple(0);
+}
+
+function showSimple(i) {
+  const box = document.getElementById('simpleSteps');
+  if (i >= simpleData.length) {
+    document.getElementById('simpleNextBtn').disabled = false;
+    box.innerHTML = `<div class="add-display" style="background:#fff8e1;border-color:#e65100">
+      <div style="font-size:60px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#e65100;margin-top:8px;">You can add numbers!</div>
+      <div style="font-size:16px;font-weight:800;color:#555;margin-top:6px;">Tap Next to continue!</div>
+    </div>`;
+    speak('Wonderful! You can add numbers! Tap next!');
+    return;
+  }
+  const d = simpleData[i];
+  const opts = shuffle([...new Set([d.ans, d.ans-1, d.ans+1, d.ans+2].filter(n=>n>=0&&n<=20))]).slice(0,4);
+  if(!opts.includes(d.ans)){ opts[0]=d.ans; }
+  const shuffled = shuffle(opts);
+
+  box.innerHTML = `<div class="prac-card" id="scard-${i}">
+    <div class="add-display" style="margin-bottom:14px;border:none;box-shadow:none;padding:0">
+      <div class="add-objects">${d.emoji}</div>
+      <div class="add-equation">
+        <span class="add-num">${d.a}</span>
+        <span class="add-op">+</span>
+        <span class="add-num">${d.b}</span>
+        <span class="add-eq">=</span>
+        <span class="add-blank" id="sblank-${i}">?</span>
+      </div>
+    </div>
+    <div class="prac-q">${d.a} + ${d.b} = ?</div>
+    <div class="prac-opts">${shuffled.map(o=>`<div class="prac-opt" onclick="answerSimple(this,${o},${d.ans},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="sfb-${i}"></div>
+  </div>`;
+  speak(d.a + ' plus ' + d.b + ' equals what? Tap the answer!');
+}
+
+function answerSimple(el, chosen, correct, i) {
+  document.querySelectorAll(`#scard-${i} .prac-opt`).forEach(b=>b.classList.add('locked-choice'));
+  if (chosen === correct) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`sdot-${i}`).classList.add('done');
+    const blank = document.getElementById(`sblank-${i}`);
+    if(blank){ blank.textContent=correct; blank.classList.add('filled'); }
+    showFeedback(`sfb-${i}`,'ok',`✅ ${simpleData[i].a} + ${simpleData[i].b} = ${correct}! 🎉`);
+    speak('Correct! ' + simpleData[i].a + ' plus ' + simpleData[i].b + ' equals ' + correct + '!');
+    setTimeout(()=>showSimple(i+1), 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`sfb-${i}`,'no',`❌ Try again! ${simpleData[i].a} + ${simpleData[i].b} = ?`);
+    speak('Try again! Count carefully!');
+    setTimeout(()=>{ document.querySelectorAll(`#scard-${i} .prac-opt`).forEach(b=>b.classList.remove('locked-choice','wrong')); }, 900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 2: COUNT AND ADD (from textbook pages 1-2)
+// Objects in two groups, count and add
+// ═══════════════════════════════════
+const countAddData = [
+  { g1:'⭕⭕⭕⭕⭕⭕⭕⭕⭕', g2:'⚫', c1:9, c2:1, ans:10, label:'white and black circles' },
+  { g1:'⭕⭕⭕⭕⭕⭕⭕⭕', g2:'⚫⚫', c1:8, c2:2, ans:10, label:'white and black circles' },
+  { g1:'⭐⭐⭐⭐⭐', g2:'⭐⭐⭐⭐⭐', c1:5, c2:5, ans:10, label:'stars' },
+  { g1:'🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸', g2:'🌸🌸', c1:10, c2:2, ans:12, label:'flowers' },
+  { g1:'🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆', g2:'🏆🏆🏆', c1:10, c2:3, ans:13, label:'cups' },
+  { g1:'🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵', g2:'🔵🔵🔵🔵🔵🔵', c1:10, c2:6, ans:16, label:'balls' },
+  { g1:'🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭', g2:'🍭🍭🍭🍭', c1:10, c2:4, ans:14, label:'lollipops' },
+];
+
+function buildCountAddSteps(){
+  const dots = document.getElementById('countAddDots');
+  dots.innerHTML = countAddData.map((_,i)=>`<div class="pdot" id="cadot-${i}"></div>`).join('');
+  showCountAdd(0);
+}
+
+function showCountAdd(i) {
+  const box = document.getElementById('countAddSteps');
+  if (i >= countAddData.length) {
+    document.getElementById('countAddNextBtn').disabled = false;
+    box.innerHTML = `<div class="add-display" style="background:#fff8e1;border-color:#e65100">
+      <div style="font-size:60px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#e65100;margin-top:8px;">You can Count and Add!</div>
+    </div>`;
+    speak('Amazing! You can count and add objects!');
+    return;
+  }
+  const d = countAddData[i];
+  const opts = shuffle([...new Set([d.ans, d.ans-1, d.ans+1, d.ans+2].filter(n=>n>=1&&n<=20))]).slice(0,4);
+  if(!opts.includes(d.ans)){ opts[0]=d.ans; }
+  const shuffled = shuffle(opts);
+
+  box.innerHTML = `<div class="prac-card" id="cacard-${i}">
+    <div style="display:flex;gap:14px;justify-content:center;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:12px;font-weight:900;color:#888;margin-bottom:4px;">Group 1</div>
+        <div style="font-size:28px;letter-spacing:3px;line-height:1.6;background:#fff8e1;border:3px solid #ffcc80;border-radius:14px;padding:8px 12px;">${d.g1}</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#e65100;margin-top:4px;">${d.c1}</div>
+      </div>
+      <div style="font-family:'Fredoka One',cursive;font-size:32px;color:#aaa;">+</div>
+      <div style="text-align:center;">
+        <div style="font-size:12px;font-weight:900;color:#888;margin-bottom:4px;">Group 2</div>
+        <div style="font-size:28px;letter-spacing:3px;line-height:1.6;background:#fff8e1;border:3px solid #ffcc80;border-radius:14px;padding:8px 12px;">${d.g2}</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#e65100;margin-top:4px;">${d.c2}</div>
+      </div>
+    </div>
+    <div class="add-equation" style="margin-bottom:14px;">
+      <span class="add-num">${d.c1}</span>
+      <span class="add-op">+</span>
+      <span class="add-num">${d.c2}</span>
+      <span class="add-eq">=</span>
+      <span class="add-blank" id="cablank-${i}">?</span>
+    </div>
+    <div class="prac-q">Count all ${d.label} — what is the total?</div>
+    <div class="prac-opts">${shuffled.map(o=>`<div class="prac-opt" onclick="answerCountAdd(this,${o},${d.ans},${d.c1},${d.c2},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="cafb-${i}"></div>
+  </div>`;
+  speak('Count the ' + d.label + '! Group 1 has ' + d.c1 + '. Group 2 has ' + d.c2 + '. How many in all?');
+}
+
+function answerCountAdd(el, chosen, correct, c1, c2, i) {
+  document.querySelectorAll(`#cacard-${i} .prac-opt`).forEach(b=>b.classList.add('locked-choice'));
+  if (chosen === correct) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`cadot-${i}`).classList.add('done');
+    const blank = document.getElementById(`cablank-${i}`);
+    if(blank){ blank.textContent=correct; blank.classList.add('filled'); }
+    showFeedback(`cafb-${i}`,'ok',`✅ ${c1} + ${c2} = ${correct}! 🎉`);
+    speak('Correct! ' + c1 + ' plus ' + c2 + ' equals ' + correct + '!');
+    setTimeout(()=>showCountAdd(i+1), 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`cafb-${i}`,'no',`❌ Count again! ${c1} + ${c2} = ${correct}!`);
+    speak('Try again! Count all the objects carefully!');
+    setTimeout(()=>{ document.querySelectorAll(`#cacard-${i} .prac-opt`).forEach(b=>b.classList.remove('locked-choice','wrong')); }, 900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 3: TENS AND UNITS (from textbook pages 3-4)
+// 7+4=11, 8+5=13, and more sums >9
+// ═══════════════════════════════════
+const tensData = [
+  { a:7, b:4, ans:11, tens:1, units:1, emoji:'🕯️🕯️🕯️🕯️🕯️🕯️🕯️ + 🕯️🕯️🕯️🕯️' },
+  { a:8, b:5, ans:13, tens:1, units:3, emoji:'🟡🟡🟡🟡🟡🟡🟡🟡 + 🟡🟡🟡🟡🟡' },
+  { a:9, b:2, ans:11, tens:1, units:1, emoji:'🍎🍎🍎🍎🍎🍎🍎🍎🍎 + 🍎🍎' },
+  { a:6, b:7, ans:13, tens:1, units:3, emoji:'⭐⭐⭐⭐⭐⭐ + ⭐⭐⭐⭐⭐⭐⭐' },
+  { a:9, b:3, ans:12, tens:1, units:2, emoji:'🔵🔵🔵🔵🔵🔵🔵🔵🔵 + 🔵🔵🔵' },
+  { a:8, b:6, ans:14, tens:1, units:4, emoji:'🌸🌸🌸🌸🌸🌸🌸🌸 + 🌸🌸🌸🌸🌸🌸' },
+  { a:7, b:8, ans:15, tens:1, units:5, emoji:'🏆🏆🏆🏆🏆🏆🏆 + 🏆🏆🏆🏆🏆🏆🏆🏆' },
+  { a:9, b:9, ans:18, tens:1, units:8, emoji:'🍬🍬🍬🍬🍬🍬🍬🍬🍬 + 🍬🍬🍬🍬🍬🍬🍬🍬🍬' },
+];
+
+function buildTensSteps(){
+  const dots = document.getElementById('tensDots');
+  dots.innerHTML = tensData.map((_,i)=>`<div class="pdot" id="tdot-${i}"></div>`).join('');
+  showTens(0);
+}
+
+function showTens(i) {
+  const box = document.getElementById('tensSteps');
+  if (i >= tensData.length) {
+    document.getElementById('tensNextBtn').disabled = false;
+    box.innerHTML = `<div class="add-display" style="background:#fff8e1;border-color:#e65100">
+      <div style="font-size:60px;">📦</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#e65100;margin-top:8px;">You know Tens and Units!</div>
+    </div>`;
+    speak('Excellent! You understand tens and units!');
+    return;
+  }
+  const d = tensData[i];
+  const opts = shuffle([...new Set([d.ans, d.ans-2, d.ans+1, d.ans-1].filter(n=>n>=1&&n<=20))]).slice(0,4);
+  if(!opts.includes(d.ans)){ opts[0]=d.ans; }
+  const shuffled = shuffle(opts);
+
+  box.innerHTML = `<div class="prac-card" id="tcard-${i}">
+    <div class="add-display" style="margin-bottom:14px;border:none;box-shadow:none;padding:0">
+      <div class="add-objects" style="font-size:26px;">${d.emoji}</div>
+      <div class="add-equation" style="margin-bottom:8px;">
+        <span class="add-num">${d.a}</span>
+        <span class="add-op">+</span>
+        <span class="add-num">${d.b}</span>
+        <span class="add-eq">=</span>
+        <span class="add-blank" id="tblank-${i}">?</span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:12px;">
+      <div style="background:#fff3e0;border:3px solid #ffcc80;border-radius:14px;padding:10px 18px;text-align:center;font-size:14px;font-weight:900;color:#555;">
+        ${d.a} units + ${d.b} units = <strong>${d.ans} units</strong><br>
+        = <strong>${d.tens} TEN</strong> ${d.units} UNIT${d.units!==1?'S':''} = <strong>${d.ans}</strong>
+      </div>
+    </div>
+    <div class="prac-q">${d.a} + ${d.b} = ?</div>
+    <div class="prac-opts">${shuffled.map(o=>`<div class="prac-opt" onclick="answerTens(this,${o},${d.ans},${d.a},${d.b},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="tfb-${i}"></div>
+  </div>`;
+  speak(d.a + ' plus ' + d.b + '. We get ' + d.ans + ' units. That is ' + d.tens + ' ten and ' + d.units + ' unit' + (d.units!==1?'s':'') + '. What is the sum?');
+}
+
+function answerTens(el, chosen, correct, a, b, i) {
+  document.querySelectorAll(`#tcard-${i} .prac-opt`).forEach(x=>x.classList.add('locked-choice'));
+  if (chosen === correct) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`tdot-${i}`).classList.add('done');
+    const blank = document.getElementById(`tblank-${i}`);
+    if(blank){ blank.textContent=correct; blank.classList.add('filled'); }
+    showFeedback(`tfb-${i}`,'ok',`✅ ${a} + ${b} = ${correct}! That is ${tensData[i].tens} TEN ${tensData[i].units} UNIT${tensData[i].units!==1?'S':''}! 🎉`);
+    speak('Correct! ' + a + ' plus ' + b + ' equals ' + correct + '! ' + tensData[i].tens + ' ten ' + tensData[i].units + ' units!');
+    setTimeout(()=>showTens(i+1), 1600);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`tfb-${i}`,'no',`❌ Try again! ${a} + ${b} = ${correct}!`);
+    speak('Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#tcard-${i} .prac-opt`).forEach(x=>x.classList.remove('locked-choice','wrong')); }, 900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 4: GROUP AND ADD (from textbook page 4)
+// 0+14, 8+8, 2+11 — find tens+units+sum
+// ═══════════════════════════════════
+const groupAddData = [
+  { a:0, b:14, ans:14, tens:1, units:4, tallies:'| | | | | | | | | | | | | |' },
+  { a:8, b:8, ans:16, tens:1, units:6, tallies:'| | | | | | | | | | | | | | | |' },
+  { a:2, b:11, ans:13, tens:1, units:3, tallies:'| | | | | | | | | | | | |' },
+  { a:5, b:9, ans:14, tens:1, units:4, tallies:'| | | | | | | | | | | | | |' },
+  { a:7, b:6, ans:13, tens:1, units:3, tallies:'| | | | | | | | | | | | |' },
+  { a:4, b:9, ans:13, tens:1, units:3, tallies:'| | | | | | | | | | | | |' },
+];
+
+function makeTallyDisplay(n) {
+  let marks = '';
+  for(let i=0; i<n; i++){
+    if(i>0 && i%5===4) marks += '<span style="font-size:22px;color:#e65100;font-weight:900;margin:0 4px">🔟</span>';
+    else marks += '<span style="font-size:24px;font-weight:900;color:#333;margin:1px">|</span>';
+  }
+  return marks;
+}
+
+function buildGroupAddSteps(){
+  const dots = document.getElementById('groupAddDots');
+  dots.innerHTML = groupAddData.map((_,i)=>`<div class="pdot" id="gadot-${i}"></div>`).join('');
+  showGroupAdd(0);
+}
+
+function showGroupAdd(i) {
+  const box = document.getElementById('groupAddSteps');
+  if (i >= groupAddData.length) {
+    document.getElementById('groupAddNextBtn').disabled = false;
+    box.innerHTML = `<div class="add-display" style="background:#fff8e1;border-color:#e65100">
+      <div style="font-size:60px;">🔗</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#e65100;margin-top:8px;">You can Group and Add!</div>
+    </div>`;
+    speak('Superb! You can group tally marks and find the sum!');
+    return;
+  }
+  const d = groupAddData[i];
+  const opts = shuffle([...new Set([d.ans, d.ans-1, d.ans+1, d.ans-2].filter(n=>n>=1&&n<=20))]).slice(0,4);
+  if(!opts.includes(d.ans)){ opts[0]=d.ans; }
+  const shuffled = shuffle(opts);
+
+  const tally1 = makeTallyDisplay(d.a);
+  const tally2 = makeTallyDisplay(d.b);
+
+  box.innerHTML = `<div class="prac-card" id="gacard-${i}">
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:900;color:#888;margin-bottom:6px;">Group the tally marks!</div>
+      <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
+        <div style="background:#fff3e0;border:3px solid #ffcc80;border-radius:14px;padding:10px 14px;min-height:50px;display:flex;align-items:center;flex-wrap:wrap;gap:2px;max-width:160px;">
+          ${tally1 || '<span style="color:#bbb;font-size:18px;">0</span>'}
+          <div style="width:100%;text-align:center;font-family:\'Fredoka One\',cursive;font-size:18px;color:#e65100;margin-top:4px;">${d.a}</div>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#aaa;">+</div>
+        <div style="background:#fff3e0;border:3px solid #ffcc80;border-radius:14px;padding:10px 14px;min-height:50px;display:flex;align-items:center;flex-wrap:wrap;gap:2px;max-width:160px;">
+          ${tally2}
+          <div style="width:100%;text-align:center;font-family:'Fredoka One',cursive;font-size:18px;color:#e65100;margin-top:4px;">${d.b}</div>
+        </div>
+      </div>
+      <div style="background:#e8f5e9;border:3px solid #81c784;border-radius:14px;padding:10px;font-size:14px;font-weight:900;color:#2e7d32;margin-bottom:10px;">
+        Total tally marks = ${d.ans} = <strong>${d.tens} TEN</strong> + <strong>${d.units} UNIT${d.units!==1?'S':''}</strong>
+      </div>
+    </div>
+    <div class="add-equation" style="margin-bottom:14px;">
+      <span class="add-num">${d.a}</span>
+      <span class="add-op">+</span>
+      <span class="add-num">${d.b}</span>
+      <span class="add-eq">=</span>
+      <span class="add-blank" id="gablank-${i}">?</span>
+    </div>
+    <div class="prac-q">${d.a} + ${d.b} = ?</div>
+    <div class="prac-opts">${shuffled.map(o=>`<div class="prac-opt" onclick="answerGroupAdd(this,${o},${d.ans},${d.a},${d.b},${i})">${o}</div>`).join('')}</div>
+    <div class="fb-box" id="gafb-${i}"></div>
+  </div>`;
+  speak(d.a + ' plus ' + d.b + '. All tally marks together are ' + d.ans + '. That is ' + d.tens + ' ten and ' + d.units + ' units. What is the sum?');
+}
+
+function answerGroupAdd(el, chosen, correct, a, b, i) {
+  document.querySelectorAll(`#gacard-${i} .prac-opt`).forEach(x=>x.classList.add('locked-choice'));
+  if (chosen === correct) {
+    el.classList.add('right'); addStars(2);
+    document.getElementById(`gadot-${i}`).classList.add('done');
+    const blank = document.getElementById(`gablank-${i}`);
+    if(blank){ blank.textContent=correct; blank.classList.add('filled'); }
+    showFeedback(`gafb-${i}`,'ok',`✅ ${a} + ${b} = ${correct}! ${groupAddData[i].tens} TEN ${groupAddData[i].units} UNIT${groupAddData[i].units!==1?'S':''}! 🎉`);
+    speak('Correct! ' + a + ' plus ' + b + ' equals ' + correct + '!');
+    setTimeout(()=>showGroupAdd(i+1), 1500);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`gafb-${i}`,'no',`❌ Try again! ${a} + ${b} = ${correct}!`);
+    speak('Try again! Count the tally marks!');
+    setTimeout(()=>{ document.querySelectorAll(`#gacard-${i} .prac-opt`).forEach(x=>x.classList.remove('locked-choice','wrong')); }, 900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 5: ADD AND MATCH (from textbook page 5)
+// Match equal sums: 9+5=14, 5+8=13, 5+6=11, 6+6=12
+// Also: 18+2=20, 11+9=20, 9+9=18, 12+4=16, 16+2=18, 8+5=13, 9+7=16, 11+2=13
+// ═══════════════════════════════════
+const matchData = [
+  {
+    question: 'Which gives the same answer as 9 + 5?',
+    given: '9 + 5', givenAns: 14,
+    options: ['7 + 7', '8 + 6', '10 + 3', '6 + 8'],
+    correct: '8 + 6'
+  },
+  {
+    question: 'Which gives the same answer as 5 + 8?',
+    given: '5 + 8', givenAns: 13,
+    options: ['9 + 4', '7 + 8', '6 + 5', '8 + 7'],
+    correct: '9 + 4'
+  },
+  {
+    question: 'Which gives the same answer as 5 + 6?',
+    given: '5 + 6', givenAns: 11,
+    options: ['9 + 3', '10 + 1', '8 + 4', '6 + 6'],
+    correct: '10 + 1'
+  },
+  {
+    question: 'Which gives the same answer as 6 + 6?',
+    given: '6 + 6', givenAns: 12,
+    options: ['9 + 2', '7 + 4', '8 + 4', '10 + 3'],
+    correct: '8 + 4'
+  },
+  {
+    question: 'Which gives the same answer as 18 + 2?',
+    given: '18 + 2', givenAns: 20,
+    options: ['11 + 9', '12 + 9', '10 + 9', '13 + 8'],
+    correct: '11 + 9'
+  },
+  {
+    question: 'Which gives the same answer as 12 + 4?',
+    given: '12 + 4', givenAns: 16,
+    options: ['9 + 7', '8 + 9', '7 + 8', '10 + 5'],
+    correct: '9 + 7'
+  },
+  {
+    question: 'Which gives the same answer as 8 + 5?',
+    given: '8 + 5', givenAns: 13,
+    options: ['6 + 8', '7 + 6', '9 + 4', '5 + 9'],
+    correct: '9 + 4'
+  },
+  {
+    question: 'Which gives the same answer as 9 + 9?',
+    given: '9 + 9', givenAns: 18,
+    options: ['10 + 9', '16 + 2', '8 + 8', '7 + 9'],
+    correct: '16 + 2'
+  },
+];
+
+function buildMatchSteps(){
+  const dots = document.getElementById('matchDots');
+  dots.innerHTML = matchData.map((_,i)=>`<div class="pdot" id="mdot-${i}"></div>`).join('');
+  showMatch(0);
+}
+
+function showMatch(i) {
+  const box = document.getElementById('matchSteps');
+  if (i >= matchData.length) {
+    document.getElementById('matchNextBtn').disabled = false;
+    box.innerHTML = `<div class="add-display" style="background:#fff8e1;border-color:#e65100">
+      <div style="font-size:60px;">🔀</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#e65100;margin-top:8px;">You can match equal sums!</div>
+    </div>`;
+    speak('Brilliant! You can match equal additions!');
+    return;
+  }
+  const d = matchData[i];
+  const shuffled = shuffle([...d.options]);
+
+  box.innerHTML = `<div class="prac-card" id="mcard-${i}">
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:900;color:#888;margin-bottom:8px;">This sum is:</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;background:#ffe0b2;border:3px solid #e65100;border-radius:16px;padding:12px 20px;display:inline-block;">
+        ${d.given} = <span style="color:#e65100;">${d.givenAns}</span>
+      </div>
+    </div>
+    <div class="prac-q">${d.question}</div>
+    <div class="prac-opts">${shuffled.map(o=>{
+      const parts = o.split('+').map(s=>parseInt(s.trim()));
+      const sum = parts[0]+parts[1];
+      return `<div class="prac-opt" onclick="answerMatch(this,'${o}','${d.correct}',${i},${sum})">${o}<br><span style="font-size:16px;opacity:.6">= ?</span></div>`;
+    }).join('')}</div>
+    <div class="fb-box" id="mfb-${i}"></div>
+  </div>`;
+  speak(d.question);
+}
+
+function answerMatch(el, chosen, correct, i, sum) {
+  document.querySelectorAll(`#mcard-${i} .prac-opt`).forEach(x=>x.classList.add('locked-choice'));
+  if (chosen.trim() === correct.trim()) {
+    el.classList.add('right'); addStars(3);
+    document.getElementById(`mdot-${i}`).classList.add('done');
+    showFeedback(`mfb-${i}`,'ok',`✅ ${chosen} = ${sum} = ${matchData[i].given}! They match! 🎉`);
+    speak('Correct! They both equal ' + sum + '! They match!');
+    setTimeout(()=>showMatch(i+1), 1500);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`mfb-${i}`,'no',`❌ ${chosen} = ${sum}. That is not ${matchData[i].givenAns}! Try again!`);
+    speak('Try again! Calculate that sum first!');
+    setTimeout(()=>{ document.querySelectorAll(`#mcard-${i} .prac-opt`).forEach(x=>x.classList.remove('locked-choice','wrong')); }, 900);
+  }
+}
+
+// ═══════════════════════════════════
+// TAB 6: FINAL QUIZ
+// ═══════════════════════════════════
+const quizData = [
+  { q:'4 + 5 = ?', e:'🍎🍎🍎🍎 + 🍎🍎🍎🍎🍎', opts:['7','8','9','10'], ans:'9' },
+  { q:'7 + 2 = ?', e:'⭐⭐⭐⭐⭐⭐⭐ + ⭐⭐', opts:['8','9','10','7'], ans:'9' },
+  { q:'0 + 7 = ?', e:'(nothing) + 🌸🌸🌸🌸🌸🌸🌸', opts:['6','7','8','9'], ans:'7' },
+  { q:'3 + 6 = ?', e:'🔵🔵🔵 + 🔵🔵🔵🔵🔵🔵', opts:['7','8','9','10'], ans:'9' },
+  { q:'7 + 4 = ? (How many TENS?)', e:'🕯️×7 + 🕯️×4', opts:['10','11','12','13'], ans:'11' },
+  { q:'8 + 5 = ? (1 TEN + ? UNITS)', e:'🟡×8 + 🟡×5', opts:['11','12','13','14'], ans:'13' },
+  { q:'10 + 2 = ?', e:'⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ + ⭐⭐', opts:['10','11','12','13'], ans:'12' },
+  { q:'8 + 8 = ?', e:'🍬🍬🍬🍬🍬🍬🍬🍬 + 🍬🍬🍬🍬🍬🍬🍬🍬', opts:['14','15','16','17'], ans:'16' },
+  { q:'9 + 5 = ? — Which matches?', e:'9 + 5', opts:['13','14','15','12'], ans:'14' },
+  { q:'5 + 6 = ? — Which matches?', e:'5 + 6', opts:['10','11','12','13'], ans:'11' },
+  { q:'6 + 6 = ?', e:'🏆🏆🏆🏆🏆🏆 + 🏆🏆🏆🏆🏆🏆', opts:['10','11','12','13'], ans:'12' },
+  { q:'2 + 11 = ?', e:'|| + |||||||||||', opts:['11','12','13','14'], ans:'13' },
+];
+
+let quizItems = [], quizIdx = 0, quizScore = 0;
+
+function startQuiz(){
+  quizItems = shuffle([...quizData]).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ(){
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    tabDone['quiz'] = true;
+    updateProgress();
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#e65100;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Lesson!</button>
+      <button class="big-btn gold" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    speak('Quiz done! You scored ' + quizScore + ' out of ' + quizItems.length + '! Tap complete lesson!');
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = shuffle([...q.opts]);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`<div class="quiz-opt" onclick="answerQ(this,'${o}','${q.ans}')">${o}</div>`).join('')}
+    </div>`;
+  speak(q.q);
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.onclick=null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{ if(b.textContent.trim()===correct) b.classList.add('right'); });
+    speak('Oops! The answer is ' + correct);
+  }
+  setTimeout(()=>{ quizIdx++; showQ(); }, 1700);
+}
+
+// ── CELEBRATE ─────────────────────────────
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Lesson 10 Complete!';
+  document.getElementById('celebS').textContent =
+    'Amazing! You learned:\n➕ Add two numbers (sum not more than 20)\n🔢 Count and Add objects\n📦 Tens and Units\n🔗 Group and Add (tally marks)\n🔀 Match equal sums\n⭐ Great job, superstar!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Lesson 10! Addition! Sum not more than twenty! You are a superstar!');
+}
+
+function closeCeleb() {
+  document.getElementById('celebScreen').classList.remove('show');
+}
+
+function launchConfetti() {
+  const cols = ['#FF6B6B','#FFC300','#FF8F00','#3498DB','#9B59B6','#ffffff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 5000);
+  }
+}
+const s2 = document.createElement('style');
+s2.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ── INIT ────────────────────────────────────
+buildSimpleSteps();
+buildCountAddSteps();
+buildTensSteps();
+buildGroupAddSteps();
+buildMatchSteps();
+updateProgress();
+setTimeout(()=>speak("Welcome to Lesson 10! Addition! Sum not more than twenty! Let's add! Let's go!"), 700);
+</script>
+</body>
+</html>

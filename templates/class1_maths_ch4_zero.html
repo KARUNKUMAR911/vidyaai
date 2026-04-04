@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 4: Zero</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#2e7d32);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.25); border:2px solid rgba(255,215,0,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:72px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:30px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.85); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#66bb6a); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#2e7d32; border-color:#a5d6a7; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#e8f5e9; color:#2e7d32; border-color:#66bb6a; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #43a047;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── MONKEY COUNTER ── */
+.monkey-scene {
+  background:#fff; border-radius:24px; padding:18px; margin-bottom:14px;
+  box-shadow:0 4px 18px rgba(0,0,0,.1); text-align:center;
+}
+.monkey-scene .ms-label { font-family:'Fredoka One',cursive; font-size:15px; color:#1b5e20; margin-bottom:8px; }
+.monkey-row { font-size:52px; min-height:64px; letter-spacing:4px; margin:8px 0; transition:all .4s; }
+.monkey-count-badge {
+  display:inline-block; background:#1b5e20; color:#fff; font-family:'Fredoka One',cursive;
+  font-size:36px; width:60px; height:60px; border-radius:50%; line-height:60px;
+  margin:6px auto; box-shadow:0 4px 12px rgba(27,94,32,.4);
+  transition:all .4s;
+}
+.monkey-count-badge.zero { background:#c62828; animation:zeroPop .4s ease; }
+@keyframes zeroPop { 0%{transform:scale(.7)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.wire-btn-row { display:flex; gap:10px; justify-content:center; margin-top:10px; }
+.wire-btn {
+  background:#e8f5e9; border:3px solid #a5d6a7; border-radius:16px; padding:10px 18px;
+  font-family:'Fredoka One',cursive; font-size:17px; color:#1b5e20; cursor:pointer; transition:all .2s;
+}
+.wire-btn:active { transform:scale(.93); }
+.wire-btn.active-val { background:#1b5e20; color:#fff; border-color:#1b5e20; }
+
+/* ── CONCEPT CARDS ── */
+.concept-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.concept-card {
+  background:#fff; border-radius:20px; padding:18px 12px; text-align:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.09); border:3px solid #a5d6a7; cursor:pointer;
+  transition:all .3s;
+}
+.concept-card:active { transform:scale(.95); }
+.concept-card.revealed { border-color:#1b5e20; background:#e8f5e9; }
+.concept-card .cc-emoji { font-size:52px; display:block; margin-bottom:8px; }
+.concept-card .cc-title { font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; }
+.concept-card .cc-count { font-family:'Fredoka One',cursive; font-size:38px; color:#c62828; margin-top:4px; display:none; }
+.concept-card.revealed .cc-count { display:block; }
+.concept-card .cc-hint { font-size:12px; font-weight:800; color:#888; margin-top:4px; }
+.concept-card.revealed .cc-hint { color:#1b5e20; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.choice-btn {
+  flex:1; min-width:80px; max-width:120px; padding:16px 10px; border-radius:16px; border:3px solid #a5d6a7;
+  background:#e8f5e9; font-family:'Fredoka One',cursive; font-size:22px; color:#1b5e20;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn.correct { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── SCENARIO CARDS ── */
+.scenario-card {
+  background:#fff; border-radius:24px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid transparent;
+  transition:border-color .3s, background .3s;
+}
+.scenario-card.done { border-color:#43a047; background:#f1f8e9; }
+.scene-top { padding:16px 16px 10px; display:flex; align-items:center; gap:12px; }
+.scene-emojis { font-size:52px; line-height:1; }
+.scene-label { font-family:'Fredoka One',cursive; font-size:13px; color:#777; text-transform:uppercase; letter-spacing:.5px; }
+.scene-sentence { font-size:18px; font-weight:900; color:#222; line-height:1.4; }
+.scene-sentence .kw { color:#1b5e20; font-size:21px; }
+.scene-bottom { border-top:2px dashed #c8e6c9; padding:12px 16px; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#c8e6c9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#e65100,#ff6f00); color:#fff; }
+
+/* ── QUIZ ── */
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:68px; text-align:center; margin:10px 0; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff; border:3px solid #a5d6a7; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.quiz-opt .qo-emoji { font-size:30px; }
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+
+/* ── TRACE ── */
+.trace-wrap { background:#fff; border-radius:20px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center; }
+.trace-title { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; margin-bottom:14px; }
+.trace-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.trace-box {
+  width:80px; height:90px; background:#fffde7; border:3px dashed #a5d6a7; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:54px; color:#c8e6c9;
+  cursor:pointer; transition:all .3s; user-select:none;
+}
+.trace-box.traced { color:#1b5e20; border-color:#1b5e20; background:#e8f5e9; animation:tracePop .3s ease; }
+@keyframes tracePop { 0%{transform:scale(.8)} 60%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+/* ── COUNT GAME ── */
+.count-scene { background:#fff; border-radius:20px; padding:18px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center; }
+.count-scene-emoji { font-size:56px; margin-bottom:6px; }
+.count-scene-label { font-family:'Fredoka One',cursive; font-size:18px; color:#555; margin-bottom:12px; }
+.count-opts { display:flex; gap:12px; justify-content:center; }
+.count-opt {
+  background:#e8f5e9; border:3px solid #a5d6a7; border-radius:16px; padding:14px 20px;
+  font-family:'Fredoka One',cursive; font-size:28px; color:#1b5e20;
+  cursor:pointer; transition:all .2s; min-width:60px;
+}
+.count-opt:active { transform:scale(.9); }
+.count-opt.right { background:#c8e6c9; border-color:#2e7d32; pointer-events:none; }
+.count-opt.wrong { background:#ffcdd2; border-color:#c62828; }
+
+/* ── CELEB ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(27,94,32,.93); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; }
+.celeb-sub   { font-size:16px; color:rgba(255,255,255,.85); font-weight:800; margin-bottom:8px; text-align:center; padding:0 30px; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#1b5e20; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+.progress-dots { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:14px; height:14px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#43a047; }
+
+/* ── MATCH GAME ── */
+.match-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.match-col-title { font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; text-align:center; margin-bottom:8px; }
+.match-item {
+  background:#fff; border:3px solid #a5d6a7; border-radius:16px; padding:14px 10px;
+  text-align:center; cursor:pointer; transition:all .25s; margin-bottom:8px;
+  font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.match-item .mi-emoji { font-size:36px; }
+.match-item:active { transform:scale(.93); }
+.match-item.selected { border-color:#1b5e20; background:#e8f5e9; }
+.match-item.matched  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.match-item.wrong-flash { border-color:#c62828; background:#ffcdd2; animation:flashNo .4s; }
+@keyframes flashNo { 0%,100%{transform:scale(1)} 50%{transform:scale(.92)} }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🔢 Chapter 4 — Zero</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">0️⃣</span>
+  <h1>Lesson 4: Zero</h1>
+  <p>Learn what ZERO means! No typing — just tap! 👆</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start learning!</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="intro"   onclick="tabClick('intro')">🐒 What is Zero?</div>
+  <div class="step-tab locked"  data-tab="concept" onclick="tabClick('concept')">🧺 Zero Around Us</div>
+  <div class="step-tab locked"  data-tab="trace"   onclick="tabClick('trace')">✏️ Write Zero</div>
+  <div class="step-tab locked"  data-tab="count"   onclick="tabClick('count')">🔢 Count & Pick</div>
+  <div class="step-tab locked"  data-tab="match"   onclick="tabClick('match')">🔗 Match</div>
+  <div class="step-tab locked"  data-tab="quiz"    onclick="tabClick('quiz')">🎯 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — WHAT IS ZERO? (monkey wire)
+══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff6f00)">
+    <span class="banner-emoji">🐒</span>
+    <div>
+      <div class="banner-title" style="color:#fff">What is ZERO?</div>
+      <div class="banner-sub" style="color:#fff">Count the monkeys dangling from the wire!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎯 Your Goal!</div>
+    <div class="ic-text">Tap the number of monkeys you see on the wire. When there are <strong>NONE</strong>, that is <strong>ZERO (0)</strong>! Zero means <strong>"nothing"</strong> or <strong>"not even one"</strong>!</div>
+  </div>
+
+  <!-- Monkey wire scene -->
+  <div class="monkey-scene">
+    <div class="ms-label">🌳 How many monkeys are on the wire? 🌳</div>
+    <div class="monkey-row" id="monkeyRow">🐒🐒🐒🐒</div>
+    <div style="font-size:13px;font-weight:900;color:#888;margin-bottom:6px">Tap the correct number 👇</div>
+    <div class="wire-btn-row" id="wireOpts"></div>
+    <div id="wireFeedback" class="fb-box" style="margin-top:10px"></div>
+  </div>
+
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">
+    Answer all 5 rounds to unlock next step! (<span id="wireCount">0</span>/5)
+  </div>
+  <button class="big-btn primary" id="introNextBtn" disabled onclick="completeTab('intro','concept','What is Zero?','Zero Around Us')">
+    Next: Zero Around Us! 🧺
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — ZERO AROUND US
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-concept">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#4a148c,#7b1fa2)">
+    <span class="banner-emoji">🧺</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Zero Around Us!</div>
+      <div class="banner-sub" style="color:#fff">Tap each picture — is there anything inside?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">Remember!</div>
+    <div class="ic-text"><strong>"There is no one"</strong> or <strong>"there is nothing"</strong> — these are represented by <strong>ZERO (0)</strong>.<br>Zero is written as <strong>O</strong>.</div>
+  </div>
+
+  <div class="concept-grid" id="conceptGrid">
+
+    <div class="concept-card" id="cc-monkeys" onclick="revealConcept('cc-monkeys', 0, 'No monkeys! ZERO monkeys on the wire! 🎉')">
+      <span class="cc-emoji">🌳🪢🌳</span>
+      <div class="cc-title">Monkeys on wire</div>
+      <div class="cc-hint">Tap to count!</div>
+      <div class="cc-count">0</div>
+    </div>
+
+    <div class="concept-card" id="cc-basket" onclick="revealConcept('cc-basket', 0, 'No fruits! The basket is empty! ZERO fruits! 🎉')">
+      <span class="cc-emoji">🧺</span>
+      <div class="cc-title">Fruits in basket</div>
+      <div class="cc-hint">Tap to count!</div>
+      <div class="cc-count">0</div>
+    </div>
+
+    <div class="concept-card" id="cc-jar" onclick="revealConcept('cc-jar', 0, 'No chocolates! The jar is empty! ZERO! 🎉')">
+      <span class="cc-emoji">🫙</span>
+      <div class="cc-title">Chocolates in jar</div>
+      <div class="cc-hint">Tap to count!</div>
+      <div class="cc-count">0</div>
+    </div>
+
+    <div class="concept-card" id="cc-plant" onclick="revealConcept('cc-plant', 0, 'No flowers! ZERO flowers on the plant! 🎉')">
+      <span class="cc-emoji">🪴</span>
+      <div class="cc-title">Flowers on plant</div>
+      <div class="cc-hint">Tap to count!</div>
+      <div class="cc-count">0</div>
+    </div>
+
+    <div class="concept-card" id="cc-skip" onclick="revealConcept('cc-skip', 0, 'No children skipping! ZERO children skipping the rope! 🎉')">
+      <span class="cc-emoji">🏡</span>
+      <div class="cc-title">Children skipping rope</div>
+      <div class="cc-hint">Tap to count!</div>
+      <div class="cc-count">0</div>
+    </div>
+
+    <div class="concept-card" id="cc-birds" onclick="revealConcept('cc-birds', 0, 'No birds! ZERO birds on the wire! 🎉')">
+      <span class="cc-emoji">🌿</span>
+      <div class="cc-title">Birds on branch</div>
+      <div class="cc-hint">Tap to count!</div>
+      <div class="cc-count">0</div>
+    </div>
+
+  </div>
+
+  <div class="progress-dots" id="conceptDots">
+    <div class="pdot" id="cdot-0"></div>
+    <div class="pdot" id="cdot-1"></div>
+    <div class="pdot" id="cdot-2"></div>
+    <div class="pdot" id="cdot-3"></div>
+    <div class="pdot" id="cdot-4"></div>
+    <div class="pdot" id="cdot-5"></div>
+  </div>
+
+  <div id="conceptFeedback" class="fb-box"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin:8px 0 10px">Tap all 6 cards! (<span id="conceptCount">0</span>/6)</div>
+  <button class="big-btn primary" id="conceptNextBtn" disabled onclick="completeTab('concept','trace','Zero Around Us','Write Zero')">
+    Next: Write Zero! ✏️
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — TRACE & WRITE ZERO
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-trace">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#0d47a1,#1565c0)">
+    <span class="banner-emoji">✏️</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Write Zero!</div>
+      <div class="banner-sub" style="color:#fff">Tap each box to trace and write 0!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">Zero is written as: <span style="font-size:36px;color:#c62828;">0</span></div>
+    <div class="ic-text">Zero looks like an <strong>egg shape</strong> — round with no gaps! It goes <strong>round and round</strong> in a circle! It has <strong>no corners</strong>!</div>
+  </div>
+
+  <!-- Big zero display -->
+  <div style="text-align:center;margin-bottom:16px;">
+    <div style="display:inline-block;background:#fff;border-radius:24px;padding:20px 32px;box-shadow:0 4px 16px rgba(0,0,0,.1);">
+      <div style="font-family:'Fredoka One',cursive;font-size:100px;color:#1b5e20;line-height:1;">0</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#555;">ZERO</div>
+    </div>
+  </div>
+
+  <div class="trace-wrap">
+    <div class="trace-title">Tap each box to trace the number 0! 👇</div>
+    <div class="trace-row" id="traceRow">
+      <div class="trace-box" id="tb0" onclick="traceBox(0)">0</div>
+      <div class="trace-box" id="tb1" onclick="traceBox(1)">0</div>
+      <div class="trace-box" id="tb2" onclick="traceBox(2)">0</div>
+      <div class="trace-box" id="tb3" onclick="traceBox(3)">0</div>
+      <div class="trace-box" id="tb4" onclick="traceBox(4)">0</div>
+      <div class="trace-box" id="tb5" onclick="traceBox(5)">0</div>
+      <div class="trace-box" id="tb6" onclick="traceBox(6)">0</div>
+      <div class="trace-box" id="tb7" onclick="traceBox(7)">0</div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;font-weight:900;color:#999;text-align:center">
+      Tap all boxes! (<span id="traceCount">0</span>/8)
+    </div>
+  </div>
+
+  <!-- Fun fact -->
+  <div class="info-card">
+    <div class="ic-title">🌟 Fun Fact!</div>
+    <div class="ic-text">Zero is a very special number! Before 0, 1, 2, 3... counting goes → <strong>0, 1, 2, 3, 4, 5</strong>! Zero comes <strong>BEFORE 1</strong>! Zero means <strong>EMPTY</strong>!</div>
+  </div>
+
+  <div id="traceFeedback" class="fb-box"></div>
+  <button class="big-btn primary" id="traceNextBtn" disabled onclick="completeTab('trace','count','Write Zero','Count & Pick')">
+    Next: Count & Pick! 🔢
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 4 — COUNT & PICK
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-count">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#c62828)">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Count & Pick!</div>
+      <div class="banner-sub" style="color:#fff">Look at the picture. Tap the correct number!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">How to play! 🎮</div>
+    <div class="ic-text">Count what you see. Then <strong>tap the right number</strong>! If it's empty → tap <strong>0</strong>!</div>
+  </div>
+
+  <div id="countQuestions"></div>
+  <div id="countFeedback" class="fb-box"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin:8px 0 10px">
+    Answer all questions! (<span id="countDoneCount">0</span>/10)
+  </div>
+  <button class="big-btn primary" id="countNextBtn" disabled onclick="completeTab('count','match','Count & Pick','Match')">
+    Next: Match! 🔗
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 5 — MATCH
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#00695c,#00897b)">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Match It!</div>
+      <div class="banner-sub" style="color:#fff">Tap a picture, then tap its correct count!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">How to play! 🎮</div>
+    <div class="ic-text">Tap a <strong>picture</strong> on the left, then tap the <strong>correct number</strong> on the right! Match all pairs to win!</div>
+  </div>
+
+  <div id="matchArea"></div>
+  <div id="matchFeedback" class="fb-box"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin:8px 0 10px">
+    Match all pairs to unlock Quiz! (<span id="matchCount">0</span>/6)
+  </div>
+  <button class="big-btn primary" id="matchNextBtn" disabled onclick="completeTab('match','quiz','Match','Final Quiz')">
+    Next: Final Quiz! 🎯
+  </button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB 6 — FINAL QUIZ
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#2e7d32)">
+    <span class="banner-emoji">🎯</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Zero!</div>
+    </div>
+  </div>
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center;padding:20px">
+      <div style="font-size:64px;margin-bottom:12px">🎯</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:#1b5e20;margin-bottom:8px">Ready for the Quiz?</div>
+      <div style="font-size:15px;font-weight:800;color:#666;margin-bottom:20px">10 questions about ZERO! Tap the right answer!</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🚀 Start Quiz!</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE SCREEN -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Chapter 4 Complete!</div>
+  <div class="celeb-sub" id="celebS">Amazing! You learned about ZERO!</div>
+  <div class="celeb-stars" id="celebStar">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 Yay!</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// GLOBAL STATE
+// ─────────────────────────────────────────
+let stars = 0;
+const tabOrder = ['intro','concept','trace','count','match','quiz'];
+const tabDone  = { intro:false, concept:false, trace:false, count:false, match:false, quiz:false };
+
+// ─────────────────────────────────────────
+// TAB NAVIGATION
+// ─────────────────────────────────────────
+function tabClick(name) {
+  const tab = document.querySelector(`[data-tab="${name}"]`);
+  if (tab.classList.contains('locked')) {
+    tab.classList.add('shaking');
+    setTimeout(() => tab.classList.remove('shaking'), 600);
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function completeTab(current, next, currentLabel, nextLabel) {
+  tabDone[current] = true;
+  const currentTab = document.querySelector(`[data-tab="${current}"]`);
+  currentTab.classList.remove('active');
+  currentTab.classList.add('done');
+  const nextTab = document.querySelector(`[data-tab="${next}"]`);
+  nextTab.classList.remove('locked');
+  nextTab.classList.add('unlocked');
+  addStars(10);
+  updateProgress();
+  speak(`Great job! Now let's do ${nextLabel}!`);
+  tabClick(next);
+  if (next === 'quiz') buildMatchArea();
+}
+
+function updateProgress() {
+  const done = Object.values(tabDone).filter(Boolean).length;
+  const pct  = Math.round((done / tabOrder.length) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['Just started!','Keep going! 🌱','Halfway there! 💪','Almost done! 🔥','So close! 🌟','Chapter complete! 🏆'];
+  document.getElementById('progLabel').textContent = labels[done] || 'Let\'s start learning!';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─────────────────────────────────────────
+// TAB 1 — MONKEY WIRE
+// ─────────────────────────────────────────
+const wireRounds = [
+  { monkeys: '🐒🐒🐒🐒', count: 4 },
+  { monkeys: '🐒🐒🐒',     count: 3 },
+  { monkeys: '🐒🐒',        count: 2 },
+  { monkeys: '🐒',           count: 1 },
+  { monkeys: '',              count: 0 }
+];
+let wireIdx = 0;
+let wireDone = 0;
+
+function buildWireOpts(correct) {
+  const container = document.getElementById('wireOpts');
+  container.innerHTML = '';
+  // Generate options: correct + 2 wrong
+  const pool = [0,1,2,3,4,5].filter(n => n !== correct);
+  const shuffled = pool.sort(() => Math.random() - .5).slice(0,2);
+  const opts = [...shuffled, correct].sort(() => Math.random() - .5);
+  opts.forEach(n => {
+    const b = document.createElement('div');
+    b.className = 'wire-btn';
+    b.textContent = n === 0 ? '0\nZERO' : n;
+    b.innerHTML = n === 0 ? '<div style="font-size:32px;font-family:Fredoka One,cursive">0</div><div style="font-size:12px">ZERO</div>' :
+      `<div style="font-size:32px;font-family:Fredoka One,cursive">${n}</div>`;
+    b.onclick = () => answerWire(n, correct);
+    container.appendChild(b);
+  });
+}
+
+function showWireRound() {
+  if (wireIdx >= wireRounds.length) return;
+  const r = wireRounds[wireIdx];
+  const rowEl = document.getElementById('monkeyRow');
+  rowEl.textContent = r.monkeys || '';
+  if (r.monkeys === '') {
+    rowEl.textContent = '🚫 No monkeys!';
+    rowEl.style.fontSize = '28px';
+    speak('There are no monkeys! Not even one! The answer is ZERO!');
+  } else {
+    rowEl.style.fontSize = '52px';
+    speak(`Count the monkeys! How many are there?`);
+  }
+  buildWireOpts(r.count);
+  document.getElementById('wireFeedback').style.display = 'none';
+}
+
+function answerWire(sel, correct) {
+  document.getElementById('wireOpts').querySelectorAll('.wire-btn').forEach(b => b.onclick = null);
+  if (sel === correct) {
+    showFeedback('wireFeedback','ok', correct === 0 ? '✅ YES! Zero! Not even ONE! 🎉' : `✅ Correct! ${correct} monkeys! 🎉`);
+    speak(correct === 0 ? 'Zero! Not even one! Excellent!' : `Correct! ${correct}! Amazing!`);
+    addStars(2);
+    wireDone++;
+    document.getElementById('wireCount').textContent = wireDone;
+    wireIdx++;
+    setTimeout(() => {
+      document.getElementById('wireFeedback').style.display = 'none';
+      if (wireIdx < wireRounds.length) {
+        showWireRound();
+      } else {
+        document.getElementById('introNextBtn').disabled = false;
+        showFeedback('wireFeedback','ok','🌟 All done! You understand ZERO! Tap Next!');
+        speak('Fantastic! You understand what zero means! Tap next!');
+      }
+    }, 1600);
+  } else {
+    showFeedback('wireFeedback','no','❌ Oops! Count again!');
+    speak('Oops! Count carefully! Try again!');
+    setTimeout(() => {
+      document.getElementById('wireFeedback').style.display = 'none';
+      buildWireOpts(correct);
+    }, 1400);
+  }
+}
+
+showWireRound();
+
+// ─────────────────────────────────────────
+// TAB 2 — CONCEPT CARDS
+// ─────────────────────────────────────────
+let conceptRevealed = 0;
+const conceptMessages = {};
+
+function revealConcept(id, count, msg) {
+  const card = document.getElementById(id);
+  if (card.classList.contains('revealed')) return;
+  card.classList.add('revealed');
+  conceptRevealed++;
+  document.getElementById('cdot-' + (conceptRevealed - 1)).classList.add('done');
+  document.getElementById('conceptCount').textContent = conceptRevealed;
+  showFeedback('conceptFeedback','ok', msg);
+  speak(msg.replace(/[🎉✅]/g,''));
+  addStars(2);
+  if (conceptRevealed >= 6) {
+    document.getElementById('conceptNextBtn').disabled = false;
+    setTimeout(() => showFeedback('conceptFeedback','ok','🌟 Excellent! You found all the ZEROS! Tap Next!'), 200);
+    speak('Excellent! You found all the zeros!');
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 3 — TRACE
+// ─────────────────────────────────────────
+let tracesDone = 0;
+
+function traceBox(idx) {
+  const box = document.getElementById('tb' + idx);
+  if (box.classList.contains('traced')) return;
+  box.classList.add('traced');
+  tracesDone++;
+  document.getElementById('traceCount').textContent = tracesDone;
+  speak('Zero!');
+  addStars(1);
+  if (tracesDone >= 8) {
+    document.getElementById('traceNextBtn').disabled = false;
+    showFeedback('traceFeedback','ok','🌟 Great writing! You wrote Zero 8 times! Tap Next!');
+    speak('Great job! You wrote zero eight times! Amazing!');
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 4 — COUNT & PICK
+// ─────────────────────────────────────────
+const countData = [
+  { emoji:'🐒🐒🐒🐒🐒', label:'Monkeys on wire', answer:5, opts:[5,3,0] },
+  { emoji:'🍎🍎',        label:'Fruits in basket', answer:2, opts:[2,0,4] },
+  { emoji:'',            label:'Chocolates in jar', answer:0, opts:[0,2,3] },
+  { emoji:'🌸🌸🌸',     label:'Flowers on plant', answer:3, opts:[3,1,0] },
+  { emoji:'👧👧',        label:'Children skipping', answer:2, opts:[0,2,5] },
+  { emoji:'',            label:'Birds on branch', answer:0, opts:[1,0,3] },
+  { emoji:'✏️✏️✏️',    label:'Pencils in box', answer:3, opts:[3,0,2] },
+  { emoji:'',            label:'Pens in case', answer:0, opts:[0,4,1] },
+  { emoji:'🎀🎀🎀🎀',  label:'Dolls on shelf', answer:4, opts:[4,0,2] },
+  { emoji:'',            label:'Balls in basket', answer:0, opts:[2,0,5] },
+];
+let countAnswered = 0;
+
+function buildCountQuestions() {
+  const container = document.getElementById('countQuestions');
+  container.innerHTML = '';
+  countData.forEach((q, i) => {
+    const opts = [...q.opts].sort(() => Math.random() - .5);
+    const html = `
+      <div class="count-scene" id="cq-${i}">
+        <div class="count-scene-emoji">${q.emoji || '🫙'}</div>
+        <div class="count-scene-label">${q.label}</div>
+        <div class="count-opts">
+          ${opts.map(o => `<div class="count-opt" onclick="answerCount(this,${o},${q.answer},${i})">${o}</div>`).join('')}
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+  });
+}
+
+function answerCount(el, sel, correct, idx) {
+  const card = document.getElementById('cq-' + idx);
+  card.querySelectorAll('.count-opt').forEach(b => b.onclick = null);
+  if (sel === correct) {
+    el.classList.add('right');
+    addStars(2);
+    countAnswered++;
+    document.getElementById('countDoneCount').textContent = countAnswered;
+    speak(correct === 0 ? 'Zero! Correct!' : `${correct}! Correct!`);
+    if (countAnswered >= countData.length) {
+      document.getElementById('countNextBtn').disabled = false;
+      showFeedback('countFeedback','ok','🌟 All correct! Amazing! Tap Next!');
+      speak('Fantastic! You got all correct! Well done!');
+    }
+  } else {
+    el.classList.add('wrong');
+    speak('Oops! Try again!');
+    setTimeout(() => {
+      el.classList.remove('wrong');
+      el.onclick = () => answerCount(el, sel, correct, idx);
+    }, 800);
+  }
+}
+
+buildCountQuestions();
+
+// ─────────────────────────────────────────
+// TAB 5 — MATCH
+// ─────────────────────────────────────────
+const matchPairs = [
+  { id:'m1', scene:'🧺', sceneLabel:'Empty basket', count:'0', countLabel:'Zero' },
+  { id:'m2', scene:'🍎🍎🍎', sceneLabel:'3 apples', count:'3', countLabel:'Three' },
+  { id:'m3', scene:'🌸🌸', sceneLabel:'2 flowers', count:'2', countLabel:'Two' },
+  { id:'m4', scene:'🫙', sceneLabel:'Empty jar', count:'0', countLabel:'Zero' },
+  { id:'m5', scene:'🐒🐒🐒🐒🐒', sceneLabel:'5 monkeys', count:'5', countLabel:'Five' },
+  { id:'m6', scene:'🪴', sceneLabel:'No flowers', count:'0', countLabel:'Zero' },
+];
+let selScene = null, selCount = null, matchDone = 0;
+
+function buildMatchArea() {
+  const scenes = [...matchPairs].sort(() => Math.random() - .5);
+  const counts = [...matchPairs].sort(() => Math.random() - .5);
+  const area = document.getElementById('matchArea');
+  area.innerHTML = `
+    <div class="match-grid">
+      <div>
+        <div class="match-col-title">🖼️ Picture</div>
+        ${scenes.map(p => `
+          <div class="match-item" id="ms-${p.id}" onclick="selectScene('${p.id}')">
+            <div class="mi-emoji">${p.scene}</div>
+            <div>${p.sceneLabel}</div>
+          </div>`).join('')}
+      </div>
+      <div>
+        <div class="match-col-title">🔢 Count</div>
+        ${counts.map(p => `
+          <div class="match-item" id="mc-${p.id}" onclick="selectCount('${p.id}')">
+            <div class="mi-emoji" style="font-size:48px">${p.count}</div>
+            <div>${p.countLabel}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function selectScene(id) {
+  if (document.getElementById('ms-'+id).classList.contains('matched')) return;
+  document.querySelectorAll('[id^="ms-"]').forEach(e => e.classList.remove('selected'));
+  selScene = id;
+  document.getElementById('ms-'+id).classList.add('selected');
+  if (selScene && selCount) checkMatch();
+}
+
+function selectCount(id) {
+  if (document.getElementById('mc-'+id).classList.contains('matched')) return;
+  document.querySelectorAll('[id^="mc-"]').forEach(e => e.classList.remove('selected'));
+  selCount = id;
+  document.getElementById('mc-'+id).classList.add('selected');
+  if (selScene && selCount) checkMatch();
+}
+
+function checkMatch() {
+  if (selScene === selCount) {
+    document.getElementById('ms-'+selScene).classList.add('matched');
+    document.getElementById('mc-'+selCount).classList.add('matched');
+    addStars(3);
+    matchDone++;
+    document.getElementById('matchCount').textContent = matchDone;
+    speak('Correct match! Amazing!');
+    showFeedback('matchFeedback','ok','✅ Correct Match! 🎉');
+    if (matchDone >= matchPairs.length) {
+      document.getElementById('matchNextBtn').disabled = false;
+      showFeedback('matchFeedback','ok','🌟 All matched! You are a star! Tap Next!');
+      speak('All matched! You are a superstar!');
+    }
+  } else {
+    document.getElementById('ms-'+selScene).classList.add('wrong-flash');
+    document.getElementById('mc-'+selCount).classList.add('wrong-flash');
+    speak('Oops! Try again!');
+    showFeedback('matchFeedback','no','❌ Oops! Try again!');
+    setTimeout(() => {
+      document.getElementById('ms-'+selScene).classList.remove('wrong-flash','selected');
+      document.getElementById('mc-'+selCount).classList.remove('wrong-flash','selected');
+    }, 500);
+  }
+  selScene = null; selCount = null;
+}
+
+// ─────────────────────────────────────────
+// TAB 6 — QUIZ
+// ─────────────────────────────────────────
+const quizData = [
+  { q:'How many monkeys are on an EMPTY wire?', e:'🌳🪢🌳', opts:[{t:'Zero',e:'0'},{t:'One',e:'1'},{t:'Two',e:'2'},{t:'Five',e:'5'}], ans:'Zero' },
+  { q:'How many fruits are in an EMPTY basket?', e:'🧺', opts:[{t:'Three',e:'3'},{t:'Zero',e:'0'},{t:'Two',e:'2'},{t:'Four',e:'4'}], ans:'Zero' },
+  { q:'Zero is written as ___', e:'✏️', opts:[{t:'0',e:'0'},{t:'1',e:'1'},{t:'O',e:'O'},{t:'8',e:'8'}], ans:'0' },
+  { q:'How many chocolates in an EMPTY jar?', e:'🫙', opts:[{t:'Two',e:'2'},{t:'Four',e:'4'},{t:'Zero',e:'0'},{t:'One',e:'1'}], ans:'Zero' },
+  { q:'If there are NO children skipping, the count is ___', e:'🏡', opts:[{t:'Zero',e:'0'},{t:'Three',e:'3'},{t:'Two',e:'2'},{t:'Five',e:'5'}], ans:'Zero' },
+  { q:'What comes BEFORE 1 in counting?', e:'🔢', opts:[{t:'Two',e:'2'},{t:'Zero',e:'0'},{t:'Three',e:'3'},{t:'Five',e:'5'}], ans:'Zero' },
+  { q:'"Not even one" means ___', e:'🚫', opts:[{t:'One',e:'1'},{t:'Two',e:'2'},{t:'Zero',e:'0'},{t:'Three',e:'3'}], ans:'Zero' },
+  { q:'How many flowers on a plant with NO flowers?', e:'🪴', opts:[{t:'One',e:'1'},{t:'Four',e:'4'},{t:'Zero',e:'0'},{t:'Two',e:'2'}], ans:'Zero' },
+  { q:'"There is nothing" is shown by the number ___', e:'❓', opts:[{t:'Zero',e:'0'},{t:'One',e:'1'},{t:'Five',e:'5'},{t:'Ten',e:'10'}], ans:'Zero' },
+  { q:'How many birds on an EMPTY branch?', e:'🌿', opts:[{t:'Two',e:'2'},{t:'Three',e:'3'},{t:'One',e:'1'},{t:'Zero',e:'0'}], ans:'Zero' },
+];
+
+let quizItems=[], quizIdx=0, quizScore=0;
+
+function startQuiz() {
+  quizItems = [...quizData].sort(() => Math.random()-.5);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    tabDone['quiz'] = true;
+    updateProgress();
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#1b5e20;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Chapter!</button>
+      <button class="big-btn gold" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    speak(`Quiz done! You got ${quizScore} out of ${quizItems.length}! Amazing!`);
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = [...q.opts].sort(() => Math.random()-.5);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o => `<div class="quiz-opt" onclick="answerQ(this,'${o.t}','${q.ans}')">
+        <div class="qo-emoji">${o.e}</div><div>${o.t}</div>
+      </div>`).join('')}
+    </div>
+  `;
+  speak(q.q);
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => b.onclick = null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.querySelector('div:last-child')?.textContent.trim() === correct) b.classList.add('right');
+    });
+    speak('Oops! The answer is ' + correct + '!');
+  }
+  setTimeout(() => { quizIdx++; showQ(); }, 1700);
+}
+
+// ─────────────────────────────────────────
+// FEEDBACK HELPER
+// ─────────────────────────────────────────
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'fb-box ' + (type === 'ok' ? 'ok' : 'no');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2800);
+}
+
+// ─────────────────────────────────────────
+// END LESSON
+// ─────────────────────────────────────────
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Chapter 4 Complete!';
+  document.getElementById('celebS').textContent = 'Amazing! You learned that ZERO means "nothing"! Zero is written as 0. Zero comes before 1!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Chapter 4 Zero! You are a superstar! Zero means nothing! Not even one!');
+}
+function closeCeleb() { document.getElementById('celebScreen').classList.remove('show'); }
+
+// ─────────────────────────────────────────
+// STARS & SPEAK
+// ─────────────────────────────────────────
+function addStars(n) { stars += n; document.getElementById('starsNum').textContent = stars; }
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+
+// ─────────────────────────────────────────
+// CONFETTI
+// ─────────────────────────────────────────
+function launchConfetti() {
+  const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#ffffff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+}
+const s2 = document.createElement('style');
+s2.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+setTimeout(() => speak('Welcome to Chapter 4! Zero! Let\'s learn what zero means!'), 600);
+</script>
+</body>
+</html>

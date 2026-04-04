@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 17: Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e3f2fd; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#0d47a1,#1e88e5); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#0d47a1,#ffd600); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#0d47a1; border-color:#90caf9; }
+.step-tab.active   { background:#0d47a1; color:#fff; border-color:#0d47a1; box-shadow:0 4px 14px rgba(13,71,161,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #0d47a1;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#0d47a1; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── SEQUENCE ROW ── */
+.seq-row {
+  display:flex; overflow-x:auto; gap:12px; padding:12px 4px 14px;
+  scrollbar-width:none; margin-bottom:14px;
+}
+.seq-row::-webkit-scrollbar { display:none; }
+.seq-item {
+  flex-shrink:0; background:#fff; border-radius:16px; padding:12px 14px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9; min-width:90px;
+}
+.seq-num { font-family:'Fredoka One',cursive; font-size:22px; color:#0d47a1; }
+.seq-emoji { font-size:32px; margin:4px 0; display:block; }
+.seq-label { font-size:12px; font-weight:900; color:#555; }
+.seq-arrow { flex-shrink:0; font-size:24px; align-self:center; color:#1976d2; }
+
+/* ── WORD BUBBLE ── */
+.word-bubble {
+  display:inline-block; padding:8px 20px; border-radius:30px;
+  font-family:'Fredoka One',cursive; font-size:22px; margin:6px 4px;
+}
+.wb-earlier { background:#0d47a1; color:#fff; }
+.wb-later   { background:#e91e63; color:#fff; }
+.wb-day     { background:#f57f17; color:#fff; }
+.wb-night   { background:#311b92; color:#fff; }
+.wb-week    { background:#1b5e20; color:#fff; }
+.wb-month   { background:#b71c1c; color:#fff; }
+
+/* ── DAYS GRID ── */
+.days-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px;
+}
+.day-card {
+  background:#fff; border-radius:14px; padding:10px 6px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08); border:2px solid #90caf9;
+}
+.day-card .day-num { font-family:'Fredoka One',cursive; font-size:24px; color:#0d47a1; }
+.day-card .day-name { font-size:11px; font-weight:900; color:#555; margin-top:2px; }
+.day-card.first-day { border-color:#ffd600; background:#fffde7; }
+.day-card.last-day  { border-color:#ef9a9a; background:#ffebee; }
+
+/* ── MONTHS GRID ── */
+.months-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px;
+}
+.month-card {
+  background:#fff; border-radius:14px; padding:10px 6px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08); border:2px solid #ffab91;
+}
+.month-card .m-num { font-family:'Fredoka One',cursive; font-size:20px; color:#bf360c; }
+.month-card .m-name { font-size:12px; font-weight:900; color:#555; margin-top:2px; }
+.month-card.first-m { border-color:#ffd600; background:#fffde7; }
+.month-card.last-m  { border-color:#ef9a9a; background:#ffebee; }
+
+/* ── PRACTICE CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #90caf9; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:19px; color:#333; text-align:center; margin-bottom:14px; line-height:1.5; white-space:pre-line; }
+.prac-q .visual { font-size:36px; display:block; margin-bottom:8px; letter-spacing:2px; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#e3f2fd; border:3px solid #90caf9; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:19px; color:#0d47a1; user-select:none;
+  line-height:1.3;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#1b5e20; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:16px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#e8f5e9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.dot { width:14px; height:14px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done   { background:#1b5e20; }
+.dot.active { background:#0d47a1; }
+
+/* ── NEXT BUTTON ── */
+.next-btn {
+  display:block; width:100%; padding:16px; border-radius:18px; border:none; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#fff; margin-top:14px;
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  box-shadow:0 4px 16px rgba(13,71,161,.35); transition:all .2s;
+}
+.next-btn:disabled { background:#bdbdbd; box-shadow:none; cursor:not-allowed; }
+.next-btn:not(:disabled):active { transform:scale(.97); }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(135deg,#0d47a1,#1e88e5);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; opacity:0; pointer-events:none; transition:opacity .5s; padding:24px; text-align:center;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:38px; color:#ffd600; margin-bottom:10px; }
+.celeb-sub   { font-size:16px; color:#fff; font-weight:800; line-height:1.7; margin-bottom:16px; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd600; font-weight:900; margin-bottom:20px; }
+.celeb-btn   { padding:16px 36px; border-radius:50px; border:none; background:#ffd600; color:#0d47a1;
+  font-family:'Fredoka One',cursive; font-size:22px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+
+/* ── HIGHLIGHT WORD ── */
+.hw { display:inline; font-family:'Fredoka One',cursive; font-size:inherit; }
+.hw.blue   { color:#1565c0; }
+.hw.pink   { color:#e91e63; }
+.hw.purple { color:#6a1b9a; }
+.hw.orange { color:#e65100; }
+.hw.green  { color:#2e7d32; }
+.hw.red    { color:#c62828; }
+.hw.yellow { color:#f57f17; }
+.hw.navy   { color:#0d47a1; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">🕐 Lesson 17 — Time</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🕐</span>
+  <h1>Let's Learn Time!</h1>
+  <p>Earlier · Later · Days · Months!</p>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="prog-wrap">
+  <div class="prog-label">🚀 Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-earlyLate"  onclick="tabClick('earlyLate')">🌅 Earlier &amp; Later</div>
+  <div class="step-tab locked" id="tab-dayNight"   onclick="tabClick('dayNight')">🌙 Day &amp; Night</div>
+  <div class="step-tab locked" id="tab-daysWeek"   onclick="tabClick('daysWeek')">📅 Days of Week</div>
+  <div class="step-tab locked" id="tab-months"     onclick="tabClick('months')">🗓️ Months</div>
+  <div class="step-tab locked" id="tab-quiz"       onclick="tabClick('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════
+     TAB 1 — EARLIER & LATER
+══════════════════════════════ -->
+<div class="tab-panel active" id="panel-earlyLate">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">🌅</div>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">Earlier and Later</div>
+      <div class="banner-sub" style="color:#1565c0;">What happens first? Tap the answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#1976d2;">
+    <div class="ic-title" style="color:#1976d2;">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-earlier">EARLIER</span>
+      <span class="word-bubble wb-later">LATER</span><br><br>
+      Raju <span class="hw blue">wakes up</span> in the morning — this happens <span class="hw blue">EARLIER</span>. 🌅<br>
+      Raju <span class="hw pink">goes to sleep</span> at night — this happens <span class="hw pink">LATER</span>. 🌙<br><br>
+      Raju <span class="hw blue">has breakfast</span> — this is <span class="hw blue">EARLIER</span>. 🍽️<br>
+      Raju <span class="hw pink">plays football</span> in the evening — this is <span class="hw pink">LATER</span>. ⚽<br><br>
+      Something that happens <span class="hw blue">first</span> is called <span class="hw blue">EARLIER</span>.<br>
+      Something that happens <span class="hw pink">after</span> is called <span class="hw pink">LATER</span>.
+    </div>
+  </div>
+
+  <!-- Raju's day sequence strip -->
+  <div style="background:#fff;border-radius:20px;padding:14px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.09);">
+    <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#0d47a1;margin-bottom:10px;">📖 Raju's Day — In Order!</div>
+    <div class="seq-row">
+      <div class="seq-item"><div class="seq-num">1</div><span class="seq-emoji">🌅</span><div class="seq-label">Wake Up</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">2</div><span class="seq-emoji">🚿</span><div class="seq-label">Bath</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">3</div><span class="seq-emoji">🍽️</span><div class="seq-label">Breakfast</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">4</div><span class="seq-emoji">🎒</span><div class="seq-label">Go to School</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">5</div><span class="seq-emoji">📖</span><div class="seq-label">Study</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">6</div><span class="seq-emoji">🏠</span><div class="seq-label">Come Home</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">7</div><span class="seq-emoji">⚽</span><div class="seq-label">Play</div></div>
+      <div class="seq-arrow">➜</div>
+      <div class="seq-item"><div class="seq-num">8</div><span class="seq-emoji">😴</span><div class="seq-label">Sleep</div></div>
+    </div>
+    <div style="font-size:13px;font-weight:800;color:#555;text-align:center;">Scroll ➜ to see full day!</div>
+  </div>
+
+  <div class="progress-dots" id="elDots"></div>
+  <div id="elSteps"></div>
+  <button class="next-btn" id="elNextBtn" onclick="goNext('earlyLate','dayNight')" disabled>Next: Day &amp; Night ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 2 — DAY & NIGHT
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-dayNight">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <div class="banner-emoji">🌙</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Day and Night</div>
+      <div class="banner-sub" style="color:#f57f17;">Sun shines in the day! Stars shine at night!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#f57f17;">
+    <div class="ic-title" style="color:#f57f17;">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-day">DAY</span>
+      <span class="word-bubble wb-night">NIGHT</span><br><br>
+      When the <span class="hw yellow">sun</span> shines it is <span class="hw yellow">DAY</span>. ☀️<br>
+      When the <span class="hw purple">moon</span> and <span class="hw purple">stars</span> come out it is <span class="hw purple">NIGHT</span>. 🌙⭐<br><br>
+      We <span class="hw yellow">go to school</span> during the <span class="hw yellow">DAY</span>. 🎒<br>
+      We <span class="hw yellow">play outside</span> during the <span class="hw yellow">DAY</span>. ⚽<br><br>
+      We <span class="hw purple">go to sleep</span> during the <span class="hw purple">NIGHT</span>. 😴<br>
+      The sky is <span class="hw yellow">bright</span> in the <span class="hw yellow">DAY</span> and <span class="hw purple">dark</span> in the <span class="hw purple">NIGHT</span>.
+    </div>
+  </div>
+
+  <!-- Visual day-night compare -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+    <div style="background:linear-gradient(160deg,#87ceeb,#fff176);border-radius:18px;padding:18px 10px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.1);">
+      <div style="font-size:44px;">☀️</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#e65100;margin-top:6px;">DAY</div>
+      <div style="font-size:12px;font-weight:800;color:#555;margin-top:4px;">Sun is shining!</div>
+    </div>
+    <div style="background:linear-gradient(160deg,#1a237e,#311b92);border-radius:18px;padding:18px 10px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.1);">
+      <div style="font-size:44px;">🌙</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#ffd600;margin-top:6px;">NIGHT</div>
+      <div style="font-size:12px;font-weight:800;color:#ccc;margin-top:4px;">Stars are shining!</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="dnDots"></div>
+  <div id="dnSteps"></div>
+  <button class="next-btn" id="dnNextBtn" onclick="goNext('dayNight','daysWeek')" disabled>Next: Days of the Week ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 3 — DAYS OF THE WEEK
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-daysWeek">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">📅</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Days of the Week</div>
+      <div class="banner-sub" style="color:#2e7d32;">A week has 7 days! Tap to learn!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#2e7d32;">
+    <div class="ic-title" style="color:#2e7d32;">📖 7 Days of the Week</div>
+    <div class="ic-text">
+      The week <span class="hw green">begins</span> on <span class="hw blue">SUNDAY</span> and <span class="hw green">ends</span> on <span class="hw red">SATURDAY</span>.<br>
+      <span class="word-bubble wb-week" style="font-size:16px;padding:5px 14px;">A Week = 7 Days</span>
+    </div>
+  </div>
+
+  <!-- 7-day visual grid -->
+  <div class="days-grid">
+    <div class="day-card first-day"><div class="day-num">1</div><div class="day-name">SUNDAY ⭐</div></div>
+    <div class="day-card"><div class="day-num">2</div><div class="day-name">MONDAY</div></div>
+    <div class="day-card"><div class="day-num">3</div><div class="day-name">TUESDAY</div></div>
+    <div class="day-card"><div class="day-num">4</div><div class="day-name">WEDNESDAY</div></div>
+    <div class="day-card"><div class="day-num">5</div><div class="day-name">THURSDAY</div></div>
+    <div class="day-card"><div class="day-num">6</div><div class="day-name">FRIDAY</div></div>
+    <div class="day-card last-day"><div class="day-num">7</div><div class="day-name">SATURDAY 🔴</div></div>
+    <div class="day-card" style="grid-column:span 1;border-color:#ffd600;background:#fffde7;"><div style="font-size:11px;font-weight:900;color:#555;">⭐ = First Day</div></div>
+  </div>
+
+  <div class="progress-dots" id="dwDots"></div>
+  <div id="dwSteps"></div>
+  <button class="next-btn" id="dwNextBtn" onclick="goNext('daysWeek','months')" disabled>Next: Months of the Year ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 4 — MONTHS OF THE YEAR
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-months">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);">
+    <div class="banner-emoji">🗓️</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Months of the Year</div>
+      <div class="banner-sub" style="color:#ad1457;">A year has 12 months! Tap to learn!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#c2185b;">
+    <div class="ic-title" style="color:#c2185b;">📖 12 Months of the Year</div>
+    <div class="ic-text">
+      <span class="hw blue">JANUARY</span> is the <span class="hw green">first</span> month of the year.<br>
+      <span class="hw red">DECEMBER</span> is the <span class="hw red">last</span> month of the year.<br>
+      <span class="word-bubble wb-month" style="font-size:16px;padding:5px 14px;">A Year = 12 Months</span>
+    </div>
+  </div>
+
+  <!-- 12-month grid -->
+  <div class="months-grid">
+    <div class="month-card first-m"><div class="m-num">1</div><div class="m-name">JANUARY ⭐</div></div>
+    <div class="month-card"><div class="m-num">2</div><div class="m-name">FEBRUARY</div></div>
+    <div class="month-card"><div class="m-num">3</div><div class="m-name">MARCH</div></div>
+    <div class="month-card"><div class="m-num">4</div><div class="m-name">APRIL</div></div>
+    <div class="month-card"><div class="m-num">5</div><div class="m-name">MAY</div></div>
+    <div class="month-card"><div class="m-num">6</div><div class="m-name">JUNE</div></div>
+    <div class="month-card"><div class="m-num">7</div><div class="m-name">JULY</div></div>
+    <div class="month-card"><div class="m-num">8</div><div class="m-name">AUGUST</div></div>
+    <div class="month-card"><div class="m-num">9</div><div class="m-name">SEPTEMBER</div></div>
+    <div class="month-card"><div class="m-num">10</div><div class="m-name">OCTOBER</div></div>
+    <div class="month-card"><div class="m-num">11</div><div class="m-name">NOVEMBER</div></div>
+    <div class="month-card last-m"><div class="m-num">12</div><div class="m-name">DECEMBER 🔴</div></div>
+  </div>
+
+  <div class="progress-dots" id="moDots"></div>
+  <div id="moSteps"></div>
+  <button class="next-btn" id="moNextBtn" onclick="goNext('months','quiz')" disabled>Next: Big Quiz! 🏆 ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 5 — BIG QUIZ
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f8bbd9,#f48fb1);">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Big Quiz — All Topics!</div>
+      <div class="banner-sub" style="color:#ad1457;">Finish this and you are a Time Champion! 🎉</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="next-btn" id="qFinishBtn" onclick="showCelebration()" disabled>🎉 Finish &amp; Celebrate!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-title">🎉 You Did It! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 Play Again!</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let stars = 0;
+let answeredMap = {};
+const doneTabs     = new Set();
+const unlockedTabs = new Set(['earlyLate']);
+const tabOrder = ['earlyLate','dayNight','daysWeek','months','quiz'];
+
+/* ═══════════════════════════════════════════
+   TAB CLICK
+═══════════════════════════════════════════ */
+function tabClick(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.getElementById('tab-'+id);
+    el.classList.add('shaking');
+    setTimeout(()=>el.classList.remove('shaking'),550);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const tab = document.getElementById('tab-'+id);
+  tab.classList.remove('unlocked','locked','done');
+  tab.classList.add('active');
+  document.getElementById('stepsBar').scrollLeft = tab.offsetLeft - 16;
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ═══════════════════════════════════════════
+   GO NEXT
+═══════════════════════════════════════════ */
+function goNext(currentId, nextId){
+  doneTabs.add(currentId);
+  unlockedTabs.add(nextId);
+  updateProgress();
+
+  const curTab = document.getElementById('tab-'+currentId);
+  curTab.classList.remove('active');
+  curTab.classList.add('done');
+  curTab.innerHTML = '✅ ' + curTab.textContent.replace('✅ ','');
+
+  tabClick(nextId);
+  const nextTab = document.getElementById('tab-'+nextId);
+  nextTab.classList.remove('locked');
+  nextTab.classList.add('active');
+}
+
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════
+   RENDER QUESTIONS
+═══════════════════════════════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+
+  let answered = 0;
+  dotsEl.innerHTML = '';
+  const dots = [];
+  questions.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===0?' active':'');
+    dotsEl.appendChild(d);
+    dots.push(d);
+  });
+
+  container.innerHTML = '';
+  questions.forEach((q,qi)=>{
+    const card = document.createElement('div');
+    card.className = 'prac-card';
+    card.id = containerID+'_q'+qi;
+    if(qi>0) card.style.display='none';
+
+    const mapKey = containerID+'_'+qi;
+
+    let optsHTML = '';
+    q.options.forEach((opt,oi)=>{
+      optsHTML += `<div class="prac-opt" id="${containerID}_opt_${qi}_${oi}" onclick="chooseOpt('${containerID}',${qi},${oi},${q.correct},'${nextBtnID}',${questions.length})">${opt}</div>`;
+    });
+
+    card.innerHTML = `
+      <div class="prac-q"><span class="visual">${q.visual}</span>${q.question}</div>
+      <div class="prac-opts">${optsHTML}</div>
+      <div class="fb-box" id="${containerID}_fb_${qi}"></div>
+    `;
+    container.appendChild(card);
+  });
+
+  window['_answered_'+containerID] = 0;
+  window['_dots_'+containerID] = dots;
+  window['_total_'+containerID] = questions.length;
+}
+
+function chooseOpt(cid, qi, oi, correct, nextBtnID, total){
+  const mapKey = cid+'_'+qi;
+  if(answeredMap[mapKey]) return;
+  answeredMap[mapKey] = true;
+
+  const optEl  = document.getElementById(cid+'_opt_'+qi+'_'+oi);
+  const fb     = document.getElementById(cid+'_fb_'+qi);
+  const isRight = (oi === correct);
+
+  // disable all opts
+  for(let i=0;i<4;i++){
+    const o = document.getElementById(cid+'_opt_'+qi+'_'+i);
+    if(o) o.style.pointerEvents='none';
+  }
+  optEl.classList.add(isRight ? 'right' : 'wrong');
+
+  if(!isRight){
+    const correctEl = document.getElementById(cid+'_opt_'+qi+'_'+correct);
+    if(correctEl) correctEl.classList.add('right');
+  }
+
+  if(isRight){
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+    fb.className = 'fb-box ok';
+    fb.textContent = ['🌟 Brilliant!','🎉 Correct!','✅ Well done!','👏 Amazing!','🏆 Super!'][qi%5];
+  } else {
+    fb.className = 'fb-box no';
+    fb.textContent = ['Try again next time! 💪','Almost! Keep going! 💡','Good try! 🌈','You will get it! ⭐'][qi%4];
+  }
+
+  // mark dot done
+  const dots = window['_dots_'+cid];
+  if(dots && dots[qi]) dots[qi].classList.replace('active','done');
+
+  // show next question after delay
+  const answered = (window['_answered_'+cid] || 0) + 1;
+  window['_answered_'+cid] = answered;
+
+  setTimeout(()=>{
+    const next = document.getElementById(cid+'_q'+(qi+1));
+    if(next){
+      document.getElementById(cid+'_q'+qi).style.display='none';
+      next.style.display='block';
+      if(dots && dots[qi+1]) dots[qi+1].classList.add('active');
+    }
+    if(answered >= (window['_total_'+cid] || 0)){
+      const btn = document.getElementById(nextBtnID);
+      if(btn) btn.disabled = false;
+    }
+  }, 1000);
+}
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 1: EARLIER & LATER
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'elSteps', dotsID:'elDots', nextBtnID:'elNextBtn',
+  questions:[
+    {visual:'🌅😴',question:'Raju wakes up in the morning.\nRaju goes to sleep at night.\nWaking up happens ___.',options:['LATER','SAME TIME','EARLIER','NEVER'],correct:2},
+    {visual:'🍽️⚽',question:'Breakfast happens in the morning.\nPlaying football happens in the evening.\nBreakfast is ___.',options:['LATER','EARLIER','SAME','NEVER'],correct:1},
+    {visual:'🚿🎒',question:'Raju takes a bath.\nThen Raju goes to school.\nThe bath happens ___ going to school.',options:['AFTER','SAME','LATER than','BEFORE / EARLIER than'],correct:3},
+    {visual:'📖😴',question:'Studying happens ___ going to sleep.',options:['AFTER','LATER','EARLIER','SAME'],correct:2},
+    {visual:'🌅🌙',question:'Morning comes ___ night.',options:['AFTER','LATER than','EARLIER than','SAME as'],correct:2},
+    {visual:'🎒📖',question:'Going to school happens ___ studying at home.',options:['LATER than','SAME as','EARLIER than','AFTER'],correct:2},
+    {visual:'🍽️😴',question:'Dinner happens ___ breakfast.',options:['EARLIER than','SAME as','BEFORE','LATER than'],correct:3},
+    {visual:'🌅⚽',question:'Waking up happens ___ playing in the evening.',options:['LATER than','AFTER','EARLIER than','SAME as'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 2: DAY & NIGHT
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'dnSteps', dotsID:'dnDots', nextBtnID:'dnNextBtn',
+  questions:[
+    {visual:'☀️🌙',question:'The sun shines and the sky is bright.\nIt is ___.',options:['NIGHT','MORNING after night','DAY','EVENING only'],correct:2},
+    {visual:'🌙⭐',question:'The moon and stars come out.\nThe sky is dark. It is ___.',options:['DAY','MORNING','AFTERNOON','NIGHT'],correct:3},
+    {visual:'🎒☀️',question:'Raju goes to school during the ___.',options:['NIGHT','MORNING only','DAY','MIDNIGHT'],correct:2},
+    {visual:'😴🌙',question:'Raju goes to sleep during the ___.',options:['DAY','MORNING','AFTERNOON','NIGHT'],correct:3},
+    {visual:'⚽☀️',question:'Children play outside during the ___.',options:['NIGHT','MIDNIGHT','DARK','DAY'],correct:3},
+    {visual:'🌙',question:'Stars shine in the ___.',options:['DAY','MORNING','AFTERNOON','NIGHT'],correct:3},
+    {visual:'☀️',question:'The sky is bright in the ___.',options:['NIGHT','MIDNIGHT','DAY','EVENING'],correct:2},
+    {visual:'🛏️🌙',question:'We sleep when it is ___.',options:['DAY','NOON','MORNING','NIGHT'],correct:3},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 3: DAYS OF THE WEEK
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'dwSteps', dotsID:'dwDots', nextBtnID:'dwNextBtn',
+  questions:[
+    {visual:'📅',question:'A week has ___ days.',options:['5','6','7','8'],correct:2},
+    {visual:'📅',question:'The week BEGINS on ___.',options:['MONDAY','SATURDAY','FRIDAY','SUNDAY'],correct:3},
+    {visual:'📅',question:'The week ENDS on ___.',options:['SUNDAY','FRIDAY','SATURDAY','MONDAY'],correct:2},
+    {visual:'📅',question:'Which day comes AFTER SUNDAY?',options:['SATURDAY','FRIDAY','MONDAY','TUESDAY'],correct:2},
+    {visual:'📅',question:'Which day comes AFTER WEDNESDAY?',options:['FRIDAY','TUESDAY','MONDAY','THURSDAY'],correct:3},
+    {visual:'📅',question:'Which day comes BEFORE MONDAY?',options:['WEDNESDAY','TUESDAY','SUNDAY','FRIDAY'],correct:2},
+    {visual:'📅',question:'Which day is BETWEEN TUESDAY and THURSDAY?',options:['FRIDAY','MONDAY','WEDNESDAY','SATURDAY'],correct:2},
+    {visual:'📅',question:'What is the FIRST day of the week?',options:['MONDAY','SATURDAY','FRIDAY','SUNDAY'],correct:3},
+    {visual:'📅',question:'What is the LAST day of the week?',options:['SUNDAY','SATURDAY','MONDAY','FRIDAY'],correct:1},
+    {visual:'📅',question:'Which day comes AFTER FRIDAY?',options:['THURSDAY','SUNDAY','SATURDAY','MONDAY'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 4: MONTHS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'moSteps', dotsID:'moDots', nextBtnID:'moNextBtn',
+  questions:[
+    {visual:'🗓️',question:'A year has ___ months.',options:['7','10','11','12'],correct:3},
+    {visual:'🗓️',question:'The FIRST month of the year is ___.',options:['JULY','MARCH','JANUARY','APRIL'],correct:2},
+    {visual:'🗓️',question:'The LAST month of the year is ___.',options:['SEPTEMBER','NOVEMBER','MARCH','DECEMBER'],correct:3},
+    {visual:'🗓️',question:'Which month comes AFTER MARCH?',options:['JANUARY','APRIL','AUGUST','FEBRUARY'],correct:1},
+    {visual:'🗓️',question:'Which month comes BEFORE JULY?',options:['MAY','JUNE','DECEMBER','AUGUST'],correct:1},
+    {visual:'🗓️',question:'Which month is BETWEEN SEPTEMBER and NOVEMBER?',options:['DECEMBER','AUGUST','OCTOBER','JANUARY'],correct:2},
+    {visual:'🗓️',question:'Which month comes AFTER SEPTEMBER?',options:['AUGUST','JULY','FEBRUARY','OCTOBER'],correct:3},
+    {visual:'🗓️',question:'Which month comes BEFORE MARCH?',options:['APRIL','FEBRUARY','MAY','JUNE'],correct:1},
+    {visual:'🗓️',question:'Which month comes AFTER NOVEMBER?',options:['OCTOBER','SEPTEMBER','DECEMBER','JANUARY'],correct:2},
+    {visual:'🗓️',question:'JANUARY is the ___ month.',options:['LAST','MIDDLE','FIRST','SEVENTH'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 5: BIG QUIZ
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🌅😴',question:'🏆 Waking up happens ___ going to sleep.',options:['AFTER','LATER','SAME','EARLIER'],correct:3},
+    {visual:'☀️🌙',question:'🏆 The sun shines in the ___ and the moon comes out at ___.',options:['NIGHT · DAY','DAY · NIGHT','MORNING · EVENING','NIGHT · MORNING'],correct:1},
+    {visual:'📅',question:'🏆 A week has ___ days.',options:['5','6','7','8'],correct:2},
+    {visual:'📅',question:'🏆 The FIRST day of the week is ___.',options:['MONDAY','SATURDAY','SUNDAY','FRIDAY'],correct:2},
+    {visual:'📅',question:'🏆 The LAST day of the week is ___.',options:['SUNDAY','FRIDAY','MONDAY','SATURDAY'],correct:3},
+    {visual:'📅',question:'🏆 Which day comes AFTER WEDNESDAY?',options:['TUESDAY','FRIDAY','THURSDAY','MONDAY'],correct:2},
+    {visual:'🗓️',question:'🏆 A year has ___ months.',options:['7','10','12','11'],correct:2},
+    {visual:'🗓️',question:'🏆 The FIRST month of the year is ___.',options:['MARCH','JULY','APRIL','JANUARY'],correct:3},
+    {visual:'🗓️',question:'🏆 The LAST month of the year is ___.',options:['NOVEMBER','SEPTEMBER','DECEMBER','MARCH'],correct:2},
+    {visual:'🗓️',question:'🏆 Which month comes AFTER MARCH?',options:['JANUARY','AUGUST','FEBRUARY','APRIL'],correct:3},
+    {visual:'🗓️',question:'🏆 Which month is BETWEEN SEPTEMBER and NOVEMBER?',options:['AUGUST','DECEMBER','OCTOBER','JANUARY'],correct:2},
+    {visual:'🌅🌙',question:'🏆 Dinner happens ___ breakfast.',options:['EARLIER','SAME','BEFORE','LATER'],correct:3},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know EARLIER and LATER! 🌅🌙\nYou know DAY and NIGHT! ☀️🌙\nYou know the 7 DAYS of the WEEK! 📅\nYou know the 12 MONTHS of the YEAR! 🗓️\nYou are a TIME Champion! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ═══════════════════════════════════════════
+   RESTART
+═══════════════════════════════════════════ */
+function restartAll(){
+  stars=0;
+  answeredMap={};
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('earlyLate');
+
+  // Reset all tab states
+  const allIds = ['earlyLate','dayNight','daysWeek','months','quiz'];
+  allIds.forEach((id,i)=>{
+    const t = document.getElementById('tab-'+id);
+    t.classList.remove('active','done','unlocked');
+    t.classList.add(i===0?'active':'locked');
+    // restore original label
+    const labels = ['🌅 Earlier & Later','🌙 Day & Night','📅 Days of Week','🗓️ Months','🏆 Big Quiz!'];
+    t.innerHTML = labels[i];
+  });
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-earlyLate').classList.add('active');
+
+  // Re-render all questions
+  renderQuestions({containerID:'elSteps',dotsID:'elDots',nextBtnID:'elNextBtn',questions:[
+    {visual:'🌅😴',question:'Raju wakes up in the morning.\nRaju goes to sleep at night.\nWaking up happens ___.',options:['LATER','SAME TIME','EARLIER','NEVER'],correct:2},
+    {visual:'🍽️⚽',question:'Breakfast happens in the morning.\nPlaying football happens in the evening.\nBreakfast is ___.',options:['LATER','EARLIER','SAME','NEVER'],correct:1},
+    {visual:'🚿🎒',question:'Raju takes a bath.\nThen Raju goes to school.\nThe bath happens ___ going to school.',options:['AFTER','SAME','LATER than','BEFORE / EARLIER than'],correct:3},
+    {visual:'📖😴',question:'Studying happens ___ going to sleep.',options:['AFTER','LATER','EARLIER','SAME'],correct:2},
+    {visual:'🌅🌙',question:'Morning comes ___ night.',options:['AFTER','LATER than','EARLIER than','SAME as'],correct:2},
+    {visual:'🎒📖',question:'Going to school happens ___ studying at home.',options:['LATER than','SAME as','EARLIER than','AFTER'],correct:2},
+    {visual:'🍽️😴',question:'Dinner happens ___ breakfast.',options:['EARLIER than','SAME as','BEFORE','LATER than'],correct:3},
+    {visual:'🌅⚽',question:'Waking up happens ___ playing in the evening.',options:['LATER than','AFTER','EARLIER than','SAME as'],correct:2},
+  ]});
+  document.getElementById('elNextBtn').disabled=true;
+
+  renderQuestions({containerID:'dnSteps',dotsID:'dnDots',nextBtnID:'dnNextBtn',questions:[
+    {visual:'☀️🌙',question:'The sun shines and the sky is bright.\nIt is ___.',options:['NIGHT','MORNING after night','DAY','EVENING only'],correct:2},
+    {visual:'🌙⭐',question:'The moon and stars come out.\nThe sky is dark. It is ___.',options:['DAY','MORNING','AFTERNOON','NIGHT'],correct:3},
+    {visual:'🎒☀️',question:'Raju goes to school during the ___.',options:['NIGHT','MORNING only','DAY','MIDNIGHT'],correct:2},
+    {visual:'😴🌙',question:'Raju goes to sleep during the ___.',options:['DAY','MORNING','AFTERNOON','NIGHT'],correct:3},
+    {visual:'⚽☀️',question:'Children play outside during the ___.',options:['NIGHT','MIDNIGHT','DARK','DAY'],correct:3},
+    {visual:'🌙',question:'Stars shine in the ___.',options:['DAY','MORNING','AFTERNOON','NIGHT'],correct:3},
+    {visual:'☀️',question:'The sky is bright in the ___.',options:['NIGHT','MIDNIGHT','DAY','EVENING'],correct:2},
+    {visual:'🛏️🌙',question:'We sleep when it is ___.',options:['DAY','NOON','MORNING','NIGHT'],correct:3},
+  ]});
+  document.getElementById('dnNextBtn').disabled=true;
+
+  renderQuestions({containerID:'dwSteps',dotsID:'dwDots',nextBtnID:'dwNextBtn',questions:[
+    {visual:'📅',question:'A week has ___ days.',options:['5','6','7','8'],correct:2},
+    {visual:'📅',question:'The week BEGINS on ___.',options:['MONDAY','SATURDAY','FRIDAY','SUNDAY'],correct:3},
+    {visual:'📅',question:'The week ENDS on ___.',options:['SUNDAY','FRIDAY','SATURDAY','MONDAY'],correct:2},
+    {visual:'📅',question:'Which day comes AFTER SUNDAY?',options:['SATURDAY','FRIDAY','MONDAY','TUESDAY'],correct:2},
+    {visual:'📅',question:'Which day comes AFTER WEDNESDAY?',options:['FRIDAY','TUESDAY','MONDAY','THURSDAY'],correct:3},
+    {visual:'📅',question:'Which day comes BEFORE MONDAY?',options:['WEDNESDAY','TUESDAY','SUNDAY','FRIDAY'],correct:2},
+    {visual:'📅',question:'Which day is BETWEEN TUESDAY and THURSDAY?',options:['FRIDAY','MONDAY','WEDNESDAY','SATURDAY'],correct:2},
+    {visual:'📅',question:'What is the FIRST day of the week?',options:['MONDAY','SATURDAY','FRIDAY','SUNDAY'],correct:3},
+    {visual:'📅',question:'What is the LAST day of the week?',options:['SUNDAY','SATURDAY','MONDAY','FRIDAY'],correct:1},
+    {visual:'📅',question:'Which day comes AFTER FRIDAY?',options:['THURSDAY','SUNDAY','SATURDAY','MONDAY'],correct:2},
+  ]});
+  document.getElementById('dwNextBtn').disabled=true;
+
+  renderQuestions({containerID:'moSteps',dotsID:'moDots',nextBtnID:'moNextBtn',questions:[
+    {visual:'🗓️',question:'A year has ___ months.',options:['7','10','11','12'],correct:3},
+    {visual:'🗓️',question:'The FIRST month of the year is ___.',options:['JULY','MARCH','JANUARY','APRIL'],correct:2},
+    {visual:'🗓️',question:'The LAST month of the year is ___.',options:['SEPTEMBER','NOVEMBER','MARCH','DECEMBER'],correct:3},
+    {visual:'🗓️',question:'Which month comes AFTER MARCH?',options:['JANUARY','APRIL','AUGUST','FEBRUARY'],correct:1},
+    {visual:'🗓️',question:'Which month comes BEFORE JULY?',options:['MAY','JUNE','DECEMBER','AUGUST'],correct:1},
+    {visual:'🗓️',question:'Which month is BETWEEN SEPTEMBER and NOVEMBER?',options:['DECEMBER','AUGUST','OCTOBER','JANUARY'],correct:2},
+    {visual:'🗓️',question:'Which month comes AFTER SEPTEMBER?',options:['AUGUST','JULY','FEBRUARY','OCTOBER'],correct:3},
+    {visual:'🗓️',question:'Which month comes BEFORE MARCH?',options:['APRIL','FEBRUARY','MAY','JUNE'],correct:1},
+    {visual:'🗓️',question:'Which month comes AFTER NOVEMBER?',options:['OCTOBER','SEPTEMBER','DECEMBER','JANUARY'],correct:2},
+    {visual:'🗓️',question:'JANUARY is the ___ month.',options:['LAST','MIDDLE','FIRST','SEVENTH'],correct:2},
+  ]});
+  document.getElementById('moNextBtn').disabled=true;
+
+  renderQuestions({containerID:'qSteps',dotsID:'qDots',nextBtnID:'qFinishBtn',questions:[
+    {visual:'🌅😴',question:'🏆 Waking up happens ___ going to sleep.',options:['AFTER','LATER','SAME','EARLIER'],correct:3},
+    {visual:'☀️🌙',question:'🏆 The sun shines in the ___ and the moon comes out at ___.',options:['NIGHT · DAY','DAY · NIGHT','MORNING · EVENING','NIGHT · MORNING'],correct:1},
+    {visual:'📅',question:'🏆 A week has ___ days.',options:['5','6','7','8'],correct:2},
+    {visual:'📅',question:'🏆 The FIRST day of the week is ___.',options:['MONDAY','SATURDAY','SUNDAY','FRIDAY'],correct:2},
+    {visual:'📅',question:'🏆 The LAST day of the week is ___.',options:['SUNDAY','FRIDAY','MONDAY','SATURDAY'],correct:3},
+    {visual:'📅',question:'🏆 Which day comes AFTER WEDNESDAY?',options:['TUESDAY','FRIDAY','THURSDAY','MONDAY'],correct:2},
+    {visual:'🗓️',question:'🏆 A year has ___ months.',options:['7','10','12','11'],correct:2},
+    {visual:'🗓️',question:'🏆 The FIRST month of the year is ___.',options:['MARCH','JULY','APRIL','JANUARY'],correct:3},
+    {visual:'🗓️',question:'🏆 The LAST month of the year is ___.',options:['NOVEMBER','SEPTEMBER','DECEMBER','MARCH'],correct:2},
+    {visual:'🗓️',question:'🏆 Which month comes AFTER MARCH?',options:['JANUARY','AUGUST','FEBRUARY','APRIL'],correct:3},
+    {visual:'🗓️',question:'🏆 Which month is BETWEEN SEPTEMBER and NOVEMBER?',options:['AUGUST','DECEMBER','OCTOBER','JANUARY'],correct:2},
+    {visual:'🌅🌙',question:'🏆 Dinner happens ___ breakfast.',options:['EARLIER','SAME','BEFORE','LATER'],correct:3},
+  ]});
+  document.getElementById('qFinishBtn').disabled=true;
+
+  updateProgress();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 15: Length</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e3f2fd; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#0d47a1,#1e88e5); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#0d47a1,#ffd600); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#0d47a1; border-color:#bbdefb; }
+.step-tab.active   { background:#0d47a1; color:#fff; border-color:#0d47a1; box-shadow:0 4px 14px rgba(13,71,161,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #0d47a1;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#0d47a1; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── VISUAL COMPARE ROW ── */
+.compare-row {
+  display:flex; flex-direction:column; gap:10px; background:#fff;
+  border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.compare-item {
+  display:flex; align-items:center; gap:10px;
+  border-radius:14px; padding:10px 14px;
+}
+.compare-item.long-item { background:#e3f2fd; border:3px solid #90caf9; }
+.compare-item.short-item { background:#fce4ec; border:3px solid #f48fb1; }
+.compare-label { font-family:'Fredoka One',cursive; font-size:16px; }
+.compare-bar { height:22px; border-radius:30px; }
+.long-bar { background:linear-gradient(90deg,#1976d2,#42a5f5); width:180px; }
+.short-bar { background:linear-gradient(90deg,#e91e63,#f48fb1); width:80px; }
+
+/* ── WORD BUBBLE ── */
+.word-bubble {
+  display:inline-block; padding:8px 20px; border-radius:30px;
+  font-family:'Fredoka One',cursive; font-size:22px; margin:6px 4px;
+}
+.wb-long  { background:#1976d2; color:#fff; }
+.wb-short { background:#e91e63; color:#fff; }
+.wb-tall  { background:#7b1fa2; color:#fff; }
+.wb-high  { background:#e65100; color:#fff; }
+.wb-low   { background:#558b2f; color:#fff; }
+
+/* ── MEASURE CARD ── */
+.measure-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #bbdefb;
+  display:flex; align-items:center; gap:16px;
+}
+.mc-emoji { font-size:48px; }
+.mc-body { flex:1; }
+.mc-name { font-family:'Fredoka One',cursive; font-size:20px; color:#0d47a1; }
+.mc-desc { font-size:14px; font-weight:800; color:#555; margin-top:4px; line-height:1.5; }
+
+/* ── PRACTICE CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #bbdefb; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:19px; color:#333; text-align:center; margin-bottom:14px; line-height:1.5; white-space:pre-line; }
+.prac-q .visual { font-size:32px; display:block; margin-bottom:8px; letter-spacing:2px; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#e3f2fd; border:3px solid #bbdefb; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#0d47a1; user-select:none;
+  line-height:1.3;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#1b5e20; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:16px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#e8f5e9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.dot { width:14px; height:14px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done { background:#1b5e20; }
+.dot.active { background:#0d47a1; }
+
+/* ── NEXT BUTTON ── */
+.next-btn {
+  display:block; width:100%; padding:16px; border-radius:18px; border:none; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#fff; margin-top:14px;
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  box-shadow:0 4px 16px rgba(13,71,161,.35); transition:all .2s;
+}
+.next-btn:disabled { background:#bdbdbd; box-shadow:none; cursor:not-allowed; }
+.next-btn:not(:disabled):active { transform:scale(.97); }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(135deg,#0d47a1,#7b1fa2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; opacity:0; pointer-events:none; transition:opacity .5s; padding:24px; text-align:center;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:38px; color:#ffd600; margin-bottom:10px; }
+.celeb-sub   { font-size:16px; color:#fff; font-weight:800; line-height:1.7; margin-bottom:16px; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd600; font-weight:900; margin-bottom:20px; }
+.celeb-btn   { padding:16px 36px; border-radius:50px; border:none; background:#ffd600; color:#0d47a1;
+  font-family:'Fredoka One',cursive; font-size:22px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+
+/* ── RULER VISUAL ── */
+.ruler-wrap { background:#fff8e1; border-radius:16px; padding:14px; margin-bottom:12px; border:3px solid #ffe082; }
+.ruler { height:36px; border-radius:8px; background:linear-gradient(90deg,#ffcc02,#ff9800); position:relative; display:flex; align-items:center; padding:0 10px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,.12); }
+.ruler-label { font-family:'Fredoka One',cursive; font-size:14px; color:#fff; }
+.ruler-mark { position:absolute; top:0; bottom:0; width:2px; background:rgba(255,255,255,.5); }
+
+/* ── HIGHLIGHT WORD ── */
+.hw { display:inline; font-family:'Fredoka One',cursive; font-size:inherit; }
+.hw.blue  { color:#1976d2; }
+.hw.pink  { color:#e91e63; }
+.hw.purple{ color:#7b1fa2; }
+.hw.orange{ color:#e65100; }
+.hw.green { color:#2e7d32; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">📏 Lesson 15 — Length</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">📏</span>
+  <h1>Let's Learn Length!</h1>
+  <p>Long · Short · Tall · High · Low · Measure!</p>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="prog-wrap">
+  <div class="prog-label">🚀 Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-longshort"   onclick="tabClick('longshort')">📏 Long &amp; Short</div>
+  <div class="step-tab locked" id="tab-tallshort"   onclick="tabClick('tallshort')">🧍 Tall &amp; Short</div>
+  <div class="step-tab locked" id="tab-highlow"     onclick="tabClick('highlow')">🦅 High &amp; Low</div>
+  <div class="step-tab locked" id="tab-measure"     onclick="tabClick('measure')">🤲 Measurement</div>
+  <div class="step-tab locked" id="tab-units"       onclick="tabClick('units')">🦶 Units</div>
+  <div class="step-tab locked" id="tab-quiz"        onclick="tabClick('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════
+     TAB 1 — LONG & SHORT
+══════════════════════════════ -->
+<div class="tab-panel active" id="panel-longshort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">📏</div>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">Long and Short</div>
+      <div class="banner-sub" style="color:#1565c0;">Tap the right answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-long">LONG</span>
+      <span class="word-bubble wb-short">SHORT</span><br><br>
+      The <span class="hw blue">PINK pencil</span> is <span class="hw blue">LONG</span>.<br>
+      The <span class="hw pink">BLUE pencil</span> is <span class="hw pink">SHORT</span>.<br><br>
+      We compare by keeping one beside the other. The one that goes further is <span class="hw blue">LONG</span>. The smaller one is <span class="hw pink">SHORT</span>.
+    </div>
+  </div>
+
+  <div class="compare-row">
+    <div class="compare-item long-item">
+      <div class="compare-bar long-bar"></div>
+      <div class="compare-label">📏 LONG</div>
+    </div>
+    <div class="compare-item short-item">
+      <div class="compare-bar short-bar"></div>
+      <div class="compare-label">📌 SHORT</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="lsDots"></div>
+  <div id="lsSteps"></div>
+  <button class="next-btn" id="lsNextBtn" onclick="goNext('longshort','tallshort')" disabled>Next: Tall &amp; Short ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 2 — TALL & SHORT
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-tallshort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <div class="banner-emoji">🧍</div>
+    <div>
+      <div class="banner-title" style="color:#7b1fa2;">Tall and Short</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Things standing up — which is taller?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#7b1fa2;">
+    <div class="ic-title" style="color:#7b1fa2;">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-tall">TALL</span>
+      <span class="word-bubble wb-short">SHORT</span><br><br>
+      A <span class="hw purple">coconut tree</span> is <span class="hw purple">TALL</span>. A small bush is <span class="hw pink">SHORT</span>.<br>
+      A <span class="hw purple">horse</span> is <span class="hw purple">TALL</span>. A goat is <span class="hw pink">SHORT</span>.<br>
+      A <span class="hw purple">tall bottle</span> is <span class="hw purple">TALL</span>. A small box is <span class="hw pink">SHORT</span>.<br><br>
+      We use <span class="hw purple">TALL</span> and <span class="hw pink">SHORT</span> for things standing upright!
+    </div>
+  </div>
+
+  <div class="progress-dots" id="tsDots"></div>
+  <div id="tsSteps"></div>
+  <button class="next-btn" id="tsNextBtn" onclick="goNext('tallshort','highlow')" disabled>Next: High &amp; Low ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 3 — HIGH & LOW
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-highlow">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <div class="banner-emoji">🦅</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">High and Low</div>
+      <div class="banner-sub" style="color:#bf360c;">Up in the sky or close to the ground?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e65100;">
+    <div class="ic-title" style="color:#e65100;">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-high">HIGH</span>
+      <span class="word-bubble wb-low">LOW</span><br><br>
+      An <span class="hw orange">Eagle</span> is flying <span class="hw orange">HIGH</span>. 🦅<br>
+      A <span class="hw green">Butterfly</span> is flying <span class="hw green">LOW</span>. 🦋<br><br>
+      The <span class="hw green">green kite</span> is flying <span class="hw orange">HIGH</span>. 🪁<br>
+      The <span class="hw pink">red kite</span> is flying <span class="hw green">LOW</span>. 🪁<br><br>
+      We use <span class="hw orange">HIGH</span> and <span class="hw green">LOW</span> for things in the air!
+    </div>
+  </div>
+
+  <div class="progress-dots" id="hlDots"></div>
+  <div id="hlSteps"></div>
+  <button class="next-btn" id="hlNextBtn" onclick="goNext('highlow','measure')" disabled>Next: Measurement ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 4 — MEASUREMENT
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-measure">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🤲</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Measurement</div>
+      <div class="banner-sub" style="color:#2e7d32;">How do we measure length?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#2e7d32;">
+    <div class="ic-title" style="color:#2e7d32;">📖 What is Measurement?</div>
+    <div class="ic-text">
+      We can <span class="hw green">compare</span> the length of two things by keeping one beside the other.<br><br>
+      But to know <span class="hw green">HOW LONG</span> something is, we <span class="hw green">MEASURE</span> it!<br><br>
+      We use our <span class="hw blue">body parts</span> to measure — this is called using <span class="hw blue">non-standard units</span>.
+    </div>
+  </div>
+
+  <div class="progress-dots" id="mDots"></div>
+  <div id="mSteps"></div>
+  <button class="next-btn" id="mNextBtn" onclick="goNext('measure','units')" disabled>Next: Units ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 5 — UNITS
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-units">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <div class="banner-emoji">🦶</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Cubit · Hand Span · Foot Span</div>
+      <div class="banner-sub" style="color:#bf360c;">Three ways to measure length!</div>
+    </div>
+  </div>
+
+  <div class="measure-card">
+    <div class="mc-emoji">🦾</div>
+    <div class="mc-body">
+      <div class="mc-name">Cubit</div>
+      <div class="mc-desc">From your <b>elbow</b> to the tip of your <b>middle finger</b>.<br>Used by Lakshmi to measure a garland = <b>1 cubit</b> long.</div>
+    </div>
+  </div>
+
+  <div class="measure-card" style="border-color:#c8e6c9;">
+    <div class="mc-emoji">🖐️</div>
+    <div class="mc-body">
+      <div class="mc-name" style="color:#2e7d32;">Hand Span</div>
+      <div class="mc-desc">Spread your hand wide — from <b>thumb tip</b> to <b>little finger tip</b>.<br>Used by Gowri: garland = <b>2 hand spans</b> long.<br>John measured a TV = <b>5 hand spans</b>.</div>
+    </div>
+  </div>
+
+  <div class="measure-card" style="border-color:#ffe082;">
+    <div class="mc-emoji">🦶</div>
+    <div class="mc-body">
+      <div class="mc-name" style="color:#e65100;">Foot Span</div>
+      <div class="mc-desc">The length of your <b>foot</b> from heel to toe.<br>Used by Ramu: stick = <b>5 foot spans</b> long.<br>Asha measured classroom = <b>18 foot spans</b>.</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="uDots"></div>
+  <div id="uSteps"></div>
+  <button class="next-btn" id="uNextBtn" onclick="goNext('units','quiz')" disabled>Next: Big Quiz! 🏆 ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 6 — BIG QUIZ
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Big Quiz — All Topics!</div>
+      <div class="banner-sub" style="color:#ad1457;">Finish this and you are a Length Champion! 🎉</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="next-btn" id="qFinishBtn" onclick="showCelebration()" disabled>🎉 Finish &amp; Celebrate!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-title">🎉 You Did It! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 Play Again!</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let stars = 0;
+let answeredMap = {};
+const doneTabs     = new Set();
+const unlockedTabs = new Set(['longshort']);
+const tabOrder = ['longshort','tallshort','highlow','measure','units','quiz'];
+
+/* ═══════════════════════════════════════════
+   TAB CLICK
+═══════════════════════════════════════════ */
+function tabClick(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.getElementById('tab-'+id);
+    el.classList.add('shaking');
+    setTimeout(()=>el.classList.remove('shaking'),550);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const tab = document.getElementById('tab-'+id);
+  tab.classList.remove('unlocked','locked','done');
+  tab.classList.add('active');
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════════ */
+function updateProgress(){
+  const done = doneTabs.size;
+  const total = tabOrder.length;
+  document.getElementById('progFill').style.width = (done/total*100)+'%';
+  document.getElementById('starsNum').textContent = stars;
+
+  tabOrder.forEach(id=>{
+    const el = document.getElementById('tab-'+id);
+    if(el.classList.contains('active')) return;
+    el.classList.remove('unlocked','locked','done');
+    if(doneTabs.has(id))         el.classList.add('done');
+    else if(unlockedTabs.has(id)) el.classList.add('unlocked');
+    else                          el.classList.add('locked');
+  });
+}
+
+function goNext(currentTab, nextTab){
+  doneTabs.add(currentTab);
+  unlockedTabs.add(nextTab);
+  updateProgress();
+  tabClick(nextTab);
+}
+
+/* ═══════════════════════════════════════════
+   RENDER QUESTIONS
+═══════════════════════════════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  container.innerHTML = '';
+  dotsEl.innerHTML = '';
+
+  let answered = 0;
+  const total = questions.length;
+  const dotEls = [];
+
+  questions.forEach((q,i)=>{
+    // dot
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i===0?' active':'');
+    dotsEl.appendChild(dot);
+    dotEls.push(dot);
+
+    // card
+    const card = document.createElement('div');
+    card.className = 'prac-card';
+    card.id = containerID+'_card'+i;
+    if(i>0) card.style.display='none';
+
+    const visual = q.visual ? `<span class="visual">${q.visual}</span>` : '';
+    card.innerHTML = `
+      <div class="prac-q">${visual}${q.question}</div>
+      <div class="prac-opts" id="${containerID}_opts${i}"></div>
+      <div class="fb-box" id="${containerID}_fb${i}"></div>
+    `;
+    container.appendChild(card);
+
+    const optsEl = card.querySelector('.prac-opts');
+    const fbEl   = card.querySelector('.fb-box');
+
+    q.options.forEach((opt,j)=>{
+      const btn = document.createElement('div');
+      btn.className = 'prac-opt';
+      btn.innerHTML = opt;
+      btn.onclick = ()=>{
+        if(answeredMap[containerID+'_'+i]) return;
+        answeredMap[containerID+'_'+i] = true;
+        const allBtns = optsEl.querySelectorAll('.prac-opt');
+        allBtns.forEach(b=>b.style.pointerEvents='none');
+        if(j===q.correct){
+          btn.classList.add('right');
+          fbEl.className='fb-box ok';
+          fbEl.textContent = ['Great job! 🎉','Awesome! ⭐','You got it! 🌟','Perfect! 🏆','Well done! 👏','Superstar! 🌠','Brilliant! 💡','Excellent! 🎊'][Math.floor(Math.random()*8)];
+          stars++;
+          document.getElementById('starsNum').textContent=stars;
+          dotEls[i].classList.remove('active');
+          dotEls[i].classList.add('done');
+          answered++;
+          if(answered===total){
+            nextBtn.disabled=false;
+            nextBtn.textContent = nextBtn.textContent.replace('➜','✅ ➜');
+          } else {
+            setTimeout(()=>{
+              card.style.display='none';
+              const nextCard = document.getElementById(containerID+'_card'+(i+1));
+              if(nextCard){ nextCard.style.display='block'; if(dotEls[i+1]) dotEls[i+1].classList.add('active'); }
+            },900);
+          }
+        } else {
+          btn.classList.add('wrong');
+          optsEl.querySelectorAll('.prac-opt')[q.correct].classList.add('right');
+          fbEl.className='fb-box no';
+          fbEl.textContent = ['Oops! Try next time! 💪','Not quite — the right answer is shown! 🔍','Almost! Keep going! 🌈'][Math.floor(Math.random()*3)];
+          dotEls[i].classList.remove('active');
+          dotEls[i].classList.add('done');
+          answered++;
+          if(answered===total){
+            nextBtn.disabled=false;
+          } else {
+            setTimeout(()=>{
+              card.style.display='none';
+              const nextCard = document.getElementById(containerID+'_card'+(i+1));
+              if(nextCard){ nextCard.style.display='block'; if(dotEls[i+1]) dotEls[i+1].classList.add('active'); }
+            },1200);
+          }
+        }
+      };
+      optsEl.appendChild(btn);
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 1: LONG & SHORT
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'lsSteps', dotsID:'lsDots', nextBtnID:'lsNextBtn',
+  questions:[
+    {visual:'📏📌',question:'The PINK pencil is ___ and the BLUE pencil is ___.',options:['Long · Short','Short · Long','Same · Same','Tall · Short'],correct:0},
+    {visual:'🪥🪥',question:'A big toothbrush and a small toothbrush — the big one is?',options:['Short','Tall','Long','Low'],correct:2},
+    {visual:'👧👧',question:'Priya has long hair and Riya has short hair. Long hair goes ___ than short hair.',options:['Less far','Further','Same','Higher'],correct:1},
+    {visual:'📐📐',question:'Ruler A is very long. Ruler B is small. Ruler B is ___.',options:['Long','Short','Tall','High'],correct:1},
+    {visual:'🐛🐍',question:'A worm is SHORT. A snake is LONG. Which one goes further?',options:['Worm','Snake','Both same','Cannot say'],correct:1},
+    {visual:'🏏🏏',question:'A cricket bat is long. A small bat toy is ___.',options:['Long','Tall','Short','High'],correct:2},
+    {visual:'📏',question:'We compare length by keeping one ___ the other.',options:['Above','Beside','Below','Far from'],correct:1},
+    {visual:'🪡',question:'Thread A reaches the wall. Thread B is short. Which is LONG?',options:['Thread B','Both same','Thread A','Neither'],correct:2},
+    {visual:'🐜🐟🐢🐍',question:'Number from shortest to longest: ant, fish, tortoise, snake. What comes FIRST (shortest)?',options:['Fish','Snake','Ant','Tortoise'],correct:2},
+    {visual:'🥒🌶️',question:'A ridge gourd is very long. A chilli is short. The ridge gourd is ___.',options:['Short','Tall','Long','High'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 2: TALL & SHORT
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'tsSteps', dotsID:'tsDots', nextBtnID:'tsNextBtn',
+  questions:[
+    {visual:'🌴🌳',question:'A coconut tree is ___ and a small bush is ___.',options:['Short · Tall','Tall · Short','Long · Short','High · Low'],correct:1},
+    {visual:'🐎🐐',question:'A horse is ___ and a goat is ___.',options:['Short · Tall','Tall · Long','Tall · Short','Long · Short'],correct:2},
+    {visual:'🕯️📦',question:'A tall candle and a small box — the candle is ___.',options:['Short','Low','Long','Tall'],correct:3},
+    {visual:'🏗️🏠',question:'A tall building and a small hut — the hut is ___.',options:['Tall','Long','Short','High'],correct:2},
+    {visual:'👩👦',question:'A woman is taller than a boy. We say the woman is ___.',options:['Short','High','Long','Tall'],correct:3},
+    {visual:'🪜🪜',question:'Ladder A is taller. Ladder B is shorter. Which should you tick for TALL?',options:['Ladder B','Ladder A','Both same','Neither'],correct:1},
+    {visual:'🦢🐓',question:'An ostrich is tall. A chicken is short. The chicken is ___.',options:['Tall','Long','Short','High'],correct:2},
+    {visual:'🏢🏡',question:'A big apartment building is ___ than a small house.',options:['Shorter','Longer','Taller','Lower'],correct:2},
+    {visual:'🖊️📦',question:'A standing marker is tall. A lying box is not standing. We use TALL for things that are ___.',options:['Flying','Standing upright','Very long','Very short'],correct:1},
+    {visual:'🧍👶',question:'Dad is taller than baby. Baby is ___ than Dad.',options:['Taller','Shorter','Longer','Higher'],correct:1},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 3: HIGH & LOW
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'hlSteps', dotsID:'hlDots', nextBtnID:'hlNextBtn',
+  questions:[
+    {visual:'🦅🦋',question:'An eagle flies HIGH. A butterfly flies LOW. Which is up in the sky?',options:['Butterfly','Eagle','Both same','Neither'],correct:1},
+    {visual:'🪁🪁',question:'The green kite is HIGH. The red kite is LOW. Which kite is closer to the ground?',options:['Green kite','Both same','Red kite','Neither'],correct:2},
+    {visual:'🖼️🖼️',question:'One picture on the wall is higher. Which picture hangs at a HIGHER level?',options:['The picture near the floor','The picture near the ceiling','Both same','Cannot say'],correct:1},
+    {visual:'🍇🍇',question:'A fox wants grapes. Which bunch can the fox reach — the LOWEST one?',options:['Highest bunch','Middle bunch','Lowest bunch','All same'],correct:2},
+    {visual:'🪶🪶',question:'One feather floats HIGH up near the tree top. The other is near the ground. Which floats HIGH?',options:['Near the ground feather','Both same','Top feather','Neither'],correct:2},
+    {visual:'🚰🚰',question:'Two taps — one is higher, one is lower. We want the tap at HIGHER level. Which do we ring?',options:['The lower tap','Both same','The higher tap','Cannot say'],correct:2},
+    {visual:'🫧🫧',question:'One bubble is HIGH (up). One bubble is LOW (down). Colour the HIGH bubble?',options:['The bottom bubble','Both same','The top bubble','Cannot say'],correct:2},
+    {visual:'🦅🐦',question:'We use HIGH and LOW for things that are ___.',options:['Lying on the ground','Standing upright','In the air or at levels','Under water'],correct:2},
+    {visual:'🏔️🌊',question:'A bird at the top of a mountain is ___ than a bird near the sea.',options:['Lower','Shorter','Higher','Smaller'],correct:2},
+    {visual:'🪁',question:'A kite string is pulled. The kite goes UP. The kite is now flying ___.',options:['Low','Short','Long','High'],correct:3},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 4: MEASUREMENT
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'mSteps', dotsID:'mDots', nextBtnID:'mNextBtn',
+  questions:[
+    {visual:'📏',question:'We MEASURE to find out ___ something is.',options:['What colour','How long','How heavy','What shape'],correct:1},
+    {visual:'🧣🧣',question:'The red garland is LONG. The green garland is SHORT. Which is longer?',options:['Green garland','Both same','Red garland','Cannot say'],correct:2},
+    {visual:'🤲',question:'Lakshmi uses her arm from elbow to fingertip. What is this unit called?',options:['Foot span','Hand span','Cubit','Metre'],correct:2},
+    {visual:'🖐️',question:'Gowri spreads her hand wide. What unit is she using?',options:['Cubit','Foot span','Hand span','Metre'],correct:2},
+    {visual:'🦶',question:'Ramu places his foot along the stick. What unit is he using?',options:['Hand span','Cubit','Metre','Foot span'],correct:3},
+    {visual:'📏',question:'We can compare two things by keeping one ___ the other.',options:['Above','Beside','Below','Far from'],correct:1},
+    {visual:'🧣',question:'Lakshmi measured the garland — it was 1 cubit. We are using ___ units.',options:['Standard','Metric','Non-standard','Ruler'],correct:2},
+    {visual:'📺',question:'John measured the TV using hand span. He counted 5 hand spans. So the TV is 5 ___.',options:['Cubits','Foot spans','Hand spans','Metres'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 5: UNITS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'uSteps', dotsID:'uDots', nextBtnID:'uNextBtn',
+  questions:[
+    {visual:'🦾',question:'A CUBIT is measured from your ___ to your fingertip.',options:['Knee','Shoulder','Elbow','Wrist'],correct:2},
+    {visual:'🖐️',question:'A HAND SPAN goes from your thumb tip to your ___ finger tip.',options:['Index finger','Middle finger','Ring finger','Little finger'],correct:3},
+    {visual:'🦶',question:'A FOOT SPAN is the length of your ___.',options:['Leg','Arm','Foot from heel to toe','Hand'],correct:2},
+    {visual:'🧣',question:'Lakshmi measured a garland — it was 1 cubit. Gowri measured the SAME garland — 2 hand spans. Both are correct because ___.',options:['They are wrong','Hand spans = cubits','Both used non-standard units','Both used rulers'],correct:2},
+    {visual:'🏏',question:'Ramu measured a stick using foot spans. It was 5 foot spans. Which unit did he use?',options:['Cubit','Hand span','Foot span','Metre'],correct:2},
+    {visual:'🏫',question:'Asha measured her classroom using foot spans. The classroom was 18 foot spans. Big rooms need ___ foot spans.',options:['Fewer','More','1','Zero'],correct:1},
+    {visual:'🛏️',question:'Salma measured the length of a cot using cubits. The cot was 6 cubits. Which unit did Salma use?',options:['Foot span','Hand span','Cubit','Metre'],correct:2},
+    {visual:'📺',question:'John measured the TV — 5 hand spans. The classroom is 18 foot spans. Which is LONGER?',options:['TV','Both same','Classroom','Cannot say'],correct:2},
+    {visual:'✏️🧹',question:'A pencil is about 2 hand spans. A broom is about 6 hand spans. The broom is ___.',options:['Shorter','Same','Longer','Lower'],correct:2},
+    {visual:'🤲🦶🦾',question:'Hand span, foot span and cubit are all ___ units of length.',options:['Standard','Non-standard','Metric','Digital'],correct:1},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 6: BIG QUIZ
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'📏📌',question:'🏆 The pink pencil is LONG. The blue pencil is SHORT. Which word means "goes further"?',options:['Short','Tall','Long','High'],correct:2},
+    {visual:'🌴🌱',question:'🏆 A coconut tree and a small plant. The coconut tree is ___.',options:['Short','Low','Long','Tall'],correct:3},
+    {visual:'🦅🦋',question:'🏆 Eagle flies HIGH. Butterfly flies LOW. Which is up in the sky?',options:['Butterfly','Both same','Eagle','Neither'],correct:2},
+    {visual:'🤲',question:'🏆 From elbow to fingertip — what unit is this?',options:['Foot span','Hand span','Cubit','Metre'],correct:2},
+    {visual:'🖐️',question:'🏆 Thumb tip to little finger tip — what unit is this?',options:['Cubit','Foot span','Metre','Hand span'],correct:3},
+    {visual:'🦶',question:'🏆 Heel to toe of your foot — what unit is this?',options:['Hand span','Cubit','Foot span','Metre'],correct:2},
+    {visual:'🐜🐟🐢🐍',question:'🏆 Order from SHORTEST to LONGEST: ant, fish, tortoise, snake. LONGEST is?',options:['Ant','Fish','Tortoise','Snake'],correct:3},
+    {visual:'📺',question:'🏆 John measured the TV — 5 hand spans. Asha measured the classroom — 18 foot spans. Which is LONGER?',options:['TV (5 hand spans)','Same','Classroom (18 foot spans)','Cannot say'],correct:2},
+    {visual:'🏠🏗️',question:'🏆 A small hut and a tall building. The hut is ___ and the building is ___.',options:['Tall · Short','Short · Tall','Long · Short','Short · Long'],correct:1},
+    {visual:'🪁🪁',question:'🏆 Green kite is HIGH. Red kite is LOW. Which is CLOSER to the ground?',options:['Green kite','Both same','Neither','Red kite'],correct:3},
+    {visual:'🧣',question:'🏆 Lakshmi measured a garland — 1 cubit. Gowri measured it — 2 hand spans. These are called ___ units.',options:['Standard','Metric','Non-standard','Digital'],correct:2},
+    {visual:'🏆',question:'🏆 Hand span, foot span and cubit — all are used to measure ___.',options:['Weight','Colour','Length','Time'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know LONG and SHORT! 📏\nYou know TALL and SHORT! 🧍\nYou know HIGH and LOW! 🦅\nYou know what MEASUREMENT means! 📐\nYou know CUBIT, HAND SPAN and FOOT SPAN! 🤲🖐️🦶\nYou are a Length Champion! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ═══════════════════════════════════════════
+   RESTART
+═══════════════════════════════════════════ */
+function restartAll(){
+  stars=0;
+  answeredMap={};
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('longshort');
+
+  renderQuestions({containerID:'lsSteps',dotsID:'lsDots',nextBtnID:'lsNextBtn',questions:[
+    {visual:'📏📌',question:'The PINK pencil is ___ and the BLUE pencil is ___.',options:['Long · Short','Short · Long','Same · Same','Tall · Short'],correct:0},
+    {visual:'🪥🪥',question:'A big toothbrush and a small toothbrush — the big one is?',options:['Short','Tall','Long','Low'],correct:2},
+    {visual:'👧👧',question:'Priya has long hair and Riya has short hair. Long hair goes ___ than short hair.',options:['Less far','Further','Same','Higher'],correct:1},
+    {visual:'📐📐',question:'Ruler A is very long. Ruler B is small. Ruler B is ___.',options:['Long','Short','Tall','High'],correct:1},
+    {visual:'🐛🐍',question:'A worm is SHORT. A snake is LONG. Which one goes further?',options:['Worm','Snake','Both same','Cannot say'],correct:1},
+    {visual:'🏏🏏',question:'A cricket bat is long. A small bat toy is ___.',options:['Long','Tall','Short','High'],correct:2},
+    {visual:'📏',question:'We compare length by keeping one ___ the other.',options:['Above','Beside','Below','Far from'],correct:1},
+    {visual:'🪡',question:'Thread A reaches the wall. Thread B is short. Which is LONG?',options:['Thread B','Both same','Thread A','Neither'],correct:2},
+    {visual:'🐜🐟🐢🐍',question:'Number from shortest to longest: ant, fish, tortoise, snake. What comes FIRST (shortest)?',options:['Fish','Snake','Ant','Tortoise'],correct:2},
+    {visual:'🥒🌶️',question:'A ridge gourd is very long. A chilli is short. The ridge gourd is ___.',options:['Short','Tall','Long','High'],correct:2},
+  ]});
+  document.getElementById('lsNextBtn').disabled=true;
+
+  renderQuestions({containerID:'tsSteps',dotsID:'tsDots',nextBtnID:'tsNextBtn',questions:[
+    {visual:'🌴🌳',question:'A coconut tree is ___ and a small bush is ___.',options:['Short · Tall','Tall · Short','Long · Short','High · Low'],correct:1},
+    {visual:'🐎🐐',question:'A horse is ___ and a goat is ___.',options:['Short · Tall','Tall · Long','Tall · Short','Long · Short'],correct:2},
+    {visual:'🕯️📦',question:'A tall candle and a small box — the candle is ___.',options:['Short','Low','Long','Tall'],correct:3},
+    {visual:'🏗️🏠',question:'A tall building and a small hut — the hut is ___.',options:['Tall','Long','Short','High'],correct:2},
+    {visual:'👩👦',question:'A woman is taller than a boy. We say the woman is ___.',options:['Short','High','Long','Tall'],correct:3},
+    {visual:'🪜🪜',question:'Ladder A is taller. Ladder B is shorter. Which should you tick for TALL?',options:['Ladder B','Ladder A','Both same','Neither'],correct:1},
+    {visual:'🦢🐓',question:'An ostrich is tall. A chicken is short. The chicken is ___.',options:['Tall','Long','Short','High'],correct:2},
+    {visual:'🏢🏡',question:'A big apartment building is ___ than a small house.',options:['Shorter','Longer','Taller','Lower'],correct:2},
+    {visual:'🖊️📦',question:'A standing marker is tall. We use TALL for things that are ___.',options:['Flying','Standing upright','Very long','Very short'],correct:1},
+    {visual:'🧍👶',question:'Dad is taller than baby. Baby is ___ than Dad.',options:['Taller','Shorter','Longer','Higher'],correct:1},
+  ]});
+  document.getElementById('tsNextBtn').disabled=true;
+
+  renderQuestions({containerID:'hlSteps',dotsID:'hlDots',nextBtnID:'hlNextBtn',questions:[
+    {visual:'🦅🦋',question:'An eagle flies HIGH. A butterfly flies LOW. Which is up in the sky?',options:['Butterfly','Eagle','Both same','Neither'],correct:1},
+    {visual:'🪁🪁',question:'The green kite is HIGH. The red kite is LOW. Which kite is closer to the ground?',options:['Green kite','Both same','Red kite','Neither'],correct:2},
+    {visual:'🖼️🖼️',question:'One picture on the wall is higher. Which picture hangs at a HIGHER level?',options:['The picture near the floor','The picture near the ceiling','Both same','Cannot say'],correct:1},
+    {visual:'🍇🍇',question:'A fox wants grapes. Which bunch can the fox reach — the LOWEST one?',options:['Highest bunch','Middle bunch','Lowest bunch','All same'],correct:2},
+    {visual:'🪶🪶',question:'One feather floats HIGH near the tree top. The other is near the ground. Which is HIGH?',options:['Near the ground feather','Both same','Top feather','Neither'],correct:2},
+    {visual:'🚰🚰',question:'Two taps — one is higher, one is lower. We ring the tap at HIGHER level. Which do we ring?',options:['The lower tap','Both same','The higher tap','Cannot say'],correct:2},
+    {visual:'🫧🫧',question:'One bubble is HIGH (up). One bubble is LOW (down). Which bubble is HIGH?',options:['The bottom bubble','Both same','The top bubble','Cannot say'],correct:2},
+    {visual:'🦅🐦',question:'We use HIGH and LOW for things that are ___.',options:['Lying on the ground','Standing upright','In the air or at levels','Under water'],correct:2},
+    {visual:'🏔️🌊',question:'A bird at the top of a mountain is ___ than a bird near the sea.',options:['Lower','Shorter','Higher','Smaller'],correct:2},
+    {visual:'🪁',question:'A kite string is pulled. The kite goes UP. The kite is now flying ___.',options:['Low','Short','Long','High'],correct:3},
+  ]});
+  document.getElementById('hlNextBtn').disabled=true;
+
+  renderQuestions({containerID:'mSteps',dotsID:'mDots',nextBtnID:'mNextBtn',questions:[
+    {visual:'📏',question:'We MEASURE to find out ___ something is.',options:['What colour','How long','How heavy','What shape'],correct:1},
+    {visual:'🧣🧣',question:'The red garland is LONG. The green garland is SHORT. Which is longer?',options:['Green garland','Both same','Red garland','Cannot say'],correct:2},
+    {visual:'🤲',question:'Lakshmi uses her arm from elbow to fingertip. What is this unit called?',options:['Foot span','Hand span','Cubit','Metre'],correct:2},
+    {visual:'🖐️',question:'Gowri spreads her hand wide. What unit is she using?',options:['Cubit','Foot span','Hand span','Metre'],correct:2},
+    {visual:'🦶',question:'Ramu places his foot along the stick. What unit is he using?',options:['Hand span','Cubit','Metre','Foot span'],correct:3},
+    {visual:'📏',question:'We can compare two things by keeping one ___ the other.',options:['Above','Beside','Below','Far from'],correct:1},
+    {visual:'🧣',question:'Lakshmi measured the garland — it was 1 cubit. We are using ___ units.',options:['Standard','Metric','Non-standard','Ruler'],correct:2},
+    {visual:'📺',question:'John measured the TV — 5 hand spans. So the TV is 5 ___.',options:['Cubits','Foot spans','Hand spans','Metres'],correct:2},
+  ]});
+  document.getElementById('mNextBtn').disabled=true;
+
+  renderQuestions({containerID:'uSteps',dotsID:'uDots',nextBtnID:'uNextBtn',questions:[
+    {visual:'🦾',question:'A CUBIT is measured from your ___ to your fingertip.',options:['Knee','Shoulder','Elbow','Wrist'],correct:2},
+    {visual:'🖐️',question:'A HAND SPAN goes from your thumb tip to your ___ finger tip.',options:['Index finger','Middle finger','Ring finger','Little finger'],correct:3},
+    {visual:'🦶',question:'A FOOT SPAN is the length of your ___.',options:['Leg','Arm','Foot from heel to toe','Hand'],correct:2},
+    {visual:'🧣',question:'Lakshmi: 1 cubit. Gowri: 2 hand spans. SAME garland. Both used ___ units.',options:['Wrong units','Non-standard','Standard','Ruler'],correct:1},
+    {visual:'🏏',question:'Ramu measured a stick — 5 foot spans. Which unit did he use?',options:['Cubit','Hand span','Foot span','Metre'],correct:2},
+    {visual:'🏫',question:'Asha measured her classroom — 18 foot spans. The classroom is ___ than a pencil.',options:['Shorter','Same','Longer','Lower'],correct:2},
+    {visual:'🛏️',question:'Salma measured the cot — 6 cubits. Which unit did Salma use?',options:['Foot span','Hand span','Cubit','Metre'],correct:2},
+    {visual:'📺',question:'TV = 5 hand spans. Classroom = 18 foot spans. Which is LONGER?',options:['TV','Same','Classroom','Cannot say'],correct:2},
+    {visual:'✏️🧹',question:'Pencil = 2 hand spans. Broom = 6 hand spans. The broom is ___.',options:['Shorter','Same','Longer','Lower'],correct:2},
+    {visual:'🤲🦶🦾',question:'Hand span, foot span and cubit are all ___ units of length.',options:['Standard','Metric','Non-standard','Digital'],correct:2},
+  ]});
+  document.getElementById('uNextBtn').disabled=true;
+
+  renderQuestions({containerID:'qSteps',dotsID:'qDots',nextBtnID:'qFinishBtn',questions:[
+    {visual:'📏📌',question:'🏆 The pink pencil is LONG. The blue pencil is SHORT. Which word means "goes further"?',options:['Short','Tall','Long','High'],correct:2},
+    {visual:'🌴🌱',question:'🏆 A coconut tree and a small plant. The coconut tree is ___.',options:['Short','Low','Long','Tall'],correct:3},
+    {visual:'🦅🦋',question:'🏆 Eagle flies HIGH. Butterfly flies LOW. Which is up in the sky?',options:['Butterfly','Both same','Eagle','Neither'],correct:2},
+    {visual:'🤲',question:'🏆 From elbow to fingertip — what unit is this?',options:['Foot span','Hand span','Cubit','Metre'],correct:2},
+    {visual:'🖐️',question:'🏆 Thumb tip to little finger tip — what unit is this?',options:['Cubit','Foot span','Metre','Hand span'],correct:3},
+    {visual:'🦶',question:'🏆 Heel to toe of your foot — what unit is this?',options:['Hand span','Cubit','Foot span','Metre'],correct:2},
+    {visual:'🐜🐟🐢🐍',question:'🏆 LONGEST of: ant, fish, tortoise, snake is?',options:['Ant','Fish','Tortoise','Snake'],correct:3},
+    {visual:'📺🏫',question:'🏆 TV = 5 hand spans. Classroom = 18 foot spans. Which is LONGER?',options:['TV','Same','Classroom','Cannot say'],correct:2},
+    {visual:'🏠🏗️',question:'🏆 A small hut and a tall building. The hut is ___ and the building is ___.',options:['Tall · Short','Short · Tall','Long · Short','Short · Long'],correct:1},
+    {visual:'🪁🪁',question:'🏆 Green kite is HIGH. Red kite is LOW. Which is CLOSER to the ground?',options:['Green kite','Both same','Neither','Red kite'],correct:3},
+    {visual:'🧣',question:'🏆 Garland = 1 cubit. These are called ___ units.',options:['Standard','Metric','Non-standard','Digital'],correct:2},
+    {visual:'🏆',question:'🏆 Hand span, foot span and cubit are used to measure ___.',options:['Weight','Colour','Length','Time'],correct:2},
+  ]});
+  document.getElementById('qFinishBtn').disabled=true;
+
+  updateProgress();
+  tabClick('longshort');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 16: Weight</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fce4ec; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#880e4f,#c2185b);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#880e4f,#e91e63); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#880e4f,#ffd600); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#880e4f; border-color:#f48fb1; }
+.step-tab.active   { background:#880e4f; color:#fff; border-color:#880e4f; box-shadow:0 4px 14px rgba(136,14,79,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #880e4f;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#880e4f; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── VISUAL COMPARE ROW ── */
+.compare-row {
+  display:flex; flex-direction:column; gap:10px; background:#fff;
+  border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.compare-item {
+  display:flex; align-items:center; gap:12px;
+  border-radius:14px; padding:12px 14px;
+}
+.compare-item.thick-item { background:#e8eaf6; border:3px solid #9fa8da; }
+.compare-item.thin-item  { background:#fce4ec; border:3px solid #f48fb1; }
+.compare-item.heavy-item { background:#fff3e0; border:3px solid #ffb74d; }
+.compare-item.light-item { background:#e8f5e9; border:3px solid #81c784; }
+.compare-label { font-family:'Fredoka One',cursive; font-size:16px; }
+.compare-bar { height:22px; border-radius:30px; }
+.thick-bar { background:linear-gradient(90deg,#3949ab,#7986cb); width:180px; }
+.thin-bar  { background:linear-gradient(90deg,#e91e63,#f48fb1); width:60px; }
+.heavy-emoji { font-size:44px; }
+.light-emoji { font-size:26px; }
+
+/* ── WORD BUBBLE ── */
+.word-bubble {
+  display:inline-block; padding:8px 20px; border-radius:30px;
+  font-family:'Fredoka One',cursive; font-size:22px; margin:6px 4px;
+}
+.wb-thick  { background:#3949ab; color:#fff; }
+.wb-thin   { background:#e91e63; color:#fff; }
+.wb-heavy  { background:#e65100; color:#fff; }
+.wb-light  { background:#2e7d32; color:#fff; }
+
+/* ── MEASURE CARD ── */
+.measure-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #f8bbd9;
+  display:flex; align-items:center; gap:16px;
+}
+.mc-emoji { font-size:48px; }
+.mc-body { flex:1; }
+.mc-name { font-family:'Fredoka One',cursive; font-size:20px; color:#880e4f; }
+.mc-desc { font-size:14px; font-weight:800; color:#555; margin-top:4px; line-height:1.5; }
+
+/* ── PRACTICE CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #f8bbd9; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:19px; color:#333; text-align:center; margin-bottom:14px; line-height:1.5; white-space:pre-line; }
+.prac-q .visual { font-size:32px; display:block; margin-bottom:8px; letter-spacing:2px; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#fce4ec; border:3px solid #f48fb1; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#880e4f; user-select:none;
+  line-height:1.3;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#1b5e20; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:16px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#e8f5e9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.dot { width:14px; height:14px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done { background:#1b5e20; }
+.dot.active { background:#880e4f; }
+
+/* ── NEXT BUTTON ── */
+.next-btn {
+  display:block; width:100%; padding:16px; border-radius:18px; border:none; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#fff; margin-top:14px;
+  background:linear-gradient(135deg,#880e4f,#c2185b);
+  box-shadow:0 4px 16px rgba(136,14,79,.35); transition:all .2s;
+}
+.next-btn:disabled { background:#bdbdbd; box-shadow:none; cursor:not-allowed; }
+.next-btn:not(:disabled):active { transform:scale(.97); }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(135deg,#880e4f,#e91e63);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; opacity:0; pointer-events:none; transition:opacity .5s; padding:24px; text-align:center;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:38px; color:#ffd600; margin-bottom:10px; }
+.celeb-sub   { font-size:16px; color:#fff; font-weight:800; line-height:1.7; margin-bottom:16px; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd600; font-weight:900; margin-bottom:20px; }
+.celeb-btn   { padding:16px 36px; border-radius:50px; border:none; background:#ffd600; color:#880e4f;
+  font-family:'Fredoka One',cursive; font-size:22px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+
+/* ── HIGHLIGHT WORD ── */
+.hw { display:inline; font-family:'Fredoka One',cursive; font-size:inherit; }
+.hw.blue   { color:#1976d2; }
+.hw.pink   { color:#e91e63; }
+.hw.purple { color:#7b1fa2; }
+.hw.orange { color:#e65100; }
+.hw.green  { color:#2e7d32; }
+.hw.red    { color:#c62828; }
+.hw.indigo { color:#3949ab; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">⚖️ Lesson 16 — Weight</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">⚖️</span>
+  <h1>Let's Learn Weight!</h1>
+  <p>Thick · Thin · Heavy · Light!</p>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="prog-wrap">
+  <div class="prog-label">🚀 Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  id="tab-thickthin"   onclick="tabClick('thickthin')">🪵 Thick &amp; Thin</div>
+  <div class="step-tab locked"  id="tab-heavylight"  onclick="tabClick('heavylight')">🪨 Heavy &amp; Light</div>
+  <div class="step-tab locked"  id="tab-compare"     onclick="tabClick('compare')">⚖️ Compare!</div>
+  <div class="step-tab locked"  id="tab-quiz"        onclick="tabClick('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════
+     TAB 1 — THICK & THIN
+══════════════════════════════ -->
+<div class="tab-panel active" id="panel-thickthin">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <div class="banner-emoji">🪵</div>
+    <div>
+      <div class="banner-title" style="color:#1a237e;">Thick and Thin</div>
+      <div class="banner-sub" style="color:#283593;">Tap the right answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#3949ab;">
+    <div class="ic-title" style="color:#3949ab;">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-thick">THICK</span>
+      <span class="word-bubble wb-thin">THIN</span><br><br>
+      The <span class="hw indigo">leg</span> of an elephant is <span class="hw indigo">THICK</span>. 🐘<br>
+      The <span class="hw pink">tail</span> of an elephant is <span class="hw pink">THIN</span>. 🐘<br><br>
+      A <span class="hw indigo">rope</span> is <span class="hw indigo">THICK</span>. 🪢<br>
+      A <span class="hw pink">thread</span> is <span class="hw pink">THIN</span>. 🧵<br><br>
+      Something that is wide or fat is <span class="hw indigo">THICK</span>.<br>
+      Something that is narrow or slim is <span class="hw pink">THIN</span>.
+    </div>
+  </div>
+
+  <div class="compare-row">
+    <div class="compare-item thick-item">
+      <div class="compare-bar thick-bar"></div>
+      <div class="compare-label">🪵 THICK</div>
+    </div>
+    <div class="compare-item thin-item">
+      <div class="compare-bar thin-bar"></div>
+      <div class="compare-label">🧵 THIN</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="ttDots"></div>
+  <div id="ttSteps"></div>
+  <button class="next-btn" id="ttNextBtn" onclick="goNext('thickthin','heavylight')" disabled>Next: Heavy &amp; Light ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 2 — HEAVY & LIGHT
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-heavylight">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <div class="banner-emoji">🪨</div>
+    <div>
+      <div class="banner-title" style="color:#bf360c;">Heavy and Light</div>
+      <div class="banner-sub" style="color:#e64a19;">Which weighs more? Tap the answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e65100;">
+    <div class="ic-title" style="color:#e65100;">🔑 Key Words</div>
+    <div class="ic-text">
+      <span class="word-bubble wb-heavy">HEAVY</span>
+      <span class="word-bubble wb-light">LIGHT</span><br><br>
+      A <span class="hw orange">rock</span> is <span class="hw orange">HEAVY</span>. 🪨<br>
+      A piece of <span class="hw green">wood</span> is <span class="hw green">LIGHT</span>. 🪵<br><br>
+      A <span class="hw orange">doll</span> is <span class="hw orange">HEAVY</span>. 🧸<br>
+      A <span class="hw green">feather</span> is <span class="hw green">LIGHT</span>. 🪶<br><br>
+      A <span class="hw orange">pumpkin</span> is <span class="hw orange">HEAVY</span>. 🎃<br>
+      An <span class="hw green">orange</span> is <span class="hw green">LIGHT</span>. 🍊<br><br>
+      When something is hard to lift, it is <span class="hw orange">HEAVY</span>.<br>
+      When something is easy to lift, it is <span class="hw green">LIGHT</span>.
+    </div>
+  </div>
+
+  <div class="compare-row">
+    <div class="compare-item heavy-item">
+      <div class="heavy-emoji">🪨</div>
+      <div class="compare-label" style="color:#e65100;">HEAVY — Hard to lift!</div>
+    </div>
+    <div class="compare-item light-item">
+      <div class="light-emoji">🪶</div>
+      <div class="compare-label" style="color:#2e7d32;">LIGHT — Easy to lift!</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="hlDots"></div>
+  <div id="hlSteps"></div>
+  <button class="next-btn" id="hlNextBtn" onclick="goNext('heavylight','compare')" disabled>Next: Compare! ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 3 — COMPARE
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-compare">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">⚖️</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Compare Objects!</div>
+      <div class="banner-sub" style="color:#2e7d32;">Thick vs Thin · Heavy vs Light</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#2e7d32;">
+    <div class="ic-title" style="color:#2e7d32;">📖 Let's Compare!</div>
+    <div class="ic-text">
+      We can <span class="hw green">compare</span> objects to find out which is <span class="hw indigo">thick</span> or <span class="hw pink">thin</span>.<br><br>
+      We can also compare to find out which is <span class="hw orange">heavy</span> or <span class="hw green">light</span>.<br><br>
+      A <span class="hw orange">dog</span> is heavier than a <span class="hw green">cat</span>. 🐕🐈<br>
+      A <span class="hw orange">big book</span> is heavier than a <span class="hw green">small book</span>. 📚📕<br>
+      A <span class="hw orange">football</span> is heavier than a <span class="hw green">marble</span>. ⚽🔮<br>
+      A <span class="hw orange">bucket of water</span> is heavier than an <span class="hw green">empty bottle</span>. 🪣🍶<br><br>
+      A <span class="hw indigo">log</span> is thicker than a <span class="hw pink">stick</span>. 🪵<br>
+      A <span class="hw indigo">big candle</span> is thicker than a <span class="hw pink">small candle</span>. 🕯️
+    </div>
+  </div>
+
+  <div class="progress-dots" id="coDots"></div>
+  <div id="coSteps"></div>
+  <button class="next-btn" id="coNextBtn" onclick="goNext('compare','quiz')" disabled>Next: Big Quiz! 🏆 ➜</button>
+</div>
+
+<!-- ══════════════════════════════
+     TAB 4 — BIG QUIZ
+══════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f8bbd9,#f48fb1);">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Big Quiz — All Topics!</div>
+      <div class="banner-sub" style="color:#ad1457;">Finish this and you are a Weight Champion! 🎉</div>
+    </div>
+  </div>
+
+  <div class="progress-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="next-btn" id="qFinishBtn" onclick="showCelebration()" disabled>🎉 Finish &amp; Celebrate!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-title">🎉 You Did It! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 Play Again!</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let stars = 0;
+let answeredMap = {};
+const doneTabs     = new Set();
+const unlockedTabs = new Set(['thickthin']);
+const tabOrder = ['thickthin','heavylight','compare','quiz'];
+
+/* ═══════════════════════════════════════════
+   TAB CLICK
+═══════════════════════════════════════════ */
+function tabClick(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.getElementById('tab-'+id);
+    el.classList.add('shaking');
+    setTimeout(()=>el.classList.remove('shaking'),550);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const tab = document.getElementById('tab-'+id);
+  tab.classList.remove('unlocked','locked','done');
+  tab.classList.add('active');
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════════ */
+function updateProgress(){
+  const done = doneTabs.size;
+  const total = tabOrder.length;
+  document.getElementById('progFill').style.width = (done/total*100)+'%';
+  document.getElementById('starsNum').textContent = stars;
+
+  tabOrder.forEach(id=>{
+    const el = document.getElementById('tab-'+id);
+    if(el.classList.contains('active')) return;
+    el.classList.remove('unlocked','locked','done');
+    if(doneTabs.has(id))          el.classList.add('done');
+    else if(unlockedTabs.has(id)) el.classList.add('unlocked');
+    else                          el.classList.add('locked');
+  });
+}
+
+function goNext(currentTab, nextTab){
+  doneTabs.add(currentTab);
+  unlockedTabs.add(nextTab);
+  updateProgress();
+  tabClick(nextTab);
+}
+
+/* ═══════════════════════════════════════════
+   RENDER QUESTIONS
+═══════════════════════════════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  container.innerHTML = '';
+  dotsEl.innerHTML = '';
+
+  let answered = 0;
+  const total = questions.length;
+  const dotEls = [];
+
+  questions.forEach((q,i)=>{
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i===0?' active':'');
+    dotsEl.appendChild(dot);
+    dotEls.push(dot);
+
+    const card = document.createElement('div');
+    card.className = 'prac-card';
+    card.id = containerID+'_card'+i;
+    if(i>0) card.style.display='none';
+
+    const visual = q.visual ? `<span class="visual">${q.visual}</span>` : '';
+    card.innerHTML = `
+      <div class="prac-q">${visual}${q.question}</div>
+      <div class="prac-opts" id="${containerID}_opts${i}"></div>
+      <div class="fb-box" id="${containerID}_fb${i}"></div>
+    `;
+    container.appendChild(card);
+
+    const optsEl = card.querySelector('.prac-opts');
+    const fbEl   = card.querySelector('.fb-box');
+
+    q.options.forEach((opt,j)=>{
+      const btn = document.createElement('div');
+      btn.className = 'prac-opt';
+      btn.innerHTML = opt;
+      btn.onclick = ()=>{
+        if(answeredMap[containerID+'_'+i]) return;
+        answeredMap[containerID+'_'+i] = true;
+        const allBtns = optsEl.querySelectorAll('.prac-opt');
+        allBtns.forEach(b=>b.style.pointerEvents='none');
+        if(j===q.correct){
+          btn.classList.add('right');
+          fbEl.className='fb-box ok';
+          fbEl.textContent='✅ Correct! Well done! 🌟';
+          stars++;
+          document.getElementById('starsNum').textContent = stars;
+        } else {
+          btn.classList.add('wrong');
+          allBtns[q.correct].classList.add('right');
+          fbEl.className='fb-box no';
+          fbEl.textContent='❌ Not quite! The right answer is highlighted. Try again next time! 💪';
+        }
+        answered++;
+        dotEls[i].classList.remove('active');
+        dotEls[i].classList.add('done');
+
+        setTimeout(()=>{
+          if(i+1 < total){
+            card.style.display='none';
+            document.getElementById(containerID+'_card'+(i+1)).style.display='block';
+            dotEls[i+1].classList.add('active');
+          } else {
+            nextBtn.disabled = false;
+          }
+        }, 1100);
+      };
+      optsEl.appendChild(btn);
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 1: THICK & THIN
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'ttSteps', dotsID:'ttDots', nextBtnID:'ttNextBtn',
+  questions:[
+    {visual:'🐘',question:'The LEG of an elephant is ___ and the TAIL is ___.',options:['Thin · Thick','Thick · Thin','Long · Short','Heavy · Light'],correct:1},
+    {visual:'🪢🧵',question:'A rope is ___ and a thread is ___.',options:['Thin · Thick','Short · Long','Thick · Thin','Light · Heavy'],correct:2},
+    {visual:'🕯️🕯️',question:'A big candle is ___ and a small birthday candle is ___.',options:['Thin · Thick','Thick · Thin','Long · Short','Short · Tall'],correct:1},
+    {visual:'📚📄',question:'A book is ___ and a sheet of paper is ___.',options:['Thin · Thick','Short · Tall','Thick · Thin','Heavy · Light'],correct:2},
+    {visual:'🪵',question:'A thick log is wide. A thin stick is narrow. What do we call something that is narrow?',options:['THICK','HEAVY','THIN','LIGHT'],correct:2},
+    {visual:'🖊️✏️',question:'A thick marker and a thin pencil. Which is THIN?',options:['The marker','Both same','The pencil','Neither'],correct:2},
+    {visual:'📦📦',question:'A big soap bar is ___ than a small soap bar.',options:['Thinner','Lighter','Thicker','Shorter'],correct:2},
+    {visual:'🌳🌿',question:'A big tree trunk is thick. A little vine is thin. The vine is ___.',options:['Thick','Heavy','Thin','Tall'],correct:2},
+    {visual:'🪣',question:'A thick rope can carry heavy things. A thin thread cannot. We say the rope is ___.',options:['Light','Thin','Long','Thick'],correct:3},
+    {visual:'🖍️🖍️',question:'A big fat crayon is ___ than a thin crayon.',options:['Thinner','Lighter','Thicker','Shorter'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 2: HEAVY & LIGHT
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'hlSteps', dotsID:'hlDots', nextBtnID:'hlNextBtn',
+  questions:[
+    {visual:'🪨🍁',question:'A rock is ___ and a leaf is ___.',options:['Light · Heavy','Heavy · Light','Thick · Thin','Tall · Short'],correct:1},
+    {visual:'🧸🪶',question:'A doll is ___ and a feather is ___.',options:['Light · Heavy','Thin · Thick','Heavy · Light','Short · Tall'],correct:2},
+    {visual:'🎃🍊',question:'A pumpkin is ___ and an orange is ___.',options:['Light · Heavy','Thin · Thick','Heavy · Light','Short · Tall'],correct:2},
+    {visual:'🐕🐈',question:'A dog is ___ than a cat.',options:['Lighter','Thinner','Heavier','Shorter'],correct:2},
+    {visual:'📚📕',question:'A big thick book is ___ than a small thin book.',options:['Lighter','Shorter','Heavier','Thinner'],correct:2},
+    {visual:'🪣💧',question:'A full bucket of water is HEAVY. An empty bottle is LIGHT. Which is hard to lift?',options:['Empty bottle','Both same','Full bucket','Neither'],correct:2},
+    {visual:'⚽🔮',question:'A football is ___ than a small glass marble.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+    {visual:'🪶',question:'A feather is very easy to lift. We say a feather is ___.',options:['Heavy','Thick','Light','Tall'],correct:2},
+    {visual:'🪨',question:'A rock is very hard to lift. We say a rock is ___.',options:['Light','Thin','Tall','Heavy'],correct:3},
+    {visual:'🛒',question:'A full shopping bag is ___ than an empty bag.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 3: COMPARE
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'coSteps', dotsID:'coDots', nextBtnID:'coNextBtn',
+  questions:[
+    {visual:'🐕🐈',question:'A dog and a cat. Which is HEAVIER?',options:['Cat','Both same','Dog','Cannot say'],correct:2},
+    {visual:'⚽🔮',question:'A football and a marble. Which is LIGHTER?',options:['Football','Both same','Marble','Neither'],correct:2},
+    {visual:'🪵🧵',question:'A log and a thread. The log is ___ and the thread is ___.',options:['Thin · Thick','Thick · Thin','Heavy · Light','Light · Heavy'],correct:1},
+    {visual:'📚📕',question:'Big book and small book. Tick the HEAVY one.',options:['Small book','Both same','Big book','Cannot say'],correct:2},
+    {visual:'🪣🍶',question:'A full bucket and an empty bottle. Circle the LIGHT one.',options:['Full bucket','Both same','Empty bottle','Neither'],correct:2},
+    {visual:'🕯️🕯️',question:'A thick big candle and a thin birthday candle. Which is THICK?',options:['Birthday candle','Both same','Big candle','Neither'],correct:2},
+    {visual:'🎃🍊',question:'A pumpkin and an orange. Which is LIGHT?',options:['Pumpkin','Both same','Orange','Neither'],correct:2},
+    {visual:'🐘',question:'An elephant leg is thick. An elephant tail is thin. Which is THIN?',options:['Leg','Both same','Tail','Neither'],correct:2},
+    {visual:'🪨🪶',question:'A rock and a feather. Which is HEAVY?',options:['Feather','Both same','Rock','Neither'],correct:2},
+    {visual:'🖍️✏️',question:'A fat crayon and a thin pencil. Which is THIN?',options:['Crayon','Both same','Pencil','Neither'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   QUESTIONS — TAB 4: BIG QUIZ
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🐘',question:'🏆 The LEG of an elephant is ___.',options:['Thin','Light','Thick','Short'],correct:2},
+    {visual:'🐘',question:'🏆 The TAIL of an elephant is ___.',options:['Thick','Heavy','Thin','Tall'],correct:2},
+    {visual:'🪢🧵',question:'🏆 A rope is THICK and a thread is ___.',options:['Heavy','Thick','Tall','Thin'],correct:3},
+    {visual:'🪨🪶',question:'🏆 A rock is HEAVY and a feather is ___.',options:['Thick','Heavy','Thin','Light'],correct:3},
+    {visual:'🎃🍊',question:'🏆 A pumpkin is HEAVY and an orange is ___.',options:['Heavy','Thin','Light','Thick'],correct:2},
+    {visual:'🧸',question:'🏆 A doll is ___.',options:['Light','Thin','Heavy','Short'],correct:2},
+    {visual:'📚📕',question:'🏆 A big thick book is ___ than a small thin book.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+    {visual:'🐕🐈',question:'🏆 A dog is ___ than a cat.',options:['Lighter','Thinner','Heavier','Shorter'],correct:2},
+    {visual:'🖍️✏️',question:'🏆 A fat crayon is ___ than a thin pencil.',options:['Thinner','Lighter','Thicker','Shorter'],correct:2},
+    {visual:'🪣💧',question:'🏆 A full bucket of water is ___.',options:['Light','Thin','Tall','Heavy'],correct:3},
+    {visual:'⚽🔮',question:'🏆 A football is ___ than a glass marble.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+    {visual:'⚖️',question:'🏆 When something is easy to lift, we say it is ___.',options:['Heavy','Thick','Thin','Light'],correct:3},
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know THICK and THIN! 🪵🧵\nYou know HEAVY and LIGHT! 🪨🪶\nYou can COMPARE objects! ⚖️\nYou are a Weight Champion! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ═══════════════════════════════════════════
+   RESTART
+═══════════════════════════════════════════ */
+function restartAll(){
+  stars=0;
+  answeredMap={};
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('thickthin');
+
+  renderQuestions({containerID:'ttSteps',dotsID:'ttDots',nextBtnID:'ttNextBtn',questions:[
+    {visual:'🐘',question:'The LEG of an elephant is ___ and the TAIL is ___.',options:['Thin · Thick','Thick · Thin','Long · Short','Heavy · Light'],correct:1},
+    {visual:'🪢🧵',question:'A rope is ___ and a thread is ___.',options:['Thin · Thick','Short · Long','Thick · Thin','Light · Heavy'],correct:2},
+    {visual:'🕯️🕯️',question:'A big candle is ___ and a small birthday candle is ___.',options:['Thin · Thick','Thick · Thin','Long · Short','Short · Tall'],correct:1},
+    {visual:'📚📄',question:'A book is ___ and a sheet of paper is ___.',options:['Thin · Thick','Short · Tall','Thick · Thin','Heavy · Light'],correct:2},
+    {visual:'🪵',question:'A thick log is wide. A thin stick is narrow. What do we call something that is narrow?',options:['THICK','HEAVY','THIN','LIGHT'],correct:2},
+    {visual:'🖊️✏️',question:'A thick marker and a thin pencil. Which is THIN?',options:['The marker','Both same','The pencil','Neither'],correct:2},
+    {visual:'📦📦',question:'A big soap bar is ___ than a small soap bar.',options:['Thinner','Lighter','Thicker','Shorter'],correct:2},
+    {visual:'🌳🌿',question:'A big tree trunk is thick. A little vine is thin. The vine is ___.',options:['Thick','Heavy','Thin','Tall'],correct:2},
+    {visual:'🪣',question:'A thick rope can carry heavy things. A thin thread cannot. We say the rope is ___.',options:['Light','Thin','Long','Thick'],correct:3},
+    {visual:'🖍️🖍️',question:'A big fat crayon is ___ than a thin crayon.',options:['Thinner','Lighter','Thicker','Shorter'],correct:2},
+  ]});
+  document.getElementById('ttNextBtn').disabled=true;
+
+  renderQuestions({containerID:'hlSteps',dotsID:'hlDots',nextBtnID:'hlNextBtn',questions:[
+    {visual:'🪨🍁',question:'A rock is ___ and a leaf is ___.',options:['Light · Heavy','Heavy · Light','Thick · Thin','Tall · Short'],correct:1},
+    {visual:'🧸🪶',question:'A doll is ___ and a feather is ___.',options:['Light · Heavy','Thin · Thick','Heavy · Light','Short · Tall'],correct:2},
+    {visual:'🎃🍊',question:'A pumpkin is ___ and an orange is ___.',options:['Light · Heavy','Thin · Thick','Heavy · Light','Short · Tall'],correct:2},
+    {visual:'🐕🐈',question:'A dog is ___ than a cat.',options:['Lighter','Thinner','Heavier','Shorter'],correct:2},
+    {visual:'📚📕',question:'A big thick book is ___ than a small thin book.',options:['Lighter','Shorter','Heavier','Thinner'],correct:2},
+    {visual:'🪣💧',question:'A full bucket of water is HEAVY. An empty bottle is LIGHT. Which is hard to lift?',options:['Empty bottle','Both same','Full bucket','Neither'],correct:2},
+    {visual:'⚽🔮',question:'A football is ___ than a small glass marble.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+    {visual:'🪶',question:'A feather is very easy to lift. We say a feather is ___.',options:['Heavy','Thick','Light','Tall'],correct:2},
+    {visual:'🪨',question:'A rock is very hard to lift. We say a rock is ___.',options:['Light','Thin','Tall','Heavy'],correct:3},
+    {visual:'🛒',question:'A full shopping bag is ___ than an empty bag.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+  ]});
+  document.getElementById('hlNextBtn').disabled=true;
+
+  renderQuestions({containerID:'coSteps',dotsID:'coDots',nextBtnID:'coNextBtn',questions:[
+    {visual:'🐕🐈',question:'A dog and a cat. Which is HEAVIER?',options:['Cat','Both same','Dog','Cannot say'],correct:2},
+    {visual:'⚽🔮',question:'A football and a marble. Which is LIGHTER?',options:['Football','Both same','Marble','Neither'],correct:2},
+    {visual:'🪵🧵',question:'A log and a thread. The log is ___ and the thread is ___.',options:['Thin · Thick','Thick · Thin','Heavy · Light','Light · Heavy'],correct:1},
+    {visual:'📚📕',question:'Big book and small book. Tick the HEAVY one.',options:['Small book','Both same','Big book','Cannot say'],correct:2},
+    {visual:'🪣🍶',question:'A full bucket and an empty bottle. Circle the LIGHT one.',options:['Full bucket','Both same','Empty bottle','Neither'],correct:2},
+    {visual:'🕯️🕯️',question:'A thick big candle and a thin birthday candle. Which is THICK?',options:['Birthday candle','Both same','Big candle','Neither'],correct:2},
+    {visual:'🎃🍊',question:'A pumpkin and an orange. Which is LIGHT?',options:['Pumpkin','Both same','Orange','Neither'],correct:2},
+    {visual:'🐘',question:'An elephant leg is thick. An elephant tail is thin. Which is THIN?',options:['Leg','Both same','Tail','Neither'],correct:2},
+    {visual:'🪨🪶',question:'A rock and a feather. Which is HEAVY?',options:['Feather','Both same','Rock','Neither'],correct:2},
+    {visual:'🖍️✏️',question:'A fat crayon and a thin pencil. Which is THIN?',options:['Crayon','Both same','Pencil','Neither'],correct:2},
+  ]});
+  document.getElementById('coNextBtn').disabled=true;
+
+  renderQuestions({containerID:'qSteps',dotsID:'qDots',nextBtnID:'qFinishBtn',questions:[
+    {visual:'🐘',question:'🏆 The LEG of an elephant is ___.',options:['Thin','Light','Thick','Short'],correct:2},
+    {visual:'🐘',question:'🏆 The TAIL of an elephant is ___.',options:['Thick','Heavy','Thin','Tall'],correct:2},
+    {visual:'🪢🧵',question:'🏆 A rope is THICK and a thread is ___.',options:['Heavy','Thick','Tall','Thin'],correct:3},
+    {visual:'🪨🪶',question:'🏆 A rock is HEAVY and a feather is ___.',options:['Thick','Heavy','Thin','Light'],correct:3},
+    {visual:'🎃🍊',question:'🏆 A pumpkin is HEAVY and an orange is ___.',options:['Heavy','Thin','Light','Thick'],correct:2},
+    {visual:'🧸',question:'🏆 A doll is ___.',options:['Light','Thin','Heavy','Short'],correct:2},
+    {visual:'📚📕',question:'🏆 A big thick book is ___ than a small thin book.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+    {visual:'🐕🐈',question:'🏆 A dog is ___ than a cat.',options:['Lighter','Thinner','Heavier','Shorter'],correct:2},
+    {visual:'🖍️✏️',question:'🏆 A fat crayon is ___ than a thin pencil.',options:['Thinner','Lighter','Thicker','Shorter'],correct:2},
+    {visual:'🪣💧',question:'🏆 A full bucket of water is ___.',options:['Light','Thin','Tall','Heavy'],correct:3},
+    {visual:'⚽🔮',question:'🏆 A football is ___ than a glass marble.',options:['Lighter','Thinner','Shorter','Heavier'],correct:3},
+    {visual:'⚖️',question:'🏆 When something is easy to lift, we say it is ___.',options:['Heavy','Thick','Thin','Light'],correct:3},
+  ]});
+  document.getElementById('qFinishBtn').disabled=true;
+
+  updateProgress();
+  tabClick('thickthin');
+}
+</script>
+</body>
+</html>

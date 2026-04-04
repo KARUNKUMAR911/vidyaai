@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 5: Addition</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#2e7d32);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.25); border:2px solid rgba(255,215,0,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.82); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#66bb6a); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#2e7d32; border-color:#c8e6c9; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#66bb6a; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #66bb6a;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── STORY CARD ── */
+.story-card {
+  background:#fff; border-radius:24px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #c8e6c9; overflow:hidden;
+}
+.story-top { padding:18px 16px 12px; text-align:center; }
+.story-emojis { font-size:52px; margin-bottom:8px; }
+.story-text { font-family:'Fredoka One',cursive; font-size:17px; color:#222; line-height:1.5; }
+.story-text .kw { color:#1b5e20; font-size:20px; }
+.story-bottom { background:#e8f5e9; padding:14px 16px; }
+
+/* ── CHOICE BUTTONS ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.choice-btn {
+  flex:1; min-width:80px; max-width:120px; padding:14px 10px; border-radius:16px; border:3px solid #c8e6c9;
+  background:#f1f8e9; font-family:'Fredoka One',cursive; font-size:22px; color:#2e7d32;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn .cb-emoji { font-size:36px; }
+.choice-btn .cb-word { font-size:16px; }
+.choice-btn.correct { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#c8e6c9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#1b5e20,#2e7d32); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f57f17,#fbc02d); color:#fff; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#66bb6a; }
+
+/* ── COUNT AREA ── */
+.count-area {
+  background:#fff; border-radius:24px; padding:18px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.count-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; text-align:center; margin-bottom:12px; }
+.count-row { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+.count-group { text-align:center; }
+.count-emojis { font-size:32px; line-height:1.3; letter-spacing:2px; }
+.count-num { font-family:'Fredoka One',cursive; font-size:28px; color:#1b5e20; margin-top:4px; }
+.count-op { font-family:'Fredoka One',cursive; font-size:44px; color:#f57f17; }
+.count-eq { font-family:'Fredoka One',cursive; font-size:44px; color:#1976d2; }
+.count-box { background:#e8f5e9; border:4px solid #66bb6a; border-radius:16px;
+  width:70px; height:70px; display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:36px; color:#1b5e20; }
+.count-box.filled { background:#c8e6c9; border-color:#2e7d32; }
+
+/* ── SIGN LEARN ── */
+.sign-display {
+  background:#fff; border-radius:24px; padding:20px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center;
+}
+.sign-big { font-family:'Fredoka One',cursive; font-size:100px; line-height:1; }
+.sign-name { font-family:'Fredoka One',cursive; font-size:28px; margin:8px 0 4px; }
+.sign-desc { font-size:15px; font-weight:800; color:#555; }
+.sign-example { font-family:'Fredoka One',cursive; font-size:32px; color:#1b5e20; margin-top:12px; }
+
+/* ── SIGN QUIZ ── */
+.sign-quiz-card {
+  background:#fff; border-radius:24px; padding:20px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.sign-question { font-family:'Fredoka One',cursive; font-size:26px; color:#222; text-align:center; margin-bottom:16px; }
+.sign-opts { display:flex; gap:10px; justify-content:center; }
+.sign-opt {
+  width:80px; height:80px; border-radius:20px; border:3px solid #c8e6c9; background:#f1f8e9;
+  font-family:'Fredoka One',cursive; font-size:44px; color:#2e7d32;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s;
+  user-select:none;
+}
+.sign-opt:active { transform:scale(.9); }
+.sign-opt.correct { border-color:#2e7d32; background:#c8e6c9; }
+.sign-opt.wrong   { border-color:#c62828; background:#ffcdd2; }
+
+/* ── ADD PRACTICE ── */
+.add-card {
+  background:#fff; border-radius:24px; padding:20px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #c8e6c9;
+}
+.add-card.done { border-color:#2e7d32; background:#f1f8e9; }
+.add-equation { font-family:'Fredoka One',cursive; font-size:32px; color:#333; text-align:center; margin-bottom:14px; }
+.add-equation .kw { color:#1b5e20; }
+.add-equation .op { color:#f57f17; }
+.add-equation .eq { color:#1976d2; }
+.add-opts { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.add-opt {
+  background:#f1f8e9; border:3px solid #c8e6c9; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:26px; color:#2e7d32;
+  user-select:none;
+}
+.add-opt:active { transform:scale(.91); }
+.add-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.add-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── PROPERTY CARD ── */
+.prop-card {
+  background:#fff; border-radius:24px; padding:18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.prop-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:12px; text-align:center; }
+.prop-row { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px; }
+.prop-num { font-family:'Fredoka One',cursive; font-size:28px; color:#333; }
+.prop-op  { font-family:'Fredoka One',cursive; font-size:28px; color:#f57f17; }
+.prop-eq  { font-family:'Fredoka One',cursive; font-size:28px; color:#1976d2; }
+.prop-ans { font-family:'Fredoka One',cursive; font-size:28px; color:#1b5e20; background:#c8e6c9; border-radius:10px; padding:4px 14px; }
+.prop-blank {
+  width:60px; height:50px; border-radius:12px; border:3px solid #c8e6c9; background:#e8f5e9;
+  font-family:'Fredoka One',cursive; font-size:26px; color:#1b5e20;
+  display:inline-flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s;
+}
+.prop-blank.filled { background:#c8e6c9; border-color:#2e7d32; }
+.prop-opts { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
+.prop-opt {
+  background:#f1f8e9; border:3px solid #c8e6c9; border-radius:12px; padding:10px 18px;
+  font-family:'Fredoka One',cursive; font-size:24px; color:#2e7d32; cursor:pointer; transition:all .2s;
+}
+.prop-opt:active { transform:scale(.9); }
+.prop-opt.used { opacity:.35; pointer-events:none; }
+.prop-opt.right { border-color:#2e7d32; background:#c8e6c9; }
+.prop-opt.wrong { border-color:#c62828; background:#ffcdd2; color:#c62828; animation:flashNo .4s; }
+@keyframes flashNo { 0%,100%{transform:scale(1)} 50%{transform:scale(.9)} }
+
+/* ── QUIZ ── */
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:64px; text-align:center; margin:10px 0; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff; border:3px solid #c8e6c9; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive;
+  font-size:20px; color:#1b5e20; display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#2e7d32; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(27,94,32,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; }
+.celeb-sub   { font-size:16px; color:rgba(255,255,255,.85); font-weight:800; margin-bottom:8px; text-align:center; padding:0 30px; line-height:1.6; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#1b5e20; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+/* ── RABBIT STORY ── */
+.rabbit-track { background:#fff; border-radius:24px; padding:18px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.rabbit-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.rabbit-nums { font-family:'Fredoka One',cursive; font-size:16px; color:#555; flex:1; min-width:140px; }
+.rabbit-emojis { font-size:28px; letter-spacing:1px; }
+.rabbit-eq { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; white-space:nowrap; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">➕ Chapter 5 — Addition</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🐰</span>
+  <h1>Addition (Sum not more than 9)</h1>
+  <p>Count • Add • Use + and = signs • Learn the magic of numbers!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start! 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="story"   onclick="tabClick('story')">🐰 Story</div>
+  <div class="step-tab locked"  data-tab="signs"   onclick="tabClick('signs')">➕ Signs</div>
+  <div class="step-tab locked"  data-tab="count"   onclick="tabClick('count')">🍎 Count & Add</div>
+  <div class="step-tab locked"  data-tab="prop"    onclick="tabClick('prop')">🔄 Property</div>
+  <div class="step-tab locked"  data-tab="practice" onclick="tabClick('practice')">✏️ Practice</div>
+  <div class="step-tab locked"  data-tab="quiz"    onclick="tabClick('quiz')">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — RABBIT STORY
+══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-story">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff8f00)">
+    <span class="banner-emoji">🐰</span>
+    <div>
+      <div class="banner-title" style="color:#fff">The Rabbit Story!</div>
+      <div class="banner-sub" style="color:#fff">Tap each picture to see what happens next!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 Lesson Goal</div>
+    <div class="ic-text">After this lesson you can: <strong>add using objects and pictures</strong>, and <strong>identify and use the symbols '+' and '='</strong>!</div>
+  </div>
+
+  <!-- Story steps -->
+  <div id="storySteps">
+
+    <div class="story-card" id="scard-0" style="opacity:.4">
+      <div class="story-top">
+        <div class="story-emojis">🐰</div>
+        <div class="story-text">One rabbit was <span class="kw">sitting</span>.</div>
+      </div>
+      <div class="story-bottom">
+        <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:20px;color:#1b5e20;">👆 TAP to begin!</div>
+      </div>
+    </div>
+
+    <div class="story-card" id="scard-1" style="display:none">
+      <div class="story-top">
+        <div class="story-emojis">🐰🐰</div>
+        <div class="story-text">One more rabbit <span class="kw">joins</span> — Making them <span class="kw">two</span>. Two rabbits were <span class="kw">playing</span>.</div>
+      </div>
+      <div class="story-bottom">
+        <div class="choice-row">
+          <div class="choice-btn" onclick="storyAnswer(0,'correct',this)"><div class="cb-word">1 + 1 = 2</div></div>
+          <div class="choice-btn" onclick="storyAnswer(0,'wrong',this)"><div class="cb-word">1 + 1 = 3</div></div>
+        </div>
+        <div class="fb-box" id="sfb-0"></div>
+      </div>
+    </div>
+
+    <div class="story-card" id="scard-2" style="display:none">
+      <div class="story-top">
+        <div class="story-emojis">🐰🐰🐰</div>
+        <div class="story-text">One more rabbit <span class="kw">joins</span> — Making them <span class="kw">three</span>. Three rabbits are ready for a <span class="kw">party</span>.</div>
+      </div>
+      <div class="story-bottom">
+        <div class="choice-row">
+          <div class="choice-btn" onclick="storyAnswer(1,'wrong',this)"><div class="cb-word">2 + 1 = 4</div></div>
+          <div class="choice-btn" onclick="storyAnswer(1,'correct',this)"><div class="cb-word">2 + 1 = 3</div></div>
+        </div>
+        <div class="fb-box" id="sfb-1"></div>
+      </div>
+    </div>
+
+    <div class="story-card" id="scard-3" style="display:none">
+      <div class="story-top">
+        <div class="story-emojis">🐰🐰🐰🐰</div>
+        <div class="story-text">One more <span class="kw">comes in</span> — Making them <span class="kw">four</span>. Four little rabbits are now ready to <span class="kw">race</span>.</div>
+      </div>
+      <div class="story-bottom">
+        <div class="choice-row">
+          <div class="choice-btn" onclick="storyAnswer(2,'correct',this)"><div class="cb-word">3 + 1 = 4</div></div>
+          <div class="choice-btn" onclick="storyAnswer(2,'wrong',this)"><div class="cb-word">3 + 1 = 5</div></div>
+        </div>
+        <div class="fb-box" id="sfb-2"></div>
+      </div>
+    </div>
+
+    <div class="story-card" id="scard-4" style="display:none">
+      <div class="story-top">
+        <div class="story-emojis">🐰🐰🐰🐰🐰</div>
+        <div class="story-text">One more <span class="kw">enters</span> — Making them <span class="kw">five</span>!</div>
+      </div>
+      <div class="story-bottom">
+        <div class="choice-row">
+          <div class="choice-btn" onclick="storyAnswer(3,'wrong',this)"><div class="cb-word">3 + 2 = 4</div></div>
+          <div class="choice-btn" onclick="storyAnswer(3,'correct',this)"><div class="cb-word">3 + 2 = 5</div></div>
+        </div>
+        <div class="fb-box" id="sfb-3"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="progress-dots" id="storyDots">
+    <div class="pdot" id="sdot-0"></div>
+    <div class="pdot" id="sdot-1"></div>
+    <div class="pdot" id="sdot-2"></div>
+    <div class="pdot" id="sdot-3"></div>
+  </div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Answer all 4 questions to continue!</div>
+  <button class="big-btn primary" id="storyNextBtn" disabled onclick="completeTab('story','signs','Rabbit Story','Signs ➕ =')">Next: Learn the Signs! ➕</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — SIGNS: + and =
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-signs">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1565c0,#1976d2)">
+    <span class="banner-emoji">➕</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Signs for Addition and Equal!</div>
+      <div class="banner-sub" style="color:#fff">'+' means ADD (Plus)  •  '=' means is equal to</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <div class="sign-display" style="flex:1">
+      <div class="sign-big" style="color:#f57f17">+</div>
+      <div class="sign-name" style="color:#f57f17">PLUS</div>
+      <div class="sign-desc">Means <strong>ADD</strong></div>
+      <div class="sign-example">4 <span style="color:#f57f17">+</span> 2</div>
+    </div>
+    <div class="sign-display" style="flex:1">
+      <div class="sign-big" style="color:#1976d2">=</div>
+      <div class="sign-name" style="color:#1976d2">EQUALS</div>
+      <div class="sign-desc">Means <strong>is equal to</strong></div>
+      <div class="sign-example">4 + 2 <span style="color:#1976d2">=</span> 6</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📝 We write addition like this:</div>
+    <div class="ic-text" style="font-size:26px;text-align:center;letter-spacing:4px;">
+      4 <strong style="color:#f57f17">+</strong> 2 <strong style="color:#1976d2">=</strong> 6
+    </div>
+    <div class="ic-text" style="margin-top:8px;">Read as: <strong>"Four plus two is equal to six"</strong></div>
+  </div>
+
+  <!-- Sign Quiz: pick the right sign -->
+  <div id="signQuizArea"></div>
+
+  <div class="progress-dots" id="signDots">
+    <div class="pdot" id="sqdot-0"></div>
+    <div class="pdot" id="sqdot-1"></div>
+    <div class="pdot" id="sqdot-2"></div>
+    <div class="pdot" id="sqdot-3"></div>
+    <div class="pdot" id="sqdot-4"></div>
+  </div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Pick the right sign for all 5 questions!</div>
+  <button class="big-btn primary" id="signsNextBtn" disabled onclick="completeTab('signs','count','Signs','Count & Add')">Next: Count & Add! 🍎</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — COUNT & ADD (Process of Addition)
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-count">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#6a1b9a,#8e24aa)">
+    <span class="banner-emoji">🍎</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Count and Add!</div>
+      <div class="banner-sub" style="color:#fff">See the pictures → count → pick the answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🔢 Process of Addition</div>
+    <div class="ic-text">When we put two groups together, we <strong>ADD</strong> them! Count the first group, count the second group, then count ALL together!</div>
+  </div>
+
+  <div id="countQuizArea"></div>
+
+  <div class="progress-dots" id="countDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px" id="countHint">Answer all questions to continue!</div>
+  <button class="big-btn primary" id="countNextBtn" disabled onclick="completeTab('count','prop','Count & Add','Addition Property')">Next: Addition Property! 🔄</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 4 — ADDITION PROPERTY (Order doesn't matter)
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-prop">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#880e4f,#c2185b)">
+    <span class="banner-emoji">🔄</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Addition Property!</div>
+      <div class="banner-sub" style="color:#fff">6+1 = 7  AND  1+6 = 7  — Same answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌟 Big Discovery!</div>
+    <div class="ic-text">When you add two numbers, you get the <strong>SAME answer</strong> even if you swap them!<br><strong>6 + 1 = 7</strong> is the same as <strong>1 + 6 = 7</strong></div>
+  </div>
+
+  <div id="propQuizArea"></div>
+
+  <div class="progress-dots" id="propDots"></div>
+  <button class="big-btn primary" id="propNextBtn" disabled onclick="completeTab('prop','practice','Addition Property','Practice')">Next: Practice Adding! ✏️</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 5 — PRACTICE (Add numbers)
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-practice">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#004d40,#00796b)">
+    <span class="banner-emoji">✏️</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Practice Adding!</div>
+      <div class="banner-sub" style="color:#fff">Tap the correct answer for each sum!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">✅ You can do it!</div>
+    <div class="ic-text">Look at each addition sum. Tap the <strong>correct answer</strong>. Remember: + means ADD and = means equals!</div>
+  </div>
+
+  <div id="practiceArea"></div>
+
+  <div class="progress-dots" id="practiceDots"></div>
+  <button class="big-btn primary" id="practiceNextBtn" disabled onclick="completeTab('practice','quiz','Practice','Final Quiz')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 6 — FINAL QUIZ
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#e53935)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Addition!</div>
+    </div>
+  </div>
+  <div class="quiz-box-wrap">
+    <div id="quizBox">
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:64px;margin-bottom:12px">🎯</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#333;margin-bottom:8px">Ready for the quiz?</div>
+        <div style="font-size:15px;font-weight:800;color:#666;margin-bottom:20px">10 questions about addition!</div>
+        <button class="big-btn primary" style="max-width:260px;margin:0 auto" onclick="startQuiz()">🚀 Start Quiz!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Chapter 5 Complete!</div>
+  <div class="celeb-sub" id="celebS">You learned: Adding with objects · Plus (+) · Equals (=) · Addition facts up to 9!</div>
+  <div class="celeb-stars" id="celebStar">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 Hooray!</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let stars = 0;
+let tabOrder = ['story','signs','count','prop','practice','quiz'];
+let tabDone = { story:false, signs:false, count:false, prop:false, practice:false, quiz:false };
+let currentTab = 'story';
+
+// ─────────────────────────────────────────
+// TAB SYSTEM
+// ─────────────────────────────────────────
+function tabClick(tab) {
+  if (tab === currentTab) return;
+  const el = document.querySelector(`[data-tab="${tab}"]`);
+  if (el.classList.contains('locked')) {
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 550);
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  switchTab(tab);
+}
+
+function switchTab(tab) {
+  document.getElementById('tab-'+currentTab).classList.remove('active');
+  document.querySelector(`[data-tab="${currentTab}"]`).classList.remove('active');
+  currentTab = tab;
+  document.getElementById('tab-'+tab).classList.add('active');
+  const el = document.querySelector(`[data-tab="${tab}"]`);
+  el.classList.remove('locked','unlocked','done');
+  el.classList.add('active');
+  updateProgress();
+}
+
+function completeTab(fromTab, toTab, fromName, toName) {
+  tabDone[fromTab] = true;
+  const fromEl = document.querySelector(`[data-tab="${fromTab}"]`);
+  fromEl.classList.remove('active');
+  fromEl.classList.add('done');
+  const toEl = document.querySelector(`[data-tab="${toTab}"]`);
+  toEl.classList.remove('locked');
+  toEl.classList.add('unlocked');
+  addStars(10);
+  switchTab(toTab);
+  speak('Great job! Now let\'s do ' + toName + '!');
+  if (toTab === 'quiz') buildQuizIntro();
+}
+
+function updateProgress() {
+  const done = Object.values(tabDone).filter(Boolean).length;
+  const pct = Math.round(done / tabOrder.length * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['story','signs','count','prop','practice','quiz'];
+  const names  = ['Rabbit Story','Signs','Count & Add','Property','Practice','Quiz'];
+  const idx = labels.indexOf(currentTab);
+  document.getElementById('progLabel').textContent = `Step ${idx+1} of 6: ${names[idx]}`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ─────────────────────────────────────────
+// TAB 1 — STORY
+// ─────────────────────────────────────────
+let storyStep = 0;
+let storyCorrect = [false,false,false,false];
+
+// Tap first card to start
+document.getElementById('scard-0').onclick = function() {
+  if (storyStep === 0) {
+    this.style.opacity = '1';
+    this.onclick = null;
+    document.getElementById('scard-1').style.display = 'block';
+    storyStep = 1;
+    speak('One rabbit was sitting. One more rabbit joins. Making them two. Is 1 plus 1 equal to 2 or 3?');
+  }
+};
+
+function storyAnswer(idx, result, btn) {
+  const btns = btn.closest('.story-bottom').querySelectorAll('.choice-btn');
+  btns.forEach(b => b.classList.add('locked-choice'));
+  const fbId = 'sfb-' + idx;
+  if (result === 'correct') {
+    btn.classList.add('correct');
+    storyCorrect[idx] = true;
+    document.getElementById('sdot-' + idx).classList.add('done');
+    showFeedback(fbId, 'ok', '✅ Correct! Great counting!');
+    addStars(3);
+    speak('Correct! Great job!');
+    setTimeout(() => {
+      const next = document.getElementById('scard-' + (idx + 2));
+      if (next) next.style.display = 'block';
+      // speak next card
+      const storyTexts = [
+        '',
+        'One more rabbit joins, making them two!',
+        'One more rabbit joins, making them three!',
+        'One more comes in, making them four!',
+        'One more enters, making them five!'
+      ];
+      if (idx < 3) speak(storyTexts[idx+2]);
+    }, 1200);
+  } else {
+    btn.classList.add('wrong');
+    btn.classList.remove('locked-choice');
+    btns.forEach(b => b.classList.remove('locked-choice'));
+    btn.onclick = null;
+    showFeedback(fbId, 'no', '❌ Try again! Count the rabbits!');
+    speak('Try again! Count the rabbits!');
+  }
+  // Check all done
+  if (storyCorrect.filter(Boolean).length === 4) {
+    setTimeout(() => {
+      document.getElementById('storyNextBtn').disabled = false;
+      speak('Amazing! You finished the rabbit story! Tap Next!');
+    }, 800);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 2 — SIGNS
+// ─────────────────────────────────────────
+const signQuestions = [
+  { equation:'4 ___ 2 = 6', answer:'+', desc:'4 and 2 make 6. What sign goes in the middle?' },
+  { equation:'3 + 5 ___ 8', answer:'=', desc:'3 plus 5 is eight. What sign goes after 5?' },
+  { equation:'6 ___ 1 = 7', answer:'+', desc:'6 and 1 make 7. What sign goes here?' },
+  { equation:'2 + 7 ___ 9', answer:'=', desc:'2 plus 7 is nine. What sign?' },
+  { equation:'5 ___ 3 = 8', answer:'+', desc:'5 and 3 make 8. Which sign?' },
+];
+let signIdx = 0;
+let signDone = [];
+
+function buildSignQuiz() {
+  const area = document.getElementById('signQuizArea');
+  if (signIdx >= signQuestions.length) {
+    area.innerHTML = '<div class="info-card"><div class="ic-title">🎉 All Signs Correct!</div><div class="ic-text">You know + (Plus/Add) and = (Equals)! Tap Next!</div></div>';
+    document.getElementById('signsNextBtn').disabled = false;
+    speak('Excellent! You know all the signs! Tap Next!');
+    return;
+  }
+  const q = signQuestions[signIdx];
+  area.innerHTML = `
+    <div class="sign-quiz-card">
+      <div style="text-align:center;font-size:13px;font-weight:900;color:#888;margin-bottom:8px">Question ${signIdx+1} of ${signQuestions.length}</div>
+      <div class="sign-question">${q.equation}</div>
+      <div style="font-size:14px;font-weight:800;color:#555;text-align:center;margin-bottom:14px">${q.desc}</div>
+      <div class="sign-opts">
+        <div class="sign-opt" onclick="answerSign(this,'+','${q.answer}')">+</div>
+        <div class="sign-opt" onclick="answerSign(this,'=','${q.answer}')">=</div>
+      </div>
+      <div class="fb-box" id="signFb"></div>
+    </div>`;
+  speak(q.desc);
+}
+
+function answerSign(el, chosen, correct) {
+  document.querySelectorAll('.sign-opt').forEach(b => b.onclick = null);
+  if (chosen === correct) {
+    el.classList.add('correct');
+    document.getElementById('sqdot-' + signIdx).classList.add('done');
+    showFeedback('signFb','ok','✅ Yes! ' + (correct==='+' ? '+ means PLUS (ADD)!' : '= means EQUALS!'));
+    addStars(3);
+    speak('Correct!');
+    signIdx++;
+    setTimeout(buildSignQuiz, 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('signFb','no','❌ Oops! Try the other one!');
+    speak('Try again!');
+    setTimeout(() => {
+      el.classList.remove('wrong');
+      document.querySelectorAll('.sign-opt').forEach(b => b.onclick = function(){
+        answerSign(this, this.textContent.trim(), correct);
+      });
+    }, 1000);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 3 — COUNT & ADD
+// ─────────────────────────────────────────
+const countQuestions = [
+  { em1:'🏏🏏', em2:'🏏', n1:2, n2:1, ans:3, opts:[3,4,2], scene:'Bottles' },
+  { em1:'📦📦📦', em2:'📦', n1:3, n2:1, ans:4, opts:[4,5,3], scene:'Boxes' },
+  { em1:'🐿️🐿️🐿️', em2:'🐿️🐿️', n1:3, n2:2, ans:5, opts:[5,6,4], scene:'Squirrels' },
+  { em1:'🌺🌺🌺🌺', em2:'🌺🌺', n1:4, n2:2, ans:6, opts:[7,6,5], scene:'Flowers' },
+  { em1:'🌺🌺🌺🌺🌺', em2:'🌺🌺', n1:5, n2:2, ans:7, opts:[7,8,6], scene:'Flowers' },
+  { em1:'🪶🪶🪶🪶🪶🪶', em2:'🪶🪶🪶', n1:6, n2:3, ans:9, opts:[8,9,7], scene:'Feathers' },
+  { em1:'🎃🎃🎃', em2:'🎃🎃🎃', n1:3, n2:3, ans:6, opts:[6,7,5], scene:'Pumpkins' },
+  { em1:'🍎🍎🍎🍎🍎🍎🍎', em2:'🍎🍎', n1:7, n2:2, ans:9, opts:[9,8,7], scene:'Apples' },
+];
+let countIdx = 0;
+let countDoneCount = 0;
+
+function buildCountQuiz() {
+  const area = document.getElementById('countQuizArea');
+  if (countIdx >= countQuestions.length) {
+    area.innerHTML = '<div class="info-card"><div class="ic-title">🎉 All sums done!</div><div class="ic-text">You can count and add! Tap Next!</div></div>';
+    document.getElementById('countNextBtn').disabled = false;
+    speak('Wonderful! You can count and add! Tap Next!');
+    return;
+  }
+  const q = countQuestions[countIdx];
+  // rebuild dots
+  const dotsEl = document.getElementById('countDots');
+  dotsEl.innerHTML = countQuestions.map((_,i) => `<div class="pdot ${i<countIdx?'done':''}" id="cdot-${i}"></div>`).join('');
+
+  const shuffled = [...q.opts].sort(() => Math.random() - .5);
+  area.innerHTML = `
+    <div class="count-area">
+      <div class="count-title">${q.scene}: How many altogether?</div>
+      <div style="text-align:center;font-size:13px;font-weight:900;color:#888;margin-bottom:10px">Question ${countIdx+1} of ${countQuestions.length}</div>
+      <div class="count-row">
+        <div class="count-group">
+          <div class="count-emojis">${q.em1}</div>
+          <div class="count-num">${q.n1}</div>
+        </div>
+        <div class="count-op">+</div>
+        <div class="count-group">
+          <div class="count-emojis">${q.em2}</div>
+          <div class="count-num">${q.n2}</div>
+        </div>
+        <div class="count-eq">=</div>
+        <div class="count-box" id="cBox">?</div>
+      </div>
+      <div class="choice-row">
+        ${shuffled.map(o => `<div class="choice-btn" onclick="answerCount(this,${o},${q.ans})"><div class="cb-word">${o}</div></div>`).join('')}
+      </div>
+      <div class="fb-box" id="countFb"></div>
+    </div>`;
+  speak(`${q.n1} plus ${q.n2} equals? Count the ${q.scene}!`);
+}
+
+function answerCount(el, chosen, correct) {
+  const btns = el.closest('.count-area').querySelectorAll('.choice-btn');
+  if (chosen === correct) {
+    el.classList.add('correct');
+    btns.forEach(b => b.classList.add('locked-choice'));
+    document.getElementById('cBox').textContent = correct;
+    document.getElementById('cBox').classList.add('filled');
+    showFeedback('countFb','ok','✅ Yes! ' + correct + ' is correct!');
+    addStars(3);
+    speak('Correct! ' + correct + '!');
+    countIdx++;
+    setTimeout(buildCountQuiz, 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('countFb','no','❌ Count again! Try the other number!');
+    speak('Not quite! Count the pictures again!');
+    setTimeout(() => el.classList.remove('wrong'), 900);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 4 — ADDITION PROPERTY
+// ─────────────────────────────────────────
+const propPairs = [
+  { a:6, b:1, sum:7 },
+  { a:4, b:3, sum:7 },
+  { a:2, b:5, sum:7 },
+  { a:5, b:3, sum:8 },
+  { a:4, b:4, sum:8 },
+  { a:6, b:2, sum:8 },
+  { a:1, b:7, sum:8 },
+];
+let propIdx = 0;
+let propPhase = 0; // 0=first 1=second (swapped)
+
+function buildPropQuiz() {
+  const area = document.getElementById('propQuizArea');
+  if (propIdx >= propPairs.length) {
+    area.innerHTML = '<div class="info-card"><div class="ic-title">🌟 Amazing!</div><div class="ic-text">You discovered the Addition Property! Swapping numbers gives the SAME answer!</div></div>';
+    document.getElementById('propNextBtn').disabled = false;
+    speak('Amazing! You discovered the Addition Property!');
+    return;
+  }
+  const p = propPairs[propIdx];
+  const dotsEl = document.getElementById('propDots');
+  dotsEl.innerHTML = propPairs.map((_,i) => `<div class="pdot ${i<propIdx?'done':''}" id="pdot-${i}"></div>`).join('');
+
+  if (propPhase === 0) {
+    // Show first equation, ask for sum
+    const opts = [p.sum, p.sum+1, p.sum-1].sort(() => Math.random()-.5);
+    area.innerHTML = `
+      <div class="prop-card">
+        <div class="prop-title">Question ${propIdx+1}: What is the sum?</div>
+        <div class="prop-row">
+          <div class="prop-num">${p.a}</div><div class="prop-op">+</div>
+          <div class="prop-num">${p.b}</div><div class="prop-eq">=</div>
+          <div class="prop-blank" id="propBlank">?</div>
+        </div>
+        <div class="prop-opts">
+          ${opts.map(o=>`<div class="prop-opt" onclick="answerProp(this,${o},${p.sum})">${o}</div>`).join('')}
+        </div>
+        <div class="fb-box" id="propFb"></div>
+      </div>`;
+    speak(`${p.a} plus ${p.b} equals?`);
+  } else {
+    // Show SWAP, already know sum, ask if same
+    area.innerHTML = `
+      <div class="prop-card">
+        <div class="prop-title">🔄 Now swap the numbers!</div>
+        <div class="prop-row">
+          <div class="prop-num" style="color:#888;text-decoration:line-through">${p.a} + ${p.b} = <span style="color:#1b5e20">${p.sum}</span></div>
+        </div>
+        <div class="prop-row" style="margin-top:4px">
+          <div class="prop-num">${p.b}</div><div class="prop-op">+</div>
+          <div class="prop-num">${p.a}</div><div class="prop-eq">=</div>
+          <div class="prop-blank" id="propBlank">?</div>
+        </div>
+        <div style="text-align:center;font-size:14px;font-weight:800;color:#555;margin:10px 0;">Is it the same answer?</div>
+        <div class="choice-row">
+          <div class="choice-btn" onclick="answerPropSwap(this,'yes')"><div class="cb-word">✅ Yes, ${p.sum}!</div></div>
+          <div class="choice-btn" onclick="answerPropSwap(this,'no')"><div class="cb-word">❌ No, different!</div></div>
+        </div>
+        <div class="fb-box" id="propFb"></div>
+      </div>`;
+    speak(`${p.b} plus ${p.a} equals? Is it the same as before?`);
+  }
+}
+
+function answerProp(el, chosen, correct) {
+  const btns = el.closest('.prop-card').querySelectorAll('.prop-opt');
+  btns.forEach(b => b.classList.add('used'));
+  if (chosen === correct) {
+    el.classList.add('right');
+    document.getElementById('propBlank').textContent = correct;
+    document.getElementById('propBlank').classList.add('filled');
+    showFeedback('propFb','ok','✅ Correct! Now see what happens when we swap!');
+    addStars(2);
+    speak('Correct! Now let\'s swap the numbers!');
+    propPhase = 1;
+    setTimeout(buildPropQuiz, 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('propFb','no','❌ Try again!');
+    speak('Try again!');
+    setTimeout(() => { el.classList.remove('wrong'); btns.forEach(b=>b.classList.remove('used')); el.classList.remove('used'); }, 900);
+  }
+}
+
+function answerPropSwap(el, choice) {
+  const btns = el.closest('.prop-card').querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.classList.add('locked-choice'));
+  const p = propPairs[propIdx];
+  if (choice === 'yes') {
+    el.classList.add('correct');
+    showFeedback('propFb','ok',`🌟 YES! ${p.b} + ${p.a} = ${p.sum} — Same as ${p.a} + ${p.b} = ${p.sum}!`);
+    addStars(3);
+    speak('Yes! Swapping the numbers gives the same answer! This is the Addition Property!');
+    propPhase = 0;
+    propIdx++;
+    setTimeout(buildPropQuiz, 1800);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('propFb','no','❌ Actually YES — they ARE the same! Look again!');
+    speak('Actually they are the same! Swapping numbers gives the same sum!');
+    setTimeout(() => { btns.forEach(b=>b.classList.remove('locked-choice','wrong','correct')); }, 1200);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 5 — PRACTICE
+// ─────────────────────────────────────────
+const practiceQs = [
+  { n1:2, n2:1, ans:3 }, { n1:2, n2:3, ans:5 }, { n1:3, n2:6, ans:9 },
+  { n1:4, n2:5, ans:9 }, { n1:5, n2:4, ans:9 }, { n1:6, n2:3, ans:9 },
+  { n1:3, n2:5, ans:8 }, { n1:2, n2:7, ans:9 }, { n1:3, n2:3, ans:6 },
+  { n1:1, n2:5, ans:6 }, { n1:2, n2:5, ans:7 }, { n1:1, n2:4, ans:5 },
+  { n1:4, n2:4, ans:8 }, { n1:0, n2:6, ans:6 }, { n1:6, n2:0, ans:6 },
+  { n1:1, n2:7, ans:8 }, { n1:7, n2:1, ans:8 }, { n1:5, n2:3, ans:8 },
+];
+let practiceIdx = 0;
+
+function buildPractice() {
+  const area = document.getElementById('practiceArea');
+  if (practiceIdx >= practiceQs.length) {
+    area.innerHTML = '<div class="info-card"><div class="ic-title">🎉 All done!</div><div class="ic-text">You practiced all the addition sums! Tap Next for the Final Quiz!</div></div>';
+    document.getElementById('practiceNextBtn').disabled = false;
+    speak('Fantastic! You finished all the practice! Time for the quiz!');
+    return;
+  }
+  const q = practiceQs[practiceIdx];
+  const dotsEl = document.getElementById('practiceDots');
+  dotsEl.innerHTML = practiceQs.map((_,i) => `<div class="pdot ${i<practiceIdx?'done':''}" id="prdot-${i}"></div>`).join('');
+
+  // generate 3 options
+  let opts = new Set([q.ans]);
+  while (opts.size < 3) {
+    const r = Math.max(0, q.ans + Math.floor(Math.random()*5) - 2);
+    if (r !== q.ans && r >= 0 && r <= 9) opts.add(r);
+  }
+  opts = [...opts].sort(() => Math.random()-.5);
+
+  area.innerHTML = `
+    <div class="add-card" id="addCard-${practiceIdx}">
+      <div style="text-align:center;font-size:13px;font-weight:900;color:#888;margin-bottom:8px">Sum ${practiceIdx+1} of ${practiceQs.length}</div>
+      <div class="add-equation">
+        <span class="kw">${q.n1}</span> <span class="op">+</span> <span class="kw">${q.n2}</span> <span class="eq">=</span> <span style="color:#aaa">?</span>
+      </div>
+      <div class="add-opts">
+        ${opts.map(o=>`<div class="add-opt" onclick="answerPractice(this,${o},${q.ans})">${o}</div>`).join('')}
+      </div>
+      <div class="fb-box" id="prFb"></div>
+    </div>`;
+  speak(`${q.n1} plus ${q.n2} equals?`);
+}
+
+function answerPractice(el, chosen, correct) {
+  const btns = el.closest('.add-card').querySelectorAll('.add-opt');
+  btns.forEach(b => b.style.pointerEvents = 'none');
+  if (chosen === correct) {
+    el.classList.add('right');
+    showFeedback('prFb','ok','✅ ' + correct + ' is right!');
+    addStars(3);
+    speak('Correct! ' + correct + '!');
+    practiceIdx++;
+    setTimeout(buildPractice, 1200);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('prFb','no','❌ Try again!');
+    speak('Try again!');
+    setTimeout(() => { el.classList.remove('wrong'); btns.forEach(b=>b.style.pointerEvents='auto'); }, 900);
+  }
+}
+
+// ─────────────────────────────────────────
+// TAB 6 — QUIZ
+// ─────────────────────────────────────────
+const quizData = [
+  {q:'1 + 1 = ?', e:'🐰🐰', opts:[{t:'2'},{t:'3'},{t:'1'},{t:'4'}], ans:'2'},
+  {q:'2 + 1 = ?', e:'🐰🐰🐰', opts:[{t:'4'},{t:'2'},{t:'3'},{t:'5'}], ans:'3'},
+  {q:'3 + 1 = ?', e:'🐰🐰🐰🐰', opts:[{t:'3'},{t:'4'},{t:'5'},{t:'2'}], ans:'4'},
+  {q:'3 + 2 = ?', e:'🐰🐰🐰🐰🐰', opts:[{t:'6'},{t:'4'},{t:'7'},{t:'5'}], ans:'5'},
+  {q:'4 + 2 = ?', e:'🍎', opts:[{t:'5'},{t:'7'},{t:'6'},{t:'8'}], ans:'6'},
+  {q:'5 + 2 = ?', e:'🌺🌺🌺🌺🌺🌺🌺', opts:[{t:'8'},{t:'6'},{t:'9'},{t:'7'}], ans:'7'},
+  {q:'6 + 2 = ?', e:'🎲', opts:[{t:'7'},{t:'9'},{t:'8'},{t:'6'}], ans:'8'},
+  {q:'7 + 2 = ?', e:'🍎🍎', opts:[{t:'8'},{t:'9'},{t:'7'},{t:'6'}], ans:'9'},
+  {q:'What does + mean?', e:'➕', opts:[{t:'Minus'},{t:'Add'},{t:'Divide'},{t:'Times'}], ans:'Add'},
+  {q:'What does = mean?', e:'🟰', opts:[{t:'Plus'},{t:'Different'},{t:'Is equal to'},{t:'Add'}], ans:'Is equal to'},
+  {q:'6 + 1 = 7. What is 1 + 6?', e:'🔄', opts:[{t:'6'},{t:'8'},{t:'7'},{t:'9'}], ans:'7'},
+  {q:'3 + 5 = ?', e:'✏️✏️✏️', opts:[{t:'7'},{t:'9'},{t:'6'},{t:'8'}], ans:'8'},
+  {q:'4 + 4 = ?', e:'📚📚📚📚', opts:[{t:'9'},{t:'7'},{t:'6'},{t:'8'}], ans:'8'},
+  {q:'0 + 6 = ?', e:'🎈', opts:[{t:'0'},{t:'5'},{t:'6'},{t:'7'}], ans:'6'},
+  {q:'5 + 3 = 8. What is 3 + 5?', e:'🔄', opts:[{t:'7'},{t:'9'},{t:'8'},{t:'6'}], ans:'8'},
+];
+
+let quizItems = [], quizIdx = 0, quizScore = 0;
+
+function buildQuizIntro() {/* already has start button */}
+
+function startQuiz() {
+  quizItems = [...quizData].sort(() => Math.random()-.5).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    tabDone['quiz'] = true;
+    updateProgress();
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#1b5e20;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Chapter!</button>
+      <button class="big-btn gold" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    speak('Quiz done! You scored ' + quizScore + ' out of ' + quizItems.length + '! Tap Complete Chapter!');
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = [...q.opts].sort(() => Math.random()-.5);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`<div class="quiz-opt" onclick="answerQ(this,'${o.t}','${q.ans}')">${o.t}</div>`).join('')}
+    </div>`;
+  speak(q.q);
+}
+
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => b.onclick = null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.textContent.trim() === correct) b.classList.add('right');
+    });
+    speak('Oops! The answer is ' + correct);
+  }
+  setTimeout(() => { quizIdx++; showQ(); }, 1700);
+}
+
+// ─────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'fb-box ' + (type==='ok'?'ok':'no');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { if(el) el.style.display='none'; }, 2800);
+}
+
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Chapter 5 Complete!';
+  document.getElementById('celebS').textContent = 'Amazing! You learned:\n➕ Plus sign · 🟰 Equals sign · Adding numbers 1 to 9 · Addition Property (swap = same answer)!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Chapter 5 Addition! You are a superstar!');
+}
+
+function closeCeleb() {
+  document.getElementById('celebScreen').classList.remove('show');
+}
+
+function launchConfetti() {
+  const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#ffffff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+}
+const s2 = document.createElement('style');
+s2.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+buildSignQuiz();
+buildCountQuiz();
+buildPropQuiz();
+buildPractice();
+updateProgress();
+
+setTimeout(() => speak('Welcome to Chapter 5! Addition! Let\'s learn how to add numbers! Tap the rabbit to start!'), 700);
+</script>
+</body>
+</html>

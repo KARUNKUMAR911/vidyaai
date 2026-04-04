@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 13: Mental Arithmetic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff8e1; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#ff6f00);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#e65100,#ff8f00); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffcc02); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffe0b2; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#fff8e1; color:#e65100; border-color:#ffcc02; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #e65100;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── PRACTICE CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #ffe0b2; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:20px; color:#333; text-align:center; margin-bottom:14px; line-height:1.5; }
+.prac-q .visual { font-size:30px; display:block; margin-bottom:6px; letter-spacing:3px; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opt {
+  background:#fff8e1; border:3px solid #ffe0b2; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:28px; color:#e65100; user-select:none;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#e65100; background:#ffe0b2; color:#e65100; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:16px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#fff8e1; color:#e65100; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#e65100; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#e65100,#ff8f00); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f9a825,#fdd835); color:#fff; }
+
+/* ── ADDITION VISUAL ── */
+.add-box {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-family:'Fredoka One',cursive; font-size:32px; color:#e65100;
+  background:#fff8e1; border:3px solid #ffe0b2; border-radius:18px; padding:14px 18px;
+  margin:10px 0 14px; flex-wrap:wrap; text-align:center;
+}
+.add-emoji-group { font-size:26px; letter-spacing:2px; }
+
+/* ── CIRCLE DIAGRAM ── */
+.circle-diagram {
+  display:flex; flex-direction:column; align-items:center; margin:10px auto 14px;
+}
+.circle-center {
+  width:80px; height:80px; border-radius:50%; background:#e65100; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:28px;
+  box-shadow:0 4px 12px rgba(230,81,0,.4);
+}
+.circle-spokes { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+.spoke-num {
+  background:#fff8e1; border:3px solid #ffe0b2; border-radius:12px; padding:8px 16px;
+  font-family:'Fredoka One',cursive; font-size:20px; color:#e65100;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+}
+.spoke-result { font-size:13px; font-weight:900; color:#aaa; }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(230,81,0,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s; padding:24px;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; text-align:center; }
+.celeb-sub   { font-size:15px; color:rgba(255,255,255,.9); font-weight:800; margin-bottom:8px; text-align:center; line-height:1.7; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#e65100; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🧮 Lesson 13 — Mental Arithmetic</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🧠</span>
+  <h1>Mental Arithmetic!</h1>
+  <p>Add in your head • Number Patterns • True or False!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's add in our heads! 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="adding"   onclick="tabClick('adding')">➕ Adding!</div>
+  <div class="step-tab locked" data-tab="patterns" onclick="tabClick('patterns')">🔢 Patterns</div>
+  <div class="step-tab locked" data-tab="blanks"   onclick="tabClick('blanks')">🔲 Fill Blanks</div>
+  <div class="step-tab locked" data-tab="stories"  onclick="tabClick('stories')">📖 Word Sums</div>
+  <div class="step-tab locked" data-tab="truefalse" onclick="tabClick('truefalse')">✅ True/False</div>
+  <div class="step-tab locked" data-tab="quiz"     onclick="tabClick('quiz')">🏆 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ════════════════════════════════════════════════════
+     TAB 1 : ADDING SINGLE DIGIT NUMBERS MENTALLY
+════════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-adding">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff8f00)">
+    <span class="banner-emoji">➕</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Add Two Numbers!</div>
+      <div class="banner-sub" style="color:#fff">Add two single digit numbers mentally!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 How to Add in Your Head!</div>
+    <div class="ic-text">
+      Start from the bigger number, then count up!<br><br>
+      <strong>5 fruits + 3 fruits = ?</strong><br>
+      Start at 5 → count 3 more → 6, 7, <strong>8</strong> ✅<br><br>
+      Try: <strong>After 5 → 6, 7, 8</strong> = <strong>8!</strong>
+    </div>
+  </div>
+
+  <div id="addSteps"></div>
+  <div class="progress-dots" id="addDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="addNextBtn" disabled onclick="completeTab('adding','patterns','Adding!','Patterns')">Next: Number Patterns! 🔢</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 2 : NUMBER PATTERNS
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-patterns">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc)">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Number Patterns!</div>
+      <div class="banner-sub" style="color:#fff">Find the next number in the pattern!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Spot the Pattern!</div>
+    <div class="ic-text">
+      Numbers can go <strong>UP</strong> (increasing) or <strong>DOWN</strong> (decreasing)!<br><br>
+      <strong>2, 4, 6, ?</strong> → numbers increase by 2 → 6+2 = <strong>8</strong> ✅<br>
+      <strong>12, 9, 6, ?</strong> → numbers decrease by 3 → 6-3 = <strong>3</strong> ✅<br><br>
+      Find the <strong>rule</strong>, then find the <strong>next number</strong>!
+    </div>
+  </div>
+
+  <div id="patSteps"></div>
+  <div class="progress-dots" id="patDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the next number in the pattern!</div>
+  <button class="big-btn primary" id="patNextBtn" disabled onclick="completeTab('patterns','blanks','Patterns','Fill Blanks')">Next: Fill the Blanks! 🔲</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 3 : FILL THE BLANKS (both sides equal)
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-blanks">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#43a047)">
+    <span class="banner-emoji">🔲</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Fill the Blanks!</div>
+      <div class="banner-sub" style="color:#fff">Make both sides equal!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Both Sides Must Be Equal!</div>
+    <div class="ic-text">
+      The <strong>=</strong> sign means both sides have the <strong>same value</strong>!<br><br>
+      <strong>6 + ? = 10</strong> → 6 + <strong>4</strong> = 10 ✅<br>
+      <strong>12 = ? + 8</strong> → 12 = <strong>4</strong> + 8 ✅<br>
+      <strong>3 = 0 + ?</strong> → 3 = 0 + <strong>3</strong> ✅
+    </div>
+  </div>
+
+  <div id="blankSteps"></div>
+  <div class="progress-dots" id="blankDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the missing number!</div>
+  <button class="big-btn primary" id="blankNextBtn" disabled onclick="completeTab('blanks','stories','Fill Blanks','Word Sums')">Next: Word Sums! 📖</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 4 : WORD PROBLEMS / STORY SUMS
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-stories">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#0277bd,#039be5)">
+    <span class="banner-emoji">📖</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Word Sums!</div>
+      <div class="banner-sub" style="color:#fff">Read the story and find the answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Read, Think, Add!</div>
+    <div class="ic-text">
+      Read the story carefully. Find the two numbers and <strong>add them</strong>!<br><br>
+      <strong>5 books + 4 books = ?</strong><br>
+      Start at 5 → count 4 more → <strong>9 books!</strong> ✅
+    </div>
+  </div>
+
+  <div id="storySteps"></div>
+  <div class="progress-dots" id="storyDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="storyNextBtn" disabled onclick="completeTab('stories','truefalse','Word Sums','True/False')">Next: True or False! ✅</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 5 : TRUE / FALSE
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-truefalse">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#880e4f,#e91e63)">
+    <span class="banner-emoji">✅</span>
+    <div>
+      <div class="banner-title" style="color:#fff">True or False?</div>
+      <div class="banner-sub" style="color:#fff">Is the statement correct?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Check if it is Right!</div>
+    <div class="ic-text">
+      Work out the sum mentally. Then decide:<br><br>
+      ✅ <strong>TRUE</strong> — if the answer is correct<br>
+      ❌ <strong>FALSE</strong> — if the answer is wrong<br><br>
+      <strong>3 + 2 = 5</strong> → TRUE ✅<br>
+      <strong>6 + 6 = 4</strong> → FALSE ❌ (6+6 = 12!)
+    </div>
+  </div>
+
+  <div id="tfSteps"></div>
+  <div class="progress-dots" id="tfDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap TRUE ✅ or FALSE ❌!</div>
+  <button class="big-btn primary" id="tfNextBtn" disabled onclick="completeTab('truefalse','quiz','True/False','Final Quiz')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TAB 6 : FINAL QUIZ
+════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#e53935)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Mental Arithmetic!</div>
+    </div>
+  </div>
+
+  <div id="quizSteps"></div>
+  <div class="progress-dots" id="quizDots"></div>
+  <button class="big-btn gold" id="quizFinishBtn" disabled onclick="showCelebration()">🎉 Finish!</button>
+</div>
+
+</div><!-- .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🎉</div>
+  <div class="celeb-title">Amazing Work!</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">Play Again! 🔄</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let stars = 0;
+const TAB_ORDER = ['adding','patterns','blanks','stories','truefalse','quiz'];
+const unlockedTabs = new Set(['adding']);
+const doneTabs     = new Set();
+
+/* ═══════════════════════════════════════════
+   TAB NAVIGATION
+═══════════════════════════════════════════ */
+function tabClick(id){
+  if(!unlockedTabs.has(id)){
+    const el = document.querySelector(`[data-tab="${id}"]`);
+    el.classList.remove('shaking');
+    void el.offsetWidth;
+    el.classList.add('shaking');
+    el.addEventListener('animationend',()=>el.classList.remove('shaking'),{once:true});
+    const t = document.getElementById('lockToast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2000);
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>{
+    const tid = t.dataset.tab;
+    t.className = 'step-tab';
+    if(tid===id) t.classList.add('active');
+    else if(doneTabs.has(tid)) t.classList.add('done');
+    else if(unlockedTabs.has(tid)) t.classList.add('unlocked');
+    else t.classList.add('locked');
+  });
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+function completeTab(doneId, nextId, doneName, nextName){
+  doneTabs.add(doneId);
+  unlockedTabs.add(nextId);
+  updateProgress();
+  tabClick(nextId);
+}
+
+function updateProgress(){
+  const total = TAB_ORDER.length;
+  const done  = doneTabs.size;
+  const pct   = Math.round((done/total)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  const labels = ['Let\'s add in our heads! 🚀','Great! Now find patterns! 🔢','Awesome! Fill the blanks! 🔲','Super! Solve word sums! 📖','Almost there! True or False! ✅','Final challenge! 🏆','You did it! 🎉'];
+  document.getElementById('progLabel').textContent = labels[done] || labels[labels.length-1];
+}
+
+/* ═══════════════════════════════════════════
+   RENDER QUESTIONS ENGINE
+═══════════════════════════════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  container.innerHTML = '';
+  dotsEl.innerHTML = '';
+  let answeredCount = 0;
+
+  // dots
+  questions.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className='pdot'; d.id=dotsID+'_dot_'+i;
+    dotsEl.appendChild(d);
+  });
+
+  questions.forEach((q,qi)=>{
+    const card = document.createElement('div');
+    card.className='prac-card';
+    card.id = containerID+'_card_'+qi;
+
+    let html = `<div class="prac-q">`;
+    if(q.visual) html += `<span class="visual">${q.visual}</span>`;
+    html += `${q.question}</div>`;
+    html += `<div class="prac-opts" id="${containerID}_opts_${qi}">`;
+    q.options.forEach((opt,oi)=>{
+      html += `<div class="prac-opt" onclick="pickAnswer('${containerID}','${dotsID}','${nextBtnID}',${qi},${oi},${q.correct},${questions.length})">${opt}</div>`;
+    });
+    html += `</div>`;
+    html += `<div class="fb-box" id="${containerID}_fb_${qi}"></div>`;
+    card.innerHTML = html;
+    container.appendChild(card);
+  });
+}
+
+let answeredMap = {};
+function pickAnswer(contID, dotsID, nextBtnID, qi, chosen, correct, total){
+  const mapKey = contID+'_'+qi;
+  if(answeredMap[mapKey]) return;
+  answeredMap[mapKey] = true;
+
+  const opts = document.querySelectorAll(`#${contID}_opts_${qi} .prac-opt`);
+  const fb   = document.getElementById(`${contID}_fb_${qi}`);
+
+  opts.forEach(o=>o.style.pointerEvents='none');
+
+  if(chosen === correct){
+    opts[chosen].classList.add('right');
+    fb.className='fb-box ok'; fb.textContent='🎉 Correct! Well done!';
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+    document.getElementById(dotsID+'_dot_'+qi).classList.add('done');
+  } else {
+    opts[chosen].classList.add('wrong');
+    opts[correct].classList.add('right');
+    fb.className='fb-box no'; fb.textContent='❌ Not quite! The right answer is shown in orange.';
+    document.getElementById(dotsID+'_dot_'+qi).classList.add('done');
+  }
+
+  // check all answered
+  const allDone = document.querySelectorAll(`#${contID} .prac-card`).length;
+  let cnt = 0;
+  for(let i=0;i<allDone;i++){ if(answeredMap[contID+'_'+i]) cnt++; }
+  if(cnt>=allDone){
+    document.getElementById(nextBtnID).disabled = false;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1 : ADDING SINGLE DIGIT NUMBERS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'addSteps', dotsID:'addDots', nextBtnID:'addNextBtn',
+  questions:[
+    {
+      visual:'🍫🍫🍫🍫 + 🍫🍫',
+      question:'4 chocolates + 2 chocolates = ?',
+      options:['5','7','6','8'], correct:2
+    },
+    {
+      visual:'🦜🦜🦜🦜🦜 + 🦜🦜🦜🦜',
+      question:'5 parrots + 4 parrots = ?',
+      options:['8','10','9','7'], correct:2
+    },
+    {
+      visual:'🐰🐰🐰 + 🐰🐰🐰🐰🐰🐰',
+      question:'3 rabbits + 6 rabbits = ?',
+      options:['8','10','7','9'], correct:3
+    },
+    {
+      visual:'⚽⚽ + ⚽⚽⚽⚽⚽⚽⚽',
+      question:'2 balls + 7 balls = ?',
+      options:['10','8','9','11'], correct:2
+    },
+    {
+      visual:'🦋🦋🦋🦋🦋🦋🦋🦋 + 🦋🦋🦋🦋🦋🦋',
+      question:'8 butterflies + 6 butterflies = ?',
+      options:['12','13','15','14'], correct:3
+    },
+    {
+      visual:'📚📚📚📚📚 + 📚📚📚📚',
+      question:'One shelf has 5 books. Another has 4 books. How many books are there?',
+      options:['10','8','9','7'], correct:2
+    },
+    {
+      visual:'🎈🎈🎈 + 🎈🎈🎈🎈🎈🎈',
+      question:'3 balloons in right hand + 6 balloons in left hand = ?',
+      options:['8','10','7','9'], correct:3
+    },
+    {
+      visual:'💰5 + 💰10',
+      question:'Rs. 5 from father + Rs. 10 from mother = Rs. ?',
+      options:['10','12','15','16'], correct:2
+    },
+    {
+      visual:'🥭🥭🥭🥭🥭🥭🥭🥭🥭 + 🍎🍎🍎🍎🍎🍎🍎🍎',
+      question:'9 mangoes + 8 apples = how many fruits?',
+      options:['15','16','17','18'], correct:2
+    },
+    {
+      visual:'📖📖📖📖📖📖📖 + 📖📖📖📖📖📖',
+      question:'7 books in bag + 6 books on shelf = how many books altogether?',
+      options:['12','13','14','11'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 2 : NUMBER PATTERNS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'patSteps', dotsID:'patDots', nextBtnID:'patNextBtn',
+  questions:[
+    {
+      question:'🔢 2, 4, 6, … What is the next number? (increasing by 2)',
+      options:['7','8','9','10'], correct:1
+    },
+    {
+      question:'🔢 3, 6, 9, … What is the next number? (increasing by 3)',
+      options:['10','11','12','13'], correct:2
+    },
+    {
+      question:'🔢 4, 8, 12, … What is the next number? (increasing by 4)',
+      options:['15','14','13','16'], correct:3
+    },
+    {
+      question:'🔢 12, 9, 6, … What is the next number? (decreasing by 3)',
+      options:['5','4','3','2'], correct:2
+    },
+    {
+      question:'🔢 8, 7, 6, … What is the next number? (decreasing by 1)',
+      options:['4','5','6','7'], correct:1
+    },
+    {
+      question:'🔢 10, 8, 6, … What is the next number? (decreasing by 2)',
+      options:['5','4','3','2'], correct:1
+    },
+    {
+      question:'🔢 3, 5, 7, … What is the next number? (increasing by 2)',
+      options:['8','9','10','11'], correct:1
+    },
+    {
+      question:'🔢 8, 6, 4, … What is the next number? (decreasing by 2)',
+      options:['3','2','1','4'], correct:1
+    },
+    {
+      question:'🔢 10, 12, 14, … What is the next number? (increasing by 2)',
+      options:['15','16','17','18'], correct:1
+    },
+    {
+      question:'🔢 9, 11, 13, … What is the next number? (increasing by 2)',
+      options:['14','15','16','17'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 3 : FILL THE BLANKS (both sides equal)
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'blankSteps', dotsID:'blankDots', nextBtnID:'blankNextBtn',
+  questions:[
+    {
+      question:'🔲 6 + __ = 10\nWhat is the missing number?',
+      options:['3','4','5','6'], correct:1
+    },
+    {
+      question:'🔲 10 + __ = 15\nWhat is the missing number?',
+      options:['4','5','6','7'], correct:1
+    },
+    {
+      question:'🔲 12 = __ + 8\nWhat is the missing number?',
+      options:['2','3','4','5'], correct:2
+    },
+    {
+      question:'🔲 12 = __ + 6\nWhat is the missing number?',
+      options:['4','5','6','7'], correct:2
+    },
+    {
+      question:'🔲 3 = 0 + __\nWhat is the missing number?',
+      options:['1','2','3','4'], correct:2
+    },
+    {
+      question:'🔲 15 = 7 + __\nWhat is the missing number?',
+      options:['6','7','8','9'], correct:2
+    },
+    {
+      question:'🔲 __ + 6 = 9\nWhat is the missing number?',
+      options:['2','3','4','5'], correct:1
+    },
+    {
+      question:'🔲 __ + 3 = 10\nWhat is the missing number?',
+      options:['6','7','8','9'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 4 : WORD PROBLEMS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'storySteps', dotsID:'storyDots', nextBtnID:'storyNextBtn',
+  questions:[
+    {
+      visual:'📚📚📚📚📚 + 📚📚📚📚',
+      question:'One shelf has 5 books and another has 4 books.\nHow many books are there in both shelves?',
+      options:['8','9','10','7'], correct:1
+    },
+    {
+      visual:'💰5 + 💰10',
+      question:'Suma gets Rs. 5 from her father and Rs. 10 from her mother.\nHow much money does Suma collect?',
+      options:['12','14','15','16'], correct:2
+    },
+    {
+      visual:'🥭×9 + 🍎×8',
+      question:'A fruit vendor has 9 mangoes and 8 apples in his basket.\nHow many fruits are in the basket?',
+      options:['15','16','17','18'], correct:2
+    },
+    {
+      visual:'📖×7 + 📖×6',
+      question:'Raju kept 7 books in his school bag and 6 books in the shelf.\nHow many books are there altogether?',
+      options:['11','12','13','14'], correct:2
+    },
+    {
+      visual:'🎈🎈🎈 + 🎈🎈🎈🎈🎈🎈',
+      question:'A balloon seller holds 3 balloons in his right hand and 6 in his left.\nHow many balloons are there in all?',
+      options:['7','8','9','10'], correct:2
+    },
+    {
+      visual:'💍×8 + 💍×6',
+      question:'A girl wears 8 bangles on one hand and 6 bangles on the other.\nHow many bangles are there together?',
+      options:['12','13','14','15'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 5 : TRUE / FALSE
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'tfSteps', dotsID:'tfDots', nextBtnID:'tfNextBtn',
+  questions:[
+    {
+      question:'✅ or ❌ ?\n3 + 2 = 5',
+      options:['✅ TRUE','❌ FALSE'], correct:0
+    },
+    {
+      question:'✅ or ❌ ?\n6 + 6 = 4',
+      options:['✅ TRUE','❌ FALSE'], correct:1
+    },
+    {
+      question:'✅ or ❌ ?\nSita ate 3 bananas in the morning and 2 in the evening.\nSita ate 6 bananas in a day.',
+      options:['✅ TRUE','❌ FALSE'], correct:1
+    },
+    {
+      question:'✅ or ❌ ?\nRaju practices a song 3 times in the morning and 5 times in the evening.\nRaju practiced 8 times that day.',
+      options:['✅ TRUE','❌ FALSE'], correct:0
+    },
+    {
+      question:'✅ or ❌ ?\nRama has 5 marbles and Raheem has 4 marbles.\nTogether they have 10 marbles.',
+      options:['✅ TRUE','❌ FALSE'], correct:1
+    },
+    {
+      question:'✅ or ❌ ?\nCharan has 5 pens. Chandana has 7 pens.\nThey have 15 pens altogether.',
+      options:['✅ TRUE','❌ FALSE'], correct:1
+    },
+    {
+      question:'✅ or ❌ ?\n8 + 8 = 16',
+      options:['✅ TRUE','❌ FALSE'], correct:0
+    },
+    {
+      question:'✅ or ❌ ?\n10, 8, 6 — the next number in this pattern is 5.',
+      options:['✅ TRUE','❌ FALSE'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 6 : FINAL QUIZ
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'quizSteps', dotsID:'quizDots', nextBtnID:'quizFinishBtn',
+  questions:[
+    {
+      visual:'🍬🍬🍬🍬🍬 + 🍬🍬🍬',
+      question:'🏆 5 + 3 = ?',
+      options:['7','8','9','6'], correct:1
+    },
+    {
+      question:'🏆 What is the next number? 2, 4, 6, __',
+      options:['7','9','8','10'], correct:2
+    },
+    {
+      question:'🏆 6 + __ = 10\nWhat is the missing number?',
+      options:['3','4','5','6'], correct:1
+    },
+    {
+      question:'🏆 What is the next number? 12, 9, 6, __',
+      options:['5','4','3','2'], correct:2
+    },
+    {
+      visual:'🐰🐰🐰 + 🐰🐰🐰🐰🐰🐰',
+      question:'🏆 3 rabbits + 6 rabbits = ?',
+      options:['7','8','9','10'], correct:2
+    },
+    {
+      question:'🏆 Raju practices 3 times in the morning and 5 times in the evening.\nIs "Raju practiced 8 times" TRUE or FALSE?',
+      options:['✅ TRUE','❌ FALSE'], correct:0
+    },
+    {
+      question:'🏆 15 = 7 + __\nWhat is the missing number?',
+      options:['6','7','8','9'], correct:2
+    },
+    {
+      question:'🏆 What is the next number? 9, 11, 13, __',
+      options:['14','15','16','17'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You can add two numbers mentally!\nYou can find number patterns!\nYou can make both sides equal!\nYou can solve word sums!\nYou know True from False!';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function restartAll(){
+  stars=0;
+  answeredMap={};
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('adding');
+
+  renderQuestions({containerID:'addSteps', dotsID:'addDots', nextBtnID:'addNextBtn', questions:[
+    {visual:'🍫🍫🍫🍫 + 🍫🍫',question:'4 chocolates + 2 chocolates = ?',options:['5','7','6','8'],correct:2},
+    {visual:'🦜🦜🦜🦜🦜 + 🦜🦜🦜🦜',question:'5 parrots + 4 parrots = ?',options:['8','10','9','7'],correct:2},
+    {visual:'🐰🐰🐰 + 🐰🐰🐰🐰🐰🐰',question:'3 rabbits + 6 rabbits = ?',options:['8','10','7','9'],correct:3},
+    {visual:'⚽⚽ + ⚽⚽⚽⚽⚽⚽⚽',question:'2 balls + 7 balls = ?',options:['10','8','9','11'],correct:2},
+    {visual:'🦋🦋🦋🦋🦋🦋🦋🦋 + 🦋🦋🦋🦋🦋🦋',question:'8 butterflies + 6 butterflies = ?',options:['12','13','15','14'],correct:3},
+    {visual:'📚📚📚📚📚 + 📚📚📚📚',question:'One shelf has 5 books. Another has 4 books. How many books are there?',options:['10','8','9','7'],correct:2},
+    {visual:'🎈🎈🎈 + 🎈🎈🎈🎈🎈🎈',question:'3 balloons in right hand + 6 balloons in left hand = ?',options:['8','10','7','9'],correct:3},
+    {visual:'💰5 + 💰10',question:'Rs. 5 from father + Rs. 10 from mother = Rs. ?',options:['10','12','15','16'],correct:2},
+    {visual:'🥭🥭🥭🥭🥭🥭🥭🥭🥭 + 🍎🍎🍎🍎🍎🍎🍎🍎',question:'9 mangoes + 8 apples = how many fruits?',options:['15','16','17','18'],correct:2},
+    {visual:'📖📖📖📖📖📖📖 + 📖📖📖📖📖📖',question:'7 books in bag + 6 books on shelf = how many books altogether?',options:['12','13','14','11'],correct:1},
+  ]});
+  document.getElementById('addNextBtn').disabled=true;
+
+  renderQuestions({containerID:'patSteps', dotsID:'patDots', nextBtnID:'patNextBtn', questions:[
+    {question:'🔢 2, 4, 6, … What is the next number? (increasing by 2)',options:['7','8','9','10'],correct:1},
+    {question:'🔢 3, 6, 9, … What is the next number? (increasing by 3)',options:['10','11','12','13'],correct:2},
+    {question:'🔢 4, 8, 12, … What is the next number? (increasing by 4)',options:['15','14','13','16'],correct:3},
+    {question:'🔢 12, 9, 6, … What is the next number? (decreasing by 3)',options:['5','4','3','2'],correct:2},
+    {question:'🔢 8, 7, 6, … What is the next number? (decreasing by 1)',options:['4','5','6','7'],correct:1},
+    {question:'🔢 10, 8, 6, … What is the next number? (decreasing by 2)',options:['5','4','3','2'],correct:1},
+    {question:'🔢 3, 5, 7, … What is the next number? (increasing by 2)',options:['8','9','10','11'],correct:1},
+    {question:'🔢 8, 6, 4, … What is the next number? (decreasing by 2)',options:['3','2','1','4'],correct:1},
+    {question:'🔢 10, 12, 14, … What is the next number? (increasing by 2)',options:['15','16','17','18'],correct:1},
+    {question:'🔢 9, 11, 13, … What is the next number? (increasing by 2)',options:['14','15','16','17'],correct:1},
+  ]});
+  document.getElementById('patNextBtn').disabled=true;
+
+  renderQuestions({containerID:'blankSteps', dotsID:'blankDots', nextBtnID:'blankNextBtn', questions:[
+    {question:'🔲 6 + __ = 10\nWhat is the missing number?',options:['3','4','5','6'],correct:1},
+    {question:'🔲 10 + __ = 15\nWhat is the missing number?',options:['4','5','6','7'],correct:1},
+    {question:'🔲 12 = __ + 8\nWhat is the missing number?',options:['2','3','4','5'],correct:2},
+    {question:'🔲 12 = __ + 6\nWhat is the missing number?',options:['4','5','6','7'],correct:2},
+    {question:'🔲 3 = 0 + __\nWhat is the missing number?',options:['1','2','3','4'],correct:2},
+    {question:'🔲 15 = 7 + __\nWhat is the missing number?',options:['6','7','8','9'],correct:2},
+    {question:'🔲 __ + 6 = 9\nWhat is the missing number?',options:['2','3','4','5'],correct:1},
+    {question:'🔲 __ + 3 = 10\nWhat is the missing number?',options:['6','7','8','9'],correct:1},
+  ]});
+  document.getElementById('blankNextBtn').disabled=true;
+
+  renderQuestions({containerID:'storySteps', dotsID:'storyDots', nextBtnID:'storyNextBtn', questions:[
+    {visual:'📚📚📚📚📚 + 📚📚📚📚',question:'One shelf has 5 books and another has 4 books.\nHow many books are there in both shelves?',options:['8','9','10','7'],correct:1},
+    {visual:'💰5 + 💰10',question:'Suma gets Rs. 5 from her father and Rs. 10 from her mother.\nHow much money does Suma collect?',options:['12','14','15','16'],correct:2},
+    {visual:'🥭×9 + 🍎×8',question:'A fruit vendor has 9 mangoes and 8 apples in his basket.\nHow many fruits are in the basket?',options:['15','16','17','18'],correct:2},
+    {visual:'📖×7 + 📖×6',question:'Raju kept 7 books in his school bag and 6 books in the shelf.\nHow many books are there altogether?',options:['11','12','13','14'],correct:2},
+    {visual:'🎈🎈🎈 + 🎈🎈🎈🎈🎈🎈',question:'A balloon seller holds 3 balloons in his right hand and 6 in his left.\nHow many balloons are there in all?',options:['7','8','9','10'],correct:2},
+    {visual:'💍×8 + 💍×6',question:'A girl wears 8 bangles on one hand and 6 bangles on the other.\nHow many bangles are there together?',options:['12','13','14','15'],correct:2},
+  ]});
+  document.getElementById('storyNextBtn').disabled=true;
+
+  renderQuestions({containerID:'tfSteps', dotsID:'tfDots', nextBtnID:'tfNextBtn', questions:[
+    {question:'✅ or ❌ ?\n3 + 2 = 5',options:['✅ TRUE','❌ FALSE'],correct:0},
+    {question:'✅ or ❌ ?\n6 + 6 = 4',options:['✅ TRUE','❌ FALSE'],correct:1},
+    {question:'✅ or ❌ ?\nSita ate 3 bananas in the morning and 2 in the evening.\nSita ate 6 bananas in a day.',options:['✅ TRUE','❌ FALSE'],correct:1},
+    {question:'✅ or ❌ ?\nRaju practices a song 3 times in the morning and 5 times in the evening.\nRaju practiced 8 times that day.',options:['✅ TRUE','❌ FALSE'],correct:0},
+    {question:'✅ or ❌ ?\nRama has 5 marbles and Raheem has 4 marbles.\nTogether they have 10 marbles.',options:['✅ TRUE','❌ FALSE'],correct:1},
+    {question:'✅ or ❌ ?\nCharan has 5 pens. Chandana has 7 pens.\nThey have 15 pens altogether.',options:['✅ TRUE','❌ FALSE'],correct:1},
+    {question:'✅ or ❌ ?\n8 + 8 = 16',options:['✅ TRUE','❌ FALSE'],correct:0},
+    {question:'✅ or ❌ ?\n10, 8, 6 — the next number in this pattern is 5.',options:['✅ TRUE','❌ FALSE'],correct:1},
+  ]});
+  document.getElementById('tfNextBtn').disabled=true;
+
+  renderQuestions({containerID:'quizSteps', dotsID:'quizDots', nextBtnID:'quizFinishBtn', questions:[
+    {visual:'🍬🍬🍬🍬🍬 + 🍬🍬🍬',question:'🏆 5 + 3 = ?',options:['7','8','9','6'],correct:1},
+    {question:'🏆 What is the next number? 2, 4, 6, __',options:['7','9','8','10'],correct:2},
+    {question:'🏆 6 + __ = 10\nWhat is the missing number?',options:['3','4','5','6'],correct:1},
+    {question:'🏆 What is the next number? 12, 9, 6, __',options:['5','4','3','2'],correct:2},
+    {visual:'🐰🐰🐰 + 🐰🐰🐰🐰🐰🐰',question:'🏆 3 rabbits + 6 rabbits = ?',options:['7','8','9','10'],correct:2},
+    {question:'🏆 Raju practices 3 times in the morning and 5 times in the evening.\nIs "Raju practiced 8 times" TRUE or FALSE?',options:['✅ TRUE','❌ FALSE'],correct:0},
+    {question:'🏆 15 = 7 + __\nWhat is the missing number?',options:['6','7','8','9'],correct:2},
+    {question:'🏆 What is the next number? 9, 11, 13, __',options:['14','15','16','17'],correct:1},
+  ]});
+  document.getElementById('quizFinishBtn').disabled=true;
+
+  updateProgress();
+  tabClick('adding');
+}
+</script>
+</body>
+</html>

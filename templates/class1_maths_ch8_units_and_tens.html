@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 8: Units and Tens</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff8e1; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#f57f17);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#e65100,#ff8f00); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.85); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffd54f); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffe0b2; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#fff8e1; color:#e65100; border-color:#ffb300; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #ffb300;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── BIG CONCEPT CARD ── */
+.concept-card {
+  background:#fff; border-radius:24px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); overflow:hidden; border:3px solid #ffe0b2;
+}
+.concept-top { padding:18px 16px 12px; text-align:center; }
+.concept-emojis { font-size:48px; margin-bottom:8px; letter-spacing:3px; line-height:1.4; }
+.concept-text { font-family:'Fredoka One',cursive; font-size:18px; color:#222; line-height:1.5; }
+.concept-text .kw { color:#e65100; font-size:22px; }
+.concept-bottom { background:#fff8e1; padding:14px 16px; }
+
+/* ── QUIZ OPTS (choice) ── */
+.choice-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.choice-btn {
+  flex:1; min-width:80px; max-width:160px; padding:14px 10px; border-radius:16px; border:3px solid #ffe0b2;
+  background:#fff8e1; font-family:'Fredoka One',cursive; font-size:18px; color:#e65100;
+  cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:4px; user-select:none;
+}
+.choice-btn:active { transform:scale(.93); }
+.choice-btn .cb-emoji { font-size:34px; }
+.choice-btn .cb-word  { font-size:16px; }
+.choice-btn.correct { border-color:#e65100; background:#ffe0b2; color:#bf360c; }
+.choice-btn.wrong   { border-color:#c62828; background:#ffcdd2; color:#c62828; }
+.choice-btn.locked-choice { pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:15px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#fff9c4; color:#e65100; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#e65100,#ff8f00); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f9a825,#fdd835); color:#fff; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#ff8f00; }
+
+/* ── APPLE COUNT VISUAL ── */
+.apple-card {
+  background:#fff; border-radius:24px; padding:18px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.apple-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; text-align:center; margin-bottom:12px; }
+.apple-display { font-size:40px; text-align:center; margin:10px 0; line-height:1.5; letter-spacing:2px; }
+.apple-row { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+.apple-group { text-align:center; }
+.apple-emojis { font-size:28px; line-height:1.4; letter-spacing:3px; }
+.apple-num { font-family:'Fredoka One',cursive; font-size:28px; color:#e65100; margin-top:4px; }
+.apple-op { font-family:'Fredoka One',cursive; font-size:40px; color:#f57f17; }
+.a-box { background:#fff8e1; border:4px solid #ffb300; border-radius:16px;
+  width:70px; height:70px; display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive; font-size:36px; color:#e65100; }
+.a-box.filled { background:#ffe0b2; border-color:#e65100; }
+
+/* ── TENS/UNITS TABLE ── */
+.tu-table { width:100%; border-collapse:separate; border-spacing:0 8px; margin-bottom:10px; }
+.tu-table th { font-family:'Fredoka One',cursive; font-size:16px; color:#fff; background:#e65100; padding:10px; border-radius:10px; text-align:center; }
+.tu-table td { background:#fff8e1; border:3px solid #ffe0b2; padding:12px 8px; text-align:center; font-family:'Fredoka One',cursive; font-size:22px; color:#333; border-radius:10px; }
+.tu-table td.num-col { background:#e65100; color:#fff; font-size:26px; border-color:#e65100; }
+
+/* ── CIRCLE GROUP ── */
+.circle-group {
+  display:inline-flex; align-items:center; justify-content:center; flex-wrap:wrap;
+  gap:4px; border:4px dashed #ffb300; border-radius:50%; padding:12px;
+  background:#fff9c4;
+}
+
+/* ── TEN GROUP BOX ── */
+.ten-box {
+  background:#fff; border-radius:24px; padding:18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center; border:3px solid #ffe0b2;
+}
+.ten-big { font-family:'Fredoka One',cursive; font-size:80px; color:#e65100; line-height:1; }
+.ten-word { font-family:'Fredoka One',cursive; font-size:28px; color:#f57f17; }
+.ten-label { font-family:'Fredoka One',cursive; font-size:16px; color:#777; margin-top:6px; }
+
+/* ── QUIZ ── */
+.quiz-box-wrap { background:#fff; border-radius:24px; padding:20px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.quiz-num { font-size:13px; color:#888; font-weight:900; margin-bottom:8px; text-align:center; }
+.quiz-scene { font-size:50px; text-align:center; margin:10px 0; letter-spacing:3px; line-height:1.4; }
+.quiz-question { font-family:'Fredoka One',cursive; font-size:20px; color:#e65100; text-align:center; margin-bottom:18px; line-height:1.4; }
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.quiz-opt {
+  background:#fff; border:3px solid #ffe0b2; border-radius:16px; padding:16px 8px;
+  text-align:center; cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive;
+  font-size:22px; color:#e65100; display:flex; flex-direction:column; align-items:center; gap:4px;
+  user-select:none;
+}
+.quiz-opt:active { transform:scale(.93); }
+.quiz-opt.right  { border-color:#e65100; background:#ffe0b2; color:#bf360c; pointer-events:none; }
+.quiz-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── PRACTICE CARD ── */
+.prac-card {
+  background:#fff; border-radius:24px; padding:20px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #ffe0b2;
+}
+.prac-card.done { border-color:#e65100; background:#fff8e1; }
+.prac-scene { font-size:36px; text-align:center; margin-bottom:10px; line-height:1.4; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:18px; color:#333; text-align:center; margin-bottom:14px; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.prac-opt {
+  background:#fff8e1; border:3px solid #ffe0b2; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:26px; color:#e65100; user-select:none;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#e65100; background:#ffe0b2; color:#bf360c; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── TENS UNITS PICKER ── */
+.tu-picker { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin:14px 0; }
+.tu-slot { text-align:center; }
+.tu-slot-label { font-family:'Fredoka One',cursive; font-size:14px; color:#888; margin-bottom:4px; }
+.tu-slot-box { width:64px; height:64px; border:4px solid #ffe0b2; border-radius:16px; background:#fff8e1;
+  display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:32px; color:#e65100; }
+.tu-slot-box.filled { background:#ffe0b2; border-color:#e65100; }
+.tu-plus { font-family:'Fredoka One',cursive; font-size:36px; color:#f57f17; }
+.tu-eq   { font-family:'Fredoka One',cursive; font-size:36px; color:#e53935; }
+
+/* ── NUMBER LINE ── */
+.num-line-wrap { background:#fff; border-radius:20px; padding:16px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); overflow-x:auto; }
+.num-line { display:flex; align-items:center; gap:4px; min-width:max-content; }
+.nl-num {
+  width:36px; height:36px; border-radius:50%; background:#fff8e1; border:3px solid #ffb300;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#e65100;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.nl-num.special { background:#e65100; color:#fff; border-color:#e65100; transform:scale(1.2); }
+.nl-arrow { font-size:16px; color:#ffb300; }
+.nl-item { text-align:center; }
+.nl-label { font-family:'Fredoka One',cursive; font-size:10px; color:#aaa; text-align:center; margin-top:3px; }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(230,81,0,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; }
+.celeb-sub   { font-size:16px; color:rgba(255,255,255,.85); font-weight:800; margin-bottom:8px; text-align:center; padding:0 30px; line-height:1.6; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#e65100; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🍎 Chapter 8 — Units and Tens</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🍎</span>
+  <h1>Units and Tens!</h1>
+  <p>Every object is ONE UNIT • 10 units make ONE TEN!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's start! 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="units"   onclick="tabClick('units')">🍎 What is a Unit?</div>
+  <div class="step-tab locked"  data-tab="ten"     onclick="tabClick('ten')">🔟 Making a TEN</div>
+  <div class="step-tab locked"  data-tab="circle"  onclick="tabClick('circle')">⭕ Circle the TEN</div>
+  <div class="step-tab locked"  data-tab="tens"    onclick="tabClick('tens')">📦 Tens and Units</div>
+  <div class="step-tab locked"  data-tab="numbers" onclick="tabClick('numbers')">🔢 Numbers 10–20</div>
+  <div class="step-tab locked"  data-tab="quiz"    onclick="tabClick('quiz')">🏆 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — WHAT IS A UNIT?
+══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-units">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#c62828,#e53935)">
+    <span class="banner-emoji">🍎</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Every Apple is ONE UNIT!</div>
+      <div class="banner-sub" style="color:#fff">Count the apples — tap the right number!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 What is a UNIT?</div>
+    <div class="ic-text">Every object you count is <strong>ONE UNIT</strong>! 🍎 = 1 unit, 🌸 = 1 unit, 🐻 = 1 unit. Each single thing is called a <strong>unit</strong>!</div>
+  </div>
+
+  <!-- Apple counting steps -->
+  <div id="unitSteps"></div>
+  <div class="progress-dots" id="unitDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px" id="unitHint">Count the apples and tap the number!</div>
+  <button class="big-btn primary" id="unitsNextBtn" disabled onclick="completeTab('units','ten','What is a Unit','Making a TEN')">Next: Making a TEN! 🔟</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — MAKING A TEN
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-ten">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#388e3c)">
+    <span class="banner-emoji">🔟</span>
+    <div>
+      <div class="banner-title" style="color:#fff">10 Units = 1 TEN!</div>
+      <div class="banner-sub" style="color:#fff">When you have 10 units, that makes ONE group of TEN!</div>
+    </div>
+  </div>
+
+  <div class="ten-box">
+    <div style="font-size:42px;letter-spacing:3px;margin-bottom:10px;">
+      🍎🍎🍎🍎🍎<br>🍎🍎🍎🍎🍎
+    </div>
+    <div class="ten-big">10</div>
+    <div class="ten-word">ONE TEN</div>
+    <div class="ten-label">10 apples = 10 units = 1 TEN!</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🔑 Big Rule!</div>
+    <div class="ic-text"><strong>Every object you count is ONE UNIT.</strong><br><br><strong>10 units make a group of 1 TEN.</strong><br><br>So 10 🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎 = <strong>1 TEN</strong> and <strong>0 units</strong> left over!</div>
+  </div>
+
+  <div class="num-line-wrap">
+    <div style="font-family:'Fredoka One',cursive;font-size:15px;color:#e65100;margin-bottom:10px;text-align:center;">Count 1 by 1... until you reach 10 units = 1 TEN! 🎉</div>
+    <div class="num-line">
+      <div class="nl-item"><div class="nl-num">1</div><div class="nl-label">1 unit</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">2</div><div class="nl-label">2 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">3</div><div class="nl-label">3 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">4</div><div class="nl-label">4 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">5</div><div class="nl-label">5 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">6</div><div class="nl-label">6 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">7</div><div class="nl-label">7 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">8</div><div class="nl-label">8 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num">9</div><div class="nl-label">9 units</div></div>
+      <div class="nl-arrow">→</div>
+      <div class="nl-item"><div class="nl-num special">10</div><div class="nl-label" style="color:#e65100;font-weight:900;">1 TEN! ⭐</div></div>
+    </div>
+  </div>
+
+  <!-- Ten concept quiz -->
+  <div id="tenQuizArea"></div>
+  <div class="progress-dots" id="tenDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Answer all questions to continue!</div>
+  <button class="big-btn primary" id="tenNextBtn" disabled onclick="completeTab('ten','circle','Making a TEN','Circle the TEN')">Next: Circle the TEN! ⭕</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — CIRCLE THE TEN
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-circle">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#4a148c,#7b1fa2)">
+    <span class="banner-emoji">⭕</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Circle TEN Objects!</div>
+      <div class="banner-sub" style="color:#fff">Count the circled group and what's left over!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 How it works!</div>
+    <div class="ic-text">Count ALL objects. Circle <strong>10</strong> of them (the round-up group). The rest are the <strong>remaining</strong> objects! Then tell us both numbers!</div>
+  </div>
+
+  <div id="circleSteps"></div>
+  <div class="progress-dots" id="circleDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Find the circled group and remaining!</div>
+  <button class="big-btn primary" id="circleNextBtn" disabled onclick="completeTab('circle','tens','Circle the TEN','Tens and Units')">Next: Tens and Units! 📦</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 4 — TENS AND UNITS TABLE
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-tens">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#01579b,#0288d1)">
+    <span class="banner-emoji">📦</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Tens and Units!</div>
+      <div class="banner-sub" style="color:#fff">A bunch of bananas = 1 TEN. Extra bananas = UNITS!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🍌 Banana Shop!</div>
+    <div class="ic-text">One <strong>bunch</strong> of bananas = <strong>1 TEN (10 bananas)</strong>.<br>Extra single bananas are <strong>UNITS</strong>.<br>Together they make a number!</div>
+  </div>
+
+  <div class="apple-card">
+    <div class="apple-title">Example: 1 bunch + 0 extra = ?</div>
+    <div style="text-align:center;font-size:50px;margin:8px 0;">🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0;">
+      <div style="text-align:center;"><div style="font-size:36px;">🍌x10</div><div style="font-family:'Fredoka One',cursive;font-size:20px;color:#e65100;">1 TEN (10)</div></div>
+      <div style="font-family:'Fredoka One',cursive;font-size:36px;color:#f57f17;">+</div>
+      <div style="text-align:center;"><div style="font-size:36px;">🧺</div><div style="font-family:'Fredoka One',cursive;font-size:20px;color:#e65100;">0 UNITS (0)</div></div>
+      <div style="font-family:'Fredoka One',cursive;font-size:36px;color:#e53935;">=</div>
+      <div style="background:#e65100;color:#fff;border-radius:50%;width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:36px;">10</div>
+    </div>
+    <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:16px;color:#777;">TENS: 1 &nbsp;|&nbsp; UNITS: 0 &nbsp;|&nbsp; NUMBER: 10</div>
+  </div>
+
+  <!-- Tens units interactive -->
+  <div id="tuSteps"></div>
+  <div class="progress-dots" id="tuDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Pick TENS and UNITS for each number!</div>
+  <button class="big-btn primary" id="tensNextBtn" disabled onclick="completeTab('tens','numbers','Tens and Units','Numbers 10 to 20')">Next: Numbers 10 to 20! 🔢</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 5 — NUMBERS 10 TO 20
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-numbers">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#004d40,#00796b)">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Numbers 10 to 20!</div>
+      <div class="banner-sub" style="color:#fff">Each number has a TEN part and a UNIT part!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🔑 Tens + Units = The Number!</div>
+    <div class="ic-text">Every number from <strong>10 to 20</strong> has <strong>1 TEN</strong> plus some <strong>UNITS</strong>!<br>Example: <strong>13 = 1 TEN + 3 UNITS</strong></div>
+  </div>
+
+  <div id="numSteps"></div>
+  <div class="progress-dots" id="numDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Choose the correct UNITS for each number!</div>
+  <button class="big-btn primary" id="numsNextBtn" disabled onclick="completeTab('numbers','quiz','Numbers 10-20','Final Quiz')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 6 — QUIZ
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f57f17,#fbc02d)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Units and Tens!</div>
+    </div>
+  </div>
+
+  <div class="quiz-box-wrap" id="quizBox">
+    <div style="text-align:center;padding:20px;">
+      <div style="font-size:80px;margin-bottom:14px;">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:24px;color:#333;margin-bottom:8px;">Ready for the Quiz?</div>
+      <div style="font-size:15px;color:#666;font-weight:800;margin-bottom:20px;">10 questions about Units and Tens!</div>
+      <button class="big-btn primary" onclick="startQuiz()" style="max-width:280px;margin:0 auto;">🚀 Start Quiz!</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji" id="celebE">🏆</div>
+  <div class="celeb-title" id="celebT">Chapter 8 Complete!</div>
+  <div class="celeb-sub" id="celebS"></div>
+  <div class="celeb-stars" id="celebStar">⭐ 0 Stars!</div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 Awesome!</button>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────
+let stars = 0;
+const tabOrder = ['units','ten','circle','tens','numbers','quiz'];
+const tabDone  = { units:false, ten:false, circle:false, tens:false, numbers:false, quiz:false };
+
+// ─── TAB LOGIC ───────────────────────────────
+function tabClick(tab) {
+  const el = document.querySelector(`[data-tab="${tab}"]`);
+  if (el.classList.contains('locked')) {
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 550);
+    showToast('🔒 Finish the previous step first!');
+    speak('Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0,0);
+  // auto-speak tab intro
+  const msgs = {
+    units:'Count the apples! Every apple is one unit!',
+    ten:'Learn about making a TEN! Ten units make one group of ten!',
+    circle:'Circle ten objects! Count what is circled and what is left!',
+    tens:'Learn Tens and Units! A bunch equals one ten!',
+    numbers:'Numbers ten to twenty! Each has a ten part and a units part!',
+    quiz:'Final quiz time! Show what you know about units and tens!'
+  };
+  speak(msgs[tab] || '');
+}
+
+function completeTab(current, next, doneLabel, nextLabel) {
+  tabDone[current] = true;
+  const curEl  = document.querySelector(`[data-tab="${current}"]`);
+  const nextEl = document.querySelector(`[data-tab="${next}"]`);
+  curEl.classList.remove('active'); curEl.classList.add('done');
+  nextEl.classList.remove('locked'); nextEl.classList.add('unlocked');
+  updateProgress();
+  addStars(5);
+  setTimeout(() => tabClick(next), 300);
+  speak('Great job! Now let us go to ' + nextLabel + '!');
+}
+
+function updateProgress() {
+  const done = Object.values(tabDone).filter(Boolean).length;
+  const pct  = Math.round((done / tabOrder.length) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['Let\'s start! 🚀','Great start!','You\'re doing awesome!','Halfway there! 🎉','Almost done!','You did it! 🏆','Chapter 8 Complete! 🌟'];
+  document.getElementById('progLabel').textContent = labels[done] || '';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─── TAB 1: UNIT COUNTING ────────────────────
+const appleEmoji = '🍎';
+const unitData = [
+  { count:1,  opts:[1,2,3] },
+  { count:2,  opts:[1,2,3] },
+  { count:3,  opts:[2,3,4] },
+  { count:4,  opts:[3,4,5] },
+  { count:5,  opts:[4,5,6] },
+  { count:6,  opts:[5,6,7] },
+  { count:7,  opts:[6,7,8] },
+  { count:8,  opts:[7,8,9] },
+  { count:9,  opts:[8,9,10] },
+  { count:10, opts:[8,9,10] },
+];
+let unitIdx = 0;
+let unitAnswered = 0;
+
+function buildUnitSteps() {
+  const wrap = document.getElementById('unitSteps');
+  const dots = document.getElementById('unitDots');
+  wrap.innerHTML = ''; dots.innerHTML = '';
+  unitData.forEach((_,i) => {
+    dots.innerHTML += `<div class="pdot" id="udot-${i}"></div>`;
+  });
+  showUnit(0);
+}
+
+function showUnit(i) {
+  if (i >= unitData.length) {
+    document.getElementById('unitsNextBtn').disabled = false;
+    document.getElementById('unitHint').textContent = '✅ All done! Tap Next!';
+    speak('Amazing! You counted all the apples! Tap next!');
+    return;
+  }
+  unitIdx = i;
+  const d = unitData[i];
+  const apples = appleEmoji.repeat(d.count);
+  const wrap = document.getElementById('unitSteps');
+  wrap.innerHTML = `
+    <div class="apple-card" id="unitCard-${i}">
+      <div class="apple-title">How many apples? Each apple is 1 UNIT!</div>
+      <div style="font-size:${d.count<=5?'48':'36'}px;text-align:center;margin:10px 0;letter-spacing:4px;line-height:1.5;">${apples}</div>
+      <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:14px;color:#aaa;margin-bottom:12px;">${d.count} apple${d.count>1?'s':''} = ${d.count} unit${d.count>1?'s':''}</div>
+      <div class="choice-row">
+        ${d.opts.sort(()=>Math.random()-.5).map(o=>`<div class="choice-btn" onclick="answerUnit(this,${o},${d.count},${i})"><span class="cb-word">${o}</span></div>`).join('')}
+      </div>
+      <div class="fb-box" id="ufb-${i}"></div>
+    </div>`;
+  speak('How many apples? Tap the right number!');
+}
+
+function answerUnit(el, chosen, correct, i) {
+  document.querySelectorAll(`#unitCard-${i} .choice-btn`).forEach(b => b.classList.add('locked-choice'));
+  if (chosen === correct) {
+    el.classList.add('correct');
+    document.getElementById(`udot-${i}`).classList.add('done');
+    addStars(2);
+    showFeedback(`ufb-${i}`, 'ok', '✅ ' + correct + ' apple' + (correct>1?'s':'') + ' = ' + correct + ' unit' + (correct>1?'s':'') + '! 🍎');
+    speak('Correct! ' + correct + ' unit' + (correct>1?'s':'') + '!');
+    setTimeout(() => showUnit(i + 1), 1100);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`ufb-${i}`, 'no', '❌ Try again! Count the apples!');
+    speak('Try again! Count each apple!');
+    setTimeout(() => {
+      document.querySelectorAll(`#unitCard-${i} .choice-btn`).forEach(b => { b.classList.remove('locked-choice','wrong'); });
+    }, 900);
+  }
+}
+
+// ─── TAB 2: TEN CONCEPT QUIZ ─────────────────
+const tenQData = [
+  { q:'Each single thing you count is called a…', e:'🍎', opts:['Group','TEN','Unit','Bunch'], ans:'Unit' },
+  { q:'How many units make 1 TEN?', e:'🍎🍎🍎🍎🍎\n🍎🍎🍎🍎🍎', opts:['5','8','10','12'], ans:'10' },
+  { q:'10 units make a group of…', e:'🍎x10', opts:['1 Unit','1 TEN','2 TENS','100'], ans:'1 TEN' },
+  { q:'If I have 10 apples, how many TENS do I have?', e:'🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎', opts:['0','2','10','1'], ans:'1' },
+];
+let tenQIdx = 0;
+function buildTenQuiz() {
+  const wrap = document.getElementById('tenQuizArea');
+  const dots = document.getElementById('tenDots');
+  wrap.innerHTML = ''; dots.innerHTML = '';
+  tenQData.forEach((_,i) => { dots.innerHTML += `<div class="pdot" id="tqdot-${i}"></div>`; });
+  showTenQ(0);
+}
+function showTenQ(i) {
+  if (i >= tenQData.length) {
+    document.getElementById('tenNextBtn').disabled = false;
+    speak('Excellent! You understand units and tens! Tap next!');
+    return;
+  }
+  const d = tenQData[i];
+  const opts = [...d.opts].sort(()=>Math.random()-.5);
+  document.getElementById('tenQuizArea').innerHTML = `
+    <div class="apple-card" id="tqCard-${i}">
+      <div class="apple-title">${d.q}</div>
+      <div style="font-size:42px;text-align:center;margin:8px 0;white-space:pre-line;">${d.e}</div>
+      <div class="choice-row">${opts.map(o=>`<div class="choice-btn" onclick="answerTenQ(this,'${o}','${d.ans}',${i})"><span class="cb-word">${o}</span></div>`).join('')}</div>
+      <div class="fb-box" id="tqfb-${i}"></div>
+    </div>`;
+  speak(d.q);
+}
+function answerTenQ(el, chosen, correct, i) {
+  document.querySelectorAll(`#tqCard-${i} .choice-btn`).forEach(b=>b.classList.add('locked-choice'));
+  if (chosen === correct) {
+    el.classList.add('correct'); addStars(3);
+    document.getElementById(`tqdot-${i}`).classList.add('done');
+    showFeedback(`tqfb-${i}`,'ok','✅ Correct! ' + correct + '!');
+    speak('Correct! ' + correct + '!');
+    setTimeout(()=>showTenQ(i+1),1100);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`tqfb-${i}`,'no','❌ Try again!');
+    speak('Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#tqCard-${i} .choice-btn`).forEach(b=>{b.classList.remove('locked-choice','wrong');}); },900);
+  }
+}
+
+// ─── TAB 3: CIRCLE THE TEN ───────────────────
+const circleData = [
+  { emoji:'🌸', total:14, circled:10, remaining:4, label:'flowers' },
+  { emoji:'🐻', total:16, circled:10, remaining:6, label:'bears' },
+  { emoji:'🍦', total:12, circled:10, remaining:2, label:'ice creams' },
+  { emoji:'⭐', total:15, circled:10, remaining:5, label:'stars' },
+  { emoji:'🎈', total:13, circled:10, remaining:3, label:'balloons' },
+];
+let circleIdx = 0;
+function buildCircleSteps() {
+  const dots = document.getElementById('circleDots');
+  circleData.forEach((_,i)=>{ dots.innerHTML+=`<div class="pdot" id="cdot-${i}"></div>`; });
+  showCircle(0);
+}
+function showCircle(i) {
+  if (i >= circleData.length) {
+    document.getElementById('circleNextBtn').disabled = false;
+    speak('Amazing! You found all the tens and remaining objects!');
+    return;
+  }
+  circleIdx = i;
+  const d = circleData[i];
+  const circledEmojis = d.emoji.repeat(d.circled);
+  const remainEmojis  = d.emoji.repeat(d.remaining);
+  const wrap = document.getElementById('circleSteps');
+  // Ask: how many are circled (round-up)?
+  const wrongOpts1 = [d.circled-2, d.circled+2].filter(v=>v>0&&v!==d.circled);
+  const opts1 = shuffle([d.circled, ...wrongOpts1.slice(0,2)]);
+  wrap.innerHTML = `
+    <div class="apple-card" id="circleCard-${i}">
+      <div class="apple-title">${d.total} ${d.label} — We circled 10!</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin:12px 0;">
+        <div style="background:#fff9c4;border:4px dashed #ffb300;border-radius:20px;padding:12px;text-align:center;">
+          <div style="font-family:'Fredoka One',cursive;font-size:12px;color:#999;margin-bottom:4px;">⭕ CIRCLED (round-up)</div>
+          <div style="font-size:${d.circled>8?'32':'40'}px;letter-spacing:3px;">${circledEmojis}</div>
+        </div>
+        <div style="background:#e3f2fd;border:4px dashed #42a5f5;border-radius:20px;padding:12px;text-align:center;">
+          <div style="font-family:'Fredoka One',cursive;font-size:12px;color:#999;margin-bottom:4px;">Remaining (left over)</div>
+          <div style="font-size:40px;letter-spacing:3px;">${remainEmojis}</div>
+        </div>
+      </div>
+      <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#333;text-align:center;margin-bottom:12px;">How many objects are in the <strong style="color:#e65100;">circled group</strong>?</div>
+      <div class="choice-row" id="circleRow1-${i}">${opts1.map(o=>`<div class="choice-btn" onclick="answerCircle1(this,${o},${d.circled},${i})"><span class="cb-word">${o}</span></div>`).join('')}</div>
+      <div class="fb-box" id="cfb1-${i}"></div>
+    </div>`;
+  speak('How many ' + d.label + ' are in the circled group?');
+}
+function answerCircle1(el, chosen, correct, i) {
+  document.querySelectorAll(`#circleRow1-${i} .choice-btn`).forEach(b=>b.classList.add('locked-choice'));
+  const d = circleData[i];
+  if (chosen === correct) {
+    el.classList.add('correct'); addStars(2);
+    showFeedback(`cfb1-${i}`,'ok','✅ Yes! ' + correct + ' are circled! Now how many are remaining?');
+    speak('Correct! Now how many are left over?');
+    setTimeout(()=>showCircle2(i), 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`cfb1-${i}`,'no','❌ Try again! Count the circled ones!');
+    speak('Try again! Count the ones inside the circle!');
+    setTimeout(()=>{ document.querySelectorAll(`#circleRow1-${i} .choice-btn`).forEach(b=>{b.classList.remove('locked-choice','wrong');}); },900);
+  }
+}
+function showCircle2(i) {
+  const d = circleData[i];
+  const wrongOpts2 = [d.remaining-1, d.remaining+1, d.remaining+2].filter(v=>v>=0&&v!==d.remaining);
+  const opts2 = shuffle([d.remaining, ...wrongOpts2.slice(0,2)]);
+  const wrap = document.getElementById('circleSteps');
+  wrap.innerHTML += `
+    <div class="apple-card" id="circleCard2-${i}" style="border:3px solid #42a5f5;">
+      <div class="apple-title">How many ${d.label} are <span style="color:#1565c0;">remaining</span> (left over)?</div>
+      <div style="font-size:40px;text-align:center;letter-spacing:3px;margin:10px 0;">${d.emoji.repeat(d.remaining)}</div>
+      <div class="choice-row" id="circleRow2-${i}">${opts2.map(o=>`<div class="choice-btn" onclick="answerCircle2(this,${o},${d.remaining},${i})"><span class="cb-word">${o}</span></div>`).join('')}</div>
+      <div class="fb-box" id="cfb2-${i}"></div>
+    </div>`;
+  speak('How many ' + d.label + ' are remaining?');
+}
+function answerCircle2(el, chosen, correct, i) {
+  document.querySelectorAll(`#circleCard2-${i} .choice-btn`).forEach(b=>b.classList.add('locked-choice'));
+  const d = circleData[i];
+  if (chosen === correct) {
+    el.classList.add('correct'); addStars(3);
+    document.getElementById(`cdot-${i}`).classList.add('done');
+    showFeedback(`cfb2-${i}`,'ok',`✅ Yes! ${d.circled} circled + ${d.remaining} remaining = ${d.total} ${d.label}! 🎉`);
+    speak('Correct! ' + d.circled + ' circled and ' + d.remaining + ' remaining! Total is ' + d.total + '!');
+    setTimeout(()=>showCircle(i+1), 1400);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`cfb2-${i}`,'no','❌ Try again! Count the ones outside the circle!');
+    speak('Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#circleCard2-${i} .choice-btn`).forEach(b=>{b.classList.remove('locked-choice','wrong');}); },900);
+  }
+}
+
+// ─── TAB 4: TENS UNITS ──────────────────────
+// Numbers 11-19: 1 TEN + ? UNITS
+const tuData = [
+  { num:11, tens:1, units:1, scene:'🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌 + 🍌', label:'11 = 1 TEN + 1 UNIT' },
+  { num:12, tens:1, units:2, scene:'🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌 + 🍌🍌', label:'12 = 1 TEN + 2 UNITS' },
+  { num:13, tens:1, units:3, scene:'🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌 + 🍌🍌🍌', label:'13 = 1 TEN + 3 UNITS' },
+  { num:15, tens:1, units:5, scene:'🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌 + 🍌🍌🍌🍌🍌', label:'15 = 1 TEN + 5 UNITS' },
+  { num:17, tens:1, units:7, scene:'🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌 + 🍌🍌🍌🍌🍌🍌🍌', label:'17 = 1 TEN + 7 UNITS' },
+  { num:20, tens:2, units:0, scene:'🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌 + 🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌', label:'20 = 2 TENS + 0 UNITS' },
+];
+let tuIdx = 0;
+function buildTuSteps() {
+  const dots = document.getElementById('tuDots');
+  tuData.forEach((_,i)=>{ dots.innerHTML+=`<div class="pdot" id="tudot-${i}"></div>`; });
+  showTu(0);
+}
+function showTu(i) {
+  if (i >= tuData.length) {
+    document.getElementById('tensNextBtn').disabled = false;
+    speak('Excellent! You understand tens and units! Tap next!');
+    return;
+  }
+  tuIdx = i;
+  const d = tuData[i];
+  const wrongUnits = [d.units-1, d.units+1, d.units+2].filter(v=>v>=0&&v<=9&&v!==d.units);
+  const unitOpts = shuffle([d.units, ...wrongUnits.slice(0,2)]);
+  document.getElementById('tuSteps').innerHTML = `
+    <div class="apple-card" id="tuCard-${i}">
+      <div class="apple-title">How many UNITS in ${d.num}?</div>
+      <div style="font-size:${d.num>=17?'28':'34'}px;text-align:center;margin:10px 0;letter-spacing:2px;line-height:1.6;">${d.scene}</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0;">
+        <div style="text-align:center;"><div style="font-size:28px;">📦</div><div style="font-family:'Fredoka One',cursive;font-size:16px;color:#e65100;">${d.tens} TEN${d.tens>1?'S':''}</div></div>
+        <div style="font-family:'Fredoka One',cursive;font-size:30px;color:#f57f17;">+</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#555;">? UNITS</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:30px;color:#e53935;">=</div>
+        <div style="background:#e65100;color:#fff;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:28px;">${d.num}</div>
+      </div>
+      <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#777;text-align:center;margin-bottom:12px;">Tap the number of UNITS!</div>
+      <div class="choice-row">${unitOpts.map(o=>`<div class="choice-btn" onclick="answerTu(this,${o},${d.units},${i})"><span class="cb-word">${o}</span></div>`).join('')}</div>
+      <div class="fb-box" id="tufb-${i}"></div>
+    </div>`;
+  speak('How many units in ' + d.num + '? Tap the right number!');
+}
+function answerTu(el, chosen, correct, i) {
+  document.querySelectorAll(`#tuCard-${i} .choice-btn`).forEach(b=>b.classList.add('locked-choice'));
+  const d = tuData[i];
+  if (chosen === correct) {
+    el.classList.add('correct'); addStars(3);
+    document.getElementById(`tudot-${i}`).classList.add('done');
+    showFeedback(`tufb-${i}`,'ok','✅ ' + d.label + '! 🎉');
+    speak('Correct! ' + d.label + '!');
+    setTimeout(()=>showTu(i+1),1200);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`tufb-${i}`,'no','❌ Try again! Count the single bananas!');
+    speak('Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#tuCard-${i} .choice-btn`).forEach(b=>{b.classList.remove('locked-choice','wrong');}); },900);
+  }
+}
+
+// ─── TAB 5: NUMBERS 10-20 ────────────────────
+const numData = [
+  { num:10, tens:1, units:0, emoji:'🍎', q:'10 = 1 TEN + how many UNITS?', opts:[0,1,2], ans:0 },
+  { num:11, tens:1, units:1, emoji:'🍎', q:'11 = 1 TEN + how many UNITS?', opts:[0,1,2], ans:1 },
+  { num:14, tens:1, units:4, emoji:'🌸', q:'14 = 1 TEN + how many UNITS?', opts:[3,4,5], ans:4 },
+  { num:16, tens:1, units:6, emoji:'🐻', q:'16 = 1 TEN + how many UNITS?', opts:[5,6,7], ans:6 },
+  { num:18, tens:1, units:8, emoji:'⭐', q:'18 = 1 TEN + how many UNITS?', opts:[7,8,9], ans:8 },
+  { num:19, tens:1, units:9, emoji:'🍌', q:'19 = 1 TEN + how many UNITS?', opts:[8,9,10], ans:9 },
+  { num:20, tens:2, units:0, emoji:'🍎', q:'20 = ? TENS + 0 UNITS. How many TENS?', opts:[1,2,3], ans:2, askTens:true },
+];
+let numIdx = 0;
+function buildNumSteps() {
+  const dots = document.getElementById('numDots');
+  numData.forEach((_,i)=>{ dots.innerHTML+=`<div class="pdot" id="ndot-${i}"></div>`; });
+  showNum(0);
+}
+function showNum(i) {
+  if (i >= numData.length) {
+    document.getElementById('numsNextBtn').disabled = false;
+    speak('Amazing! You learned all numbers from 10 to 20! Tap next!');
+    return;
+  }
+  numIdx = i;
+  const d = numData[i];
+  const scene = d.emoji.repeat(Math.min(d.num, 20));
+  const opts = shuffle([...d.opts]);
+  document.getElementById('numSteps').innerHTML = `
+    <div class="apple-card" id="numCard-${i}">
+      <div class="apple-title">${d.q}</div>
+      <div style="font-size:${d.num>=15?'28':'34'}px;text-align:center;margin:10px 0;letter-spacing:2px;line-height:1.5;">${scene}</div>
+      <div style="text-align:center;margin:12px 0;">
+        <table style="width:90%;max-width:300px;margin:0 auto;border-collapse:separate;border-spacing:6px;">
+          <tr>
+            <th style="background:#e65100;color:#fff;border-radius:10px;padding:8px;font-family:'Fredoka One',cursive;font-size:16px;">TENS</th>
+            <th style="background:#01579b;color:#fff;border-radius:10px;padding:8px;font-family:'Fredoka One',cursive;font-size:16px;">UNITS</th>
+            <th style="background:#1b5e20;color:#fff;border-radius:10px;padding:8px;font-family:'Fredoka One',cursive;font-size:16px;">NUMBER</th>
+          </tr>
+          <tr>
+            <td style="background:#fff8e1;border:3px solid #ffe0b2;border-radius:10px;padding:10px;text-align:center;font-family:'Fredoka One',cursive;font-size:28px;">${d.askTens ? '?' : d.tens}</td>
+            <td style="background:#e3f2fd;border:3px solid #bbdefb;border-radius:10px;padding:10px;text-align:center;font-family:'Fredoka One',cursive;font-size:28px;">${d.askTens ? d.units : '?'}</td>
+            <td style="background:#e8f5e9;border:3px solid #a5d6a7;border-radius:10px;padding:10px;text-align:center;font-family:'Fredoka One',cursive;font-size:28px;color:#1b5e20;">${d.num}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="choice-row">${opts.map(o=>`<div class="choice-btn" onclick="answerNum(this,${o},${d.ans},${i})"><span class="cb-word">${o}</span></div>`).join('')}</div>
+      <div class="fb-box" id="nfb-${i}"></div>
+    </div>`;
+  speak(d.q);
+}
+function answerNum(el, chosen, correct, i) {
+  document.querySelectorAll(`#numCard-${i} .choice-btn`).forEach(b=>b.classList.add('locked-choice'));
+  const d = numData[i];
+  if (chosen === correct) {
+    el.classList.add('correct'); addStars(3);
+    document.getElementById(`ndot-${i}`).classList.add('done');
+    const msg = d.askTens ? `✅ ${d.num} = ${d.ans} TENS + ${d.units} UNITS!` : `✅ ${d.num} = ${d.tens} TEN + ${d.ans} UNITS!`;
+    showFeedback(`nfb-${i}`,'ok', msg + ' 🎉');
+    speak('Correct! ' + d.num + '!');
+    setTimeout(()=>showNum(i+1),1200);
+  } else {
+    el.classList.add('wrong');
+    showFeedback(`nfb-${i}`,'no','❌ Try again! Count the single objects!');
+    speak('Try again!');
+    setTimeout(()=>{ document.querySelectorAll(`#numCard-${i} .choice-btn`).forEach(b=>{b.classList.remove('locked-choice','wrong');}); },900);
+  }
+}
+
+// ─── TAB 6: QUIZ ────────────────────────────
+const quizData = [
+  { q:'Every single object you count is called a…', e:'🍎', opts:['Group','Unit','Ten','Number'], ans:'Unit' },
+  { q:'How many units make 1 TEN?', e:'🍎🍎🍎🍎🍎\n🍎🍎🍎🍎🍎', opts:['5','8','10','9'], ans:'10' },
+  { q:'10 units = how many TENs?', e:'🍎x10', opts:['0','2','10','1'], ans:'1' },
+  { q:'How many UNITS in the number 13?', e:'📦 + 🍌🍌🍌', opts:['1','2','3','4'], ans:'3' },
+  { q:'How many TENS in the number 15?', e:'15', opts:['0','1','5','2'], ans:'1' },
+  { q:'1 TEN + 6 UNITS = ?', e:'📦 + 🍌🍌🍌🍌🍌🍌', opts:['16','61','6','60'], ans:'16' },
+  { q:'What is 1 TEN + 0 UNITS?', e:'📦 + 🧺', opts:['100','1','0','10'], ans:'10' },
+  { q:'How many UNITS in 17?', e:'17', opts:['1','7','17','0'], ans:'7' },
+  { q:'2 TENS + 0 UNITS = ?', e:'📦📦 + 🧺', opts:['2','12','20','22'], ans:'20' },
+  { q:'If I circle 10 flowers and 4 are left, how many flowers total?', e:'⭕10 + 🌸🌸🌸🌸', opts:['4','10','14','40'], ans:'14' },
+  { q:'TENS digit of 19 is…', e:'19', opts:['9','0','19','1'], ans:'1' },
+  { q:'UNITS digit of 12 is…', e:'12', opts:['1','12','2','0'], ans:'2' },
+];
+let quizItems = [], quizIdx = 0, quizScore = 0;
+function startQuiz() {
+  quizItems = shuffle([...quizData]).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if (quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    tabDone['quiz'] = true;
+    updateProgress();
+    box.innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:80px;margin-bottom:10px">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#333;margin-bottom:8px">Quiz Done!</div>
+      <div style="font-size:18px;color:#666;font-weight:800;margin-bottom:6px">${quizScore} out of ${quizItems.length} correct!</div>
+      <div style="font-size:15px;color:#e65100;font-weight:900;margin-bottom:20px">+${bonus} bonus stars! ⭐</div>
+      <button class="big-btn primary" onclick="endLesson()" style="max-width:280px;margin:0 auto 10px">🎉 Complete Chapter!</button>
+      <button class="big-btn gold" onclick="startQuiz()" style="max-width:280px;margin:0 auto">🔄 Try Again!</button>
+    </div>`;
+    speak('Quiz done! You scored ' + quizScore + ' out of ' + quizItems.length + '! Tap complete chapter!');
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = shuffle([...q.opts]);
+  box.innerHTML = `
+    <div class="quiz-num">Question ${quizIdx+1} of ${quizItems.length}</div>
+    <div class="quiz-scene" style="white-space:pre-line;font-size:${q.e.length>12?'22':'48'}px;">${q.e}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-opts">
+      ${opts.map(o=>`<div class="quiz-opt" onclick="answerQ(this,'${o}','${q.ans}')">${o}</div>`).join('')}
+    </div>`;
+  speak(q.q);
+}
+function answerQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.onclick=null);
+  if (sel === correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('Correct! Excellent!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{ if(b.textContent.trim()===correct) b.classList.add('right'); });
+    speak('Oops! The answer is ' + correct);
+  }
+  setTimeout(()=>{ quizIdx++; showQ(); }, 1700);
+}
+
+// ─── HELPERS ─────────────────────────────────
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'fb-box ' + (type==='ok'?'ok':'no');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(()=>{ if(el) el.style.display='none'; }, 2800);
+}
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+}
+function shuffle(arr) { return arr.sort(()=>Math.random()-.5); }
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82; u.pitch = 1.2; u.lang = 'en-IN';
+  window.speechSynthesis.speak(u);
+}
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'Chapter 8 Complete!';
+  document.getElementById('celebS').textContent = 'Amazing! You learned:\n🍎 Every object = 1 UNIT\n🔟 10 UNITS = 1 TEN\n⭕ Circle the TEN and count remaining\n📦 TENS and UNITS make numbers 10–20!';
+  document.getElementById('celebStar').textContent = '⭐ ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('Congratulations! You finished Chapter 8! Units and Tens! You are a superstar!');
+}
+function closeCeleb() {
+  document.getElementById('celebScreen').classList.remove('show');
+}
+function launchConfetti() {
+  const cols = ['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#ffffff','#fbbf24'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    const sz = Math.random()*14+6;
+    c.style.cssText = `position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()*1}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+const s2 = document.createElement('style');
+s2.textContent = `@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(s2);
+
+// ─── INIT ─────────────────────────────────────
+buildUnitSteps();
+buildTenQuiz();
+buildCircleSteps();
+buildTuSteps();
+buildNumSteps();
+updateProgress();
+setTimeout(()=>speak("Welcome to Chapter 8! Units and Tens! Every apple you count is one unit! Let's go!"), 700);
+</script>
+</body>
+</html>

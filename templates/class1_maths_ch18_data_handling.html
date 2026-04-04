@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 18: Data Handling</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff8e1; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#ff6f00);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#e65100,#ff8f00); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffd600); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffcc80; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #e65100;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── SHAPE GRID ── */
+.shape-showcase {
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:14px 0;
+}
+.shape-card {
+  background:#fff; border-radius:16px; padding:14px 18px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #ffcc80; min-width:80px;
+}
+.shape-card .shape-icon { font-size:40px; display:block; margin-bottom:4px; }
+.shape-card .shape-name { font-family:'Fredoka One',cursive; font-size:16px; color:#e65100; }
+
+/* ── COUNT EXERCISE ── */
+.count-exercise {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.count-exercise .ce-title { font-family:'Fredoka One',cursive; font-size:17px; color:#e65100; margin-bottom:10px; }
+.count-row {
+  display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:2px dashed #ffe0b2;
+}
+.count-row:last-child { border-bottom:none; }
+.count-icon { font-size:36px; }
+.count-name { font-size:15px; font-weight:900; color:#444; flex:1; }
+.count-val { font-family:'Fredoka One',cursive; font-size:26px; color:#e65100;
+  background:#fff8e1; border-radius:12px; padding:4px 14px; border:3px solid #ffcc80; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:70px; margin-bottom:10px; display:block; line-height:1.2; }
+.q-text { font-family:'Fredoka One',cursive; font-size:20px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:18px;
+  border:3px solid #ffe082; background:#fff8e1; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS / PROGRESS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#e65100; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:16px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; border:none; cursor:pointer; margin-top:10px; transition:all .2s;
+}
+.nav-btn:disabled { opacity:.4; cursor:not-allowed; }
+.nav-btn.orange { background:linear-gradient(135deg,#e65100,#ff8f00); color:#fff; box-shadow:0 4px 16px rgba(230,81,0,.4); }
+.nav-btn.green  { background:linear-gradient(135deg,#2e7d32,#43a047); color:#fff; box-shadow:0 4px 16px rgba(46,125,50,.4); }
+
+/* ── FLOWER SCENE ── */
+.flower-scene {
+  background:linear-gradient(160deg,#e8f5e9,#f1f8e9); border-radius:20px; padding:16px;
+  margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.flower-scene .fs-title { font-family:'Fredoka One',cursive; font-size:16px; color:#2e7d32; margin-bottom:10px; text-align:center; }
+.flower-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:10px; }
+.flower-item {
+  font-size:34px; background:#fff; border-radius:12px; padding:8px 10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08); border:2px solid #a5d6a7;
+}
+
+/* ── TALLY BAR ── */
+.tally-section {
+  background:#fff; border-radius:20px; padding:14px 16px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.tally-title { font-family:'Fredoka One',cursive; font-size:16px; color:#e65100; margin-bottom:10px; }
+.tally-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.tally-icon { font-size:28px; min-width:40px; text-align:center; }
+.tally-bar-bg { flex:1; background:#ffe0b2; border-radius:10px; height:28px; overflow:hidden; }
+.tally-bar-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#e65100,#ffa726);
+  display:flex; align-items:center; padding-left:8px; font-family:'Fredoka One',cursive;
+  font-size:15px; color:#fff; transition:width 1s ease; }
+.tally-count { font-family:'Fredoka One',cursive; font-size:20px; color:#e65100; min-width:30px; text-align:right; }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(160deg,#e65100,#ff6f00);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; opacity:0; pointer-events:none; transition:opacity .4s; padding:30px;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:80px; animation:heroFloat 2s ease-in-out infinite; margin-bottom:12px; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:10px; text-align:center; }
+.celeb-sub { font-size:16px; color:rgba(255,255,255,.9); font-weight:800; text-align:center; line-height:1.8; white-space:pre-wrap; margin-bottom:20px; }
+.celeb-stars { font-size:22px; margin-bottom:24px; color:#ffd600; font-weight:900; }
+.celeb-btn { background:#fff; color:#e65100; font-family:'Fredoka One',cursive; font-size:20px;
+  border:none; border-radius:20px; padding:14px 36px; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.2); }
+
+/* ── SCENE IMAGE ── */
+.scene-box {
+  background:#fff; border-radius:20px; padding:14px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); text-align:center;
+}
+.scene-box .scene-title { font-family:'Fredoka One',cursive; font-size:16px; color:#e65100; margin-bottom:10px; }
+.scene-emoji-grid { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:8px; }
+.scene-item { font-size:30px; }
+
+/* ── BEAD GARLAND ── */
+.garland-wrap {
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:14px;
+  background:#fff; border-radius:20px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.bead { font-size:32px; border-radius:50%; padding:4px; }
+
+/* ── COIN GRID ── */
+.coin-grid {
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.coin {
+  font-size:15px; font-weight:900; border-radius:50%; width:54px; height:54px;
+  display:flex; align-items:center; justify-content:center; border:4px solid;
+  font-family:'Fredoka One',cursive;
+}
+.coin-1  { background:#fff9c4; border-color:#f9a825; color:#f57f17; }
+.coin-2  { background:#e1f5fe; border-color:#0288d1; color:#01579b; }
+.coin-5  { background:#fce4ec; border-color:#e91e63; color:#880e4f; }
+.coin-10 { background:#e8f5e9; border-color:#43a047; color:#1b5e20; }
+
+/* ── MOST/LEAST ── */
+.highlight-box {
+  border-radius:16px; padding:14px 18px; margin-bottom:10px; text-align:center;
+  border:4px solid;
+}
+.highlight-box.most  { background:#e8f5e9; border-color:#4caf50; }
+.highlight-box.least { background:#fff3e0; border-color:#ff9800; }
+.highlight-box .hl-label { font-family:'Fredoka One',cursive; font-size:14px; margin-bottom:6px; }
+.highlight-box .hl-icon  { font-size:42px; }
+.highlight-box .hl-name  { font-family:'Fredoka One',cursive; font-size:18px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">📊 Lesson 18 · Data Handling</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">📊</span>
+  <h1>Data Handling!</h1>
+  <p>Collect · Count · Compare · Understand!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" id="tab-learn"   onclick="tryTab('learn')">🌸 Flowers</div>
+  <div class="step-tab locked" id="tab-shapes"  onclick="tryTab('shapes')">🏠 Shapes</div>
+  <div class="step-tab locked" id="tab-beads"   onclick="tryTab('beads')">📿 Beads</div>
+  <div class="step-tab locked" id="tab-park"    onclick="tryTab('park')">🛝 Park</div>
+  <div class="step-tab locked" id="tab-coins"   onclick="tryTab('coins')">🪙 Coins</div>
+  <div class="step-tab locked" id="tab-quiz"    onclick="tryTab('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ═══════════════════════════════════════
+     TAB 1 — FLOWERS (Lesson Intro + Q1)
+════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-learn">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🌸</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">What is Data?</div>
+      <div class="banner-sub" style="color:#bf360c;">Counting things around us!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📊 Data Handling means…</div>
+    <div class="ic-text">
+      ✅ <b>Collect</b> simple data — count things!<br>
+      ✅ <b>Represent</b> data — show it clearly!<br>
+      ✅ <b>Interpret</b> data — understand it!
+    </div>
+  </div>
+
+  <!-- Anita's flowers scene -->
+  <div class="flower-scene">
+    <div class="fs-title">🌸 Anita collected flowers from the garden!</div>
+    <div class="flower-row">
+      <span class="flower-item">🌷</span><span class="flower-item">🌼</span><span class="flower-item">🌺</span>
+      <span class="flower-item">🌷</span><span class="flower-item">🌼</span><span class="flower-item">🌷</span>
+      <span class="flower-item">🌺</span><span class="flower-item">🌷</span><span class="flower-item">🌼</span>
+      <span class="flower-item">🌷</span><span class="flower-item">🌺</span><span class="flower-item">🌷</span>
+    </div>
+  </div>
+
+  <!-- Tally of flowers -->
+  <div class="tally-section">
+    <div class="tally-title">🔢 Count the flowers in the garland!</div>
+    <div class="tally-row">
+      <div class="tally-icon">🌷</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" id="tb1" style="width:0%"></div></div>
+      <div class="tally-count" id="tc1">6</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">🌼</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" id="tb2" style="width:0%"></div></div>
+      <div class="tally-count" id="tc2">3</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">🌺</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" id="tb3" style="width:0%"></div></div>
+      <div class="tally-count" id="tc3">3</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <div class="highlight-box most" style="flex:1">
+      <div class="hl-label" style="color:#2e7d32;">Occurs MOST 🎉</div>
+      <div class="hl-icon">🌷</div>
+      <div class="hl-name" style="color:#2e7d32;">Pink Tulip = 6</div>
+    </div>
+    <div class="highlight-box least" style="flex:1">
+      <div class="hl-label" style="color:#e65100;">Occurs LEAST</div>
+      <div class="hl-icon">🌼</div>
+      <div class="hl-name" style="color:#e65100;">Daisy = 3</div>
+    </div>
+  </div>
+
+  <!-- Q1 about flowers -->
+  <div class="q-dots" id="learnDots"></div>
+  <div id="learnSteps"></div>
+  <button class="nav-btn orange" id="learnNextBtn" onclick="goNext('learn')" disabled>Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 2 — SHAPES (Q2 from book)
+════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-shapes">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <span class="banner-emoji">🏠</span>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">Shapes in a Picture!</div>
+      <div class="banner-sub" style="color:#4a148c;">Count and Compare!</div>
+    </div>
+  </div>
+
+  <!-- House picture scene using emojis/shapes -->
+  <div class="scene-box">
+    <div class="scene-title">🏠 Count the shapes in this house picture!</div>
+    <div style="background:linear-gradient(180deg,#ffe0b2 0%,#c8e6c9 100%);border-radius:16px;padding:16px;margin-bottom:10px;">
+      <!-- Mountains row -->
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:36px;">🔺</span>
+        <span style="font-size:36px;">🔺</span>
+        <span style="font-size:36px;">🔺</span>
+        <span style="font-size:36px;">🔺</span>
+      </div>
+      <!-- House -->
+      <div style="display:flex;justify-content:center;gap:10px;align-items:center;">
+        <!-- left rocket = triangle+rectangle -->
+        <div style="text-align:center"><span style="font-size:28px;">🔺</span><br><span style="font-size:28px;">⬜</span></div>
+        <!-- mini triangle -->
+        <div style="text-align:center"><span style="font-size:22px;">🔺</span></div>
+        <!-- house body -->
+        <div style="background:#fff;border-radius:8px;padding:8px 12px;text-align:center;border:3px solid #ccc">
+          <div style="font-size:22px;">🔺🔵</div>
+          <div style="font-size:22px;">🟦⬜🟦</div>
+          <div style="font-size:22px;">⬜🟪⬜</div>
+        </div>
+        <!-- mini triangle -->
+        <div style="text-align:center"><span style="font-size:22px;">🔺</span></div>
+        <!-- right rocket = triangle+rectangle -->
+        <div style="text-align:center"><span style="font-size:28px;">🔺</span><br><span style="font-size:28px;">⬜</span></div>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:800;color:#888;margin-top:4px;">Triangles 🔺 · Circles 🔵 · Squares ⬜ · Rectangles ▭</div>
+  </div>
+
+  <!-- Tally of shapes -->
+  <div class="tally-section">
+    <div class="tally-title">🔢 Shapes Count!</div>
+    <div class="tally-row">
+      <div class="tally-icon">🔺</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:100%">Triangles</div></div>
+      <div class="tally-count">9</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">🔵</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:11%">Circles</div></div>
+      <div class="tally-count">1</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">⬜</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:44%">Squares</div></div>
+      <div class="tally-count">4</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">▭</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:22%">Rectangles</div></div>
+      <div class="tally-count">2</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <div class="highlight-box most" style="flex:1">
+      <div class="hl-label" style="color:#2e7d32;">Occurs MOST 🎉</div>
+      <div class="hl-icon">🔺</div>
+      <div class="hl-name" style="color:#2e7d32;">Triangle = 9</div>
+    </div>
+    <div class="highlight-box least" style="flex:1">
+      <div class="hl-label" style="color:#e65100;">Occurs LEAST</div>
+      <div class="hl-icon">🔵</div>
+      <div class="hl-name" style="color:#e65100;">Circle = 1</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="shapesDots"></div>
+  <div id="shapesSteps"></div>
+  <button class="nav-btn orange" id="shapesNextBtn" onclick="goNext('shapes')" disabled>Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 3 — BEADS GARLAND (Q3 from book)
+════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-beads">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">📿</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">Bead Garland!</div>
+      <div class="banner-sub" style="color:#1565c0;">Count beads of each shape!</div>
+    </div>
+  </div>
+
+  <!-- Garland visual -->
+  <div class="garland-wrap">
+    <div style="width:100%;text-align:center;font-family:'Fredoka One',cursive;font-size:15px;color:#0d47a1;margin-bottom:6px;">🔗 The Garland</div>
+    <span class="bead">🔵</span><span class="bead">💎</span><span class="bead">🌸</span>
+    <span class="bead">🔵</span><span class="bead">💎</span><span class="bead">🌸</span>
+    <span class="bead">🔵</span><span class="bead">🔵</span><span class="bead">💎</span>
+    <span class="bead">🌸</span><span class="bead">🔵</span><span class="bead">💎</span>
+    <span class="bead">🌸</span><span class="bead">🔵</span><span class="bead">💎</span>
+    <span class="bead">🌸</span><span class="bead">🔵</span><span class="bead">💎</span>
+    <span class="bead">🌸</span><span class="bead">🔵</span>
+  </div>
+
+  <!-- Tally -->
+  <div class="tally-section">
+    <div class="tally-title">🔢 Count the beads!</div>
+    <div class="tally-row">
+      <div class="tally-icon">🔵</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:100%">Circle beads</div></div>
+      <div class="tally-count">9</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">💎</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:66%">Diamond beads</div></div>
+      <div class="tally-count">6</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">🌸</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:55%">Flower beads</div></div>
+      <div class="tally-count">5</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <div class="highlight-box most" style="flex:1">
+      <div class="hl-label" style="color:#2e7d32;">Occurs MOST 🎉</div>
+      <div class="hl-icon">🔵</div>
+      <div class="hl-name" style="color:#2e7d32;">Circle = 9</div>
+    </div>
+    <div class="highlight-box least" style="flex:1">
+      <div class="hl-label" style="color:#e65100;">Occurs LEAST</div>
+      <div class="hl-icon">🌸</div>
+      <div class="hl-name" style="color:#e65100;">Flower = 5</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="beadsDots"></div>
+  <div id="beadsSteps"></div>
+  <button class="nav-btn orange" id="beadsNextBtn" onclick="goNext('beads')" disabled>Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 4 — PARK (Q4 from book)
+════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-park">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🛝</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Children in the Park!</div>
+      <div class="banner-sub" style="color:#2e7d32;">Count swings, seesaws and children!</div>
+    </div>
+  </div>
+
+  <!-- Park scene -->
+  <div class="scene-box">
+    <div class="scene-title">🌳 Children Playing in the Park!</div>
+    <div style="background:linear-gradient(180deg,#e3f2fd 0%,#c8e6c9 100%);border-radius:16px;padding:16px;margin-bottom:8px;text-align:center;font-size:13px;font-weight:800;color:#555;">
+      <!-- Park items -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">
+        <div style="background:#fff;border-radius:12px;padding:8px 12px;border:2px solid #a5d6a7;text-align:center;">
+          <div style="font-size:32px;">🎢</div>
+          <div>Slide</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:8px 12px;border:2px solid #a5d6a7;text-align:center;">
+          <div style="font-size:32px;">🎠</div>
+          <div>Swing × 4</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:8px 12px;border:2px solid #a5d6a7;text-align:center;">
+          <div style="font-size:32px;">⚖️</div>
+          <div>Seesaw × 1</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+        <span style="font-size:26px;">🧒</span><span style="font-size:26px;">🧒</span>
+        <span style="font-size:26px;">🧒</span><span style="font-size:26px;">🧒</span>
+        <span style="font-size:26px;">🧒</span><span style="font-size:26px;">🧒</span>
+        <span style="font-size:26px;">🧒</span><span style="font-size:26px;">🧒</span>
+        <span style="font-size:26px;">🧒</span><span style="font-size:26px;">🧒</span>
+        <span style="font-size:26px;">🧒</span><span style="font-size:26px;">🧒</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Count table -->
+  <div class="count-exercise">
+    <div class="ce-title">🔢 Count and Check!</div>
+    <div class="count-row">
+      <div class="count-icon">🎠</div>
+      <div class="count-name">Number of Swings</div>
+      <div class="count-val">4</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">⚖️</div>
+      <div class="count-name">Number of Seesaws</div>
+      <div class="count-val">1</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">🧒</div>
+      <div class="count-name">Children on Swing</div>
+      <div class="count-val">4</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">🧒</div>
+      <div class="count-name">Children on Slide</div>
+      <div class="count-val">2</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">🧒</div>
+      <div class="count-name">Children on Seesaw</div>
+      <div class="count-val">2</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="parkDots"></div>
+  <div id="parkSteps"></div>
+  <button class="nav-btn orange" id="parkNextBtn" onclick="goNext('park')" disabled>Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 5 — COINS (Q5+Q6 from book)
+════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-coins">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <span class="banner-emoji">🪙</span>
+    <div>
+      <div class="banner-title" style="color:#f57f17;">Count the Coins!</div>
+      <div class="banner-sub" style="color:#ff6f00;">Help Gopal count!</div>
+    </div>
+  </div>
+
+  <!-- Dasara dolls -->
+  <div class="info-card" style="border-left-color:#8e24aa">
+    <div class="ic-title" style="color:#8e24aa;">🎪 Dasara Festival Dolls!</div>
+    <div class="ic-text">
+      During the Dasara festival, dolls are arranged on steps.<br>
+      🐄🐘🐐 Animal dolls = <b>18</b><br>
+      👧🪆 Other dolls = <b>9</b>
+    </div>
+  </div>
+
+  <!-- Gopal's coins -->
+  <div class="scene-box">
+    <div class="scene-title">🪙 Gopal's Coins — Can you count them?</div>
+    <div class="coin-grid">
+      <!-- ₹1 coins -->
+      <div class="coin coin-1">₹1</div>
+      <div class="coin coin-1">₹1</div>
+      <div class="coin coin-1">₹1</div>
+      <!-- ₹2 coins -->
+      <div class="coin coin-2">₹2</div>
+      <div class="coin coin-2">₹2</div>
+      <div class="coin coin-2">₹2</div>
+      <div class="coin coin-2">₹2</div>
+      <div class="coin coin-2">₹2</div>
+      <div class="coin coin-2">₹2</div>
+      <div class="coin coin-2">₹2</div>
+      <!-- ₹5 coins -->
+      <div class="coin coin-5">₹5</div>
+      <div class="coin coin-5">₹5</div>
+      <div class="coin coin-5">₹5</div>
+      <div class="coin coin-5">₹5</div>
+      <div class="coin coin-5">₹5</div>
+      <!-- ₹10 coins -->
+      <div class="coin coin-10">₹10</div>
+      <div class="coin coin-10">₹10</div>
+      <div class="coin coin-10">₹10</div>
+      <div class="coin coin-10">₹10</div>
+    </div>
+  </div>
+
+  <!-- Coin count table -->
+  <div class="count-exercise">
+    <div class="ce-title">🔢 Count the coins!</div>
+    <div class="count-row">
+      <div class="count-icon">🟡</div>
+      <div class="count-name">₹ 1 coins</div>
+      <div class="count-val">3</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">🔵</div>
+      <div class="count-name">₹ 2 coins</div>
+      <div class="count-val">7</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">🩷</div>
+      <div class="count-name">₹ 5 coins</div>
+      <div class="count-val">5</div>
+    </div>
+    <div class="count-row">
+      <div class="count-icon">🟢</div>
+      <div class="count-name">₹ 10 coins</div>
+      <div class="count-val">4</div>
+    </div>
+  </div>
+
+  <!-- Tally bar for coins -->
+  <div class="tally-section">
+    <div class="tally-title">📊 Which coin is the most?</div>
+    <div class="tally-row">
+      <div class="tally-icon">₹1</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:43%">3</div></div>
+      <div class="tally-count">3</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">₹2</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:100%">7</div></div>
+      <div class="tally-count">7</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">₹5</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:71%">5</div></div>
+      <div class="tally-count">5</div>
+    </div>
+    <div class="tally-row">
+      <div class="tally-icon">₹10</div>
+      <div class="tally-bar-bg"><div class="tally-bar-fill" style="width:57%">4</div></div>
+      <div class="tally-count">4</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <div class="highlight-box most" style="flex:1">
+      <div class="hl-label" style="color:#2e7d32;">Most Coins 🎉</div>
+      <div class="hl-icon">🔵</div>
+      <div class="hl-name" style="color:#2e7d32;">₹2 = 7 coins</div>
+    </div>
+    <div class="highlight-box least" style="flex:1">
+      <div class="hl-label" style="color:#e65100;">Least Coins</div>
+      <div class="hl-icon">🟡</div>
+      <div class="hl-name" style="color:#e65100;">₹1 = 3 coins</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="coinsDots"></div>
+  <div id="coinsSteps"></div>
+  <button class="nav-btn orange" id="coinsNextBtn" onclick="goNext('coins')" disabled>Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 6 — BIG QUIZ
+════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#ffee58);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#f57f17;">Big Quiz Time!</div>
+      <div class="banner-sub" style="color:#e65100;">Show what you know!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="nav-btn green" id="qFinishBtn" onclick="showCelebration()" disabled>🎉 Finish!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <span class="celeb-emoji">🏆</span>
+  <div class="celeb-title">Amazing Work! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 Play Again!</button>
+</div>
+
+<script>
+/* ════════════════ STATE ════════════════ */
+let stars = 0;
+const doneTabs     = new Set();
+const unlockedTabs = new Set(['learn']);
+const tabOrder     = ['learn','shapes','beads','park','coins','quiz'];
+
+function tryTab(id){
+  if(unlockedTabs.has(id) || doneTabs.has(id)){
+    switchTab(id); return;
+  }
+  const el = document.getElementById('tab-'+id);
+  el.classList.remove('shaking');
+  void el.offsetWidth;
+  el.classList.add('shaking');
+  el.addEventListener('animationend',()=>el.classList.remove('shaking'),{once:true});
+  showToast('🔒 Finish the previous step first!');
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function switchTab(id){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const el = document.getElementById('tab-'+id);
+  el.classList.remove('locked','unlocked','done');
+  el.classList.add('active');
+}
+
+function unlockNext(currentId){
+  doneTabs.add(currentId);
+  const el = document.getElementById('tab-'+currentId);
+  el.classList.remove('active');
+  el.classList.add('done');
+  const idx = tabOrder.indexOf(currentId);
+  if(idx < tabOrder.length-1){
+    const nextId = tabOrder[idx+1];
+    unlockedTabs.add(nextId);
+    const nEl = document.getElementById('tab-'+nextId);
+    nEl.classList.remove('locked');
+    nEl.classList.add('unlocked');
+    setTimeout(()=>switchTab(nextId), 300);
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const pct = Math.round((doneTabs.size / tabOrder.length)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+function goNext(id){ unlockNext(id); }
+
+/* ════════════════ QUESTION ENGINE ════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+
+  let current = 0;
+  let answered = new Array(questions.length).fill(null);
+
+  function buildDots(){
+    dotsEl.innerHTML = '';
+    questions.forEach((_,i)=>{
+      const d = document.createElement('div');
+      d.className = 'dot' + (i===current?' active':'') +
+        (answered[i]===true?' done-ok':answered[i]===false?' done-err':'');
+      dotsEl.appendChild(d);
+    });
+  }
+
+  function render(){
+    buildDots();
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options" id="opts_${containerID}">
+          ${q.options.map((opt,i)=>`
+            <button class="q-option" onclick="pickAns_${containerID}(${i})">${opt}</button>
+          `).join('')}
+        </div>
+      </div>`;
+
+    // Re-attach pick function
+    window['pickAns_'+containerID] = function(chosen){
+      if(answered[current] !== null) return;
+      const correct = chosen === q.correct;
+      answered[current] = correct;
+      if(correct){ stars++; document.getElementById('starsNum').textContent=stars; }
+      const opts = document.querySelectorAll(`#opts_${containerID} .q-option`);
+      opts.forEach((o,i)=>{
+        if(i===q.correct) o.classList.add('correct');
+        else if(i===chosen && !correct) o.classList.add('wrong');
+        o.style.pointerEvents='none';
+      });
+      buildDots();
+      setTimeout(()=>{
+        if(current < questions.length-1){ current++; render(); }
+        else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+      }, correct ? 900 : 1300);
+    };
+  }
+
+  render();
+}
+
+/* ════════════════ QUESTIONS DATA ════════════════ */
+
+// TAB 1 — FLOWERS
+renderQuestions({
+  containerID:'learnSteps', dotsID:'learnDots', nextBtnID:'learnNextBtn',
+  questions:[
+    {visual:'🌷🌼🌺',question:'Anita collects flowers.\nWhich word means counting things?\nData ___ means collecting simple data.',options:['FLYING','HANDLING','HIDING','JUMPING'],correct:1},
+    {visual:'🌷🌷🌷🌷🌷🌷',question:'There are 6 pink tulips 🌷\nand 3 daisies 🌼.\nWhich flower is MORE?',options:['Daisy 🌼','Tulip 🌷','Same','Not sure'],correct:1},
+    {visual:'🌼🌺',question:'There are 3 daisies 🌼\nand 3 lotuses 🌺.\nWhich occurs LEAST?',options:['🌷 Tulip','🌼 Daisy','🌺 Lotus','None'],correct:1},
+    {visual:'📊',question:'When we COUNT things\nand SHOW the result,\nwe are doing ___ Handling.',options:['Number','Letter','DATA','Shape'],correct:2},
+    {visual:'🌷🌷🌷🌷🌷🌷',question:'The flower that occurs MOST\nin Anita\'s garland is?',options:['Lotus 🌺','Daisy 🌼','Tulip 🌷','Rose 🌹'],correct:2},
+    {visual:'📊🌸',question:'We COLLECT data,\nREPRESENT data and\n___ data.',options:['EAT','IGNORE','INTERPRET','DESTROY'],correct:2},
+  ]
+});
+
+// TAB 2 — SHAPES
+renderQuestions({
+  containerID:'shapesSteps', dotsID:'shapesDots', nextBtnID:'shapesNextBtn',
+  questions:[
+    {visual:'🔺🔺🔺🔺🔺',question:'In the house picture,\nthere are 9 triangles.\nTriangle occurs the ___.',options:['LEAST','SAME','MOST','NONE'],correct:2},
+    {visual:'🔵',question:'There is only 1 circle\nin the whole picture.\nCircle occurs the ___.',options:['MOST','LEAST','SAME','ALL'],correct:1},
+    {visual:'🔺⬜🔵▭',question:'How many SQUARES\nare there in the picture?',options:['2','3','5','4'],correct:3},
+    {visual:'▭',question:'How many RECTANGLES\nare there in the picture?',options:['1','2','3','4'],correct:1},
+    {visual:'🔺🔺🔺🔺🔺🔺🔺🔺🔺',question:'Triangles = 9, Circles = 1,\nSquares = 4, Rectangles = 2.\nWhich has the MOST?',options:['Circle','Rectangle','Square','Triangle'],correct:3},
+    {visual:'📊',question:'Which shape occurs\nLEAST in the picture?',options:['Triangle 🔺','Square ⬜','Circle 🔵','Rectangle ▭'],correct:2},
+  ]
+});
+
+// TAB 3 — BEADS
+renderQuestions({
+  containerID:'beadsSteps', dotsID:'beadsDots', nextBtnID:'beadsNextBtn',
+  questions:[
+    {visual:'🔵💎🌸',question:'In the garland,\nthere are 9 circle beads 🔵.\nCircle beads occur the ___.',options:['LEAST','MOST','SAME','NONE'],correct:1},
+    {visual:'🌸🌸🌸🌸🌸',question:'There are 5 flower beads 🌸\nand 6 diamond beads 💎.\nWhich is LESS?',options:['Diamond 💎','Circle 🔵','Flower 🌸','Same'],correct:2},
+    {visual:'💎💎💎💎💎💎',question:'How many DIAMOND beads\nare in the garland?',options:['5','7','6','8'],correct:2},
+    {visual:'🔵🔵🔵🔵🔵🔵🔵🔵🔵',question:'How many CIRCLE beads\nare in the garland?',options:['8','6','10','9'],correct:3},
+    {visual:'📿',question:'Circle = 9, Diamond = 6, Flower = 5.\nWhich bead occurs LEAST?',options:['Circle 🔵','Diamond 💎','Flower 🌸','All same'],correct:2},
+    {visual:'📊📿',question:'Circle = 9, Diamond = 6, Flower = 5.\nWhich bead occurs MOST?',options:['Flower 🌸','Diamond 💎','Circle 🔵','None'],correct:2},
+  ]
+});
+
+// TAB 4 — PARK
+renderQuestions({
+  containerID:'parkSteps', dotsID:'parkDots', nextBtnID:'parkNextBtn',
+  questions:[
+    {visual:'🎠🎠🎠🎠',question:'In the park,\nhow many SWINGS are there?',options:['2','3','5','4'],correct:3},
+    {visual:'⚖️',question:'How many SEESAWS\nare in the park?',options:['2','3','1','4'],correct:2},
+    {visual:'🧒🎠',question:'How many children\nare playing on the SWING?',options:['3','2','5','4'],correct:3},
+    {visual:'🧒🎢',question:'How many children\nare playing on the SLIDE?',options:['3','2','4','5'],correct:1},
+    {visual:'🧒⚖️',question:'How many children\nare playing on the SEESAW?',options:['1','3','4','2'],correct:3},
+    {visual:'🛝📊',question:'In a park, we can COLLECT data\nby counting swings, slides,\nand ___.',options:['BOOKS','SEESAWS','TREES','PENS'],correct:1},
+  ]
+});
+
+// TAB 5 — COINS
+renderQuestions({
+  containerID:'coinsSteps', dotsID:'coinsDots', nextBtnID:'coinsNextBtn',
+  questions:[
+    {visual:'🪙🪙🪙',question:'Gopal has 3 one-rupee coins,\n7 two-rupee coins, 5 five-rupee coins,\n4 ten-rupee coins.\nWhich coin does he have the MOST?',options:['₹1','₹5','₹2','₹10'],correct:2},
+    {visual:'🟡🟡🟡',question:'How many ₹1 coins\ndoes Gopal have?',options:['5','7','3','4'],correct:2},
+    {visual:'🔵🔵🔵🔵🔵🔵🔵',question:'How many ₹2 coins\ndoes Gopal have?',options:['5','3','4','7'],correct:3},
+    {visual:'🩷🩷🩷🩷🩷',question:'How many ₹5 coins\ndoes Gopal have?',options:['7','5','3','4'],correct:1},
+    {visual:'🟢🟢🟢🟢',question:'How many ₹10 coins\ndoes Gopal have?',options:['5','3','7','4'],correct:3},
+    {visual:'📊🪙',question:'₹1=3, ₹2=7, ₹5=5, ₹10=4.\nWhich coin does he have LEAST?',options:['₹2','₹5','₹10','₹1'],correct:3},
+    {visual:'🎪🎭',question:'During DASARA festival,\nAnimal dolls = 18,\nOther dolls = 9.\nWhich is MORE?',options:['Other dolls','Animal dolls','Same','None'],correct:1},
+  ]
+});
+
+// TAB 6 — BIG QUIZ
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'📊',question:'🏆 Data Handling means we\nCOLLECT, REPRESENT and\n___ simple data.',options:['THROW','IGNORE','INTERPRET','HIDE'],correct:2},
+    {visual:'🌷🌷🌷🌷🌷🌷',question:'🏆 In Anita\'s garland,\nTulips=6, Daisies=3, Lotus=3.\nWhich occurs MOST?',options:['Lotus 🌺','Daisy 🌼','Tulip 🌷','All same'],correct:2},
+    {visual:'🔺🔵⬜▭',question:'🏆 Triangles=9, Circles=1,\nSquares=4, Rectangles=2.\nWhich occurs LEAST?',options:['Triangle','Rectangle','Square','Circle'],correct:3},
+    {visual:'📿🔵💎🌸',question:'🏆 In the garland,\nCircle=9, Diamond=6, Flower=5.\nWhich is MOST?',options:['Flower','Diamond','Circle','All same'],correct:2},
+    {visual:'🛝',question:'🏆 In the park,\nhow many SEESAWS were there?',options:['3','2','1','4'],correct:2},
+    {visual:'🎠',question:'🏆 How many SWINGS\nwere in the park?',options:['2','3','5','4'],correct:3},
+    {visual:'🪙',question:'🏆 Gopal had ₹1=3, ₹2=7,\n₹5=5, ₹10=4 coins.\nWhich coin had the MOST?',options:['₹1','₹10','₹5','₹2'],correct:3},
+    {visual:'🎪',question:'🏆 At Dasara festival,\nAnimal dolls=18, Others=9.\nWhich is LESS?',options:['Animal dolls','Others','Same','None'],correct:1},
+    {visual:'📊📈',question:'🏆 A BAR shows a longer line\nwhen something happens ___.',options:['LEAST','SAME','NEVER','MOST'],correct:3},
+    {visual:'🏆',question:'🏆 When we COUNT and WRITE\nhow many of each thing,\nwe are collecting ___.',options:['Stories','DATA','Songs','Games'],correct:1},
+  ]
+});
+
+// Animate tally bars on load
+setTimeout(()=>{
+  const tb1 = document.getElementById('tb1');
+  const tb2 = document.getElementById('tb2');
+  const tb3 = document.getElementById('tb3');
+  if(tb1){ tb1.style.width='100%'; tb1.textContent='6'; }
+  if(tb2){ tb2.style.width='50%';  tb2.textContent='3'; }
+  if(tb3){ tb3.style.width='50%';  tb3.textContent='3'; }
+}, 500);
+
+/* ════════════════ CELEBRATION ════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You can COLLECT simple data! 📊\nYou can COUNT things around you! 🔢\nYou can find MOST and LEAST! 🏆\nYou know about BEADS, FLOWERS, COINS & PARKS! 🌸🪙🛝\nYou are a DATA Champion! 🎉';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,15);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ════════════════ RESTART ════════════════ */
+function restartAll(){
+  stars = 0;
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('learn');
+
+  tabOrder.forEach((id,i)=>{
+    const t = document.getElementById('tab-'+id);
+    t.className = 'step-tab ' + (i===0?'active':'locked');
+    const labels = ['🌸 Flowers','🏠 Shapes','📿 Beads','🛝 Park','🪙 Coins','🏆 Big Quiz!'];
+    t.textContent = labels[i];
+  });
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-learn').classList.add('active');
+
+  updateProgress();
+  location.reload();
+}
+</script>
+</body>
+</html>

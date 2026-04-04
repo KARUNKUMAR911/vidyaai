@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaAI - Class 1 EVS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0faf4;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(27,94,32,0.35);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-subject {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+        }
+        .back-btn {
+            background: white; color: #1b5e20;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            padding: 20px 20px 35px; text-align: center; color: white;
+        }
+        .hero-icon { font-size: 56px; margin-bottom: 8px; }
+        .hero h2   { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p    { font-size: 13px; opacity: 0.9; }
+
+        /* Progress card */
+        .progress-card {
+            background: white; margin: -18px 16px 20px;
+            border-radius: 18px; padding: 14px 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-circle {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
+        }
+        .progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
+        .progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+        .progress-bar-wrap {
+            flex: 1; background: #f0f0f0;
+            border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
+        }
+        .progress-bar-inner {
+            height: 100%; background: linear-gradient(90deg, #1b5e20, #66bb6a);
+            border-radius: 10px; width: 0%; transition: width 0.5s;
+        }
+
+        /* Section label */
+        .section-label {
+            padding: 8px 16px 6px;
+            font-size: 12px; font-weight: 800;
+            color: #888; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* Chapter list */
+        .chapters-list {
+            padding: 0 16px 100px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        /* Chapter card */
+        .chapter-card {
+            background: white; border-radius: 18px;
+            padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            cursor: pointer; transition: all 0.25s;
+            text-decoration: none; position: relative; overflow: hidden;
+        }
+        .chapter-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .chapter-card:active { transform: scale(0.98); }
+        .chapter-card.locked { opacity: 0.6; cursor: not-allowed; }
+        .chapter-card.completed  { border-left: 4px solid #059669; }
+        .chapter-card.inprogress { border-left: 4px solid #f59e0b; }
+        .chapter-card.notstarted { border-left: 4px solid #e5e7eb; }
+
+        .chapter-num {
+            width: 42px; height: 42px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; font-weight: 900;
+        }
+        .chapter-info { flex: 1; }
+        .chapter-title { font-size: 15px; font-weight: 800; color: #333; margin-bottom: 3px; }
+        .chapter-meta  { font-size: 12px; color: #888; font-weight: 600; }
+        .chapter-status { font-size: 18px; flex-shrink: 0; }
+
+        /* Page badge */
+        .page-badge {
+            background: #e8f5e9; color: #2e7d32;
+            padding: 2px 8px; border-radius: 10px;
+            font-size: 11px; font-weight: 800;
+            margin-left: 6px; white-space: nowrap;
+        }
+
+        /* Individual chapter colors */
+        .animals-card     .chapter-num { background: #fce4ec; }
+        .plants-card      .chapter-num { background: #e8f5e9; }
+        .water-card       .chapter-num { background: #e3f2fd; }
+        .food1-card       .chapter-num { background: #fff3e0; }
+        .food2-card       .chapter-num { background: #f3e5f5; }
+        .house-card       .chapter-num { background: #fbe9e7; }
+        .habits-card      .chapter-num { background: #e0f7fa; }
+        .safety-card      .chapter-num { background: #f9fbe7; }
+        .transport-card   .chapter-num { background: #fce4ec; }
+        .family-card      .chapter-num { background: #e8f5e9; }
+        .neighbour-card   .chapter-num { background: #fff3e0; }
+        .game-card        .chapter-num { background: #e3f2fd; }
+        .needs-card       .chapter-num { background: #f3e5f5; }
+        .friends-card     .chapter-num { background: #fbe9e7; }
+        .aroundus-card    .chapter-num { background: #e0f7fa; }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        }
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
+        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#1b5e20; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-subject">Class 1 • EVS</div>
+    </div>
+    <a href="/class/1" class="back-btn">← Back</a>
+</nav>
+
+<div class="hero">
+    <div class="hero-icon">🌿</div>
+    <h2>Environmental Studies</h2>
+    <p>Class 1 • Karnataka State Board • All Chapters</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-card">
+    <div class="progress-circle" id="progressNum">0%</div>
+    <div class="progress-info" style="flex:1">
+        <h4>My Progress</h4>
+        <p id="progressText">0 of 15 chapters completed</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Chapters -->
+<div class="section-label">🌱 All Chapters</div>
+
+<div class="chapters-list">
+
+    <!-- Chapter 1 -->
+    <a href="/class/1/evs/animals" class="chapter-card animals-card notstarted">
+        <div class="chapter-num">🐾</div>
+        <div class="chapter-info">
+            <div class="chapter-title">1. Animals Around Us <span class="page-badge">Pg 1–11</span></div>
+            <div class="chapter-meta">Domestic &amp; wild animals • Birds &amp; insects</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 2 -->
+    <a href="/class/1/evs/plants" class="chapter-card plants-card notstarted">
+        <div class="chapter-num">🌳</div>
+        <div class="chapter-info">
+            <div class="chapter-title">2. Plants Around Us <span class="page-badge">Pg 12–21</span></div>
+            <div class="chapter-meta">Trees, shrubs &amp; herbs • Uses of plants</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+
+    <!-- Chapter 3 -->
+    <a href="#" onclick="return false;" class="chapter-card water-card locked">
+        <div class="chapter-num">💧</div>
+        <div class="chapter-info">
+            <div class="chapter-title">3. Water <span class="page-badge">Pg 22–26</span></div>
+            <div class="chapter-meta">Sources of water • Uses of water</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 4 -->
+    <a href="#" onclick="return false;" class="chapter-card food1-card locked">
+        <div class="chapter-num">🍱</div>
+        <div class="chapter-info">
+            <div class="chapter-title">4. Delicious Food <span class="page-badge">Pg 27–34</span></div>
+            <div class="chapter-meta">Types of food • Foods we eat daily</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 5 -->
+    <a href="#" onclick="return false;" class="chapter-card food2-card locked">
+        <div class="chapter-num">🥦</div>
+        <div class="chapter-info">
+            <div class="chapter-title">5. Do We Need Food? <span class="page-badge">Pg 35–37</span></div>
+            <div class="chapter-meta">Why we eat • Importance of food</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 6 -->
+    <a href="#" onclick="return false;" class="chapter-card house-card locked">
+        <div class="chapter-num">🏠</div>
+        <div class="chapter-info">
+            <div class="chapter-title">6. My House <span class="page-badge">Pg 38–42</span></div>
+            <div class="chapter-meta">Types of houses • Parts of a house</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 7 -->
+    <a href="#" onclick="return false;" class="chapter-card habits-card locked">
+        <div class="chapter-num">🪥</div>
+        <div class="chapter-info">
+            <div class="chapter-title">7. Clean Habits <span class="page-badge">Pg 43–51</span></div>
+            <div class="chapter-meta">Personal hygiene • Keeping surroundings clean</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 8 -->
+    <a href="#" onclick="return false;" class="chapter-card safety-card locked">
+        <div class="chapter-num">🦺</div>
+        <div class="chapter-info">
+            <div class="chapter-title">8. Safety and Discipline <span class="page-badge">Pg 1–4</span></div>
+            <div class="chapter-meta">Road safety • Rules &amp; discipline</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 9 -->
+    <a href="#" onclick="return false;" class="chapter-card transport-card locked">
+        <div class="chapter-num">🚌</div>
+        <div class="chapter-info">
+            <div class="chapter-title">9. Transportation <span class="page-badge">Pg 5–11</span></div>
+            <div class="chapter-meta">Land, water &amp; air transport • Vehicles</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 10 -->
+    <a href="#" onclick="return false;" class="chapter-card family-card locked">
+        <div class="chapter-num">👨‍👩‍👧‍👦</div>
+        <div class="chapter-info">
+            <div class="chapter-title">10. I and My Family <span class="page-badge">Pg 12–21</span></div>
+            <div class="chapter-meta">Family members • Our roles at home</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 11 -->
+    <a href="#" onclick="return false;" class="chapter-card neighbour-card locked">
+        <div class="chapter-num">🏘️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">11. Neighbourhood <span class="page-badge">Pg 22–24</span></div>
+            <div class="chapter-meta">People around us • Community helpers</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 12 -->
+    <a href="#" onclick="return false;" class="chapter-card game-card locked">
+        <div class="chapter-num">🎮</div>
+        <div class="chapter-info">
+            <div class="chapter-title">12. Play the Game <span class="page-badge">Pg 25–32</span></div>
+            <div class="chapter-meta">Indoor &amp; outdoor games • Fun activities</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 13 -->
+    <a href="#" onclick="return false;" class="chapter-card needs-card locked">
+        <div class="chapter-num">🎒</div>
+        <div class="chapter-info">
+            <div class="chapter-title">13. I Need These <span class="page-badge">Pg 33–40</span></div>
+            <div class="chapter-meta">Clothes, tools &amp; daily necessities</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 14 -->
+    <a href="#" onclick="return false;" class="chapter-card friends-card locked">
+        <div class="chapter-num">⭐</div>
+        <div class="chapter-info">
+            <div class="chapter-title">14. Heavenly Friends <span class="page-badge">Pg 41–48</span></div>
+            <div class="chapter-meta">Sun, moon &amp; stars • Day and night</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+    <!-- Chapter 15 -->
+    <a href="#" onclick="return false;" class="chapter-card aroundus-card locked">
+        <div class="chapter-num">🌍</div>
+        <div class="chapter-info">
+            <div class="chapter-title">15. Around Us <span class="page-badge">Pg 49–54</span></div>
+            <div class="chapter-meta">Our environment • Taking care of nature</div>
+        </div>
+        <div class="chapter-status">⏳</div>
+    </a>
+
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+    <a href="/class/1" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">🌿</div>
+        <div class="nav-label">EVS</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=1');
+        const data = await res.json();
+        const chapters = [
+            'animals','plants','water','delicious-food','do-we-need-food',
+            'my-house','clean-habits','safety-discipline','transportation',
+            'i-and-my-family','neighbourhood','play-the-game',
+            'i-need-these','heavenly-friends','around-us'
+        ];
+        let completed = 0;
+        chapters.forEach(ch => {
+            const p = data[`evs_${ch}`];
+            if (p && p.total > 0 && p.completed === p.total) completed++;
+        });
+        const total = 15;
+        const pct = Math.round((completed / total) * 100);
+        document.getElementById('progressNum').textContent  = `${pct}%`;
+        document.getElementById('progressText').textContent = `${completed} of ${total} chapters completed`;
+        document.getElementById('progressBar').style.width  = `${pct}%`;
+    } catch(e) {}
+}
+loadProgress();
+</script>
+</body>
+</html>

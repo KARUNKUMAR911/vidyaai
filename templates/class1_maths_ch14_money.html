@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Maths Class 1 — Lesson 14: Money</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#388e3c);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#ffcc02); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1b5e20; border-color:#c8e6c9; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#f1f8e9; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1b5e20;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.6; }
+
+/* ── COIN/NOTE DISPLAY ── */
+.money-row {
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.money-item {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  background:#f1f8e9; border:3px solid #a5d6a7; border-radius:16px; padding:10px 14px;
+  min-width:70px;
+}
+.money-emoji { font-size:36px; }
+.money-label { font-family:'Fredoka One',cursive; font-size:13px; color:#1b5e20; text-align:center; }
+
+/* ── PRACTICE CARD ── */
+.prac-card { background:#fff; border-radius:24px; padding:20px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #c8e6c9; }
+.prac-q { font-family:'Fredoka One',cursive; font-size:19px; color:#333; text-align:center; margin-bottom:14px; line-height:1.5; white-space:pre-line; }
+.prac-q .visual { font-size:28px; display:block; margin-bottom:8px; letter-spacing:2px; }
+.prac-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.prac-opts.three { grid-template-columns:1fr 1fr 1fr; }
+.prac-opt {
+  background:#f1f8e9; border:3px solid #c8e6c9; border-radius:14px; padding:14px 8px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  font-family:'Fredoka One',cursive; font-size:22px; color:#1b5e20; user-select:none;
+  line-height:1.3;
+}
+.prac-opt:active { transform:scale(.91); }
+.prac-opt.right  { border-color:#1b5e20; background:#c8e6c9; color:#1b5e20; pointer-events:none; }
+.prac-opt.wrong  { border-color:#c62828; background:#ffcdd2; color:#c62828; pointer-events:none; }
+
+/* ── FEEDBACK ── */
+.fb-box { padding:10px 14px; border-radius:14px; font-size:16px; font-weight:900; text-align:center; margin-top:8px; display:none; }
+.fb-box.ok  { background:#f1f8e9; color:#1b5e20; display:block; }
+.fb-box.no  { background:#ffcdd2; color:#c62828; display:block; }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 14px; justify-content:center; }
+.pdot { width:16px; height:16px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.pdot.done { background:#1b5e20; }
+
+/* ── BIG BTN ── */
+.big-btn {
+  width:100%; padding:18px; border:none; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; cursor:pointer; transition:all .2s; margin-top:12px; display:block;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+.big-btn:active { transform:scale(.97); }
+.big-btn.primary { background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff; }
+.big-btn.primary:disabled { background:#ccc; color:#999; box-shadow:none; cursor:not-allowed; transform:none; }
+.big-btn.gold { background:linear-gradient(135deg,#f9a825,#fdd835); color:#fff; }
+
+/* ── RUPEE KEY ── */
+.rupee-key {
+  background:linear-gradient(135deg,#fff8e1,#fffde7); border:3px solid #ffcc02;
+  border-radius:20px; padding:14px 18px; margin-bottom:14px; text-align:center;
+  box-shadow:0 3px 14px rgba(0,0,0,.08);
+}
+.rupee-key .rk-title { font-family:'Fredoka One',cursive; font-size:18px; color:#f57f17; margin-bottom:8px; }
+.rupee-symbol { font-size:48px; font-weight:900; color:#f57f17; display:block; }
+.rupee-fact { font-size:16px; font-weight:900; color:#555; margin-top:6px; }
+
+/* ── MATCH CARD ── */
+.match-card { background:#fff; border-radius:20px; padding:16px; margin-bottom:12px; box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #c8e6c9; }
+.match-question { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; text-align:center; margin-bottom:12px; }
+.match-opts { display:flex; flex-direction:column; gap:10px; }
+.match-opt {
+  background:#f1f8e9; border:3px solid #c8e6c9; border-radius:14px; padding:14px 16px;
+  cursor:pointer; transition:all .2s; font-family:'Fredoka One',cursive;
+  font-size:17px; color:#333; user-select:none; display:flex; align-items:center; gap:10px;
+}
+.match-opt:active { transform:scale(.97); }
+.match-opt.right { border-color:#1b5e20; background:#c8e6c9; pointer-events:none; }
+.match-opt.wrong { border-color:#c62828; background:#ffcdd2; pointer-events:none; }
+
+/* ── CELEBRATE ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(27,94,32,.95); z-index:600;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s; padding:24px;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:90px; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:8px; text-align:center; }
+.celeb-sub   { font-size:15px; color:rgba(255,255,255,.9); font-weight:800; margin-bottom:8px; text-align:center; line-height:1.7; white-space:pre-line; }
+.celeb-stars { font-size:24px; color:#ffd700; font-weight:900; margin-bottom:26px; }
+.celeb-btn   { background:#ffd700; color:#1b5e20; font-family:'Fredoka One',cursive; font-size:20px; padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+/* ── SITUATION CARD ── */
+.situation-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #c8e6c9;
+}
+.sit-scene { font-size:48px; text-align:center; margin-bottom:8px; }
+.sit-text { font-family:'Fredoka One',cursive; font-size:17px; color:#333; text-align:center; line-height:1.5; margin-bottom:10px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">💰 Lesson 14 — Money</span>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🪙</span>
+  <h1>Money!</h1>
+  <p>Coins • Notes • Rupees • Paise • Addition!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Let's learn about Money! 💰</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="coins"    onclick="tabClick('coins')">🪙 Coins!</div>
+  <div class="step-tab locked"  data-tab="notes"    onclick="tabClick('notes')">💵 Notes!</div>
+  <div class="step-tab locked"  data-tab="symbol"   onclick="tabClick('symbol')">₹ Rupee!</div>
+  <div class="step-tab locked"  data-tab="choose"   onclick="tabClick('choose')">🛒 Buy Things!</div>
+  <div class="step-tab locked"  data-tab="addition" onclick="tabClick('addition')">➕ Add Money!</div>
+  <div class="step-tab locked"  data-tab="quiz"     onclick="tabClick('quiz')">🏆 Final Quiz!</div>
+</div>
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════
+     TAB 1 : COINS
+═══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-coins">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#43a047)">
+    <span class="banner-emoji">🪙</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Indian Coins!</div>
+      <div class="banner-sub" style="color:#fff">We use coins to buy things!</div>
+    </div>
+  </div>
+
+  <!-- Situations intro -->
+  <div class="situation-card">
+    <div class="sit-scene">👦🛒</div>
+    <div class="sit-text">"Mother, I want to buy a pencil!"<br>What does the child need? → <strong>MONEY!</strong></div>
+  </div>
+  <div class="situation-card">
+    <div class="sit-scene">🍌🏪</div>
+    <div class="sit-text">"I want a banana!" → Give money to the vendor!</div>
+  </div>
+  <div class="situation-card">
+    <div class="sit-scene">🍦🎠</div>
+    <div class="sit-text">"Uncle, I want ice cream!" → Give money!</div>
+  </div>
+  <div class="situation-card">
+    <div class="sit-scene">🎈👴</div>
+    <div class="sit-text">"I will give you a balloon — give me MONEY!"<br>💡 <strong>Money is needed to buy things!</strong></div>
+  </div>
+
+  <div class="rupee-key">
+    <div class="rk-title">Key Fact!</div>
+    <span class="rupee-symbol">🪙</span>
+    <div class="rupee-fact">In India, money comes as <strong>COINS</strong> and <strong>NOTES</strong></div>
+    <div class="rupee-fact" style="margin-top:6px;color:#c62800;font-size:18px;">1 Rupee = 100 Paise</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🪙 Indian Coins We Use!</div>
+    <div class="ic-text">Look at these coins and remember them!</div>
+  </div>
+
+  <div class="money-row">
+    <div class="money-item"><span class="money-emoji">🔘</span><div class="money-label">50 Paise</div></div>
+    <div class="money-item"><span class="money-emoji">🥈</span><div class="money-label">₹ 1 Rupee</div></div>
+    <div class="money-item"><span class="money-emoji">🪙</span><div class="money-label">₹ 2 Rupees</div></div>
+    <div class="money-item"><span class="money-emoji">💰</span><div class="money-label">₹ 5 Rupees</div></div>
+    <div class="money-item"><span class="money-emoji">🟡</span><div class="money-label">₹ 10 Rupees</div></div>
+  </div>
+
+  <div id="coinSteps"></div>
+  <div class="progress-dots" id="coinDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="coinNextBtn" disabled onclick="completeTab('coins','notes','Coins!','Notes!')">Next: Notes! 💵</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB 2 : NOTES
+═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-notes">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#4527a0,#7e57c2)">
+    <span class="banner-emoji">💵</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Indian Notes!</div>
+      <div class="banner-sub" style="color:#fff">These are commonly used notes!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💵 Commonly Used Notes!</div>
+    <div class="ic-text">Notes are bigger amounts of money. Look and remember!</div>
+  </div>
+
+  <div class="money-row">
+    <div class="money-item"><span class="money-emoji">📄</span><div class="money-label">₹ 1</div></div>
+    <div class="money-item"><span class="money-emoji">📃</span><div class="money-label">₹ 2</div></div>
+    <div class="money-item"><span class="money-emoji">🟢</span><div class="money-label">₹ 5</div></div>
+    <div class="money-item"><span class="money-emoji">🟡</span><div class="money-label">₹ 10</div></div>
+    <div class="money-item"><span class="money-emoji">🟠</span><div class="money-label">₹ 20</div></div>
+    <div class="money-item"><span class="money-emoji">🟣</span><div class="money-label">₹ 50</div></div>
+  </div>
+
+  <div id="noteSteps"></div>
+  <div class="progress-dots" id="noteDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="noteNextBtn" disabled onclick="completeTab('notes','symbol','Notes!','Rupee Symbol!')">Next: Rupee Symbol! ₹</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB 3 : RUPEE SYMBOL + MATCHING
+═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-symbol">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#bf360c,#e64a19)">
+    <span class="banner-emoji">₹</span>
+    <div>
+      <div class="banner-title" style="color:#fff">The Rupee Symbol!</div>
+      <div class="banner-sub" style="color:#fff">₹ is the symbol for Rupees!</div>
+    </div>
+  </div>
+
+  <div class="rupee-key">
+    <div class="rk-title">Symbol of Rupee</div>
+    <span class="rupee-symbol">₹</span>
+    <div class="rupee-fact">₹ 1 means One Rupee &nbsp;|&nbsp; ₹ 5 means Five Rupees</div>
+    <div class="rupee-fact" style="margin-top:6px">₹ 10 means Ten Rupees &nbsp;|&nbsp; 50 p = 50 Paise</div>
+  </div>
+
+  <div id="symbolSteps"></div>
+  <div class="progress-dots" id="symbolDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="symbolNextBtn" disabled onclick="completeTab('symbol','choose','Rupee Symbol!','Buy Things!')">Next: Buy Things! 🛒</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB 4 : WHICH COIN/NOTE TO USE
+═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-choose">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#006064,#00838f)">
+    <span class="banner-emoji">🛒</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Buy Things!</div>
+      <div class="banner-sub" style="color:#fff">Which coin or note do you use?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Match the Price!</div>
+    <div class="ic-text">
+      Look at the price tag. Choose the correct coin or note!<br><br>
+      A toffee costs <strong>50 paise</strong> → use the <strong>50 paise coin</strong>!<br>
+      A pencil costs <strong>₹ 5</strong> → use the <strong>₹ 5 coin or note</strong>!
+    </div>
+  </div>
+
+  <div id="chooseSteps"></div>
+  <div class="progress-dots" id="chooseDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="chooseNextBtn" disabled onclick="completeTab('choose','addition','Buy Things!','Add Money!')">Next: Add Money! ➕</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB 5 : MONEY ADDITION
+═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-addition">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#ff8f00)">
+    <span class="banner-emoji">➕</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Add Money!</div>
+      <div class="banner-sub" style="color:#fff">Add two notes or coins together!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">💡 Adding Money!</div>
+    <div class="ic-text">
+      Just add the numbers!<br><br>
+      ₹ 10 + ₹ 5 = ₹ <strong>15</strong> ✅<br>
+      ₹ 10 + ₹ 2 = ₹ <strong>12</strong> ✅<br>
+      ₹ 5 + ₹ 2 = ₹ <strong>7</strong> ✅<br><br>
+      Model: A pen costs ₹ 15 → Pay with <strong>₹ 10 + ₹ 5</strong>!
+    </div>
+  </div>
+
+  <div id="additionSteps"></div>
+  <div class="progress-dots" id="additionDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn primary" id="additionNextBtn" disabled onclick="completeTab('addition','quiz','Add Money!','Final Quiz!')">Next: Final Quiz! 🏆</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB 6 : FINAL QUIZ
+═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f57f17,#fbc02d)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Final Quiz!</div>
+      <div class="banner-sub" style="color:#fff">Show what you know about Money!</div>
+    </div>
+  </div>
+
+  <div id="quizSteps"></div>
+  <div class="progress-dots" id="quizDots"></div>
+  <div style="text-align:center;font-size:13px;font-weight:800;color:#999;margin-bottom:10px">Tap the correct answer!</div>
+  <button class="big-btn gold" id="quizFinishBtn" disabled onclick="showCelebration()">🏆 See My Result!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATION SCREEN -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🎉</div>
+  <div class="celeb-title">Amazing Work! 🌟</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 Play Again!</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let stars = 0;
+let answeredMap = {};
+const tabOrder = ['coins','notes','symbol','choose','addition','quiz'];
+const unlockedTabs = new Set(['coins']);
+const doneTabs = new Set();
+
+/* ═══════════════════════════════════════════
+   TAB CLICK
+═══════════════════════════════════════════ */
+function tabClick(id) {
+  if (!unlockedTabs.has(id)) {
+    const el = document.querySelector(`[data-tab="${id}"]`);
+    el.classList.add('shaking');
+    el.addEventListener('animationend', () => el.classList.remove('shaking'), {once:true});
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => {
+    t.classList.remove('active');
+    if (doneTabs.has(t.dataset.tab)) { t.classList.add('done'); t.classList.remove('locked','unlocked'); }
+    else if (unlockedTabs.has(t.dataset.tab)) { t.classList.add('unlocked'); t.classList.remove('locked','done'); }
+    else { t.classList.add('locked'); t.classList.remove('unlocked','done','active'); }
+  });
+  document.getElementById('tab-' + id).classList.add('active');
+  const activeTab = document.querySelector(`[data-tab="${id}"]`);
+  activeTab.classList.add('active');
+  activeTab.classList.remove('locked','unlocked','done');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ═══════════════════════════════════════════
+   COMPLETE TAB → UNLOCK NEXT
+═══════════════════════════════════════════ */
+function completeTab(currentID, nextID, currentLabel, nextLabel) {
+  doneTabs.add(currentID);
+  unlockedTabs.add(nextID);
+  updateProgress();
+  tabClick(nextID);
+  showToast('🎉 Great! ' + nextLabel + ' unlocked!');
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════════ */
+function updateProgress() {
+  const pct = Math.round((doneTabs.size / tabOrder.length) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['Let\'s learn about Money! 💰','Learning Coins! 🪙','Learning Notes! 💵','Learning the Rupee Symbol! ₹','Buying Things! 🛒','Adding Money! ➕','🏆 Quiz Time! Almost done!'];
+  document.getElementById('progLabel').textContent = labels[Math.min(doneTabs.size, labels.length-1)];
+  document.getElementById('starsNum').textContent = stars;
+}
+
+/* ═══════════════════════════════════════════
+   RENDER QUESTIONS ENGINE
+═══════════════════════════════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}) {
+  const container = document.getElementById(containerID);
+  const dotsContainer = document.getElementById(dotsID);
+  const nextBtn = document.getElementById(nextBtnID);
+  container.innerHTML = '';
+  dotsContainer.innerHTML = '';
+  let answered = 0;
+
+  questions.forEach((q, idx) => {
+    // dot
+    const dot = document.createElement('div');
+    dot.className = 'pdot';
+    dot.id = dotsID + '_dot_' + idx;
+    dotsContainer.appendChild(dot);
+
+    // card
+    const card = document.createElement('div');
+    card.className = 'prac-card';
+    card.id = containerID + '_card_' + idx;
+
+    let html = '<div class="prac-q">';
+    if (q.visual) html += `<span class="visual">${q.visual}</span>`;
+    html += q.question.replace(/\n/g,'<br>') + '</div>';
+
+    const cols = q.options.length === 3 ? 'prac-opts three' : 'prac-opts';
+    html += `<div class="${cols}" id="${containerID}_opts_${idx}">`;
+    q.options.forEach((opt, oi) => {
+      html += `<div class="prac-opt" onclick="pickAnswer('${containerID}','${dotsID}','${nextBtnID}',${idx},${oi},${q.correct},${questions.length})">${opt}</div>`;
+    });
+    html += '</div>';
+    html += `<div class="fb-box" id="${containerID}_fb_${idx}"></div>`;
+
+    card.innerHTML = html;
+    if (idx > 0) card.style.display = 'none';
+    container.appendChild(card);
+  });
+}
+
+function pickAnswer(cID, dID, nID, idx, chosen, correct, total) {
+  const key = cID + '_' + idx;
+  if (answeredMap[key]) return;
+  answeredMap[key] = true;
+
+  const optsEl = document.getElementById(cID + '_opts_' + idx);
+  const opts = optsEl.querySelectorAll('.prac-opt');
+  const fb = document.getElementById(cID + '_fb_' + idx);
+  const dot = document.getElementById(dID + '_dot_' + idx);
+
+  opts.forEach((o,i) => {
+    if (i === correct) o.classList.add('right');
+    else if (i === chosen && chosen !== correct) o.classList.add('wrong');
+    o.style.pointerEvents = 'none';
+  });
+
+  if (chosen === correct) {
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+    fb.className = 'fb-box ok';
+    fb.textContent = ['🎉 Correct! Well done!','✅ Yes! That\'s right!','🌟 Brilliant!','👏 You got it!','🥳 Perfect!'][idx % 5];
+  } else {
+    fb.className = 'fb-box no';
+    fb.textContent = ['❌ Not quite! The green one is right!','Try to remember this one!','Look at the highlighted answer!'][idx % 3];
+  }
+  dot.classList.add('done');
+
+  // show next card
+  setTimeout(() => {
+    const nextCard = document.getElementById(cID + '_card_' + (idx+1));
+    if (nextCard) {
+      nextCard.style.display = 'block';
+      nextCard.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    // count answered
+    let cnt = 0;
+    for (let i=0;i<1000;i++) { if(answeredMap[cID+'_'+i] !== undefined) cnt++; else break; }
+    // check if all done
+    let allDone = true;
+    const allCards = document.getElementById(cID).querySelectorAll('.prac-card');
+    allCards.forEach((_,i) => { if(!answeredMap[cID+'_'+i]) allDone=false; });
+    if (allDone) {
+      document.getElementById(nID).disabled = false;
+      document.getElementById(nID).scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }, 700);
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1 : COINS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'coinSteps', dotsID:'coinDots', nextBtnID:'coinNextBtn',
+  questions:[
+    {
+      visual:'🔘',
+      question:'This small coin is worth how much?',
+      options:['₹ 1','₹ 2','50 Paise','₹ 5'], correct:2
+    },
+    {
+      visual:'🥈',
+      question:'This coin has the number 1 on it. What is its value?',
+      options:['50 Paise','₹ 1','₹ 2','₹ 5'], correct:1
+    },
+    {
+      visual:'🪙',
+      question:'This coin is worth Two Rupees. What do we write?',
+      options:['50 p','₹ 1','₹ 5','₹ 2'], correct:3
+    },
+    {
+      visual:'💰',
+      question:'This gold-coloured coin is worth Five Rupees. Which is it?',
+      options:['₹ 2','₹ 10','₹ 5','₹ 1'], correct:2
+    },
+    {
+      visual:'🟡',
+      question:'This is our biggest coin. What is it worth?',
+      options:['₹ 5','₹ 10','₹ 2','₹ 20'], correct:1
+    },
+    {
+      question:'1 Rupee = how many Paise?',
+      options:['10 Paise','50 Paise','100 Paise','200 Paise'], correct:2
+    },
+    {
+      question:'Which of these is a COIN (not a note)?',
+      options:['₹ 50 note','₹ 20 note','₹ 5 coin','₹ 100 note'], correct:2
+    },
+    {
+      question:'2 one-rupee coins = ?',
+      options:['₹ 1','₹ 3','₹ 2','₹ 4'], correct:2
+    },
+    {
+      question:'How many 50-paise coins make ₹ 1?',
+      options:['1','3','4','2'], correct:3
+    },
+    {
+      question:'Which coin is BIGGER in value — ₹ 5 or ₹ 2?',
+      options:['₹ 2','₹ 5','They are equal','Cannot say'], correct:1
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 2 : NOTES
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'noteSteps', dotsID:'noteDots', nextBtnID:'noteNextBtn',
+  questions:[
+    {
+      visual:'📄',
+      question:'This is the smallest note. What is its value?',
+      options:['₹ 2','₹ 5','₹ 1','₹ 10'], correct:2
+    },
+    {
+      visual:'📃',
+      question:'This note is worth Two Rupees. What do we write?',
+      options:['₹ 1','₹ 5','₹ 10','₹ 2'], correct:3
+    },
+    {
+      visual:'🟢',
+      question:'The ₹ 5 note — which number is on it?',
+      options:['2','5','10','20'], correct:1
+    },
+    {
+      visual:'🟡',
+      question:'The ₹ 10 note — what is its value?',
+      options:['₹ 5','₹ 20','₹ 10','₹ 2'], correct:2
+    },
+    {
+      visual:'🟠',
+      question:'This note is worth Twenty Rupees. What do we write?',
+      options:['₹ 10','₹ 50','₹ 5','₹ 20'], correct:3
+    },
+    {
+      visual:'🟣',
+      question:'This is the biggest note we have learned. What is its value?',
+      options:['₹ 20','₹ 100','₹ 50','₹ 10'], correct:2
+    },
+    {
+      question:'Which note has a BIGGER value — ₹ 20 or ₹ 10?',
+      options:['₹ 10','₹ 20','They are same','Cannot say'], correct:1
+    },
+    {
+      question:'How many ₹ 5 notes make ₹ 10?',
+      options:['1','3','4','2'], correct:3
+    },
+    {
+      question:'You have a ₹ 20 note and a ₹ 10 note. Which is bigger?',
+      options:['₹ 10','Same value','₹ 20','Both are coins'], correct:2
+    },
+    {
+      question:'Which of these is a NOTE (not a coin)?',
+      options:['₹ 5 coin','50 paise coin','₹ 1 coin','₹ 50 note'], correct:3
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 3 : RUPEE SYMBOL
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'symbolSteps', dotsID:'symbolDots', nextBtnID:'symbolNextBtn',
+  questions:[
+    {
+      question:'What is the symbol for Rupee?',
+      options:['$','€','₹','£'], correct:2
+    },
+    {
+      question:'₹ 1 means?',
+      options:['One Paise','One Dollar','One Rupee','Ten Rupees'], correct:2
+    },
+    {
+      question:'₹ 5 means?',
+      options:['Five Paise','Fifty Rupees','Five Dollars','Five Rupees'], correct:3
+    },
+    {
+      question:'₹ 10 means?',
+      options:['One Rupee','Hundred Rupees','Ten Rupees','Ten Paise'], correct:2
+    },
+    {
+      question:'₹ 2 coin matches which coin?',
+      options:['50 Paise coin','₹ 1 coin','₹ 2 coin','₹ 5 coin'], correct:2
+    },
+    {
+      question:'50 Paise means?',
+      options:['Half a Rupee','₹ 50','₹ 5','₹ 100'], correct:0
+    },
+    {
+      question:'₹ 20 note matches which note?',
+      options:['₹ 10 note','₹ 50 note','₹ 5 note','₹ 20 note'], correct:3
+    },
+    {
+      question:'The symbol ₹ is used for which country\'s money?',
+      options:['America','England','India','Japan'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 4 : CHOOSE COIN/NOTE TO BUY THINGS
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'chooseSteps', dotsID:'chooseDots', nextBtnID:'chooseNextBtn',
+  questions:[
+    {
+      visual:'🍬',
+      question:'A toffee costs 50 Paise.\nWhich coin do you use?',
+      options:['₹ 1 coin','₹ 2 coin','50 Paise coin','₹ 5 coin'], correct:2
+    },
+    {
+      visual:'✏️',
+      question:'A pencil costs ₹ 5.\nWhich coin or note do you use?',
+      options:['₹ 1 coin','₹ 10 note','50 Paise coin','₹ 5 coin'], correct:3
+    },
+    {
+      visual:'🥒',
+      question:'A cucumber costs ₹ 1.\nWhich coin do you use?',
+      options:['₹ 5 coin','₹ 2 coin','₹ 1 coin','50 Paise coin'], correct:2
+    },
+    {
+      visual:'🍌',
+      question:'A banana costs ₹ 2.\nWhich coin or note do you use?',
+      options:['₹ 5 coin','50 Paise coin','₹ 1 coin','₹ 2 coin'], correct:3
+    },
+    {
+      visual:'🧅',
+      question:'An onion costs ₹ 10.\nWhich note do you use?',
+      options:['₹ 2 note','₹ 50 note','₹ 5 note','₹ 10 note'], correct:3
+    },
+    {
+      visual:'🎈',
+      question:'A balloon costs ₹ 2.\nWhich is the BEST coin to use?',
+      options:['₹ 5 coin','₹ 10 note','₹ 2 coin','₹ 1 coin'], correct:2
+    },
+    {
+      visual:'🎏',
+      question:'A toy costs ₹ 10.\nWhich one toy can you buy for ₹ 10?',
+      options:['A toy car (₹10)','A doll (₹5)','A drum (₹2)','A cycle (₹5)'], correct:0
+    },
+    {
+      question:'A doll costs ₹ 5 and a drum costs ₹ 2.\nWhich TWO toys can you buy for ₹ 5?',
+      options:['Toy car + Doll','Doll + Drum','Drum + Cycle','Toy car + Cycle'], correct:1
+    },
+    {
+      visual:'🎠',
+      question:'You have ₹ 10.\nWhich one toy (₹10) can you buy?',
+      options:['Doll (₹5)','Drum (₹2)','Cycle (₹5)','Toy Car (₹10)'], correct:3
+    },
+    {
+      visual:'🛍️',
+      question:'A pumpkin costs ₹ 20.\nWhich note should you give?',
+      options:['₹ 5 note','₹ 10 note','₹ 20 note','₹ 50 note'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 5 : MONEY ADDITION
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'additionSteps', dotsID:'additionDots', nextBtnID:'additionNextBtn',
+  questions:[
+    {
+      visual:'💵₹10 + 💵₹5',
+      question:'A pen costs ₹ 15.\n₹ 10 + ₹ 5 = ₹ ?',
+      options:['₹ 12','₹ 15','₹ 20','₹ 5'], correct:1
+    },
+    {
+      visual:'💵₹10 + 🪙₹2',
+      question:'A papaya costs ₹ 12.\n₹ 10 + ₹ 2 = ₹ ?',
+      options:['₹ 8','₹ 10','₹ 12','₹ 14'], correct:2
+    },
+    {
+      visual:'🪙₹5 + 🪙₹2',
+      question:'A horn toy costs ₹ 7.\n₹ 5 + ₹ 2 = ₹ ?',
+      options:['₹ 3','₹ 5','₹ 7','₹ 9'], correct:2
+    },
+    {
+      visual:'🪙₹2 + 🪙₹2',
+      question:'A spinning toy costs ₹ 4.\n₹ 2 + ₹ 2 = ₹ ?',
+      options:['₹ 2','₹ 3','₹ 4','₹ 5'], correct:2
+    },
+    {
+      visual:'💵₹20 + 🪙₹5',
+      question:'A glass costs ₹ 25.\n₹ 20 + ₹ 5 = ₹ ?',
+      options:['₹ 20','₹ 25','₹ 30','₹ 15'], correct:1
+    },
+    {
+      visual:'🪙₹1 + 🪙₹2',
+      question:'A bangle costs ₹ 3.\n₹ 1 + ₹ 2 = ₹ ?',
+      options:['₹ 1','₹ 2','₹ 3','₹ 4'], correct:2
+    },
+    {
+      visual:'💵₹10 + 🪙₹2',
+      question:'A mug costs ₹ 12.\nWhich two notes/coins make ₹ 12?',
+      options:['₹ 5 + ₹ 5','₹ 10 + ₹ 2','₹ 20 + ₹ 2','₹ 2 + ₹ 2'], correct:1
+    },
+    {
+      visual:'💵₹10 + 💵₹5',
+      question:'A mug costs ₹ 15.\nWhich two notes make ₹ 15?',
+      options:['₹ 5 + ₹ 5','₹ 20 + ₹ 5','₹ 10 + ₹ 5','₹ 2 + ₹ 10'], correct:2
+    },
+    {
+      visual:'🪙₹5 + 🪙₹5',
+      question:'A custard apple costs ₹ 11.\n₹ 10 + ₹ 1 = ?',
+      options:['₹ 9','₹ 10','₹ 11','₹ 12'], correct:2
+    },
+    {
+      visual:'💵₹10 + 🪙₹5',
+      question:'A coconut costs ₹ 10.\nWhich one note can you use?',
+      options:['₹ 5 note','₹ 2 note','₹ 20 note','₹ 10 note'], correct:3
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   TAB 6 : FINAL QUIZ
+═══════════════════════════════════════════ */
+renderQuestions({
+  containerID:'quizSteps', dotsID:'quizDots', nextBtnID:'quizFinishBtn',
+  questions:[
+    {
+      question:'🏆 1 Rupee = how many Paise?',
+      options:['10','50','100','200'], correct:2
+    },
+    {
+      visual:'🔘',
+      question:'🏆 Which coin is this? (50 Paise or ₹ 1?)',
+      options:['₹ 1','₹ 2','50 Paise','₹ 5'], correct:2
+    },
+    {
+      question:'🏆 What is the symbol for Rupee?',
+      options:['$','₹','€','£'], correct:1
+    },
+    {
+      visual:'✏️💰',
+      question:'🏆 A pencil costs ₹ 5.\nWhich coin/note do you use?',
+      options:['₹ 1','₹ 2','₹ 5','50 Paise'], correct:2
+    },
+    {
+      visual:'💵₹10 + 🪙₹2',
+      question:'🏆 ₹ 10 + ₹ 2 = ?',
+      options:['₹ 8','₹ 10','₹ 14','₹ 12'], correct:3
+    },
+    {
+      question:'🏆 A toy car costs ₹ 10. A doll costs ₹ 5.\nWhich TWO toys can you buy for ₹ 10?',
+      options:['Car + Car','Doll + Doll','Car + Doll','Doll + Drum(₹2)'], correct:1
+    },
+    {
+      visual:'💵₹20 + 🪙₹5',
+      question:'🏆 ₹ 20 + ₹ 5 = ?',
+      options:['₹ 15','₹ 25','₹ 20','₹ 30'], correct:1
+    },
+    {
+      question:'🏆 Which is BIGGER in value?',
+      options:['₹ 10 coin','₹ 5 note','₹ 50 note','₹ 2 coin'], correct:2
+    },
+  ]
+});
+
+/* ═══════════════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know Indian Coins — 50p, ₹1, ₹2, ₹5, ₹10!\nYou know Indian Notes — ₹1, ₹2, ₹5, ₹10, ₹20, ₹50!\nYou know the Rupee Symbol ₹!\n1 Rupee = 100 Paise!\nYou can buy things with the right coin or note!\nYou can add money amounts together!';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+/* ═══════════════════════════════════════════
+   RESTART
+═══════════════════════════════════════════ */
+function restartAll(){
+  stars=0;
+  answeredMap={};
+  document.getElementById('starsNum').textContent='0';
+  document.getElementById('celebScreen').classList.remove('show');
+  doneTabs.clear();
+  unlockedTabs.clear();
+  unlockedTabs.add('coins');
+
+  renderQuestions({containerID:'coinSteps', dotsID:'coinDots', nextBtnID:'coinNextBtn', questions:[
+    {visual:'🔘',question:'This small coin is worth how much?',options:['₹ 1','₹ 2','50 Paise','₹ 5'],correct:2},
+    {visual:'🥈',question:'This coin has the number 1 on it. What is its value?',options:['50 Paise','₹ 1','₹ 2','₹ 5'],correct:1},
+    {visual:'🪙',question:'This coin is worth Two Rupees. What do we write?',options:['50 p','₹ 1','₹ 5','₹ 2'],correct:3},
+    {visual:'💰',question:'This gold-coloured coin is worth Five Rupees. Which is it?',options:['₹ 2','₹ 10','₹ 5','₹ 1'],correct:2},
+    {visual:'🟡',question:'This is our biggest coin. What is it worth?',options:['₹ 5','₹ 10','₹ 2','₹ 20'],correct:1},
+    {question:'1 Rupee = how many Paise?',options:['10 Paise','50 Paise','100 Paise','200 Paise'],correct:2},
+    {question:'Which of these is a COIN (not a note)?',options:['₹ 50 note','₹ 20 note','₹ 5 coin','₹ 100 note'],correct:2},
+    {question:'2 one-rupee coins = ?',options:['₹ 1','₹ 3','₹ 2','₹ 4'],correct:2},
+    {question:'How many 50-paise coins make ₹ 1?',options:['1','3','4','2'],correct:3},
+    {question:'Which coin is BIGGER in value — ₹ 5 or ₹ 2?',options:['₹ 2','₹ 5','They are equal','Cannot say'],correct:1},
+  ]});
+  document.getElementById('coinNextBtn').disabled=true;
+
+  renderQuestions({containerID:'noteSteps', dotsID:'noteDots', nextBtnID:'noteNextBtn', questions:[
+    {visual:'📄',question:'This is the smallest note. What is its value?',options:['₹ 2','₹ 5','₹ 1','₹ 10'],correct:2},
+    {visual:'📃',question:'This note is worth Two Rupees. What do we write?',options:['₹ 1','₹ 5','₹ 10','₹ 2'],correct:3},
+    {visual:'🟢',question:'The ₹ 5 note — which number is on it?',options:['2','5','10','20'],correct:1},
+    {visual:'🟡',question:'The ₹ 10 note — what is its value?',options:['₹ 5','₹ 20','₹ 10','₹ 2'],correct:2},
+    {visual:'🟠',question:'This note is worth Twenty Rupees. What do we write?',options:['₹ 10','₹ 50','₹ 5','₹ 20'],correct:3},
+    {visual:'🟣',question:'This is the biggest note we have learned. What is its value?',options:['₹ 20','₹ 100','₹ 50','₹ 10'],correct:2},
+    {question:'Which note has a BIGGER value — ₹ 20 or ₹ 10?',options:['₹ 10','₹ 20','They are same','Cannot say'],correct:1},
+    {question:'How many ₹ 5 notes make ₹ 10?',options:['1','3','4','2'],correct:3},
+    {question:'You have a ₹ 20 note and a ₹ 10 note. Which is bigger?',options:['₹ 10','Same value','₹ 20','Both are coins'],correct:2},
+    {question:'Which of these is a NOTE (not a coin)?',options:['₹ 5 coin','50 paise coin','₹ 1 coin','₹ 50 note'],correct:3},
+  ]});
+  document.getElementById('noteNextBtn').disabled=true;
+
+  renderQuestions({containerID:'symbolSteps', dotsID:'symbolDots', nextBtnID:'symbolNextBtn', questions:[
+    {question:'What is the symbol for Rupee?',options:['$','€','₹','£'],correct:2},
+    {question:'₹ 1 means?',options:['One Paise','One Dollar','One Rupee','Ten Rupees'],correct:2},
+    {question:'₹ 5 means?',options:['Five Paise','Fifty Rupees','Five Dollars','Five Rupees'],correct:3},
+    {question:'₹ 10 means?',options:['One Rupee','Hundred Rupees','Ten Rupees','Ten Paise'],correct:2},
+    {question:'₹ 2 coin matches which coin?',options:['50 Paise coin','₹ 1 coin','₹ 2 coin','₹ 5 coin'],correct:2},
+    {question:'50 Paise means?',options:['Half a Rupee','₹ 50','₹ 5','₹ 100'],correct:0},
+    {question:'₹ 20 note matches which note?',options:['₹ 10 note','₹ 50 note','₹ 5 note','₹ 20 note'],correct:3},
+    {question:'The symbol ₹ is used for which country\'s money?',options:['America','England','India','Japan'],correct:2},
+  ]});
+  document.getElementById('symbolNextBtn').disabled=true;
+
+  renderQuestions({containerID:'chooseSteps', dotsID:'chooseDots', nextBtnID:'chooseNextBtn', questions:[
+    {visual:'🍬',question:'A toffee costs 50 Paise.\nWhich coin do you use?',options:['₹ 1 coin','₹ 2 coin','50 Paise coin','₹ 5 coin'],correct:2},
+    {visual:'✏️',question:'A pencil costs ₹ 5.\nWhich coin or note do you use?',options:['₹ 1 coin','₹ 10 note','50 Paise coin','₹ 5 coin'],correct:3},
+    {visual:'🥒',question:'A cucumber costs ₹ 1.\nWhich coin do you use?',options:['₹ 5 coin','₹ 2 coin','₹ 1 coin','50 Paise coin'],correct:2},
+    {visual:'🍌',question:'A banana costs ₹ 2.\nWhich coin or note do you use?',options:['₹ 5 coin','50 Paise coin','₹ 1 coin','₹ 2 coin'],correct:3},
+    {visual:'🧅',question:'An onion costs ₹ 10.\nWhich note do you use?',options:['₹ 2 note','₹ 50 note','₹ 5 note','₹ 10 note'],correct:3},
+    {visual:'🎈',question:'A balloon costs ₹ 2.\nWhich is the BEST coin to use?',options:['₹ 5 coin','₹ 10 note','₹ 2 coin','₹ 1 coin'],correct:2},
+    {visual:'🎏',question:'A toy costs ₹ 10.\nWhich one toy can you buy for ₹ 10?',options:['A toy car (₹10)','A doll (₹5)','A drum (₹2)','A cycle (₹5)'],correct:0},
+    {question:'A doll costs ₹ 5 and a drum costs ₹ 2.\nWhich TWO toys can you buy for ₹ 5?',options:['Toy car + Doll','Doll + Drum','Drum + Cycle','Toy car + Cycle'],correct:1},
+    {visual:'🎠',question:'You have ₹ 10.\nWhich one toy (₹10) can you buy?',options:['Doll (₹5)','Drum (₹2)','Cycle (₹5)','Toy Car (₹10)'],correct:3},
+    {visual:'🛍️',question:'A pumpkin costs ₹ 20.\nWhich note should you give?',options:['₹ 5 note','₹ 10 note','₹ 20 note','₹ 50 note'],correct:2},
+  ]});
+  document.getElementById('chooseNextBtn').disabled=true;
+
+  renderQuestions({containerID:'additionSteps', dotsID:'additionDots', nextBtnID:'additionNextBtn', questions:[
+    {visual:'💵₹10 + 💵₹5',question:'A pen costs ₹ 15.\n₹ 10 + ₹ 5 = ₹ ?',options:['₹ 12','₹ 15','₹ 20','₹ 5'],correct:1},
+    {visual:'💵₹10 + 🪙₹2',question:'A papaya costs ₹ 12.\n₹ 10 + ₹ 2 = ₹ ?',options:['₹ 8','₹ 10','₹ 12','₹ 14'],correct:2},
+    {visual:'🪙₹5 + 🪙₹2',question:'A horn toy costs ₹ 7.\n₹ 5 + ₹ 2 = ₹ ?',options:['₹ 3','₹ 5','₹ 7','₹ 9'],correct:2},
+    {visual:'🪙₹2 + 🪙₹2',question:'A spinning toy costs ₹ 4.\n₹ 2 + ₹ 2 = ₹ ?',options:['₹ 2','₹ 3','₹ 4','₹ 5'],correct:2},
+    {visual:'💵₹20 + 🪙₹5',question:'A glass costs ₹ 25.\n₹ 20 + ₹ 5 = ₹ ?',options:['₹ 20','₹ 25','₹ 30','₹ 15'],correct:1},
+    {visual:'🪙₹1 + 🪙₹2',question:'A bangle costs ₹ 3.\n₹ 1 + ₹ 2 = ₹ ?',options:['₹ 1','₹ 2','₹ 3','₹ 4'],correct:2},
+    {visual:'💵₹10 + 🪙₹2',question:'A mug costs ₹ 12.\nWhich two notes/coins make ₹ 12?',options:['₹ 5 + ₹ 5','₹ 10 + ₹ 2','₹ 20 + ₹ 2','₹ 2 + ₹ 2'],correct:1},
+    {visual:'💵₹10 + 💵₹5',question:'A mug costs ₹ 15.\nWhich two notes make ₹ 15?',options:['₹ 5 + ₹ 5','₹ 20 + ₹ 5','₹ 10 + ₹ 5','₹ 2 + ₹ 10'],correct:2},
+    {visual:'🪙₹5 + 🪙₹5',question:'A custard apple costs ₹ 11.\n₹ 10 + ₹ 1 = ?',options:['₹ 9','₹ 10','₹ 11','₹ 12'],correct:2},
+    {visual:'💵₹10 + 🪙₹5',question:'A coconut costs ₹ 10.\nWhich one note can you use?',options:['₹ 5 note','₹ 2 note','₹ 20 note','₹ 10 note'],correct:3},
+  ]});
+  document.getElementById('additionNextBtn').disabled=true;
+
+  renderQuestions({containerID:'quizSteps', dotsID:'quizDots', nextBtnID:'quizFinishBtn', questions:[
+    {question:'🏆 1 Rupee = how many Paise?',options:['10','50','100','200'],correct:2},
+    {visual:'🔘',question:'🏆 Which coin is this? (50 Paise or ₹ 1?)',options:['₹ 1','₹ 2','50 Paise','₹ 5'],correct:2},
+    {question:'🏆 What is the symbol for Rupee?',options:['$','₹','€','£'],correct:1},
+    {visual:'✏️💰',question:'🏆 A pencil costs ₹ 5.\nWhich coin/note do you use?',options:['₹ 1','₹ 2','₹ 5','50 Paise'],correct:2},
+    {visual:'💵₹10 + 🪙₹2',question:'🏆 ₹ 10 + ₹ 2 = ?',options:['₹ 8','₹ 10','₹ 14','₹ 12'],correct:3},
+    {question:'🏆 A toy car costs ₹ 10. A doll costs ₹ 5.\nWhich TWO toys can you buy for ₹ 10?',options:['Car + Car','Doll + Doll','Car + Doll','Doll + Drum(₹2)'],correct:1},
+    {visual:'💵₹20 + 🪙₹5',question:'🏆 ₹ 20 + ₹ 5 = ?',options:['₹ 15','₹ 25','₹ 20','₹ 30'],correct:1},
+    {question:'🏆 Which is BIGGER in value?',options:['₹ 10 coin','₹ 5 note','₹ 50 note','₹ 2 coin'],correct:2},
+  ]});
+  document.getElementById('quizFinishBtn').disabled=true;
+
+  updateProgress();
+  tabClick('coins');
+}
+</script>
+</body>
+</html>
