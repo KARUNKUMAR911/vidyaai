@@ -37,6 +37,37 @@ class Progress(db.Model):
     stars = db.Column(db.Integer, default=0)
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
+class LessonProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    grade = db.Column(db.String(20), nullable=False)
+    subject = db.Column(db.String(50), nullable=False)
+    lesson = db.Column(db.String(80), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+    stars = db.Column(db.Integer, default=0)
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        db.UniqueConstraint('student_id', 'grade', 'subject', 'lesson', name='uq_lesson_progress'),
+    )
+
+# Canonical lesson lists used to compute subject totals.
+GRADE1_ENGLISH_LESSONS = [
+    'alphabets',
+    'fruits',
+    'vegetables',
+    'animals',
+    'body',
+    'story1',
+    'school',
+    'family',
+    'shapes',
+    'habits',
+    'transport',
+    'numbers',
+    'story2',
+]
+
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -744,6 +775,114 @@ def load_progress():
             'stars': p.stars
         } for p in progs
     })
+
+@app.route('/api/lesson_progress/load', methods=['GET'])
+def load_lesson_progress():
+    if 'student_id' not in session:
+        return jsonify({'error': 'Not logged in'})
+
+    grade = request.args.get('grade', session.get('student_grade'))
+    subject = request.args.get('subject')
+    if not subject:
+        return jsonify({'error': 'Missing subject'}), 400
+
+    lessons = None
+    if str(grade) == '1' and subject == 'english':
+        lessons = GRADE1_ENGLISH_LESSONS
+
+    if lessons is None:
+        return jsonify({'subject': subject, 'grade': grade, 'totalLessons': 0, 'lessons': {}})
+
+    rows = LessonProgress.query.filter_by(
+        student_id=session['student_id'],
+        grade=str(grade),
+        subject=subject
+    ).all()
+    lesson_map = {r.lesson: {'completed': bool(r.completed), 'stars': int(r.stars or 0)} for r in rows}
+
+    # Ensure stable keys for all lessons even if not saved yet.
+    normalized = {k: lesson_map.get(k, {'completed': False, 'stars': 0}) for k in lessons}
+    return jsonify({'subject': subject, 'grade': str(grade), 'totalLessons': len(lessons), 'lessons': normalized})
+
+@app.route('/api/lesson_progress/save', methods=['POST'])
+def save_lesson_progress():
+    if 'student_id' not in session:
+        return jsonify({'error': 'Not logged in'})
+
+    data = request.json or {}
+    grade = str(data.get('grade', session.get('student_grade')))
+    subject = data.get('subject')
+    lesson = data.get('lesson')
+    completed = bool(data.get('completed', False))
+    stars = int(data.get('stars', 0) or 0)
+
+    if not subject or not lesson:
+        return jsonify({'error': 'Missing subject or lesson'}), 400
+
+    # Upsert lesson progress.
+    row = LessonProgress.query.filter_by(
+        student_id=session['student_id'],
+        grade=grade,
+        subject=subject,
+        lesson=lesson
+    ).first()
+
+    if row:
+        # Never "uncomplete" and never reduce stars when replaying.
+        row.completed = bool(row.completed) or completed
+        row.stars = max(int(row.stars or 0), stars)
+        row.last_updated = datetime.utcnow()
+    else:
+        row = LessonProgress(
+            student_id=session['student_id'],
+            grade=grade,
+            subject=subject,
+            lesson=lesson,
+            completed=completed,
+            stars=stars,
+            last_updated=datetime.utcnow()
+        )
+        db.session.add(row)
+
+    # If we know the official lesson list, also keep the aggregated Progress row in sync.
+    lessons = None
+    if grade == '1' and subject == 'english':
+        lessons = GRADE1_ENGLISH_LESSONS
+
+    if lessons is not None:
+        rows = LessonProgress.query.filter_by(
+            student_id=session['student_id'],
+            grade=grade,
+            subject=subject
+        ).all()
+        by_lesson = {r.lesson: r for r in rows}
+        completed_count = sum(1 for k in lessons if k in by_lesson and bool(by_lesson[k].completed))
+        stars_total = sum(int(by_lesson[k].stars or 0) for k in lessons if k in by_lesson)
+
+        prog = Progress.query.filter_by(
+            student_id=session['student_id'],
+            grade=grade,
+            subject=subject
+        ).first()
+        if prog:
+            prog.completed = completed_count
+            prog.total = len(lessons)
+            prog.stars = stars_total
+            prog.last_updated = datetime.utcnow()
+        else:
+            prog = Progress(
+                student_id=session['student_id'],
+                grade=grade,
+                subject=subject,
+                completed=completed_count,
+                total=len(lessons),
+                stars=stars_total,
+                last_updated=datetime.utcnow()
+            )
+            db.session.add(prog)
+
+    db.session.commit()
+    return jsonify({'success': True})
 
 @app.route('/ukg')
 def ukg_dashboard():

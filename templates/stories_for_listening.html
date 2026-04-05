@@ -780,6 +780,7 @@ function ansQ(btn, qNum, type) {
     setTimeout(() => {
       document.getElementById('goToActivitiesBtn').style.display = 'block';
       celebrate('🏆','Quiz Done!','You answered all questions!', `⭐ ${stars} Stars!`);
+      saveLessonCompletion('story1');
     }, 800);
   }
 }
@@ -875,6 +876,16 @@ function updateProgress() {
 function addStars(n) {
   stars += n;
   document.getElementById('starsDisplay').textContent = stars;
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 // ── CELEBRATE ──

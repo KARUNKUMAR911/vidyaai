@@ -765,6 +765,17 @@ function completeChapter() {
         u.rate = 0.85; u.pitch = 1.2; u.lang = 'en-IN';
         window.speechSynthesis.speak(u);
     }
+    saveLessonCompletion('alphabets');
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 function closeCelebration() {

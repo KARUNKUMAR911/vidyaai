@@ -685,6 +685,17 @@ function celebrateAll() {
   document.getElementById('celebOverlay').classList.add('show');
   launchConfetti();
   speak('You are a star! Amazing work! You finished all seven stories!', 0.88);
+  saveLessonCompletion('story2');
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 function launchConfetti() {

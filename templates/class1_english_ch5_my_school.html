@@ -676,8 +676,19 @@ function completeStep(tab){
     document.getElementById('celebOverlay').dataset.next=next;
   } else {
     celebrate('🏆','Chapter Complete!','You are a School Star!','⭐ '+stars+' Stars!');
+    saveLessonCompletion('school');
   }
   updateProgress();
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 /* ════ PROGRESS ════ */

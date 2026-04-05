@@ -664,6 +664,17 @@ function finishAll(){
   addStars(20);
   updateProg(4);
   celebrate('🏆','Chapter Complete!','You finished Chapter 7!',`⭐ Total: ${stars} Stars!`);
+  saveLessonCompletion('shapes');
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 function updateProg(step){
   const pct=Math.round((step/4)*100);

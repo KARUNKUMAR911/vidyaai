@@ -932,7 +932,18 @@ function checkAssessmentDone() {
   if (aqIds.every(id => assessCorrect.has(id))) {
     celebrate('🏆','Transport Champion!','You finished the whole chapter!','⭐ Amazing!');
     addStars(20);
+    saveLessonCompletion('transport');
   }
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 /* ══════════════════════════════════

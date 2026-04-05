@@ -1079,6 +1079,16 @@ function speak(text) {
   }
 }
 
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
+}
+
 /* ══════════════════════════════════
    INIT
 ══════════════════════════════════ */
@@ -1094,6 +1104,7 @@ buildQuiz(rhymeQuizData, 'rhymeQuizContainer', onRhymeQuizDone);
 buildQuiz(assessQuizData, 'assessQuizContainer', () => {
   addStars(10);
   celebrate('🏆','Chapter Complete!','You finished Chapter 8!','⭐ Amazing Stars!');
+  saveLessonCompletion('habits');
 });
 </script>
 </body>

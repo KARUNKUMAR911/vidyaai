@@ -985,6 +985,17 @@ function finishChapter() {
   document.getElementById('celebOverlay').classList.add('show');
   speakText('Congratulations! You finished the Fruits chapter! You are amazing!');
   launchConfetti();
+  saveLessonCompletion('fruits');
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 /* ══ CONFETTI ══ */

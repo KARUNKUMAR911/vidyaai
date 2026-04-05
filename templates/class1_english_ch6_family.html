@@ -1116,6 +1116,7 @@ function checkMissing(){
         r.textContent=`🎉 All ${correct}/${total} letters correct! You're a spelling star! 🌟`;
         addStars(15); celebrate('🔤','Spelling Star!','You completed all missing letters!','⭐ +15 Stars!');
         document.getElementById('missRetryBtn').style.display = 'none';
+        saveLessonCompletion('family');
     } else {
         r.className='result-msg bad';
         r.textContent=`${correct}/${total} correct. 🟢 = right, 🔴 shows the correct letter — tap Try Again!`;
@@ -1143,6 +1144,16 @@ function updateProgress(){
 }
 
 function addStars(n){ stars+=n; document.getElementById('starsDisplay').textContent=stars; }
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
+}
 
 function markProg(btn,type){
     const row=btn.closest('.prog-btns');

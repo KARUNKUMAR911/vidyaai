@@ -911,6 +911,17 @@ function completeChapter(){
   showCeleb('🏆','Chapter Complete!','You finished all of Chapter 2 — Vegetables!',stars,'Amazing! 🎉');
   launchConfetti();
   speak('Congratulations! Chapter complete! You are a superstar!',0.85,1.2);
+  saveLessonCompletion('vegetables');
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 function launchConfetti(){

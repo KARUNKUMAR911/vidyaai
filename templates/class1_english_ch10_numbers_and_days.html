@@ -773,6 +773,8 @@ body { font-family:'Nunito',sans-serif; background:var(--bg); min-height:100vh; 
     </div>
   </div>
 
+  <button class="check-btn" style="margin-top:14px" onclick="completeChapter()">🏆 Complete Chapter</button>
+
 </div>
 
 <!-- CELEBRATION -->
@@ -1263,6 +1265,23 @@ function checkMatch(){
   ok.style.display='none';bad.style.display='none';
   if(correct===matchData.length){ok.textContent=`🎉 All ${correct}/${matchData.length} matched!`;ok.style.display='block';addStars(10);celebrate('🔢','Number Star!','All numbers matched!','⭐ +10 Stars!');}
   else{bad.textContent=`${correct}/${matchData.length} correct. Keep trying!`;bad.style.display='block';}
+}
+
+function completeChapter(){
+  addStars(50);
+  celebrate('🏆','Chapter Complete!','You finished Chapter 10 — Numbers and Days!','⭐ ' + stars + ' Stars!');
+  speak('Congratulations! You finished the chapter!');
+  saveLessonCompletion('numbers');
+}
+
+async function saveLessonCompletion(lesson){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:1, subject:'english', lesson, completed:true, stars})
+    });
+  }catch(e){}
 }
 
 /* ══ ANSWER QUIZ ══ */

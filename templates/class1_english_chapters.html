@@ -160,10 +160,10 @@
 
 <!-- Progress -->
 <div class="progress-card">
-    <div class="progress-circle" id="progressNum">0</div>
+    <div class="progress-circle" id="progressNum">0%</div>
     <div class="progress-info" style="flex:1">
         <h4>My Progress</h4>
-        <p id="progressText">0 of 12 chapters completed</p>
+        <p id="progressText">0 of 13 lessons completed</p>
         <div class="progress-bar-wrap">
             <div class="progress-bar-inner" id="progressBar"></div>
         </div>
@@ -176,7 +176,7 @@
 <div class="chapters-list">
 
     <!-- Letters of Alphabet -->
-    <a href="/class/1/english/alphabets" class="chapter-card intro-card notstarted">
+    <a href="/class/1/english/alphabets" data-lesson="alphabets" class="chapter-card intro-card notstarted">
         <div class="chapter-num">🔤</div>
         <div class="chapter-info">
             <div class="chapter-title">Letters of Alphabet</div>
@@ -186,7 +186,7 @@
     </a>
 
     <!-- Chapter 1 -->
-    <a href="/class/1/english/fruits" class="chapter-card fruits-card notstarted">
+    <a href="/class/1/english/fruits" data-lesson="fruits" class="chapter-card fruits-card notstarted">
         <div class="chapter-num">🍎</div>
         <div class="chapter-info">
             <div class="chapter-title">1. Fruits</div>
@@ -196,7 +196,7 @@
     </a>
 
     <!-- Chapter 2 -->
-    <a href="/class/1/english/vegetables" class="chapter-card veg-card notstarted">
+    <a href="/class/1/english/vegetables" data-lesson="vegetables" class="chapter-card veg-card notstarted">
         <div class="chapter-num">&#x1F966;</div>
         <div class="chapter-info">
             <div class="chapter-title">2. Vegetables</div>
@@ -206,7 +206,7 @@
     </a>
 
     <!-- Chapter 3 -->
-    <a href="/class/1/english/animals" class="chapter-card animal-card notstarted">
+    <a href="/class/1/english/animals" data-lesson="animals" class="chapter-card animal-card notstarted">
         <div class="chapter-num">&#x1F418;</div>
         <div class="chapter-info">
             <div class="chapter-title">3. Animals, Birds and Insects</div>
@@ -216,7 +216,7 @@
     </a>
 
     <!-- Chapter 4 -->
-    <a href="/class/1/english/body" class="chapter-card body-card notstarted">
+    <a href="/class/1/english/body" data-lesson="body" class="chapter-card body-card notstarted">
         <div class="chapter-num">&#x1F440;</div>
         <div class="chapter-info">
             <div class="chapter-title">4. Parts of the Body</div>
@@ -226,7 +226,7 @@
     </a>
 
     <!-- Stories for Listening 1 -->
-    <a href="/class/1/english/story1" class="chapter-card stories-card story-card notstarted">
+    <a href="/class/1/english/story1" data-lesson="story1" class="chapter-card stories-card story-card notstarted">
         <div class="chapter-num">📖</div>
         <div class="chapter-info">
             <div class="chapter-title">Stories for Listening</div>
@@ -236,7 +236,7 @@
     </a>
 
     <!-- Chapter 5 -->
-    <a href="/class/1/english/school" class="chapter-card school-card notstarted">
+    <a href="/class/1/english/school" data-lesson="school" class="chapter-card school-card notstarted">
         <div class="chapter-num">🏫</div>
         <div class="chapter-info">
             <div class="chapter-title">5. My School</div>
@@ -246,7 +246,7 @@
     </a>
 
     <!-- Chapter 6 -->
-    <a href="/class/1/english/family" class="chapter-card family-card notstarted">
+    <a href="/class/1/english/family" data-lesson="family" class="chapter-card family-card notstarted">
         <div class="chapter-num">👨‍👩‍👧</div>
         <div class="chapter-info">
             <div class="chapter-title">6. Family</div>
@@ -256,7 +256,7 @@
     </a>
 
     <!-- Chapter 7 -->
-    <a href="/class/1/english/shapes" class="chapter-card shapes-card notstarted">
+    <a href="/class/1/english/shapes" data-lesson="shapes" class="chapter-card shapes-card notstarted">
         <div class="chapter-num">🔷</div>
         <div class="chapter-info">
             <div class="chapter-title">7. Shapes and Colours</div>
@@ -266,7 +266,7 @@
     </a>
 
     <!-- Chapter 8 -->
-    <a href="/class/1/english/habits" class="chapter-card habits-card notstarted">
+    <a href="/class/1/english/habits" data-lesson="habits" class="chapter-card habits-card notstarted">
         <div class="chapter-num">🪥</div>
         <div class="chapter-info">
             <div class="chapter-title">8. Good Habits</div>
@@ -276,7 +276,7 @@
     </a>
 
     <!-- Chapter 9 -->
-    <a href="/class/1/english/transport" class="chapter-card trans-card notstarted">
+    <a href="/class/1/english/transport" data-lesson="transport" class="chapter-card trans-card notstarted">
         <div class="chapter-num">🚗</div>
         <div class="chapter-info">
             <div class="chapter-title">9. Means of Transport</div>
@@ -286,7 +286,7 @@
     </a>
 
     <!-- Chapter 10 -->
-    <a href="/class/1/english/numbers" class="chapter-card numbers-card notstarted">
+    <a href="/class/1/english/numbers" data-lesson="numbers" class="chapter-card numbers-card notstarted">
         <div class="chapter-num">🔢</div>
         <div class="chapter-info">
             <div class="chapter-title">10. Numbers and Days</div>
@@ -296,7 +296,7 @@
     </a>
 
     <!-- Stories for Listening 2 -->
-    <a href="/class/1/english/story2" class="chapter-card stories-card story-card notstarted">
+    <a href="/class/1/english/story2" data-lesson="story2" class="chapter-card stories-card story-card notstarted">
         <div class="chapter-num">📖</div>
         <div class="chapter-info">
             <div class="chapter-title">Stories for Listening</div>
@@ -330,23 +330,36 @@
 <script>
 async function loadProgress() {
     try {
-        const res = await fetch('/api/progress/load?grade=1');
+        const res = await fetch('/api/lesson_progress/load?grade=1&subject=english');
         const data = await res.json();
-        const chapters = [
-            'alphabets','fruits','vegetables','animals',
-            'body','school','family','shapes',
-            'habits','transport','numbers'
-        ];
-        let completed = 0;
-        chapters.forEach(ch => {
-            const p = data[`english_${ch}`];
-            if (p && p.total > 0 && p.completed === p.total) completed++;
-        });
-        const total = 12;
-        const pct = Math.round((completed / total) * 100);
+        if (data && data.error) throw new Error(data.error);
+
+        const lessons = (data && data.lessons) ? data.lessons : {};
+        const total = Number(data && data.totalLessons) || 13;
+        const completed = Object.values(lessons).filter(x => x && x.completed).length;
+        const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
         document.getElementById('progressNum').textContent  = `${pct}%`;
-        document.getElementById('progressText').textContent = `${completed} of ${total} chapters completed`;
+        document.getElementById('progressText').textContent = `${completed} of ${total} lessons completed`;
         document.getElementById('progressBar').style.width  = `${pct}%`;
+
+        document.querySelectorAll('a.chapter-card[data-lesson]').forEach(card => {
+            const key = card.getAttribute('data-lesson');
+            const p = lessons[key] || {completed:false, stars:0};
+            card.classList.remove('completed','inprogress','notstarted');
+            const statusEl = card.querySelector('.chapter-status');
+
+            if (p.completed) {
+                card.classList.add('completed');
+                if (statusEl) statusEl.textContent = '✅';
+            } else if ((p.stars || 0) > 0) {
+                card.classList.add('inprogress');
+                if (statusEl) statusEl.textContent = '⏳';
+            } else {
+                card.classList.add('notstarted');
+                if (statusEl) statusEl.textContent = '▶️';
+            }
+        });
     } catch(e) {}
 }
 loadProgress();
