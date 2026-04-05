@@ -466,6 +466,7 @@ function renderQuestions({containerID, dotsID, nextBtnID, questions}){
   const nextBtn   = document.getElementById(nextBtnID);
   let current = 0;
   const results = [];
+  const handlerName = 'answerQ_' + containerID;
 
   // build dots
   dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
@@ -485,14 +486,14 @@ function renderQuestions({containerID, dotsID, nextBtnID, questions}){
         <span class="q-visual">${q.visual}</span>
         <div class="q-text">${q.question}</div>
         <div class="q-options">
-          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ(this,${i},${q.correct},'${containerID}','${dotsID}','${nextBtnID}')">${o}</div>`).join('')}
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="${handlerName}(this,${i},${q.correct})">${o}</div>`).join('')}
         </div>
       </div>`;
   }
 
-  window['answerQ'] = function(el, chosen, correct, cid, did, nid){
-    if(cid !== containerID) return;
-    const opts = document.querySelectorAll('#'+cid+' .q-option');
+  // Each tab gets its own click handler so later tabs don't overwrite earlier ones.
+  window[handlerName] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
     opts.forEach(o=>o.style.pointerEvents='none');
     const isCorrect = chosen===correct;
     el.classList.add(isCorrect?'correct':'wrong');
@@ -515,7 +516,7 @@ renderQuestions({
   containerID:'introSteps', dotsID:'introDots', nextBtnID:'introNextBtn',
   questions:[
     {visual:'🔁',question:'A PATTERN means shapes\nor things that ___\nagain and again!',options:['DISAPPEAR','REPEAT','CHANGE','STOP'],correct:1},
-    {visual:'🔺⬜🔺⬜',question:'Triangle, Square, Triangle, Square…\nWhat comes NEXT?',options:['⭕ Circle','🔺 Triangle','⭐ Star','💎 Diamond'],correct:0},
+    {visual:'🔺⬜🔺⬜',question:'Triangle, Square, Triangle, Square…\nWhat comes NEXT?',options:['⭕ Circle','🔺 Triangle','⭐ Star','💎 Diamond'],correct:1},
     {visual:'🔵🔴🟡🔵🔴🟡',question:'Blue, Red, Yellow, Blue, Red, Yellow…\nWhat is this called?',options:['A Game','A Story','A PATTERN','A Song'],correct:2},
     {visual:'🍅🥦🍅🥦',question:'Tomato, Broccoli, Tomato, Broccoli…\nWhat comes NEXT?',options:['🍅 Tomato','🥕 Carrot','🫐 Berry','🍋 Lemon'],correct:0},
     {visual:'📏',question:'When things repeat in ORDER,\nwe call it a ___.',options:['Sequence','Colour','Number','Letter'],correct:0},
@@ -579,7 +580,7 @@ renderQuestions({
     {visual:'🥦🍅🥦🍅',question:'🏆 Broccoli, Tomato, Broccoli, Tomato…\nWhat comes NEXT?',options:['🥕 Carrot','🥦 Broccoli','🍋 Lemon','🧅 Onion'],correct:1},
     {visual:'🍃🍁🍃🍁',question:'🏆 Green Leaf, Red Leaf, Green Leaf, Red Leaf…\nWhat comes NEXT?',options:['🍀 Clover','🌱 Sprout','🍃 Green Leaf','🌿 Plant'],correct:2},
     {visual:'👍👍\n👍👍👍',question:'🏆 Row 1 has 2 thumb stamps.\nRow 2 has 3. Row 3 has ___.',options:['3','5','4','6'],correct:2},
-    {visual:'🔺⬜🔺⬜',question:'🏆 Triangle, Square, Triangle, Square…\nWhat comes NEXT?',options:['⭕ Circle','🔺 Triangle','⭐ Star','⬜ Square'],correct:0},
+    {visual:'🔺⬜🔺⬜',question:'🏆 Triangle, Square, Triangle, Square…\nWhat comes NEXT?',options:['⭕ Circle','🔺 Triangle','⭐ Star','⬜ Square'],correct:1},
     {visual:'🔺🔺🔺⭕',question:'🏆 From the book:\n3 Triangles + 1 Circle.\nHow many triangles in ONE set?',options:['1','2','4','3'],correct:3},
     {visual:'🤚',question:'🏆 A HAND stamp on paper\nshows how many fingers?',options:['3','4','6','5'],correct:3},
     {visual:'🎨🥦',question:'🏆 Dipping a vegetable in\npaint and pressing on paper\nis called ___.',options:['Drawing','Stamping','Writing','Colouring'],correct:1},
