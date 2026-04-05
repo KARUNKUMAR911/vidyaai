@@ -129,6 +129,54 @@
         .nav-item.active .nav-label { color:#3a0ca3; }
         .nav-item.active .nav-icon  { transform:scale(1.15); }
         .page-content { padding-bottom:80px; }
+
+        /* Panels for bottom-nav tabs */
+        .panel { display:none; }
+        .panel.active { display:block; }
+
+        .detail-card {
+            background: white;
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin: 0 16px 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .detail-row { display:flex; align-items:center; gap:12px; }
+        .detail-emoji { font-size: 28px; width: 34px; text-align:center; flex-shrink:0; }
+        .detail-main { flex:1; min-width:0; }
+        .detail-title { font-size: 14px; font-weight: 900; color:#222; }
+        .detail-sub { font-size: 12px; color:#777; font-weight:700; margin-top: 2px; }
+        .detail-right { text-align:right; flex-shrink:0; }
+        .detail-pct { font-size: 13px; font-weight: 900; color:#3a0ca3; }
+        .detail-stars { font-size: 12px; font-weight: 800; color:#666; margin-top: 2px; }
+        .detail-actions { margin-top: 10px; display:flex; gap:10px; }
+        .mini-btn {
+            flex:1;
+            border: none;
+            border-radius: 14px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .mini-btn.primary { background: #3a0ca3; color: #fff; }
+        .mini-btn.ghost { background: #f3f4ff; color: #3a0ca3; }
+        .big-stars {
+            margin: 0 16px 14px;
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            border-radius: 22px;
+            padding: 18px 18px;
+            color: white;
+            box-shadow: 0 10px 28px rgba(58,12,163,0.25);
+        }
+        .big-stars .label { font-size: 12px; font-weight: 900; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; }
+        .big-stars .value { font-size: 36px; font-weight: 1000; margin-top: 4px; line-height: 1; }
+        .big-stars .hint { font-size: 13px; opacity: 0.9; margin-top: 8px; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -151,84 +199,134 @@
         <p>Class 1 • {{ student.school or 'VidyaAI Student' }} • Let's learn today!</p>
     </div>
 
-    <div class="progress-section">
-        <div class="progress-header">
-            <div class="progress-title">📊 My Progress</div>
-            <div class="progress-count" id="progressCount">0 of 5 subjects</div>
+    <!-- HOME PANEL -->
+    <div class="panel active" id="panel-home">
+        <div class="progress-section">
+            <div class="progress-header">
+                <div class="progress-title">📊 My Progress</div>
+                <div class="progress-count" id="progressCount">0 of 5 subjects</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
+
+        <a href="/class/1/english" class="challenge-card" id="challengeLink">
+            <div class="challenge-icon" id="challengeIcon">🌟</div>
+            <div class="challenge-text">
+                <h3 id="challengeTitle">Today's Challenge!</h3>
+                <p id="challengeDesc">Complete 1 lesson and earn bonus stars!</p>
+            </div>
+            <div class="challenge-arrow">→</div>
+        </a>
+
+        <div class="section-title">📖 My Subjects</div>
+
+        <div class="subjects-grid">
+
+            <a href="/class/1/english" class="subject-card c1">
+                <div class="card-badge">📘 Subject</div>
+                <span class="card-icon">📝</span>
+                <div class="card-title">English</div>
+                <div class="card-sub">Reading & Writing</div>
+                <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
+            </a>
+
+            <a href="/class/1/maths" class="subject-card c2">
+                <div class="card-badge">📘 Subject</div>
+                <span class="card-icon">🔢</span>
+                <div class="card-title">Mathematics</div>
+                <div class="card-sub">Numbers & Sums</div>
+                <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-maths"></div></div>
+            </a>
+
+            <a href="/class/1/evs" class="subject-card c3">
+                <div class="card-badge">📘 Subject</div>
+                <span class="card-icon">🌿</span>
+                <div class="card-title">EVS</div>
+                <div class="card-sub">Our Environment</div>
+                <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-evs"></div></div>
+            </a>
+
+            <a href="/class/1/kannada" class="subject-card c5">
+                <div class="card-badge">📘 Subject</div>
+                <span class="card-icon">🌸</span>
+                <div class="card-title">Kannada</div>
+                <div class="card-sub">ಕನ್ನಡ ಭಾಷೆ</div>
+                <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
+            </a>
+
+            <a href="/class/1/hindi" class="subject-card c6" style="grid-column: span 2;">
+                <div class="card-badge">📘 Subject</div>
+                <span class="card-icon">🙏</span>
+                <div class="card-title">Hindi</div>
+                <div class="card-sub">हिंदी भाषा</div>
+                <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hindi"></div></div>
+            </a>
+
         </div>
     </div>
 
-    <a href="/class/1/english" class="challenge-card">
-        <div class="challenge-icon">🌟</div>
-        <div class="challenge-text">
-            <h3>Today's Challenge!</h3>
-            <p>Complete 1 lesson and earn bonus stars!</p>
+    <!-- PROGRESS PANEL -->
+    <div class="panel" id="panel-progress">
+        <div class="section-title">📊 Progress Details</div>
+        <div class="detail-card" style="margin-top:0;">
+            <div class="progress-header">
+                <div class="progress-title">Overall</div>
+                <div class="progress-count" id="progressCount2">0 of 5 subjects</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill2"></div>
+            </div>
         </div>
-        <div class="challenge-arrow">→</div>
-    </a>
+        <div id="progressDetails"></div>
+    </div>
 
-    <div class="section-title">📖 My Subjects</div>
+    <!-- STARS PANEL -->
+    <div class="panel" id="panel-stars">
+        <div class="section-title">⭐ Stars</div>
+        <div class="big-stars">
+            <div class="label">Total Stars</div>
+            <div class="value">⭐ <span id="totalStarsBig">0</span></div>
+            <div class="hint">Earn stars by finishing lessons and quizzes.</div>
+        </div>
+        <div id="starsDetails"></div>
+    </div>
 
-    <div class="subjects-grid">
-
-        <a href="/class/1/english" class="subject-card c1">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">📝</span>
-            <div class="card-title">English</div>
-            <div class="card-sub">Reading & Writing</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
+    <!-- DAILY PANEL -->
+    <div class="panel" id="panel-daily">
+        <div class="section-title">🎯 Daily Challenge</div>
+        <a href="/class/1/english" class="challenge-card" id="dailyLink">
+            <div class="challenge-icon" id="dailyIcon">🎯</div>
+            <div class="challenge-text">
+                <h3 id="dailyTitle">Today's Challenge!</h3>
+                <p id="dailyDesc">Complete 1 lesson and earn stars!</p>
+            </div>
+            <div class="challenge-arrow">→</div>
         </a>
-
-        <a href="/class/1/maths" class="subject-card c2">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🔢</span>
-            <div class="card-title">Mathematics</div>
-            <div class="card-sub">Numbers & Sums</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-maths"></div></div>
-        </a>
-
-        <a href="/class/1/evs" class="subject-card c3">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🌿</span>
-            <div class="card-title">EVS</div>
-            <div class="card-sub">Our Environment</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-evs"></div></div>
-        </a>
-
-        <a href="/class/1/kannada" class="subject-card c5">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🌸</span>
-            <div class="card-title">Kannada</div>
-            <div class="card-sub">ಕನ್ನಡ ಭಾಷೆ</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
-        </a>
-
-        <a href="/class/1/hindi" class="subject-card c6" style="grid-column: span 2;">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🙏</span>
-            <div class="card-title">Hindi</div>
-            <div class="card-sub">हिंदी भाषा</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hindi"></div></div>
-        </a>
-
+        <div class="detail-card">
+            <div class="detail-title">Tip</div>
+            <div class="detail-sub" style="margin-top:6px;">If you finish EVS, you will complete one more subject today.</div>
+        </div>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="/class/1" class="nav-item active">
+    <a href="#home" class="nav-item active js-tab" data-tab="home">
         <div class="nav-icon">🏠</div>
         <div class="nav-label">Home</div>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#progress" class="nav-item js-tab" data-tab="progress">
         <div class="nav-icon">📊</div>
         <div class="nav-label">Progress</div>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#stars" class="nav-item js-tab" data-tab="stars">
         <div class="nav-icon">⭐</div>
         <div class="nav-label">Stars</div>
+    </a>
+    <a href="#daily" class="nav-item js-tab" data-tab="daily">
+        <div class="nav-icon">🎯</div>
+        <div class="nav-label">Daily</div>
     </a>
     <a href="/profile" class="nav-item">
         <div class="nav-icon">👤</div>
@@ -241,24 +339,201 @@ async function loadProgress() {
     try {
         const res = await fetch('/api/progress/load?grade=1');
         const data = await res.json();
+        if (data && data.error) throw new Error(data.error);
+
         let completed = 0;
-        const subjects = ['english','maths','evs','kannada','hindi'];
-        subjects.forEach(s => {
-            const p = data[s];
-            const bar = document.getElementById(`prog-${s}`);
-            if (bar && p && p.total > 0) {
-                const pct = Math.round((p.completed/p.total)*100);
-                bar.style.width = pct+'%';
-                if (pct===100) completed++;
-            }
+        const subjects = [
+            { key:'english',  label:'English',  emoji:'📝', href:'/class/1/english' },
+            { key:'maths',    label:'Maths',    emoji:'🔢', href:'/class/1/maths' },
+            { key:'evs',      label:'EVS',      emoji:'🌿', href:'/class/1/evs' },
+            { key:'kannada',  label:'Kannada',  emoji:'🌸', href:'/class/1/kannada' },
+            { key:'hindi',    label:'Hindi',    emoji:'🙏', href:'/class/1/hindi' },
+        ];
+
+        function getP(s){
+            const p = (data && data[s]) ? data[s] : {completed:0,total:0,stars:0};
+            return {
+                completed: Number(p.completed||0),
+                total: Number(p.total||0),
+                stars: Number(p.stars||0),
+            };
+        }
+
+        // Subject cards progress + completed subjects count
+        subjects.forEach(sub => {
+            const p = getP(sub.key);
+            const bar = document.getElementById(`prog-${sub.key}`);
+            const pct = (p.total > 0) ? Math.round((p.completed/p.total)*100) : 0;
+            if (bar) bar.style.width = pct + '%';
+            if (p.total > 0 && pct === 100) completed++;
         });
+
+        const pctOverall = Math.round((completed / 5) * 100);
         document.getElementById('progressCount').textContent = `${completed} of 5 subjects`;
-        document.getElementById('progressFill').style.width = `${Math.round((completed/5)*100)}%`;
-        const stars = Object.values(data).reduce((s,p)=>s+(p.stars||0),0);
-        document.getElementById('totalStars').textContent = stars;
+        document.getElementById('progressFill').style.width = pctOverall + '%';
+        const pc2 = document.getElementById('progressCount2');
+        const pf2 = document.getElementById('progressFill2');
+        if (pc2) pc2.textContent = `${completed} of 5 subjects`;
+        if (pf2) pf2.style.width = pctOverall + '%';
+
+        const starsTotal = subjects.reduce((sum, sub) => sum + getP(sub.key).stars, 0);
+        document.getElementById('totalStars').textContent = starsTotal;
+        const tsb = document.getElementById('totalStarsBig');
+        if (tsb) tsb.textContent = starsTotal;
+
+        // Progress details
+        const progressWrap = document.getElementById('progressDetails');
+        if (progressWrap) {
+            progressWrap.innerHTML = subjects.map(sub => {
+                const p = getP(sub.key);
+                const pct = (p.total > 0) ? Math.round((p.completed/p.total)*100) : 0;
+                const remain = Math.max(0, p.total - p.completed);
+                const status = (p.total === 0) ? 'No lessons yet' : (pct === 100 ? 'Completed' : `Left: ${remain}`);
+                return `
+                  <div class="detail-card">
+                    <div class="detail-row">
+                      <div class="detail-emoji">${sub.emoji}</div>
+                      <div class="detail-main">
+                        <div class="detail-title">${sub.label}</div>
+                        <div class="detail-sub">${p.completed} / ${p.total} lessons · ${status}</div>
+                      </div>
+                      <div class="detail-right">
+                        <div class="detail-pct">${pct}%</div>
+                        <div class="detail-stars">⭐ ${p.stars}</div>
+                      </div>
+                    </div>
+                    <div class="detail-actions">
+                      <a class="mini-btn primary" href="${sub.href}">Continue</a>
+                      <a class="mini-btn ghost" href="#stars" data-tab="stars">Stars</a>
+                    </div>
+                  </div>
+                `;
+            }).join('');
+        }
+
+        // Stars details
+        const starsWrap = document.getElementById('starsDetails');
+        if (starsWrap) {
+            const sorted = [...subjects].sort((a,b)=>getP(b.key).stars - getP(a.key).stars);
+            starsWrap.innerHTML = sorted.map(sub => {
+                const p = getP(sub.key);
+                const pct = (p.total > 0) ? Math.round((p.completed/p.total)*100) : 0;
+                return `
+                  <div class="detail-card">
+                    <div class="detail-row">
+                      <div class="detail-emoji">${sub.emoji}</div>
+                      <div class="detail-main">
+                        <div class="detail-title">${sub.label}</div>
+                        <div class="detail-sub">${pct}% completed · ${p.completed}/${p.total} lessons</div>
+                      </div>
+                      <div class="detail-right">
+                        <div class="detail-pct">⭐ ${p.stars}</div>
+                        <div class="detail-stars">stars</div>
+                      </div>
+                    </div>
+                    <div class="detail-actions">
+                      <a class="mini-btn primary" href="${sub.href}">Earn More</a>
+                      <a class="mini-btn ghost" href="#progress" data-tab="progress">Progress</a>
+                    </div>
+                  </div>
+                `;
+            }).join('');
+        }
+
+        // Daily challenge (pick the subject with most lessons remaining)
+        const inProgress = subjects
+            .map(sub => ({ sub, p: getP(sub.key) }))
+            .filter(x => x.p.total > 0 && x.p.completed < x.p.total)
+            .sort((a,b) => (b.p.total-b.p.completed) - (a.p.total-a.p.completed));
+
+        const daily = inProgress[0];
+        const cLink = document.getElementById('challengeLink');
+        const cIcon = document.getElementById('challengeIcon');
+        const cTitle = document.getElementById('challengeTitle');
+        const cDesc = document.getElementById('challengeDesc');
+        const dLink = document.getElementById('dailyLink');
+        const dIcon = document.getElementById('dailyIcon');
+        const dTitle = document.getElementById('dailyTitle');
+        const dDesc = document.getElementById('dailyDesc');
+
+        if (daily) {
+            const remain = Math.max(0, daily.p.total - daily.p.completed);
+            const title = `${daily.sub.label} Challenge!`;
+            const desc  = `You have ${remain} lesson(s) left. Complete 1 lesson today and earn stars!`;
+            if (cLink) cLink.href = daily.sub.href;
+            if (dLink) dLink.href = daily.sub.href;
+            if (cIcon) cIcon.textContent = daily.sub.emoji;
+            if (dIcon) dIcon.textContent = daily.sub.emoji;
+            if (cTitle) cTitle.textContent = title;
+            if (dTitle) dTitle.textContent = title;
+            if (cDesc) cDesc.textContent = desc;
+            if (dDesc) dDesc.textContent = desc;
+        } else {
+            const title = `All Subjects Completed!`;
+            const desc  = `Great job! Practice any lesson to earn more stars.`;
+            if (cLink) cLink.href = '/class/1';
+            if (dLink) dLink.href = '/class/1';
+            if (cIcon) cIcon.textContent = '🏆';
+            if (dIcon) dIcon.textContent = '🏆';
+            if (cTitle) cTitle.textContent = title;
+            if (dTitle) dTitle.textContent = title;
+            if (cDesc) cDesc.textContent = desc;
+            if (dDesc) dDesc.textContent = desc;
+        }
+
     } catch(e) {}
 }
 loadProgress();
+</script>
+
+<script>
+// Bottom-nav tabs: switch panels without leaving the page.
+const TAB_TO_PANEL = {
+    home: 'panel-home',
+    progress: 'panel-progress',
+    stars: 'panel-stars',
+    daily: 'panel-daily',
+};
+
+function setTab(tab){
+    const panelId = TAB_TO_PANEL[tab] || TAB_TO_PANEL.home;
+    Object.values(TAB_TO_PANEL).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active', id === panelId);
+    });
+
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(a => {
+        const t = a.getAttribute('data-tab');
+        if (!t) return;
+        a.classList.toggle('active', t === tab);
+    });
+
+    try { localStorage.setItem('c1_dashboard_tab', tab); } catch (e) {}
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('.js-tab').forEach(a => {
+    a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = a.getAttribute('data-tab');
+        setTab(tab);
+    });
+});
+
+// Allow links inside cards to jump between tabs
+document.addEventListener('click', (e) => {
+    const a = e.target && e.target.closest ? e.target.closest('a[data-tab]') : null;
+    if (!a) return;
+    const tab = a.getAttribute('data-tab');
+    if (!tab || !TAB_TO_PANEL[tab]) return;
+    e.preventDefault();
+    setTab(tab);
+});
+
+try {
+    const saved = localStorage.getItem('c1_dashboard_tab');
+    if (saved && TAB_TO_PANEL[saved]) setTab(saved);
+} catch (e) {}
 </script>
 
 <script>
