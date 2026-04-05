@@ -571,6 +571,7 @@ function renderQuestions({containerID, dotsID, nextBtnID, questions}){
   const nextBtn   = document.getElementById(nextBtnID);
   let current = 0;
   const results = [];
+  const handlerName = 'answerQ_' + containerID;
 
   dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
 
@@ -588,14 +589,14 @@ function renderQuestions({containerID, dotsID, nextBtnID, questions}){
         <span class="q-visual">${q.visual}</span>
         <div class="q-text">${q.question}</div>
         <div class="q-options">
-          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ(this,${i},${q.correct},'${containerID}','${dotsID}','${nextBtnID}')">${o}</div>`).join('')}
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="${handlerName}(this,${i},${q.correct})">${o}</div>`).join('')}
         </div>
       </div>`;
   }
 
-  window['answerQ'] = function(el, chosen, correct, cid, did, nid){
-    if(cid !== containerID) return;
-    const opts = document.querySelectorAll('#'+cid+' .q-option');
+  // Each question set gets its own click handler so later tabs don't overwrite earlier ones.
+  window[handlerName] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
     opts.forEach(o=>o.style.pointerEvents='none');
     const isCorrect = chosen===correct;
     el.classList.add(isCorrect?'correct':'wrong');
