@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EVS Class 1 — Lesson 15: Around Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#0b3d1f; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#0b3d1f,#1b5e20);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.back-btn {
+  background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5);
+  color:#fff; padding:6px 12px; border-radius:20px; font-size:14px;
+  font-weight:900; cursor:pointer; text-decoration:none;
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.5); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero {
+  background:linear-gradient(160deg,#0b3d1f,#2e7d32);
+  padding:18px 20px 40px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before {
+  content:'🌿 🌳 🌿 🌳 🌿 🌳 🌿 🌳 🌿 🌳 🌿 🌳 🌿 🌳';
+  position:absolute; top:8px; left:0; right:0; font-size:12px; color:rgba(255,255,255,.25);
+  letter-spacing:4px;
+}
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.3); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#66bb6a); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.5); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#4caf50; }
+.step-tab.locked   { background:rgba(255,255,255,.08); color:#9e9e9e; border-color:rgba(255,255,255,.15); cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.4); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.2);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.15); border-left:6px solid #1b5e20;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── GRID ── */
+.two-grid   { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.three-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.grid-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.15); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.grid-card .gc-icon { font-size:44px; display:block; margin-bottom:6px; }
+.grid-card .gc-name { font-family:'Fredoka One',cursive; font-size:15px; color:#1b5e20; }
+.grid-card .gc-desc { font-size:11px; font-weight:800; color:#888; margin-top:3px; line-height:1.4; }
+
+/* ── BIG FACT BOX ── */
+.big-fact {
+  background:linear-gradient(135deg,#1b5e20,#2e7d32); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; text-align:center; box-shadow:0 6px 20px rgba(27,94,32,.5);
+}
+.big-fact .bf-icon { font-size:52px; display:block; margin-bottom:8px; }
+.big-fact .bf-text { font-family:'Fredoka One',cursive; font-size:20px; color:#fff; line-height:1.4; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+  background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border:3px solid #4caf50;
+  border-radius:18px; padding:14px 16px; margin-bottom:14px; text-align:center;
+}
+.highlight-box .hb-text { font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; line-height:1.6; }
+
+/* ── SCENE ── */
+.nature-scene {
+  border-radius:20px; padding:20px; margin-bottom:14px; text-align:center;
+  position:relative; overflow:hidden; min-height:140px;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);
+}
+.nature-scene.green-scene { background:linear-gradient(180deg,#81c784 0%,#4caf50 50%,#2e7d32 100%); }
+.nature-scene.blue-scene  { background:linear-gradient(180deg,#29b6f6 0%,#0288d1 60%,#01579b 100%); }
+.nature-scene .sc-title { font-family:'Fredoka One',cursive; font-size:18px; color:#fff; margin-bottom:10px; text-shadow:0 2px 4px rgba(0,0,0,.4); }
+.sc-items { display:flex; gap:20px; align-items:center; justify-content:center; flex-wrap:wrap; }
+.sc-item { text-align:center; color:#fff; }
+.sc-item .sc-emoji { font-size:46px; display:block; }
+.sc-item .sc-label { font-family:'Fredoka One',cursive; font-size:13px; margin-top:4px; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.15); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:19px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:16px;
+  border:3px solid #a5d6a7; background:#e8f5e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#388e3c; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#388e3c; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1b5e20; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:16px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:20px; border:none; cursor:pointer; margin-top:10px; transition:all .2s;
+}
+.nav-btn:active { transform:scale(.97); }
+.nav-btn-green { background:linear-gradient(135deg,#1b5e20,#2e7d32); color:#fff; box-shadow:0 6px 20px rgba(27,94,32,.5); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+/* ── SORT ACTIVITY ── */
+.sort-items { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:10px; }
+.sort-item {
+  padding:10px 14px; border-radius:14px; font-family:'Fredoka One',cursive; font-size:18px;
+  background:#fff; border:3px solid #a5d6a7; cursor:pointer;
+  transition:all .2s; user-select:none; box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+.sort-item:active { transform:scale(.92); }
+.sort-item.placed { opacity:.3; pointer-events:none; }
+.sort-columns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.sort-col {
+  background:#fff; border-radius:16px; padding:12px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7; min-height:110px;
+}
+.sort-col-title { font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; margin-bottom:8px; }
+.sort-col .placed-emojis { font-size:28px; line-height:1.6; }
+
+/* ── SONG CARD ── */
+.song-card {
+  background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border:3px solid #4caf50;
+  border-radius:20px; padding:18px; margin-bottom:14px; text-align:center;
+}
+.song-card .song-title { font-family:'Fredoka One',cursive; font-size:20px; color:#1b5e20; margin-bottom:12px; }
+.song-card .song-line { font-size:14px; font-weight:800; color:#2e7d32; line-height:2; }
+
+/* ── STORY STRIP ── */
+.story-strip {
+  background:#fff; border-radius:16px; padding:14px 16px; margin-bottom:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,.12); display:flex; align-items:center; gap:14px; border-left:5px solid #388e3c;
+}
+.ss-emoji { font-size:40px; }
+.ss-info { flex:1; }
+.ss-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1b5e20; }
+.ss-desc { font-size:12px; font-weight:800; color:#666; margin-top:3px; line-height:1.5; }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:999;
+  display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;
+  transition:opacity .4s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-box {
+  background:#fff; border-radius:32px; padding:32px 24px; text-align:center;
+  max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.6);
+  animation:celebPop .4s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes celebPop { from{transform:scale(.5)} to{transform:scale(1)} }
+.celeb-emoji { font-size:72px; display:block; margin-bottom:8px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#1b5e20; margin-bottom:10px; }
+.celeb-sub { font-size:14px; font-weight:800; color:#555; line-height:1.8; white-space:pre-line; margin-bottom:12px; }
+.celeb-stars { font-family:'Fredoka One',cursive; font-size:20px; color:#f9a825; margin-bottom:18px; }
+.restart-btn {
+  background:linear-gradient(135deg,#1b5e20,#2e7d32); color:#fff; border:none;
+  padding:14px 30px; border-radius:20px; font-family:'Fredoka One',cursive; font-size:18px;
+  cursor:pointer; box-shadow:0 6px 20px rgba(27,94,32,.5);
+}
+
+/* ── LEAF BG ── */
+.leaf-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.leaf-bg span { position:absolute; animation:leafFall 8s ease-in-out infinite; opacity:.15; font-size:16px; }
+@keyframes leafFall { 0%{opacity:.1;transform:translateY(-10px) rotate(0deg)} 50%{opacity:.25} 100%{opacity:.1;transform:translateY(20px) rotate(20deg)} }
+
+/* ensure content over bg */
+.topbar,.hero,.prog-wrap,.steps-bar,.content,.lock-toast,.celeb-screen { position:relative; z-index:1; }
+</style>
+</head>
+<body>
+
+<!-- Leaf background -->
+<div class="leaf-bg" id="leafBg"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="javascript:history.back()">← Back</a>
+    <span class="topbar-title">🌿 EVS Ch.15 — Around Us!</span>
+  </div>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🌍</span>
+  <h1>Around Us!</h1>
+  <p>Let's learn about forests 🌳, rivers 🌊, mountains ⛰️ and more!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">Your Progress 🌟</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-nature"   onclick="tryTab('nature')">🌳 Nature!</div>
+  <div class="step-tab locked" id="tab-water"    onclick="tryTab('water')">🌊 Water!</div>
+  <div class="step-tab locked" id="tab-places"   onclick="tryTab('places')">🏘️ Places!</div>
+  <div class="step-tab locked" id="tab-locality" onclick="tryTab('locality')">📍 My Locality!</div>
+  <div class="step-tab locked" id="tab-song"     onclick="tryTab('song')">🎵 Song!</div>
+  <div class="step-tab locked" id="tab-quiz"     onclick="tryTab('quiz')">🏆 Big Quiz!</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════ TAB 1 — NATURE ══════════ -->
+<div class="tab-panel active" id="panel-nature">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1b5e20,#2e7d32)">
+    <span class="banner-emoji">🌳</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Nature Around Us!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.8)">What do you see in nature?</div>
+    </div>
+  </div>
+
+  <div class="big-fact">
+    <span class="bf-icon">👀</span>
+    <div class="bf-text">Look around you!<br>What do you see?</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌍 Our Local Environment!</div>
+    <div class="ic-text">
+      The world around us is full of beautiful things!<br><br>
+      🌳 <b>FORESTS</b> — full of tall trees!<br>
+      🌺 <b>GARDENS</b> — full of flowers and plants!<br>
+      🏔️ <b>MOUNTAINS</b> — big tall hills!<br>
+      🌾 <b>FIELDS</b> — where farmers grow food!<br><br>
+      All these things are part of our <b>LOCAL ENVIRONMENT</b>! 🌈
+    </div>
+  </div>
+
+  <div class="three-grid">
+    <div class="grid-card" style="border-color:#66bb6a; background:linear-gradient(160deg,#e8f5e9,#c8e6c9)">
+      <span class="gc-icon">🌳</span>
+      <div class="gc-name">Forest</div>
+      <div class="gc-desc">Lots of big tall trees! Home to animals 🐘</div>
+    </div>
+    <div class="grid-card" style="border-color:#ef9a9a; background:linear-gradient(160deg,#fff3e0,#ffe0b2)">
+      <span class="gc-icon">🌺</span>
+      <div class="gc-name">Garden</div>
+      <div class="gc-desc">Flowers and plants! So colourful! 🌸</div>
+    </div>
+    <div class="grid-card" style="border-color:#90a4ae; background:linear-gradient(160deg,#eceff1,#cfd8dc)">
+      <span class="gc-icon">⛰️</span>
+      <div class="gc-name">Mountains</div>
+      <div class="gc-desc">Very tall! Touch the clouds! 🌤</div>
+    </div>
+  </div>
+
+  <div class="nature-scene green-scene">
+    <div class="sc-title">🌿 Things We See in Nature!</div>
+    <div class="sc-items">
+      <div class="sc-item"><span class="sc-emoji">🌳</span><div class="sc-label">Forest</div></div>
+      <div class="sc-item"><span class="sc-emoji">🌾</span><div class="sc-label">Field</div></div>
+      <div class="sc-item"><span class="sc-emoji">🐘</span><div class="sc-label">Animals</div></div>
+      <div class="sc-item"><span class="sc-emoji">🌺</span><div class="sc-label">Garden</div></div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌾 Fields and Farms!</div>
+    <div class="ic-text">
+      We also see <b>FIELDS</b> around us!<br><br>
+      🌾 <b>Grass fields</b> — cows and animals eat grass here!<br>
+      🌾 <b>Paddy fields</b> — where rice grows in water! (terrace fields)<br>
+      🐄 Farmers use fields to grow our food!<br><br>
+      Without fields we would have <b>NO FOOD</b>! 🍚🥗
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hb-text">🌳 FOREST + 🌺 GARDEN + ⛰️ MOUNTAINS + 🌾 FIELDS<br>= Beautiful NATURE around us!</div>
+  </div>
+
+  <!-- Sort: Nature or Man-made? -->
+  <div class="info-card">
+    <div class="ic-title">🎮 Tap the NATURE things!</div>
+    <div class="ic-text">Tap only things found in NATURE 🌿. Skip man-made things!</div>
+  </div>
+  <div class="sort-items" id="natureItems">
+    <div class="sort-item" onclick="sortNature(this)" data-ans="yes">🌳 Tree</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="no">🚌 Bus</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="yes">⛰️ Mountain</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="no">🏫 School</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="yes">🌾 Field</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="no">🏭 Factory</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="yes">🌺 Flower</div>
+    <div class="sort-item" onclick="sortNature(this)" data-ans="yes">🐘 Elephant</div>
+  </div>
+  <div class="sort-columns">
+    <div class="sort-col" style="border-color:#388e3c; background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+      <div class="sort-col-title">✅ Nature!</div>
+      <div id="natureYesFill" class="placed-emojis"></div>
+    </div>
+    <div class="sort-col" style="border-color:#e57373; background:linear-gradient(135deg,#ffebee,#ffcdd2)">
+      <div class="sort-col-title">❌ Man-made!</div>
+      <div id="natureNoFill" class="placed-emojis"></div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="natureDots"></div>
+  <div id="natureSteps"></div>
+  <button class="nav-btn nav-btn-green" id="natureNextBtn" disabled onclick="unlockAndGo('nature','water')">Next: Water! 🌊 →</button>
+</div>
+
+
+<!-- ══════════ TAB 2 — WATER ══════════ -->
+<div class="tab-panel" id="panel-water">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#01579b,#0288d1)">
+    <span class="banner-emoji">🌊</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Water Around Us!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.8)">Seas, Rivers, Waterfalls and Dams!</div>
+    </div>
+  </div>
+
+  <div class="nature-scene blue-scene">
+    <div class="sc-title">💧 Water is Everywhere!</div>
+    <div class="sc-items">
+      <div class="sc-item"><span class="sc-emoji">🌊</span><div class="sc-label">Sea</div></div>
+      <div class="sc-item"><span class="sc-emoji">🏞️</span><div class="sc-label">River</div></div>
+      <div class="sc-item"><span class="sc-emoji">💧</span><div class="sc-label">Waterfall</div></div>
+      <div class="sc-item"><span class="sc-emoji">🏗️</span><div class="sc-label">Dam</div></div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0288d1">
+    <div class="ic-title" style="color:#01579b">🌊 The SEA — So Big and Blue!</div>
+    <div class="ic-text">
+      The <b>SEA</b> is a very large body of salt water!<br><br>
+      🌊 The sea is huge and deep!<br>
+      🚢 Big ships sail on the sea!<br>
+      🐟 Many fish and sea animals live in the sea!<br>
+      🏖️ Beaches are found near the sea — with golden sand!<br><br>
+      We can see a boat floating on the peaceful blue sea! ⛵
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0097a7">
+    <div class="ic-title" style="color:#006064">🏞️ The RIVER — Flowing Water!</div>
+    <div class="ic-text">
+      A <b>RIVER</b> is flowing water that moves through the land!<br><br>
+      🌿 Rivers flow through forests and mountains!<br>
+      🐟 Fish live in rivers!<br>
+      💧 Rivers give us fresh water to drink!<br>
+      🌾 Farmers use river water to grow crops!
+    </div>
+  </div>
+
+  <div class="two-grid">
+    <div class="grid-card" style="border-color:#80deea; background:linear-gradient(160deg,#e0f7fa,#b2ebf2)">
+      <span class="gc-icon">💧</span>
+      <div class="gc-name" style="color:#006064">Waterfall</div>
+      <div class="gc-desc">Water falling down from a height! Very beautiful! 🏔</div>
+    </div>
+    <div class="grid-card" style="border-color:#90a4ae; background:linear-gradient(160deg,#eceff1,#cfd8dc)">
+      <span class="gc-icon">🏗️</span>
+      <div class="gc-name" style="color:#37474f">Dam</div>
+      <div class="gc-desc">A wall built to hold river water! Gives electricity! ⚡</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#4caf50">
+    <div class="ic-title">💧 Waterfall and Dam!</div>
+    <div class="ic-text">
+      <b>WATERFALL</b> — Water falls from a great height over rocks! It looks amazing!<br><br>
+      <b>DAM</b> — A big wall built across a river to store water! The water stored in a dam is used for:<br>
+      ⚡ Making electricity!<br>
+      💧 Drinking water!<br>
+      🌾 Watering crops!
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2); border-color:#00acc1">
+    <div class="hb-text" style="color:#006064">🌊 SEA (salty, huge) + 🏞️ RIVER (flowing) + 💧 WATERFALL + 🏗️ DAM<br>= Water around us!</div>
+  </div>
+
+  <div class="q-dots" id="waterDots"></div>
+  <div id="waterSteps"></div>
+  <button class="nav-btn" id="waterNextBtn" disabled onclick="unlockAndGo('water','places')" style="background:linear-gradient(135deg,#01579b,#0288d1);color:#fff;box-shadow:0 6px 20px rgba(1,87,155,.4)">Next: Places! 🏘️ →</button>
+</div>
+
+
+<!-- ══════════ TAB 3 — PLACES ══════════ -->
+<div class="tab-panel" id="panel-places">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#4a148c,#6a1b9a)">
+    <span class="banner-emoji">🏘️</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Places Around Us!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.8)">Village, School, Factory and more!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#6a1b9a">
+    <div class="ic-title" style="color:#4a148c">🏡 A Village!</div>
+    <div class="ic-text">
+      A <b>VILLAGE</b> is a small place where people live!<br><br>
+      🏠 There are small houses in a village!<br>
+      🌳 There are many trees around!<br>
+      🌾 Farmers live and work in villages!<br>
+      🏗️ There is often a well (🪣) to get water!<br>
+      🐄 Animals like cows roam freely!<br><br>
+      A village is a very peaceful and beautiful place! 🌿
+    </div>
+  </div>
+
+  <div class="three-grid">
+    <div class="grid-card" style="border-color:#ce93d8; background:linear-gradient(160deg,#f3e5f5,#e1bee7)">
+      <span class="gc-icon">🪣</span>
+      <div class="gc-name" style="color:#4a148c">Well</div>
+      <div class="gc-desc">A deep hole in the ground to get water! 💧</div>
+    </div>
+    <div class="grid-card" style="border-color:#ef9a9a; background:linear-gradient(160deg,#ffebee,#ffcdd2)">
+      <span class="gc-icon">🏫</span>
+      <div class="gc-name" style="color:#b71c1c">School</div>
+      <div class="gc-desc">Govt. H.P.S. — where children learn! 📚</div>
+    </div>
+    <div class="grid-card" style="border-color:#ffcc80; background:linear-gradient(160deg,#fff8e1,#ffecb3)">
+      <span class="gc-icon">🏭</span>
+      <div class="gc-name" style="color:#e65100">Factory</div>
+      <div class="gc-desc">Makes things! Has tall chimneys with smoke! 🏗️</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e53935">
+    <div class="ic-title" style="color:#b71c1c">🏭 A Factory!</div>
+    <div class="ic-text">
+      A <b>FACTORY</b> is a big building where things are made!<br><br>
+      🏗️ Factories have big machines!<br>
+      💨 They have tall chimneys that make smoke!<br>
+      ⚠️ Too much smoke from factories makes the air <b>DIRTY</b> (pollution)!<br>
+      🌿 We must take care that factories do not pollute our air!
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#4a148c,#6a1b9a)">
+    <span class="bf-icon">🌿</span>
+    <div class="bf-text">Our locality has MANY things!<br>Some are natural, some are man-made! 🏡</div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7); border-color:#8e24aa">
+    <div class="hb-text" style="color:#4a148c">🏡 Village + 🏫 School + 🪣 Well + 🏭 Factory<br>= Places in our locality!</div>
+  </div>
+
+  <div class="q-dots" id="placesDots"></div>
+  <div id="placesSteps"></div>
+  <button class="nav-btn" id="placesNextBtn" disabled onclick="unlockAndGo('places','locality')" style="background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;box-shadow:0 6px 20px rgba(74,20,140,.4)">Next: My Locality! 📍 →</button>
+</div>
+
+
+<!-- ══════════ TAB 4 — LOCALITY ══════════ -->
+<div class="tab-panel" id="panel-locality">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#f57f17)">
+    <span class="banner-emoji">📍</span>
+    <div>
+      <div class="banner-title" style="color:#fff">My Locality!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.8)">What do YOU have in your area?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#f57f17">
+    <div class="ic-title" style="color:#e65100">📍 What is a Locality?</div>
+    <div class="ic-text">
+      A <b>LOCALITY</b> is the place where YOU live!<br><br>
+      🏠 It is your <b>neighbourhood</b> — the area around your home!<br>
+      🌳 Your locality may have trees, roads, shops, schools!<br>
+      🌊 Some localities are near sea, rivers or mountains!<br><br>
+      Every locality is <b>DIFFERENT</b> and <b>SPECIAL</b>! 🌟
+    </div>
+  </div>
+
+  <div class="big-fact" style="background:linear-gradient(135deg,#e65100,#f57f17)">
+    <span class="bf-icon">🏘️</span>
+    <div class="bf-text">Look around your locality!<br>What do you see?<br>Tell your teacher or elders! 🗣️</div>
+  </div>
+
+  <!-- Interactive locality checklist -->
+  <div class="info-card" style="border-left-color:#388e3c">
+    <div class="ic-title">✅ Does YOUR locality have these?</div>
+    <div class="ic-text">Tap YES ✅ or NO ❌ for each thing!</div>
+  </div>
+
+  <div id="localityChecklist"></div>
+
+  <div id="localityFeedback" style="text-align:center;font-family:'Fredoka One',cursive;font-size:18px;color:#1b5e20;margin:10px 0;min-height:30px"></div>
+
+  <div class="q-dots" id="localityDots"></div>
+  <div id="localitySteps"></div>
+  <button class="nav-btn" id="localityNextBtn" disabled onclick="unlockAndGo('locality','song')" style="background:linear-gradient(135deg,#e65100,#f57f17);color:#fff;box-shadow:0 6px 20px rgba(230,81,0,.4)">Next: Song! 🎵 →</button>
+</div>
+
+
+<!-- ══════════ TAB 5 — SONG ══════════ -->
+<div class="tab-panel" id="panel-song">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#880e4f,#ad1457)">
+    <span class="banner-emoji">🎵</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Sing and Enjoy!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.8)">The world around me is so lovely!</div>
+    </div>
+  </div>
+
+  <div class="song-card">
+    <div class="song-title">🎵 The World Around Me! 🌍</div>
+    <div class="song-line">Come dear brothers, Come dear sisters;</div>
+    <div class="song-line">Let us sing and play.</div>
+    <div class="song-line">The world around is so lovely,</div>
+    <div class="song-line">Let us see and learn. 🌈</div>
+    <br>
+    <div class="song-line">Tell me what you see around —</div>
+    <div class="song-line">🚲 Cycle, 🛺 auto, 🚌 bus that sounds:</div>
+    <div class="song-line">Picking me and picking you</div>
+    <div class="song-line">To take us off to school I know! 🏫</div>
+    <br>
+    <div class="song-line">I can hear the sounds of 🐸 frogs and 🦆 ducks,</div>
+    <div class="song-line">And see a lot of 🐟 fish and 🌿 plants,</div>
+    <div class="song-line">I also see some people,</div>
+    <div class="song-line">Swimming in the pond nearby! 🏊</div>
+    <br>
+    <div class="song-line">When I look around the place</div>
+    <div class="song-line">I see 🏞️ lakes, ⛰️ hills and 🌳 trees surround</div>
+    <div class="song-line">And the forests with the trees.</div>
+    <div class="song-line">🐦 Chirping birds and lovely green. 🌿</div>
+    <br>
+    <div class="song-line">The world around me, world around me;</div>
+    <div class="song-line">Is so lovely, Is so lovely! 🌍💚</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎵 What does the song talk about?</div>
+    <div class="ic-text">
+      The song tells us about things we see around us:<br><br>
+      🚲 <b>Cycle, Auto, Bus</b> — vehicles that take us to school!<br>
+      🐸 <b>Frogs and Ducks</b> — animals near the pond!<br>
+      🐟 <b>Fish and Plants</b> — in the water!<br>
+      🏞️ <b>Lakes, Hills and Trees</b> — nature all around!<br>
+      🐦 <b>Chirping Birds</b> — birds singing in trees!<br><br>
+      The world around us is <b>SO LOVELY!</b> 💚
+    </div>
+  </div>
+
+  <div class="story-strip" style="border-left-color:#ad1457">
+    <span class="ss-emoji">🌍</span>
+    <div class="ss-info">
+      <div class="ss-title" style="color:#880e4f">Visit your locality!</div>
+      <div class="ss-desc">Visit the place around your locality with your teacher or elders. Tell your friends the things you saw there! 🗣️🌿</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0); border-color:#e91e63">
+    <div class="hb-text" style="color:#880e4f">🌍 The world around me is SO LOVELY!<br>Let us see and learn about it! 🌿🌊⛰️🌳</div>
+  </div>
+
+  <div class="q-dots" id="songDots"></div>
+  <div id="songSteps"></div>
+  <button class="nav-btn" id="songNextBtn" disabled onclick="unlockAndGo('song','quiz')" style="background:linear-gradient(135deg,#880e4f,#ad1457);color:#fff;box-shadow:0 6px 20px rgba(136,14,79,.4)">Next: Big Quiz! 🏆 →</button>
+</div>
+
+
+<!-- ══════════ TAB 6 — BIG QUIZ ══════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#c62828)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#fff">Big Quiz!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.85)">Show what you know about Around Us!</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);border-color:#ffa000">
+    <div class="hb-text" style="color:#e65100">🏆 You learned so much!<br>Let's answer 10 questions!<br>You CAN do it! 💪🌿</div>
+  </div>
+
+  <div class="q-dots" id="qDots"></div>
+  <div id="qSteps"></div>
+  <button class="nav-btn" id="qFinishBtn" disabled onclick="showCelebration()" style="background:linear-gradient(135deg,#b71c1c,#e53935);color:#fff;box-shadow:0 6px 20px rgba(183,28,28,.5)">🎉 I'm Done! Show my Result!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🌍</span>
+    <div class="celeb-title">Amazing! 🎉</div>
+    <div class="celeb-sub" id="celebSub"></div>
+    <div class="celeb-stars" id="celebStars"></div>
+    <button class="restart-btn" onclick="restartAll()">🔁 Try Again!</button>
+  </div>
+</div>
+
+<script>
+/* ══ LEAF BG ══ */
+(function(){
+  const bg = document.getElementById('leafBg');
+  const emojis = ['🍃','🌿','🍀','🌱','🍂'];
+  for(let i=0;i<30;i++){
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left = Math.random()*100+'%';
+    s.style.top  = Math.random()*100+'%';
+    s.style.animationDelay = Math.random()*8+'s';
+    s.style.animationDuration = (5+Math.random()*6)+'s';
+    bg.appendChild(s);
+  }
+})();
+
+/* ══ STATE ══ */
+let stars = 0;
+const tabOrder = ['nature','water','places','locality','song','quiz'];
+const doneTabs = new Set();
+let currentTab = 'nature';
+
+/* ══ SORT: NATURE ══ */
+let natureSortDone = 0;
+const natureSortTotal = 8;
+function sortNature(el){
+  if(el.classList.contains('placed')) return;
+  const ans = el.dataset.ans;
+  el.classList.add('placed');
+  const isNature = ans === 'yes';
+  const fillId = isNature ? 'natureYesFill' : 'natureNoFill';
+  document.getElementById(fillId).textContent += el.textContent.trim().split(' ')[0] + ' ';
+  if(isNature){ stars++; document.getElementById('starsNum').textContent=stars; }
+  showMiniToast(isNature ? '✅ Yes, that is nature!' : '❌ That is man-made!');
+  natureSortDone++;
+  if(natureSortDone === natureSortTotal) checkNatureComplete();
+}
+function checkNatureComplete(){
+  // allow next button after sort done — quiz still controls unlock
+}
+
+/* ══ LOCALITY CHECKLIST ══ */
+const localityItems = [
+  {emoji:'🪣', name:'Well', q:'Do you have a WELL in your locality?'},
+  {emoji:'🏫', name:'School', q:'Do you have a SCHOOL in your locality?'},
+  {emoji:'🌊', name:'Sea / Beach', q:'Do you have a SEA or BEACH nearby?'},
+  {emoji:'🏭', name:'Factory', q:'Do you have a FACTORY in your locality?'},
+  {emoji:'🌺', name:'Garden', q:'Do you have a GARDEN in your locality?'},
+  {emoji:'🌳', name:'Forest', q:'Do you have a FOREST nearby?'},
+  {emoji:'⛰️', name:'Mountains', q:'Do you have MOUNTAINS nearby?'},
+  {emoji:'🌾', name:'Fields', q:'Do you have FIELDS or FARMS nearby?'},
+  {emoji:'💧', name:'Waterfall', q:'Do you have a WATERFALL nearby?'},
+];
+let localityAnswered = 0;
+(function buildLocality(){
+  const container = document.getElementById('localityChecklist');
+  localityItems.forEach((item,i)=>{
+    const div = document.createElement('div');
+    div.style.cssText='background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;border-left:5px solid #4caf50';
+    div.innerHTML=`
+      <span style="font-size:36px">${item.emoji}</span>
+      <div style="flex:1">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#1b5e20">${item.name}</div>
+        <div style="font-size:12px;font-weight:800;color:#666">${item.q}</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="answerLocality(this,${i},'yes')" style="padding:10px 16px;border-radius:12px;font-family:'Fredoka One',cursive;font-size:16px;background:#e8f5e9;border:3px solid #4caf50;color:#1b5e20;cursor:pointer">✅ Yes</button>
+        <button onclick="answerLocality(this,${i},'no')" style="padding:10px 16px;border-radius:12px;font-family:'Fredoka One',cursive;font-size:16px;background:#ffebee;border:3px solid #e53935;color:#b71c1c;cursor:pointer">❌ No</button>
+      </div>
+    `;
+    div.id = 'litem-'+i;
+    container.appendChild(div);
+  });
+})();
+function answerLocality(btn, idx, val){
+  const row = document.getElementById('litem-'+idx);
+  if(row.dataset.answered) return;
+  row.dataset.answered = '1';
+  const btns = row.querySelectorAll('button');
+  btns.forEach(b=>b.style.pointerEvents='none');
+  btn.style.background = val==='yes' ? '#c8e6c9' : '#ffcdd2';
+  btn.style.borderColor = val==='yes' ? '#388e3c' : '#e53935';
+  stars++; document.getElementById('starsNum').textContent=stars;
+  localityAnswered++;
+  if(localityAnswered === localityItems.length){
+    document.getElementById('localityFeedback').textContent = '🎉 Great! You explored your locality!';
+    // enable via quiz
+  }
+  showMiniToast(val==='yes' ? '✅ Great! You tapped Yes!' : '❌ Okay! You tapped No!');
+}
+
+/* ══ TOAST ══ */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+function showMiniToast(msg){
+  const fb = document.createElement('div');
+  fb.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-family:Fredoka One,cursive;font-size:15px;z-index:600;opacity:0;transition:opacity .3s;max-width:80vw;text-align:center';
+  fb.textContent = msg;
+  document.body.appendChild(fb);
+  setTimeout(()=>fb.style.opacity='1',10);
+  setTimeout(()=>{fb.style.opacity='0';setTimeout(()=>fb.remove(),300)},1600);
+}
+
+/* ══ TAB NAVIGATION ══ */
+function tryTab(name){
+  const idx = tabOrder.indexOf(name);
+  const curIdx = tabOrder.indexOf(currentTab);
+  if(name === currentTab) return;
+  if(idx > curIdx && !doneTabs.has(tabOrder[idx-1])){
+    const tabEl = document.getElementById('tab-'+name);
+    tabEl.classList.add('shaking');
+    setTimeout(()=>tabEl.classList.remove('shaking'),550);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  switchTab(name);
+}
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>{ t.classList.remove('active'); });
+  document.getElementById('panel-'+name).classList.add('active');
+  const tabEl = document.getElementById('tab-'+name);
+  tabEl.classList.remove('locked','unlocked','done');
+  tabEl.classList.add('active');
+  currentTab = name;
+  tabEl.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+function unlockAndGo(doneTab, nextTab){
+  doneTabs.add(doneTab);
+  const doneEl = document.getElementById('tab-'+doneTab);
+  doneEl.classList.remove('active');
+  doneEl.classList.add('done');
+  const nextEl = document.getElementById('tab-'+nextTab);
+  nextEl.classList.remove('locked');
+  nextEl.classList.add('unlocked');
+  updateProgress();
+  switchTab(nextTab);
+}
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ══ QUESTION ENGINE ══ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ_${containerID}(this,${i},${q.correct})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  window['answerQ_'+containerID] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+
+  render();
+}
+
+/* ══ TAB 1 — NATURE ══ */
+renderQuestions({
+  containerID:'natureSteps', dotsID:'natureDots', nextBtnID:'natureNextBtn',
+  questions:[
+    {visual:'🌳🌺⛰️',question:'What do we call all the\nbeautiful things around us?',options:['🧸 Toys','🌿 Our Environment!','🍕 Food','🎮 Games'],correct:1},
+    {visual:'🌳',question:'A FOREST is a place\nwith many ___.',options:['🏠 Houses','🌊 Rivers','🌳 Trees!','🚌 Buses'],correct:2},
+    {visual:'🌺',question:'A GARDEN is full\nof ___ and plants.',options:['🏭 Factories','🌺 Flowers!','🚗 Cars','🖥️ Computers'],correct:1},
+    {visual:'🌾',question:'FIELDS are where\nfarmers grow ___.',options:['🎮 Games','🏠 Houses','🌾 Food!','✈️ Planes'],correct:2},
+    {visual:'🐘',question:'Who lives in\nthe FOREST?',options:['🧑‍💼 Office workers','🐘 Animals!','🚌 Buses','🏭 Machines'],correct:1},
+  ]
+});
+
+/* ══ TAB 2 — WATER ══ */
+renderQuestions({
+  containerID:'waterSteps', dotsID:'waterDots', nextBtnID:'waterNextBtn',
+  questions:[
+    {visual:'🌊',question:'The SEA is a very large\nbody of ___ water.',options:['🍬 Sweet','🌊 Salt!','🥛 Milk','🧃 Juice'],correct:1},
+    {visual:'🏞️',question:'A RIVER has ___ water\nthat flows through land.',options:['🔥 Hot','❄️ Still / Frozen','🏞️ Flowing!','🌊 Salty'],correct:2},
+    {visual:'💧',question:'A WATERFALL is water\nfalling from a great ___.',options:['🌊 Distance','💧 Height!','🌡️ Temperature','🏠 House'],correct:1},
+    {visual:'🏗️',question:'A DAM is built to\n___ river water.',options:['🏗️ Store!','🔥 Heat','🌈 Colour','❄️ Freeze'],correct:0},
+    {visual:'⚡',question:'The water in a DAM\ngives us ___.',options:['🌧 Rain','🌊 Sea','⚡ Electricity!','🎮 Games'],correct:2},
+  ]
+});
+
+/* ══ TAB 3 — PLACES ══ */
+renderQuestions({
+  containerID:'placesSteps', dotsID:'placesDots', nextBtnID:'placesNextBtn',
+  questions:[
+    {visual:'🏡',question:'A VILLAGE is a small\nplace where people ___.',options:['🌊 Swim','🏡 Live!','✈️ Fly','🚀 Rocket'],correct:1},
+    {visual:'🪣',question:'A WELL is used\nto get ___.',options:['🔥 Fire','💧 Water!','🌾 Food','⚡ Electricity'],correct:1},
+    {visual:'🏫',question:'Govt. H.P.S. is a\n___ in the village.',options:['🏭 Factory','🏫 School!','🏠 House only','🌊 River'],correct:1},
+    {visual:'🏭',question:'A FACTORY makes\nthings using big ___.',options:['🌳 Trees','🌊 Rivers','🏭 Machines!','🎵 Songs'],correct:2},
+    {visual:'💨',question:'Factory CHIMNEYS\ncreate what problem?',options:['🌈 Rainbows','💨 Air Pollution!','🎵 Music','🌳 More trees'],correct:1},
+  ]
+});
+
+/* ══ TAB 4 — LOCALITY ══ */
+renderQuestions({
+  containerID:'localitySteps', dotsID:'localityDots', nextBtnID:'localityNextBtn',
+  questions:[
+    {visual:'📍',question:'A LOCALITY is the\nplace where YOU ___.',options:['🌊 Swim only','📍 Live!','✈️ Fly','🚀 Travel to space'],correct:1},
+    {visual:'🏘️',question:'Different localities\nhave ___ things.',options:['Same 🟰','🏘️ Different!','No things','Only trees'],correct:1},
+    {visual:'🌿',question:'With teacher or elders,\nwe should VISIT our ___.',options:['🌙 Moon','🌿 Locality!','✈️ Other country','🚀 Space'],correct:1},
+  ]
+});
+
+/* ══ TAB 5 — SONG ══ */
+renderQuestions({
+  containerID:'songSteps', dotsID:'songDots', nextBtnID:'songNextBtn',
+  questions:[
+    {visual:'🎵',question:'The song says:\n"The world around is so ___"',options:['🌧 Rainy','😴 Boring','🎵 Lovely!','🏜 Empty'],correct:2},
+    {visual:'🚲🛺🚌',question:'The song talks about\ncycle, auto and ___.',options:['✈️ Airplane','🚀 Rocket','🚌 Bus!','🛸 UFO'],correct:2},
+    {visual:'🐸',question:'The song says we can\nhear sounds of FROGS and ___.',options:['🦁 Lions','🦆 Ducks!','🐘 Elephants','🐯 Tigers'],correct:1},
+    {visual:'🏞️',question:'In the song, when we\nlook around we see lakes, ___ and trees.',options:['🌊 Seas','⛰️ Hills!','🏭 Factories','🚌 Buses'],correct:1},
+    {visual:'🐦',question:'The song talks about\n___ birds in the trees.',options:['😴 Sleeping','💨 Flying away','🐦 Chirping!','🔇 Silent'],correct:2},
+  ]
+});
+
+/* ══ TAB 6 — BIG QUIZ ══ */
+renderQuestions({
+  containerID:'qSteps', dotsID:'qDots', nextBtnID:'qFinishBtn',
+  questions:[
+    {visual:'🏆🌳',question:'🏆 A FOREST is a place\nwith many ___.',options:['🏠 Houses','🌊 Seas','🌳 Trees!','🚗 Cars'],correct:2},
+    {visual:'🏆🌊',question:'🏆 The SEA has ___\nwater.',options:['💧 Fresh','🌊 Salty!','🍬 Sweet','🥛 Milky'],correct:1},
+    {visual:'🏆💧',question:'🏆 A WATERFALL is\nwater falling from a ___.',options:['🌊 River','💧 Great height!','🏠 House','🌳 Tree'],correct:1},
+    {visual:'🏆🏗️',question:'🏆 A DAM is built\nto STORE ___.',options:['🌾 Food','⚡ Electricity','💧 Water!','🌳 Trees'],correct:2},
+    {visual:'🏆🏡',question:'🏆 A VILLAGE is\nwhere people ___.',options:['✈️ Fly','🚀 Go to space','🏡 Live!','🌊 Swim always'],correct:2},
+    {visual:'🏆🪣',question:'🏆 A WELL is used\nto get ___.',options:['🔥 Fire','⚡ Electricity','💧 Water!','🌾 Food'],correct:2},
+    {visual:'🏆🏭',question:'🏆 Factory chimneys\ncreate ___ problem.',options:['🌈 Rainbows','💨 Air pollution!','🎵 Music','🌳 More trees'],correct:1},
+    {visual:'🏆📍',question:'🏆 A LOCALITY is the\narea around YOUR ___.',options:['🌙 Moon','🌍 Whole world','🏠 Home!','✈️ Airport'],correct:2},
+    {visual:'🏆🎵',question:'🏆 The song says\n"The world around is so ___"',options:['😴 Boring','🌧 Rainy','🎵 Lovely!','🏜 Empty'],correct:2},
+    {visual:'🏆🌍',question:'🏆 This lesson is\ncalled "Around ___"',options:['🌙 Night','🌊 Water','🌳 Trees','🌍 Us!'],correct:3},
+  ]
+});
+
+/* ══ CELEBRATION ══ */
+function showCelebration(){
+  doneTabs.add('quiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'You know about Forests, Gardens & Mountains! 🌳\nYou know about Seas, Rivers & Dams! 🌊\nYou know about Villages & Factories! 🏡\nYou explored YOUR Locality! 📍\nYou sang the World Around Me song! 🎵\nYou are an AROUND US CHAMPION! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,15);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function restartAll(){ location.reload(); }
+</script>
+</body>
+</html>

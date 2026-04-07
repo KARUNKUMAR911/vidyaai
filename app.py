@@ -661,6 +661,13 @@ def class1_evs_heavenly_friends():
     student = Student.query.get(session['student_id'])
     return render_template('class1_evs_chapter14_heavenly_friends.html', student=student)
 
+@app.route('/class/1/evs/around-us')
+def class1_evs_around_us():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_evs_chapter15_around_us.html', student=student)
+
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'student_id' not in session:
