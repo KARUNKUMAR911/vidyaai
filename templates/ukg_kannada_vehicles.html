@@ -3,348 +3,486 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ಸಾರಿಗೆ ವಾಹನಗಳು - UKG Kannada</title>
+<title>ಸಾರಿಗೆ ವಾಹನಗಳು - UKG ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --radius: 30px; --top-h: 70px; }
 
-  :root { --bg: #0d0d1a; --topbar: #12122a; }
+body {
+  font-family: 'Baloo Tamma 2', cursive;
+  background: #f0f4ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--top-h);
+  background: #1a1a2e;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 300;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+.topbar-title {
+  font-size: 1.55rem; font-weight: 900;
+  background: linear-gradient(90deg, #FFD93D, #FF6B35, #4d96ff);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.top-right { display: flex; align-items: center; gap: 10px; }
+.score-pill {
+  background: #FFD93D; color: #1a1a2e;
+  font-weight: 900; font-size: 1rem;
+  padding: 7px 18px; border-radius: 50px;
+  box-shadow: 0 4px 14px rgba(255,217,61,0.45);
+  white-space: nowrap;
+}
+.sound-btn {
+  background: rgba(255,255,255,0.13);
+  border: 2px solid rgba(255,255,255,0.22);
+  color: white; border-radius: 12px;
+  padding: 8px 14px; font-size: 1.2rem;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s;
+}
+.sound-btn:hover { background: rgba(255,255,255,0.22); }
+.sound-btn.off { opacity: 0.4; }
 
-  body {
-    font-family: 'Baloo Tamma 2', cursive;
-    background: var(--bg); min-height: 100vh; color: #f0f0ff;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(77,150,255,0.13) 0%, transparent 50%),
-      radial-gradient(circle at 90% 70%, rgba(253,203,110,0.1) 0%, transparent 50%),
-      radial-gradient(circle at 50% 95%, rgba(107,203,119,0.07) 0%, transparent 40%);
-  }
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  background: #1a1a2e;
+  padding: 0 10px 14px;
+  gap: 7px;
+  overflow-x: auto; scrollbar-width: none;
+  position: sticky; top: var(--top-h); z-index: 200;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 9px 18px; border-radius: 18px; border: none;
+  cursor: pointer; font-family: 'Baloo Tamma 2', cursive;
+  font-weight: 800; color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.07);
+  transition: all 0.22s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap; position: relative;
+}
+.tab-btn .t-icon { font-size: 1.5rem; line-height: 1; }
+.tab-btn .t-kn   { font-size: 0.88rem; }
+.tab-btn .t-en   { font-size: 0.64rem; opacity: 0.55; font-weight: 600; }
+.tab-btn.active  { color: #1a1a2e; transform: translateY(-3px) scale(1.06); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+.tab-btn[data-t="road"].active  { background: linear-gradient(135deg,#FFD93D,#FF6B35); }
+.tab-btn[data-t="rail"].active  { background: linear-gradient(135deg,#4d96ff,#0984e3); color:white; }
+.tab-btn[data-t="air"].active   { background: linear-gradient(135deg,#a29bfe,#6c5ce7); color:white; }
+.tab-btn[data-t="water"].active { background: linear-gradient(135deg,#00cec9,#0984e3); color:white; }
+.tab-btn[data-t="rules"].active { background: linear-gradient(135deg,#ff6b9d,#e84393); color:white; }
+.tab-count {
+  position: absolute; top: 5px; right: 7px;
+  background: rgba(255,255,255,0.22); border-radius: 50px;
+  padding: 1px 6px; font-size: 0.6rem; font-weight: 900;
+}
+.tab-btn.active .tab-count { background: rgba(0,0,0,0.12); }
 
-  .topbar {
-    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .back-btn {
-    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
-    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
-    text-decoration: none; transition: background 0.2s;
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.2); }
-  .topbar-title {
-    font-size: 1.2rem; font-weight: 800;
-    background: linear-gradient(90deg, #fdcb6e, #4d96ff, #6bcb77);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .sound-btn {
-    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
-    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
-    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
-  }
-  .sound-btn:hover { background: rgba(255,255,255,0.22); }
-  .sound-btn.off { opacity: 0.5; }
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; }
 
-  .hero { text-align: center; padding: 26px 20px 10px; }
-  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: drive 2s ease-in-out infinite; }
-  @keyframes drive { 0%,100%{transform:translateX(-8px)} 50%{transform:translateX(8px)} }
-  .hero h1 {
-    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
-    background: linear-gradient(135deg, #fdcb6e, #4d96ff, #6bcb77);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+/* ── PANEL HERO ── */
+.panel-hero {
+  padding: 28px 24px 16px; text-align: center; position: relative; overflow: hidden;
+}
+.panel-hero h2 { font-size: 2.6rem; font-weight: 900; line-height: 1.1; margin-bottom: 5px; }
+.panel-hero p  { font-size: 1rem; font-weight: 700; opacity: 0.6; margin-bottom: 12px; }
+.tap-hint {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 2.5px dashed currentColor; border-radius: 50px;
+  padding: 7px 20px; font-size: 0.95rem; font-weight: 800; opacity: 0.7;
+  animation: wag 2s ease-in-out infinite;
+}
+@keyframes wag { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+.hf {
+  position: absolute; font-size: 3.2rem;
+  animation: fy 4s ease-in-out infinite; pointer-events: none; opacity: 0.14;
+}
+@keyframes fy { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-18px) rotate(8deg);} }
 
-  /* TABS */
-  .tabs {
-    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-    padding: 12px 20px 4px; max-width: 1100px; margin: 0 auto;
-  }
-  .tab {
-    padding: 9px 16px; border-radius: 14px;
-    font-family: 'Baloo Tamma 2', cursive; font-size: 0.86rem; font-weight: 700;
-    cursor: pointer; border: none; transition: all 0.2s;
-    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
-  }
-  .tab.active-road  { background: linear-gradient(135deg,#fdcb6e,#e17055); color:white; box-shadow:0 4px 14px rgba(253,203,110,0.4); }
-  .tab.active-rail  { background: linear-gradient(135deg,#4d96ff,#2980b9); color:white; box-shadow:0 4px 14px rgba(77,150,255,0.4); }
-  .tab.active-air   { background: linear-gradient(135deg,#a29bfe,#6c5ce7); color:white; box-shadow:0 4px 14px rgba(162,155,254,0.4); }
-  .tab.active-water { background: linear-gradient(135deg,#00cec9,#0984e3); color:white; box-shadow:0 4px 14px rgba(0,206,201,0.4); }
-  .tab.active-rules { background: linear-gradient(135deg,#e84393,#c0336f); color:white; box-shadow:0 4px 14px rgba(232,67,147,0.4); }
-  .tab:hover:not([class*='active']) { background: rgba(255,255,255,0.13); color:white; }
+/* ── VEHICLE GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 22px; padding: 14px 26px 60px;
+  max-width: 1300px; margin: 0 auto;
+}
 
-  .tts-notice {
-    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
-    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
-    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
-    max-width: 1100px; margin: 12px auto 4px;
-  }
+/* ── CARD ── */
+.card {
+  border-radius: var(--radius); background: white;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+  cursor: pointer; overflow: hidden;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  border: 3.5px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.5) rotate(-6deg); }
+  to   { opacity:1; transform:scale(1); }
+}
+.card:hover { transform:translateY(-12px) scale(1.04) rotate(.8deg); box-shadow:0 24px 56px rgba(0,0,0,0.15); }
+.card:active { transform:scale(0.91); }
+.card.playing { animation: cb .5s cubic-bezier(.34,1.56,.64,1) !important; }
+@keyframes cb { 0%{transform:scale(1);} 30%{transform:scale(1.22) rotate(-4deg);} 65%{transform:scale(.94) rotate(2deg);} 100%{transform:scale(1);} }
 
-  /* GRID */
-  .grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
-  }
+.card-face {
+  height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5.5rem; position: relative; overflow: hidden;
+}
+.card-face span.emoji { filter: drop-shadow(0 6px 14px rgba(0,0,0,0.2)); line-height: 1; }
+.star-pop {
+  position: absolute; top: 8px; right: 12px;
+  font-size: 1.6rem; transform: scale(0); opacity: 0;
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1); pointer-events: none;
+}
+.card.playing .star-pop { transform: scale(1) rotate(25deg); opacity: 1; }
+.card.learned .star-pop { transform: scale(0.85); opacity: 0.55; }
 
-  .card {
-    border-radius: 22px; overflow: hidden; cursor: pointer;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    transition: transform 0.18s, box-shadow 0.18s;
-    animation: popIn 0.4s both;
-  }
-  @keyframes popIn { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
-  .card:nth-child(1){animation-delay:0.02s} .card:nth-child(2){animation-delay:0.05s}
-  .card:nth-child(3){animation-delay:0.08s} .card:nth-child(4){animation-delay:0.11s}
-  .card:nth-child(5){animation-delay:0.14s} .card:nth-child(6){animation-delay:0.17s}
-  .card:nth-child(7){animation-delay:0.20s} .card:nth-child(8){animation-delay:0.23s}
-  .card:nth-child(9){animation-delay:0.26s} .card:nth-child(10){animation-delay:0.29s}
+/* animated road dashes for road vehicles */
+.road-stripe::after {
+  content: ''; position: absolute; bottom: 6px; left: 0; right: 0; height: 4px;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.6) 0px,
+    rgba(255,255,255,0.6) 14px, transparent 14px, transparent 24px);
+  animation: roadMove 0.7s linear infinite;
+}
+@keyframes roadMove { from{background-position:0 0} to{background-position:24px 0} }
 
-  .card:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 48px rgba(0,0,0,0.55); }
-  .card:active { transform: scale(0.94); }
-  .card.playing { animation: vpulse 0.5s ease !important; }
-  @keyframes vpulse { 0%{transform:scale(1)} 40%{transform:scale(1.13)} 100%{transform:scale(1)} }
+/* wave animation for water vehicles */
+.water-wave::after {
+  content: '〜〜〜〜〜'; position: absolute; bottom: 4px;
+  left: 0; right: 0; text-align: center;
+  font-size: 0.85rem; color: rgba(255,255,255,0.4);
+  animation: wave 1.5s ease-in-out infinite;
+}
+@keyframes wave { 0%,100%{transform:translateX(-4px)} 50%{transform:translateX(4px)} }
 
-  .item-face {
-    height: 108px; display: flex; align-items: center; justify-content: center;
-    font-size: 3.8rem; position: relative;
-  }
-  /* road dashes animation for road vehicles */
-  .road-anim::after {
-    content: ''; position: absolute; bottom: 4px; left: 0; right: 0; height: 3px;
-    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0px, rgba(255,255,255,0.5) 12px, transparent 12px, transparent 20px);
-    animation: roadMove 0.8s linear infinite;
-  }
-  @keyframes roadMove { from{background-position:0 0} to{background-position:20px 0} }
+.card-info { padding: 15px 12px 20px; text-align: center; border-top: 3px solid rgba(0,0,0,0.05); }
+.kn-word { font-size: 1.65rem; font-weight: 900; color: #1a1a2e; line-height: 1.1; }
+.en-word { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 3px; opacity: 0.4; }
+.use-pill {
+  display: inline-block; margin-top: 9px; border-radius: 50px;
+  padding: 4px 14px; font-size: 0.78rem; font-weight: 800; color: white;
+}
 
-  .fact-pill {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
-    font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.8);
-    padding: 3px 6px; text-align: center; line-height: 1.3;
-  }
-  .card-info {
-    padding: 10px 10px 14px; text-align: center;
-    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
-  }
-  .card-kn { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.2; }
-  .card-en { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.42); margin-top: 2px; font-style: italic; }
-  .card-use { font-size: 0.65rem; color: rgba(255,255,255,0.28); margin-top: 3px; }
+/* ── RULES PANEL ── */
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px; padding: 14px 26px 60px;
+  max-width: 1300px; margin: 0 auto;
+}
+.rule-card {
+  background: white; border: 3.5px solid transparent;
+  border-radius: 24px; padding: 20px 20px;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+  display: flex; gap: 16px; align-items: flex-start;
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+}
+.rule-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 48px rgba(0,0,0,0.13); }
+.rule-card:active { transform: scale(0.95); }
+.rule-card.playing { background: #fff9e6; border-color: #FFD93D !important; }
+.rule-emoji { font-size: 2.4rem; flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15)); }
+.rule-kn  { font-size: 1.05rem; font-weight: 900; color: #1a1a2e; line-height: 1.3; }
+.rule-en  { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.4; margin-top: 2px; }
+.rule-desc { font-size: 0.82rem; color: #555; margin-top: 6px; line-height: 1.5; font-weight: 600; }
 
-  /* RULES tab */
-  .rules-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
-    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
-    display: none;
-  }
-  .rule-card {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px; padding: 18px; cursor: pointer; transition: all 0.18s;
-    display: flex; gap: 14px; align-items: flex-start;
-    animation: popIn 0.4s both;
-  }
-  .rule-card:nth-child(1){animation-delay:0.03s} .rule-card:nth-child(2){animation-delay:0.07s}
-  .rule-card:nth-child(3){animation-delay:0.11s} .rule-card:nth-child(4){animation-delay:0.15s}
-  .rule-card:nth-child(5){animation-delay:0.19s} .rule-card:nth-child(6){animation-delay:0.23s}
-  .rule-card:nth-child(7){animation-delay:0.27s} .rule-card:nth-child(8){animation-delay:0.31s}
-  .rule-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
-  .rule-card.playing { background: rgba(232,67,147,0.12); border-color: rgba(232,67,147,0.3); }
-  .rule-emoji { font-size: 2rem; flex-shrink: 0; }
-  .rule-kn  { font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.3; }
-  .rule-en  { font-size: 0.72rem; color: rgba(255,255,255,0.4); font-style: italic; margin-top: 2px; }
-  .rule-desc{ font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 5px; line-height: 1.5; }
+/* ── CONFETTI ── */
+.cf { position:fixed; border-radius:3px; top:-20px; pointer-events:none; z-index:9999; animation:cff 1.4s ease-in forwards; }
+@keyframes cff { to { transform: translateY(110vh) rotate(600deg); opacity:0; } }
 
-  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
-
-  @media(max-width:480px){
-    .grid { grid-template-columns: repeat(3,1fr); gap: 11px; padding: 10px 13px 32px; }
-    .item-face { height: 84px; font-size: 2.9rem; }
-    .card-kn { font-size: 0.88rem; }
-    .hero h1 { font-size: 1.75rem; }
-    .rules-grid { padding: 12px 14px 40px; }
-    .topbar-title { font-size: 1rem; }
-  }
+/* ── RESPONSIVE ── */
+@media (max-width: 580px) {
+  .grid { grid-template-columns: repeat(2,1fr); gap:13px; padding:10px 12px 44px; }
+  .card-face { height:115px; font-size:3.8rem; }
+  .kn-word { font-size:1.25rem; }
+  .panel-hero h2 { font-size:1.9rem; }
+  .rules-grid { grid-template-columns: 1fr; padding: 10px 12px 44px; }
+}
+@media (min-width:900px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); }
+  .card-face { height:175px; font-size:6rem; }
+  .kn-word { font-size:1.85rem; }
+}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <a href="/class/ukg/kannada" class="back-btn">←</a>
-    <span class="topbar-title">ಸಾರಿಗೆ ವಾಹನಗಳು</span>
-  </div>
-  <div class="topbar-right">
-    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
-      <span id="soundIcon">🔊</span>
-      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
-    </button>
+  <div class="topbar-title">🚗 ಸಾರಿಗೆ ವಾಹನಗಳು</div>
+  <div class="top-right">
+    <div class="score-pill" id="scorePill">⭐ 0 / 28</div>
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
   </div>
 </div>
 
-<div class="hero">
-  <div class="hero-emoji">🚗</div>
-  <h1>ಸಾರಿಗೆ ವಾಹನಗಳು</h1>
-  <p>ವಾಹನಗಳು ಮತ್ತು ಪ್ರಯಾಣ • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-t="road" onclick="switchTab('road',this)">
+    <span class="t-icon">🛣️</span><span class="t-kn">ರಸ್ತೆ</span><span class="t-en">Road</span>
+    <span class="tab-count" id="cnt-road">0/10</span>
+  </button>
+  <button class="tab-btn" data-t="rail" onclick="switchTab('rail',this)">
+    <span class="t-icon">🚂</span><span class="t-kn">ರೈಲು</span><span class="t-en">Rail</span>
+    <span class="tab-count" id="cnt-rail">0/6</span>
+  </button>
+  <button class="tab-btn" data-t="air" onclick="switchTab('air',this)">
+    <span class="t-icon">✈️</span><span class="t-kn">ಆಕಾಶ</span><span class="t-en">Air</span>
+    <span class="tab-count" id="cnt-air">0/6</span>
+  </button>
+  <button class="tab-btn" data-t="water" onclick="switchTab('water',this)">
+    <span class="t-icon">⛵</span><span class="t-kn">ನೀರು</span><span class="t-en">Water</span>
+    <span class="tab-count" id="cnt-water">0/6</span>
+  </button>
+  <button class="tab-btn" data-t="rules" onclick="switchTab('rules',this)">
+    <span class="t-icon">🚦</span><span class="t-kn">ನಿಯಮಗಳು</span><span class="t-en">Rules</span>
+  </button>
+</nav>
+
+<!-- PANEL: ROAD -->
+<div class="panel active" id="panel-road">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fff9db,#ffe5d0);">
+    <span class="hf" style="top:8px;left:4%;">🛣️</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🚦</span>
+    <h2 style="color:#7c3500;">🚗 ರಸ್ತೆ ವಾಹನಗಳು</h2>
+    <p style="color:#a04500;">Road Vehicles</p>
+    <span class="tap-hint" style="color:#a04500;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-road"></div>
 </div>
 
-<div class="tabs">
-  <button class="tab active-road" id="tab-road"  onclick="switchTab('road')">🛣️ ರಸ್ತೆ</button>
-  <button class="tab" id="tab-rail"  onclick="switchTab('rail')">🚂 ರೈಲು</button>
-  <button class="tab" id="tab-air"   onclick="switchTab('air')">✈️ ಆಕಾಶ</button>
-  <button class="tab" id="tab-water" onclick="switchTab('water')">🚢 ನೀರು</button>
-  <button class="tab" id="tab-rules" onclick="switchTab('rules')">🚦 ನಿಯಮಗಳು</button>
+<!-- PANEL: RAIL -->
+<div class="panel" id="panel-rail">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#dbeaff,#e8f0ff);">
+    <span class="hf" style="top:8px;left:4%;">🛤️</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🚂</span>
+    <h2 style="color:#003580;">🚂 ರೈಲು ವಾಹನಗಳು</h2>
+    <p style="color:#0050b3;">Rail Vehicles</p>
+    <span class="tap-hint" style="color:#0050b3;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-rail"></div>
 </div>
 
-<div class="tts-notice">
-  <span>📱</span>
-  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+<!-- PANEL: AIR -->
+<div class="panel" id="panel-air">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#ede7f6,#e8f0ff);">
+    <span class="hf" style="top:8px;left:4%;">☁️</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🌤️</span>
+    <h2 style="color:#3a007c;">✈️ ಆಕಾಶ ವಾಹನಗಳು</h2>
+    <p style="color:#5500b3;">Air Vehicles</p>
+    <span class="tap-hint" style="color:#5500b3;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-air"></div>
 </div>
 
-<div class="grid" id="grid"></div>
-<div class="rules-grid" id="rulesGrid"></div>
-<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+<!-- PANEL: WATER -->
+<div class="panel" id="panel-water">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#b3e5fc,#e1f5fe);">
+    <span class="hf" style="top:8px;left:4%;">💧</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🌊</span>
+    <h2 style="color:#003d5c;">⛵ ನೀರು ವಾಹನಗಳು</h2>
+    <p style="color:#005f8a;">Water Vehicles</p>
+    <span class="tap-hint" style="color:#005f8a;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-water"></div>
+</div>
+
+<!-- PANEL: RULES -->
+<div class="panel" id="panel-rules">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fce4ec,#fff3cd);">
+    <span class="hf" style="top:8px;left:4%;">🚦</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🛑</span>
+    <h2 style="color:#7a0030;">🚦 ಸಂಚಾರ ನಿಯಮಗಳು</h2>
+    <p style="color:#a0004a;">Traffic Rules</p>
+    <span class="tap-hint" style="color:#a0004a;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</span>
+  </div>
+  <div class="rules-grid" id="grid-rules"></div>
+</div>
 
 <script>
-const road = [
-  { kn:'ಕಾರು',          en:'Car',           emoji:'🚗', use:'ಕುಟುಂಬ ಪ್ರಯಾಣ',     road:true,  bg:'linear-gradient(145deg,#e74c3c,#c0392b)' },
-  { kn:'ಬಸ್',           en:'Bus',           emoji:'🚌', use:'ಸಾರ್ವಜನಿಕ ಸಾರಿಗೆ', road:true,  bg:'linear-gradient(145deg,#e67e22,#ca6f1e)' },
-  { kn:'ಟ್ರಕ್',         en:'Truck',         emoji:'🚚', use:'ಸಾಮಾನು ಸಾಗಿಸುತ್ತದೆ', road:true, bg:'linear-gradient(145deg,#7f8c8d,#5d6d7e)' },
-  { kn:'ಆಟೋ',           en:'Auto Rickshaw', emoji:'🛺', use:'ನಗರ ಪ್ರಯಾಣ',        road:true,  bg:'linear-gradient(145deg,#f1c40f,#d4ac0d)' },
-  { kn:'ದ್ವಿಚಕ್ರ ವಾಹನ', en:'Motorcycle',    emoji:'🏍️', use:'ವೇಗದ ಪ್ರಯಾಣ',      road:true,  bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
-  { kn:'ಸೈಕಲ್',         en:'Bicycle',       emoji:'🚲', use:'ಪರಿಸರ ಸ್ನೇಹಿ',      road:true,  bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
-  { kn:'ಆಂಬ್ಯುಲೆನ್ಸ್',  en:'Ambulance',     emoji:'🚑', use:'ರೋಗಿ ಸಾಗಿಸುತ್ತದೆ',  road:true,  bg:'linear-gradient(145deg,#e74c3c,#c0392b)' },
-  { kn:'ಅಗ್ನಿಶಾಮಕ',     en:'Fire Engine',   emoji:'🚒', use:'ಬೆಂಕಿ ನಂದಿಸುತ್ತದೆ', road:true,  bg:'linear-gradient(145deg,#e74c3c,#922b21)' },
-  { kn:'ಪೊಲೀಸ್ ವಾಹನ',  en:'Police Car',    emoji:'🚓', use:'ಕಾನೂನು ರಕ್ಷಣೆ',      road:true,  bg:'linear-gradient(145deg,#2980b9,#1a5276)' },
-  { kn:'ಶಾಲೆ ಬಸ್',      en:'School Bus',    emoji:'🚐', use:'ಮಕ್ಕಳ ಸಾರಿಗೆ',       road:true,  bg:'linear-gradient(145deg,#f39c12,#d68910)' },
-];
-
-const rail = [
-  { kn:'ರೈಲು',           en:'Train',          emoji:'🚂', use:'ದೂರ ಪ್ರಯಾಣ',        road:false, bg:'linear-gradient(145deg,#2c3e50,#1a252f)' },
-  { kn:'ಮೆಟ್ರೋ',         en:'Metro',          emoji:'🚇', use:'ನಗರ ರೈಲು',           road:false, bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
-  { kn:'ಟ್ರಾಮ್',         en:'Tram',           emoji:'🚋', use:'ನಗರ ಸಾರಿಗೆ',         road:false, bg:'linear-gradient(145deg,#27ae60,#1e8449)' },
-  { kn:'ಸರಕು ರೈಲು',      en:'Freight Train',  emoji:'🚃', use:'ಸಾಮಾನು ಸಾಗಿಸುತ್ತದೆ', road:false, bg:'linear-gradient(145deg,#7f8c8d,#5d6d7e)' },
-  { kn:'ಬುಲೆಟ್ ಟ್ರೈನ್',  en:'Bullet Train',   emoji:'🚄', use:'ಅತ್ಯಂತ ವೇಗದ ರೈಲು',   road:false, bg:'linear-gradient(145deg,#e74c3c,#c0392b)' },
-  { kn:'ಮೋನೋರೈಲ್',       en:'Monorail',       emoji:'🚝', use:'ಒಂದು ಹಳಿ ರೈಲು',      road:false, bg:'linear-gradient(145deg,#8e44ad,#6c3483)' },
-];
-
-const air = [
-  { kn:'ವಿಮಾನ',         en:'Aeroplane',   emoji:'✈️', use:'ದೂರ ವೇಗ ಪ್ರಯಾಣ',     road:false, bg:'linear-gradient(145deg,#2980b9,#1a5276)' },
-  { kn:'ಹೆಲಿಕಾಪ್ಟರ್',   en:'Helicopter',  emoji:'🚁', use:'ತುರ್ತು ಸೇವೆ',          road:false, bg:'linear-gradient(145deg,#e67e22,#ca6f1e)' },
-  { kn:'ರಾಕೆಟ್',        en:'Rocket',      emoji:'🚀', use:'ಬಾಹ್ಯಾಕಾಶ ಪ್ರಯಾಣ',    road:false, bg:'linear-gradient(145deg,#8e44ad,#6c3483)' },
-  { kn:'ಹಾರುವ ತಟ್ಟೆ',   en:'UFO',         emoji:'🛸', use:'ಕಾಲ್ಪನಿಕ ವಾಹನ',       road:false, bg:'linear-gradient(145deg,#1a1a4e,#2d2d8e)' },
-  { kn:'ಪ್ಯಾರಾಚೂಟ್',    en:'Parachute',   emoji:'🪂', use:'ಆಕಾಶದಿಂದ ಇಳಿಯಲು',    road:false, bg:'linear-gradient(145deg,#e84393,#c0336f)' },
-  { kn:'ಬಲೂನ್',         en:'Hot Air Balloon',emoji:'🎈',use:'ಹವ್ಯಾಸ ಪ್ರಯಾಣ',    road:false, bg:'linear-gradient(145deg,#f39c12,#d68910)' },
-];
-
-const water = [
-  { kn:'ಹಡಗು',          en:'Ship',        emoji:'🚢', use:'ಸಮುದ್ರ ಪ್ರಯಾಣ',      road:false, bg:'linear-gradient(145deg,#1a5276,#0d3b8e)' },
-  { kn:'ದೋಣಿ',          en:'Boat',        emoji:'⛵', use:'ನದಿ ಪ್ರಯಾಣ',          road:false, bg:'linear-gradient(145deg,#2980b9,#1f618d)' },
-  { kn:'ಮೀನು ದೋಣಿ',    en:'Fishing Boat',emoji:'🚤', use:'ಮೀನು ಹಿಡಿಯಲು',       road:false, bg:'linear-gradient(145deg,#117a65,#0e6655)' },
-  { kn:'ಜಲಾಂತರ್ಗಾಮಿ',   en:'Submarine',   emoji:'🤿', use:'ನೀರಿನ ಅಡಿ ಪ್ರಯಾಣ',  road:false, bg:'linear-gradient(145deg,#1a3a5e,#0d2040)' },
-  { kn:'ಫೆರ್ರಿ',        en:'Ferry',       emoji:'⛴️', use:'ನದಿ ದಾಟಲು',          road:false, bg:'linear-gradient(145deg,#e67e22,#ca6f1e)' },
-  { kn:'ಕ್ರೂಸ್ ಹಡಗು',  en:'Cruise Ship', emoji:'🛳️', use:'ಸಮುದ್ರ ಪ್ರವಾಸ',      road:false, bg:'linear-gradient(145deg,#2c3e50,#1a252f)' },
-];
+const DATA = {
+  road: [
+    { kn:'ಕಾರು',           en:'Car',            emoji:'🚗',  use:'ಕುಟುಂಬ ಪ್ರಯಾಣ',      road:true,  bg:'#fce4ec', border:'#E91E63', pill:'#880E4F' },
+    { kn:'ಬಸ್',            en:'Bus',            emoji:'🚌',  use:'ಸಾರ್ವಜನಿಕ ಸಾರಿಗೆ',  road:true,  bg:'#fff3e0', border:'#FF9800', pill:'#E65100' },
+    { kn:'ಟ್ರಕ್',          en:'Truck',          emoji:'🚛',  use:'ಸಾಮಾನು ಸಾಗಿಸುತ್ತದೆ', road:true,  bg:'#efebe9', border:'#795548', pill:'#4E342E' },
+    { kn:'ಆಟೋ',            en:'Auto Rickshaw',  emoji:'🛺',  use:'ನಗರ ಪ್ರಯಾಣ',          road:true,  bg:'#fffde7', border:'#FFC107', pill:'#F57F17' },
+    { kn:'ದ್ವಿಚಕ್ರ ವಾಹನ',  en:'Motorcycle',    emoji:'🏍️', use:'ವೇಗದ ಪ್ರಯಾಣ',         road:true,  bg:'#e3f2fd', border:'#2196F3', pill:'#0D47A1' },
+    { kn:'ಸೈಕಲ್',          en:'Bicycle',        emoji:'🚲',  use:'ಪರಿಸರ ಸ್ನೇಹಿ',        road:true,  bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20' },
+    { kn:'ಆಂಬ್ಯುಲೆನ್ಸ್',   en:'Ambulance',      emoji:'🚑',  use:'ರೋಗಿ ಸಾಗಿಸುತ್ತದೆ',   road:true,  bg:'#fce4ec', border:'#F44336', pill:'#B71C1C' },
+    { kn:'ಅಗ್ನಿಶಾಮಕ',      en:'Fire Engine',    emoji:'🚒',  use:'ಬೆಂಕಿ ನಂದಿಸುತ್ತದೆ',  road:true,  bg:'#fbe9e7', border:'#FF5722', pill:'#BF360C' },
+    { kn:'ಪೊಲೀಸ್ ವಾಹನ',   en:'Police Car',     emoji:'🚓',  use:'ಕಾನೂನು ರಕ್ಷಣೆ',       road:true,  bg:'#e8eaf6', border:'#3F51B5', pill:'#1A237E' },
+    { kn:'ಶಾಲೆ ಬಸ್',       en:'School Bus',     emoji:'🚌',  use:'ಮಕ್ಕಳ ಸಾರಿಗೆ',        road:true,  bg:'#fff9c4', border:'#F9A825', pill:'#E65100' },
+  ],
+  rail: [
+    { kn:'ರೈಲು',            en:'Train',          emoji:'🚂',  use:'ದೂರ ಪ್ರಯಾಣ',          road:false, bg:'#e8eaf6', border:'#3F51B5', pill:'#1A237E' },
+    { kn:'ಮೆಟ್ರೋ',          en:'Metro',          emoji:'🚇',  use:'ನಗರ ರೈಲು',             road:false, bg:'#e3f2fd', border:'#2196F3', pill:'#0D47A1' },
+    { kn:'ಟ್ರಾಮ್',          en:'Tram',           emoji:'🚋',  use:'ನಗರ ಸಾರಿಗೆ',           road:false, bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20' },
+    { kn:'ಸರಕು ರೈಲು',       en:'Freight Train',  emoji:'🚃',  use:'ಸಾಮಾನು ಸಾಗಿಸುತ್ತದೆ',  road:false, bg:'#efebe9', border:'#795548', pill:'#4E342E' },
+    { kn:'ಬುಲೆಟ್ ಟ್ರೈನ್',   en:'Bullet Train',   emoji:'🚄',  use:'ಅತ್ಯಂತ ವೇಗದ ರೈಲು',    road:false, bg:'#fce4ec', border:'#E91E63', pill:'#880E4F' },
+    { kn:'ಮೋನೋರೈಲ್',        en:'Monorail',       emoji:'🚝',  use:'ಒಂದು ಹಳಿ ರೈಲು',       road:false, bg:'#f3e5f5', border:'#9C27B0', pill:'#6A1B9A' },
+  ],
+  air: [
+    { kn:'ವಿಮಾನ',           en:'Aeroplane',      emoji:'✈️', use:'ದೂರ ವೇಗ ಪ್ರಯಾಣ',      road:false, bg:'#e3f2fd', border:'#2196F3', pill:'#0D47A1' },
+    { kn:'ಹೆಲಿಕಾಪ್ಟರ್',    en:'Helicopter',     emoji:'🚁',  use:'ತುರ್ತು ಸೇವೆ',           road:false, bg:'#fff3e0', border:'#FF9800', pill:'#E65100' },
+    { kn:'ರಾಕೆಟ್',          en:'Rocket',         emoji:'🚀',  use:'ಬಾಹ್ಯಾಕಾಶ ಪ್ರಯಾಣ',     road:false, bg:'#f3e5f5', border:'#9C27B0', pill:'#6A1B9A' },
+    { kn:'ಹಾರುವ ತಟ್ಟೆ',    en:'UFO',            emoji:'🛸',  use:'ಕಾಲ್ಪನಿಕ ವಾಹನ',        road:false, bg:'#e8eaf6', border:'#3F51B5', pill:'#1A237E' },
+    { kn:'ಪ್ಯಾರಾಚೂಟ್',     en:'Parachute',      emoji:'🪂',  use:'ಆಕಾಶದಿಂದ ಇಳಿಯಲು',     road:false, bg:'#fce4ec', border:'#E91E63', pill:'#880E4F' },
+    { kn:'ಬಿಸಿ ಗಾಳಿ ಬಲೂನ್', en:'Hot Air Balloon',emoji:'🎈', use:'ಹವ್ಯಾಸ ಪ್ರಯಾಣ',        road:false, bg:'#fff9c4', border:'#F9A825', pill:'#E65100' },
+  ],
+  water: [
+    { kn:'ಹಡಗು',            en:'Ship',           emoji:'🚢',  use:'ಸಮುದ್ರ ಪ್ರಯಾಣ',        road:false, bg:'#e3f2fd', border:'#2196F3', pill:'#0D47A1' },
+    { kn:'ದೋಣಿ',            en:'Boat',           emoji:'⛵',  use:'ನದಿ ಪ್ರಯಾಣ',            road:false, bg:'#e0f7fa', border:'#00BCD4', pill:'#006064' },
+    { kn:'ಮೀನು ದೋಣಿ',      en:'Fishing Boat',   emoji:'🚤',  use:'ಮೀನು ಹಿಡಿಯಲು',         road:false, bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20' },
+    { kn:'ಜಲಾಂತರ್ಗಾಮಿ',    en:'Submarine',      emoji:'🛥️', use:'ನೀರಿನ ಅಡಿ ಪ್ರಯಾಣ',     road:false, bg:'#e8eaf6', border:'#3F51B5', pill:'#1A237E' },
+    { kn:'ಫೆರ್ರಿ',          en:'Ferry',          emoji:'⛴️', use:'ನದಿ ದಾಟಲು',             road:false, bg:'#fff3e0', border:'#FF9800', pill:'#E65100' },
+    { kn:'ಕ್ರೂಸ್ ಹಡಗು',    en:'Cruise Ship',    emoji:'🛳️', use:'ಸಮುದ್ರ ಪ್ರವಾಸ',         road:false, bg:'#e1f5fe', border:'#03A9F4', pill:'#01579B' },
+  ],
+};
 
 const rules = [
-  { emoji:'🔴', kn:'ಕೆಂಪು ಬಣ್ಣ — ನಿಲ್ಲು',    en:'Red light — Stop',       desc:'ಕೆಂಪು ದೀಪ ಕಂಡಾಗ ವಾಹನ ನಿಲ್ಲಿಸಬೇಕು.' },
-  { emoji:'🟡', kn:'ಹಳದಿ ಬಣ್ಣ — ಜಾಗ್ರತೆ',   en:'Yellow light — Caution', desc:'ಹಳದಿ ದೀಪ ಕಂಡಾಗ ನಿಧಾನ ಆಗಬೇಕು.' },
-  { emoji:'🟢', kn:'ಹಸಿರು ಬಣ್ಣ — ಹೋಗು',    en:'Green light — Go',       desc:'ಹಸಿರು ದೀಪ ಕಂಡಾಗ ಹೋಗಬಹುದು.' },
-  { emoji:'🚶', kn:'ಜೀಬ್ರಾ ಕ್ರಾಸಿಂಗ್',      en:'Zebra Crossing',         desc:'ಬಿಳಿ ಗೆರೆ ಮೇಲೆ ರಸ್ತೆ ದಾಟಬೇಕು.' },
-  { emoji:'⛑️', kn:'ಹೆಲ್ಮೆಟ್ ಹಾಕಿ',         en:'Wear helmet',            desc:'ದ್ವಿಚಕ್ರ ವಾಹನ ಸವಾರಿ ಮಾಡಲು ಹೆಲ್ಮೆಟ್ ಬೇಕು.' },
-  { emoji:'🔇', kn:'ಹಾರ್ನ್ ಕಡಿಮೆ ಮಾಡಿ',    en:'Avoid honking',          desc:'ಶಾಲೆ ಮತ್ತು ಆಸ್ಪತ್ರೆ ಸಮೀಪ ಹಾರ್ನ್ ಬಾರಿಸಬೇಡಿ.' },
-  { emoji:'🏎️', kn:'ವೇಗ ನಿಯಂತ್ರಣ',         en:'Speed limit',            desc:'ನಿಗದಿತ ವೇಗ ಮೀರಿ ವಾಹನ ಓಡಿಸಬಾರದು.' },
-  { emoji:'👮', kn:'ಸಂಚಾರ ಪೊಲೀಸ್',         en:'Traffic Police',         desc:'ಸಂಚಾರ ಪೊಲೀಸ್ ರಸ್ತೆ ನಿಯಮ ಜಾರಿ ಮಾಡುತ್ತಾರೆ.' },
+  { emoji:'🔴', kn:'ಕೆಂಪು ಬಣ್ಣ — ನಿಲ್ಲು',    en:'Red — Stop',       desc:'ಕೆಂಪು ದೀಪ ಕಂಡಾಗ ವಾಹನ ನಿಲ್ಲಿಸಬೇಕು.',      border:'#F44336' },
+  { emoji:'🟡', kn:'ಹಳದಿ ಬಣ್ಣ — ಜಾಗ್ರತೆ',   en:'Yellow — Caution', desc:'ಹಳದಿ ದೀಪ ಕಂಡಾಗ ನಿಧಾನ ಆಗಬೇಕು.',           border:'#FFC107' },
+  { emoji:'🟢', kn:'ಹಸಿರು ಬಣ್ಣ — ಹೋಗು',    en:'Green — Go',       desc:'ಹಸಿರು ದೀಪ ಕಂಡಾಗ ಹೋಗಬಹುದು.',              border:'#4CAF50' },
+  { emoji:'🚶', kn:'ಜೀಬ್ರಾ ಕ್ರಾಸಿಂಗ್',      en:'Zebra Crossing',   desc:'ಬಿಳಿ ಗೆರೆ ಮೇಲೆ ರಸ್ತೆ ದಾಟಬೇಕು.',           border:'#9E9E9E' },
+  { emoji:'⛑️', kn:'ಹೆಲ್ಮೆಟ್ ಹಾಕಿ',         en:'Wear Helmet',      desc:'ದ್ವಿಚಕ್ರ ವಾಹನ ಸವಾರಿ ಮಾಡಲು ಹೆಲ್ಮೆಟ್ ಬೇಕು.', border:'#FF9800' },
+  { emoji:'🔕', kn:'ಹಾರ್ನ್ ಕಡಿಮೆ ಮಾಡಿ',    en:'Avoid Honking',    desc:'ಶಾಲೆ ಮತ್ತು ಆಸ್ಪತ್ರೆ ಸಮೀಪ ಹಾರ್ನ್ ಬಾರಿಸಬೇಡಿ.',border:'#9C27B0' },
+  { emoji:'🐢', kn:'ವೇಗ ನಿಯಂತ್ರಣ',          en:'Speed Limit',      desc:'ನಿಗದಿತ ವೇಗ ಮೀರಿ ವಾಹನ ಓಡಿಸಬಾರದು.',         border:'#3F51B5' },
+  { emoji:'👮', kn:'ಸಂಚಾರ ಪೊಲೀಸ್',          en:'Traffic Police',   desc:'ಸಂಚಾರ ಪೊಲೀಸ್ ರಸ್ತೆ ನಿಯಮ ಜಾರಿ ಮಾಡುತ್ತಾರೆ.',border:'#E91E63' },
 ];
 
-const tabData = { road, rail, air, water };
+const vehicleTabs = ['road','rail','air','water'];
+const VEHICLE_TOTAL = vehicleTabs.reduce((s,t) => s + DATA[t].length, 0);
+document.getElementById('scorePill').textContent = `⭐ 0 / ${VEHICLE_TOTAL}`;
+
 let soundOn = true;
-let activeTab = 'road';
+const learned = { road: new Set(), rail: new Set(), air: new Set(), water: new Set() };
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+}
 
 function toggleSound() {
   soundOn = !soundOn;
-  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
-  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
-  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+  const b = document.getElementById('soundBtn');
+  b.textContent = soundOn ? '🔊' : '🔇';
+  b.classList.toggle('off', !soundOn);
 }
 
 function speak(text) {
   if (!soundOn || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
-  if (!kn) return;
-  u.voice = kn;
+  u.lang='kn-IN'; u.rate=0.82; u.pitch=1.1;
+  const v = window.speechSynthesis.getVoices().find(x=>x.lang==='kn-IN'||x.lang.startsWith('kn'));
+  if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 
-function switchTab(tab) {
-  activeTab = tab;
-  ['road','rail','air','water','rules'].forEach(t => {
-    document.getElementById('tab-'+t).className = 'tab' + (t===tab ? ' active-'+t : '');
-  });
-  const grid = document.getElementById('grid');
-  const rg   = document.getElementById('rulesGrid');
-  if (tab === 'rules') {
-    grid.style.display = 'none'; rg.style.display = 'grid'; buildRules();
-  } else {
-    grid.style.display = 'grid'; rg.style.display = 'none'; buildGrid();
+function updateScore() {
+  const tot = vehicleTabs.reduce((s,t) => s + learned[t].size, 0);
+  document.getElementById('scorePill').textContent = `⭐ ${tot} / ${VEHICLE_TOTAL}`;
+}
+
+function updateCnt(tid) {
+  const el = document.getElementById('cnt-'+tid);
+  if (el) el.textContent = `${learned[tid].size}/${DATA[tid].length}`;
+}
+
+const CC = ['#FFD93D','#FF6B35','#06D6A0','#FF6B9D','#9B5DE5','#118AB2','#43e97b'];
+function confetti(x,y) {
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='cf';
+    el.style.cssText=`left:${x+(Math.random()-.5)*160}px;background:${CC[i%CC.length]};animation-duration:${.9+Math.random()*.9}s;animation-delay:${Math.random()*.2}s;width:${6+Math.random()*10}px;height:${8+Math.random()*14}px;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2200);
   }
 }
 
-function buildGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  tabData[activeTab].forEach(v => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="item-face ${v.road ? 'road-anim' : ''}" style="background:${v.bg};">
-        ${v.emoji}
-        <div class="fact-pill">🛤️ ${v.use}</div>
-      </div>
-      <div class="card-info">
-        <div class="card-kn">${v.kn}</div>
-        <div class="card-en">${v.en}</div>
-      </div>
-    `;
-    card.addEventListener('click', () => {
-      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
-      speak(`${v.kn}. ${v.use}`);
-      setTimeout(() => card.classList.remove('playing'), 500);
-    });
-    grid.appendChild(card);
+let di = 0;
+function makeVehicleCard(v, tid) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.animationDelay = (di++ * 0.05) + 's';
+  card.style.borderColor = v.border;
+  const faceClass = v.road ? 'card-face road-stripe' : (tid==='water' ? 'card-face water-wave' : 'card-face');
+  card.innerHTML = `
+    <div class="${faceClass}" style="background:${v.bg};">
+      <span class="star-pop">⭐</span>
+      <span class="emoji">${v.emoji}</span>
+    </div>
+    <div class="card-info">
+      <div class="kn-word">${v.kn}</div>
+      <div class="en-word">${v.en}</div>
+      <div class="use-pill" style="background:${v.pill};">${v.use}</div>
+    </div>`;
+  card.addEventListener('click', e => {
+    card.classList.remove('playing');
+    void card.offsetWidth;
+    card.classList.add('playing');
+    speak(`${v.kn}. ${v.use}`);
+    setTimeout(() => card.classList.remove('playing'), 520);
+    if (!learned[tid].has(v.kn)) {
+      learned[tid].add(v.kn);
+      card.classList.add('learned');
+      updateScore(); updateCnt(tid);
+      const r = card.getBoundingClientRect();
+      confetti(r.left + r.width/2, r.top + r.height/2);
+    }
   });
+  return card;
 }
 
-function buildRules() {
-  const rg = document.getElementById('rulesGrid');
-  rg.innerHTML = '';
-  rules.forEach((r, i) => {
-    const div = document.createElement('div');
-    div.className = 'rule-card';
-    div.style.animationDelay = (i * 0.06) + 's';
-    div.innerHTML = `
-      <div class="rule-emoji">${r.emoji}</div>
-      <div>
-        <div class="rule-kn">${r.kn}</div>
-        <div class="rule-en">${r.en}</div>
-        <div class="rule-desc">${r.desc}</div>
-      </div>
-    `;
-    div.addEventListener('click', () => {
-      div.classList.add('playing');
-      speak(`${r.kn}. ${r.desc}`);
-      setTimeout(() => div.classList.remove('playing'), 2500);
-    });
-    rg.appendChild(div);
-  });
-}
+// Build all vehicle grids upfront
+vehicleTabs.forEach(tid => {
+  const grid = document.getElementById('grid-'+tid);
+  DATA[tid].forEach(v => grid.appendChild(makeVehicleCard(v, tid)));
+  updateCnt(tid);
+});
 
-if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
-buildGrid();
+// Build rules grid
+const rulesGrid = document.getElementById('grid-rules');
+rules.forEach((r, i) => {
+  const div = document.createElement('div');
+  div.className = 'rule-card';
+  div.style.animationDelay = (i * 0.07) + 's';
+  div.style.borderColor = r.border;
+  div.innerHTML = `
+    <div class="rule-emoji">${r.emoji}</div>
+    <div>
+      <div class="rule-kn">${r.kn}</div>
+      <div class="rule-en">${r.en}</div>
+      <div class="rule-desc">${r.desc}</div>
+    </div>`;
+  div.addEventListener('click', () => {
+    div.classList.add('playing');
+    speak(`${r.kn}. ${r.desc}`);
+    setTimeout(() => div.classList.remove('playing'), 2500);
+  });
+  rulesGrid.appendChild(div);
+});
+
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
 </script>
 </body>
 </html>

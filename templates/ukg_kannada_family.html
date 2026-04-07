@@ -3,356 +3,528 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ನನ್ನ ಕುಟುಂಬ - UKG Kannada</title>
+<title>ನನ್ನ ಕುಟುಂಬ - UKG ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --radius: 30px; --top-h: 70px; }
 
-  :root { --bg: #1a0a00; --topbar: #231000; }
+body {
+  font-family: 'Baloo Tamma 2', cursive;
+  background: #fff5fb;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--top-h);
+  background: #1a1a2e;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 300;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+.topbar-title {
+  font-size: 1.55rem; font-weight: 900;
+  background: linear-gradient(90deg, #fda73c, #e84393, #a29bfe);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.top-right { display: flex; align-items: center; gap: 10px; }
+.score-pill {
+  background: #fda73c; color: #1a1a2e;
+  font-weight: 900; font-size: 1rem;
+  padding: 7px 18px; border-radius: 50px;
+  box-shadow: 0 4px 14px rgba(253,167,60,0.45);
+  white-space: nowrap;
+}
+.sound-btn {
+  background: rgba(255,255,255,0.13);
+  border: 2px solid rgba(255,255,255,0.22);
+  color: white; border-radius: 12px;
+  padding: 8px 14px; font-size: 1.2rem;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s;
+}
+.sound-btn:hover { background: rgba(255,255,255,0.22); }
+.sound-btn.off { opacity: 0.4; }
 
-  body {
-    font-family: 'Baloo Tamma 2', cursive;
-    background: var(--bg); min-height: 100vh; color: #fff8f0;
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(253,167,60,0.13) 0%, transparent 50%),
-      radial-gradient(circle at 85% 75%, rgba(232,67,147,0.1) 0%, transparent 50%);
-  }
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  background: #1a1a2e;
+  padding: 0 12px 14px;
+  gap: 8px;
+  overflow-x: auto; scrollbar-width: none;
+  position: sticky; top: var(--top-h); z-index: 200;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
 
-  .topbar {
-    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .back-btn {
-    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
-    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
-    text-decoration: none; transition: background 0.2s;
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.2); }
-  .topbar-title {
-    font-size: 1.3rem; font-weight: 800;
-    background: linear-gradient(90deg, #fda73c, #e84393);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .sound-btn {
-    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
-    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
-    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
-  }
-  .sound-btn:hover { background: rgba(255,255,255,0.22); }
-  .sound-btn.off { opacity: 0.5; }
+.tab-btn {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 10px 22px; border-radius: 18px; border: none;
+  cursor: pointer; font-family: 'Baloo Tamma 2', cursive;
+  font-weight: 800; color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.07);
+  transition: all 0.22s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap; position: relative;
+}
+.tab-btn .t-icon { font-size: 1.7rem; line-height: 1; }
+.tab-btn .t-kn   { font-size: 0.95rem; }
+.tab-btn .t-en   { font-size: 0.68rem; opacity: 0.55; font-weight: 600; }
+.tab-btn.active  { color: #1a1a2e; transform: translateY(-3px) scale(1.06); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
 
-  .hero { text-align: center; padding: 26px 20px 10px; }
-  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: heartbeat 1.8s ease-in-out infinite; }
-  @keyframes heartbeat {
-    0%,100%{transform:scale(1)} 14%{transform:scale(1.18)}
-    28%{transform:scale(1)} 42%{transform:scale(1.12)} 56%{transform:scale(1)}
-  }
-  .hero h1 {
-    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
-    background: linear-gradient(135deg, #fda73c, #e84393, #ff6b6b);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+.tab-btn[data-t="nuclear"].active   { background: linear-gradient(135deg,#fda73c,#e17055); }
+.tab-btn[data-t="extended"].active  { background: linear-gradient(135deg,#e84393,#c0336f); color: white; }
+.tab-btn[data-t="sentences"].active { background: linear-gradient(135deg,#a29bfe,#6c5ce7); color: white; }
 
-  /* TABS */
-  .tabs {
-    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-    padding: 12px 20px 4px; max-width: 1100px; margin: 0 auto;
-  }
-  .tab {
-    padding: 9px 18px; border-radius: 14px;
-    font-family: 'Baloo Tamma 2', cursive; font-size: 0.88rem; font-weight: 700;
-    cursor: pointer; border: none; transition: all 0.2s;
-    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5);
-  }
-  .tab.active-nuclear  { background: linear-gradient(135deg,#fda73c,#e17055); color:white; box-shadow:0 4px 16px rgba(253,167,60,0.4); }
-  .tab.active-extended { background: linear-gradient(135deg,#e84393,#c0336f); color:white; box-shadow:0 4px 16px rgba(232,67,147,0.4); }
-  .tab.active-sentences{ background: linear-gradient(135deg,#a29bfe,#6c5ce7); color:white; box-shadow:0 4px 16px rgba(162,155,254,0.4); }
-  .tab:hover:not([class*='active']) { background: rgba(255,255,255,0.13); color:white; }
+.tab-count {
+  position: absolute; top: 5px; right: 7px;
+  background: rgba(255,255,255,0.22); border-radius: 50px;
+  padding: 1px 6px; font-size: 0.62rem; font-weight: 900;
+}
+.tab-btn.active .tab-count { background: rgba(0,0,0,0.12); }
 
-  .tts-notice {
-    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
-    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
-    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
-    max-width: 1100px; margin: 12px auto 4px;
-  }
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; }
 
-  /* GRID */
-  .grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-    gap: 16px; padding: 16px 24px 52px; max-width: 1100px; margin: 0 auto;
-  }
+/* ── PANEL HERO ── */
+.panel-hero {
+  padding: 30px 24px 20px; text-align: center; position: relative; overflow: hidden;
+}
+.panel-hero h2 { font-size: 2.6rem; font-weight: 900; line-height: 1.1; margin-bottom: 6px; }
+.panel-hero p  { font-size: 1.05rem; font-weight: 700; opacity: 0.65; margin-bottom: 14px; }
+.tap-hint {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 2.5px dashed currentColor; border-radius: 50px;
+  padding: 7px 20px; font-size: 0.98rem; font-weight: 800; opacity: 0.75;
+  animation: wag 2s ease-in-out infinite;
+}
+@keyframes wag { 0%,100%{transform:rotate(-1.5deg);} 50%{transform:rotate(1.5deg);} }
+.hf {
+  position: absolute; font-size: 3.5rem;
+  animation: fy 4s ease-in-out infinite; pointer-events: none; opacity: 0.14;
+}
+@keyframes fy { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-18px) rotate(8deg);} }
 
-  .card {
-    border-radius: 22px; overflow: hidden; cursor: pointer;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    transition: transform 0.18s, box-shadow 0.18s;
-    animation: popIn 0.42s both;
-  }
-  @keyframes popIn { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
-  .card:nth-child(1){animation-delay:0.02s} .card:nth-child(2){animation-delay:0.05s}
-  .card:nth-child(3){animation-delay:0.08s} .card:nth-child(4){animation-delay:0.11s}
-  .card:nth-child(5){animation-delay:0.14s} .card:nth-child(6){animation-delay:0.17s}
-  .card:nth-child(7){animation-delay:0.20s} .card:nth-child(8){animation-delay:0.23s}
-  .card:nth-child(9){animation-delay:0.26s} .card:nth-child(10){animation-delay:0.29s}
-  .card:nth-child(11){animation-delay:0.32s} .card:nth-child(12){animation-delay:0.35s}
+/* ── CARD GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 22px; padding: 14px 26px 60px;
+  max-width: 1300px; margin: 0 auto;
+}
 
-  .card:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 48px rgba(0,0,0,0.55); }
-  .card:active { transform: scale(0.94); }
-  .card.playing { animation: fpulse 0.5s ease !important; }
-  @keyframes fpulse { 0%{transform:scale(1)} 40%{transform:scale(1.13)} 100%{transform:scale(1)} }
+/* ── CARD ── */
+.card {
+  border-radius: var(--radius); background: white;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+  cursor: pointer; overflow: hidden;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+  animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  border: 3.5px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.5) rotate(-6deg); }
+  to   { opacity:1; transform:scale(1); }
+}
+.card:hover { transform:translateY(-12px) scale(1.04) rotate(.8deg); box-shadow:0 24px 56px rgba(0,0,0,0.14); }
+.card:active { transform:scale(0.91); }
+.card.playing { animation: cb .5s cubic-bezier(.34,1.56,.64,1) !important; }
+@keyframes cb { 0%{transform:scale(1);} 30%{transform:scale(1.22) rotate(-4deg);} 65%{transform:scale(.94) rotate(2deg);} 100%{transform:scale(1);} }
 
-  .item-face {
-    height: 108px; display: flex; align-items: center; justify-content: center;
-    font-size: 3.6rem; position: relative;
-  }
-  .item-face::after { content:'❤️'; position:absolute; bottom:6px; right:10px; font-size:0.85rem; opacity:0.55; }
+.card-face {
+  height: 155px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5.2rem; position: relative;
+}
+.heart-pop {
+  position: absolute; top: 8px; right: 12px;
+  font-size: 1.5rem; transform: scale(0); opacity: 0;
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1); pointer-events: none;
+}
+.card.playing .heart-pop { transform: scale(1) rotate(15deg); opacity: 1; }
+.card.learned .heart-pop { transform: scale(0.85); opacity: 0.5; }
 
-  .card-info {
-    padding: 11px 10px 15px; text-align: center;
-    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
-  }
-  .card-kn { font-size: 1.1rem; font-weight: 800; color: #fff; line-height: 1.2; }
-  .card-en { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.42); margin-top: 2px; font-style: italic; }
-  .card-relation { font-size: 0.68rem; color: rgba(255,255,255,0.28); margin-top: 4px; }
-  .card-side {
-    font-size: 0.65rem; margin-top: 3px;
-    padding: 2px 8px; border-radius: 8px; display: inline-block;
-    font-weight: 700;
-  }
-  .side-paternal { background: rgba(77,150,255,0.2); color: #74b9ff; }
-  .side-maternal { background: rgba(232,67,147,0.2); color: #fd79a8; }
+/* side badge top-left */
+.side-badge {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 0.65rem; font-weight: 900;
+  padding: 3px 9px; border-radius: 50px;
+  letter-spacing: 0.3px;
+}
+.side-p { background: #dbeafe; color: #1d4ed8; }
+.side-m { background: #fce7f3; color: #9d174d; }
 
-  /* SENTENCES TAB */
-  .sentences-wrap {
-    padding: 16px 24px 52px; max-width: 900px; margin: 0 auto;
-    display: none;
-  }
-  .sentences-wrap.active { display: block; }
+.card-info { padding: 14px 12px 20px; text-align: center; border-top: 3px solid rgba(0,0,0,0.05); }
+.kn-word { font-size: 1.75rem; font-weight: 900; color: #1a1a2e; line-height: 1.1; }
+.en-word { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 3px; opacity: 0.38; }
+.relation-pill {
+  display: inline-block; margin-top: 9px; border-radius: 50px;
+  padding: 5px 14px; font-size: 0.82rem; font-weight: 800; color: white;
+}
 
-  .sentence-group-title {
-    font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.35);
-    letter-spacing: 1px; text-transform: uppercase; margin: 16px 0 10px;
-  }
+/* ── SENTENCES PANEL ── */
+.sentences-wrap {
+  max-width: 920px; margin: 0 auto;
+  padding: 14px 26px 60px;
+}
 
-  .sentence-card {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px; padding: 14px 18px; margin-bottom: 10px;
-    cursor: pointer; transition: all 0.18s;
-    display: flex; align-items: flex-start; gap: 12px;
-    animation: popIn 0.4s both;
-  }
-  .sentence-card:hover { background: rgba(255,255,255,0.1); transform: translateX(6px); }
-  .sentence-card.playing { background: rgba(255,200,100,0.15); border-color: rgba(255,200,100,0.3); }
-  .s-emoji { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
-  .s-kn { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.5; }
-  .s-en { font-size: 0.73rem; color: rgba(255,255,255,0.38); font-style: italic; margin-top: 2px; }
+.sent-group { margin-bottom: 28px; }
 
-  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
+.sent-group-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.2rem; font-weight: 900;
+  background: white;
+  border-radius: 50px;
+  padding: 10px 22px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  width: fit-content;
+}
 
-  @media(max-width:480px){
-    .grid { grid-template-columns: repeat(3,1fr); gap: 11px; padding: 10px 13px 32px; }
-    .item-face { height: 84px; font-size: 2.8rem; }
-    .card-kn { font-size: 0.9rem; }
-    .hero h1 { font-size: 1.75rem; }
-    .sentences-wrap { padding: 12px 14px 40px; }
-  }
+.sent-card {
+  background: white;
+  border: 3px solid transparent;
+  border-radius: 22px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  display: flex; align-items: flex-start; gap: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+  transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.18s;
+  animation: popIn 0.45s cubic-bezier(.34,1.56,.64,1) both;
+  -webkit-tap-highlight-color: transparent;
+}
+.sent-card:hover { transform: translateX(8px) scale(1.01); box-shadow: 0 10px 32px rgba(0,0,0,0.12); }
+.sent-card:active { transform: scale(0.97); }
+.sent-card.playing { border-color: #fda73c; background: #fff8ee; }
+
+.sent-emoji {
+  font-size: 2.6rem; flex-shrink: 0;
+  background: #fff5e6; border-radius: 16px;
+  width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+}
+.sent-body { flex: 1; }
+.sent-kn {
+  font-size: 1.15rem; font-weight: 800; color: #1a1a2e;
+  line-height: 1.5;
+}
+.sent-en {
+  font-size: 0.8rem; font-weight: 700;
+  color: #aaa; margin-top: 4px; font-style: italic;
+}
+.sent-play {
+  flex-shrink: 0; font-size: 1.4rem;
+  background: #f3f4f6; border-radius: 50%;
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  align-self: center;
+}
+.sent-card:hover .sent-play { background: #fda73c; }
+.sent-card.playing .sent-play { background: #fda73c; animation: spinPop 0.4s ease; }
+@keyframes spinPop { 0%{transform:scale(0.8) rotate(-20deg);} 100%{transform:scale(1) rotate(0);} }
+
+/* ── CONFETTI ── */
+.cf { position:fixed; border-radius:3px; top:-20px; pointer-events:none; z-index:9999; animation:cff 1.4s ease-in forwards; }
+@keyframes cff { to { transform: translateY(110vh) rotate(600deg); opacity:0; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 580px) {
+  .grid { grid-template-columns: repeat(2,1fr); gap:13px; padding:10px 12px 44px; }
+  .card-face { height:115px; font-size:3.8rem; }
+  .kn-word { font-size:1.35rem; }
+  .panel-hero h2 { font-size:2rem; }
+  .sentences-wrap { padding: 10px 14px 44px; }
+  .sent-kn { font-size: 1rem; }
+}
+@media (min-width:900px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); }
+  .card-face { height:172px; font-size:5.8rem; }
+  .kn-word { font-size:2rem; }
+}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <a href="/class/ukg/kannada" class="back-btn">←</a>
-    <span class="topbar-title">ನನ್ನ ಕುಟುಂಬ</span>
-  </div>
-  <div class="topbar-right">
-    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
-      <span id="soundIcon">🔊</span>
-      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
-    </button>
+  <div class="topbar-title">❤️ ನನ್ನ ಕುಟುಂಬ</div>
+  <div class="top-right">
+    <div class="score-pill" id="scorePill">⭐ 0 / 18</div>
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
   </div>
 </div>
 
-<div class="hero">
-  <div class="hero-emoji">👨‍👩‍👧‍👦</div>
-  <h1>ನನ್ನ ಕುಟುಂಬ</h1>
-  <p>ಸಂಬಂಧಗಳು • ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ!</p>
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-t="nuclear" onclick="switchTab('nuclear',this)">
+    <span class="t-icon">🏠</span>
+    <span class="t-kn">ತಕ್ಷಣದ</span>
+    <span class="t-en">Nuclear</span>
+    <span class="tab-count" id="cnt-nuclear">0/6</span>
+  </button>
+  <button class="tab-btn" data-t="extended" onclick="switchTab('extended',this)">
+    <span class="t-icon">👨‍👩‍👧</span>
+    <span class="t-kn">ವಿಸ್ತೃತ</span>
+    <span class="t-en">Extended</span>
+    <span class="tab-count" id="cnt-extended">0/12</span>
+  </button>
+  <button class="tab-btn" data-t="sentences" onclick="switchTab('sentences',this)">
+    <span class="t-icon">📝</span>
+    <span class="t-kn">ವಾಕ್ಯಗಳು</span>
+    <span class="t-en">Sentences</span>
+  </button>
+</nav>
+
+<!-- ══ PANEL: NUCLEAR ══ -->
+<div class="panel active" id="panel-nuclear">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fff3e0,#fce4ec);">
+    <span class="hf" style="top:8px;left:4%;">🏠</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">💛</span>
+    <h2 style="color:#e65100;">🏠 ತಕ್ಷಣದ ಕುಟುಂಬ</h2>
+    <p style="color:#bf360c;">My Immediate Family</p>
+    <span class="tap-hint" style="color:#e65100;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-nuclear"></div>
 </div>
 
-<div class="tabs">
-  <button class="tab active-nuclear" id="tab-nuclear"   onclick="switchTab('nuclear')">🏠 ತಕ್ಷಣದ ಕುಟುಂಬ</button>
-  <button class="tab" id="tab-extended" onclick="switchTab('extended')">👨‍👩‍👧 ವಿಸ್ತೃತ ಕುಟುಂಬ</button>
-  <button class="tab" id="tab-sentences" onclick="switchTab('sentences')">📝 ವಾಕ್ಯಗಳು</button>
+<!-- ══ PANEL: EXTENDED ══ -->
+<div class="panel" id="panel-extended">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fce4ec,#ede7f6);">
+    <span class="hf" style="top:8px;left:4%;">👴</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">💝</span>
+    <h2 style="color:#880e4f;">👨‍👩‍👧 ವಿಸ್ತೃತ ಕುಟುಂಬ</h2>
+    <p style="color:#ad1457;">Extended Family</p>
+    <div style="display:flex;justify-content:center;gap:12px;margin-top:10px;flex-wrap:wrap;">
+      <span style="background:#dbeafe;color:#1d4ed8;padding:6px 16px;border-radius:50px;font-weight:800;font-size:0.88rem;">🔵 ಅಪ್ಪನ ಕಡೆ · Paternal</span>
+      <span style="background:#fce7f3;color:#9d174d;padding:6px 16px;border-radius:50px;font-weight:800;font-size:0.88rem;">🩷 ಅಮ್ಮನ ಕಡೆ · Maternal</span>
+    </div>
+    <br/>
+    <span class="tap-hint" style="color:#880e4f;">👆 ಕಾರ್ಡ್ ಒತ್ತಿ ಹೆಸರು ಕೇಳಿ!</span>
+  </div>
+  <div class="grid" id="grid-extended"></div>
 </div>
 
-<div class="tts-notice">
-  <span>📱</span>
-  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+<!-- ══ PANEL: SENTENCES ══ -->
+<div class="panel" id="panel-sentences">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#ede7f6,#e8eaf6);">
+    <span class="hf" style="top:8px;left:4%;">📖</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">✏️</span>
+    <h2 style="color:#4a148c;">📝 ವಾಕ್ಯಗಳು</h2>
+    <p style="color:#6a1b9a;">Family Sentences · ಕಾರ್ಡ್ ಒತ್ತಿ ಕೇಳಿ</p>
+    <span class="tap-hint" style="color:#4a148c;">👆 ಒತ್ತಿ ವಾಕ್ಯ ಕೇಳಿ!</span>
+  </div>
+  <div class="sentences-wrap" id="sentWrap"></div>
 </div>
-
-<div class="grid" id="grid"></div>
-<div class="sentences-wrap" id="sentencesWrap"></div>
-<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
 
 <script>
-const nuclear = [
-  { kn:'ಅಪ್ಪ',       en:'Father',         emoji:'👨', relation:'ತಂದೆ',         side:'', bg:'linear-gradient(145deg,#1a5276,#1a3a5e)' },
-  { kn:'ಅಮ್ಮ',       en:'Mother',         emoji:'👩', relation:'ತಾಯಿ',         side:'', bg:'linear-gradient(145deg,#e84393,#a0205e)' },
-  { kn:'ಅಣ್ಣ',       en:'Elder Brother',  emoji:'👦', relation:'ಹಿರಿಯ ಸಹೋದರ', side:'', bg:'linear-gradient(145deg,#2874a6,#1a5276)' },
-  { kn:'ಅಕ್ಕ',       en:'Elder Sister',   emoji:'👧', relation:'ಹಿರಿಯ ಸಹೋದರಿ',side:'', bg:'linear-gradient(145deg,#c0396b,#922b51)' },
-  { kn:'ತಮ್ಮ',       en:'Younger Brother',emoji:'🧒', relation:'ಕಿರಿಯ ಸಹೋದರ', side:'', bg:'linear-gradient(145deg,#117a65,#0e6655)' },
-  { kn:'ತಂಗಿ',       en:'Younger Sister', emoji:'👶', relation:'ಕಿರಿಯ ಸಹೋದರಿ',side:'', bg:'linear-gradient(145deg,#d4619a,#a0397a)' },
+// ══════════ DATA ══════════
+const NUCLEAR = [
+  {kn:'ಅಪ್ಪ',   en:'Father',          emoji:'👨', relation:'ತಂದೆ',           side:'',  bg:'#e3f2fd', border:'#2196F3', pill:'#0D47A1'},
+  {kn:'ಅಮ್ಮ',   en:'Mother',          emoji:'👩', relation:'ತಾಯಿ',           side:'',  bg:'#fce4ec', border:'#E91E63', pill:'#880E4F'},
+  {kn:'ಅಣ್ಣ',   en:'Elder Brother',   emoji:'👦', relation:'ಹಿರಿಯ ಸಹೋದರ',  side:'',  bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20'},
+  {kn:'ಅಕ್ಕ',   en:'Elder Sister',    emoji:'👧', relation:'ಹಿರಿಯ ಸಹೋದರಿ', side:'',  bg:'#fff3e0', border:'#FF9800', pill:'#E65100'},
+  {kn:'ತಮ್ಮ',   en:'Younger Brother', emoji:'🧒', relation:'ಕಿರಿಯ ಸಹೋದರ',  side:'',  bg:'#e0f2f1', border:'#009688', pill:'#004D40'},
+  {kn:'ತಂಗಿ',   en:'Younger Sister',  emoji:'👶', relation:'ಕಿರಿಯ ಸಹೋದರಿ', side:'',  bg:'#f3e5f5', border:'#9C27B0', pill:'#6A1B9A'},
 ];
 
-const extended = [
-  { kn:'ತಾತ (ಅಪ್ಪನ)',  en:'Paternal Grandfather', emoji:'👴', relation:'ಅಪ್ಪನ ತಂದೆ',   side:'paternal', bg:'linear-gradient(145deg,#6e4a2a,#4e2a0a)' },
-  { kn:'ಅಜ್ಜಿ (ಅಪ್ಪನ)', en:'Paternal Grandmother',emoji:'👵', relation:'ಅಪ್ಪನ ತಾಯಿ',   side:'paternal', bg:'linear-gradient(145deg,#8e5a3a,#6e3a1a)' },
-  { kn:'ತಾತ (ಅಮ್ಮನ)',  en:'Maternal Grandfather', emoji:'👴', relation:'ಅಮ್ಮನ ತಂದೆ',   side:'maternal', bg:'linear-gradient(145deg,#5a3a6e,#3a1a4e)' },
-  { kn:'ಅಜ್ಜಿ (ಅಮ್ಮನ)', en:'Maternal Grandmother',emoji:'👵', relation:'ಅಮ್ಮನ ತಾಯಿ',   side:'maternal', bg:'linear-gradient(145deg,#9a4a7e,#7a2a5e)' },
-  { kn:'ಚಿಕ್ಕಪ್ಪ',     en:'Uncle (Paternal)',     emoji:'🧔', relation:'ಅಪ್ಪನ ತಮ್ಮ',   side:'paternal', bg:'linear-gradient(145deg,#1f618d,#17496e)' },
-  { kn:'ಚಿಕ್ಕಮ್ಮ',     en:'Aunt (Paternal)',      emoji:'👩‍🦱',relation:'ಚಿಕ್ಕಪ್ಪನ ಹೆಂಡತಿ',side:'paternal', bg:'linear-gradient(145deg,#a93277,#7d1f57)' },
-  { kn:'ಮಾವ',          en:'Uncle (Maternal)',     emoji:'🧓', relation:'ಅಮ್ಮನ ಅಣ್ಣ/ತಮ್ಮ',side:'maternal', bg:'linear-gradient(145deg,#1e8bc3,#1a6fa0)' },
-  { kn:'ಅತ್ತೆ',        en:'Aunt (Maternal)',      emoji:'👩', relation:'ಅಮ್ಮನ ಅಕ್ಕ/ತಂಗಿ', side:'maternal', bg:'linear-gradient(145deg,#e8407a,#c0305a)' },
-  { kn:'ಅಣ್ಣನ ಮಗ',    en:'Nephew',               emoji:'👦', relation:'ಅಣ್ಣ/ಅಕ್ಕನ ಮಗ', side:'', bg:'linear-gradient(145deg,#2874a6,#1a5276)' },
-  { kn:'ಅಣ್ಣನ ಮಗಳು',  en:'Niece',                emoji:'👧', relation:'ಅಣ್ಣ/ಅಕ್ಕನ ಮಗಳು',side:'', bg:'linear-gradient(145deg,#c0396b,#922b51)' },
-  { kn:'ಸೋದರ ಮಾವ',    en:'Cousin Brother',       emoji:'🧒', relation:'ಚಿಕ್ಕಪ್ಪ/ಮಾವನ ಮಗ',side:'', bg:'linear-gradient(145deg,#117a65,#0e6655)' },
-  { kn:'ಸೋದರ ಸೊಸೆ',   en:'Cousin Sister',        emoji:'👧', relation:'ಚಿಕ್ಕಪ್ಪ/ಮಾವನ ಮಗಳು',side:'', bg:'linear-gradient(145deg,#d4619a,#a0397a)' },
+const EXTENDED = [
+  {kn:'ತಾತ (ಅಪ್ಪನ)',   en:'Paternal Grandfather', emoji:'👴', relation:'ಅಪ್ಪನ ತಂದೆ',        side:'p', bg:'#dbeafe', border:'#3B82F6', pill:'#1d4ed8'},
+  {kn:'ಅಜ್ಜಿ (ಅಪ್ಪನ)',  en:'Paternal Grandmother', emoji:'👵', relation:'ಅಪ್ಪನ ತಾಯಿ',        side:'p', bg:'#dbeafe', border:'#60A5FA', pill:'#2563EB'},
+  {kn:'ಚಿಕ್ಕಪ್ಪ',       en:'Uncle (Paternal)',      emoji:'🧔', relation:'ಅಪ್ಪನ ತಮ್ಮ',        side:'p', bg:'#dbeafe', border:'#93C5FD', pill:'#1D4ED8'},
+  {kn:'ಚಿಕ್ಕಮ್ಮ',       en:'Aunt (Paternal)',       emoji:'👩‍🦱',relation:'ಚಿಕ್ಕಪ್ಪನ ಹೆಂಡತಿ',  side:'p', bg:'#dbeafe', border:'#2196F3', pill:'#0D47A1'},
+  {kn:'ತಾತ (ಅಮ್ಮನ)',   en:'Maternal Grandfather', emoji:'👴', relation:'ಅಮ್ಮನ ತಂದೆ',        side:'m', bg:'#fce7f3', border:'#EC4899', pill:'#9d174d'},
+  {kn:'ಅಜ್ಜಿ (ಅಮ್ಮನ)',  en:'Maternal Grandmother', emoji:'👵', relation:'ಅಮ್ಮನ ತಾಯಿ',        side:'m', bg:'#fce7f3', border:'#F472B6', pill:'#BE185D'},
+  {kn:'ಮಾವ',            en:'Uncle (Maternal)',      emoji:'🧓', relation:'ಅಮ್ಮನ ಅಣ್ಣ/ತಮ್ಮ',   side:'m', bg:'#fce7f3', border:'#F9A8D4', pill:'#9D174D'},
+  {kn:'ಅತ್ತೆ',          en:'Aunt (Maternal)',       emoji:'👩', relation:'ಅಮ್ಮನ ಅಕ್ಕ/ತಂಗಿ',  side:'m', bg:'#fce7f3', border:'#E91E63', pill:'#880E4F'},
+  {kn:'ಅಣ್ಣನ ಮಗ',      en:'Nephew',               emoji:'👦', relation:'ಅಣ್ಣ/ಅಕ್ಕನ ಮಗ',    side:'',  bg:'#f1f8e9', border:'#8BC34A', pill:'#33691E'},
+  {kn:'ಅಣ್ಣನ ಮಗಳು',    en:'Niece',                emoji:'👧', relation:'ಅಣ್ಣ/ಅಕ್ಕನ ಮಗಳು',  side:'',  bg:'#fff8e1', border:'#FFC107', pill:'#F57F17'},
+  {kn:'ಸೋದರ ಮಾವ',      en:'Cousin Brother',       emoji:'🧒', relation:'ಮಾವ/ಚಿಕ್ಕಪ್ಪನ ಮಗ',  side:'',  bg:'#e8f5e9', border:'#4CAF50', pill:'#1B5E20'},
+  {kn:'ಸೋದರ ಸೊಸೆ',     en:'Cousin Sister',        emoji:'👧', relation:'ಮಾವ/ಚಿಕ್ಕಪ್ಪನ ಮಗಳು',side:'',  bg:'#f3e5f5', border:'#9C27B0', pill:'#6A1B9A'},
 ];
 
-const sentenceGroups = [
+const SENTENCES = [
   {
-    title: '🏠 ತಕ್ಷಣದ ಕುಟುಂಬ',
-    items: [
-      { emoji:'👨', kn:'ಇವರು ನನ್ನ ಅಪ್ಪ. ಅವರು ನನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತಾರೆ.', en:'This is my father. He loves me.' },
-      { emoji:'👩', kn:'ಇವರು ನನ್ನ ಅಮ್ಮ. ಅವರು ನನಗೆ ಅಡುಗೆ ಮಾಡುತ್ತಾರೆ.', en:'This is my mother. She cooks for me.' },
-      { emoji:'👦', kn:'ಇವರು ನನ್ನ ಅಣ್ಣ. ಅವರು ನನಗೆ ಓದಲು ಸಹಾಯ ಮಾಡುತ್ತಾರೆ.', en:'This is my brother. He helps me study.' },
-      { emoji:'👨‍👩‍👧‍👦', kn:'ನಾವು ಒಂದು ಸುಖಿ ಕುಟುಂಬ.', en:'We are a happy family.' },
+    title:'🏠 ತಕ್ಷಣದ ಕುಟುಂಬ', color:'#e65100', bg:'#fff3e0',
+    items:[
+      {emoji:'👨', kn:'ಇವರು ನನ್ನ ಅಪ್ಪ. ಅವರು ನನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತಾರೆ.', en:'This is my father. He loves me.'},
+      {emoji:'👩', kn:'ಇವರು ನನ್ನ ಅಮ್ಮ. ಅವರು ನನಗೆ ಅಡುಗೆ ಮಾಡುತ್ತಾರೆ.', en:'This is my mother. She cooks for me.'},
+      {emoji:'👦', kn:'ಇವರು ನನ್ನ ಅಣ್ಣ. ಅವರು ನನಗೆ ಓದಲು ಸಹಾಯ ಮಾಡುತ್ತಾರೆ.', en:'This is my brother. He helps me study.'},
+      {emoji:'👨‍👩‍👧‍👦', kn:'ನಾವು ಒಂದು ಸುಖಿ ಕುಟುಂಬ.', en:'We are a happy family.'},
     ]
   },
   {
-    title: '👴 ಅಜ್ಜ ಅಜ್ಜಿ',
-    items: [
-      { emoji:'👴', kn:'ಇವರು ನನ್ನ ತಾತ. ಅವರು ನನಗೆ ಕಥೆ ಹೇಳುತ್ತಾರೆ.', en:'This is my grandfather. He tells me stories.' },
-      { emoji:'👵', kn:'ಇವರು ನನ್ನ ಅಜ್ಜಿ. ಅವರು ನನಗೆ ತಿಂಡಿ ಮಾಡಿ ಕೊಡುತ್ತಾರೆ.', en:'This is my grandmother. She makes snacks for me.' },
-      { emoji:'🏡', kn:'ನಾನು ರಜೆಯಲ್ಲಿ ತಾತ ಅಜ್ಜಿ ಮನೆಗೆ ಹೋಗುತ್ತೇನೆ.', en:'I go to grandparents\' home during holidays.' },
+    title:'👴 ಅಜ್ಜ ಅಜ್ಜಿ', color:'#01579b', bg:'#e1f5fe',
+    items:[
+      {emoji:'👴', kn:'ಇವರು ನನ್ನ ತಾತ. ಅವರು ನನಗೆ ಕಥೆ ಹೇಳುತ್ತಾರೆ.', en:'This is my grandfather. He tells me stories.'},
+      {emoji:'👵', kn:'ಇವರು ನನ್ನ ಅಜ್ಜಿ. ಅವರು ನನಗೆ ತಿಂಡಿ ಮಾಡಿ ಕೊಡುತ್ತಾರೆ.', en:'This is my grandmother. She makes snacks for me.'},
+      {emoji:'🏡', kn:'ನಾನು ರಜೆಯಲ್ಲಿ ತಾತ ಅಜ್ಜಿ ಮನೆಗೆ ಹೋಗುತ್ತೇನೆ.', en:'I visit my grandparents during holidays.'},
     ]
   },
   {
-    title: '❤️ ಕುಟುಂಬ ಮೌಲ್ಯಗಳು',
-    items: [
-      { emoji:'🙏', kn:'ನಾನು ಹಿರಿಯರಿಗೆ ನಮಸ್ಕಾರ ಮಾಡುತ್ತೇನೆ.', en:'I bow to elders with respect.' },
-      { emoji:'🤝', kn:'ಕುಟುಂಬದಲ್ಲಿ ಎಲ್ಲರೂ ಒಟ್ಟಿಗೆ ಇರುತ್ತೇವೆ.', en:'In family, we all stay together.' },
-      { emoji:'💝', kn:'ಕುಟುಂಬ ದೇವರ ಕೊಡುಗೆ.', en:'Family is a gift from God.' },
+    title:'❤️ ಕುಟುಂಬ ಮೌಲ್ಯಗಳು', color:'#4a148c', bg:'#ede7f6',
+    items:[
+      {emoji:'🙏', kn:'ನಾನು ಹಿರಿಯರಿಗೆ ನಮಸ್ಕಾರ ಮಾಡುತ್ತೇನೆ.', en:'I bow to elders with respect.'},
+      {emoji:'🤝', kn:'ಕುಟುಂಬದಲ್ಲಿ ಎಲ್ಲರೂ ಒಟ್ಟಿಗೆ ಇರುತ್ತೇವೆ.', en:'In family, we all stay together.'},
+      {emoji:'💝', kn:'ಕುಟುಂಬ ದೇವರ ಕೊಡುಗೆ.', en:'Family is a gift from God.'},
     ]
   },
 ];
 
+// ══════════ STATE ══════════
+const TOTAL_CARDS = NUCLEAR.length + EXTENDED.length;
 let soundOn = true;
-let activeTab = 'nuclear';
+const learned = { nuclear: new Set(), extended: new Set() };
 
-function toggleSound() {
-  soundOn = !soundOn;
-  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
-  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
-  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+document.getElementById('scorePill').textContent = `⭐ 0 / ${TOTAL_CARDS}`;
+
+// ══════════ TABS ══════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
 }
 
+// ══════════ SOUND ══════════
+function toggleSound() {
+  soundOn = !soundOn;
+  const b = document.getElementById('soundBtn');
+  b.textContent = soundOn ? '🔊' : '🔇';
+  b.classList.toggle('off', !soundOn);
+}
 function speak(text) {
   if (!soundOn || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'kn-IN'; u.rate = 0.85; u.pitch = 1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const kn = voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn'));
-  if (!kn) return;
-  u.voice = kn;
+  u.lang='kn-IN'; u.rate=0.82; u.pitch=1.1;
+  const v = window.speechSynthesis.getVoices().find(x=>x.lang==='kn-IN'||x.lang.startsWith('kn'));
+  if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 
-function switchTab(tab) {
-  activeTab = tab;
-  document.getElementById('tab-nuclear').className    = 'tab' + (tab==='nuclear'    ? ' active-nuclear'   : '');
-  document.getElementById('tab-extended').className   = 'tab' + (tab==='extended'   ? ' active-extended'  : '');
-  document.getElementById('tab-sentences').className  = 'tab' + (tab==='sentences'  ? ' active-sentences' : '');
+// ══════════ SCORE ══════════
+function updateScore() {
+  const tot = learned.nuclear.size + learned.extended.size;
+  document.getElementById('scorePill').textContent = `⭐ ${tot} / ${TOTAL_CARDS}`;
+}
+function updateCnt(tid) {
+  const el = document.getElementById('cnt-'+tid);
+  if (el) el.textContent = `${learned[tid].size}/${tid==='nuclear'?NUCLEAR.length:EXTENDED.length}`;
+}
 
-  const grid = document.getElementById('grid');
-  const sw   = document.getElementById('sentencesWrap');
-
-  if (tab === 'sentences') {
-    grid.style.display = 'none';
-    sw.classList.add('active');
-    buildSentences();
-  } else {
-    grid.style.display = 'grid';
-    sw.classList.remove('active');
-    buildGrid();
+// ══════════ CONFETTI ══════════
+const CC = ['#fda73c','#e84393','#a29bfe','#06D6A0','#FF6B9D','#FFD93D','#43e97b'];
+function confetti(x,y) {
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='cf';
+    el.style.cssText=`left:${x+(Math.random()-.5)*160}px;background:${CC[i%CC.length]};animation-duration:${.9+Math.random()*.9}s;animation-delay:${Math.random()*.2}s;width:${6+Math.random()*10}px;height:${8+Math.random()*14}px;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2200);
   }
 }
 
-function buildGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  const data = activeTab === 'nuclear' ? nuclear : extended;
-  data.forEach(f => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    const sideClass = f.side === 'paternal' ? 'side-paternal' : f.side === 'maternal' ? 'side-maternal' : '';
-    const sideLabel = f.side === 'paternal' ? '🔵 ಅಪ್ಪನ ಕಡೆ' : f.side === 'maternal' ? '🩷 ಅಮ್ಮನ ಕಡೆ' : '';
-    card.innerHTML = `
-      <div class="item-face" style="background:${f.bg};">${f.emoji}</div>
-      <div class="card-info">
-        <div class="card-kn">${f.kn}</div>
-        <div class="card-en">${f.en}</div>
-        <div class="card-relation">${f.relation}</div>
-        ${sideLabel ? `<div class="card-side ${sideClass}">${sideLabel}</div>` : ''}
-      </div>
-    `;
-    card.addEventListener('click', () => {
-      card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
-      speak(f.kn);
-      setTimeout(() => card.classList.remove('playing'), 500);
-    });
-    grid.appendChild(card);
+// ══════════ BUILD FAMILY CARDS ══════════
+let di = 0;
+function makeCard(f, tid) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.animationDelay = (di++ * 0.05) + 's';
+  card.style.borderColor = f.border;
+
+  const sideBadge = f.side==='p'
+    ? `<span class="side-badge side-p">🔵 ಅಪ್ಪನ ಕಡೆ</span>`
+    : f.side==='m'
+    ? `<span class="side-badge side-m">🩷 ಅಮ್ಮನ ಕಡೆ</span>`
+    : '';
+
+  card.innerHTML = `
+    <div class="card-face" style="background:${f.bg};">
+      <span class="heart-pop">❤️</span>
+      ${sideBadge}
+      <span style="filter:drop-shadow(0 6px 14px rgba(0,0,0,0.18));line-height:1;">${f.emoji}</span>
+    </div>
+    <div class="card-info">
+      <div class="kn-word">${f.kn}</div>
+      <div class="en-word">${f.en}</div>
+      <div class="relation-pill" style="background:${f.pill};">${f.relation}</div>
+    </div>`;
+
+  card.addEventListener('click', e => {
+    card.classList.remove('playing'); void card.offsetWidth; card.classList.add('playing');
+    speak(f.kn);
+    setTimeout(() => card.classList.remove('playing'), 520);
+    if (learned[tid] && !learned[tid].has(f.kn)) {
+      learned[tid].add(f.kn);
+      card.classList.add('learned');
+      updateScore(); updateCnt(tid);
+      const r = card.getBoundingClientRect();
+      confetti(r.left + r.width/2, r.top + r.height/2);
+    }
   });
+  return card;
 }
 
+// ══════════ BUILD SENTENCE CARDS ══════════
 function buildSentences() {
-  const sw = document.getElementById('sentencesWrap');
-  sw.innerHTML = '';
-  sentenceGroups.forEach(group => {
+  const wrap = document.getElementById('sentWrap');
+  wrap.innerHTML = '';
+  let sd = 0;
+  SENTENCES.forEach(group => {
+    const grp = document.createElement('div');
+    grp.className = 'sent-group';
+
     const title = document.createElement('div');
-    title.className = 'sentence-group-title';
+    title.className = 'sent-group-title';
+    title.style.color = group.color;
+    title.style.border = `2.5px solid ${group.color}22`;
     title.textContent = group.title;
-    sw.appendChild(title);
-    group.items.forEach((s, i) => {
-      const div = document.createElement('div');
-      div.className = 'sentence-card';
-      div.style.animationDelay = (i * 0.06) + 's';
-      div.innerHTML = `
-        <div class="s-emoji">${s.emoji}</div>
-        <div>
-          <div class="s-kn">${s.kn}</div>
-          <div class="s-en">${s.en}</div>
+    grp.appendChild(title);
+
+    group.items.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'sent-card';
+      card.style.animationDelay = (sd++ * 0.06) + 's';
+      card.style.borderColor = group.color + '33';
+      card.innerHTML = `
+        <div class="sent-emoji" style="background:${group.bg};">${s.emoji}</div>
+        <div class="sent-body">
+          <div class="sent-kn">${s.kn}</div>
+          <div class="sent-en">${s.en}</div>
         </div>
-      `;
-      div.addEventListener('click', () => {
-        div.classList.add('playing');
+        <div class="sent-play">🔊</div>`;
+      card.addEventListener('click', () => {
+        card.classList.add('playing');
         speak(s.kn);
-        setTimeout(() => div.classList.remove('playing'), 2500);
+        setTimeout(() => card.classList.remove('playing'), 3000);
       });
-      sw.appendChild(div);
+      grp.appendChild(card);
     });
+    wrap.appendChild(grp);
   });
 }
 
-if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
-buildGrid();
+// ══════════ INIT ══════════
+const gnuc = document.getElementById('grid-nuclear');
+NUCLEAR.forEach(f => gnuc.appendChild(makeCard(f,'nuclear')));
+
+const gext = document.getElementById('grid-extended');
+EXTENDED.forEach(f => gext.appendChild(makeCard(f,'extended')));
+
+buildSentences();
+
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
+}
 </script>
 </body>
 </html>

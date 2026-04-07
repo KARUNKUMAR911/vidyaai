@@ -3,307 +3,486 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ಕನ್ನಡ ಪದ್ಯಗಳು - UKG Kannada</title>
+<title>ಕನ್ನಡ ಪದ್ಯಗಳು - UKG ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@500;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --radius: 28px; --top-h: 70px; }
 
-  :root { --bg: #0a1628; --topbar: #0d1f3c; }
+body {
+  font-family: 'Baloo Tamma 2', cursive;
+  background: #f0f4ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--top-h);
+  background: #1a1a2e;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 300;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+.topbar-title {
+  font-size: 1.55rem; font-weight: 900;
+  background: linear-gradient(90deg, #FDCB6E, #E17055, #FF6FD8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.top-right { display: flex; align-items: center; gap: 10px; }
+.score-pill {
+  background: #FDCB6E; color: #1a1a2e;
+  font-weight: 900; font-size: 1rem;
+  padding: 7px 18px; border-radius: 50px;
+  box-shadow: 0 4px 14px rgba(253,203,110,0.45);
+  white-space: nowrap;
+}
+.sound-btn {
+  background: rgba(255,255,255,0.13);
+  border: 2px solid rgba(255,255,255,0.22);
+  color: white; border-radius: 12px;
+  padding: 8px 14px; font-size: 1.2rem;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s;
+}
+.sound-btn:hover { background: rgba(255,255,255,0.22); }
+.sound-btn.off { opacity: 0.4; }
 
-  body {
-    font-family: 'Baloo Tamma 2', cursive;
-    background: var(--bg); min-height: 100vh; color: #f0f4ff;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(77,150,255,0.13) 0%, transparent 50%),
-      radial-gradient(circle at 90% 70%, rgba(253,203,110,0.1) 0%, transparent 50%);
-  }
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  background: #1a1a2e;
+  padding: 0 12px 14px;
+  gap: 8px;
+  overflow-x: auto; scrollbar-width: none;
+  position: sticky; top: var(--top-h); z-index: 200;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 18px; border-radius: 18px; border: none;
+  cursor: pointer; font-family: 'Baloo Tamma 2', cursive;
+  font-weight: 800; color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.07);
+  transition: all 0.22s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap; position: relative;
+}
+.tab-btn .t-icon { font-size: 1.6rem; line-height: 1; }
+.tab-btn .t-kn   { font-size: 0.88rem; }
+.tab-btn .t-en   { font-size: 0.63rem; opacity: 0.55; font-weight: 600; }
+.tab-btn.active  { color: #1a1a2e; transform: translateY(-3px) scale(1.06); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+.tab-btn[data-t="patriotic"].active { background: linear-gradient(135deg,#FF9933,#138808); color:white; }
+.tab-btn[data-t="nature"].active    { background: linear-gradient(135deg,#43e97b,#38f9d7); }
+.tab-btn[data-t="children"].active  { background: linear-gradient(135deg,#fa709a,#fee140); }
+.tab-count {
+  position: absolute; top: 5px; right: 7px;
+  background: rgba(255,255,255,0.22); border-radius: 50px;
+  padding: 1px 6px; font-size: 0.62rem; font-weight: 900;
+}
+.tab-btn.active .tab-count { background: rgba(0,0,0,0.12); }
 
-  .topbar {
-    background: var(--topbar); border-bottom: 2px solid rgba(255,255,255,0.07);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; height: 64px; position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .back-btn {
-    background: rgba(255,255,255,0.1); border: none; border-radius: 10px;
-    color: white; padding: 8px 14px; font-size: 18px; cursor: pointer;
-    text-decoration: none; transition: background 0.2s;
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.2); }
-  .topbar-title {
-    font-size: 1.3rem; font-weight: 800;
-    background: linear-gradient(90deg, #fdcb6e, #e17055);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .sound-btn {
-    background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 12px; color: white; padding: 8px 16px; font-size: 0.85rem;
-    font-family: 'Baloo Tamma 2', cursive; font-weight: 700; cursor: pointer;
-    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
-  }
-  .sound-btn:hover { background: rgba(255,255,255,0.22); }
-  .sound-btn.off { opacity: 0.5; }
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; }
 
-  .hero { text-align: center; padding: 26px 20px 12px; }
-  .hero-emoji { font-size: 3.2rem; display: inline-block; animation: notes 2s ease-in-out infinite; }
-  @keyframes notes { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-10px) rotate(5deg)} }
-  .hero h1 {
-    font-size: 2.2rem; font-weight: 800; margin-top: 8px;
-    background: linear-gradient(135deg, #fdcb6e, #e17055, #ff6fd8);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .hero p { font-size: 0.92rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+/* ── PANEL HERO ── */
+.panel-hero {
+  padding: 28px 24px 16px; text-align: center; position: relative; overflow: hidden;
+}
+.panel-hero h2 { font-size: 2.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 5px; }
+.panel-hero p  { font-size: 1rem; font-weight: 700; opacity: 0.6; margin-bottom: 13px; }
+.tap-hint {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 2.5px dashed currentColor; border-radius: 50px;
+  padding: 7px 20px; font-size: 0.95rem; font-weight: 800; opacity: 0.7;
+  animation: wag 2s ease-in-out infinite;
+}
+@keyframes wag { 0%,100%{transform:rotate(-1.5deg);} 50%{transform:rotate(1.5deg);} }
+.hf {
+  position: absolute; font-size: 3.5rem;
+  animation: fy 4s ease-in-out infinite; pointer-events: none; opacity: 0.15;
+}
+@keyframes fy { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-18px) rotate(8deg);} }
 
-  .tts-notice {
-    background: rgba(255,209,61,0.1); border: 1px solid rgba(255,209,61,0.28);
-    border-radius: 14px; padding: 10px 16px; font-size: 0.8rem;
-    color: rgba(255,209,61,0.85); display: flex; gap: 8px;
-    max-width: 900px; margin: 12px auto 16px;
-  }
+/* ── RHYME CARDS LIST ── */
+.rhymes-list {
+  display: flex; flex-direction: column; gap: 24px;
+  padding: 14px 26px 60px; max-width: 900px; margin: 0 auto;
+}
 
-  /* RHYME LIST */
-  .rhymes-list {
-    display: flex; flex-direction: column; gap: 20px;
-    padding: 4px 24px 52px; max-width: 900px; margin: 0 auto;
-  }
+/* ── RHYME CARD ── */
+.rhyme-card {
+  border-radius: var(--radius); background: white;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+  overflow: hidden; border: 3.5px solid transparent;
+  animation: slideUp 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  -webkit-tap-highlight-color: transparent;
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(40px) scale(0.95); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.rhyme-card:nth-child(1){ animation-delay:0.05s }
+.rhyme-card:nth-child(2){ animation-delay:0.12s }
+.rhyme-card:nth-child(3){ animation-delay:0.19s }
 
-  .rhyme-card {
-    border-radius: 24px; overflow: hidden; cursor: pointer;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-    transition: transform 0.18s, box-shadow 0.18s;
-    animation: popIn 0.45s both;
-  }
-  @keyframes popIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-  .rhyme-card:nth-child(1){animation-delay:0.05s} .rhyme-card:nth-child(2){animation-delay:0.12s}
-  .rhyme-card:nth-child(3){animation-delay:0.19s} .rhyme-card:nth-child(4){animation-delay:0.26s}
-  .rhyme-card:nth-child(5){animation-delay:0.33s} .rhyme-card:nth-child(6){animation-delay:0.40s}
-  .rhyme-card:hover { transform: translateY(-5px); box-shadow: 0 18px 48px rgba(0,0,0,0.55); }
+/* ── RHYME HEADER ── */
+.rhyme-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 22px 18px; position: relative; cursor: pointer;
+}
+.rhyme-emoji-wrap {
+  width: 68px; height: 68px; border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.6rem; flex-shrink: 0;
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+.rhyme-meta { flex: 1; min-width: 0; }
+.rhyme-title { font-size: 1.25rem; font-weight: 900; color: white; line-height: 1.2; }
+.rhyme-subtitle { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 2px; font-style: italic; }
+.rhyme-badge {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 6px;
+  background: rgba(255,255,255,0.18); border-radius: 50px;
+  padding: 3px 10px; font-size: 0.72rem; font-weight: 800; color: rgba(255,255,255,0.9);
+}
 
-  .rhyme-header {
-    display: flex; align-items: center; gap: 16px; padding: 18px 20px 16px;
-  }
-  .rhyme-emoji { font-size: 2.8rem; flex-shrink: 0; }
-  .rhyme-meta { flex: 1; }
-  .rhyme-title { font-size: 1.25rem; font-weight: 800; color: #fff; line-height: 1.2; }
-  .rhyme-subtitle { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 2px; font-style: italic; }
-  .rhyme-lines-count { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 3px; }
+/* play button */
+.play-btn {
+  width: 54px; height: 54px; border-radius: 50%; border: none;
+  font-size: 1.5rem; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.22);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  color: white; transition: all 0.2s; backdrop-filter: blur(4px);
+}
+.play-btn:hover { background: rgba(255,255,255,0.38); transform: scale(1.1); }
+.play-btn.playing-btn {
+  background: rgba(255,255,255,0.9); color: #1a1a2e;
+  animation: pulse-play 0.8s ease-in-out infinite;
+}
+@keyframes pulse-play { 0%,100%{transform:scale(1);} 50%{transform:scale(1.12);} }
 
-  .play-btn {
-    background: rgba(255,255,255,0.18); border: none; border-radius: 50%;
-    width: 48px; height: 48px; font-size: 1.4rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all 0.2s; color: white;
-  }
-  .play-btn:hover { background: rgba(255,255,255,0.32); transform: scale(1.1); }
-  .play-btn.playing-btn { background: rgba(255,255,255,0.35); animation: spin-play 1s linear infinite; }
-  @keyframes spin-play { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap {
+  padding: 0 22px 14px; background: inherit;
+}
+.progress-bar-bg {
+  height: 6px; border-radius: 6px; background: rgba(255,255,255,0.18); overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 6px; background: rgba(255,255,255,0.8);
+  width: 0%; transition: width 0.4s ease;
+}
 
-  /* line-by-line karaoke area */
-  .karaoke-wrap {
-    background: rgba(0,0,0,0.3); padding: 0 20px 0;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.3s;
-  }
-  .karaoke-wrap.open { max-height: 600px; padding: 16px 20px 20px; }
+/* ── LYRICS AREA ── */
+.lyrics-wrap {
+  border-top: 2px solid rgba(0,0,0,0.06);
+  padding: 18px 22px 22px;
+  background: #fafbff;
+}
+.lyrics-title {
+  font-size: 0.75rem; font-weight: 900; color: #94a3b8;
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px;
+}
+.lyric-line {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 14px; cursor: pointer;
+  transition: all 0.2s; margin-bottom: 4px;
+  border: 2px solid transparent;
+}
+.lyric-line:hover { background: #f0f4ff; border-color: #e2e8f0; }
+.lyric-line.active-line {
+  background: linear-gradient(135deg, #fef9e7, #fdf3d0);
+  border-color: #FDCB6E;
+}
+.lyric-num {
+  font-size: 0.7rem; font-weight: 900; color: #cbd5e1;
+  min-width: 20px; text-align: right; flex-shrink: 0;
+}
+.lyric-line.active-line .lyric-num { color: #f39c12; }
+.lyric-text {
+  font-size: 1.05rem; font-weight: 700; color: #475569; line-height: 1.4; flex: 1;
+}
+.lyric-line.active-line .lyric-text { color: #1a1a2e; font-weight: 900; }
+.lyric-speak-icon {
+  font-size: 0.9rem; opacity: 0; transition: opacity 0.2s; flex-shrink: 0;
+}
+.lyric-line:hover .lyric-speak-icon { opacity: 1; }
+.lyric-line.active-line .lyric-speak-icon { opacity: 1; }
 
-  .lyric-line {
-    font-size: 1.05rem; font-weight: 600; color: rgba(255,255,255,0.55);
-    line-height: 2; letter-spacing: 0.3px; cursor: pointer;
-    border-radius: 8px; padding: 2px 8px; transition: all 0.2s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .lyric-line:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
-  .lyric-line.active-line {
-    color: #fdcb6e; font-weight: 800;
-    background: rgba(253,203,110,0.12);
-    border-left: 3px solid #fdcb6e; padding-left: 10px;
-  }
-  .lyric-num { font-size: 0.65rem; color: rgba(255,255,255,0.2); min-width: 16px; }
+/* ── LEARNED BADGE ── */
+.learned-badge {
+  display: none; align-items: center; gap: 6px;
+  padding: 12px 22px; background: #f0fdf4;
+  border-top: 2px solid #86efac;
+  font-size: 0.9rem; font-weight: 800; color: #15803d;
+}
+.rhyme-card.learned .learned-badge { display: flex; }
 
-  .toggle-btn {
-    background: none; border: none; color: rgba(255,255,255,0.4);
-    font-family: 'Baloo Tamma 2', cursive; font-size: 0.82rem;
-    cursor: pointer; padding: 8px 20px 14px; display: flex;
-    align-items: center; gap: 5px; transition: color 0.2s;
-  }
-  .toggle-btn:hover { color: rgba(255,255,255,0.75); }
+/* ── CONFETTI ── */
+.cf { position:fixed; border-radius:3px; top:-20px; pointer-events:none; z-index:9999; animation:cff 1.4s ease-in forwards; }
+@keyframes cff { to { transform:translateY(110vh) rotate(600deg); opacity:0; } }
 
-  .footer { text-align: center; padding: 14px; color: rgba(255,255,255,0.18); font-size: 0.78rem; }
-
-  @media(max-width:480px){
-    .rhymes-list { padding: 4px 14px 40px; gap: 16px; }
-    .rhyme-title { font-size: 1.05rem; }
-    .rhyme-emoji { font-size: 2.2rem; }
-    .lyric-line { font-size: 0.95rem; }
-    .hero h1 { font-size: 1.8rem; }
-  }
+/* ── RESPONSIVE ── */
+@media (max-width:580px) {
+  .rhymes-list { padding: 10px 12px 44px; gap: 16px; }
+  .rhyme-title { font-size: 1.05rem; }
+  .rhyme-emoji-wrap { width: 56px; height: 56px; font-size: 2rem; }
+  .lyric-text { font-size: 0.95rem; }
+  .panel-hero h2 { font-size: 2rem; }
+  .play-btn { width: 46px; height: 46px; font-size: 1.2rem; }
+}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <a href="/class/ukg/kannada" class="back-btn">←</a>
-    <span class="topbar-title">ಕನ್ನಡ ಪದ್ಯಗಳು</span>
-  </div>
-  <div class="topbar-right">
-    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
-      <span id="soundIcon">🔊</span>
-      <span id="soundLabel">ಧ್ವನಿ ಆನ್</span>
-    </button>
+  <div class="topbar-title">🎵 ಕನ್ನಡ ಪದ್ಯಗಳು</div>
+  <div class="top-right">
+    <div class="score-pill" id="scorePill">🎵 0 / 6</div>
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
   </div>
 </div>
 
-<div class="hero">
-  <div class="hero-emoji">🎵</div>
-  <h1>ಕನ್ನಡ ಪದ್ಯಗಳು</h1>
-  <p>ಜೊತೆಗೆ ಹಾಡಿ! • ▶ ಒತ್ತಿ ಕೇಳಿ, ಸಾಲು ಒತ್ತಿ ಪುನರಾವರ್ತಿಸಿ!</p>
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-t="patriotic" onclick="switchTab('patriotic',this)">
+    <span class="t-icon">🇮🇳</span><span class="t-kn">ದೇಶಭಕ್ತಿ</span><span class="t-en">Patriotic</span>
+    <span class="tab-count" id="cnt-patriotic">0/2</span>
+  </button>
+  <button class="tab-btn" data-t="nature" onclick="switchTab('nature',this)">
+    <span class="t-icon">🌿</span><span class="t-kn">ಪ್ರಕೃತಿ</span><span class="t-en">Nature</span>
+    <span class="tab-count" id="cnt-nature">0/2</span>
+  </button>
+  <button class="tab-btn" data-t="children" onclick="switchTab('children',this)">
+    <span class="t-icon">👶</span><span class="t-kn">ಮಕ್ಕಳ</span><span class="t-en">Children</span>
+    <span class="tab-count" id="cnt-children">0/2</span>
+  </button>
+</nav>
+
+<!-- PANELS -->
+<div class="panel active" id="panel-patriotic">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fff8e7,#ffe0cc);">
+    <span class="hf" style="top:8px;left:4%;">🇮🇳</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">⭐</span>
+    <h2 style="color:#bf360c;">🇮🇳 ದೇಶಭಕ್ತಿ ಪದ್ಯಗಳು</h2>
+    <p style="color:#e65100;">Patriotic Rhymes</p>
+    <span class="tap-hint" style="color:#bf360c;">▶ ಒತ್ತಿ ಹಾಡು ಕೇಳಿ! ಸಾಲು ಒತ್ತಿ ಪುನರಾವರ್ತಿಸಿ!</span>
+  </div>
+  <div class="rhymes-list" id="list-patriotic"></div>
 </div>
 
-<div class="tts-notice">
-  <span>📱</span>
-  <span>ಧ್ವನಿ ಕೇಳಲು Android TTS ನಲ್ಲಿ Kannada ಭಾಷೆ ಸ್ಥಾಪಿಸಿ.</span>
+<div class="panel" id="panel-nature">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#d4f5df,#b2f5ea);">
+    <span class="hf" style="top:8px;left:4%;">🌳</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🦋</span>
+    <h2 style="color:#1b5e20;">🌿 ಪ್ರಕೃತಿ ಪದ್ಯಗಳು</h2>
+    <p style="color:#2e7d32;">Nature Rhymes</p>
+    <span class="tap-hint" style="color:#1b5e20;">▶ ಒತ್ತಿ ಹಾಡು ಕೇಳಿ! ಸಾಲು ಒತ್ತಿ ಪುನರಾವರ್ತಿಸಿ!</span>
+  </div>
+  <div class="rhymes-list" id="list-nature"></div>
 </div>
 
-<div class="rhymes-list" id="rhymesList"></div>
-<div class="footer">VidyaAI • UKG ಕನ್ನಡ</div>
+<div class="panel" id="panel-children">
+  <div class="panel-hero" style="background:linear-gradient(135deg,#fce4ec,#fff9c4);">
+    <span class="hf" style="top:8px;left:4%;">🌙</span>
+    <span class="hf" style="top:18px;right:6%;animation-delay:-2s;">🌟</span>
+    <h2 style="color:#880e4f;">👶 ಮಕ್ಕಳ ಪದ್ಯಗಳು</h2>
+    <p style="color:#ad1457;">Children's Rhymes</p>
+    <span class="tap-hint" style="color:#880e4f;">▶ ಒತ್ತಿ ಹಾಡು ಕೇಳಿ! ಸಾಲು ಒತ್ತಿ ಪುನರಾವರ್ತಿಸಿ!</span>
+  </div>
+  <div class="rhymes-list" id="list-children"></div>
+</div>
 
 <script>
-const rhymes = [
-  {
-    title: 'ರಾಷ್ಟ್ರಗೀತೆ - ಜನ ಗಣ ಮನ',
-    subtitle: 'National Anthem – Jana Gana Mana',
-    emoji: '🇮🇳',
-    bg: 'linear-gradient(135deg,#0d3b8e,#1a5276)',
-    lines: [
-      'ಜನ ಗಣ ಮನ ಅಧಿನಾಯಕ ಜಯ ಹೇ',
-      'ಭಾರತ ಭಾಗ್ಯ ವಿಧಾತಾ',
-      'ಪಂಜಾಬ ಸಿಂಧು ಗುಜರಾತ ಮರಾಠಾ',
-      'ದ್ರಾವಿಡ ಉತ್ಕಲ ವಂಗ',
-      'ವಿಂಧ್ಯ ಹಿಮಾಚಲ ಯಮುನಾ ಗಂಗಾ',
-      'ಉಚ್ಛಲ ಜಲಧಿ ತರಂಗ',
-      'ತವ ಶುಭ ನಾಮೇ ಜಾಗೇ',
-      'ತವ ಶುಭ ಆಶಿಷ ಮಾಗೇ',
-      'ಗಾಹೇ ತವ ಜಯ ಗಾಥಾ',
-      'ಜನ ಗಣ ಮಂಗಲದಾಯಕ ಜಯ ಹೇ',
-      'ಭಾರತ ಭಾಗ್ಯ ವಿಧಾತಾ',
-      'ಜಯ ಹೇ! ಜಯ ಹೇ! ಜಯ ಹೇ!',
-      'ಜಯ ಜಯ ಜಯ ಜಯ ಹೇ!',
-    ]
-  },
-  {
-    title: 'ಚಂದಮಾಮ',
-    subtitle: 'Chandamama – Moon Rhyme',
-    emoji: '🌙',
-    bg: 'linear-gradient(135deg,#1a1a4e,#2d2d8e)',
-    lines: [
-      'ಚಂದಮಾಮ ಬಾ ಬಾ',
-      'ಜೋಳದ ರೊಟ್ಟಿ ತಾ ತಾ',
-      'ತುಪ್ಪದಲ್ಲಿ ಅದ್ದಿ ತಾ',
-      'ಬಾಯಲ್ಲಿ ತುರುಕಿಸು',
-      'ಮಳೆಯಲ್ಲಿ ನೆಂದರೆ',
-      'ಛತ್ರಿ ಹಿಡಿದು ಬಾ',
-      'ಚಂದಮಾಮ ಬಾ ಬಾ',
-    ]
-  },
-  {
-    title: 'ಚಿಟ್ಟೆ ಚಿಟ್ಟೆ',
-    subtitle: 'Chiṭṭe – Butterfly Rhyme',
-    emoji: '🦋',
-    bg: 'linear-gradient(135deg,#3a1a5e,#5a2a8e)',
-    lines: [
-      'ಚಿಟ್ಟೆ ಚಿಟ್ಟೆ ಬಣ್ಣದ ಚಿಟ್ಟೆ',
-      'ಹೂವಿನ ಮೇಲೆ ಕುಳಿತ ಚಿಟ್ಟೆ',
-      'ಹಾರಿ ಹಾರಿ ಬರುವ ಚಿಟ್ಟೆ',
-      'ಮಕ್ಕಳ ಮನ ಗೆಲ್ಲುವ ಚಿಟ್ಟೆ',
-      'ಕೆಂಪು ನೀಲಿ ಹಳದಿ ಬಣ್ಣ',
-      'ಎಷ್ಟು ಸುಂದರ ಚಿಟ್ಟೆ ತಂದೆ',
-    ]
-  },
-  {
-    title: 'ನಮ್ಮ ಭಾರತ',
-    subtitle: 'Namma Bhārata – Our India',
-    emoji: '🗺️',
-    bg: 'linear-gradient(135deg,#1a4a1a,#2e6e2e)',
-    lines: [
-      'ಭಾರತ ನಮ್ಮ ದೇಶ',
-      'ಸುಂದರ ನಮ್ಮ ದೇಶ',
-      'ಹಸಿರು ಗಿರಿ ಕಾಡು',
-      'ನದಿ ಕೆರೆ ಬಾವಿ',
-      'ಎಲ್ಲರೂ ಬಾಳ್ವೆ ಮಾಡುವ ದೇಶ',
-      'ಭಾರತ ನಮ್ಮ ದೇಶ',
-    ]
-  },
-  {
-    title: 'ಮರದ ಮೇಲೆ',
-    subtitle: 'Marada Mēle – On the Tree',
-    emoji: '🌳',
-    bg: 'linear-gradient(135deg,#1e3a2a,#2e5a3e)',
-    lines: [
-      'ಮರದ ಮೇಲೆ ಕುಳಿತ ಗಿಳಿ',
-      'ಚಿಲಿಪಿಲಿ ಹಾಡುತ ಇತ್ತು',
-      'ಮಕ್ಕಳೆಲ್ಲ ಕೇಳುತ ನಿಂತರು',
-      'ಹಾಡು ನಿಲ್ಲಿಸಬೇಡ ಎಂದರು',
-      'ಗಿಳಿಯು ಮತ್ತೆ ಹಾಡಿತು',
-      'ಮಕ್ಕಳೆಲ್ಲ ನಕ್ಕರು',
-    ]
-  },
-  {
-    title: 'ನಾವು ಮಕ್ಕಳು',
-    subtitle: 'Nāvu Makkaḷu – We are Children',
-    emoji: '👶',
-    bg: 'linear-gradient(135deg,#2a1a3e,#4a2a5e)',
-    lines: [
-      'ನಾವು ಮಕ್ಕಳು ಚಿಣ್ಣರು',
-      'ಓದಿ ಬರೆದು ಕಲಿಯುವೆವು',
-      'ಆಟ ಆಡಿ ನಲಿಯುವೆವು',
-      'ದೊಡ್ಡವರಿಗೆ ನಮಸ್ಕರಿಸುವೆವು',
-      'ಭಾರತ ತಾಯಿ ಮಕ್ಕಳು ನಾವು',
-      'ದೇಶ ಕಟ್ಟುವ ಶಕ್ತಿ ನಾವು',
-    ]
-  },
-];
+const DATA = {
+  patriotic: [
+    {
+      title: 'ರಾಷ್ಟ್ರಗೀತೆ — ಜನ ಗಣ ಮನ',
+      subtitle: 'National Anthem • Jana Gana Mana',
+      emoji: '🇮🇳',
+      bg: 'linear-gradient(135deg,#0d3b8e,#1565c0)',
+      border: '#1565c0',
+      lines: [
+        'ಜನ ಗಣ ಮನ ಅಧಿನಾಯಕ ಜಯ ಹೇ',
+        'ಭಾರತ ಭಾಗ್ಯ ವಿಧಾತಾ',
+        'ಪಂಜಾಬ ಸಿಂಧು ಗುಜರಾತ ಮರಾಠಾ',
+        'ದ್ರಾವಿಡ ಉತ್ಕಲ ವಂಗ',
+        'ವಿಂಧ್ಯ ಹಿಮಾಚಲ ಯಮುನಾ ಗಂಗಾ',
+        'ಉಚ್ಛಲ ಜಲಧಿ ತರಂಗ',
+        'ತವ ಶುಭ ನಾಮೇ ಜಾಗೇ',
+        'ತವ ಶುಭ ಆಶಿಷ ಮಾಗೇ',
+        'ಗಾಹೇ ತವ ಜಯ ಗಾಥಾ',
+        'ಜನ ಗಣ ಮಂಗಲದಾಯಕ ಜಯ ಹೇ',
+        'ಭಾರತ ಭಾಗ್ಯ ವಿಧಾತಾ',
+        'ಜಯ ಹೇ! ಜಯ ಹೇ! ಜಯ ಹೇ!',
+        'ಜಯ ಜಯ ಜಯ ಜಯ ಹೇ!',
+      ]
+    },
+    {
+      title: 'ನಮ್ಮ ಭಾರತ',
+      subtitle: 'Namma Bhārata • Our India',
+      emoji: '🗺️',
+      bg: 'linear-gradient(135deg,#1b5e20,#2e7d32)',
+      border: '#2e7d32',
+      lines: [
+        'ಭಾರತ ನಮ್ಮ ದೇಶ',
+        'ಸುಂದರ ನಮ್ಮ ದೇಶ',
+        'ಹಸಿರು ಗಿರಿ ಕಾಡು',
+        'ನದಿ ಕೆರೆ ಬಾವಿ',
+        'ಎಲ್ಲರೂ ಬಾಳ್ವೆ ಮಾಡುವ ದೇಶ',
+        'ಭಾರತ ನಮ್ಮ ದೇಶ',
+      ]
+    },
+  ],
+  nature: [
+    {
+      title: 'ಚಿಟ್ಟೆ ಚಿಟ್ಟೆ',
+      subtitle: 'Chiṭṭe • Butterfly Rhyme',
+      emoji: '🦋',
+      bg: 'linear-gradient(135deg,#6a1b9a,#8e24aa)',
+      border: '#8e24aa',
+      lines: [
+        'ಚಿಟ್ಟೆ ಚಿಟ್ಟೆ ಬಣ್ಣದ ಚಿಟ್ಟೆ',
+        'ಹೂವಿನ ಮೇಲೆ ಕುಳಿತ ಚಿಟ್ಟೆ',
+        'ಹಾರಿ ಹಾರಿ ಬರುವ ಚಿಟ್ಟೆ',
+        'ಮಕ್ಕಳ ಮನ ಗೆಲ್ಲುವ ಚಿಟ್ಟೆ',
+        'ಕೆಂಪು ನೀಲಿ ಹಳದಿ ಬಣ್ಣ',
+        'ಎಷ್ಟು ಸುಂದರ ಚಿಟ್ಟೆ ತಂದೆ',
+      ]
+    },
+    {
+      title: 'ಮರದ ಮೇಲೆ',
+      subtitle: 'Marada Mēle • On the Tree',
+      emoji: '🌳',
+      bg: 'linear-gradient(135deg,#1b5e20,#388e3c)',
+      border: '#388e3c',
+      lines: [
+        'ಮರದ ಮೇಲೆ ಕುಳಿತ ಗಿಳಿ',
+        'ಚಿಲಿಪಿಲಿ ಹಾಡುತ ಇತ್ತು',
+        'ಮಕ್ಕಳೆಲ್ಲ ಕೇಳುತ ನಿಂತರು',
+        'ಹಾಡು ನಿಲ್ಲಿಸಬೇಡ ಎಂದರು',
+        'ಗಿಳಿಯು ಮತ್ತೆ ಹಾಡಿತು',
+        'ಮಕ್ಕಳೆಲ್ಲ ನಕ್ಕರು',
+      ]
+    },
+  ],
+  children: [
+    {
+      title: 'ಚಂದಮಾಮ',
+      subtitle: 'Chandamama • Moon Rhyme',
+      emoji: '🌙',
+      bg: 'linear-gradient(135deg,#1a237e,#283593)',
+      border: '#3949ab',
+      lines: [
+        'ಚಂದಮಾಮ ಬಾ ಬಾ',
+        'ಜೋಳದ ರೊಟ್ಟಿ ತಾ ತಾ',
+        'ತುಪ್ಪದಲ್ಲಿ ಅದ್ದಿ ತಾ',
+        'ಬಾಯಲ್ಲಿ ತುರುಕಿಸು',
+        'ಮಳೆಯಲ್ಲಿ ನೆಂದರೆ',
+        'ಛತ್ರಿ ಹಿಡಿದು ಬಾ',
+        'ಚಂದಮಾಮ ಬಾ ಬಾ',
+      ]
+    },
+    {
+      title: 'ನಾವು ಮಕ್ಕಳು',
+      subtitle: 'Nāvu Makkaḷu • We are Children',
+      emoji: '👶',
+      bg: 'linear-gradient(135deg,#880e4f,#c2185b)',
+      border: '#c2185b',
+      lines: [
+        'ನಾವು ಮಕ್ಕಳು ಚಿಣ್ಣರು',
+        'ಓದಿ ಬರೆದು ಕಲಿಯುವೆವು',
+        'ಆಟ ಆಡಿ ನಲಿಯುವೆವು',
+        'ದೊಡ್ಡವರಿಗೆ ನಮಸ್ಕರಿಸುವೆವು',
+        'ಭಾರತ ತಾಯಿ ಮಕ್ಕಳು ನಾವು',
+        'ದೇಶ ಕಟ್ಟುವ ಶಕ್ತಿ ನಾವು',
+      ]
+    },
+  ],
+};
+
+const TOTAL = Object.values(DATA).reduce((s,a)=>s+a.length,0);
+document.getElementById('scorePill').textContent = `🎵 0 / ${TOTAL}`;
 
 let soundOn = true;
+const learnedSet = new Set();
+const learnedByTab = { patriotic: new Set(), nature: new Set(), children: new Set() };
+
 let currentPlayBtn = null;
 let currentLineEls = [];
 let lineTimer = null;
 
+/* ── helpers ── */
 function toggleSound() {
   soundOn = !soundOn;
-  document.getElementById('soundIcon').textContent = soundOn ? '🔊' : '🔇';
-  document.getElementById('soundLabel').textContent = soundOn ? 'ಧ್ವನಿ ಆನ್' : 'ಧ್ವನಿ ಆಫ್';
-  document.getElementById('soundToggle').classList.toggle('off', !soundOn);
+  const b = document.getElementById('soundBtn');
+  b.textContent = soundOn ? '🔊' : '🔇';
+  b.classList.toggle('off', !soundOn);
   if (!soundOn && window.speechSynthesis) { window.speechSynthesis.cancel(); stopAllPlaying(); }
 }
 
 function getKnVoice() {
-  const voices = window.speechSynthesis.getVoices();
-  return voices.find(v => v.lang === 'kn-IN' || v.lang.startsWith('kn')) || null;
+  return window.speechSynthesis.getVoices().find(v => v.lang==='kn-IN' || v.lang.startsWith('kn')) || null;
 }
 
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+}
+
+function updateScore() {
+  const tot = Object.values(learnedByTab).reduce((s,st)=>s+st.size,0);
+  document.getElementById('scorePill').textContent = `🎵 ${tot} / ${TOTAL}`;
+}
+
+function updateCnt(tid) {
+  document.getElementById('cnt-'+tid).textContent = `${learnedByTab[tid].size}/${DATA[tid].length}`;
+}
+
+const CC = ['#FFD93D','#FF6B35','#06D6A0','#FF6B9D','#9B5DE5','#118AB2','#43e97b'];
+function confetti(x,y) {
+  for(let i=0;i<22;i++){
+    const el=document.createElement('div');
+    el.className='cf';
+    el.style.cssText=`left:${x+(Math.random()-.5)*200}px;background:${CC[i%CC.length]};animation-duration:${.9+Math.random()*.9}s;animation-delay:${Math.random()*.25}s;width:${6+Math.random()*10}px;height:${8+Math.random()*14}px;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2400);
+  }
+}
+
+/* ── playback ── */
 function stopAllPlaying() {
-  if (currentPlayBtn) { currentPlayBtn.textContent = '▶'; currentPlayBtn.classList.remove('playing-btn'); currentPlayBtn = null; }
+  if (currentPlayBtn) {
+    currentPlayBtn.textContent = '▶';
+    currentPlayBtn.classList.remove('playing-btn');
+    currentPlayBtn = null;
+  }
   currentLineEls.forEach(el => el.classList.remove('active-line'));
   currentLineEls = [];
   if (lineTimer) { clearTimeout(lineTimer); lineTimer = null; }
 }
 
-function speakLine(text, lineEl) {
+function speakLine(text, lineEl, allLineEls) {
   if (!soundOn || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const kn = getKnVoice();
   if (!kn) return;
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'kn-IN'; u.rate = 0.78; u.pitch = 1.15; u.voice = kn;
-  currentLineEls.forEach(el => el.classList.remove('active-line'));
-  if (lineEl) lineEl.classList.add('active-line');
+  u.lang='kn-IN'; u.rate=0.78; u.pitch=1.15; u.voice=kn;
+  allLineEls.forEach(el => el.classList.remove('active-line'));
+  lineEl.classList.add('active-line');
   window.speechSynthesis.speak(u);
 }
 
-function speakFullRhyme(lines, btn, lineEls) {
+function speakFullRhyme(lines, btn, lineEls, progressFill, cardEl, tid, rhymeTitle) {
   if (!soundOn || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const kn = getKnVoice();
@@ -315,78 +494,99 @@ function speakFullRhyme(lines, btn, lineEls) {
 
   let i = 0;
   function speakNext() {
-    if (i >= lines.length) { stopAllPlaying(); return; }
+    if (i >= lines.length) {
+      stopAllPlaying();
+      if (progressFill) progressFill.style.width = '100%';
+      // mark as learned
+      if (!learnedByTab[tid].has(rhymeTitle)) {
+        learnedByTab[tid].add(rhymeTitle);
+        updateScore(); updateCnt(tid);
+        cardEl.classList.add('learned');
+        const r = cardEl.getBoundingClientRect();
+        confetti(r.left + r.width/2, r.top + 60);
+      }
+      return;
+    }
     lineEls.forEach(el => el.classList.remove('active-line'));
     lineEls[i].classList.add('active-line');
-    lineEls[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    lineEls[i].scrollIntoView({ behavior:'smooth', block:'nearest' });
+    if (progressFill) progressFill.style.width = `${((i+1)/lines.length)*100}%`;
     const u = new SpeechSynthesisUtterance(lines[i]);
-    u.lang = 'kn-IN'; u.rate = 0.78; u.pitch = 1.15; u.voice = kn;
-    u.onend = () => { i++; lineTimer = setTimeout(speakNext, 300); };
+    u.lang='kn-IN'; u.rate=0.78; u.pitch=1.15; u.voice=kn;
+    u.onend = () => { i++; lineTimer = setTimeout(speakNext, 280); };
     window.speechSynthesis.speak(u);
   }
   speakNext();
 }
 
-function buildRhymes() {
-  const list = document.getElementById('rhymesList');
-  rhymes.forEach((r, ri) => {
+/* ── build cards ── */
+function buildList(tid) {
+  const listEl = document.getElementById('list-'+tid);
+  DATA[tid].forEach((r, ri) => {
     const card = document.createElement('div');
     card.className = 'rhyme-card';
-    const karaokeId = `kk-${ri}`;
-    const lyricsHTML = r.lines.map((l, li) =>
-      `<div class="lyric-line" id="line-${ri}-${li}" data-ri="${ri}" data-li="${li}">
-        <span class="lyric-num">${li+1}</span>${l}
-       </div>`
-    ).join('');
+    card.style.borderColor = r.border;
+    card.style.animationDelay = (ri * 0.1) + 's';
+
+    const linesHTML = r.lines.map((l, li) => `
+      <div class="lyric-line" id="ll-${tid}-${ri}-${li}">
+        <span class="lyric-num">${li+1}</span>
+        <span class="lyric-text">${l}</span>
+        <span class="lyric-speak-icon">🔊</span>
+      </div>`).join('');
 
     card.innerHTML = `
       <div class="rhyme-header" style="background:${r.bg};">
-        <div class="rhyme-emoji">${r.emoji}</div>
+        <div class="rhyme-emoji-wrap">${r.emoji}</div>
         <div class="rhyme-meta">
           <div class="rhyme-title">${r.title}</div>
           <div class="rhyme-subtitle">${r.subtitle}</div>
-          <div class="rhyme-lines-count">📝 ${r.lines.length} ಸಾಲುಗಳು</div>
+          <div class="rhyme-badge">📝 ${r.lines.length} ಸಾಲುಗಳು</div>
         </div>
-        <button class="play-btn" id="playbtn-${ri}" onclick="handlePlay(event,${ri})">▶</button>
+        <button class="play-btn" id="pb-${tid}-${ri}">▶</button>
       </div>
-      <button class="toggle-btn" onclick="toggleKaraoke('${karaokeId}',this)">📖 ಸಾಲುಗಳು ತೋರಿಸು ▾</button>
-      <div class="karaoke-wrap" id="${karaokeId}">${lyricsHTML}</div>
+      <div class="progress-bar-wrap" style="background:${r.bg};">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="pf-${tid}-${ri}"></div>
+        </div>
+      </div>
+      <div class="lyrics-wrap">
+        <div class="lyrics-title">📖 ಸಾಲುಗಳು — ಒತ್ತಿ ಪ್ರತ್ಯೇಕವಾಗಿ ಕೇಳಿ</div>
+        ${linesHTML}
+      </div>
+      <div class="learned-badge">🎉 ಭೇಷ್! ಈ ಪದ್ಯ ಕಲಿತಿರಾ! ✅</div>
     `;
-    list.appendChild(card);
-  });
 
-  // attach line-click handlers
-  rhymes.forEach((r, ri) => {
-    r.lines.forEach((l, li) => {
-      const el = document.getElementById(`line-${ri}-${li}`);
-      if (el) el.addEventListener('click', () => speakLine(l, el));
+    listEl.appendChild(card);
+
+    const btn = document.getElementById(`pb-${tid}-${ri}`);
+    const progressFill = document.getElementById(`pf-${tid}-${ri}`);
+    const lineEls = r.lines.map((_, li) => document.getElementById(`ll-${tid}-${ri}-${li}`));
+
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (btn.classList.contains('playing-btn')) {
+        window.speechSynthesis.cancel(); stopAllPlaying();
+        progressFill.style.width = '0%';
+        return;
+      }
+      speakFullRhyme(r.lines, btn, lineEls, progressFill, card, tid, r.title);
+    });
+
+    lineEls.forEach((el, li) => {
+      el.addEventListener('click', () => speakLine(r.lines[li], el, lineEls));
     });
   });
+
+  updateCnt(tid);
 }
 
-function handlePlay(e, ri) {
-  e.stopPropagation();
-  const btn = document.getElementById(`playbtn-${ri}`);
-  if (btn.classList.contains('playing-btn')) { window.speechSynthesis.cancel(); stopAllPlaying(); return; }
-  // open karaoke if closed
-  const kk = document.getElementById(`kk-${ri}`);
-  if (!kk.classList.contains('open')) {
-    kk.classList.add('open');
-    const tb = kk.previousElementSibling;
-    if (tb) tb.textContent = '📖 ಸಾಲುಗಳು ಮುಚ್ಚು ▴';
-  }
-  const lineEls = rhymes[ri].lines.map((_, li) => document.getElementById(`line-${ri}-${li}`));
-  speakFullRhyme(rhymes[ri].lines, btn, lineEls);
-}
+Object.keys(DATA).forEach(tid => buildList(tid));
 
-function toggleKaraoke(id, btn) {
-  const el = document.getElementById(id);
-  const open = el.classList.toggle('open');
-  btn.textContent = open ? '📖 ಸಾಲುಗಳು ಮುಚ್ಚು ▴' : '📖 ಸಾಲುಗಳು ತೋರಿಸು ▾';
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 }
-
-if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = () => {}; window.speechSynthesis.getVoices(); }
-buildRhymes();
 </script>
 </body>
 </html>
