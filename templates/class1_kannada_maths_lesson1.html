@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 1: ಸ್ಥಳಾವಕಾಶದ ಅರಿವು</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff9f0;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:17px;color:#fff;font-weight:900;letter-spacing:.3px}
+.stars-pill{background:rgba(255,215,0,.25);border:2px solid rgba(255,215,0,.7);color:#fff8dc;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1b5e20,#388e3c,#66bb6a);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.85);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.12);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#e0e0e0;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#1b5e20,#66bb6a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* TABS BAR */
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#2e7d32;border-color:#a5d6a7}
+.step-tab.active{background:#1b5e20;color:#fff;border-color:#1b5e20;box-shadow:0 4px 14px rgba(27,94,32,.4)}
+.step-tab.done{background:#e8f5e9;color:#1b5e20;border-color:#81c784}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#4e342e;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONTENT */
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:56px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7}
+
+/* TEACH CARD — show the concept first */
+.teach-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.09);overflow:hidden;border-left:6px solid #2e7d32}
+.teach-inner{padding:14px 16px;display:flex;align-items:center;gap:14px}
+.teach-vis{font-size:52px;flex-shrink:0;line-height:1}
+.teach-kn{font-size:16px;font-weight:900;color:#333;margin-bottom:2px}
+.teach-en{font-size:13px;font-weight:700;color:#2e7d32}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#66bb6a;background:#f1f8e9}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px;display:flex;align-items:center;gap:14px}
+.q-vis{font-size:58px;line-height:1;flex-shrink:0;text-align:center;min-width:70px}
+.q-label{font-size:11px;font-weight:900;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-kn{font-size:15px;font-weight:900;color:#444;line-height:1.5;margin-bottom:3px}
+.q-kn .blank{color:#1b5e20;font-size:18px;border-bottom:3px solid #1b5e20;padding:0 6px}
+.q-en{font-size:13px;font-weight:700;color:#888}
+.q-bottom{border-top:2px dashed #e8e8e8;padding:12px 14px}
+
+/* CHOICE BUTTONS */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #c8e6c9;background:#f1f8e9;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-icon{font-size:34px;line-height:1}
+.choice-kn{font-size:16px;font-weight:900;color:#2e7d32}
+.choice-en{font-size:12px;font-weight:700;color:#66bb6a}
+.choice.correct{border-color:#2e7d32;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+/* FEEDBACK */
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#c8e6c9;color:#1b5e20;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* DOTS */
+.dots{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.dot{width:14px;height:14px;border-radius:50%;background:#e0e0e0;transition:background .3s}
+.dot.done{background:#2e7d32}
+
+/* BIG BUTTON */
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.green{background:linear-gradient(135deg,#1b5e20,#43a047);color:#fff}
+.big-btn.green:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+.big-btn.orange{background:linear-gradient(135deg,#e65100,#f57c00);color:#fff}
+
+/* QUIZ */
+.quiz-wrap{background:#fff;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.quiz-num{font-size:12px;color:#999;font-weight:900;text-align:center;margin-bottom:8px}
+.quiz-scene{font-size:72px;text-align:center;margin:10px 0}
+.quiz-q{font-size:19px;font-weight:900;color:#1b5e20;text-align:center;margin-bottom:18px;line-height:1.4}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#f1f8e9;border:3px solid #a5d6a7;border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .18s;font-size:17px;font-weight:900;color:#1b5e20}
+.quiz-opt:active{transform:scale(.92)}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none}
+
+/* CELEBRATE */
+.celeb{position:fixed;inset:0;background:rgba(27,94,32,.95);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;text-align:center;padding:20px}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-e{font-size:90px;margin-bottom:12px;animation:float 2s ease-in-out infinite}
+.celeb-t{font-size:30px;font-weight:900;color:#fff;margin-bottom:8px}
+.celeb-s{font-size:15px;color:rgba(255,255,255,.85);font-weight:700;margin-bottom:8px;line-height:1.6}
+.celeb-stars{font-size:22px;color:#ffd700;font-weight:900;margin-bottom:28px}
+.celeb-btn{background:#ffd700;color:#1b5e20;font-family:'Baloo Tamma 2',sans-serif;font-size:20px;font-weight:900;padding:16px 44px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+/* SECTION DIVIDER */
+.sec-head{font-size:13px;font-weight:900;color:#2e7d32;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-left:4px}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">📐 ಗಣಿತ — ತರಗತಿ 1</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🏡</span>
+  <h1>ಪಾಠ 1: ಸ್ಥಳಾವಕಾಶದ ಅರಿವು</h1>
+  <p>Lesson 1: Spatial Understanding — Tap the right answer!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">ಪ್ರಾರಂಭಿಸೋಣ! ಮೊದಲ ಹಂತವನ್ನು ಒತ್ತಿ 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="topbottom">⬆️ ತುದಿ–ತಳ</div>
+  <div class="step-tab locked"  data-tab="onunder">🪑 ಮೇಲೆ–ಕೆಳಗೆ</div>
+  <div class="step-tab locked"  data-tab="inout">🏠 ಒಳಗೆ–ಹೊರಗೆ</div>
+  <div class="step-tab locked"  data-tab="abovebelow">💡 ಮೇಲ್ಗಡೆ–ಕೆಳಗಡೆ</div>
+  <div class="step-tab locked"  data-tab="nearfar">🌲 ಹತ್ತಿರ–ದೂರ</div>
+  <div class="step-tab locked"  data-tab="beforeafter">🕯️ ಮೊದಲು–ಬಳಿಕ</div>
+  <div class="step-tab locked"  data-tab="quiz">🎯 ಪರೀಕ್ಷೆ</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════
+     TAB 1 — ತುದಿ & ತಳ  (TOP & BOTTOM)
+═══════════════════════════ -->
+<div class="tab-panel active" id="tab-topbottom">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <div class="banner-emoji">⬆️⬇️</div>
+    <div>
+      <div class="banner-kn" style="color:#0d47a1">ತುದಿ – ತಳ</div>
+      <div class="banner-en" style="color:#1565c0">Top – Bottom</div>
+      <div class="banner-sub" style="color:#1565c0">ಮೇಲ್ಭಾಗ ಯಾವುದು? ಕೆಳಭಾಗ ಯಾವುದು? ಸರಿಯಾದ ಉತ್ತರ ಒತ್ತಿ!</div>
+    </div>
+  </div>
+
+  <!-- TEACH EXAMPLES -->
+  <div class="sec-head">👀 ನೋಡಿ ಕಲಿಯಿರಿ (Look & Learn)</div>
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">🦅<br><small style="font-size:24px">🌳</small></div>
+      <div>
+        <div class="teach-kn">ಹಕ್ಕಿಯು ಮರದ <span style="color:#1b5e20;font-size:18px">ತುದಿ</span>ಯಲ್ಲಿ ಕುಳಿತಿದೆ.</div>
+        <div class="teach-en">Bird sits at the <strong style="color:#1b5e20">TOP</strong> of the tree. ⬆️</div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis"><small style="font-size:28px">🔥</small><br>🪣</div>
+      <div>
+        <div class="teach-kn">ಬೆಂಕಿಯು ಮಡಕೆಯ <span style="color:#c62828;font-size:18px">ತಳ</span>ಕ್ಕೆ ತಾಗುತ್ತಿದೆ.</div>
+        <div class="teach-en">Fire touches the <strong style="color:#c62828">BOTTOM</strong> of the pot. ⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ (Now You Choose)</div>
+
+  <div class="q-card" id="tb1">
+    <div class="q-top">
+      <div class="q-vis">🐒<br><small style="font-size:22px">🏛️</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಕಂಬದ <span class="blank">___</span> ಮಂಗ ಕುಳಿತಿದೆ.</div>
+        <div class="q-en">Monkey sits at the ___ of the pillar.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('tb1',this,'top')"><div class="choice-icon">⬆️</div><div class="choice-kn">ತುದಿ</div><div class="choice-en">TOP</div></div>
+        <div class="choice" onclick="ans('tb1',this,'bottom')"><div class="choice-icon">⬇️</div><div class="choice-kn">ತಳ</div><div class="choice-en">BOTTOM</div></div>
+      </div>
+      <div class="fb" id="fb-tb1"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="tb2">
+    <div class="q-top">
+      <div class="q-vis">🌸<br><small style="font-size:22px">🪴</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಹೂವು ಗಿಡದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Flower is at the ___ of the plant.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('tb2',this,'top')"><div class="choice-icon">⬆️</div><div class="choice-kn">ತುದಿ</div><div class="choice-en">TOP</div></div>
+        <div class="choice" onclick="ans('tb2',this,'bottom')"><div class="choice-icon">⬇️</div><div class="choice-kn">ತಳ</div><div class="choice-en">BOTTOM</div></div>
+      </div>
+      <div class="fb" id="fb-tb2"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="tb3">
+    <div class="q-top">
+      <div class="q-vis">🥛<br><small style="font-size:20px">💧</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಹಾಲು ಲೋಟದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Milk is at the ___ of the glass.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('tb3',this,'bottom')"><div class="choice-icon">⬇️</div><div class="choice-kn">ತಳ</div><div class="choice-en">BOTTOM</div></div>
+        <div class="choice" onclick="ans('tb3',this,'top')"><div class="choice-icon">⬆️</div><div class="choice-kn">ತುದಿ</div><div class="choice-en">TOP</div></div>
+      </div>
+      <div class="fb" id="fb-tb3"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="tb4">
+    <div class="q-top">
+      <div class="q-vis">🦅<br><small style="font-size:22px">🌳</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಹಕ್ಕಿಯು ಮರದ <span class="blank">___</span> ಕುಳಿತಿದೆ.</div>
+        <div class="q-en">Bird sits at the ___ of the tree.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('tb4',this,'top')"><div class="choice-icon">⬆️</div><div class="choice-kn">ತುದಿ</div><div class="choice-en">TOP</div></div>
+        <div class="choice" onclick="ans('tb4',this,'bottom')"><div class="choice-icon">⬇️</div><div class="choice-kn">ತಳ</div><div class="choice-en">BOTTOM</div></div>
+      </div>
+      <div class="fb" id="fb-tb4"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="tb5">
+    <div class="q-top">
+      <div class="q-vis">🪣<br><small style="font-size:20px">🕳️</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಮಡಕೆಯ <span class="blank">___</span> ರಂಧ್ರವಿದೆ.</div>
+        <div class="q-en">The pot has a hole at the ___.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('tb5',this,'bottom')"><div class="choice-icon">⬇️</div><div class="choice-kn">ತಳ</div><div class="choice-en">BOTTOM</div></div>
+        <div class="choice" onclick="ans('tb5',this,'top')"><div class="choice-icon">⬆️</div><div class="choice-kn">ತುದಿ</div><div class="choice-en">TOP</div></div>
+      </div>
+      <div class="fb" id="fb-tb5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-topbottom"></div>
+  <button class="big-btn green" id="btn-topbottom" disabled onclick="completeTab('topbottom','onunder')">ಮುಂದೆ: ಮೇಲೆ–ಕೆಳಗೆ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 2 — ಮೇಲೆ & ಕೆಳಗೆ  (ON & UNDER)
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-onunder">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <div class="banner-emoji">📺🪑</div>
+    <div>
+      <div class="banner-kn" style="color:#880e4f">ಮೇಲೆ – ಕೆಳಗೆ</div>
+      <div class="banner-en" style="color:#ad1457">On – Under</div>
+      <div class="banner-sub" style="color:#ad1457">ಯಾವುದು ಮೇಲೆ ಇದೆ? ಯಾವುದು ಕೆಳಗೆ ಇದೆ? ಒತ್ತಿ!</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ನೋಡಿ ಕಲಿಯಿರಿ</div>
+  <div class="teach-card" style="border-left-color:#880e4f">
+    <div class="teach-inner">
+      <div class="teach-vis">📺<br><small style="font-size:24px">🪑</small></div>
+      <div>
+        <div class="teach-kn">ಟಿ.ವಿ ಯು ಮೇಜಿನ <span style="color:#880e4f;font-size:18px">ಮೇಲೆ</span> ಇದೆ.</div>
+        <div class="teach-en">TV is <strong style="color:#880e4f">ON</strong> the table.</div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card" style="border-left-color:#880e4f">
+    <div class="teach-inner">
+      <div class="teach-vis"><small style="font-size:28px">🪑</small><br>🐕</div>
+      <div>
+        <div class="teach-kn">ನಾಯಿಯು ಮೇಜಿನ <span style="color:#c62828;font-size:18px">ಕೆಳಗೆ</span> ಇದೆ.</div>
+        <div class="teach-en">Dog is <strong style="color:#c62828">UNDER</strong> the table.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ</div>
+
+  <div class="q-card" id="ou1">
+    <div class="q-top">
+      <div class="q-vis">🖼️<br><small style="font-size:20px">🧱</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಚಿತ್ರಪಟವು ಗೋಡೆಯ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Picture is ___ the wall.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ou1',this,'on')"><div class="choice-icon">⬆️</div><div class="choice-kn">ಮೇಲೆ</div><div class="choice-en">ON</div></div>
+        <div class="choice" onclick="ans('ou1',this,'under')"><div class="choice-icon">⬇️</div><div class="choice-kn">ಕೆಳಗೆ</div><div class="choice-en">UNDER</div></div>
+      </div>
+      <div class="fb" id="fb-ou1"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ou2">
+    <div class="q-top">
+      <div class="q-vis">🐕<br><small style="font-size:20px">🪑</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ನಾಯಿಯು ಮೇಜಿನ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Dog is ___ the table.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ou2',this,'under')"><div class="choice-icon">⬇️</div><div class="choice-kn">ಕೆಳಗೆ</div><div class="choice-en">UNDER</div></div>
+        <div class="choice" onclick="ans('ou2',this,'on')"><div class="choice-icon">⬆️</div><div class="choice-kn">ಮೇಲೆ</div><div class="choice-en">ON</div></div>
+      </div>
+      <div class="fb" id="fb-ou2"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ou3">
+    <div class="q-top">
+      <div class="q-vis">🦜<br><small style="font-size:20px">🐦‍⬛</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಗಿಳಿಯು ಪಂಜರದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Parrot is ___ (inside) the cage.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ou3',this,'on')"><div class="choice-icon">⬆️</div><div class="choice-kn">ಮೇಲೆ</div><div class="choice-en">ON</div></div>
+        <div class="choice" onclick="ans('ou3',this,'under')"><div class="choice-icon">⬇️</div><div class="choice-kn">ಕೆಳಗೆ</div><div class="choice-en">UNDER</div></div>
+      </div>
+      <div class="fb" id="fb-ou3"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ou4">
+    <div class="q-top">
+      <div class="q-vis">🌊<br><small style="font-size:20px">🌉</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ನದಿಯು ಸೇತುವೆಯ <span class="blank">___</span> ಹರಿಯುತ್ತಿದೆ.</div>
+        <div class="q-en">River flows ___ the bridge.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ou4',this,'under')"><div class="choice-icon">⬇️</div><div class="choice-kn">ಕೆಳಗೆ</div><div class="choice-en">UNDER</div></div>
+        <div class="choice" onclick="ans('ou4',this,'on')"><div class="choice-icon">⬆️</div><div class="choice-kn">ಮೇಲೆ</div><div class="choice-en">ON</div></div>
+      </div>
+      <div class="fb" id="fb-ou4"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ou5">
+    <div class="q-top">
+      <div class="q-vis">🐱<br><small style="font-size:20px">🛏️</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಬೆಕ್ಕು ಮಂಚದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Cat is ___ the bed.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ou5',this,'under')"><div class="choice-icon">⬇️</div><div class="choice-kn">ಕೆಳಗೆ</div><div class="choice-en">UNDER</div></div>
+        <div class="choice" onclick="ans('ou5',this,'on')"><div class="choice-icon">⬆️</div><div class="choice-kn">ಮೇಲೆ</div><div class="choice-en">ON</div></div>
+      </div>
+      <div class="fb" id="fb-ou5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-onunder"></div>
+  <button class="big-btn green" id="btn-onunder" disabled onclick="completeTab('onunder','inout')">ಮುಂದೆ: ಒಳಗೆ–ಹೊರಗೆ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 3 — ಒಳಗೆ & ಹೊರಗೆ  (INSIDE & OUTSIDE)
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-inout">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">
+    <div class="banner-emoji">🏠🌳</div>
+    <div>
+      <div class="banner-kn" style="color:#4a148c">ಒಳಗೆ – ಹೊರಗೆ</div>
+      <div class="banner-en" style="color:#6a1b9a">Inside – Outside</div>
+      <div class="banner-sub" style="color:#6a1b9a">ಯಾವುದು ಒಳಗೆ? ಯಾವುದು ಹೊರಗೆ? ಒತ್ತಿ!</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ನೋಡಿ ಕಲಿಯಿರಿ</div>
+  <div class="teach-card" style="border-left-color:#6a1b9a">
+    <div class="teach-inner">
+      <div class="teach-vis">🍎<br><small style="font-size:24px">🧺</small></div>
+      <div>
+        <div class="teach-kn">ಹಣ್ಣುಗಳು ಬುಟ್ಟಿಯ <span style="color:#6a1b9a;font-size:18px">ಒಳಗೆ</span> ಇವೆ.</div>
+        <div class="teach-en">Fruits are <strong style="color:#6a1b9a">INSIDE</strong> the basket.</div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card" style="border-left-color:#6a1b9a">
+    <div class="teach-inner">
+      <div class="teach-vis">🍃<br><small style="font-size:24px">🧺</small></div>
+      <div>
+        <div class="teach-kn">ಎಲೆಗಳು ಬುಟ್ಟಿಯ <span style="color:#c62828;font-size:18px">ಹೊರಗೆ</span> ಇವೆ.</div>
+        <div class="teach-en">Leaves are <strong style="color:#c62828">OUTSIDE</strong> the basket.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ</div>
+
+  <div class="q-card" id="io1">
+    <div class="q-top">
+      <div class="q-vis">👩<br><small style="font-size:20px">🏠</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಅಮ್ಮ ಮನೆಯ <span class="blank">___</span> ಇದ್ದಾರೆ.</div>
+        <div class="q-en">Mother is ___ the house.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('io1',this,'inside')"><div class="choice-icon">🏠</div><div class="choice-kn">ಒಳಗೆ</div><div class="choice-en">INSIDE</div></div>
+        <div class="choice" onclick="ans('io1',this,'outside')"><div class="choice-icon">🌳</div><div class="choice-kn">ಹೊರಗೆ</div><div class="choice-en">OUTSIDE</div></div>
+      </div>
+      <div class="fb" id="fb-io1"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="io2">
+    <div class="q-top">
+      <div class="q-vis">👨<br><small style="font-size:20px">🏠</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಅಪ್ಪ ಮನೆಯ <span class="blank">___</span> ಇದ್ದಾರೆ.</div>
+        <div class="q-en">Father is ___ the house.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('io2',this,'outside')"><div class="choice-icon">🌳</div><div class="choice-kn">ಹೊರಗೆ</div><div class="choice-en">OUTSIDE</div></div>
+        <div class="choice" onclick="ans('io2',this,'inside')"><div class="choice-icon">🏠</div><div class="choice-kn">ಒಳಗೆ</div><div class="choice-en">INSIDE</div></div>
+      </div>
+      <div class="fb" id="fb-io2"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="io3">
+    <div class="q-top">
+      <div class="q-vis">🐣🐣<br><small style="font-size:20px">🧺</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಕೋಳಿಯ ಮರಿಗಳು ಬುಟ್ಟಿಯ <span class="blank">___</span> ಇವೆ.</div>
+        <div class="q-en">Chicks are ___ the basket.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('io3',this,'inside')"><div class="choice-icon">🏠</div><div class="choice-kn">ಒಳಗೆ</div><div class="choice-en">INSIDE</div></div>
+        <div class="choice" onclick="ans('io3',this,'outside')"><div class="choice-icon">🌳</div><div class="choice-kn">ಹೊರಗೆ</div><div class="choice-en">OUTSIDE</div></div>
+      </div>
+      <div class="fb" id="fb-io3"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="io4">
+    <div class="q-top">
+      <div class="q-vis">🐶<br><small style="font-size:20px">🏚️</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ನಾಯಿಯು ಗೂಡಿನ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Dog is ___ the kennel.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('io4',this,'inside')"><div class="choice-icon">🏠</div><div class="choice-kn">ಒಳಗೆ</div><div class="choice-en">INSIDE</div></div>
+        <div class="choice" onclick="ans('io4',this,'outside')"><div class="choice-icon">🌳</div><div class="choice-kn">ಹೊರಗೆ</div><div class="choice-en">OUTSIDE</div></div>
+      </div>
+      <div class="fb" id="fb-io4"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="io5">
+    <div class="q-top">
+      <div class="q-vis">🍊🍊<br><small style="font-size:20px">🧺</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಹಣ್ಣುಗಳು ಬುಟ್ಟಿಯ <span class="blank">___</span> ಇವೆ.</div>
+        <div class="q-en">Fruits are ___ the basket.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('io5',this,'inside')"><div class="choice-icon">🏠</div><div class="choice-kn">ಒಳಗೆ</div><div class="choice-en">INSIDE</div></div>
+        <div class="choice" onclick="ans('io5',this,'outside')"><div class="choice-icon">🌳</div><div class="choice-kn">ಹೊರಗೆ</div><div class="choice-en">OUTSIDE</div></div>
+      </div>
+      <div class="fb" id="fb-io5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-inout"></div>
+  <button class="big-btn green" id="btn-inout" disabled onclick="completeTab('inout','abovebelow')">ಮುಂದೆ: ಮೇಲ್ಗಡೆ–ಕೆಳಗಡೆ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 4 — ಮೇಲ್ಗಡೆ & ಕೆಳಗಡೆ  (ABOVE & BELOW / MĒLGAḌE–KEḶAGAḌE)
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-abovebelow">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3)">
+    <div class="banner-emoji">💡🪑</div>
+    <div>
+      <div class="banner-kn" style="color:#e65100">ಮೇಲ್ಗಡೆ – ಕೆಳಗಡೆ</div>
+      <div class="banner-en" style="color:#bf360c">Above – Below</div>
+      <div class="banner-sub" style="color:#bf360c">ಮೇಲ್ಗಡೆ ಎಂದರೆ ಹೆಚ್ಚು ಮೇಲೆ! ಕೆಳಗಡೆ ಎಂದರೆ ಹೆಚ್ಚು ಕೆಳಗೆ!</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ನೋಡಿ ಕಲಿಯಿರಿ</div>
+  <div class="teach-card" style="border-left-color:#e65100">
+    <div class="teach-inner">
+      <div class="teach-vis">💡<br><small style="font-size:24px">🪑</small></div>
+      <div>
+        <div class="teach-kn">ದೀಪವು ಮೇಜಿನ <span style="color:#e65100;font-size:18px">ಮೇಲ್ಗಡೆ</span> ಇದೆ.</div>
+        <div class="teach-en">Lamp is <strong style="color:#e65100">ABOVE</strong> the table.</div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card" style="border-left-color:#e65100">
+    <div class="teach-inner">
+      <div class="teach-vis"><small style="font-size:28px">💡</small><br>🪑</div>
+      <div>
+        <div class="teach-kn">ಮೇಜು ದೀಪದ <span style="color:#c62828;font-size:18px">ಕೆಳಗಡೆ</span> ಇದೆ.</div>
+        <div class="teach-en">Table is <strong style="color:#c62828">BELOW</strong> the lamp.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ</div>
+
+  <div class="q-card" id="ab1">
+    <div class="q-top">
+      <div class="q-vis">🦋<br><small style="font-size:20px">🌸</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಚಿಟ್ಟೆ ಹೂವಿನ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Butterfly is ___ the flower.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ab1',this,'below')"><div class="choice-icon">☝️⬇️</div><div class="choice-kn">ಕೆಳಗಡೆ</div><div class="choice-en">BELOW</div></div>
+        <div class="choice" onclick="ans('ab1',this,'above')"><div class="choice-icon">☝️⬆️</div><div class="choice-kn">ಮೇಲ್ಗಡೆ</div><div class="choice-en">ABOVE</div></div>
+      </div>
+      <div class="fb" id="fb-ab1"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ab2">
+    <div class="q-top">
+      <div class="q-vis">👁️<br><small style="font-size:20px">😶</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಕಣ್ಣುಗಳ <span class="blank">___</span> ಹುಬ್ಬುಗಳು ಇವೆ.</div>
+        <div class="q-en">Eyebrows are ___ the eyes.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ab2',this,'above')"><div class="choice-icon">☝️⬆️</div><div class="choice-kn">ಮೇಲ್ಗಡೆ</div><div class="choice-en">ABOVE</div></div>
+        <div class="choice" onclick="ans('ab2',this,'below')"><div class="choice-icon">☝️⬇️</div><div class="choice-kn">ಕೆಳಗಡೆ</div><div class="choice-en">BELOW</div></div>
+      </div>
+      <div class="fb" id="fb-ab2"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ab3">
+    <div class="q-top">
+      <div class="q-vis">👃<br><small style="font-size:20px">👄</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಮೂಗಿನ <span class="blank">___</span> ಬಾಯಿ ಇದೆ.</div>
+        <div class="q-en">Mouth is ___ the nose.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ab3',this,'below')"><div class="choice-icon">☝️⬇️</div><div class="choice-kn">ಕೆಳಗಡೆ</div><div class="choice-en">BELOW</div></div>
+        <div class="choice" onclick="ans('ab3',this,'above')"><div class="choice-icon">☝️⬆️</div><div class="choice-kn">ಮೇಲ್ಗಡೆ</div><div class="choice-en">ABOVE</div></div>
+      </div>
+      <div class="fb" id="fb-ab3"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ab4">
+    <div class="q-top">
+      <div class="q-vis">💡<br><small style="font-size:20px">🪑</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ದೀಪವು ಮೇಜಿನ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Lamp is ___ the table.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ab4',this,'above')"><div class="choice-icon">☝️⬆️</div><div class="choice-kn">ಮೇಲ್ಗಡೆ</div><div class="choice-en">ABOVE</div></div>
+        <div class="choice" onclick="ans('ab4',this,'below')"><div class="choice-icon">☝️⬇️</div><div class="choice-kn">ಕೆಳಗಡೆ</div><div class="choice-en">BELOW</div></div>
+      </div>
+      <div class="fb" id="fb-ab4"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ab5">
+    <div class="q-top">
+      <div class="q-vis">🦅<br><small style="font-size:20px">🌳</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಹಕ್ಕಿ ಮರದ <span class="blank">___</span> ಹಾರುತ್ತಿದೆ.</div>
+        <div class="q-en">Bird flies ___ the tree.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ab5',this,'above')"><div class="choice-icon">☝️⬆️</div><div class="choice-kn">ಮೇಲ್ಗಡೆ</div><div class="choice-en">ABOVE</div></div>
+        <div class="choice" onclick="ans('ab5',this,'below')"><div class="choice-icon">☝️⬇️</div><div class="choice-kn">ಕೆಳಗಡೆ</div><div class="choice-en">BELOW</div></div>
+      </div>
+      <div class="fb" id="fb-ab5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-abovebelow"></div>
+  <button class="big-btn green" id="btn-abovebelow" disabled onclick="completeTab('abovebelow','nearfar')">ಮುಂದೆ: ಹತ್ತಿರ–ದೂರ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 5 — ಹತ್ತಿರ & ದೂರ  (NEAR & FAR)
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-nearfar">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <div class="banner-emoji">🌲🏔️</div>
+    <div>
+      <div class="banner-kn" style="color:#1b5e20">ಹತ್ತಿರ – ದೂರ</div>
+      <div class="banner-en" style="color:#2e7d32">Near – Far</div>
+      <div class="banner-sub" style="color:#2e7d32">ಯಾವುದು ಹಾತ್ತಿರದಲ್ಲಿ ಇದೆ? ಯಾವುದು ದೂರದಲ್ಲಿ ಇದೆ?</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ನೋಡಿ ಕಲಿಯಿರಿ</div>
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">👩‍👦</div>
+      <div>
+        <div class="teach-kn">ತಾಯಿಯು ಮಗುವಿನ <span style="color:#1b5e20;font-size:18px">ಹತ್ತಿರ</span> ಇದ್ದಾಳೆ.</div>
+        <div class="teach-en">Mother is <strong style="color:#1b5e20">NEAR</strong> the child.</div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">🌕<br><small style="font-size:24px">👶</small></div>
+      <div>
+        <div class="teach-kn">ಚಂದ್ರ ಮಗುವಿನಿಂದ <span style="color:#c62828;font-size:18px">ದೂರ</span>ದಲ್ಲಿದೆ.</div>
+        <div class="teach-en">Moon is <strong style="color:#c62828">FAR</strong> from the child.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ</div>
+
+  <div class="q-card" id="nf1">
+    <div class="q-top">
+      <div class="q-vis">🦅<br><small style="font-size:20px">🌳</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಹಕ್ಕಿಯು ಮರದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Bird is ___ the tree.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('nf1',this,'near')"><div class="choice-icon">🤏</div><div class="choice-kn">ಹತ್ತಿರ</div><div class="choice-en">NEAR</div></div>
+        <div class="choice" onclick="ans('nf1',this,'far')"><div class="choice-icon">👋</div><div class="choice-kn">ದೂರ</div><div class="choice-en">FAR</div></div>
+      </div>
+      <div class="fb" id="fb-nf1"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="nf2">
+    <div class="q-top">
+      <div class="q-vis">🐑<br><small style="font-size:20px">🌳</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಕುರಿಯು ಮರದಿಂದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Sheep is ___ from the tree.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('nf2',this,'far')"><div class="choice-icon">👋</div><div class="choice-kn">ದೂರ</div><div class="choice-en">FAR</div></div>
+        <div class="choice" onclick="ans('nf2',this,'near')"><div class="choice-icon">🤏</div><div class="choice-kn">ಹತ್ತಿರ</div><div class="choice-en">NEAR</div></div>
+      </div>
+      <div class="fb" id="fb-nf2"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="nf3">
+    <div class="q-top">
+      <div class="q-vis">👩‍👦</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ತಾಯಿಯು ಮಗುವಿನ <span class="blank">___</span> ಇದ್ದಾಳೆ.</div>
+        <div class="q-en">Mother is ___ the child.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('nf3',this,'near')"><div class="choice-icon">🤏</div><div class="choice-kn">ಹತ್ತಿರ</div><div class="choice-en">NEAR</div></div>
+        <div class="choice" onclick="ans('nf3',this,'far')"><div class="choice-icon">👋</div><div class="choice-kn">ದೂರ</div><div class="choice-en">FAR</div></div>
+      </div>
+      <div class="fb" id="fb-nf3"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="nf4">
+    <div class="q-top">
+      <div class="q-vis">🐑<br><small style="font-size:20px">💧</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಕುರಿಯು ಕೊಳದ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Sheep is ___ the pond.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('nf4',this,'near')"><div class="choice-icon">🤏</div><div class="choice-kn">ಹತ್ತಿರ</div><div class="choice-en">NEAR</div></div>
+        <div class="choice" onclick="ans('nf4',this,'far')"><div class="choice-icon">👋</div><div class="choice-kn">ದೂರ</div><div class="choice-en">FAR</div></div>
+      </div>
+      <div class="fb" id="fb-nf4"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="nf5">
+    <div class="q-top">
+      <div class="q-vis">🌕<br><small style="font-size:20px">👶</small></div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಚಂದ್ರ ಮಗುವಿನಿಂದ ತುಂಬಾ <span class="blank">___</span> ಇದೆ.</div>
+        <div class="q-en">Moon is very ___ from the child.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('nf5',this,'far')"><div class="choice-icon">👋</div><div class="choice-kn">ದೂರ</div><div class="choice-en">FAR</div></div>
+        <div class="choice" onclick="ans('nf5',this,'near')"><div class="choice-icon">🤏</div><div class="choice-kn">ಹತ್ತಿರ</div><div class="choice-en">NEAR</div></div>
+      </div>
+      <div class="fb" id="fb-nf5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-nearfar"></div>
+  <button class="big-btn green" id="btn-nearfar" disabled onclick="completeTab('nearfar','beforeafter')">ಮುಂದೆ: ಮೊದಲು–ಬಳಿಕ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 6 — ಮೊದಲು & ಬಳಿಕ  (BEFORE & AFTER)
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-beforeafter">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <div class="banner-emoji">🕯️💥</div>
+    <div>
+      <div class="banner-kn" style="color:#e65100">ಮೊದಲು – ಬಳಿಕ</div>
+      <div class="banner-en" style="color:#bf360c">Before – After</div>
+      <div class="banner-sub" style="color:#bf360c">ಯಾವ ಕೆಲಸ ಮೊದಲಾಗುತ್ತದೆ? ಯಾವ ಕೆಲಸ ಬಳಿಕ ಆಗುತ್ತದೆ?</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ನೋಡಿ ಕಲಿಯಿರಿ</div>
+  <div class="teach-card" style="border-left-color:#e65100">
+    <div class="teach-inner">
+      <div class="teach-vis">🕯️➡️💥</div>
+      <div>
+        <div class="teach-kn">ಮೇಣದ ಬತ್ತಿ ಉರಿಯುವುದಕ್ಕೆ <span style="color:#e65100;font-size:18px">ಮೊದಲು</span> → ಉರಿದ <span style="color:#c62828;font-size:18px">ಬಳಿಕ</span>.</div>
+        <div class="teach-en"><strong style="color:#e65100">Before</strong> candle burns → <strong style="color:#c62828">After</strong> candle burns.</div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card" style="border-left-color:#e65100">
+    <div class="teach-inner">
+      <div class="teach-vis">🥭💧➡️😋</div>
+      <div>
+        <div class="teach-kn">ತಿನ್ನುವ <span style="color:#e65100;font-size:18px">ಮೊದಲು</span> ಮಾವಿನ ಹಣ್ಣನ್ನು ತೊಳೆ. ತೊಳೆದ <span style="color:#c62828;font-size:18px">ಬಳಿಕ</span> ತಿನ್ನು.</div>
+        <div class="teach-en">Wash mango <strong style="color:#e65100">before</strong> eating. Eat <strong style="color:#c62828">after</strong> washing.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ</div>
+
+  <div class="q-card" id="ba1">
+    <div class="q-top">
+      <div class="q-vis">🥭💧</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ತಿನ್ನುವ <span class="blank">___</span> ಮಾವಿನ ಹಣ್ಣನ್ನು ತೊಳೆ.</div>
+        <div class="q-en">___ eating, wash the mango.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ba1',this,'before')"><div class="choice-icon">1️⃣</div><div class="choice-kn">ಮೊದಲು</div><div class="choice-en">BEFORE</div></div>
+        <div class="choice" onclick="ans('ba1',this,'after')"><div class="choice-icon">2️⃣</div><div class="choice-kn">ಬಳಿಕ</div><div class="choice-en">AFTER</div></div>
+      </div>
+      <div class="fb" id="fb-ba1"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ba2">
+    <div class="q-top">
+      <div class="q-vis">😋🥭</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಮಾವಿನ ಹಣ್ಣನ್ನು ತೊಳೆದ <span class="blank">___</span> ತಿನ್ನು.</div>
+        <div class="q-en">___ washing, eat the mango.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ba2',this,'after')"><div class="choice-icon">2️⃣</div><div class="choice-kn">ಬಳಿಕ</div><div class="choice-en">AFTER</div></div>
+        <div class="choice" onclick="ans('ba2',this,'before')"><div class="choice-icon">1️⃣</div><div class="choice-kn">ಮೊದಲು</div><div class="choice-en">BEFORE</div></div>
+      </div>
+      <div class="fb" id="fb-ba2"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ba3">
+    <div class="q-top">
+      <div class="q-vis">🛌➡️🪥</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಎದ್ದ <span class="blank">___</span> ಹಲ್ಲು ತಿಕ್ಕು.</div>
+        <div class="q-en">Brush teeth ___ waking up.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ba3',this,'after')"><div class="choice-icon">2️⃣</div><div class="choice-kn">ಬಳಿಕ</div><div class="choice-en">AFTER</div></div>
+        <div class="choice" onclick="ans('ba3',this,'before')"><div class="choice-icon">1️⃣</div><div class="choice-kn">ಮೊದಲು</div><div class="choice-en">BEFORE</div></div>
+      </div>
+      <div class="fb" id="fb-ba3"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ba4">
+    <div class="q-top">
+      <div class="q-vis">🕯️💥</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಮೇಣದ ಬತ್ತಿ ಉರಿಯುವ <span class="blank">___</span> ಹಚ್ಚು.</div>
+        <div class="q-en">Light the candle ___ it burns.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ba4',this,'before')"><div class="choice-icon">1️⃣</div><div class="choice-kn">ಮೊದಲು</div><div class="choice-en">BEFORE</div></div>
+        <div class="choice" onclick="ans('ba4',this,'after')"><div class="choice-icon">2️⃣</div><div class="choice-kn">ಬಳಿಕ</div><div class="choice-en">AFTER</div></div>
+      </div>
+      <div class="fb" id="fb-ba4"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="ba5">
+    <div class="q-top">
+      <div class="q-vis">🍚😋</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಅಡಿಗೆ ಮಾಡಿದ <span class="blank">___</span> ಊಟ ಮಾಡು.</div>
+        <div class="q-en">Eat ___ cooking the food.</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('ba5',this,'after')"><div class="choice-icon">2️⃣</div><div class="choice-kn">ಬಳಿಕ</div><div class="choice-en">AFTER</div></div>
+        <div class="choice" onclick="ans('ba5',this,'before')"><div class="choice-icon">1️⃣</div><div class="choice-kn">ಮೊದಲು</div><div class="choice-en">BEFORE</div></div>
+      </div>
+      <div class="fb" id="fb-ba5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-beforeafter"></div>
+  <button class="big-btn green" id="btn-beforeafter" disabled onclick="completeTab('beforeafter','quiz')">🎯 ಅಂತಿಮ ಪರೀಕ್ಷೆಗೆ ಹೋಗಿ!</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 7 — QUIZ
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#ffe0b2)">
+    <div class="banner-emoji">🎯🏆</div>
+    <div>
+      <div class="banner-kn" style="color:#880e4f">ಅಂತಿಮ ಪರೀಕ್ಷೆ</div>
+      <div class="banner-en" style="color:#ad1457">Final Quiz — All 6 Concepts!</div>
+      <div class="banner-sub" style="color:#ad1457">ನೀವು ಕಲಿತದ್ದನ್ನು ತೋರಿಸಿ! Show what you learned!</div>
+    </div>
+  </div>
+  <div id="quizBox"></div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATE -->
+<div class="celeb" id="celebScreen">
+  <div class="celeb-e" id="celebE">🏆</div>
+  <div class="celeb-t" id="celebT"></div>
+  <div class="celeb-s" id="celebS"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="closeCeleb()">🎉 ಮತ್ತೊಮ್ಮೆ ಆಡಿ!</button>
+</div>
+
+<script>
+// ─── ANSWER CONFIG ───
+const CORRECT = {
+  tb1:'top', tb2:'top', tb3:'bottom', tb4:'top', tb5:'bottom',
+  ou1:'on',  ou2:'under', ou3:'under', ou4:'under', ou5:'under',
+  io1:'inside', io2:'outside', io3:'inside', io4:'inside', io5:'inside',
+  ab1:'below', ab2:'above', ab3:'below', ab4:'above', ab5:'above',
+  nf1:'near', nf2:'far', nf3:'near', nf4:'near', nf5:'far',
+  ba1:'before', ba2:'after', ba3:'after', ba4:'before', ba5:'after'
+};
+
+// Tab question groups
+const TAB_QS = {
+  topbottom: ['tb1','tb2','tb3','tb4','tb5'],
+  onunder:   ['ou1','ou2','ou3','ou4','ou5'],
+  inout:     ['io1','io2','io3','io4','io5'],
+  abovebelow:['ab1','ab2','ab3','ab4','ab5'],
+  nearfar:   ['nf1','nf2','nf3','nf4','nf5'],
+  beforeafter:['ba1','ba2','ba3','ba4','ba5']
+};
+
+const TAB_ORDER = ['topbottom','onunder','inout','abovebelow','nearfar','beforeafter','quiz'];
+
+const FB_OK  = ['ಶಾಭಾಷ್! ✅ Correct! 🌟', 'ಅದ್ಭುತ! ✅ Excellent! 🎉', 'ಸರಿ! ✅ Right! 👏'];
+const FB_NO  = ['ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ! Try again!', 'ಒಪ್ಸ್! 😊 Think again!'];
+
+let stars = 0;
+let answered = {};
+let tabDone = {};
+let quizItems = [], quizIdx = 0, quizScore = 0;
+
+// ─── BUILD DOTS ───
+function buildDots(tab) {
+  const qs = TAB_QS[tab] || [];
+  const row = document.getElementById('dots-'+tab);
+  if(!row) return;
+  row.innerHTML = qs.map(q => `<div class="dot" id="dot-${q}"></div>`).join('');
+}
+Object.keys(TAB_QS).forEach(buildDots);
+
+// ─── ANSWER ───
+function ans(qid, btn, choice) {
+  if(answered[qid]) return;
+  const correct = CORRECT[qid];
+  const btns = btn.parentElement.querySelectorAll('.choice');
+  btns.forEach(b => b.classList.add('disabled'));
+  const fb = document.getElementById('fb-'+qid);
+
+  if(choice === correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = FB_OK[Math.floor(Math.random()*FB_OK.length)];
+    answered[qid] = true;
+    addStars(5);
+    document.getElementById('dot-'+qid)?.classList.add('done');
+    document.querySelector('#'+qid)?.classList.add('done');
+    speak(fb.textContent.split('!')[0]);
+    checkTabComplete(qid);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelector('#'+qid)?.classList.add('wrong-flash');
+    setTimeout(()=>document.querySelector('#'+qid)?.classList.remove('wrong-flash'),400);
+    fb.className = 'fb no';
+    fb.textContent = FB_NO[Math.floor(Math.random()*FB_NO.length)];
+    // Allow retry
+    setTimeout(()=>{
+      btns.forEach(b=>{b.classList.remove('disabled','wrong','correct');});
+      btn.classList.remove('wrong');
+      fb.style.display='none';
+    }, 1200);
+  }
+  updateProgress();
+}
+
+// ─── CHECK TAB COMPLETE ───
+function checkTabComplete(qid) {
+  for(const [tab, qs] of Object.entries(TAB_QS)) {
+    if(qs.includes(qid)) {
+      if(qs.every(q => answered[q])) {
+        const btn = document.getElementById('btn-'+tab);
+        if(btn) { btn.disabled = false; btn.style.animation='pulse 1.5s ease-in-out infinite'; }
+        speak('ಶಾಭಾಷ್! ಮುಂದೆ ಹೋಗಿ!');
+      }
+      break;
+    }
+  }
+}
+
+// ─── TAB SWITCH ───
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab)?.classList.add('active');
+  document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(tab === 'quiz') startQuiz();
+}
+
+// ─── TAB CLICK ───
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', ()=>{
+    const t = tab.dataset.tab;
+    if(tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'),600);
+      showToast('ಮೊದಲಿನ ಹಂತ ಮುಗಿಸಿ! 🔒 Finish the previous step first!');
+      return;
+    }
+    if(tab.classList.contains('active')) return;
+    document.querySelectorAll('.step-tab').forEach(t2=>{
+      if(t2.dataset.tab!==t && !t2.classList.contains('done') && !t2.classList.contains('locked')) t2.classList.remove('active');
+    });
+    switchTab(t);
+  });
+});
+
+// ─── COMPLETE TAB ───
+function completeTab(current, next) {
+  tabDone[current] = true;
+  addStars(20);
+
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if(t.dataset.tab === current) {
+      t.className = 'step-tab done';
+      t.innerHTML = '✅ ' + t.textContent.replace(/✅/g,'').trim();
+    }
+    if(t.dataset.tab === next) {
+      t.className = 'step-tab unlocked';
+    }
+  });
+
+  switchTab(next);
+  document.querySelector(`[data-tab="${next}"]`)?.classList.add('active');
+  updateProgress();
+  speak('ತುಂಬಾ ಚೆನ್ನಾಗಿ! ಮುಂದೆ ಹೋಗೋಣ!');
+}
+
+// ─── PROGRESS ───
+function updateProgress() {
+  const total = Object.keys(CORRECT).length;
+  const done = Object.keys(answered).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progLabel').textContent =
+    done===total ? '🎉 ಎಲ್ಲ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿದಿರಿ!' : `${done} / ${total} ಪ್ರಶ್ನೆಗಳು ✅`;
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ─── STARS ───
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+}
+
+// ─── SPEAK ───
+function speak(text) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.80; u.pitch = 1.2; u.lang = 'kn-IN';
+  window.speechSynthesis.speak(u);
+}
+
+// ─── QUIZ DATA (all 6 concepts) ───
+const quizData = [
+  // Top-Bottom
+  {q:'ಹಕ್ಕಿ ಮರದ ___ ಕುಳಿತಿದೆ.',en:'Bird sits at the ___ of the tree.',opts:['ತುದಿ (TOP)','ತಳ (BOTTOM)','ಒಳಗೆ (INSIDE)','ದೂರ (FAR)'],ans:'ತುದಿ (TOP)',e:'🦅🌳'},
+  {q:'ಹಾಲು ಲೋಟದ ___ ಇದೆ.',en:'Milk is at the ___ of the glass.',opts:['ತುದಿ (TOP)','ತಳ (BOTTOM)','ಮೇಲೆ (ON)','ಹತ್ತಿರ (NEAR)'],ans:'ತಳ (BOTTOM)',e:'🥛'},
+  {q:'ಕಂಬದ ___ ಮಂಗ ಕುಳಿತಿದೆ.',en:'Monkey sits at the ___ of the pillar.',opts:['ತಳ (BOTTOM)','ತುದಿ (TOP)','ಕೆಳಗೆ (UNDER)','ದೂರ (FAR)'],ans:'ತುದಿ (TOP)',e:'🐒🏛️'},
+  // On-Under
+  {q:'ಟಿ.ವಿ ಮೇಜಿನ ___ ಇದೆ.',en:'TV is ___ the table.',opts:['ಮೇಲೆ (ON)','ಕೆಳಗೆ (UNDER)','ಒಳಗೆ (INSIDE)','ಮೊದಲು (BEFORE)'],ans:'ಮೇಲೆ (ON)',e:'📺🪑'},
+  {q:'ನಾಯಿ ಮೇಜಿನ ___ ಇದೆ.',en:'Dog is ___ the table.',opts:['ಮೇಲೆ (ON)','ಕೆಳಗೆ (UNDER)','ಹೊರಗೆ (OUTSIDE)','ದೂರ (FAR)'],ans:'ಕೆಳಗೆ (UNDER)',e:'🐕🪑'},
+  {q:'ನದಿ ಸೇತುವೆಯ ___ ಹರಿಯುತ್ತಿದೆ.',en:'River flows ___ the bridge.',opts:['ಮೇಲೆ (ON)','ಕೆಳಗೆ (UNDER)','ಒಳಗೆ (INSIDE)','ಬಳಿಕ (AFTER)'],ans:'ಕೆಳಗೆ (UNDER)',e:'🌊🌉'},
+  // Inside-Outside
+  {q:'ಅಮ್ಮ ಮನೆಯ ___ ಇದ್ದಾರೆ.',en:'Mother is ___ the house.',opts:['ಒಳಗೆ (INSIDE)','ಹೊರಗೆ (OUTSIDE)','ಮೇಲೆ (ON)','ಹತ್ತಿರ (NEAR)'],ans:'ಒಳಗೆ (INSIDE)',e:'👩🏠'},
+  {q:'ಅಪ್ಪ ಮನೆಯ ___ ಇದ್ದಾರೆ.',en:'Father is ___ the house.',opts:['ಒಳಗೆ (INSIDE)','ಹೊರಗೆ (OUTSIDE)','ಕೆಳಗೆ (UNDER)','ದೂರ (FAR)'],ans:'ಹೊರಗೆ (OUTSIDE)',e:'👨🏠'},
+  {q:'ಹಣ್ಣು ಬುಟ್ಟಿಯ ___ ಇವೆ.',en:'Fruits are ___ the basket.',opts:['ಹೊರಗೆ (OUTSIDE)','ಒಳಗೆ (INSIDE)','ಮೇಲ್ಗಡೆ (ABOVE)','ಮೊದಲು (BEFORE)'],ans:'ಒಳಗೆ (INSIDE)',e:'🍎🧺'},
+  // Above-Below
+  {q:'ದೀಪ ಮೇಜಿನ ___ ಇದೆ.',en:'Lamp is ___ the table.',opts:['ಕೆಳಗಡೆ (BELOW)','ಮೇಲ್ಗಡೆ (ABOVE)','ಮೇಲೆ (ON)','ಹತ್ತಿರ (NEAR)'],ans:'ಮೇಲ್ಗಡೆ (ABOVE)',e:'💡🪑'},
+  {q:'ಮೂಗಿನ ___ ಬಾಯಿ ಇದೆ.',en:'Mouth is ___ the nose.',opts:['ಮೇಲ್ಗಡೆ (ABOVE)','ಕೆಳಗಡೆ (BELOW)','ಒಳಗೆ (INSIDE)','ದೂರ (FAR)'],ans:'ಕೆಳಗಡೆ (BELOW)',e:'👃👄'},
+  // Near-Far
+  {q:'ತಾಯಿ ಮಗುವಿನ ___ ಇದ್ದಾಳೆ.',en:'Mother is ___ the child.',opts:['ದೂರ (FAR)','ಹತ್ತಿರ (NEAR)','ಮೇಲ್ಗಡೆ (ABOVE)','ಬಳಿಕ (AFTER)'],ans:'ಹತ್ತಿರ (NEAR)',e:'👩‍👦'},
+  {q:'ಚಂದ್ರ ಮಗುವಿನಿಂದ ತುಂಬಾ ___ ಇದೆ.',en:'Moon is very ___ from the child.',opts:['ಹತ್ತಿರ (NEAR)','ದೂರ (FAR)','ಒಳಗೆ (INSIDE)','ಮೊದಲು (BEFORE)'],ans:'ದೂರ (FAR)',e:'🌕👶'},
+  // Before-After
+  {q:'ತಿನ್ನುವ ___ ಮಾವಿನ ಹಣ್ಣನ್ನು ತೊಳೆ.',en:'___ eating, wash the mango.',opts:['ಬಳಿಕ (AFTER)','ಮೊದಲು (BEFORE)','ಮೇಲ್ಗಡೆ (ABOVE)','ಹತ್ತಿರ (NEAR)'],ans:'ಮೊದಲು (BEFORE)',e:'🥭💧'},
+  {q:'ತೊಳೆದ ___ ಮಾವಿನ ಹಣ್ಣನ್ನು ತಿನ್ನು.',en:'Eat the mango ___ washing.',opts:['ಮೊದಲು (BEFORE)','ಬಳಿಕ (AFTER)','ಕೆಳಗೆ (UNDER)','ದೂರ (FAR)'],ans:'ಬಳಿಕ (AFTER)',e:'😋🥭'},
+];
+
+function startQuiz() {
+  quizItems = [...quizData].sort(()=>Math.random()-.5).slice(0,10);
+  quizIdx = 0; quizScore = 0;
+  showQ();
+}
+
+function showQ() {
+  const box = document.getElementById('quizBox');
+  if(quizIdx >= quizItems.length) {
+    const bonus = quizScore * 5;
+    addStars(bonus);
+    box.innerHTML = `
+      <div class="quiz-wrap" style="text-align:center;padding:30px">
+        <div style="font-size:80px;margin-bottom:12px">🏆</div>
+        <div style="font-size:26px;font-weight:900;color:#1b5e20;margin-bottom:8px">ಪರೀಕ್ಷೆ ಮುಗಿಯಿತು!</div>
+        <div style="font-size:17px;color:#555;font-weight:900;margin-bottom:6px">Quiz Done! ${quizScore} / ${quizItems.length} ✅</div>
+        <div style="font-size:14px;color:#2e7d32;font-weight:900;margin-bottom:24px">+${bonus} ಬೋನಸ್ ⭐ stars!</div>
+        <button class="big-btn green" onclick="endLesson()" style="max-width:300px;margin:0 auto 12px">🎉 ಪಾಠ ಮುಗಿಸಿ!</button>
+        <button class="big-btn orange" onclick="startQuiz()" style="max-width:300px;margin:0 auto">🔄 ಮತ್ತೊಮ್ಮೆ ಆಡಿ</button>
+      </div>`;
+    return;
+  }
+  const q = quizItems[quizIdx];
+  const opts = [...q.opts].sort(()=>Math.random()-.5);
+  box.innerHTML = `
+    <div class="quiz-wrap">
+      <div class="quiz-num">ಪ್ರಶ್ನೆ ${quizIdx+1} / ${quizItems.length}</div>
+      <div class="quiz-scene">${q.e}</div>
+      <div class="quiz-q">${q.q}<br><small style="font-size:14px;color:#888;font-weight:700">${q.en}</small></div>
+      <div class="quiz-opts">
+        ${opts.map(o=>`<div class="quiz-opt" onclick="ansQ(this,'${o.replace(/'/g,"\\'")}','${q.ans.replace(/'/g,"\\'")}')">${o}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function ansQ(el, sel, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.onclick=null);
+  if(sel===correct) {
+    el.classList.add('right'); quizScore++; addStars(3);
+    speak('ಶಾಭಾಷ್! ಸರಿ!');
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(b=>{
+      if(b.textContent.trim()===correct) b.classList.add('right');
+    });
+    speak('ಒಪ್ಸ್! ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+  setTimeout(()=>{quizIdx++; showQ();}, 1600);
+}
+
+function endLesson() {
+  document.getElementById('celebE').textContent = '🏆';
+  document.getElementById('celebT').textContent = 'ಪಾಠ 1 ಮುಗಿಯಿತು!';
+  document.getElementById('celebS').innerHTML = `ಅದ್ಭುತ! ನೀವು ಕಲಿತಿರಿ:<br>
+    ⬆️ ತುದಿ–ತಳ &nbsp; 🪑 ಮೇಲೆ–ಕೆಳಗೆ &nbsp; 🏠 ಒಳಗೆ–ಹೊರಗೆ<br>
+    💡 ಮೇಲ್ಗಡೆ–ಕೆಳಗಡೆ &nbsp; 🌲 ಹತ್ತಿರ–ದೂರ &nbsp; 🕯️ ಮೊದಲು–ಬಳಿಕ`;
+  document.getElementById('celebStars').textContent = '⭐ '+stars+' ಅಂಕಗಳು!';
+  document.getElementById('celebScreen').classList.add('show');
+  launchConfetti();
+  speak('ಅಭಿನಂದನೆಗಳು! ನೀವು ಪಾಠ ಒಂದು ಮುಗಿಸಿದಿರಿ! ತುಂಬಾ ಚೆನ್ನಾಗಿ!');
+}
+
+function closeCeleb() {
+  document.getElementById('celebScreen').classList.remove('show');
+  // Reset
+  Object.keys(answered).forEach(k=>delete answered[k]);
+  Object.keys(tabDone).forEach(k=>delete tabDone[k]);
+  stars=0; document.getElementById('starsNum').textContent='0';
+  location.reload();
+}
+
+function launchConfetti() {
+  const cols=['#FF6B6B','#FFC300','#2ECC71','#3498DB','#9B59B6','#fff','#fbbf24','#66bb6a'];
+  for(let i=0;i<90;i++){
+    const c=document.createElement('div');
+    const sz=Math.random()*14+6;
+    c.style.cssText=`position:fixed;width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${Math.random()*100}vw;top:-20px;z-index:700;animation:confettiFall ${Math.random()*2+2}s ease ${Math.random()}s forwards;pointer-events:none;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+const cStyle=document.createElement('style');
+cStyle.textContent=`
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+`;
+document.head.appendChild(cStyle);
+
+setTimeout(()=>speak('ನಮಸ್ಕಾರ! ಪಾಠ ಒಂದಕ್ಕೆ ಸ್ವಾಗತ! ಸ್ಥಳಾವಕಾಶದ ಅರಿವು ಕಲಿಯೋಣ!'),600);
+</script>
+</body>
+</html>

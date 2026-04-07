@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 9: ಸಂಖ್ಯೆಗಳು 11 ರಿಂದ 20</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#e8f5e9;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32,#43a047);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:16px;color:#fff;font-weight:900;letter-spacing:.3px}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1b5e20,#388e3c,#66bb6a);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#1b5e20,#66bb6a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* TABS BAR */
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#2e7d32;border-color:#a5d6a7}
+.step-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32;box-shadow:0 4px 14px rgba(46,125,50,.45)}
+.step-tab.done{background:#f1f8e9;color:#2e7d32;border-color:#81c784}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONTENT */
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+/* NUMBER DISPLAY CARD */
+.num-showcase{background:#fff;border-radius:22px;margin-bottom:14px;box-shadow:0 4px 20px rgba(0,0,0,.1);overflow:hidden;border:3px solid #a5d6a7}
+.num-showcase-header{background:linear-gradient(135deg,#1b5e20,#2e7d32);padding:12px 18px;font-size:16px;font-weight:900;color:#fff;text-align:center}
+.num-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px}
+.num-tile{background:#f1f8e9;border:3px solid #a5d6a7;border-radius:18px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;user-select:none}
+.num-tile:active{transform:scale(.93)}
+.num-tile.tapped{background:#c8e6c9;border-color:#43a047}
+.num-tile .nt-emoji{font-size:24px;letter-spacing:2px;min-height:30px;line-height:1.3}
+.num-tile .nt-num{font-size:30px;font-weight:900;color:#1b5e20;margin-top:4px}
+.num-tile .nt-kn{font-size:12px;font-weight:900;color:#388e3c;margin-top:2px}
+
+/* STORY CARD */
+.story-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,.09);border:3px solid #a5d6a7;overflow:hidden}
+.story-header{background:linear-gradient(135deg,#f1f8e9,#c8e6c9);padding:12px 16px;font-size:15px;font-weight:900;color:#2e7d32}
+.story-body{padding:14px 16px}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#81c784;background:#f1f8e9}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:40px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center}
+.q-bottom{border-top:2px dashed #c8e6c9;padding:12px 14px}
+
+/* CHOICES */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #a5d6a7;background:#f1f8e9;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-icon{font-size:26px;line-height:1}
+.choice-num{font-size:26px;font-weight:900;color:#2e7d32}
+.choice-kn{font-size:13px;font-weight:700;color:#388e3c}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+/* FEEDBACK */
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* COUNTING VISUAL */
+.count-vis{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;padding:12px;background:#f1f8e9;border-radius:16px;margin-bottom:10px}
+.count-obj{font-size:28px;animation:popIn .2s ease both}
+
+/* NUMBER LINE */
+.numline-wrap{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #a5d6a7;overflow-x:auto}
+.numline{display:flex;align-items:center;gap:0;min-width:max-content}
+.nl-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;border:3px solid #a5d6a7;background:#f1f8e9;color:#2e7d32;flex-shrink:0;transition:all .3s}
+.nl-num.highlight{background:#2e7d32;color:#fff;border-color:#1b5e20;transform:scale(1.15)}
+.nl-num.blank{background:#fff;border:3px dashed #a5d6a7;color:#ccc}
+.nl-arrow{font-size:18px;color:#66bb6a;flex-shrink:0;padding:0 2px}
+
+/* MATCH GAME */
+.match-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #a5d6a7}
+.match-title{font-size:15px;font-weight:900;color:#2e7d32;margin-bottom:14px;text-align:center}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.match-col{display:flex;flex-direction:column;gap:10px}
+.match-item{border-radius:16px;border:3px solid #a5d6a7;background:#f1f8e9;padding:12px 8px;text-align:center;cursor:pointer;font-size:15px;font-weight:900;color:#2e7d32;transition:all .2s;user-select:none}
+.match-item:active{transform:scale(.93)}
+.match-item.selected{border-color:#2e7d32;background:#c8e6c9}
+.match-item.matched{border-color:#43a047;background:#c8e6c9;pointer-events:none;opacity:.75}
+.match-item.wrong-match{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.match-fb{padding:10px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:10px;display:none}
+
+/* BEFORE-AFTER CARDS */
+.ba-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #a5d6a7;overflow:hidden}
+.ba-header{background:linear-gradient(135deg,#f1f8e9,#c8e6c9);padding:12px 16px;font-size:15px;font-weight:900;color:#2e7d32}
+.ba-houses{display:flex;justify-content:center;gap:12px;padding:14px;flex-wrap:wrap}
+.ba-house{background:#f1f8e9;border:3px solid #a5d6a7;border-radius:16px;padding:10px 16px;text-align:center;min-width:70px}
+.ba-house .bh-roof{font-size:28px}
+.ba-house .bh-num{font-size:24px;font-weight:900;color:#2e7d32;min-height:32px;display:flex;align-items:center;justify-content:center}
+.ba-house .bh-num.blank{color:#ccc;font-size:20px}
+.ba-bottom{border-top:2px dashed #c8e6c9;padding:12px 14px}
+
+/* BIG BUTTON */
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.green{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff}
+.big-btn.green:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* SCORE DOTS */
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#c8e6c9;transition:background .3s}
+.sdot.done{background:#43a047}
+
+/* TENS & ONES */
+.tens-ones-card{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #a5d6a7}
+.to-header{font-size:15px;font-weight:900;color:#2e7d32;text-align:center;margin-bottom:12px}
+.to-num-big{font-size:48px;font-weight:900;color:#1b5e20;text-align:center;margin-bottom:10px}
+.to-split{display:flex;gap:12px;justify-content:center;align-items:center}
+.to-box{border-radius:16px;padding:10px 20px;text-align:center;min-width:80px}
+.to-box.tens-box{background:#dcedc8;border:3px solid #8bc34a}
+.to-box.ones-box{background:#fff9c4;border:3px solid #f9a825}
+.to-box .tb-num{font-size:32px;font-weight:900;color:#2e7d32}
+.to-box .tb-label{font-size:12px;font-weight:900;color:#555;margin-top:4px}
+.to-plus{font-size:28px;font-weight:900;color:#888}
+
+/* CELEBRATION */
+.celeb{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-box{background:#fff;border-radius:30px;padding:40px 30px;text-align:center;max-width:340px;width:90%;animation:celebPop .5s ease}
+@keyframes celebPop{from{transform:scale(.5)}to{transform:scale(1)}}
+.celeb-emoji{font-size:80px;display:block;margin-bottom:10px;animation:spin 1s ease}
+@keyframes spin{from{transform:rotate(-20deg) scale(.5)}to{transform:rotate(0deg) scale(1)}}
+.celeb-title{font-size:28px;font-weight:900;color:#1b5e20;margin-bottom:8px}
+.celeb-sub{font-size:16px;font-weight:700;color:#555;margin-bottom:16px}
+.celeb-stars{font-size:36px;letter-spacing:4px;margin-bottom:20px}
+
+/* SECTION TITLE */
+.sec-title{font-size:15px;font-weight:900;color:#2e7d32;margin:14px 0 8px;padding-left:4px;display:flex;align-items:center;gap:6px}
+
+/* INFO PILL */
+.info-pill{background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#2e7d32;line-height:1.6}
+
+/* NUMBER CARD (big visual) */
+.num-intro-card{background:#fff;border-radius:24px;margin-bottom:14px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);border:3px solid #a5d6a7}
+.nic-top{padding:14px;display:flex;align-items:center;gap:14px}
+.nic-num{font-size:56px;font-weight:900;color:#1b5e20;min-width:70px;text-align:center}
+.nic-objs{display:flex;flex-wrap:wrap;gap:4px;flex:1}
+.nic-obj{font-size:24px}
+.nic-bottom{background:#f1f8e9;padding:10px 14px;font-size:14px;font-weight:900;color:#388e3c;border-top:2px solid #c8e6c9}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">📘 ಪಾಠ 9 · ಸಂಖ್ಯೆಗಳು 11–20</div>
+  <div class="stars-pill" id="starPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🔢</span>
+  <h1>ಸಂಖ್ಯೆಗಳು – 11 ರಿಂದ 20</h1>
+  <p>Numbers from 11 to 20 · ಒಂದೊಂದಾಗಿ ಕಲಿಯೋಣ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" id="tab0btn" onclick="goTab(0)">🔢 ಸಂಖ್ಯೆ ಕಲಿ</div>
+  <div class="step-tab locked" id="tab1btn" onclick="goTab(1)">🥕 ಎಣಿಸಿ ನೋಡು</div>
+  <div class="step-tab locked" id="tab2btn" onclick="goTab(2)">🏠 ಮೊದಲು–ನಂತರ</div>
+  <div class="step-tab locked" id="tab3btn" onclick="goTab(3)">🔗 ಜೋಡಿ ಮಾಡು</div>
+  <div class="step-tab locked" id="tab4btn" onclick="goTab(4)">🏆 ಅಭ್ಯಾಸ</div>
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ========== TAB 0: MEET THE NUMBERS ========== -->
+<div class="tab-panel active" id="tab0">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <div class="banner-emoji">🔢</div>
+    <div>
+      <div class="banner-kn">ಸಂಖ್ಯೆಗಳನ್ನು ಕಲಿಯೋಣ!</div>
+      <div class="banner-en">Let's learn the numbers!</div>
+      <div class="banner-sub">ಪ್ರತಿ ಸಂಖ್ಯೆ ಮೇಲೆ ಒತ್ತು → Tap each number below</div>
+    </div>
+  </div>
+
+  <div class="info-pill">👆 ಪ್ರತಿ ಸಂಖ್ಯೆ ಕಾರ್ಡ್ ಮೇಲೆ ಒತ್ತಿ ಕಲಿ! Tap every number card to learn it!</div>
+
+  <!-- Numbers 11–20 as big intro cards -->
+  <div class="num-intro-card" id="nc11">
+    <div class="nic-top">
+      <div class="nic-num">11</div>
+      <div class="nic-objs">🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕</div>
+    </div>
+    <div class="nic-bottom">ಹನ್ನೊಂದು · Eleven · 10 + 1</div>
+  </div>
+  <div class="num-intro-card" id="nc12">
+    <div class="nic-top">
+      <div class="nic-num">12</div>
+      <div class="nic-objs">🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥</div>
+    </div>
+    <div class="nic-bottom">ಹನ್ನೆರಡು · Twelve · 10 + 2</div>
+  </div>
+  <div class="num-intro-card" id="nc13">
+    <div class="nic-top">
+      <div class="nic-num">13</div>
+      <div class="nic-objs">🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎</div>
+    </div>
+    <div class="nic-bottom">ಹದಿಮೂರು · Thirteen · 10 + 3</div>
+  </div>
+  <div class="num-intro-card" id="nc14">
+    <div class="nic-top">
+      <div class="nic-num">14</div>
+      <div class="nic-objs">🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑</div>
+    </div>
+    <div class="nic-bottom">ಹದಿನಾಲ್ಕು · Fourteen · 10 + 4</div>
+  </div>
+  <div class="num-intro-card" id="nc15">
+    <div class="nic-top">
+      <div class="nic-num">15</div>
+      <div class="nic-objs">🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏</div>
+    </div>
+    <div class="nic-bottom">ಹದಿನೈದು · Fifteen · 10 + 5</div>
+  </div>
+  <div class="num-intro-card" id="nc16">
+    <div class="nic-top">
+      <div class="nic-num">16</div>
+      <div class="nic-objs">🏏🎾🏏🎾🏏🎾🏏🎾🏏🎾🏏🎾🏏🎾🏏🎾</div>
+    </div>
+    <div class="nic-bottom">ಹದಿನಾರು · Sixteen · 10 + 6</div>
+  </div>
+  <div class="num-intro-card" id="nc17">
+    <div class="nic-top">
+      <div class="nic-num">17</div>
+      <div class="nic-objs">📗📗📗📗📗📗📗📗📗📗📗📗📗📗📗📗📗</div>
+    </div>
+    <div class="nic-bottom">ಹದಿನೇಳು · Seventeen · 10 + 7</div>
+  </div>
+  <div class="num-intro-card" id="nc18">
+    <div class="nic-top">
+      <div class="nic-num">18</div>
+      <div class="nic-objs">☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️</div>
+    </div>
+    <div class="nic-bottom">ಹದಿನೆಂಟು · Eighteen · 10 + 8</div>
+  </div>
+  <div class="num-intro-card" id="nc19">
+    <div class="nic-top">
+      <div class="nic-num">19</div>
+      <div class="nic-objs">📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱</div>
+    </div>
+    <div class="nic-bottom">ಹತ್ತೊಂಬತ್ತು · Nineteen · 10 + 9</div>
+  </div>
+  <div class="num-intro-card" id="nc20">
+    <div class="nic-top">
+      <div class="nic-num">20</div>
+      <div class="nic-objs">🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀</div>
+    </div>
+    <div class="nic-bottom">ಇಪ್ಪತ್ತು · Twenty · 10 + 10</div>
+  </div>
+
+  <div class="score-dots" id="score0"></div>
+  <button class="big-btn green" id="btn0" disabled onclick="nextTab(0)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 1: COUNT & CHOOSE ========== -->
+<div class="tab-panel" id="tab1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8)">
+    <div class="banner-emoji">🥕</div>
+    <div>
+      <div class="banner-kn">ವಸ್ತುಗಳನ್ನು ಎಣಿಸಿ ಸಂಖ್ಯೆ ಆರಿಸು!</div>
+      <div class="banner-en">Count the objects & choose the number!</div>
+      <div class="banner-sub">ಎಷ್ಟು ಇವೆ? Tap the correct number.</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="c1q1">
+    <div class="q-top">
+      <div class="count-vis" id="cv1">🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕🥕</div>
+      <div class="q-kn">ಎಷ್ಟು ಕ್ಯಾರೆಟ್ ಇವೆ? How many carrots?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q1',this,false,'f1q1')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansCount('c1q1',this,true,'f1q1')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansCount('c1q1',this,false,'f1q1')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansCount('c1q1',this,false,'f1q1')"><div class="choice-num">13</div></div>
+      </div>
+      <div class="fb" id="f1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="c1q2">
+    <div class="q-top">
+      <div class="count-vis">🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥</div>
+      <div class="q-kn">ಎಷ್ಟು ಬೆಂಕಿ ಇದೆ? How many flames?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q2',this,false,'f1q2')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansCount('c1q2',this,true,'f1q2')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansCount('c1q2',this,false,'f1q2')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansCount('c1q2',this,false,'f1q2')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="f1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="c1q3">
+    <div class="q-top">
+      <div class="count-vis">🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎</div>
+      <div class="q-kn">ಎಷ್ಟು ಸೇಬುಗಳು? How many apples?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q3',this,false,'f1q3')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansCount('c1q3',this,false,'f1q3')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansCount('c1q3',this,true,'f1q3')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansCount('c1q3',this,false,'f1q3')"><div class="choice-num">15</div></div>
+      </div>
+      <div class="fb" id="f1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="c1q4">
+    <div class="q-top">
+      <div class="count-vis">🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑🪑</div>
+      <div class="q-kn">ಎಷ್ಟು ಕುರ್ಚಿಗಳು? How many chairs?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q4',this,false,'f1q4')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansCount('c1q4',this,true,'f1q4')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansCount('c1q4',this,false,'f1q4')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansCount('c1q4',this,false,'f1q4')"><div class="choice-num">16</div></div>
+      </div>
+      <div class="fb" id="f1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="c1q5">
+    <div class="q-top">
+      <div class="count-vis">🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏🏏</div>
+      <div class="q-kn">ಎಷ್ಟು ಬ್ಯಾಟ್ ಇವೆ? How many bats?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q5',this,false,'f1q5')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansCount('c1q5',this,true,'f1q5')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansCount('c1q5',this,false,'f1q5')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansCount('c1q5',this,false,'f1q5')"><div class="choice-num">17</div></div>
+      </div>
+      <div class="fb" id="f1q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="c1q6">
+    <div class="q-top">
+      <div class="count-vis">🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾🎾</div>
+      <div class="q-kn">ಎಷ್ಟು ಚೆಂಡುಗಳು? How many balls?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q6',this,false,'f1q6')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansCount('c1q6',this,true,'f1q6')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansCount('c1q6',this,false,'f1q6')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansCount('c1q6',this,false,'f1q6')"><div class="choice-num">18</div></div>
+      </div>
+      <div class="fb" id="f1q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="c1q7">
+    <div class="q-top">
+      <div class="count-vis">📗📗📗📗📗📗📗📗📗📗📗📗📗📗📗📗📗</div>
+      <div class="q-kn">ಎಷ್ಟು ಪುಸ್ತಕಗಳು? How many books?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q7',this,false,'f1q7')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansCount('c1q7',this,true,'f1q7')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansCount('c1q7',this,false,'f1q7')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansCount('c1q7',this,false,'f1q7')"><div class="choice-num">19</div></div>
+      </div>
+      <div class="fb" id="f1q7"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card" id="c1q8">
+    <div class="q-top">
+      <div class="count-vis">☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️☂️</div>
+      <div class="q-kn">ಎಷ್ಟು ಛತ್ರಿಗಳು? How many umbrellas?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q8',this,false,'f1q8')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansCount('c1q8',this,true,'f1q8')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansCount('c1q8',this,false,'f1q8')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansCount('c1q8',this,false,'f1q8')"><div class="choice-num">20</div></div>
+      </div>
+      <div class="fb" id="f1q8"></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" id="c1q9">
+    <div class="q-top">
+      <div class="count-vis">📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱📱</div>
+      <div class="q-kn">ಎಷ್ಟು ಫೋನ್ಗಳು? How many phones?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q9',this,false,'f1q9')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansCount('c1q9',this,false,'f1q9')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansCount('c1q9',this,true,'f1q9')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansCount('c1q9',this,false,'f1q9')"><div class="choice-num">20</div></div>
+      </div>
+      <div class="fb" id="f1q9"></div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" id="c1q10">
+    <div class="q-top">
+      <div class="count-vis">🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀🪀</div>
+      <div class="q-kn">ಎಷ್ಟು ಇವೆ? How many are there?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansCount('c1q10',this,false,'f1q10')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansCount('c1q10',this,false,'f1q10')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansCount('c1q10',this,true,'f1q10')"><div class="choice-num">20</div></div>
+        <div class="choice" onclick="ansCount('c1q10',this,false,'f1q10')"><div class="choice-num">21</div></div>
+      </div>
+      <div class="fb" id="f1q10"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn green" id="btn1" disabled onclick="nextTab(1)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 2: BEFORE, AFTER, BETWEEN ========== -->
+<div class="tab-panel" id="tab2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8)">
+    <div class="banner-emoji">🏠</div>
+    <div>
+      <div class="banner-kn">ಮೊದಲಿನ, ನಂತರದ ಮತ್ತು ಮಧ್ಯದ ಸಂಖ್ಯೆ</div>
+      <div class="banner-en">Before, After & Between numbers</div>
+      <div class="banner-sub">👆 ಸರಿಯಾದ ಸಂಖ್ಯೆ ಆರಿಸು! Choose the right number.</div>
+    </div>
+  </div>
+
+  <div class="sec-title">🏠 ಮೊದಲಿನ ಸಂಖ್ಯೆ (Before)</div>
+
+  <!-- BEFORE Q1: before 12 -->
+  <div class="q-card" id="b1">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num blank">?</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">12</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">13</div></div>
+      </div>
+      <div class="q-kn">12 ರ ಮೊದಲು ಯಾವ ಸಂಖ್ಯೆ? Before 12?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('b1',this,false,'bf1')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansBA('b1',this,true,'bf1')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansBA('b1',this,false,'bf1')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansBA('b1',this,false,'bf1')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="bf1"></div>
+    </div>
+  </div>
+
+  <!-- BEFORE Q2: before 16 -->
+  <div class="q-card" id="b2">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num blank">?</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">16</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">17</div></div>
+      </div>
+      <div class="q-kn">16 ರ ಮೊದಲು? Before 16?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('b2',this,false,'bf2')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansBA('b2',this,true,'bf2')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansBA('b2',this,false,'bf2')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansBA('b2',this,false,'bf2')"><div class="choice-num">18</div></div>
+      </div>
+      <div class="fb" id="bf2"></div>
+    </div>
+  </div>
+
+  <!-- BEFORE Q3: before 19 -->
+  <div class="q-card" id="b3">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num blank">?</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">19</div></div>
+      </div>
+      <div class="q-kn">19 ರ ಮೊದಲು? Before 19?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('b3',this,false,'bf3')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansBA('b3',this,true,'bf3')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansBA('b3',this,false,'bf3')"><div class="choice-num">20</div></div>
+        <div class="choice" onclick="ansBA('b3',this,false,'bf3')"><div class="choice-num">16</div></div>
+      </div>
+      <div class="fb" id="bf3"></div>
+    </div>
+  </div>
+
+  <div class="sec-title">🌿 ನಂತರದ ಸಂಖ್ಯೆ (After)</div>
+
+  <!-- AFTER Q1: after 11 -->
+  <div class="q-card" id="a1">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🍃</div><div class="bh-num">11</div></div>
+        <div class="ba-house"><div class="bh-roof">🍃</div><div class="bh-num">12</div></div>
+        <div class="ba-house"><div class="bh-roof">🍃</div><div class="bh-num blank">?</div></div>
+      </div>
+      <div class="q-kn">12 ರ ನಂತರ? After 12?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('a1',this,false,'af1')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansBA('a1',this,true,'af1')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansBA('a1',this,false,'af1')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansBA('a1',this,false,'af1')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="af1"></div>
+    </div>
+  </div>
+
+  <!-- AFTER Q2: after 15 -->
+  <div class="q-card" id="a2">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🥭</div><div class="bh-num">15</div></div>
+        <div class="ba-house"><div class="bh-roof">🥭</div><div class="bh-num">16</div></div>
+        <div class="ba-house"><div class="bh-roof">🥭</div><div class="bh-num blank">?</div></div>
+      </div>
+      <div class="q-kn">16 ರ ನಂತರ? After 16?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('a2',this,false,'af2')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansBA('a2',this,false,'af2')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansBA('a2',this,true,'af2')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansBA('a2',this,false,'af2')"><div class="choice-num">18</div></div>
+      </div>
+      <div class="fb" id="af2"></div>
+    </div>
+  </div>
+
+  <!-- AFTER Q3: after 18 -->
+  <div class="q-card" id="a3">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">17</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">18</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num blank">?</div></div>
+      </div>
+      <div class="q-kn">18 ರ ನಂತರ? After 18?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('a3',this,false,'af3')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansBA('a3',this,false,'af3')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansBA('a3',this,true,'af3')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansBA('a3',this,false,'af3')"><div class="choice-num">20</div></div>
+      </div>
+      <div class="fb" id="af3"></div>
+    </div>
+  </div>
+
+  <div class="sec-title">🌸 ಮಧ್ಯದ ಸಂಖ್ಯೆ (Between)</div>
+
+  <!-- BETWEEN Q1: between 16 and 18 -->
+  <div class="q-card" id="m1">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">16</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num blank">?</div></div>
+        <div class="ba-house"><div class="bh-roof">🏠</div><div class="bh-num">18</div></div>
+      </div>
+      <div class="q-kn">16 ಮತ್ತು 18 ರ ಮಧ್ಯ? Between 16 & 18?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('m1',this,false,'mf1')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansBA('m1',this,true,'mf1')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansBA('m1',this,false,'mf1')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansBA('m1',this,false,'mf1')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="mf1"></div>
+    </div>
+  </div>
+
+  <!-- BETWEEN Q2: between 13 and 15 -->
+  <div class="q-card" id="m2">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🍃</div><div class="bh-num">13</div></div>
+        <div class="ba-house"><div class="bh-roof">🍃</div><div class="bh-num blank">?</div></div>
+        <div class="ba-house"><div class="bh-roof">🍃</div><div class="bh-num">15</div></div>
+      </div>
+      <div class="q-kn">13 ಮತ್ತು 15 ರ ಮಧ್ಯ? Between 13 & 15?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('m2',this,false,'mf2')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansBA('m2',this,true,'mf2')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansBA('m2',this,false,'mf2')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansBA('m2',this,false,'mf2')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="mf2"></div>
+    </div>
+  </div>
+
+  <!-- BETWEEN Q3: between 17 and 19 -->
+  <div class="q-card" id="m3">
+    <div class="q-top">
+      <div class="ba-houses">
+        <div class="ba-house"><div class="bh-roof">🥭</div><div class="bh-num">17</div></div>
+        <div class="ba-house"><div class="bh-roof">🥭</div><div class="bh-num blank">?</div></div>
+        <div class="ba-house"><div class="bh-roof">🥭</div><div class="bh-num">19</div></div>
+      </div>
+      <div class="q-kn">17 ಮತ್ತು 19 ರ ಮಧ್ಯ? Between 17 & 19?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansBA('m3',this,false,'mf3')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansBA('m3',this,true,'mf3')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansBA('m3',this,false,'mf3')"><div class="choice-num">20</div></div>
+        <div class="choice" onclick="ansBA('m3',this,false,'mf3')"><div class="choice-num">15</div></div>
+      </div>
+      <div class="fb" id="mf3"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn green" id="btn2" disabled onclick="nextTab(2)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 3: MATCH - BIG / SMALL ========== -->
+<div class="tab-panel" id="tab3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8)">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-kn">ದೊಡ್ಡ ಮತ್ತು ಚಿಕ್ಕ ಸಂಖ್ಯೆ ಆರಿಸು!</div>
+      <div class="banner-en">Choose bigger & smaller numbers!</div>
+      <div class="banner-sub">ಪ್ರತಿ ಜೋಡಿಯಲ್ಲಿ ಯಾವುದು ದೊಡ್ಡದು / ಚಿಕ್ಕದು?</div>
+    </div>
+  </div>
+
+  <div class="sec-title">🌿 ದೊಡ್ಡ ಸಂಖ್ಯೆ ಆರಿಸು (Choose the BIGGER number)</div>
+
+  <!-- BIG Q1 -->
+  <div class="q-card" id="bg1">
+    <div class="q-top">
+      <div class="q-kn">15 ಮತ್ತು 16 — ದೊಡ್ಡದು? Which is bigger?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('bg1',this,false,'bgf1')"><div class="choice-num">15</div><div class="choice-kn">ಹದಿನೈದು</div></div>
+        <div class="choice" onclick="ansMag('bg1',this,true,'bgf1')"><div class="choice-num">16</div><div class="choice-kn">ಹದಿನಾರು</div></div>
+      </div>
+      <div class="fb" id="bgf1"></div>
+    </div>
+  </div>
+
+  <!-- BIG Q2 -->
+  <div class="q-card" id="bg2">
+    <div class="q-top">
+      <div class="q-kn">17 ಮತ್ತು 18 — ದೊಡ್ಡದು? Which is bigger?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('bg2',this,false,'bgf2')"><div class="choice-num">17</div><div class="choice-kn">ಹದಿನೇಳು</div></div>
+        <div class="choice" onclick="ansMag('bg2',this,true,'bgf2')"><div class="choice-num">18</div><div class="choice-kn">ಹದಿನೆಂಟು</div></div>
+      </div>
+      <div class="fb" id="bgf2"></div>
+    </div>
+  </div>
+
+  <!-- BIG Q3 -->
+  <div class="q-card" id="bg3">
+    <div class="q-top">
+      <div class="q-kn">10 ಮತ್ತು 11 — ದೊಡ್ಡದು? Which is bigger?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('bg3',this,false,'bgf3')"><div class="choice-num">10</div><div class="choice-kn">ಹತ್ತು</div></div>
+        <div class="choice" onclick="ansMag('bg3',this,true,'bgf3')"><div class="choice-num">11</div><div class="choice-kn">ಹನ್ನೊಂದು</div></div>
+      </div>
+      <div class="fb" id="bgf3"></div>
+    </div>
+  </div>
+
+  <!-- BIG Q4 -->
+  <div class="q-card" id="bg4">
+    <div class="q-top">
+      <div class="q-kn">13 ಮತ್ತು 10 — ದೊಡ್ಡದು? Which is bigger?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('bg4',this,true,'bgf4')"><div class="choice-num">13</div><div class="choice-kn">ಹದಿಮೂರು</div></div>
+        <div class="choice" onclick="ansMag('bg4',this,false,'bgf4')"><div class="choice-num">10</div><div class="choice-kn">ಹತ್ತು</div></div>
+      </div>
+      <div class="fb" id="bgf4"></div>
+    </div>
+  </div>
+
+  <div class="sec-title">🍃 ಚಿಕ್ಕ ಸಂಖ್ಯೆ ಆರಿಸು (Choose the SMALLER number)</div>
+
+  <!-- SMALL Q1 -->
+  <div class="q-card" id="sm1">
+    <div class="q-top">
+      <div class="q-kn">12 ಮತ್ತು 11 — ಚಿಕ್ಕದು? Which is smaller?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('sm1',this,false,'smf1')"><div class="choice-num">12</div><div class="choice-kn">ಹನ್ನೆರಡು</div></div>
+        <div class="choice" onclick="ansMag('sm1',this,true,'smf1')"><div class="choice-num">11</div><div class="choice-kn">ಹನ್ನೊಂದು</div></div>
+      </div>
+      <div class="fb" id="smf1"></div>
+    </div>
+  </div>
+
+  <!-- SMALL Q2 -->
+  <div class="q-card" id="sm2">
+    <div class="q-top">
+      <div class="q-kn">18 ಮತ್ತು 19 — ಚಿಕ್ಕದು? Which is smaller?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('sm2',this,true,'smf2')"><div class="choice-num">18</div><div class="choice-kn">ಹದಿನೆಂಟು</div></div>
+        <div class="choice" onclick="ansMag('sm2',this,false,'smf2')"><div class="choice-num">19</div><div class="choice-kn">ಹತ್ತೊಂಬತ್ತು</div></div>
+      </div>
+      <div class="fb" id="smf2"></div>
+    </div>
+  </div>
+
+  <!-- SMALL Q3 -->
+  <div class="q-card" id="sm3">
+    <div class="q-top">
+      <div class="q-kn">15 ಮತ್ತು 11 — ಚಿಕ್ಕದು? Which is smaller?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('sm3',this,false,'smf3')"><div class="choice-num">15</div><div class="choice-kn">ಹದಿನೈದು</div></div>
+        <div class="choice" onclick="ansMag('sm3',this,true,'smf3')"><div class="choice-num">11</div><div class="choice-kn">ಹನ್ನೊಂದು</div></div>
+      </div>
+      <div class="fb" id="smf3"></div>
+    </div>
+  </div>
+
+  <!-- SMALL Q4 -->
+  <div class="q-card" id="sm4">
+    <div class="q-top">
+      <div class="q-kn">13 ಮತ್ತು 10 — ಚಿಕ್ಕದು? Which is smaller?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansMag('sm4',this,false,'smf4')"><div class="choice-num">13</div><div class="choice-kn">ಹದಿಮೂರು</div></div>
+        <div class="choice" onclick="ansMag('sm4',this,true,'smf4')"><div class="choice-num">10</div><div class="choice-kn">ಹತ್ತು</div></div>
+      </div>
+      <div class="fb" id="smf4"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn green" id="btn3" disabled onclick="nextTab(3)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 4: FINAL PRACTICE ========== -->
+<div class="tab-panel" id="tab4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8)">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-kn">ಅಂತಿಮ ಅಭ್ಯಾಸ! Final Challenge!</div>
+      <div class="banner-en">Tens & Ones · ಹತ್ತು ಮತ್ತು ಬಿಡಿಗಳ ಗುಂಪು</div>
+      <div class="banner-sub">📖 ಸಂಖ್ಯೆ ಓದಿ ಸರಿಯಾದ ಉತ್ತರ ಆರಿಸು!</div>
+    </div>
+  </div>
+
+  <!-- Tens & Ones concept -->
+  <div class="tens-ones-card">
+    <div class="to-header">ಹತ್ತು ಮತ್ತು ಬಿಡಿಗಳ ಗುಂಪು · Tens & Ones</div>
+    <div class="to-num-big">12</div>
+    <div class="to-split">
+      <div class="to-box tens-box"><div class="tb-num">1</div><div class="tb-label">ಹತ್ತು (Ten)</div></div>
+      <div class="to-plus">+</div>
+      <div class="to-box ones-box"><div class="tb-num">2</div><div class="tb-label">ಬಿಡಿ (Ones)</div></div>
+    </div>
+    <div style="text-align:center;padding:10px;font-size:13px;font-weight:700;color:#555">12 = 1 ಹತ್ತು + 2 ಬಿಡಿ · 12 = 1 Ten + 2 Ones</div>
+  </div>
+
+  <!-- FQ1 -->
+  <div class="q-card" id="fq1">
+    <div class="q-top">
+      <div class="q-kn">15 ರಲ್ಲಿ ಎಷ್ಟು ಬಿಡಿಗಳು (ones) ಇವೆ?<br>How many ones in 15?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq1',this,false,'ff1')"><div class="choice-num">1</div></div>
+        <div class="choice" onclick="ansFinal('fq1',this,true,'ff1')"><div class="choice-num">5</div></div>
+        <div class="choice" onclick="ansFinal('fq1',this,false,'ff1')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansFinal('fq1',this,false,'ff1')"><div class="choice-num">10</div></div>
+      </div>
+      <div class="fb" id="ff1"></div>
+    </div>
+  </div>
+
+  <!-- FQ2 -->
+  <div class="q-card" id="fq2">
+    <div class="q-top">
+      <div class="q-kn">18 ರಲ್ಲಿ ಎಷ್ಟು ಹತ್ತುಗಳು (tens) ಇವೆ?<br>How many tens in 18?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq2',this,true,'ff2')"><div class="choice-num">1</div></div>
+        <div class="choice" onclick="ansFinal('fq2',this,false,'ff2')"><div class="choice-num">8</div></div>
+        <div class="choice" onclick="ansFinal('fq2',this,false,'ff2')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansFinal('fq2',this,false,'ff2')"><div class="choice-num">2</div></div>
+      </div>
+      <div class="fb" id="ff2"></div>
+    </div>
+  </div>
+
+  <!-- FQ3 -->
+  <div class="q-card" id="fq3">
+    <div class="q-top">
+      <div class="q-kn">1 ಹತ್ತು + 7 ಬಿಡಿ = ?<br>1 Ten + 7 Ones = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq3',this,false,'ff3')"><div class="choice-num">71</div></div>
+        <div class="choice" onclick="ansFinal('fq3',this,true,'ff3')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq3',this,false,'ff3')"><div class="choice-num">7</div></div>
+        <div class="choice" onclick="ansFinal('fq3',this,false,'ff3')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="ff3"></div>
+    </div>
+  </div>
+
+  <!-- FQ4 -->
+  <div class="q-card" id="fq4">
+    <div class="q-top">
+      <div class="q-kn">1 ಹತ್ತು + 9 ಬಿಡಿ = ?<br>1 Ten + 9 Ones = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq4',this,false,'ff4')"><div class="choice-num">91</div></div>
+        <div class="choice" onclick="ansFinal('fq4',this,false,'ff4')"><div class="choice-num">9</div></div>
+        <div class="choice" onclick="ansFinal('fq4',this,true,'ff4')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansFinal('fq4',this,false,'ff4')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="ff4"></div>
+    </div>
+  </div>
+
+  <!-- FQ5 -->
+  <div class="q-card" id="fq5">
+    <div class="q-top">
+      <div class="q-kn">ಈ ಸಂಖ್ಯೆ ಯಾವುದು? 🐭🐭🐭🐭🐭🐭🐭🐭🐭🐭🐭🐭<br>Count the mice! What number?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq5',this,false,'ff5')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansFinal('fq5',this,true,'ff5')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansFinal('fq5',this,false,'ff5')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansFinal('fq5',this,false,'ff5')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="ff5"></div>
+    </div>
+  </div>
+
+  <!-- FQ6 - number line -->
+  <div class="q-card" id="fq6">
+    <div class="q-top">
+      <div class="numline-wrap" style="margin-bottom:0;border:none;box-shadow:none;padding:8px 0">
+        <div class="numline">
+          <div class="nl-num highlight">11</div><div class="nl-arrow">→</div>
+          <div class="nl-num highlight">12</div><div class="nl-arrow">→</div>
+          <div class="nl-num highlight">13</div><div class="nl-arrow">→</div>
+          <div class="nl-num highlight">14</div><div class="nl-arrow">→</div>
+          <div class="nl-num blank">?</div><div class="nl-arrow">→</div>
+          <div class="nl-num highlight">16</div>
+        </div>
+      </div>
+      <div class="q-kn" style="margin-top:10px">? ರ ಜಾಗದಲ್ಲಿ ಯಾವ ಸಂಖ್ಯೆ? What goes in the blank?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq6',this,false,'ff6')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansFinal('fq6',this,true,'ff6')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansFinal('fq6',this,false,'ff6')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq6',this,false,'ff6')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="ff6"></div>
+    </div>
+  </div>
+
+  <!-- FQ7 -->
+  <div class="q-card" id="fq7">
+    <div class="q-top">
+      <div class="numline-wrap" style="margin-bottom:0;border:none;box-shadow:none;padding:8px 0">
+        <div class="numline">
+          <div class="nl-num highlight">17</div><div class="nl-arrow">→</div>
+          <div class="nl-num highlight">18</div><div class="nl-arrow">→</div>
+          <div class="nl-num blank">?</div><div class="nl-arrow">→</div>
+          <div class="nl-num highlight">20</div>
+        </div>
+      </div>
+      <div class="q-kn" style="margin-top:10px">? ಯಾವ ಸಂಖ್ಯೆ? Which number is missing?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq7',this,false,'ff7')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansFinal('fq7',this,true,'ff7')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansFinal('fq7',this,false,'ff7')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq7',this,false,'ff7')"><div class="choice-num">21</div></div>
+      </div>
+      <div class="fb" id="ff7"></div>
+    </div>
+  </div>
+
+  <!-- FQ8 - word to number -->
+  <div class="q-card" id="fq8">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">ಹದಿನಾಲ್ಕು = ?</div>
+      <div class="q-en">Hadinaalku = which number?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq8',this,false,'ff8')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansFinal('fq8',this,true,'ff8')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansFinal('fq8',this,false,'ff8')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansFinal('fq8',this,false,'ff8')"><div class="choice-num">16</div></div>
+      </div>
+      <div class="fb" id="ff8"></div>
+    </div>
+  </div>
+
+  <!-- FQ9 -->
+  <div class="q-card" id="fq9">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">ಇಪ್ಪತ್ತು = ?</div>
+      <div class="q-en">Ippatthu = which number?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq9',this,false,'ff9')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansFinal('fq9',this,false,'ff9')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansFinal('fq9',this,true,'ff9')"><div class="choice-num">20</div></div>
+        <div class="choice" onclick="ansFinal('fq9',this,false,'ff9')"><div class="choice-num">12</div></div>
+      </div>
+      <div class="fb" id="ff9"></div>
+    </div>
+  </div>
+
+  <!-- FQ10 -->
+  <div class="q-card" id="fq10">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">ಹನ್ನೊಂದು = ?</div>
+      <div class="q-en">Hannnondu = which number?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq10',this,true,'ff10')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansFinal('fq10',this,false,'ff10')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansFinal('fq10',this,false,'ff10')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansFinal('fq10',this,false,'ff10')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="ff10"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn green" id="btn4" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಯಿತು! Finish!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATION -->
+<div class="celeb" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🎉</span>
+    <div class="celeb-title">ಶಾಬಾಸ್! Shabash!</div>
+    <div class="celeb-sub">ನೀನು ಪಾಠ 9 ಮುಗಿಸಿದೆ!<br>You finished Lesson 9!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐⭐⭐</div>
+    <button class="big-btn green" onclick="document.getElementById('celeb').classList.remove('show')">🔁 ಮತ್ತೆ ಆಡು · Play Again</button>
+  </div>
+</div>
+
+<script>
+// ====== STATE ======
+let totalStars = 0;
+let tabUnlocked = [true, false, false, false, false];
+
+// Tab 0: 10 number cards to tap
+const numCards = ['nc11','nc12','nc13','nc14','nc15','nc16','nc17','nc18','nc19','nc20'];
+let tab0Done = 0;
+const tab0Total = numCards.length;
+
+let tab1Done = 0, tab1Total = 10;
+let tab2Done = 0, tab2Total = 9;
+let tab3Done = 0, tab3Total = 8;
+let tab4Done = 0, tab4Total = 10;
+
+// ====== INIT number card tapping ======
+numCards.forEach((id, idx) => {
+  const el = document.getElementById(id);
+  el.style.cursor = 'pointer';
+  el.addEventListener('click', () => {
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    el.style.borderColor = '#43a047';
+    el.style.background = '#f1f8e9';
+    el.querySelector('.nic-top').style.opacity = '1';
+    tab0Done++;
+    addStars(1);
+    buildDots('score0', tab0Done, tab0Total);
+    updateProgress();
+    if (tab0Done >= tab0Total) document.getElementById('btn0').disabled = false;
+  });
+});
+buildDots('score0', 0, tab0Total);
+buildDots('score1', 0, tab1Total);
+buildDots('score2', 0, tab2Total);
+buildDots('score3', 0, tab3Total);
+buildDots('score4', 0, tab4Total);
+updateProgress();
+
+// ====== TABS ======
+function goTab(n) {
+  if (!tabUnlocked[n]) {
+    const btn = document.getElementById('tab' + n + 'btn');
+    btn.classList.add('shaking');
+    btn.addEventListener('animationend', () => btn.classList.remove('shaking'), {once:true});
+    showToast('🔒 ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.classList.remove('active');
+    if (i < n && tabUnlocked[i]) t.classList.add('done');
+    else if (i === n) t.classList.add('active');
+    else if (!tabUnlocked[i]) { t.classList.remove('done','unlocked'); t.classList.add('locked'); }
+    else t.classList.add('unlocked');
+  });
+  document.getElementById('tab' + n).classList.add('active');
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function nextTab(n) {
+  tabUnlocked[n+1] = true;
+  const nextBtn = document.getElementById('tab'+(n+1)+'btn');
+  nextBtn.classList.remove('locked');
+  nextBtn.classList.add('unlocked');
+  goTab(n+1);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ====== STARS & PROGRESS ======
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starPill').textContent = '⭐ ' + totalStars;
+  updateProgress();
+}
+function updateProgress() {
+  const totalQ = tab0Total + tab1Total + tab2Total + tab3Total + tab4Total;
+  const done = tab0Done + tab1Done + tab2Done + tab3Done + tab4Done;
+  document.getElementById('progFill').style.width = Math.round((done/totalQ)*100) + '%';
+}
+
+// ====== DOTS ======
+function buildDots(id, done, total) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i=0;i<total;i++) {
+    const d = document.createElement('div');
+    d.className = 'sdot' + (i < done ? ' done' : '');
+    c.appendChild(d);
+  }
+}
+
+// ====== ANSWER: COUNT (Tab 1) ======
+function ansCount(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => {o.classList.add('disabled'); o.style.pointerEvents='none';});
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಭಲೇ! ಸರಿ!';
+    card.classList.add('done'); card.dataset.done='1';
+    tab1Done++; addStars(1);
+    buildDots('score1', tab1Done, tab1Total);
+    if (tab1Done >= tab1Total) document.getElementById('btn1').disabled=false;
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no'; fb.textContent='❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(() => {
+      opts.forEach(o => {o.classList.remove('disabled'); o.style.pointerEvents='';});
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className='fb';
+    }, 900);
+  }
+}
+
+// ====== ANSWER: BEFORE/AFTER/BETWEEN (Tab 2) ======
+function ansBA(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => {o.classList.add('disabled'); o.style.pointerEvents='none';});
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಶಾಬಾಸ್! Correct!';
+    card.classList.add('done'); card.dataset.done='1';
+    tab2Done++; addStars(1);
+    buildDots('score2', tab2Done, tab2Total);
+    if (tab2Done >= tab2Total) document.getElementById('btn2').disabled=false;
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no'; fb.textContent='❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!';
+    setTimeout(() => {
+      opts.forEach(o => {o.classList.remove('disabled'); o.style.pointerEvents='';});
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className='fb';
+    }, 900);
+  }
+}
+
+// ====== ANSWER: BIG/SMALL (Tab 3) ======
+function ansMag(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => {o.classList.add('disabled'); o.style.pointerEvents='none';});
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಭಲೇ! ';
+    card.classList.add('done'); card.dataset.done='1';
+    tab3Done++; addStars(1);
+    buildDots('score3', tab3Done, tab3Total);
+    if (tab3Done >= tab3Total) document.getElementById('btn3').disabled=false;
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no'; fb.textContent='❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!';
+    setTimeout(() => {
+      opts.forEach(o => {o.classList.remove('disabled'); o.style.pointerEvents='';});
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className='fb';
+    }, 900);
+  }
+}
+
+// ====== ANSWER: FINAL (Tab 4) ======
+function ansFinal(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => {o.classList.add('disabled'); o.style.pointerEvents='none';});
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಭಲೇ ಶಾಬಾಸ್! 🌟';
+    card.classList.add('done'); card.dataset.done='1';
+    tab4Done++; addStars(2);
+    buildDots('score4', tab4Done, tab4Total);
+    if (tab4Done >= tab4Total) document.getElementById('btn4').disabled=false;
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು! Try again!';
+    setTimeout(() => {
+      opts.forEach(o => {o.classList.remove('disabled'); o.style.pointerEvents='';});
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className='fb';
+    }, 900);
+  }
+}
+
+// ====== FINISH ======
+function finishLesson() {
+  document.getElementById('celebStars').textContent = '⭐'.repeat(Math.min(10, Math.floor(totalStars/5)));
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

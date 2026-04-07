@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 17: ಕಾಲ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#e3f2fd;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#0d47a1,#1565c0,#1e88e5);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Ccircle cx='15' cy='15' r='4'/%3E%3Ccircle cx='45' cy='45' r='4'/%3E%3Ccircle cx='45' cy='15' r='2'/%3E%3Ccircle cx='15' cy='45' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#bbdefb;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#0d47a1,#42a5f5);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#1565c0;border-color:#90caf9}
+.step-tab.active{background:#1565c0;color:#fff;border-color:#1565c0;box-shadow:0 4px 14px rgba(21,101,192,.45)}
+.step-tab.done{background:#e3f2fd;color:#1565c0;border-color:#42a5f5}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#0d47a1;line-height:1.7}
+
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#42a5f5;background:#e3f2fd}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:38px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-bottom{border-top:2px dashed #90caf9;padding:12px 14px}
+
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.three{grid-template-columns:1fr 1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #90caf9;background:#e3f2fd;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+.choice:active{transform:scale(.92)}
+.choice-kn{font-size:16px;font-weight:900;color:#0d47a1}
+.choice-emoji{font-size:32px}
+.choice-sub{font-size:11px;font-weight:700;color:#1976d2}
+.choice.correct{border-color:#1e88e5;background:#bbdefb;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#e3f2fd;color:#0d47a1;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#bbdefb;transition:background .3s}
+.sdot.done{background:#1565c0}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.blue{background:linear-gradient(135deg,#0d47a1,#1e88e5);color:#fff}
+.big-btn.blue:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* concept rows */
+.concept-box{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #90caf9}
+.concept-row{display:flex;align-items:center;justify-content:space-around;padding:12px 0;border-bottom:2px dashed #e3f2fd}
+.concept-row:last-child{border-bottom:none}
+.concept-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.concept-label{font-size:12px;font-weight:900;padding:4px 10px;border-radius:20px;text-align:center}
+.lbl-morning{background:#fff9c4;color:#f57f17}
+.lbl-night{background:#e8eaf6;color:#283593}
+.lbl-before{background:#e8f5e9;color:#1b5e20}
+.lbl-after{background:#fce4ec;color:#880e4f}
+
+/* sequence strip */
+.seq-strip{display:flex;align-items:center;gap:4px;overflow-x:auto;padding:8px 0 4px;scrollbar-width:none}
+.seq-strip::-webkit-scrollbar{display:none}
+.seq-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.seq-item-emoji{font-size:34px;background:#e3f2fd;border:3px solid #90caf9;border-radius:16px;width:62px;height:62px;display:flex;align-items:center;justify-content:center}
+.seq-item-num{font-size:18px;font-weight:900;color:#0d47a1;background:#fff;border:2px solid #90caf9;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.seq-arrow{font-size:18px;color:#90caf9;flex-shrink:0;margin-top:-10px}
+
+/* week/month grid */
+.day-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.day-item{background:#fff;border:3px solid #90caf9;border-radius:16px;padding:10px 8px;text-align:center;font-size:14px;font-weight:900;color:#0d47a1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.day-num{font-size:11px;font-weight:900;background:#1565c0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.month-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:10px 0}
+.month-item{background:#fff;border:3px solid #90caf9;border-radius:14px;padding:8px 4px;text-align:center;font-size:13px;font-weight:900;color:#0d47a1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.month-num{font-size:10px;font-weight:900;background:#1565c0;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+
+/* celeb */
+.celeb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.celeb-overlay.show{opacity:1;pointer-events:auto}
+.celeb-box{background:#fff;border-radius:28px;padding:32px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.celeb-emoji{font-size:64px;display:block;animation:float 2s ease-in-out infinite}
+.celeb-title{font-size:24px;font-weight:900;color:#0d47a1;margin:12px 0 6px}
+.celeb-sub{font-size:15px;font-weight:700;color:#555;margin-bottom:16px;line-height:1.6}
+.celeb-stars{font-size:36px;margin:8px 0 20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">⏰ ಪಾಠ 17 — ಕಾಲ (Time)</div>
+  <div class="stars-pill" id="starsPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">⏰</span>
+  <h1>ಕಾಲ ಕಲಿಯೋಣ!</h1>
+  <p>Let's learn about Time! • ತಟ್ಟು ಮಾಡಿ ಕಲಿಯಿರಿ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ • Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" id="tab-btn-1" onclick="tryTab(1)">🌅 ದಿನಚರಿ</div>
+  <div class="step-tab locked" id="tab-btn-2" onclick="tryTab(2)">⬅️ ಮುಂಚೆ–ನಂತರ</div>
+  <div class="step-tab locked" id="tab-btn-3" onclick="tryTab(3)">🌞 ಹಗಲು–ರಾತ್ರಿ</div>
+  <div class="step-tab locked" id="tab-btn-4" onclick="tryTab(4)">📅 ವಾರದ ದಿನಗಳು</div>
+  <div class="step-tab locked" id="tab-btn-5" onclick="tryTab(5)">🗓️ ತಿಂಗಳುಗಳು</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════
+     TAB 1 : ದಿನಚರಿ — Raju's Daily Routine (order activities)
+══════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-1">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#ffe082)">
+    <div class="banner-emoji">🌅</div>
+    <div>
+      <div class="banner-kn" style="color:#e65100">ರಾಜುವಿನ ದಿನಚರಿ</div>
+      <div class="banner-en" style="color:#bf360c">Raju's Daily Routine</div>
+      <div class="banner-sub" style="color:#e65100">ರಾಜು ಪ್ರತಿದಿನ ಈ ಕೆಲಸಗಳನ್ನು ಮಾಡುತ್ತಾನೆ<br>Every day Raju does these activities in order</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    📖 ರಾಜು ಬೆಳಿಗ್ಗೆ ಎದ್ದು → ಸ್ನಾನ ಮಾಡಿ → ತಿಂಡಿ ತಿಂದು → ಶಾಲೆಗೆ ಹೋಗುತ್ತಾನೆ<br>
+    Raju wakes up → bathes → eats breakfast → goes to school
+  </div>
+
+  <!-- Visual sequence strip -->
+  <div class="concept-box">
+    <div style="font-size:14px;font-weight:900;color:#0d47a1;margin-bottom:8px;text-align:center">ರಾಜುವಿನ ದಿನಚರಿ ಕ್ರಮ • Raju's Routine Order</div>
+    <div class="seq-strip">
+      <div class="seq-item">
+        <div class="seq-item-emoji">😴</div>
+        <div class="seq-item-num">1</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ನಿದ್ದೆ<br>Sleep</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">🙆</div>
+        <div class="seq-item-num">2</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ಎದ್ದ<br>Wake up</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">🚿</div>
+        <div class="seq-item-num">3</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ಸ್ನಾನ<br>Bath</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">🍽️</div>
+        <div class="seq-item-num">4</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ತಿಂಡಿ<br>Breakfast</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">🎒</div>
+        <div class="seq-item-num">5</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ಶಾಲೆ<br>School</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">📚</div>
+        <div class="seq-item-num">6</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ಓದು<br>Study</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">⚽</div>
+        <div class="seq-item-num">7</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ಆಟ<br>Play</div>
+      </div>
+      <div class="seq-arrow">➡️</div>
+      <div class="seq-item">
+        <div class="seq-item-emoji">😴</div>
+        <div class="seq-item-num">8</div>
+        <div style="font-size:10px;font-weight:900;color:#555;text-align:center">ಮಲಗು<br>Sleep</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="q-emoji">🙆</div>
+      <div class="q-kn">ರಾಜು ಎದ್ದ ನಂತರ ಏನು ಮಾಡಿದ?</div>
+      <div class="q-en">What did Raju do after waking up?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q1',this,true,'f1q1')">
+          <div class="choice-emoji">🚿</div>
+          <div class="choice-kn">ಸ್ನಾನ ಮಾಡಿದ</div>
+          <div class="choice-sub">Had a Bath ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')">
+          <div class="choice-emoji">⚽</div>
+          <div class="choice-kn">ಆಟ ಆಡಿದ</div>
+          <div class="choice-sub">Played</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="q-emoji">🎒</div>
+      <div class="q-kn">ರಾಜು ಶಾಲೆಗೆ ಹೋಗುವ ಮುಂಚೆ ಏನು ಮಾಡಿದ?</div>
+      <div class="q-en">What did Raju do BEFORE going to school?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')">
+          <div class="choice-emoji">⚽</div>
+          <div class="choice-kn">ಆಟ ಆಡಿದ</div>
+          <div class="choice-sub">Played football</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q2',this,true,'f1q2')">
+          <div class="choice-emoji">🍽️</div>
+          <div class="choice-kn">ತಿಂಡಿ ತಿಂದ</div>
+          <div class="choice-sub">Ate breakfast ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="q-emoji">📚</div>
+      <div class="q-kn">ರಾಜು ಶಾಲೆಯಿಂದ ಬಂದ ನಂತರ ಏನು ಮಾಡಿದ?</div>
+      <div class="q-en">What did Raju do AFTER coming home from school?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q3',this,true,'f1q3')">
+          <div class="choice-emoji">📚</div>
+          <div class="choice-kn">ಓದಿದ</div>
+          <div class="choice-sub">Studied ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')">
+          <div class="choice-emoji">🚿</div>
+          <div class="choice-kn">ಸ್ನಾನ ಮಾಡಿದ</div>
+          <div class="choice-sub">Had a bath</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="q-emoji">😴</div>
+      <div class="q-kn">ರಾಜು ಮಲಗುವ ಮುಂಚೆ ಏನು ಮಾಡಿದ?</div>
+      <div class="q-en">What did Raju do BEFORE sleeping at night?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-emoji">🍽️</div>
+          <div class="choice-kn">ತಿಂಡಿ ತಿಂದ</div>
+          <div class="choice-sub">Ate breakfast</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,true,'f1q4')">
+          <div class="choice-emoji">⚽</div>
+          <div class="choice-kn">ಆಟ ಆಡಿದ</div>
+          <div class="choice-sub">Played football ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: correct order -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">ಸ್ನಾನ ಮಾಡಿದ ನಂತರ, ಮೊದಲು ಯಾವ ಕೆಲಸ?</div>
+      <div class="q-en">After bathing — what comes FIRST?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t1q5',this,true,'f1q5')">
+          <div class="choice-emoji">🍽️</div>
+          <div class="choice-kn">ತಿಂಡಿ</div>
+          <div class="choice-sub">Breakfast ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">⚽</div>
+          <div class="choice-kn">ಆಟ</div>
+          <div class="choice-sub">Play</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">😴</div>
+          <div class="choice-kn">ನಿದ್ದೆ</div>
+          <div class="choice-sub">Sleep</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn blue" id="btn1" disabled onclick="unlockNext(2)">ಮುಂದೆ ➡️ ಮುಂಚೆ–ನಂತರ</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 : ಮುಂಚೆ – ನಂತರ  (Before – After)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-2">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <div class="banner-emoji">⬅️➡️</div>
+    <div>
+      <div class="banner-kn" style="color:#1b5e20">ಮುಂಚೆ ಮತ್ತು ನಂತರ</div>
+      <div class="banner-en" style="color:#2e7d32">Before and After</div>
+      <div class="banner-sub" style="color:#388e3c">ಯಾವ ಕೆಲಸ ಮೊದಲು? ಯಾವ ಕೆಲಸ ಆಮೇಲೆ?<br>Which activity comes before? Which after?</div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:36px">🙆</div>
+        <div class="concept-label lbl-before">ಎದ್ದ (Wake up)</div>
+      </div>
+      <div style="font-size:28px;color:#bbb;padding:0 8px">⬅️ ಮುಂಚೆ</div>
+      <div class="concept-item">
+        <div style="font-size:36px">🚿</div>
+        <div class="concept-label lbl-after">ಸ್ನಾನ (Bath) ➡️ ನಂತರ</div>
+      </div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:36px">🍽️</div>
+        <div class="concept-label lbl-before">ತಿಂಡಿ (Breakfast)</div>
+      </div>
+      <div style="font-size:28px;color:#bbb;padding:0 8px">⬅️ ಮುಂಚೆ</div>
+      <div class="concept-item">
+        <div style="font-size:36px">🎒</div>
+        <div class="concept-label lbl-after">ಶಾಲೆ (School) ➡️ ನಂತರ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t2q1">
+    <div class="q-top">
+      <div class="q-emoji">🎒</div>
+      <div class="q-kn">ರಾಜು ಶಾಲೆಗೆ ಹೋಗುವ <strong>ಮುಂಚೆ</strong> ಯಾವ ಚಿತ್ರ ಸರಿ?</div>
+      <div class="q-en">Which picture is correct for BEFORE Raju goes to school?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q1',this,true,'f2q1')">
+          <div class="choice-emoji">🍽️</div>
+          <div class="choice-kn">ತಿಂಡಿ ತಿನ್ನುವುದು</div>
+          <div class="choice-sub">Eating breakfast ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')">
+          <div class="choice-emoji">😴</div>
+          <div class="choice-kn">ಮಲಗುವುದು</div>
+          <div class="choice-sub">Sleeping</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t2q2">
+    <div class="q-top">
+      <div class="q-emoji">😴</div>
+      <div class="q-kn">ರಾಜು ಮಲಗುವ <strong>ಮುಂಚೆ</strong> ಏನು?</div>
+      <div class="q-en">What happens BEFORE Raju sleeps?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')">
+          <div class="choice-emoji">🚿</div>
+          <div class="choice-kn">ಸ್ನಾನ</div>
+          <div class="choice-sub">Bath</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q2',this,true,'f2q2')">
+          <div class="choice-emoji">⚽</div>
+          <div class="choice-kn">ಆಟ</div>
+          <div class="choice-sub">Play ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t2q3">
+    <div class="q-top">
+      <div class="q-emoji">🏠</div>
+      <div class="q-kn">ಶಾಲೆಯಿಂದ ಮನೆಗೆ ಬಂದ <strong>ನಂತರ</strong> ರಾಜು ಏನು ಮಾಡಿದ?</div>
+      <div class="q-en">What did Raju do AFTER coming home from school?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q3',this,true,'f2q3')">
+          <div class="choice-emoji">📚</div>
+          <div class="choice-kn">ಓದಿದ</div>
+          <div class="choice-sub">Studied ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')">
+          <div class="choice-emoji">🙆</div>
+          <div class="choice-kn">ಎದ್ದ</div>
+          <div class="choice-sub">Woke up</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t2q4">
+    <div class="q-top">
+      <div class="q-emoji">🚿</div>
+      <div class="q-kn">ನಿದ್ದೆಯಿಂದ ಎದ್ದ <strong>ನಂತರ</strong> ರಾಜು ಏನು ಮಾಡಿದ?</div>
+      <div class="q-en">What did Raju do AFTER waking up from sleep?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q4',this,true,'f2q4')">
+          <div class="choice-emoji">🚿</div>
+          <div class="choice-kn">ಸ್ನಾನ</div>
+          <div class="choice-sub">Bathed ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')">
+          <div class="choice-emoji">🎒</div>
+          <div class="choice-kn">ಶಾಲೆ</div>
+          <div class="choice-sub">Went to school</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: sequence order question -->
+  <div class="q-card" id="t2q5">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">ರಾಜುವಿನ ದಿನಚರಿಯಲ್ಲಿ ಯಾವ ಅನುಕ್ರಮ ಸರಿ?</div>
+      <div class="q-en">Which is the correct order of Raju's day?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices" style="grid-template-columns:1fr">
+        <div class="choice" onclick="ansQ('t2q5',this,true,'f2q5')">
+          <div class="choice-kn">🙆 ಎದ್ದ → 🚿 ಸ್ನಾನ → 🍽️ ತಿಂಡಿ → 🎒 ಶಾಲೆ</div>
+          <div class="choice-sub">Wake → Bath → Breakfast → School ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-kn">🎒 ಶಾಲೆ → 🍽️ ತಿಂಡಿ → 🚿 ಸ್ನಾನ → 🙆 ಎದ್ದ</div>
+          <div class="choice-sub">School → Breakfast → Bath → Wake</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-kn">🍽️ ತಿಂಡಿ → 🙆 ಎದ್ದ → 🎒 ಶಾಲೆ → 🚿 ಸ್ನಾನ</div>
+          <div class="choice-sub">Breakfast → Wake → School → Bath</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: Zoo sequence -->
+  <div class="q-card" id="t2q6">
+    <div class="q-top">
+      <div class="q-emoji">🦒🚌</div>
+      <div class="q-kn">ಮಕ್ಕಳು ಮೃಗಾಲಯಕ್ಕೆ ಹೋದರು — ಬಸ್ ಹತ್ತಿದ <strong>ನಂತರ</strong> ಏನಾಯಿತು?</div>
+      <div class="q-en">Children went to the Zoo — after boarding the bus, what happened NEXT?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q6',this,true,'f2q6')">
+          <div class="choice-emoji">🏛️</div>
+          <div class="choice-kn">ಮೃಗಾಲಯಕ್ಕೆ ಬಂದರು</div>
+          <div class="choice-sub">Arrived at zoo ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q6',this,false,'f2q6')">
+          <div class="choice-emoji">🍱</div>
+          <div class="choice-kn">ಊಟ ತಿಂದರು</div>
+          <div class="choice-sub">Ate lunch</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn blue" id="btn2" disabled onclick="unlockNext(3)">ಮುಂದೆ ➡️ ಹಗಲು–ರಾತ್ರಿ</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 : ಹಗಲು – ರಾತ್ರಿ  (Day – Night)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-3">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#e8eaf6)">
+    <div class="banner-emoji">🌞🌙</div>
+    <div>
+      <div class="banner-kn" style="color:#1a237e">ಹಗಲು ಮತ್ತು ರಾತ್ರಿ</div>
+      <div class="banner-en" style="color:#283593">Day and Night</div>
+      <div class="banner-sub" style="color:#3949ab">☀️ ಹಗಲು = ಸೂರ್ಯ ಇರುವಾಗ • Day = when sun is there<br>🌙 ರಾತ್ರಿ = ಚಂದ್ರ–ನಕ್ಷತ್ರ ಇರುವಾಗ • Night = moon & stars</div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:42px">🌞</div>
+        <div class="concept-label lbl-morning">ಹಗಲು • Day</div>
+        <div style="font-size:11px;color:#888;text-align:center;margin-top:4px">ಆಟ, ಶಾಲೆ, ಊಟ<br>Play, School, Eat</div>
+      </div>
+      <div style="font-size:24px;color:#ccc">VS</div>
+      <div class="concept-item">
+        <div style="font-size:42px">🌙</div>
+        <div class="concept-label lbl-night">ರಾತ್ರಿ • Night</div>
+        <div style="font-size:11px;color:#888;text-align:center;margin-top:4px">ನಿದ್ದೆ, ನಕ್ಷತ್ರ<br>Sleep, Stars</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t3q1">
+    <div class="q-top">
+      <div class="q-emoji">⚽</div>
+      <div class="q-kn">ಮಕ್ಕಳು ಹೊರಗೆ ಆಟ ಆಡುತ್ತಾರೆ — ಇದು ಯಾವ ಸಮಯ?</div>
+      <div class="q-en">Children are playing outside — what time is this?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q1',this,true,'f3q1')">
+          <div class="choice-emoji">🌞</div>
+          <div class="choice-kn">ಹಗಲು</div>
+          <div class="choice-sub">Day ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ರಾತ್ರಿ</div>
+          <div class="choice-sub">Night</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t3q2">
+    <div class="q-top">
+      <div class="q-emoji">⭐🌙</div>
+      <div class="q-kn">ನಕ್ಷತ್ರ ಮತ್ತು ಚಂದ್ರ ಕಾಣಿಸುತ್ತದೆ — ಇದು ಯಾವ ಸಮಯ?</div>
+      <div class="q-en">Stars and moon are visible — what time is this?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">🌞</div>
+          <div class="choice-kn">ಹಗಲು</div>
+          <div class="choice-sub">Day</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,true,'f3q2')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ರಾತ್ರಿ</div>
+          <div class="choice-sub">Night ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t3q3">
+    <div class="q-top">
+      <div class="q-emoji">🏫</div>
+      <div class="q-kn">ರಾಜು ಶಾಲೆಗೆ ಹೋಗುತ್ತಾನೆ — ಇದು ಯಾವ ಸಮಯ?</div>
+      <div class="q-en">Raju goes to school — what time of day?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q3',this,true,'f3q3')">
+          <div class="choice-emoji">🌞</div>
+          <div class="choice-kn">ಹಗಲು</div>
+          <div class="choice-sub">Day ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ರಾತ್ರಿ</div>
+          <div class="choice-sub">Night</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t3q4">
+    <div class="q-top">
+      <div class="q-emoji">😴</div>
+      <div class="q-kn">ರಾಜು ಮಲಗಿದ್ದಾನೆ — ಇದು ಯಾವ ಸಮಯ?</div>
+      <div class="q-en">Raju is sleeping — what time is this?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')">
+          <div class="choice-emoji">🌞</div>
+          <div class="choice-kn">ಹಗಲು</div>
+          <div class="choice-sub">Day</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q4',this,true,'f3q4')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ರಾತ್ರಿ</div>
+          <div class="choice-sub">Night ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: father's routine sequence -->
+  <div class="q-card" id="t3q5">
+    <div class="q-top">
+      <div class="q-emoji">👔</div>
+      <div class="q-kn">ಅಪ್ಪ ಆಫೀಸಿಗೆ ಹೋಗುವ ಸಮಯ ಯಾವುದು?</div>
+      <div class="q-en">When does father go to the office?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q5',this,true,'f3q5')">
+          <div class="choice-emoji">🌞</div>
+          <div class="choice-kn">ಹಗಲು (ಬೆಳಿಗ್ಗೆ)</div>
+          <div class="choice-sub">Day / Morning ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ರಾತ್ರಿ</div>
+          <div class="choice-sub">Night</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: TV watching time -->
+  <div class="q-card" id="t3q6">
+    <div class="q-top">
+      <div class="q-emoji">📺</div>
+      <div class="q-kn">ಕುಟುಂಬ ಒಟ್ಟಿಗೆ TV ನೋಡುತ್ತಾರೆ — ಇದು ಯಾವ ಸಮಯ?</div>
+      <div class="q-en">Family watches TV together — what time?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q6',this,false,'f3q6')">
+          <div class="choice-emoji">🌞</div>
+          <div class="choice-kn">ಬೆಳಿಗ್ಗೆ ಹಗಲು</div>
+          <div class="choice-sub">Morning</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q6',this,true,'f3q6')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ರಾತ್ರಿ</div>
+          <div class="choice-sub">Evening / Night ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn blue" id="btn3" disabled onclick="unlockNext(4)">ಮುಂದೆ ➡️ ವಾರದ ದಿನಗಳು</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 : ವಾರದ ದಿನಗಳು (Days of the Week)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-4">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <div class="banner-emoji">📅</div>
+    <div>
+      <div class="banner-kn" style="color:#880e4f">ವಾರದ ದಿನಗಳು</div>
+      <div class="banner-en" style="color:#ad1457">Days of the Week</div>
+      <div class="banner-sub" style="color:#c2185b">ಒಂದು ವಾರದಲ್ಲಿ 7 ದಿನಗಳಿವೆ<br>One week has 7 days</div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <div style="font-size:14px;font-weight:900;color:#880e4f;text-align:center;margin-bottom:10px">ವಾರದ ಏಳು ದಿನಗಳು • Seven Days of the Week</div>
+    <div class="day-grid">
+      <div class="day-item" style="border-color:#f48fb1">
+        <div class="day-num" style="background:#e91e63">1</div>
+        <div style="font-size:16px">📿</div>
+        <div>ಭಾನುವಾರ</div>
+        <div style="font-size:10px;color:#999">Sunday</div>
+      </div>
+      <div class="day-item" style="border-color:#ce93d8">
+        <div class="day-num" style="background:#9c27b0">2</div>
+        <div style="font-size:16px">🌙</div>
+        <div>ಸೋಮವಾರ</div>
+        <div style="font-size:10px;color:#999">Monday</div>
+      </div>
+      <div class="day-item" style="border-color:#ef9a9a">
+        <div class="day-num" style="background:#f44336">3</div>
+        <div style="font-size:16px">🔴</div>
+        <div>ಮಂಗಳವಾರ</div>
+        <div style="font-size:10px;color:#999">Tuesday</div>
+      </div>
+      <div class="day-item" style="border-color:#a5d6a7">
+        <div class="day-num" style="background:#4caf50">4</div>
+        <div style="font-size:16px">💚</div>
+        <div>ಬುಧವಾರ</div>
+        <div style="font-size:10px;color:#999">Wednesday</div>
+      </div>
+      <div class="day-item" style="border-color:#ffcc80">
+        <div class="day-num" style="background:#ff9800">5</div>
+        <div style="font-size:16px">🌟</div>
+        <div>ಗುರುವಾರ</div>
+        <div style="font-size:10px;color:#999">Thursday</div>
+      </div>
+      <div class="day-item" style="border-color:#80cbc4">
+        <div class="day-num" style="background:#009688">6</div>
+        <div style="font-size:16px">💎</div>
+        <div>ಶುಕ್ರವಾರ</div>
+        <div style="font-size:10px;color:#999">Friday</div>
+      </div>
+      <div class="day-item" style="border-color:#90caf9;grid-column:span 2">
+        <div class="day-num" style="background:#2196f3">7</div>
+        <div style="font-size:16px">🪐</div>
+        <div>ಶನಿವಾರ</div>
+        <div style="font-size:10px;color:#999">Saturday — Last day of week</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t4q1">
+    <div class="q-top">
+      <div class="q-emoji">1️⃣</div>
+      <div class="q-kn">ವಾರದ <strong>ಮೊದಲ</strong> ದಿನ ಯಾವುದು?</div>
+      <div class="q-en">What is the FIRST day of the week?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q1',this,true,'f4q1')">
+          <div class="choice-emoji">📿</div>
+          <div class="choice-kn">ಭಾನುವಾರ</div>
+          <div class="choice-sub">Sunday ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ಸೋಮವಾರ</div>
+          <div class="choice-sub">Monday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')">
+          <div class="choice-emoji">🪐</div>
+          <div class="choice-kn">ಶನಿವಾರ</div>
+          <div class="choice-sub">Saturday</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t4q2">
+    <div class="q-top">
+      <div class="q-emoji">7️⃣</div>
+      <div class="q-kn">ವಾರದ <strong>ಕೊನೆಯ</strong> ದಿನ ಯಾವುದು?</div>
+      <div class="q-en">What is the LAST day of the week?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')">
+          <div class="choice-emoji">📿</div>
+          <div class="choice-kn">ಭಾನುವಾರ</div>
+          <div class="choice-sub">Sunday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,true,'f4q2')">
+          <div class="choice-emoji">🪐</div>
+          <div class="choice-kn">ಶನಿವಾರ</div>
+          <div class="choice-sub">Saturday ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ಸೋಮವಾರ</div>
+          <div class="choice-sub">Monday</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t4q3">
+    <div class="q-top">
+      <div class="q-emoji">📅</div>
+      <div class="q-kn">ಭಾನುವಾರದ <strong>ನಂತರ</strong> ಯಾವ ದಿನ?</div>
+      <div class="q-en">Which day comes AFTER Sunday?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q3',this,true,'f4q3')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ಸೋಮವಾರ</div>
+          <div class="choice-sub">Monday ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,false,'f4q3')">
+          <div class="choice-emoji">🪐</div>
+          <div class="choice-kn">ಶನಿವಾರ</div>
+          <div class="choice-sub">Saturday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,false,'f4q3')">
+          <div class="choice-emoji">💎</div>
+          <div class="choice-kn">ಶುಕ್ರವಾರ</div>
+          <div class="choice-sub">Friday</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t4q4">
+    <div class="q-top">
+      <div class="q-emoji">⬅️</div>
+      <div class="q-kn">ಸೋಮವಾರದ <strong>ಹಿಂದಿನ</strong> ದಿನ ಯಾವುದು?</div>
+      <div class="q-en">Which day comes BEFORE Monday?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-emoji">🔴</div>
+          <div class="choice-kn">ಮಂಗಳವಾರ</div>
+          <div class="choice-sub">Tuesday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,true,'f4q4')">
+          <div class="choice-emoji">📿</div>
+          <div class="choice-kn">ಭಾನುವಾರ</div>
+          <div class="choice-sub">Sunday ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-emoji">💚</div>
+          <div class="choice-kn">ಬುಧವಾರ</div>
+          <div class="choice-sub">Wednesday</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t4q5">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">ಮಂಗಳವಾರ ಮತ್ತು ಗುರುವಾರದ <strong>ನಡುವೆ</strong> ಯಾವ ದಿನ?</div>
+      <div class="q-en">Which day is BETWEEN Tuesday and Thursday?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')">
+          <div class="choice-emoji">💎</div>
+          <div class="choice-kn">ಶುಕ್ರವಾರ</div>
+          <div class="choice-sub">Friday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')">
+          <div class="choice-emoji">🌙</div>
+          <div class="choice-kn">ಸೋಮವಾರ</div>
+          <div class="choice-sub">Monday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q5',this,true,'f4q5')">
+          <div class="choice-emoji">💚</div>
+          <div class="choice-kn">ಬುಧವಾರ</div>
+          <div class="choice-sub">Wednesday ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t4q6">
+    <div class="q-top">
+      <div class="q-emoji">❓</div>
+      <div class="q-kn">ಬುಧವಾರದ <strong>ನಂತರ</strong> ಯಾವ ದಿನ?</div>
+      <div class="q-en">Which day comes AFTER Wednesday?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-emoji">💎</div>
+          <div class="choice-kn">ಶುಕ್ರವಾರ</div>
+          <div class="choice-sub">Friday</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,true,'f4q6')">
+          <div class="choice-emoji">🌟</div>
+          <div class="choice-kn">ಗುರುವಾರ</div>
+          <div class="choice-sub">Thursday ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-emoji">🔴</div>
+          <div class="choice-kn">ಮಂಗಳವಾರ</div>
+          <div class="choice-sub">Tuesday</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="t4q7">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">ಒಂದು ವಾರದಲ್ಲಿ ಎಷ್ಟು ದಿನಗಳಿವೆ?</div>
+      <div class="q-en">How many days are there in one week?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q7',this,false,'f4q7')">
+          <div class="choice-emoji">5️⃣</div>
+          <div class="choice-kn">5 ದಿನ</div>
+          <div class="choice-sub">5 days</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q7',this,true,'f4q7')">
+          <div class="choice-emoji">7️⃣</div>
+          <div class="choice-kn">7 ದಿನ</div>
+          <div class="choice-sub">7 days ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q7',this,false,'f4q7')">
+          <div class="choice-emoji">🔟</div>
+          <div class="choice-kn">10 ದಿನ</div>
+          <div class="choice-sub">10 days</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q7"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn blue" id="btn4" disabled onclick="unlockNext(5)">ಮುಂದೆ ➡️ ತಿಂಗಳುಗಳು</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 : ವರ್ಷದ ತಿಂಗಳುಗಳು (Months of the Year)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-5">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9)">
+    <div class="banner-emoji">🗓️</div>
+    <div>
+      <div class="banner-kn" style="color:#1a237e">ವರ್ಷದ ತಿಂಗಳುಗಳು</div>
+      <div class="banner-en" style="color:#283593">Months of the Year</div>
+      <div class="banner-sub" style="color:#3949ab">ಒಂದು ವರ್ಷದಲ್ಲಿ 12 ತಿಂಗಳುಗಳಿವೆ<br>One year has 12 months</div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <div style="font-size:14px;font-weight:900;color:#1a237e;text-align:center;margin-bottom:6px">12 ತಿಂಗಳುಗಳು • 12 Months</div>
+    <div class="month-grid">
+      <div class="month-item" style="border-color:#ef9a9a">
+        <div class="month-num" style="background:#e53935">1</div>
+        <div>ಜನವರಿ</div>
+        <div style="font-size:9px;color:#999">January</div>
+      </div>
+      <div class="month-item" style="border-color:#f48fb1">
+        <div class="month-num" style="background:#e91e63">2</div>
+        <div>ಫೆಬ್ರವರಿ</div>
+        <div style="font-size:9px;color:#999">February</div>
+      </div>
+      <div class="month-item" style="border-color:#ce93d8">
+        <div class="month-num" style="background:#9c27b0">3</div>
+        <div>ಮಾರ್ಚ್</div>
+        <div style="font-size:9px;color:#999">March</div>
+      </div>
+      <div class="month-item" style="border-color:#9fa8da">
+        <div class="month-num" style="background:#3f51b5">4</div>
+        <div>ಎಪ್ರಿಲ್</div>
+        <div style="font-size:9px;color:#999">April</div>
+      </div>
+      <div class="month-item" style="border-color:#80cbc4">
+        <div class="month-num" style="background:#009688">5</div>
+        <div>ಮೇ</div>
+        <div style="font-size:9px;color:#999">May</div>
+      </div>
+      <div class="month-item" style="border-color:#a5d6a7">
+        <div class="month-num" style="background:#4caf50">6</div>
+        <div>ಜೂನ್</div>
+        <div style="font-size:9px;color:#999">June</div>
+      </div>
+      <div class="month-item" style="border-color:#c5e1a5">
+        <div class="month-num" style="background:#8bc34a">7</div>
+        <div>ಜುಲೈ</div>
+        <div style="font-size:9px;color:#999">July</div>
+      </div>
+      <div class="month-item" style="border-color:#ffe082">
+        <div class="month-num" style="background:#ffc107">8</div>
+        <div>ಆಗಸ್ಟ್</div>
+        <div style="font-size:9px;color:#999">August</div>
+      </div>
+      <div class="month-item" style="border-color:#ffcc80">
+        <div class="month-num" style="background:#ff9800">9</div>
+        <div>ಸೆಪ್ಟೆಂಬರ್</div>
+        <div style="font-size:9px;color:#999">September</div>
+      </div>
+      <div class="month-item" style="border-color:#ef9a9a">
+        <div class="month-num" style="background:#ff5722">10</div>
+        <div>ಅಕ್ಟೋಬರ್</div>
+        <div style="font-size:9px;color:#999">October</div>
+      </div>
+      <div class="month-item" style="border-color:#b0bec5">
+        <div class="month-num" style="background:#607d8b">11</div>
+        <div>ನವೆಂಬರ್</div>
+        <div style="font-size:9px;color:#999">November</div>
+      </div>
+      <div class="month-item" style="border-color:#90caf9">
+        <div class="month-num" style="background:#2196f3">12</div>
+        <div>ಡಿಸೆಂಬರ್</div>
+        <div style="font-size:9px;color:#999">December</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t5q1">
+    <div class="q-top">
+      <div class="q-emoji">1️⃣</div>
+      <div class="q-kn">ವರ್ಷದ <strong>ಮೊದಲ</strong> ತಿಂಗಳು ಯಾವುದು?</div>
+      <div class="q-en">What is the FIRST month of the year?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q1',this,true,'f5q1')">
+          <div class="choice-emoji">❄️</div>
+          <div class="choice-kn">ಜನವರಿ</div>
+          <div class="choice-sub">January ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q1',this,false,'f5q1')">
+          <div class="choice-emoji">☀️</div>
+          <div class="choice-kn">ಜುಲೈ</div>
+          <div class="choice-sub">July</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q1',this,false,'f5q1')">
+          <div class="choice-emoji">🎁</div>
+          <div class="choice-kn">ಡಿಸೆಂಬರ್</div>
+          <div class="choice-sub">December</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t5q2">
+    <div class="q-top">
+      <div class="q-emoji">1️⃣2️⃣</div>
+      <div class="q-kn">ವರ್ಷದ <strong>ಕೊನೆಯ</strong> ತಿಂಗಳು ಯಾವುದು?</div>
+      <div class="q-en">What is the LAST month of the year?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q2',this,false,'f5q2')">
+          <div class="choice-emoji">🍂</div>
+          <div class="choice-kn">ಸೆಪ್ಟೆಂಬರ್</div>
+          <div class="choice-sub">September</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q2',this,true,'f5q2')">
+          <div class="choice-emoji">🎁</div>
+          <div class="choice-kn">ಡಿಸೆಂಬರ್</div>
+          <div class="choice-sub">December ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q2',this,false,'f5q2')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಮಾರ್ಚ್</div>
+          <div class="choice-sub">March</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t5q3">
+    <div class="q-top">
+      <div class="q-emoji">🌸</div>
+      <div class="q-kn">ಮಾರ್ಚ್ <strong>ನಂತರ</strong> ಯಾವ ತಿಂಗಳು?</div>
+      <div class="q-en">Which month comes AFTER March?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q3',this,false,'f5q3')">
+          <div class="choice-emoji">❄️</div>
+          <div class="choice-kn">ಜನವರಿ</div>
+          <div class="choice-sub">January</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q3',this,true,'f5q3')">
+          <div class="choice-emoji">🌷</div>
+          <div class="choice-kn">ಎಪ್ರಿಲ್</div>
+          <div class="choice-sub">April ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'f5q3')">
+          <div class="choice-emoji">☀️</div>
+          <div class="choice-kn">ಆಗಸ್ಟ್</div>
+          <div class="choice-sub">August</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t5q4">
+    <div class="q-top">
+      <div class="q-emoji">⬅️</div>
+      <div class="q-kn">ಜುಲೈ <strong>ಹಿಂದೆ</strong> ಯಾವ ತಿಂಗಳು?</div>
+      <div class="q-en">Which month comes BEFORE July?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q4',this,true,'f5q4')">
+          <div class="choice-emoji">🌊</div>
+          <div class="choice-kn">ಜೂನ್</div>
+          <div class="choice-sub">June ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಮೇ</div>
+          <div class="choice-sub">May</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-emoji">🎁</div>
+          <div class="choice-kn">ಡಿಸೆಂಬರ್</div>
+          <div class="choice-sub">December</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t5q5">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">ಸೆಪ್ಟೆಂಬರ್ ಮತ್ತು ನವೆಂಬರ್ <strong>ನಡುವೆ</strong> ಯಾವ ತಿಂಗಳು?</div>
+      <div class="q-en">Which month is BETWEEN September and November?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q5',this,true,'f5q5')">
+          <div class="choice-emoji">🍂</div>
+          <div class="choice-kn">ಅಕ್ಟೋಬರ್</div>
+          <div class="choice-sub">October ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'f5q5')">
+          <div class="choice-emoji">🎁</div>
+          <div class="choice-kn">ಡಿಸೆಂಬರ್</div>
+          <div class="choice-sub">December</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'f5q5')">
+          <div class="choice-emoji">☀️</div>
+          <div class="choice-kn">ಆಗಸ್ಟ್</div>
+          <div class="choice-sub">August</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t5q6">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">ಒಂದು ವರ್ಷದಲ್ಲಿ ಎಷ್ಟು ತಿಂಗಳುಗಳಿವೆ?</div>
+      <div class="q-en">How many months are there in a year?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q6',this,false,'f5q6')">
+          <div class="choice-emoji">7️⃣</div>
+          <div class="choice-kn">7 ತಿಂಗಳು</div>
+          <div class="choice-sub">7 months</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q6',this,true,'f5q6')">
+          <div class="choice-emoji">1️⃣2️⃣</div>
+          <div class="choice-kn">12 ತಿಂಗಳು</div>
+          <div class="choice-sub">12 months ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q6',this,false,'f5q6')">
+          <div class="choice-emoji">🔟</div>
+          <div class="choice-kn">10 ತಿಂಗಳು</div>
+          <div class="choice-sub">10 months</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="t5q7">
+    <div class="q-top">
+      <div class="q-emoji">❓</div>
+      <div class="q-kn">ಜನವರಿ ನಂತರ ಯಾವ ತಿಂಗಳು?</div>
+      <div class="q-en">Which month comes after January?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q7',this,false,'f5q7')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಮಾರ್ಚ್</div>
+          <div class="choice-sub">March</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q7',this,true,'f5q7')">
+          <div class="choice-emoji">💝</div>
+          <div class="choice-kn">ಫೆಬ್ರವರಿ</div>
+          <div class="choice-sub">February ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q7',this,false,'f5q7')">
+          <div class="choice-emoji">🌷</div>
+          <div class="choice-kn">ಎಪ್ರಿಲ್</div>
+          <div class="choice-sub">April</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q7"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score5"></div>
+  <button class="big-btn blue" id="btn5" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಸಿ! Finish Lesson!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- Lock Toast -->
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಅದ್ಭುತ! ಭಲೇ!</div>
+    <div class="celeb-sub">ನೀವು ಪಾಠ 17 ಮುಗಿಸಿದಿರಿ!<br>You finished Lesson 17 — ಕಾಲ (Time)!<br>⏰ 📅 🗓️</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="big-btn blue" onclick="document.getElementById('celeb').classList.remove('show')">ಮತ್ತೆ ಆಟವಾಡಿ 🔄</button>
+  </div>
+</div>
+
+<script>
+let totalStars = 0;
+let activeTab  = 1;
+let unlockedTab = 1;
+
+const totals = {1:5, 2:6, 3:6, 4:7, 5:7};
+const done   = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+Object.keys(totals).forEach(t => buildDots('score'+t, 0, totals[t]));
+
+function buildDots(id, d, total) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'sdot' + (i < d ? ' done' : '');
+    el.appendChild(dot);
+  }
+}
+
+function updateProgress() {
+  const totalQ = Object.values(totals).reduce((a,b)=>a+b,0);
+  const doneQ  = Object.values(done).reduce((a,b)=>a+b,0);
+  document.getElementById('progFill').style.width = (doneQ/totalQ*100)+'%';
+}
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starsPill').textContent = '⭐ ' + totalStars;
+}
+
+function tryTab(n) {
+  if (n <= unlockedTab) { goTab(n); }
+  else {
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    setTimeout(()=> btn.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function goTab(n) {
+  document.getElementById('tab-'+activeTab).classList.remove('active');
+  const prevBtn = document.getElementById('tab-btn-'+activeTab);
+  prevBtn.classList.remove('active');
+  if (n > activeTab) prevBtn.classList.add('done');
+  activeTab = n;
+  if (n > unlockedTab) unlockedTab = n;
+  const btn = document.getElementById('tab-btn-'+n);
+  btn.classList.remove('locked','unlocked','done');
+  btn.classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function unlockNext(n) {
+  const nextBtn = document.getElementById('tab-btn-'+n);
+  nextBtn.classList.remove('locked');
+  nextBtn.classList.add('unlocked');
+  unlockedTab = n;
+  goTab(n);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+function ansQ(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o=>{ o.classList.add('disabled'); o.style.pointerEvents='none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ! Well done!';
+    card.classList.add('done');
+    card.dataset.done = '1';
+    addStars(1);
+    const tnum = parseInt(cardId.charAt(1));
+    done[tnum]++;
+    buildDots('score'+tnum, done[tnum], totals[tnum]);
+    if (done[tnum] >= totals[tnum]) document.getElementById('btn'+tnum).disabled = false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className = 'fb no';
+    fb.textContent = '❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(()=>{
+      opts.forEach(o=>{ o.classList.remove('disabled'); o.style.pointerEvents=''; });
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className = 'fb';
+    }, 900);
+  }
+}
+
+function finishLesson() {
+  const n = Math.max(3, Math.min(10, Math.floor(totalStars/3)));
+  document.getElementById('celebStars').textContent = '⭐'.repeat(n);
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

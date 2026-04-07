@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 2: ಆಕಾರಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8f0;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#4a148c,#6a1b9a);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:17px;color:#fff;font-weight:900;letter-spacing:.3px}
+.stars-pill{background:rgba(255,215,0,.25);border:2px solid rgba(255,215,0,.7);color:#fff8dc;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:13px;font-weight:900;cursor:pointer}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#4a148c,#7b1fa2,#ce93d8);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.85);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.12);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#e0e0e0;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#4a148c,#ce93d8);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* TABS BAR */
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#6a1b9a;border-color:#ce93d8}
+.step-tab.active{background:#4a148c;color:#fff;border-color:#4a148c;box-shadow:0 4px 14px rgba(74,20,140,.4)}
+.step-tab.done{background:#f3e5f5;color:#4a148c;border-color:#ab47bc}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#4e342e;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONTENT */
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:56px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7}
+
+/* SHAPE TEACH CARD */
+.teach-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.09);overflow:hidden;border-left:6px solid #7b1fa2}
+.teach-inner{padding:14px 16px;display:flex;align-items:center;gap:14px}
+.teach-vis{font-size:52px;flex-shrink:0;line-height:1;text-align:center;min-width:60px}
+.teach-kn{font-size:16px;font-weight:900;color:#333;margin-bottom:2px}
+.teach-en{font-size:13px;font-weight:700;color:#7b1fa2}
+
+/* SHAPE SVG CARD */
+.shape-demo{background:#fff;border-radius:22px;margin-bottom:14px;box-shadow:0 4px 20px rgba(0,0,0,.1);padding:18px;text-align:center}
+.shape-demo svg{width:100px;height:100px;margin:0 auto;display:block}
+.shape-name-kn{font-size:26px;font-weight:900;color:#4a148c;margin-top:8px}
+.shape-name-en{font-size:15px;font-weight:700;color:#7b1fa2;margin-bottom:4px}
+.shape-desc{font-size:13px;font-weight:700;color:#666;line-height:1.5}
+
+/* SHAPE GRID INTRO */
+.shapes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.shape-cell{background:#fff;border-radius:20px;padding:16px 12px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.09);border:3px solid #e1bee7;cursor:pointer;transition:all .2s}
+.shape-cell:active{transform:scale(.94)}
+.shape-cell svg{width:64px;height:64px;margin:0 auto 6px;display:block}
+.shape-cell .s-name{font-size:16px;font-weight:900;color:#4a148c}
+.shape-cell .s-en{font-size:12px;font-weight:700;color:#9c27b0}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#ab47bc;background:#f3e5f5}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px;display:flex;align-items:center;gap:14px}
+.q-vis{font-size:58px;line-height:1;flex-shrink:0;text-align:center;min-width:70px}
+.q-vis svg{width:64px;height:64px}
+.q-label{font-size:11px;font-weight:900;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-kn{font-size:15px;font-weight:900;color:#444;line-height:1.5;margin-bottom:3px}
+.q-kn .blank{color:#4a148c;font-size:18px;border-bottom:3px solid #7b1fa2;padding:0 6px}
+.q-en{font-size:13px;font-weight:700;color:#888}
+.q-bottom{border-top:2px dashed #e8e8e8;padding:12px 14px}
+
+/* CHOICE BUTTONS */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #e1bee7;background:#f3e5f5;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice svg{width:38px;height:38px;margin:0 auto}
+.choice-icon{font-size:34px;line-height:1}
+.choice-kn{font-size:16px;font-weight:900;color:#4a148c}
+.choice-en{font-size:12px;font-weight:700;color:#9c27b0}
+.choice.correct{border-color:#4a148c;background:#e1bee7;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+/* FEEDBACK */
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#e1bee7;color:#4a148c;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* DOTS */
+.dots{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.dot{width:14px;height:14px;border-radius:50%;background:#e0e0e0;transition:background .3s}
+.dot.done{background:#7b1fa2}
+
+/* BIG BUTTON */
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.purple{background:linear-gradient(135deg,#4a148c,#8e24aa);color:#fff}
+.big-btn.purple:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+.big-btn.orange{background:linear-gradient(135deg,#e65100,#f57c00);color:#fff}
+
+/* QUIZ */
+.quiz-wrap{background:#fff;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.quiz-num{font-size:12px;color:#999;font-weight:900;text-align:center;margin-bottom:8px}
+.quiz-scene{text-align:center;margin:10px 0}
+.quiz-scene svg{width:90px;height:90px;margin:0 auto;display:block}
+.quiz-q{font-size:19px;font-weight:900;color:#4a148c;text-align:center;margin-bottom:18px;line-height:1.4}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#f3e5f5;border:3px solid #ce93d8;border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .18s;font-size:17px;font-weight:900;color:#4a148c;display:flex;flex-direction:column;align-items:center;gap:4px}
+.quiz-opt svg{width:44px;height:44px;margin:0 auto}
+.quiz-opt:active{transform:scale(.92)}
+.quiz-opt.right{border-color:#4a148c;background:#e1bee7;color:#4a148c;pointer-events:none}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none}
+
+/* CELEBRATE */
+.celeb{position:fixed;inset:0;background:rgba(74,20,140,.95);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;text-align:center;padding:20px}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-e{font-size:90px;margin-bottom:12px;animation:float 2s ease-in-out infinite}
+.celeb-t{font-size:30px;font-weight:900;color:#fff;margin-bottom:8px}
+.celeb-s{font-size:15px;color:rgba(255,255,255,.85);font-weight:700;margin-bottom:8px;line-height:1.6}
+.celeb-stars{font-size:22px;color:#ffd700;font-weight:900;margin-bottom:28px}
+.celeb-btn{background:#ffd700;color:#4a148c;font-family:'Baloo Tamma 2',sans-serif;font-size:20px;font-weight:900;padding:16px 44px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+/* SECTION DIVIDER */
+.sec-head{font-size:13px;font-weight:900;color:#7b1fa2;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-left:4px}
+
+/* OBJECTS GRID (for sorting game) */
+.obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.obj-item{background:#fff;border-radius:16px;padding:14px 8px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.08);border:3px solid #e1bee7;cursor:pointer;transition:all .2s;user-select:none}
+.obj-item:active{transform:scale(.9)}
+.obj-item svg{width:48px;height:48px;margin:0 auto 4px;display:block}
+.obj-item .obj-name{font-size:13px;font-weight:900;color:#333}
+.obj-item.selected{border-color:#4a148c;background:#f3e5f5;transform:scale(.96)}
+.obj-item.correct-pick{border-color:#2e7d32;background:#c8e6c9;pointer-events:none}
+.obj-item.wrong-pick{border-color:#c62828;background:#ffcdd2;animation:wobble .4s ease;pointer-events:none}
+
+/* SORT TARGETS */
+.sort-targets{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.sort-zone{background:#f9f0ff;border:3px dashed #ce93d8;border-radius:20px;padding:16px;text-align:center;min-height:90px}
+.sort-zone svg{width:50px;height:50px;margin:0 auto 6px;display:block}
+.sort-zone-name{font-size:15px;font-weight:900;color:#4a148c;margin-bottom:4px}
+.sort-zone-count{font-size:12px;font-weight:700;color:#9c27b0}
+
+/* MOVEMENT CARD */
+.move-card{background:#fff;border-radius:22px;margin-bottom:12px;padding:18px;box-shadow:0 3px 16px rgba(0,0,0,.09);border-left:6px solid #f57c00;display:flex;align-items:center;gap:16px}
+.move-vis{font-size:48px;flex-shrink:0}
+.move-kn{font-size:16px;font-weight:900;color:#333;margin-bottom:2px}
+.move-en{font-size:13px;font-weight:700;color:#e65100}
+
+/* COLORING ACTIVITY */
+.color-targets{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.color-item{background:#fff;border-radius:20px;padding:16px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.09);border:3px solid #e1bee7}
+.color-item svg{width:70px;height:70px;margin:0 auto 8px;display:block}
+.color-item .c-name{font-size:14px;font-weight:900;color:#4a148c}
+
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="back-btn" onclick="history.back()">← ಹಿಂದೆ</button>
+  <div class="topbar-title">📐 ಗಣಿತ — ತರಗತಿ 1</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🔷</span>
+  <h1>ಪಾಠ 2: ಆಕಾರಗಳು</h1>
+  <p>Lesson 2: Shapes — Tap the right answer! No typing needed!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">ಪ್ರಾರಂಭಿಸೋಣ! ಮೊದಲ ಹಂತವನ್ನು ಒತ್ತಿ 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"   data-tab="learn">🔵 ಕಲಿಯಿರಿ</div>
+  <div class="step-tab locked"   data-tab="group">🗂️ ಗುಂಪು</div>
+  <div class="step-tab locked"   data-tab="match">🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked"   data-tab="movement">🏃 ಚಲನೆ</div>
+  <div class="step-tab locked"   data-tab="flat">📄 ಚಪ್ಪಟೆ</div>
+  <div class="step-tab locked"   data-tab="quiz">🎯 ಪರೀಕ್ಷೆ</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════
+     TAB 1 — ಕಲಿಯಿರಿ (Learn the Shapes)
+═══════════════════════════ -->
+<div class="tab-panel active" id="tab-learn">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ede7f6,#d1c4e9)">
+    <div class="banner-emoji">🔷</div>
+    <div>
+      <div class="banner-kn" style="color:#4a148c">ಆಕಾರಗಳನ್ನು ಕಲಿಯಿರಿ</div>
+      <div class="banner-en" style="color:#6a1b9a">Learn the Shapes</div>
+      <div class="banner-sub" style="color:#6a1b9a">ಪ್ರತಿ ಆಕಾರವನ್ನು ಒತ್ತಿ ಅದರ ಹೆಸರನ್ನು ಕಲಿಯಿರಿ!</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ನಮ್ಮ ಸುತ್ತ ಇರುವ ಆಕಾರಗಳು (Shapes Around Us)</div>
+
+  <!-- 4 shape teach cards -->
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">
+        <svg viewBox="0 0 60 60" style="width:56px;height:56px"><circle cx="30" cy="30" r="26" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/></svg>
+      </div>
+      <div>
+        <div class="teach-kn">ವೃತ್ತ — ⚽ ಚೆಂಡು, 🍎 ಸೇಬು, 🍭 ಲಾಲಿಪಾಪ್</div>
+        <div class="teach-en"><strong style="color:#c62828">CIRCLE</strong> — Round shape, rolls easily!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">
+        <svg viewBox="0 0 60 60" style="width:56px;height:56px"><polygon points="30,4 56,56 4,56" fill="#fff59d" stroke="#f9a825" stroke-width="3"/></svg>
+      </div>
+      <div>
+        <div class="teach-kn">ತ್ರಿಭುಜ — 🍦 ಐಸ್‌ಕ್ರೀಮ್, ⛺ ಡೇರೆ, 🌲 ಮರ</div>
+        <div class="teach-en"><strong style="color:#f9a825">TRIANGLE</strong> — 3 sides, 3 corners!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">
+        <svg viewBox="0 0 60 60" style="width:56px;height:56px"><rect x="4" y="14" width="52" height="32" rx="4" fill="#a5d6a7" stroke="#2e7d32" stroke-width="3"/></svg>
+      </div>
+      <div>
+        <div class="teach-kn">ಆಯತ — 📚 ಪುಸ್ತಕ, 🧲 ಪೆಟ್ಟಿಗೆ, 📱 ಫೋನ್</div>
+        <div class="teach-en"><strong style="color:#2e7d32">RECTANGLE</strong> — 4 sides, longer than wide!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <div class="teach-inner">
+      <div class="teach-vis">
+        <svg viewBox="0 0 60 60" style="width:56px;height:56px"><rect x="8" y="8" width="44" height="44" rx="4" fill="#90caf9" stroke="#1565c0" stroke-width="3"/></svg>
+      </div>
+      <div>
+        <div class="teach-kn">ವರ್ಗ (ಚೌಕ) — 🎲 ದಾಳ, 🎁 ಉಡುಗೊರೆ ಪೆಟ್ಟಿಗೆ</div>
+        <div class="teach-en"><strong style="color:#1565c0">SQUARE</strong> — 4 equal sides!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಈಗ ನೀವು ಆಯ್ಕೆ ಮಾಡಿ — ಸರಿಯಾದ ಆಕಾರ ಒತ್ತಿ!</div>
+
+  <!-- Q1: which is a circle -->
+  <div class="q-card" id="l1">
+    <div class="q-top">
+      <div class="q-vis">
+        <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/></svg>
+      </div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಇದು ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">What shape is this?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ans('l1',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('l1',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('l1',this,'rect')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="3" y="10" width="34" height="20" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/></svg>
+          <div class="choice-kn">ಆಯತ</div><div class="choice-en">Rectangle</div>
+        </div>
+        <div class="choice" onclick="ans('l1',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-l1"></div>
+    </div>
+  </div>
+
+  <!-- Q2: triangle -->
+  <div class="q-card" id="l2">
+    <div class="q-top">
+      <div class="q-vis">🍦</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಐಸ್‌ಕ್ರೀಮ್ ಕೋನ್ ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">Ice cream cone looks like which shape?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('l2',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('l2',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-l2"></div>
+    </div>
+  </div>
+
+  <!-- Q3: square -->
+  <div class="q-card" id="l3">
+    <div class="q-top">
+      <div class="q-vis">🎲</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ದಾಳ (Dice) ಯಾವ ಆಕಾರ ಹೊಂದಿದೆ?</div>
+        <div class="q-en">Which shape does a dice have?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('l3',this,'rect')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="3" y="10" width="34" height="20" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/></svg>
+          <div class="choice-kn">ಆಯತ</div><div class="choice-en">Rectangle</div>
+        </div>
+        <div class="choice" onclick="ans('l3',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-l3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: rectangle -->
+  <div class="q-card" id="l4">
+    <div class="q-top">
+      <div class="q-vis">📚</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಪುಸ್ತಕ ಯಾವ ಆಕಾರ ಹೊಂದಿದೆ?</div>
+        <div class="q-en">A book looks like which shape?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ans('l4',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('l4',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('l4',this,'rect')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="3" y="10" width="34" height="20" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/></svg>
+          <div class="choice-kn">ಆಯತ</div><div class="choice-en">Rectangle</div>
+        </div>
+        <div class="choice" onclick="ans('l4',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-l4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="l5">
+    <div class="q-top">
+      <div class="q-vis">⚽</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಚೆಂಡು ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">A ball looks like which shape?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('l5',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+        <div class="choice" onclick="ans('l5',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-l5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-learn"></div>
+  <button class="big-btn purple" id="btn-learn" disabled onclick="completeTab('learn','group')">ಮುಂದೆ: ಗುಂಪು ಮಾಡಿ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 2 — ಗುಂಪು (Group same shapes)
+     PDF page 17: objects grouped by shape
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-group">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <div class="banner-emoji">🗂️</div>
+    <div>
+      <div class="banner-kn" style="color:#880e4f">ಒಂದೇ ಆಕಾರ — ಒಂದು ಗುಂಪು</div>
+      <div class="banner-en" style="color:#ad1457">Same Shape = One Group</div>
+      <div class="banner-sub" style="color:#ad1457">ಒಂದೇ ಆಕಾರವಿರುವ ವಸ್ತುಗಳನ್ನು ಒಂದೇ ಗುಂಪಿನಲ್ಲಿ ಇರಿಸಲಾಗಿದೆ</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ಇವು ಎಲ್ಲ ವೃತ್ತ ಆಕಾರ (All Circle shapes)</div>
+  <div class="teach-card" style="border-left-color:#c62828">
+    <div class="teach-inner" style="gap:10px;flex-wrap:wrap">
+      <div style="font-size:38px">⚽</div>
+      <div style="font-size:38px">🍭</div>
+      <div style="font-size:38px">🍎</div>
+      <div style="font-size:38px">🍊</div>
+      <div>
+        <div class="teach-kn">ಇವೆಲ್ಲ ವೃತ್ತ ಆಕಾರ!</div>
+        <div class="teach-en">All these are <strong style="color:#c62828">CIRCLES</strong>!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ಇವು ಎಲ್ಲ ತ್ರಿಭುಜ ಆಕಾರ (All Triangle shapes)</div>
+  <div class="teach-card" style="border-left-color:#f9a825">
+    <div class="teach-inner" style="gap:10px;flex-wrap:wrap">
+      <div style="font-size:38px">🍦</div>
+      <div style="font-size:38px">⛺</div>
+      <div style="font-size:38px">🎄</div>
+      <div>
+        <div class="teach-kn">ಇವೆಲ್ಲ ತ್ರಿಭುಜ ಆಕಾರ!</div>
+        <div class="teach-en">All these are <strong style="color:#f9a825">TRIANGLES</strong>!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಸರಿಯಾದ ಗುಂಪು ಆಯ್ಕೆ ಮಾಡಿ!</div>
+
+  <!-- G1 -->
+  <div class="q-card" id="g1">
+    <div class="q-top">
+      <div class="q-vis">📦</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಪೆಟ್ಟಿಗೆ (box) ಯಾವ ಗುಂಪಿಗೆ ಸೇರುತ್ತದೆ?</div>
+        <div class="q-en">A box belongs to which group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('g1',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ / ಆಯತ</div><div class="choice-en">Square/Rectangle</div>
+        </div>
+        <div class="choice" onclick="ans('g1',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-g1"></div>
+    </div>
+  </div>
+
+  <!-- G2 -->
+  <div class="q-card" id="g2">
+    <div class="q-top">
+      <div class="q-vis">🥕</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಕ್ಯಾರೆಟ್ ತುದಿ ಯಾವ ಆಕಾರ ಗುಂಪಿಗೆ ಸೇರುತ್ತದೆ?</div>
+        <div class="q-en">The tip of a carrot belongs to which shape group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('g2',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('g2',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-g2"></div>
+    </div>
+  </div>
+
+  <!-- G3 -->
+  <div class="q-card" id="g3">
+    <div class="q-top">
+      <div class="q-vis">🪙</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ನಾಣ್ಯ (coin) ಯಾವ ಗುಂಪು?</div>
+        <div class="q-en">A coin belongs to which shape group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('g3',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('g3',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-g3"></div>
+    </div>
+  </div>
+
+  <!-- G4 -->
+  <div class="q-card" id="g4">
+    <div class="q-top">
+      <div class="q-vis">🪵</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಉದ್ದನೆ ದೊಣ್ಣೆ (long stick) ಯಾವ ಗುಂಪು?</div>
+        <div class="q-en">A long wooden stick belongs to which group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('g4',this,'rect')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="3" y="10" width="34" height="20" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/></svg>
+          <div class="choice-kn">ಆಯತ</div><div class="choice-en">Rectangle</div>
+        </div>
+        <div class="choice" onclick="ans('g4',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-g4"></div>
+    </div>
+  </div>
+
+  <!-- G5 -->
+  <div class="q-card" id="g5">
+    <div class="q-top">
+      <div class="q-vis">🏠</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಮನೆ ಮೇಲ್ಛಾವಣಿ (roof) ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">A house roof looks like which shape?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('g5',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('g5',this,'rect')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="3" y="10" width="34" height="20" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/></svg>
+          <div class="choice-kn">ಆಯತ</div><div class="choice-en">Rectangle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-g5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-group"></div>
+  <button class="big-btn purple" id="btn-group" disabled onclick="completeTab('group','match')">ಮುಂದೆ: ಹೊಂದಿಸಿ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 3 — ಹೊಂದಿಸು (Match shapes)
+     PDF page 18: connect same shapes / color sorting
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-kn" style="color:#0d47a1">ಆಕಾರ ಹೊಂದಿಸಿ</div>
+      <div class="banner-en" style="color:#1565c0">Match the Shapes</div>
+      <div class="banner-sub" style="color:#1565c0">ಒಂದೇ ರೀತಿಯ ಆಕಾರ ಇರುವ ವಸ್ತುಗಳನ್ನು ಹೊಂದಿಸಿ</div>
+    </div>
+  </div>
+
+  <div class="sec-head">🎨 ಆಕಾರಗಳ ವಿಂಗಡಣೆ — ಸರಿಯಾದ ಆಕಾರ ಆಯ್ಕೆ ಮಾಡಿ!</div>
+  <p style="font-size:13px;font-weight:700;color:#555;margin-bottom:12px;padding-left:4px">ಕೆಂಪು = ಚೌಕ | ನೀಲಿ = ವೃತ್ತ | ಹಸಿರು = ತ್ರಿಭುಜ | ಹಳದಿ = ಆಯತ</p>
+
+  <!-- M1 -->
+  <div class="q-card" id="m1">
+    <div class="q-top">
+      <div class="q-vis">📫</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಅಂಚೆ ಪೆಟ್ಟಿಗೆ (post box) ಯಾವ ಬಣ್ಣ ಗುಂಪಿಗೆ ಸೇರುತ್ತದೆ?</div>
+        <div class="q-en">Post box — which color group (shape)?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ans('m1',this,'red')" style="border-color:#ef9a9a;background:#ffebee">
+          <div style="width:30px;height:30px;background:#ef5350;border-radius:4px;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#c62828">ಕೆಂಪು</div><div class="choice-en" style="color:#c62828">Red=Square</div>
+        </div>
+        <div class="choice" onclick="ans('m1',this,'blue')" style="border-color:#90caf9;background:#e3f2fd">
+          <div style="width:30px;height:30px;background:#1e88e5;border-radius:50%;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#1565c0">ನೀಲಿ</div><div class="choice-en" style="color:#1565c0">Blue=Circle</div>
+        </div>
+        <div class="choice" onclick="ans('m1',this,'green')" style="border-color:#a5d6a7;background:#e8f5e9">
+          <div style="width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:26px solid #43a047;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#2e7d32">ಹಸಿರು</div><div class="choice-en" style="color:#2e7d32">Green=Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('m1',this,'yellow')" style="border-color:#fff59d;background:#fffde7">
+          <div style="width:34px;height:20px;background:#f9a825;border-radius:3px;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#e65100">ಹಳದಿ</div><div class="choice-en" style="color:#e65100">Yellow=Rectangle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-m1"></div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="q-card" id="m2">
+    <div class="q-top">
+      <div class="q-vis">💿</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">CD / ಡಿಸ್ಕ್ ಯಾವ ಬಣ್ಣ ಗುಂಪಿಗೆ ಸೇರುತ್ತದೆ?</div>
+        <div class="q-en">A CD disc — which color group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('m2',this,'blue')" style="border-color:#90caf9;background:#e3f2fd">
+          <div style="width:30px;height:30px;background:#1e88e5;border-radius:50%;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#1565c0">ನೀಲಿ (ವೃತ್ತ)</div>
+        </div>
+        <div class="choice" onclick="ans('m2',this,'red')" style="border-color:#ef9a9a;background:#ffebee">
+          <div style="width:30px;height:30px;background:#ef5350;border-radius:4px;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#c62828">ಕೆಂಪು (ಚೌಕ)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-m2"></div>
+    </div>
+  </div>
+
+  <!-- M3 -->
+  <div class="q-card" id="m3">
+    <div class="q-top">
+      <div class="q-vis">🎪</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಡೇರೆ (tent) ಯಾವ ಬಣ್ಣ ಗುಂಪು?</div>
+        <div class="q-en">A tent — which color group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('m3',this,'yellow')" style="border-color:#fff59d;background:#fffde7">
+          <div style="width:34px;height:20px;background:#f9a825;border-radius:3px;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#e65100">ಹಳದಿ (ಆಯತ)</div>
+        </div>
+        <div class="choice" onclick="ans('m3',this,'green')" style="border-color:#a5d6a7;background:#e8f5e9">
+          <div style="width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:26px solid #43a047;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#2e7d32">ಹಸಿರು (ತ್ರಿಭುಜ)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-m3"></div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="q-card" id="m4">
+    <div class="q-top">
+      <div class="q-vis">🪞</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಚೌಕ ಕನ್ನಡಿ ಯಾವ ಬಣ್ಣ ಗುಂಪು?</div>
+        <div class="q-en">A square mirror — which color group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('m4',this,'blue')" style="border-color:#90caf9;background:#e3f2fd">
+          <div style="width:30px;height:30px;background:#1e88e5;border-radius:50%;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#1565c0">ನೀಲಿ (ವೃತ್ತ)</div>
+        </div>
+        <div class="choice" onclick="ans('m4',this,'red')" style="border-color:#ef9a9a;background:#ffebee">
+          <div style="width:30px;height:30px;background:#ef5350;border-radius:4px;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#c62828">ಕೆಂಪು (ಚೌಕ)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-m4"></div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="q-card" id="m5">
+    <div class="q-top">
+      <div class="q-vis">📏</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಅಳತೆ ಪಟ್ಟಿ (ruler) ಯಾವ ಬಣ್ಣ ಗುಂಪು?</div>
+        <div class="q-en">A ruler — which color group?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('m5',this,'yellow')" style="border-color:#fff59d;background:#fffde7">
+          <div style="width:34px;height:20px;background:#f9a825;border-radius:3px;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#e65100">ಹಳದಿ (ಆಯತ)</div>
+        </div>
+        <div class="choice" onclick="ans('m5',this,'green')" style="border-color:#a5d6a7;background:#e8f5e9">
+          <div style="width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-bottom:26px solid #43a047;margin:0 auto"></div>
+          <div class="choice-kn" style="color:#2e7d32">ಹಸಿರು (ತ್ರಿಭುಜ)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-m5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-match"></div>
+  <button class="big-btn purple" id="btn-match" disabled onclick="completeTab('match','movement')">ಮುಂದೆ: ಚಲನೆ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 4 — ಚಲನೆ (Rolling vs Sliding)
+     PDF page 19: ವಸ್ತುಗಳ ಚಲನೆ — ಉರುಳುವುದು / ಜಾರುವುದು
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-movement">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3)">
+    <div class="banner-emoji">🏃</div>
+    <div>
+      <div class="banner-kn" style="color:#e65100">ವಸ್ತುಗಳ ಚಲನೆ</div>
+      <div class="banner-en" style="color:#bf360c">Movement of Objects</div>
+      <div class="banner-sub" style="color:#bf360c">ಉರುಳುವುದು vs ಜಾರುವುದು</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ಉರುಳುವ ಆಕಾರ vs ಜಾರುವ ಆಕಾರ</div>
+
+  <div class="move-card">
+    <div class="move-vis">⚽</div>
+    <div>
+      <div class="move-kn">ವೃತ್ತ ಆಕಾರ → <strong style="color:#e65100">ಉರುಳುತ್ತದೆ!</strong></div>
+      <div class="move-en">CIRCLE shape → <strong>ROLLS!</strong> 🔄</div>
+    </div>
+  </div>
+
+  <div class="move-card" style="border-left-color:#1565c0">
+    <div class="move-vis">📦</div>
+    <div>
+      <div class="move-kn">ಚೌಕ / ಆಯತ ಆಕಾರ → <strong style="color:#1565c0">ಜಾರುತ್ತದೆ!</strong></div>
+      <div class="move-en">SQUARE/RECTANGLE → <strong>SLIDES!</strong> ➡️</div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಉರುಳುವ ವಸ್ತುವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ (Choose the rolling object)</div>
+
+  <!-- MV1 -->
+  <div class="q-card" id="mv1">
+    <div class="q-top">
+      <div class="q-vis">🤔</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಇವುಗಳಲ್ಲಿ ಯಾವುದು ಉರುಳುತ್ತದೆ?</div>
+        <div class="q-en">Which of these ROLLS?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('mv1',this,'ball')">
+          <div class="choice-icon">⚽</div>
+          <div class="choice-kn">ಚೆಂಡು</div><div class="choice-en">Ball</div>
+        </div>
+        <div class="choice" onclick="ans('mv1',this,'box')">
+          <div class="choice-icon">📦</div>
+          <div class="choice-kn">ಪೆಟ್ಟಿಗೆ</div><div class="choice-en">Box</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-mv1"></div>
+    </div>
+  </div>
+
+  <!-- MV2 -->
+  <div class="q-card" id="mv2">
+    <div class="q-top">
+      <div class="q-vis">🤔</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಯಾವ ಆಕಾರ ಜಾರುತ್ತದೆ?</div>
+        <div class="q-en">Which shape SLIDES?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('mv2',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('mv2',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-mv2"></div>
+    </div>
+  </div>
+
+  <!-- MV3 -->
+  <div class="q-card" id="mv3">
+    <div class="q-top">
+      <div class="q-vis">🎡</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಟೈರ್ (tyre) ಉರುಳುತ್ತದೆಯೇ?</div>
+        <div class="q-en">Does a tyre ROLL?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('mv3',this,'yes')">
+          <div class="choice-icon">✅</div>
+          <div class="choice-kn">ಹೌದು!</div><div class="choice-en">YES!</div>
+        </div>
+        <div class="choice" onclick="ans('mv3',this,'no')">
+          <div class="choice-icon">❌</div>
+          <div class="choice-kn">ಇಲ್ಲ</div><div class="choice-en">NO</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-mv3"></div>
+    </div>
+  </div>
+
+  <!-- MV4 -->
+  <div class="q-card" id="mv4">
+    <div class="q-top">
+      <div class="q-vis">📚</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಪುಸ್ತಕ ಉರುಳುತ್ತದೆಯೇ?</div>
+        <div class="q-en">Does a book ROLL?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('mv4',this,'no')">
+          <div class="choice-icon">❌</div>
+          <div class="choice-kn">ಇಲ್ಲ, ಜಾರುತ್ತದೆ!</div><div class="choice-en">NO, it slides!</div>
+        </div>
+        <div class="choice" onclick="ans('mv4',this,'yes')">
+          <div class="choice-icon">✅</div>
+          <div class="choice-kn">ಹೌದು</div><div class="choice-en">YES</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-mv4"></div>
+    </div>
+  </div>
+
+  <!-- MV5 -->
+  <div class="q-card" id="mv5">
+    <div class="q-top">
+      <div class="q-vis">🍊</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಕಿತ್ತಳೆ ಹಣ್ಣು ಯಾವ ರೀತಿ ಚಲಿಸುತ್ತದೆ?</div>
+        <div class="q-en">How does an orange move?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('mv5',this,'roll')">
+          <div class="choice-icon">🔄</div>
+          <div class="choice-kn">ಉರುಳುತ್ತದೆ</div><div class="choice-en">Rolls</div>
+        </div>
+        <div class="choice" onclick="ans('mv5',this,'slide')">
+          <div class="choice-icon">➡️</div>
+          <div class="choice-kn">ಜಾರುತ್ತದೆ</div><div class="choice-en">Slides</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-mv5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-movement"></div>
+  <button class="big-btn purple" id="btn-movement" disabled onclick="completeTab('movement','flat')">ಮುಂದೆ: ಚಪ್ಪಟೆ ಆಕಾರ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 5 — ಚಪ್ಪಟೆ ಆಕಾರಗಳು (Flat 2D shapes)
+     PDF pages 20–23: flat shapes, top-face shapes, identifying 2D
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-flat">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <div class="banner-emoji">📄</div>
+    <div>
+      <div class="banner-kn" style="color:#1b5e20">ಚಪ್ಪಟೆ ಆಕಾರಗಳು</div>
+      <div class="banner-en" style="color:#2e7d32">Flat (2D) Shapes</div>
+      <div class="banner-sub" style="color:#2e7d32">ವಸ್ತುಗಳ ಮೇಲ್ಮುಖ ಆಕಾರ ನೋಡಿ ಕಲಿಯಿರಿ</div>
+    </div>
+  </div>
+
+  <div class="sec-head">👀 ವಸ್ತುಗಳ ಮೇಲ್ಮೈ ಆಕಾರ (Top face shapes)</div>
+  <div class="teach-card" style="border-left-color:#1b5e20">
+    <div class="teach-inner">
+      <div class="teach-vis">🪙</div>
+      <div>
+        <div class="teach-kn">ನಾಣ್ಯದ ಮೇಲ್ಮೈ → <strong style="color:#c62828">ವೃತ್ತ</strong></div>
+        <div class="teach-en">Top face of coin = <strong>Circle</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="teach-card" style="border-left-color:#1b5e20">
+    <div class="teach-inner">
+      <div class="teach-vis">📦</div>
+      <div>
+        <div class="teach-kn">ಪೆಟ್ಟಿಗೆ ಮೇಲ್ಮೈ → <strong style="color:#1565c0">ಚೌಕ ಅಥವಾ ಆಯತ</strong></div>
+        <div class="teach-en">Top face of box = <strong>Square or Rectangle</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">✏️ ಮೇಲ್ಮೈ ಆಕಾರ ಆಯ್ಕೆ ಮಾಡಿ!</div>
+
+  <!-- F1 -->
+  <div class="q-card" id="f1">
+    <div class="q-top">
+      <div class="q-vis">🥛</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 1</div>
+        <div class="q-kn">ಹಾಲಿನ ಡಬ್ಬಿ ಮೇಲ್ಮೈ ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">Top face of a milk tin?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('f1',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('f1',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-f1"></div>
+    </div>
+  </div>
+
+  <!-- F2 -->
+  <div class="q-card" id="f2">
+    <div class="q-top">
+      <div class="q-vis">📦</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 2</div>
+        <div class="q-kn">ಚೌಕ ಪೆಟ್ಟಿಗೆ ಮೇಲ್ಮೈ ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">Top face of a square box?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('f2',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('f2',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-f2"></div>
+    </div>
+  </div>
+
+  <!-- F3: shapes in house picture -->
+  <div class="sec-head">🏠 ಮನೆಯಲ್ಲಿ ಆಕಾರಗಳನ್ನು ಹುಡುಕಿ! (Find shapes in the house)</div>
+  <div style="background:#fff;border-radius:22px;padding:16px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.09);text-align:center">
+    <!-- Simple SVG house made of shapes -->
+    <svg viewBox="0 0 220 180" style="width:100%;max-width:300px;margin:0 auto;display:block">
+      <!-- Sky -->
+      <rect width="220" height="180" fill="#e3f2fd"/>
+      <!-- Ground -->
+      <rect y="130" width="220" height="50" fill="#c8e6c9"/>
+      <!-- House body -->
+      <rect x="50" y="80" width="120" height="60" fill="#fff9c4" stroke="#f9a825" stroke-width="2"/>
+      <!-- Roof (triangle) -->
+      <polygon points="110,25 160,80 60,80" fill="#ffcdd2" stroke="#c62828" stroke-width="2"/>
+      <!-- Door (rectangle) -->
+      <rect x="93" y="105" width="35" height="35" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/>
+      <!-- Windows (square) -->
+      <rect x="58" y="90" width="25" height="25" fill="#90caf9" stroke="#1565c0" stroke-width="2"/>
+      <rect x="137" y="90" width="25" height="25" fill="#90caf9" stroke="#1565c0" stroke-width="2"/>
+      <!-- Sun (circle) -->
+      <circle cx="185" cy="30" r="20" fill="#fff176" stroke="#f9a825" stroke-width="2"/>
+      <!-- Labels -->
+      <text x="110" y="55" text-anchor="middle" font-size="10" fill="#c62828" font-weight="bold">ತ್ರಿಭುಜ</text>
+      <text x="110" y="115" text-anchor="middle" font-size="10" fill="#f9a825" font-weight="bold">ಆಯತ</text>
+      <text x="185" y="33" text-anchor="middle" font-size="10" fill="#e65100" font-weight="bold">ವೃತ್ತ</text>
+    </svg>
+    <p style="font-size:13px;font-weight:700;color:#555;margin-top:8px">ಮನೆಯಲ್ಲಿ ನಾಲ್ಕು ಆಕಾರಗಳು ಕಾಣಿಸುತ್ತವೆ!</p>
+  </div>
+
+  <!-- F4 -->
+  <div class="q-card" id="f3">
+    <div class="q-top">
+      <div class="q-vis">🏠</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 3</div>
+        <div class="q-kn">ಮನೆ ಛಾವಣಿ (roof) ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">What shape is the house ROOF?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('f3',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#ffcdd2" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭುಜ</div><div class="choice-en">Triangle</div>
+        </div>
+        <div class="choice" onclick="ans('f3',this,'sq')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="5" y="5" width="30" height="30" rx="2" fill="#90caf9" stroke="#1565c0" stroke-width="2"/></svg>
+          <div class="choice-kn">ಚೌಕ</div><div class="choice-en">Square</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-f3"></div>
+    </div>
+  </div>
+
+  <!-- F5 -->
+  <div class="q-card" id="f4">
+    <div class="q-top">
+      <div class="q-vis">☀️</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 4</div>
+        <div class="q-kn">ಸೂರ್ಯ ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">The sun looks like which shape?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('f4',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#fff176" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+        <div class="choice" onclick="ans('f4',this,'tri')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><polygon points="20,4 36,36 4,36" fill="#fff59d" stroke="#f9a825" stroke-width="2"/></svg>
+          <div class="choice-kn">ತ್ರಿಭুজ</div><div class="choice-en">Triangle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-f4"></div>
+    </div>
+  </div>
+
+  <!-- F5 -->
+  <div class="q-card" id="f5">
+    <div class="q-top">
+      <div class="q-vis">🚪</div>
+      <div>
+        <div class="q-label">ಪ್ರಶ್ನೆ 5</div>
+        <div class="q-kn">ಬಾಗಿಲು (door) ಯಾವ ಆಕಾರ?</div>
+        <div class="q-en">A door looks like which shape?</div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ans('f5',this,'rect')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><rect x="3" y="10" width="34" height="20" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="2"/></svg>
+          <div class="choice-kn">ಆಯತ</div><div class="choice-en">Rectangle</div>
+        </div>
+        <div class="choice" onclick="ans('f5',this,'circle')">
+          <svg viewBox="0 0 40 40" style="width:38px;height:38px"><circle cx="20" cy="20" r="16" fill="#ef9a9a" stroke="#c62828" stroke-width="2"/></svg>
+          <div class="choice-kn">ವೃತ್ತ</div><div class="choice-en">Circle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb-f5"></div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots-flat"></div>
+  <button class="big-btn purple" id="btn-flat" disabled onclick="completeTab('flat','quiz')">ಮುಂದೆ: ಅಂತಿಮ ಪರೀಕ್ಷೆ ➡️</button>
+</div>
+
+<!-- ═══════════════════════════
+     TAB 6 — ಪರೀಕ್ಷೆ (Final Quiz)
+═══════════════════════════ -->
+<div class="tab-panel" id="tab-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <div class="banner-emoji">🎯</div>
+    <div>
+      <div class="banner-kn" style="color:#880e4f">ಅಂತಿಮ ಪರೀಕ್ಷೆ</div>
+      <div class="banner-en" style="color:#ad1457">Final Quiz — You're almost there!</div>
+      <div class="banner-sub" style="color:#ad1457">ಎಲ್ಲ ಪ್ರಶ್ನೆಗಳಿಗೆ ಸರಿಯಾಗಿ ಉತ್ತರಿಸಿ!</div>
+    </div>
+  </div>
+
+  <div id="quizArea"></div>
+  <div style="text-align:center;margin-top:10px">
+    <div id="quizScore" style="font-size:20px;font-weight:900;color:#4a148c;margin-bottom:14px"></div>
+    <button class="big-btn orange" id="finishBtn" style="display:none" onclick="showCelebration()">🎉 ಮುಗಿಯಿತು!</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb" id="celeb">
+  <div class="celeb-e">🎊</div>
+  <div class="celeb-t">ಅದ್ಭುತ! Excellent!</div>
+  <div class="celeb-s">ನೀವು ಎಲ್ಲ ಆಕಾರಗಳನ್ನು ಕಲಿತಿರಿ!<br>You learned all shapes!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">✅ ಮನೆಗೆ</button>
+</div>
+
+<script>
+// ─── Tab order ───
+const TAB_ORDER = ['learn','group','match','movement','flat','quiz'];
+const TOTAL_TABS = TAB_ORDER.length;
+
+// ─── Answers per tab ───
+const ANSWERS = {
+  l1:'circle', l2:'tri', l3:'sq', l4:'rect', l5:'circle',
+  g1:'sq',     g2:'tri', g3:'circle', g4:'rect', g5:'tri',
+  m1:'red',    m2:'blue', m3:'green', m4:'red', m5:'yellow',
+  mv1:'ball',  mv2:'sq', mv3:'yes', mv4:'no', mv5:'roll',
+  f1:'circle', f2:'sq', f3:'tri', f4:'circle', f5:'rect'
+};
+
+const FEEDBACK_OK  = ['ಭಲೇ! ✅ ಸರಿಯಾಗಿದೆ!', '🌟 ಅದ್ಭುತ!', '👏 ತುಂಬಾ ಚೆನ್ನಾಗಿ ಮಾಡಿದಿರಿ!', '🎉 ಸರಿ ಉತ್ತರ!', '💯 ಶಾಬಾಶ್!'];
+const FEEDBACK_NO  = ['ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ 🔁', '😅 ಸ್ವಲ್ಪ ಯೋಚಿಸಿ!', '❌ ತಪ್ಪು — ಮತ್ತೊಮ್ಮೆ ನೋಡಿ!'];
+
+// ─── State ───
+let stars = 0;
+let tabDone = { learn:false, group:false, match:false, movement:false, flat:false, quiz:false };
+let tabAnswers = {};
+let currentTab = 'learn';
+
+// Tab questions mapping
+const TAB_QS = {
+  learn:    ['l1','l2','l3','l4','l5'],
+  group:    ['g1','g2','g3','g4','g5'],
+  match:    ['m1','m2','m3','m4','m5'],
+  movement: ['mv1','mv2','mv3','mv4','mv5'],
+  flat:     ['f1','f2','f3','f4','f5'],
+};
+
+function ans(qid, el, val) {
+  if(el.classList.contains('disabled')) return;
+  const correct = ANSWERS[qid];
+  const choices = el.parentElement.querySelectorAll('.choice');
+  choices.forEach(c => c.classList.add('disabled'));
+  const fb = document.getElementById('fb-'+qid);
+
+  if(val === correct) {
+    el.classList.add('correct');
+    fb.textContent = FEEDBACK_OK[Math.floor(Math.random()*FEEDBACK_OK.length)];
+    fb.className = 'fb ok';
+    document.getElementById(qid).classList.add('done');
+    if(!tabAnswers[qid]) { stars++; document.getElementById('starsNum').textContent = stars; }
+    tabAnswers[qid] = true;
+  } else {
+    el.classList.add('wrong');
+    fb.textContent = FEEDBACK_NO[Math.floor(Math.random()*FEEDBACK_NO.length)];
+    fb.className = 'fb no';
+    document.getElementById(qid).classList.add('wrong-flash');
+    setTimeout(()=>{ document.getElementById(qid).classList.remove('wrong-flash'); choices.forEach(c=>c.classList.remove('disabled')); el.classList.remove('wrong'); fb.className='fb'; },900);
+    return;
+  }
+  checkTabComplete(currentTab);
+}
+
+function checkTabComplete(tab) {
+  const qs = TAB_QS[tab];
+  if(!qs) return;
+  const dots = document.getElementById('dots-'+tab);
+  if(dots){
+    dots.innerHTML = '';
+    qs.forEach(q => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (tabAnswers[q] ? ' done' : '');
+      dots.appendChild(d);
+    });
+  }
+  const allDone = qs.every(q => tabAnswers[q]);
+  const btn = document.getElementById('btn-'+tab);
+  if(btn && allDone) { btn.disabled = false; }
+  updateProgress();
+}
+
+function completeTab(doneTab, nextTab) {
+  tabDone[doneTab] = true;
+  const tabs = document.querySelectorAll('.step-tab');
+  tabs.forEach(t => {
+    if(t.dataset.tab === doneTab) { t.classList.remove('active','unlocked'); t.classList.add('done'); }
+    if(t.dataset.tab === nextTab) { t.classList.remove('locked'); t.classList.add('unlocked'); }
+  });
+  switchTab(nextTab);
+  updateProgress();
+  if(nextTab === 'quiz') buildQuiz();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelector('[data-tab="'+tab+'"]').classList.add('active');
+  currentTab = tab;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const t = tab.dataset.tab;
+    if(tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'), 600);
+      const toast = document.getElementById('lockToast');
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'), 2500);
+      return;
+    }
+    switchTab(t);
+  });
+});
+
+function updateProgress() {
+  const done = Object.values(tabDone).filter(Boolean).length;
+  const pct = Math.round((done / TOTAL_TABS) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['ಪ್ರಾರಂಭಿಸೋಣ! ಮೊದಲ ಹಂತ ಒತ್ತಿ 👇','🌟 ಚೆನ್ನಾಗಿ ಮಾಡುತ್ತಿದ್ದೀರಿ!','💪 ಮುಂದುವರೆಯಿರಿ!','🔥 ಅರ್ಧ ದಾರಿ ಕ್ರಮಿಸಿದಿರಿ!','⭐ ಬಹಳ ಚೆನ್ನ! ಸ್ವಲ್ಪ ಬಾಕಿ!','🏆 ಕೊನೆಯ ಹಂತ!'];
+  document.getElementById('progLabel').textContent = labels[done] || '🎉 ಪಾಠ ಮುಗಿಯಿತು!';
+}
+
+// ─── QUIZ ───
+const QUIZ_DATA = [
+  { q: 'ಈ ಆಕಾರ ಯಾವುದು?', scene: '<svg viewBox="0 0 90 90" style="width:88px;height:88px"><circle cx="45" cy="45" r="38" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/></svg>', opts: ['ವೃತ್ತ\nCircle','ತ್ರಿಭುಜ\nTriangle','ಆಯತ\nRectangle','ಚೌಕ\nSquare'], ans: 0 },
+  { q: 'ಈ ಆಕಾರ ಯಾವುದು?', scene: '<svg viewBox="0 0 90 90" style="width:88px;height:88px"><polygon points="45,6 84,84 6,84" fill="#fff59d" stroke="#f9a825" stroke-width="3"/></svg>', opts: ['ವೃತ್ತ\nCircle','ತ್ರಿಭুজ\nTriangle','ಆಯತ\nRectangle','ಚೌಕ\nSquare'], ans: 1 },
+  { q: '⚽ ಚೆಂಡು ಯಾವ ಆಕಾರ?', scene: '<div style="font-size:80px">⚽</div>', opts: ['ತ್ರಿಭুজ','ವೃತ್ತ','ಚೌಕ','ಆಯತ'], ans: 1 },
+  { q: '📚 ಪುಸ್ತಕ ಯಾವ ಆಕಾರ?', scene: '<div style="font-size:80px">📚</div>', opts: ['ಆಯತ\nRectangle','ವೃತ್ತ\nCircle','ತ್ರಿಭুজ\nTriangle','ಚೌಕ\nSquare'], ans: 0 },
+  { q: '🍦 ಐಸ್ ಕ್ರೀಮ್ ಕೋನ್ ಯಾವ ಆಕಾರ?', scene: '<div style="font-size:80px">🍦</div>', opts: ['ವೃತ್ತ','ಚೌಕ','ತ್ರಿಭुज','ಆಯತ'], ans: 2 },
+  { q: '⚽ ಚೆಂಡು ಏನು ಮಾಡುತ್ತದೆ?', scene: '<div style="font-size:80px">⚽</div>', opts: ['ಜಾರುತ್ತದೆ\nSlides','ಉರುಳುತ್ತದೆ\nRolls','ಹಾರುತ್ತದೆ\nFlies','ನಿಲ್ಲುತ್ತದೆ\nStops'], ans: 1 },
+  { q: '📦 ಪೆಟ್ಟಿಗೆ ಏನು ಮಾಡುತ್ತದೆ?', scene: '<div style="font-size:80px">📦</div>', opts: ['ಉರುಳುತ್ತದೆ\nRolls','ಜಾರುತ್ತದೆ\nSlides','ತೇಲುತ್ತದೆ\nFloats','ಒಡೆಯುತ್ತದೆ\nBreaks'], ans: 1 },
+  { q: '🏠 ಮನೆ ಛಾವಣಿ ಯಾವ ಆಕಾರ?', scene: '<div style="font-size:80px">🏠</div>', opts: ['ವೃತ್ತ','ಆಯತ','ತ್ರಿಭुज','ಚೌಕ'], ans: 2 },
+];
+
+let quizIdx = 0, quizScore = 0, quizDone = false;
+function buildQuiz() {
+  quizIdx = 0; quizScore = 0; quizDone = false;
+  document.getElementById('quizScore').textContent = '';
+  document.getElementById('finishBtn').style.display = 'none';
+  renderQuiz();
+}
+function renderQuiz() {
+  if(quizIdx >= QUIZ_DATA.length){ endQuiz(); return; }
+  const d = QUIZ_DATA[quizIdx];
+  const html = `
+    <div class="quiz-wrap">
+      <div class="quiz-num">ಪ್ರಶ್ನೆ ${quizIdx+1} / ${QUIZ_DATA.length}</div>
+      <div class="quiz-scene">${d.scene}</div>
+      <div class="quiz-q">${d.q}</div>
+      <div class="quiz-opts">
+        ${d.opts.map((o,i)=>`<div class="quiz-opt" onclick="quizAns(${i})">${o.replace('\n','<br><span style="font-size:13px;opacity:.7">')+(o.includes('\n')? '</span>':'')}</div>`).join('')}
+      </div>
+    </div>`;
+  document.getElementById('quizArea').innerHTML = html;
+}
+function quizAns(i) {
+  const d = QUIZ_DATA[quizIdx];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  if(i === d.ans){ opts[i].classList.add('right'); quizScore++; stars++; document.getElementById('starsNum').textContent=stars; }
+  else{ opts[i].classList.add('wrong'); opts[d.ans].classList.add('right'); }
+  setTimeout(()=>{ quizIdx++; renderQuiz(); }, 1100);
+}
+function endQuiz() {
+  const pct = Math.round(quizScore/QUIZ_DATA.length*100);
+  document.getElementById('quizArea').innerHTML = '';
+  document.getElementById('quizScore').innerHTML = `🎯 ${quizScore}/${QUIZ_DATA.length} ಸರಿ ಉತ್ತರ — ${pct}%<br><span style="font-size:16px">⭐ ಒಟ್ಟು ಸ್ಟಾರ್: ${stars}</span>`;
+  document.getElementById('finishBtn').style.display = 'block';
+  tabDone['quiz'] = true;
+  updateProgress();
+}
+function showCelebration() {
+  const c = document.getElementById('celeb');
+  const s = stars >= 20 ? '⭐⭐⭐' : stars >= 12 ? '⭐⭐' : '⭐';
+  document.getElementById('celebStars').textContent = s + ' ' + stars + ' ಸ್ಟಾರ್!';
+  c.classList.add('show');
+}
+
+// Init dots
+TAB_ORDER.forEach(t => { if(TAB_QS[t]) checkTabComplete(t); });
+</script>
+
+</body>
+</html>

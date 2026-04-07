@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 18: ದತ್ತಾಂಶ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8e1;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#e65100,#f57c00,#fb8c00);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#e65100,#f57c00,#ffa726);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#ffe0b2;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#e65100,#ffa726);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#e65100;border-color:#ffcc80}
+.step-tab.active{background:#e65100;color:#fff;border-color:#e65100;box-shadow:0 4px 14px rgba(230,81,0,.45)}
+.step-tab.done{background:#fff8e1;color:#e65100;border-color:#ffa726}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#fff3e0;border:2px solid #ffcc80;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#e65100;line-height:1.7}
+
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#ffa726;background:#fff8e1}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:38px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-bottom{border-top:2px dashed #ffcc80;padding:12px 14px}
+
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.three{grid-template-columns:1fr 1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #ffcc80;background:#fff8e1;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+.choice:active{transform:scale(.92)}
+.choice-kn{font-size:16px;font-weight:900;color:#e65100}
+.choice-emoji{font-size:32px}
+.choice-num{font-size:28px;font-weight:900;color:#e65100}
+.choice-sub{font-size:11px;font-weight:700;color:#f57c00}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#ffe0b2;transition:background .3s}
+.sdot.done{background:#e65100}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.orange{background:linear-gradient(135deg,#e65100,#ffa726);color:#fff}
+.big-btn.orange:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* CONCEPT BOXES */
+.concept-box{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #ffcc80}
+.flowers-row{display:flex;justify-content:space-around;align-items:flex-end;padding:14px 0;gap:8px}
+.flower-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.flower-count{font-size:28px;font-weight:900;color:#e65100}
+.flower-name{font-size:11px;font-weight:900;color:#f57c00;text-align:center}
+
+.shapes-scene{background:linear-gradient(135deg,#fff8e1,#fff3e0);border-radius:16px;padding:16px;text-align:center;margin-bottom:10px;border:2px solid #ffcc80}
+.shape-tally{display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;padding:10px 0}
+.shape-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.shape-num{font-size:24px;font-weight:900;color:#e65100}
+.shape-lbl{font-size:11px;font-weight:900;color:#f57c00}
+
+.necklace-box{background:#fff;border-radius:18px;padding:16px;border:3px solid #ffcc80;margin-bottom:12px;text-align:center}
+.bead-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:12px 0;font-size:28px}
+.bead-legend{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;margin-top:8px}
+.bead-leg-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:900;color:#e65100}
+
+.park-box{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-radius:18px;padding:16px;border:3px solid #a5d6a7;margin-bottom:12px}
+.park-items{display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;padding:8px 0}
+.park-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.park-num{font-size:24px;font-weight:900;color:#2e7d32}
+.park-lbl{font-size:11px;font-weight:900;color:#388e3c;text-align:center}
+
+.toys-box{background:#fff;border-radius:18px;padding:16px;border:3px solid #ce93d8;margin-bottom:12px}
+.toy-row{display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;padding:8px 0}
+.toy-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.toy-num{font-size:24px;font-weight:900;color:#7b1fa2}
+.toy-lbl{font-size:11px;font-weight:900;color:#9c27b0;text-align:center}
+
+.coins-box{background:linear-gradient(135deg,#fffde7,#fff8e1);border-radius:18px;padding:16px;border:3px solid #ffe082;margin-bottom:12px}
+.coin-row{display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;padding:8px 0}
+.coin-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.coin-num{font-size:24px;font-weight:900;color:#f57f17}
+.coin-lbl{font-size:11px;font-weight:900;color:#f9a825;text-align:center}
+.coin-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+
+.celeb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.celeb-overlay.show{opacity:1;pointer-events:auto}
+.celeb-box{background:#fff;border-radius:28px;padding:32px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.celeb-emoji{font-size:64px;display:block;animation:float 2s ease-in-out infinite}
+.celeb-title{font-size:24px;font-weight:900;color:#e65100;margin:12px 0 6px}
+.celeb-sub{font-size:15px;font-weight:700;color:#555;margin-bottom:16px;line-height:1.6}
+.celeb-stars{font-size:36px;margin:8px 0 20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">📊 ಪಾಠ 18 — ದತ್ತಾಂಶ (Data)</div>
+  <div class="stars-pill" id="starsPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">📊</span>
+  <h1>ದತ್ತಾಂಶ ಕಲಿಯೋಣ!</h1>
+  <p>Let's learn about Data! • ತಟ್ಟು ಮಾಡಿ ಕಲಿಯಿರಿ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ • Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" id="tab-btn-1" onclick="tryTab(1)">🌸 ಹೂವು</div>
+  <div class="step-tab locked"  id="tab-btn-2" onclick="tryTab(2)">🔺 ಆಕಾರ</div>
+  <div class="step-tab locked"  id="tab-btn-3" onclick="tryTab(3)">📿 ಮಣಿ–ಉದ್ಯಾನ</div>
+  <div class="step-tab locked"  id="tab-btn-4" onclick="tryTab(4)">🎭 ಗೊಂಬೆ–ನಾಣ್ಯ</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════
+     TAB 1: ಹೂವು (Flowers — Q1 from PDF)
+══════════════════════════════════ -->
+<div class="tab-panel active" id="tab-1">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <div class="banner-emoji">🌸</div>
+    <div>
+      <div class="banner-kn">ದತ್ತಾಂಶ — ಹೂವುಗಳು</div>
+      <div class="banner-en">Data — Flowers</div>
+      <div class="banner-sub">ಅನಿತಾ ಹೂದೋಟದಿಂದ ಹೂವುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿದ್ದಾಳೆ.<br>Anita collected flowers from the garden.</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    📌 <strong>ದತ್ತಾಂಶ (Dattāṃśa)</strong> = ಮಾಹಿತಿ ಸಂಗ್ರಹಿಸುವುದು = Collecting information!<br>
+    ✅ ಎಷ್ಟು ಇವೆ ಎಂದು ಎಣಿಸಿ ಬರೆಯುವುದು = Count and write how many!
+  </div>
+
+  <!-- Show the flower scene as visual reference -->
+  <div class="concept-box">
+    <div style="text-align:center;font-size:14px;font-weight:900;color:#e65100;margin-bottom:10px">🌸 ಅನಿತಾಳ ಹೂದೋಟ — Anita's Garden 🌸</div>
+    <div class="flowers-row">
+      <div class="flower-col">
+        <div style="font-size:48px">🌷</div>
+        <div class="flower-count">1</div>
+        <div class="flower-name">ಟ್ಯೂಲಿಪ್<br>Tulip</div>
+      </div>
+      <div class="flower-col">
+        <div style="font-size:48px">🌻</div>
+        <div class="flower-count">3</div>
+        <div class="flower-name">ಸೂರ್ಯಕಾಂತಿ<br>Sunflower</div>
+      </div>
+      <div class="flower-col">
+        <div style="font-size:48px">🌸</div>
+        <div class="flower-count">2</div>
+        <div class="flower-name">ಗುಲಾಬಿ<br>Rose</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:12px;font-weight:700;color:#888;margin-top:8px">👆 ಮೇಲಿನ ಚಿತ್ರ ನೋಡಿ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ • Look at the picture above to answer!</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="q-emoji">🌻</div>
+      <div class="q-kn">ಸೂರ್ಯಕಾಂತಿ (🌻) ಹೂವುಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many Sunflowers (🌻) are there?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')"><div class="choice-num">1</div></div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansQ('t1q1',this,true,'f1q1')"><div class="choice-num">3</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')"><div class="choice-num">4</div></div>
+      </div>
+      <div class="fb" id="f1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="q-emoji">🌷</div>
+      <div class="q-kn">ಟ್ಯೂಲಿಪ್ (🌷) ಹೂವುಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many Tulips (🌷) are there?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t1q2',this,true,'f1q2')"><div class="choice-num">1</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')"><div class="choice-num">4</div></div>
+      </div>
+      <div class="fb" id="f1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="q-emoji">🌸</div>
+      <div class="q-kn">ಗುಲಾಬಿ (🌸) ಹೂವುಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many Rose flowers (🌸) are there?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')"><div class="choice-num">1</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,true,'f1q3')"><div class="choice-num">2</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')"><div class="choice-num">4</div></div>
+      </div>
+      <div class="fb" id="f1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: Least -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="q-emoji">🔽</div>
+      <div class="q-kn">ಅತಿ ಕಡಿಮೆ ಸಂಖ್ಯೆ ಇರುವ ಹೂವು ಯಾವುದು?</div>
+      <div class="q-en">Which flower has the LEAST (fewest) count?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t1q4',this,true,'f1q4')">
+          <div class="choice-emoji">🌷</div>
+          <div class="choice-kn">ಟ್ಯೂಲಿಪ್</div>
+          <div class="choice-sub">Tulip = 1 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-emoji">🌻</div>
+          <div class="choice-kn">ಸೂರ್ಯಕಾಂತಿ</div>
+          <div class="choice-sub">Sunflower = 3</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಗುಲಾಬಿ</div>
+          <div class="choice-sub">Rose = 2</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: Most -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="q-emoji">🔼</div>
+      <div class="q-kn">ಅತಿ ಹೆಚ್ಚು ಸಂಖ್ಯೆ ಇರುವ ಹೂವು ಯಾವುದು?</div>
+      <div class="q-en">Which flower has the MOST count?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">🌷</div>
+          <div class="choice-kn">ಟ್ಯೂಲಿಪ್</div>
+          <div class="choice-sub">Tulip = 1</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,true,'f1q5')">
+          <div class="choice-emoji">🌻</div>
+          <div class="choice-kn">ಸೂರ್ಯಕಾಂತಿ</div>
+          <div class="choice-sub">Sunflower = 3 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಗುಲಾಬಿ</div>
+          <div class="choice-sub">Rose = 2</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn orange" id="btn1" disabled onclick="unlockNext(2)">ಮುಂದೆ ➡️ Next: ಆಕಾರ!</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 2: ಆಕಾರ (Shapes — Q2 from PDF)
+══════════════════════════════════ -->
+<div class="tab-panel" id="tab-2">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <div class="banner-emoji">🔺</div>
+    <div>
+      <div class="banner-kn">ಆಕಾರಗಳ ದತ್ತಾಂಶ</div>
+      <div class="banner-en">Data — Shapes</div>
+      <div class="banner-sub">ಚಿತ್ರದಲ್ಲಿರುವ ವಿವಿಧ ಆಕಾರಗಳನ್ನು ಎಣಿಸಿ ಬರೆಯಿರಿ.<br>Count the different shapes in the picture.</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🏠 ಮನೆಯ ಚಿತ್ರದಲ್ಲಿ ತ್ರಿಕೋಣ, ವೃತ್ತ, ಚೌಕ ಮತ್ತು ಆಯತ ಆಕಾರಗಳಿವೆ!<br>
+    The house picture has triangles, circles, squares and rectangles!
+  </div>
+
+  <!-- Shape scene -->
+  <div class="shapes-scene">
+    <div style="font-size:14px;font-weight:900;color:#e65100;margin-bottom:10px">🏠 ಮನೆಯ ಚಿತ್ರ — House Picture</div>
+    <div style="font-size:60px;margin-bottom:8px">🏠</div>
+    <div class="shape-tally">
+      <div class="shape-item">
+        <div style="font-size:36px">🔺</div>
+        <div class="shape-num">7</div>
+        <div class="shape-lbl">ತ್ರಿಕೋಣ<br>Triangle</div>
+      </div>
+      <div class="shape-item">
+        <div style="font-size:36px">⭕</div>
+        <div class="shape-num">3</div>
+        <div class="shape-lbl">ವೃತ್ತ<br>Circle</div>
+      </div>
+      <div class="shape-item">
+        <div style="font-size:36px">⬜</div>
+        <div class="shape-num">4</div>
+        <div class="shape-lbl">ಚೌಕ<br>Square</div>
+      </div>
+      <div class="shape-item">
+        <div style="font-size:36px">▬</div>
+        <div class="shape-num">2</div>
+        <div class="shape-lbl">ಆಯತ<br>Rectangle</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#888;margin-top:6px">👆 ಮೇಲಿನ ಸಂಖ್ಯೆ ನೋಡಿ ಉತ್ತರಿಸಿ</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t2q1">
+    <div class="q-top">
+      <div class="q-emoji">🔺</div>
+      <div class="q-kn">ಮನೆಯ ಚಿತ್ರದಲ್ಲಿ ಎಷ್ಟು ತ್ರಿಕೋಣ (🔺) ಇದೆ?</div>
+      <div class="q-en">How many Triangles (🔺) are in the house picture?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')"><div class="choice-num">5</div></div>
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')"><div class="choice-num">6</div></div>
+        <div class="choice" onclick="ansQ('t2q1',this,true,'f2q1')"><div class="choice-num">7</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+      </div>
+      <div class="fb" id="f2q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t2q2">
+    <div class="q-top">
+      <div class="q-emoji">⭕</div>
+      <div class="q-kn">ಮನೆಯ ಚಿತ್ರದಲ್ಲಿ ಎಷ್ಟು ವೃತ್ತ (⭕) ಇದೆ?</div>
+      <div class="q-en">How many Circles (⭕) are in the picture?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')"><div class="choice-num">1</div></div>
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansQ('t2q2',this,true,'f2q2')"><div class="choice-num">3</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')"><div class="choice-num">4</div></div>
+      </div>
+      <div class="fb" id="f2q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t2q3">
+    <div class="q-top">
+      <div class="q-emoji">⬜</div>
+      <div class="q-kn">ಮನೆಯ ಚಿತ್ರದಲ್ಲಿ ಎಷ್ಟು ಚೌಕ (⬜) ಇದೆ?</div>
+      <div class="q-en">How many Squares (⬜) are in the picture?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansQ('t2q3',this,true,'f2q3')"><div class="choice-num">4</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')"><div class="choice-num">5</div></div>
+      </div>
+      <div class="fb" id="f2q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t2q4">
+    <div class="q-top">
+      <div class="q-emoji">▬</div>
+      <div class="q-kn">ಮನೆಯ ಚಿತ್ರದಲ್ಲಿ ಎಷ್ಟು ಆಯತ (▬) ಇದೆ?</div>
+      <div class="q-en">How many Rectangles (▬) are in the picture?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q4',this,true,'f2q4')"><div class="choice-num">2</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')"><div class="choice-num">5</div></div>
+      </div>
+      <div class="fb" id="f2q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: Most shape -->
+  <div class="q-card" id="t2q5">
+    <div class="q-top">
+      <div class="q-emoji">🔼</div>
+      <div class="q-kn">ಹೆಚ್ಚು ಬಾರಿ ಕಾಣುವ ಆಕಾರ ಯಾವುದು?</div>
+      <div class="q-en">Which shape appears the MOST times?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q5',this,true,'f2q5')">
+          <div class="choice-emoji">🔺</div>
+          <div class="choice-kn">ತ್ರಿಕೋಣ</div>
+          <div class="choice-sub">Triangle = 7 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-emoji">⭕</div>
+          <div class="choice-kn">ವೃತ್ತ</div>
+          <div class="choice-sub">Circle = 3</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-emoji">⬜</div>
+          <div class="choice-kn">ಚೌಕ</div>
+          <div class="choice-sub">Square = 4</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-emoji">▬</div>
+          <div class="choice-kn">ಆಯತ</div>
+          <div class="choice-sub">Rectangle = 2</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: Least shape -->
+  <div class="q-card" id="t2q6">
+    <div class="q-top">
+      <div class="q-emoji">🔽</div>
+      <div class="q-kn">ಕಡಿಮೆ ಬಾರಿ ಕಾಣುವ ಆಕಾರ ಯಾವುದು?</div>
+      <div class="q-en">Which shape appears the LEAST times?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q6',this,false,'f2q6')">
+          <div class="choice-emoji">🔺</div>
+          <div class="choice-kn">ತ್ರಿಕೋಣ</div>
+          <div class="choice-sub">Triangle = 7</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q6',this,false,'f2q6')">
+          <div class="choice-emoji">⭕</div>
+          <div class="choice-kn">ವೃತ್ತ</div>
+          <div class="choice-sub">Circle = 3</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q6',this,false,'f2q6')">
+          <div class="choice-emoji">⬜</div>
+          <div class="choice-kn">ಚೌಕ</div>
+          <div class="choice-sub">Square = 4</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q6',this,true,'f2q6')">
+          <div class="choice-emoji">▬</div>
+          <div class="choice-kn">ಆಯತ</div>
+          <div class="choice-sub">Rectangle = 2 ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn orange" id="btn2" disabled onclick="unlockNext(3)">ಮುಂದೆ ➡️ Next: ಮಣಿ & ಉದ್ಯಾನ!</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 3: ಮಣಿ (Necklace Q3) + ಉದ್ಯಾನ (Park Q4)
+══════════════════════════════════ -->
+<div class="tab-panel" id="tab-3">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">
+    <div class="banner-emoji">📿</div>
+    <div>
+      <div class="banner-kn">ಮಣಿ ಸರ ಮತ್ತು ಉದ್ಯಾನ</div>
+      <div class="banner-en">Bead Necklace &amp; Park</div>
+      <div class="banner-sub">ಸರದ ಮಣಿಗಳನ್ನು ಮತ್ತು ಉದ್ಯಾನದ ಚಟುವಟಿಕೆಗಳನ್ನು ಎಣಿಸಿ!<br>Count beads in the necklace and activities in the park!</div>
+    </div>
+  </div>
+
+  <!-- Necklace visual -->
+  <div class="necklace-box">
+    <div style="font-size:14px;font-weight:900;color:#7b1fa2;margin-bottom:6px">📿 ಮಣಿ ಸರ — Bead Necklace</div>
+    <div class="bead-row">🔵🔵🔵🔵🔵🔵🔵🔵💠🔷🔷🔷🔷🌸🌸🌸🌸🌸🌸</div>
+    <div class="bead-legend">
+      <div class="bead-leg-item">🔵 ನೀಲಿ ವೃತ್ತ = <strong>8</strong></div>
+      <div class="bead-leg-item">🔷 ಹಳದಿ ಚತುರ್ಭುಜ = <strong>5</strong></div>
+      <div class="bead-leg-item">🌸 ಹೂ ಆಕಾರ = <strong>6</strong></div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#888;margin-top:8px">ಹೆಚ್ಚು ಸಂಖ್ಯೆ → 🔵 ವೃತ್ತ | ಕಡಿಮೆ ಸಂಖ್ಯೆ → 🔷 ಚತುರ್ಭುಜ</div>
+  </div>
+
+  <!-- Q1 Necklace -->
+  <div class="q-card" id="t3q1">
+    <div class="q-top">
+      <div class="q-emoji">🔵</div>
+      <div class="q-kn">ಸರದಲ್ಲಿ ಎಷ್ಟು ನೀಲಿ ವೃತ್ತ (🔵) ಮಣಿಗಳಿವೆ?</div>
+      <div class="q-en">How many blue circle (🔵) beads are in the necklace?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')"><div class="choice-num">5</div></div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')"><div class="choice-num">6</div></div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')"><div class="choice-num">7</div></div>
+        <div class="choice" onclick="ansQ('t3q1',this,true,'f3q1')"><div class="choice-num">8</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+      </div>
+      <div class="fb" id="f3q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 Necklace most -->
+  <div class="q-card" id="t3q2">
+    <div class="q-top">
+      <div class="q-emoji">🔼</div>
+      <div class="q-kn">ಹೆಚ್ಚು ಸಂಖ್ಯೆಯಲ್ಲಿರುವ ಮಣಿಯ ಆಕಾರ ಯಾವುದು?</div>
+      <div class="q-en">Which bead shape has the MOST count in the necklace?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t3q2',this,true,'f3q2')">
+          <div class="choice-emoji">🔵</div>
+          <div class="choice-kn">ವೃತ್ತ</div>
+          <div class="choice-sub">Circle = 8 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">🔷</div>
+          <div class="choice-kn">ಚತುರ್ಭುಜ</div>
+          <div class="choice-sub">Diamond = 5</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಹೂ ಆಕಾರ</div>
+          <div class="choice-sub">Flower = 6</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 Necklace least -->
+  <div class="q-card" id="t3q3">
+    <div class="q-top">
+      <div class="q-emoji">🔽</div>
+      <div class="q-kn">ಕಡಿಮೆ ಸಂಖ್ಯೆಯಲ್ಲಿರುವ ಮಣಿಯ ಆಕಾರ ಯಾವುದು?</div>
+      <div class="q-en">Which bead shape has the LEAST count in the necklace?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">🔵</div>
+          <div class="choice-kn">ವೃತ್ತ</div>
+          <div class="choice-sub">Circle = 8</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,true,'f3q3')">
+          <div class="choice-emoji">🔷</div>
+          <div class="choice-kn">ಚತುರ್ಭುಜ</div>
+          <div class="choice-sub">Diamond = 5 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಹೂ ಆಕಾರ</div>
+          <div class="choice-sub">Flower = 6</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q3"></div>
+    </div>
+  </div>
+
+  <!-- Park visual -->
+  <div class="park-box">
+    <div style="text-align:center;font-size:14px;font-weight:900;color:#2e7d32;margin-bottom:8px">🏫 ಪಾರ್ಕ್ ನಲ್ಲಿ ಮಕ್ಕಳು — Children in the Park</div>
+    <div class="park-items">
+      <div class="park-item">
+        <div style="font-size:32px">🛝</div>
+        <div class="park-num">3</div>
+        <div class="park-lbl">ಉಯ್ಯಾಲೆ<br>Swings</div>
+      </div>
+      <div class="park-item">
+        <div style="font-size:32px">🎿</div>
+        <div class="park-num">2</div>
+        <div class="park-lbl">ಏತಪಾತ<br>See-saw</div>
+      </div>
+      <div class="park-item">
+        <div style="font-size:32px">🛝</div>
+        <div class="park-num">4</div>
+        <div class="park-lbl">ಉಯ್ಯಾಲೆ ಮಕ್ಕಳು<br>On swings</div>
+      </div>
+      <div class="park-item">
+        <div style="font-size:32px">⛷️</div>
+        <div class="park-num">5</div>
+        <div class="park-lbl">ಜಾರು ಬಂಡೆ<br>Slide kids</div>
+      </div>
+      <div class="park-item">
+        <div style="font-size:32px">↕️</div>
+        <div class="park-num">3</div>
+        <div class="park-lbl">ಏತಪಾತ ಮಕ್ಕಳು<br>See-saw kids</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 Park swings -->
+  <div class="q-card" id="t3q4">
+    <div class="q-top">
+      <div class="q-emoji">🛝</div>
+      <div class="q-kn">ಪಾರ್ಕ್ ನಲ್ಲಿ ಎಷ್ಟು ಉಯ್ಯಾಲೆ (Swings) ಇವೆ?</div>
+      <div class="q-en">How many Swings are there in the park?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansQ('t3q4',this,true,'f3q4')"><div class="choice-num">3</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')"><div class="choice-num">5</div></div>
+      </div>
+      <div class="fb" id="f3q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 Park see-saw kids -->
+  <div class="q-card" id="t3q5">
+    <div class="q-top">
+      <div class="q-emoji">↕️</div>
+      <div class="q-kn">ಏತಪಾತ ಆಡುತ್ತಿರುವ ಮಕ್ಕಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many children are playing on the See-saw?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansQ('t3q5',this,true,'f3q5')"><div class="choice-num">3</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')"><div class="choice-num">5</div></div>
+      </div>
+      <div class="fb" id="f3q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 Slide kids -->
+  <div class="q-card" id="t3q6">
+    <div class="q-top">
+      <div class="q-emoji">⛷️</div>
+      <div class="q-kn">ಜಾರು ಬಂಡೆ ಆಡುತ್ತಿರುವ ಮಕ್ಕಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many children are playing on the Slide?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t3q6',this,false,'f3q6')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansQ('t3q6',this,false,'f3q6')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t3q6',this,true,'f3q6')"><div class="choice-num">5</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t3q6',this,false,'f3q6')"><div class="choice-num">6</div></div>
+      </div>
+      <div class="fb" id="f3q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn orange" id="btn3" disabled onclick="unlockNext(4)">ಮುಂದೆ ➡️ Next: ಗೊಂಬೆ & ನಾಣ್ಯ!</button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 4: ಗೊಂಬೆ (Dolls Q5) + ನಾಣ್ಯ (Coins Q6)
+══════════════════════════════════ -->
+<div class="tab-panel" id="tab-4">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <div class="banner-emoji">🎭</div>
+    <div>
+      <div class="banner-kn">ಗೊಂಬೆ ಮತ್ತು ನಾಣ್ಯ</div>
+      <div class="banner-en">Dolls &amp; Coins</div>
+      <div class="banner-sub">ದಸರಾ ಹಬ್ಬಕ್ಕಾಗಿ ಗೊಂಬೆ ಮತ್ತು ನಾಣ್ಯ ಎಣಿಸಿ!<br>Count dolls for Dasara festival and coins for Gopala!</div>
+    </div>
+  </div>
+
+  <!-- Toys/Dolls visual -->
+  <div class="toys-box">
+    <div style="text-align:center;font-size:14px;font-weight:900;color:#7b1fa2;margin-bottom:8px">🎪 ದಸರಾ ಹಬ್ಬದ ಗೊಂಬೆಗಳು — Dasara Festival Dolls</div>
+    <div class="toy-row">
+      <div class="toy-item">
+        <div style="font-size:36px">🐘🐄🐐🦒</div>
+        <div class="toy-num">9</div>
+        <div class="toy-lbl">ಪ್ರಾಣಿ ಗೊಂಬೆ<br>Animal Dolls</div>
+      </div>
+      <div class="toy-item">
+        <div style="font-size:36px">🪆🤴👸</div>
+        <div class="toy-num">6</div>
+        <div class="toy-lbl">ಇತರೆ ಗೊಂಬೆ<br>Other Dolls</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:12px;color:#888;font-weight:700;margin-top:6px">ಒಟ್ಟು ಗೊಂಬೆ = 15 | Total dolls = 15</div>
+  </div>
+
+  <!-- Q1 Animal dolls -->
+  <div class="q-card" id="t4q1">
+    <div class="q-top">
+      <div class="q-emoji">🐘</div>
+      <div class="q-kn">ದಸರಾ ಹಬ್ಬದಲ್ಲಿ ಎಷ್ಟು ಪ್ರಾಣಿ ಗೊಂಬೆ (Animal dolls) ಇವೆ?</div>
+      <div class="q-en">How many Animal dolls are there for Dasara?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')"><div class="choice-num">6</div></div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')"><div class="choice-num">7</div></div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')"><div class="choice-num">8</div></div>
+        <div class="choice" onclick="ansQ('t4q1',this,true,'f4q1')"><div class="choice-num">9</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+      </div>
+      <div class="fb" id="f4q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 Other dolls -->
+  <div class="q-card" id="t4q2">
+    <div class="q-top">
+      <div class="q-emoji">🪆</div>
+      <div class="q-kn">ದಸರಾ ಹಬ್ಬದಲ್ಲಿ ಎಷ್ಟು ಇತರೆ ಗೊಂಬೆ (Other dolls) ಇವೆ?</div>
+      <div class="q-en">How many Other dolls are there for Dasara?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')"><div class="choice-num">5</div></div>
+        <div class="choice" onclick="ansQ('t4q2',this,true,'f4q2')"><div class="choice-num">6</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')"><div class="choice-num">7</div></div>
+      </div>
+      <div class="fb" id="f4q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 More dolls? -->
+  <div class="q-card" id="t4q3">
+    <div class="q-top">
+      <div class="q-emoji">🏆</div>
+      <div class="q-kn">ಯಾವ ಗೊಂಬೆ ಹೆಚ್ಚು ಇದೆ?</div>
+      <div class="q-en">Which type of dolls are MORE in number?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q3',this,true,'f4q3')">
+          <div class="choice-emoji">🐘</div>
+          <div class="choice-kn">ಪ್ರಾಣಿ ಗೊಂಬೆ</div>
+          <div class="choice-sub">Animal = 9 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,false,'f4q3')">
+          <div class="choice-emoji">🪆</div>
+          <div class="choice-kn">ಇತರೆ ಗೊಂಬೆ</div>
+          <div class="choice-sub">Other = 6</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q3"></div>
+    </div>
+  </div>
+
+  <!-- Coins visual -->
+  <div class="coins-box">
+    <div style="text-align:center;font-size:14px;font-weight:900;color:#f57f17;margin-bottom:8px">💰 ಗೋಪಾಲನ ನಾಣ್ಯಗಳು — Gopala's Coins</div>
+    <div class="coin-row">
+      <div class="coin-item">
+        <div class="coin-circle" style="background:#c0c0c0;color:#333">₹1</div>
+        <div class="coin-num">4</div>
+        <div class="coin-lbl">₹1 ನಾಣ್ಯ<br>Re 1 coins</div>
+      </div>
+      <div class="coin-item">
+        <div class="coin-circle" style="background:#a8a8a8;color:#333">₹2</div>
+        <div class="coin-num">5</div>
+        <div class="coin-lbl">₹2 ನಾಣ್ಯ<br>Rs 2 coins</div>
+      </div>
+      <div class="coin-item">
+        <div class="coin-circle" style="background:#ffd700;color:#333">₹5</div>
+        <div class="coin-num">7</div>
+        <div class="coin-lbl">₹5 ನಾಣ್ಯ<br>Rs 5 coins</div>
+      </div>
+      <div class="coin-item">
+        <div class="coin-circle" style="background:#ffb300;color:#333">₹10</div>
+        <div class="coin-num">3</div>
+        <div class="coin-lbl">₹10 ನಾಣ್ಯ<br>Rs 10 coins</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 Rs 1 coins -->
+  <div class="q-card" id="t4q4">
+    <div class="q-top">
+      <div class="q-emoji">🪙</div>
+      <div class="q-kn">ಗೋಪಾಲನ ಬಳಿ ₹1 ರ ನಾಣ್ಯಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many ₹1 coins does Gopala have?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansQ('t4q4',this,true,'f4q4')"><div class="choice-num">4</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')"><div class="choice-num">5</div></div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')"><div class="choice-num">6</div></div>
+      </div>
+      <div class="fb" id="f4q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 Rs 5 coins -->
+  <div class="q-card" id="t4q5">
+    <div class="q-top">
+      <div class="q-emoji">🪙</div>
+      <div class="q-kn">ಗೋಪಾಲನ ಬಳಿ ₹5 ರ ನಾಣ್ಯಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+      <div class="q-en">How many ₹5 coins does Gopala have?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')"><div class="choice-num">4</div></div>
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')"><div class="choice-num">5</div></div>
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')"><div class="choice-num">6</div></div>
+        <div class="choice" onclick="ansQ('t4q5',this,true,'f4q5')"><div class="choice-num">7</div><div class="choice-sub">✓ ಸರಿ!</div></div>
+      </div>
+      <div class="fb" id="f4q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 Most coins -->
+  <div class="q-card" id="t4q6">
+    <div class="q-top">
+      <div class="q-emoji">🔼</div>
+      <div class="q-kn">ಯಾವ ನಾಣ್ಯ ಹೆಚ್ಚು ಸಂಖ್ಯೆಯಲ್ಲಿದೆ?</div>
+      <div class="q-en">Which coin denomination has the MOST coins?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-kn">₹1</div>
+          <div class="choice-sub">4 coins</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-kn">₹2</div>
+          <div class="choice-sub">5 coins</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,true,'f4q6')">
+          <div class="choice-kn">₹5</div>
+          <div class="choice-sub">7 coins ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-kn">₹10</div>
+          <div class="choice-sub">3 coins</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 Least coins -->
+  <div class="q-card" id="t4q7">
+    <div class="q-top">
+      <div class="q-emoji">🔽</div>
+      <div class="q-kn">ಯಾವ ನಾಣ್ಯ ಕಡಿಮೆ ಸಂಖ್ಯೆಯಲ್ಲಿದೆ?</div>
+      <div class="q-en">Which coin denomination has the LEAST coins?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q7',this,false,'f4q7')">
+          <div class="choice-kn">₹1</div>
+          <div class="choice-sub">4 coins</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q7',this,false,'f4q7')">
+          <div class="choice-kn">₹2</div>
+          <div class="choice-sub">5 coins</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q7',this,false,'f4q7')">
+          <div class="choice-kn">₹5</div>
+          <div class="choice-sub">7 coins</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q7',this,true,'f4q7')">
+          <div class="choice-kn">₹10</div>
+          <div class="choice-sub">3 coins ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q7"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn orange" id="btn4" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಸಿ! Finish Lesson!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- Lock Toast -->
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಅದ್ಭುತ! ಭಲೇ!</div>
+    <div class="celeb-sub">ನೀವು ಪಾಠ 18 ಮುಗಿಸಿದಿರಿ!<br>You finished Lesson 18 — ದತ್ತಾಂಶ (Data)!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="big-btn orange" onclick="document.getElementById('celeb').classList.remove('show')">ಮತ್ತೆ ಆಟವಾಡಿ 🔄</button>
+  </div>
+</div>
+
+<script>
+let totalStars = 0;
+let activeTab  = 1;
+let unlockedTab = 1;
+
+const totals = {1:5, 2:6, 3:6, 4:7};
+const done   = {1:0, 2:0, 3:0, 4:0};
+
+Object.keys(totals).forEach(t => buildDots('score'+t, 0, totals[t]));
+
+function buildDots(id, d, total) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'sdot' + (i < d ? ' done' : '');
+    el.appendChild(dot);
+  }
+}
+
+function updateProgress() {
+  const totalQ = Object.values(totals).reduce((a,b)=>a+b,0);
+  const doneQ  = Object.values(done).reduce((a,b)=>a+b,0);
+  document.getElementById('progFill').style.width = (doneQ/totalQ*100)+'%';
+}
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starsPill').textContent = '⭐ ' + totalStars;
+}
+
+function tryTab(n) {
+  if (n <= unlockedTab) { goTab(n); }
+  else {
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    setTimeout(()=> btn.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function goTab(n) {
+  document.getElementById('tab-'+activeTab).classList.remove('active');
+  const prevBtn = document.getElementById('tab-btn-'+activeTab);
+  prevBtn.classList.remove('active');
+  if (n > activeTab) prevBtn.classList.add('done');
+  activeTab = n;
+  if (n > unlockedTab) unlockedTab = n;
+  const btn = document.getElementById('tab-btn-'+n);
+  btn.classList.remove('locked','unlocked','done');
+  btn.classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function unlockNext(n) {
+  const nextBtn = document.getElementById('tab-btn-'+n);
+  nextBtn.classList.remove('locked');
+  nextBtn.classList.add('unlocked');
+  unlockedTab = n;
+  goTab(n);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+function ansQ(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o=>{ o.classList.add('disabled'); o.style.pointerEvents='none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ! Well done!';
+    card.classList.add('done');
+    card.dataset.done = '1';
+    addStars(1);
+    const tnum = parseInt(cardId.charAt(1));
+    done[tnum]++;
+    buildDots('score'+tnum, done[tnum], totals[tnum]);
+    if (done[tnum] >= totals[tnum]) document.getElementById('btn'+tnum).disabled = false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className = 'fb no';
+    fb.textContent = '❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(()=>{
+      opts.forEach(o=>{ o.classList.remove('disabled'); o.style.pointerEvents=''; });
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className = 'fb';
+    }, 900);
+  }
+}
+
+function finishLesson() {
+  const n = Math.max(3, Math.min(10, Math.floor(totalStars/2)));
+  document.getElementById('celebStars').textContent = '⭐'.repeat(n);
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

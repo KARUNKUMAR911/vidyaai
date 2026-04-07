@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 10: ಸಂಕಲನ (ಮೊತ್ತ 20 ಮೀರದಂತೆ)</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8e1;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#e65100,#ef6c00,#fb8c00);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:16px;color:#fff;font-weight:900;letter-spacing:.3px}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#bf360c,#e64a19,#ff7043);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#ffe0b2;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#bf360c,#ff7043);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#e65100;border-color:#ffcc80}
+.step-tab.active{background:#e65100;color:#fff;border-color:#e65100;box-shadow:0 4px 14px rgba(230,81,0,.45)}
+.step-tab.done{background:#fff8e1;color:#e65100;border-color:#ffb74d}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#fff3e0;border:2px solid #ffcc80;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#e65100;line-height:1.6}
+
+/* ADDITION INTRO CARD */
+.add-intro-card{background:#fff;border-radius:22px;margin-bottom:14px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);border:3px solid #ffcc80;cursor:pointer;transition:all .2s}
+.add-intro-card:active{transform:scale(.98)}
+.add-intro-card.tapped{border-color:#fb8c00;background:#fff8e1}
+.aic-top{padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.aic-objs{font-size:26px;line-height:1.4;text-align:center;letter-spacing:2px}
+.aic-plus{font-size:36px;font-weight:900;color:#e65100;padding:0 8px}
+.aic-bottom{background:#fff3e0;padding:10px 14px;font-size:15px;font-weight:900;color:#bf360c;border-top:2px solid #ffe0b2;text-align:center}
+.aic-equation{font-size:28px;font-weight:900;color:#e65100;text-align:center;padding:8px 14px}
+
+/* TENS ONES CARD */
+.to-card{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #ffcc80}
+.to-header{font-size:15px;font-weight:900;color:#e65100;text-align:center;margin-bottom:12px}
+.to-split{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+.to-box{border-radius:16px;padding:10px 20px;text-align:center;min-width:80px}
+.to-box.tens-b{background:#ffe0b2;border:3px solid #fb8c00}
+.to-box.ones-b{background:#fff9c4;border:3px solid #f9a825}
+.to-box .tb-num{font-size:32px;font-weight:900;color:#e65100}
+.to-box .tb-label{font-size:12px;font-weight:900;color:#555;margin-top:4px}
+.to-plus-sign{font-size:28px;font-weight:900;color:#888}
+.to-eq{font-size:22px;font-weight:900;color:#bf360c;text-align:center;margin-top:10px}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#fb8c00;background:#fff8e1}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:40px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center}
+.q-bottom{border-top:2px dashed #ffe0b2;padding:12px 14px}
+
+/* OBJECT DISPLAY for visual counting */
+.obj-row{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;padding:10px;background:#fff3e0;border-radius:14px;margin-bottom:8px}
+.obj-group{display:flex;flex-direction:column;align-items:center;gap:4px}
+.obj-group-label{font-size:12px;font-weight:900;color:#e65100}
+.obj-objs{font-size:24px;line-height:1.4;text-align:center;letter-spacing:2px}
+.obj-divider{font-size:28px;font-weight:900;color:#e65100;display:flex;align-items:center;padding:0 6px}
+
+/* CHOICES */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #ffcc80;background:#fff3e0;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-num{font-size:28px;font-weight:900;color:#e65100}
+.choice-kn{font-size:13px;font-weight:700;color:#ef6c00}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* SCORE DOTS */
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#ffe0b2;transition:background .3s}
+.sdot.done{background:#fb8c00}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.orange{background:linear-gradient(135deg,#bf360c,#e65100);color:#fff}
+.big-btn.orange:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+.sec-title{font-size:15px;font-weight:900;color:#e65100;margin:14px 0 8px;padding-left:4px;display:flex;align-items:center;gap:6px}
+
+/* MATCH GAME */
+.match-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #ffcc80}
+.match-title{font-size:15px;font-weight:900;color:#e65100;margin-bottom:14px;text-align:center}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.match-col{display:flex;flex-direction:column;gap:10px}
+.match-item{border-radius:16px;border:3px solid #ffcc80;background:#fff3e0;padding:12px 8px;text-align:center;cursor:pointer;font-size:15px;font-weight:900;color:#e65100;transition:all .2s;user-select:none}
+.match-item:active{transform:scale(.93)}
+.match-item.selected{border-color:#e65100;background:#ffe0b2}
+.match-item.matched{border-color:#43a047;background:#c8e6c9;pointer-events:none;opacity:.8}
+.match-item.wrong-match{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.match-fb{padding:10px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:10px;display:none}
+
+.celeb{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-box{background:#fff;border-radius:30px;padding:40px 30px;text-align:center;max-width:340px;width:90%;animation:celebPop .5s ease}
+@keyframes celebPop{from{transform:scale(.5)}to{transform:scale(1)}}
+.celeb-emoji{font-size:80px;display:block;margin-bottom:10px;animation:spin 1s ease}
+@keyframes spin{from{transform:rotate(-20deg) scale(.5)}to{transform:rotate(0deg) scale(1)}}
+.celeb-title{font-size:28px;font-weight:900;color:#bf360c;margin-bottom:8px}
+.celeb-sub{font-size:16px;font-weight:700;color:#555;margin-bottom:16px}
+.celeb-stars{font-size:36px;letter-spacing:4px;margin-bottom:20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">➕ ಪಾಠ 10 · ಸಂಕಲನ</div>
+  <div class="stars-pill" id="starPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">➕</span>
+  <h1>ಸಂಕಲನ – ಮೊತ್ತ 20 ಮೀರದಂತೆ</h1>
+  <p>Addition — Sum not more than 20 · ಕೂಡಿ ಕಲಿಯೋಣ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" id="tab0btn" onclick="goTab(0)">➕ ಕೂಡು ಕಲಿ</div>
+  <div class="step-tab locked" id="tab1btn" onclick="goTab(1)">🔢 ಹತ್ತುಗಳು–ಬಿಡಿಗಳು</div>
+  <div class="step-tab locked" id="tab2btn" onclick="goTab(2)">🌟 ಗುಂಪು ಮಾಡಿ ಕೂಡು</div>
+  <div class="step-tab locked" id="tab3btn" onclick="goTab(3)">🔗 ಜೋಡಿ ಮಾಡು</div>
+  <div class="step-tab locked" id="tab4btn" onclick="goTab(4)">🏆 ಅಭ್ಯಾಸ</div>
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ========== TAB 0: LEARN ADDITION (ಕೂಡು ಕಲಿ) ========== -->
+<div class="tab-panel active" id="tab0">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <div class="banner-emoji">➕</div>
+    <div>
+      <div class="banner-kn">ಕೂಡುವುದನ್ನು ಕಲಿಯೋಣ!</div>
+      <div class="banner-en">Let's learn Addition!</div>
+      <div class="banner-sub">ಪ್ರತಿ ಕಾರ್ಡ್ ಮೇಲೆ ಒತ್ತಿ ಕಲಿ → Tap each card to learn!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">👆 ಪ್ರತಿ ಕೂಡಿಕೆ ಕಾರ್ಡ್ ಮೇಲೆ ಒತ್ತು! ಎಲ್ಲ ಕಾರ್ಡ್ ಒತ್ತಿದ ನಂತರ ಮುಂದೆ ಹೋಗಬಹುದು. Tap all cards first!</div>
+
+  <!-- Card 1: 4+5 -->
+  <div class="add-intro-card" id="ac1">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🍎🍎🍎🍎</div>
+        <div class="obj-group-label">4</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🍎🍎🍎🍎🍎</div>
+        <div class="obj-group-label">5</div>
+      </div>
+    </div>
+    <div class="aic-equation">4 + 5 = 9</div>
+    <div class="aic-bottom">ನಾಲ್ಕು ಕೂಡಿ ಐದು = ಒಂಬತ್ತು · Four + Five = Nine</div>
+  </div>
+
+  <!-- Card 2: 7+2 -->
+  <div class="add-intro-card" id="ac2">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🌟🌟🌟🌟🌟🌟🌟</div>
+        <div class="obj-group-label">7</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🌟🌟</div>
+        <div class="obj-group-label">2</div>
+      </div>
+    </div>
+    <div class="aic-equation">7 + 2 = 9</div>
+    <div class="aic-bottom">ಏಳು ಕೂಡಿ ಎರಡು = ಒಂಬತ್ತು · Seven + Two = Nine</div>
+  </div>
+
+  <!-- Card 3: 0+7 -->
+  <div class="add-intro-card" id="ac3">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs" style="font-size:22px;color:#ccc;">ಶೂನ್ಯ</div>
+        <div class="obj-group-label">0</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🌸🌸🌸🌸🌸🌸🌸</div>
+        <div class="obj-group-label">7</div>
+      </div>
+    </div>
+    <div class="aic-equation">0 + 7 = 7</div>
+    <div class="aic-bottom">ಶೂನ್ಯ ಕೂಡಿ ಏಳು = ಏಳು · Zero + Seven = Seven</div>
+  </div>
+
+  <!-- Card 4: 3+6 -->
+  <div class="add-intro-card" id="ac4">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🎈🎈🎈</div>
+        <div class="obj-group-label">3</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🎈🎈🎈🎈🎈🎈</div>
+        <div class="obj-group-label">6</div>
+      </div>
+    </div>
+    <div class="aic-equation">3 + 6 = 9</div>
+    <div class="aic-bottom">ಮೂರು ಕೂಡಿ ಆರು = ಒಂಬತ್ತು · Three + Six = Nine</div>
+  </div>
+
+  <!-- Card 5: 1+3 -->
+  <div class="add-intro-card" id="ac5">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🐦</div>
+        <div class="obj-group-label">1</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🐦🐦🐦</div>
+        <div class="obj-group-label">3</div>
+      </div>
+    </div>
+    <div class="aic-equation">1 + 3 = 4</div>
+    <div class="aic-bottom">ಒಂದು ಕೂಡಿ ಮೂರು = ನಾಲ್ಕು · One + Three = Four</div>
+  </div>
+
+  <!-- Card 6: 0+6 -->
+  <div class="add-intro-card" id="ac6">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs" style="font-size:22px;color:#ccc;">ಶೂನ್ಯ</div>
+        <div class="obj-group-label">0</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🍋🍋🍋🍋🍋🍋</div>
+        <div class="obj-group-label">6</div>
+      </div>
+    </div>
+    <div class="aic-equation">0 + 6 = 6</div>
+    <div class="aic-bottom">ಶೂನ್ಯ ಕೂಡಿ ಆರು = ಆರು · Zero + Six = Six</div>
+  </div>
+
+  <!-- Card 7: 1+8 -->
+  <div class="add-intro-card" id="ac7">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🏀</div>
+        <div class="obj-group-label">1</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🏀🏀🏀🏀🏀🏀🏀🏀</div>
+        <div class="obj-group-label">8</div>
+      </div>
+    </div>
+    <div class="aic-equation">1 + 8 = 9</div>
+    <div class="aic-bottom">ಒಂದು ಕೂಡಿ ಎಂಟು = ಒಂಬತ್ತು · One + Eight = Nine</div>
+  </div>
+
+  <!-- Card 8: 3+5 -->
+  <div class="add-intro-card" id="ac8">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🍩🍩🍩</div>
+        <div class="obj-group-label">3</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🍩🍩🍩🍩🍩</div>
+        <div class="obj-group-label">5</div>
+      </div>
+    </div>
+    <div class="aic-equation">3 + 5 = 8</div>
+    <div class="aic-bottom">ಮೂರು ಕೂಡಿ ಐದು = ಎಂಟು · Three + Five = Eight</div>
+  </div>
+
+  <!-- Card 9: 4+4 -->
+  <div class="add-intro-card" id="ac9">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">🦋🦋🦋🦋</div>
+        <div class="obj-group-label">4</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">🦋🦋🦋🦋</div>
+        <div class="obj-group-label">4</div>
+      </div>
+    </div>
+    <div class="aic-equation">4 + 4 = 8</div>
+    <div class="aic-bottom">ನಾಲ್ಕು ಕೂಡಿ ನಾಲ್ಕು = ಎಂಟು · Four + Four = Eight</div>
+  </div>
+
+  <!-- Card 10: 10+1 — KEY concept from PDF -->
+  <div class="add-intro-card" id="ac10">
+    <div class="aic-top">
+      <div class="obj-group">
+        <div class="obj-objs">⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐</div>
+        <div class="obj-group-label">10 (ಹತ್ತು)</div>
+      </div>
+      <div class="obj-divider">+</div>
+      <div class="obj-group">
+        <div class="obj-objs">⭐</div>
+        <div class="obj-group-label">1 (ಒಂದು)</div>
+      </div>
+    </div>
+    <div class="aic-equation">10 + 1 = 11</div>
+    <div class="aic-bottom">ಹತ್ತು ಕೂಡಿ ಒಂದು = ಹನ್ನೊಂದು · Ten + One = Eleven</div>
+  </div>
+
+  <div class="score-dots" id="score0"></div>
+  <button class="big-btn orange" id="btn0" disabled onclick="nextTab(0)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 1: ಹತ್ತುಗಳು ಮತ್ತು ಬಿಡಿಗಳು (Tens & Ones) ========== -->
+<div class="tab-panel" id="tab1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <div class="banner-emoji">🔢</div>
+    <div>
+      <div class="banner-kn">ಹತ್ತುಗಳು ಮತ್ತು ಬಿಡಿಗಳು</div>
+      <div class="banner-en">Tens and Ones</div>
+      <div class="banner-sub">ಕೂಡಿಕೆ → ಎಷ್ಟು ಹತ್ತುಗಳು, ಎಷ್ಟು ಬಿಡಿಗಳು? Choose correctly!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">📖 ಉದಾ: 7 + 4 = 11 ಬಿಡಿಗಳು = 1 ಹತ್ತು + 1 ಬಿಡಿ = 11<br>Example: 7 + 4 = 11 ones = 1 ten + 1 one = 11</div>
+
+  <!-- Visual explanation card -->
+  <div class="to-card">
+    <div class="to-header">🕯️ 7 ಮತ್ತು 4 · 7 and 4</div>
+    <div style="text-align:center;font-size:22px;padding:6px;">🕯️🕯️🕯️🕯️🕯️🕯️🕯️&nbsp;&nbsp;🕯️🕯️🕯️🕯️</div>
+    <div class="to-split">
+      <div class="to-box tens-b"><div class="tb-num">1</div><div class="tb-label">ಹತ್ತು · Ten</div></div>
+      <div class="to-plus-sign">+</div>
+      <div class="to-box ones-b"><div class="tb-num">1</div><div class="tb-label">ಬಿಡಿ · One</div></div>
+    </div>
+    <div class="to-eq">11 ಬಿಡಿಗಳು = 1 ಹತ್ತು + 1 ಬಿಡಿ = <strong>11</strong></div>
+  </div>
+
+  <div class="sec-title">👆 ಸರಿಯಾದ ಮೊತ್ತ ಆರಿಸು · Choose the correct total</div>
+
+  <!-- Q1: 7+4 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🕯️🕯️🕯️🕯️🕯️🕯️🕯️</div><div class="obj-group-label">7</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🕯️🕯️🕯️🕯️</div><div class="obj-group-label">4</div></div>
+      </div>
+      <div class="q-kn">7 + 4 = ?</div>
+      <div class="q-en">Seven plus Four</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q1',this,false,'tf1')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansQ('t1q1',this,true,'tf1')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'tf1')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'tf1')"><div class="choice-num">9</div></div>
+      </div>
+      <div class="fb" id="tf1"></div>
+    </div>
+  </div>
+
+  <!-- Q2: 8+5 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🍬🍬🍬🍬🍬🍬🍬🍬</div><div class="obj-group-label">8</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🍬🍬🍬🍬🍬</div><div class="obj-group-label">5</div></div>
+      </div>
+      <div class="q-kn">8 + 5 = ?</div>
+      <div class="q-en">Eight plus Five</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q2',this,false,'tf2')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('t1q2',this,true,'tf2')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansQ('t1q2',this,false,'tf2')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansQ('t1q2',this,false,'tf2')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="tf2"></div>
+    </div>
+  </div>
+
+  <!-- Q3: 9+1 = 10 (from PDF: 9+1=10) -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🔵🔵🔵🔵🔵🔵🔵🔵🔵</div><div class="obj-group-label">9</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🔵</div><div class="obj-group-label">1</div></div>
+      </div>
+      <div class="q-kn">9 + 1 = ?</div>
+      <div class="q-en">Nine plus One · 9 ಬಿಳಿ + 1 ಕಪ್ಪು = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q3',this,false,'tf3')"><div class="choice-num">9</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,true,'tf3')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'tf3')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'tf3')"><div class="choice-num">8</div></div>
+      </div>
+      <div class="fb" id="tf3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: 8+2 = 10 (from PDF circles) -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">⚪⚪⚪⚪⚪⚪⚪⚪</div><div class="obj-group-label">8 ಬಿಳಿ</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">⚫⚫</div><div class="obj-group-label">2 ಕಪ್ಪು</div></div>
+      </div>
+      <div class="q-kn">8 + 2 = ?</div>
+      <div class="q-en">Eight plus Two</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q4',this,false,'tf4')"><div class="choice-num">9</div></div>
+        <div class="choice" onclick="ansQ('t1q4',this,true,'tf4')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansQ('t1q4',this,false,'tf4')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('t1q4',this,false,'tf4')"><div class="choice-num">12</div></div>
+      </div>
+      <div class="fb" id="tf4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: 10+2 = 12 (from PDF page 2) -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">❄️❄️❄️❄️❄️❄️❄️❄️❄️❄️</div><div class="obj-group-label">10</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">❄️❄️</div><div class="obj-group-label">2</div></div>
+      </div>
+      <div class="q-kn">10 + 2 = ?</div>
+      <div class="q-en">Ten plus Two</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q5',this,false,'tf5')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('t1q5',this,true,'tf5')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'tf5')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'tf5')"><div class="choice-num">20</div></div>
+      </div>
+      <div class="fb" id="tf5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: 10+1=11 (stars from PDF) -->
+  <div class="q-card" id="t1q6">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴</div><div class="obj-group-label">10</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🔴</div><div class="obj-group-label">1</div></div>
+      </div>
+      <div class="q-kn">10 + 1 = ?</div>
+      <div class="q-en">Ten plus One (from 10 red + 1 red)</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q6',this,false,'tf6')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansQ('t1q6',this,true,'tf6')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('t1q6',this,false,'tf6')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('t1q6',this,false,'tf6')"><div class="choice-num">9</div></div>
+      </div>
+      <div class="fb" id="tf6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn orange" id="btn1" disabled onclick="nextTab(1)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 2: ಗುಂಪು ಮಾಡಿ ಕೂಡು (Group and Add) ========== -->
+<div class="tab-panel" id="tab2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <div class="banner-emoji">🌟</div>
+    <div>
+      <div class="banner-kn">ಗುಂಪು ಮಾಡಿ ಕೂಡು!</div>
+      <div class="banner-en">Group and Add!</div>
+      <div class="banner-sub">ಹತ್ತು ಗುಂಪು + ಉಳಿದವು = ಮೊತ್ತ · Group of ten + rest = total</div>
+    </div>
+  </div>
+
+  <div class="info-pill">💡 ಉದಾ: 8 + 8 = 16 → 1 ಹತ್ತು + 6 ಬಿಡಿ = 16<br>Example: 8 + 8 = 1 ten + 6 ones = 16</div>
+
+  <!-- Visual: 8+8 explanation -->
+  <div class="to-card">
+    <div class="to-header">ಉದಾಹರಣೆ: 8 + 8</div>
+    <div style="text-align:center;font-size:20px;padding:6px;letter-spacing:3px;">| | | | | | | | &nbsp; | | | | | | | |</div>
+    <div class="to-split">
+      <div class="to-box tens-b"><div class="tb-num">1</div><div class="tb-label">ಹತ್ತು</div></div>
+      <div class="to-plus-sign">+</div>
+      <div class="to-box ones-b"><div class="tb-num">6</div><div class="tb-label">ಬಿಡಿ</div></div>
+    </div>
+    <div class="to-eq">8 + 8 = <strong>16</strong></div>
+  </div>
+
+  <!-- Q1: 8+8 -->
+  <div class="q-card" id="g1q1">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🌙🌙🌙🌙🌙🌙🌙🌙</div><div class="obj-group-label">8</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🌙🌙🌙🌙🌙🌙🌙🌙</div><div class="obj-group-label">8</div></div>
+      </div>
+      <div class="q-kn">8 + 8 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('g1q1',this,false,'gf1')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansQ('g1q1',this,true,'gf1')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansQ('g1q1',this,false,'gf1')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansQ('g1q1',this,false,'gf1')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="gf1"></div>
+    </div>
+  </div>
+
+  <!-- Q2: 2+11 -->
+  <div class="q-card" id="g1q2">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">2 + 11 = ?</div>
+      <div class="q-en">Two plus Eleven</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('g1q2',this,false,'gf2')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('g1q2',this,true,'gf2')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansQ('g1q2',this,false,'gf2')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansQ('g1q2',this,false,'gf2')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="gf2"></div>
+    </div>
+  </div>
+
+  <!-- Q3: 0+14 (from PDF: 0+14) -->
+  <div class="q-card" id="g1q3">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">0 + 14 = ?</div>
+      <div class="q-en">Zero plus Fourteen</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('g1q3',this,false,'gf3')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansQ('g1q3',this,true,'gf3')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansQ('g1q3',this,false,'gf3')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansQ('g1q3',this,false,'gf3')"><div class="choice-num">4</div></div>
+      </div>
+      <div class="fb" id="gf3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: 6+6 (from PDF page 5) -->
+  <div class="q-card" id="g1q4">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🌺🌺🌺🌺🌺🌺</div><div class="obj-group-label">6</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🌺🌺🌺🌺🌺🌺</div><div class="obj-group-label">6</div></div>
+      </div>
+      <div class="q-kn">6 + 6 = ?</div>
+      <div class="q-en">Six plus Six</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('g1q4',this,false,'gf4')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('g1q4',this,true,'gf4')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('g1q4',this,false,'gf4')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansQ('g1q4',this,false,'gf4')"><div class="choice-num">10</div></div>
+      </div>
+      <div class="fb" id="gf4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: 5+6 (from PDF page 5) -->
+  <div class="q-card" id="g1q5">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🏺🏺🏺🏺🏺</div><div class="obj-group-label">5</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🏺🏺🏺🏺🏺🏺</div><div class="obj-group-label">6</div></div>
+      </div>
+      <div class="q-kn">5 + 6 = ?</div>
+      <div class="q-en">Five plus Six</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('g1q5',this,false,'gf5')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansQ('g1q5',this,true,'gf5')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansQ('g1q5',this,false,'gf5')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansQ('g1q5',this,false,'gf5')"><div class="choice-num">9</div></div>
+      </div>
+      <div class="fb" id="gf5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: 9+5 (from PDF page 5) -->
+  <div class="q-card" id="g1q6">
+    <div class="q-top">
+      <div class="obj-row">
+        <div class="obj-group"><div class="obj-objs">🎯🎯🎯🎯🎯🎯🎯🎯🎯</div><div class="obj-group-label">9</div></div>
+        <div class="obj-divider">+</div>
+        <div class="obj-group"><div class="obj-objs">🎯🎯🎯🎯🎯</div><div class="obj-group-label">5</div></div>
+      </div>
+      <div class="q-kn">9 + 5 = ?</div>
+      <div class="q-en">Nine plus Five</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('g1q6',this,false,'gf6')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansQ('g1q6',this,true,'gf6')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansQ('g1q6',this,false,'gf6')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansQ('g1q6',this,false,'gf6')"><div class="choice-num">12</div></div>
+      </div>
+      <div class="fb" id="gf6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn orange" id="btn2" disabled onclick="nextTab(2)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 3: ಜೋಡಿ ಮಾಡು (Match) ========== -->
+<div class="tab-panel" id="tab3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-kn">ಕೂಡು, ಮೊತ್ತ ಸಮನಾಗಿರುವ ಜೋಡಿ ಹುಡುಕು!</div>
+      <div class="banner-en">Add and match pairs with equal totals!</div>
+      <div class="banner-sub">ಮಾದರಿ: 5 + 8 → 13 · Model: match equal sums</div>
+    </div>
+  </div>
+
+  <div class="info-pill">👆 ಎಡ ಕಡೆ ಒಂದು ಒತ್ತು, ನಂತರ ಬಲ ಕಡೆ ಅದರ ಮೊತ್ತ ಒತ್ತು!<br>Tap left side first, then tap the matching sum on right!</div>
+
+  <!-- Match Set 1 -->
+  <div class="match-wrap" id="mwrap1">
+    <div class="match-title">ಸಮ ಮೊತ್ತ ಜೋಡಿ ಮಾಡು · Match equal sums</div>
+    <div class="match-row">
+      <div class="match-col" id="mleft1">
+        <div class="match-item" id="ml1_1" onclick="matchLeft(1,'ml1_1','13')">5 + 8</div>
+        <div class="match-item" id="ml1_2" onclick="matchLeft(1,'ml1_2','11')">5 + 6</div>
+        <div class="match-item" id="ml1_3" onclick="matchLeft(1,'ml1_3','12')">6 + 6</div>
+        <div class="match-item" id="ml1_4" onclick="matchLeft(1,'ml1_4','11')">6 + 5</div>
+      </div>
+      <div class="match-col" id="mright1">
+        <div class="match-item" id="mr1_a" onclick="matchRight(1,'mr1_a','13')">13</div>
+        <div class="match-item" id="mr1_b" onclick="matchRight(1,'mr1_b','11')">11</div>
+        <div class="match-item" id="mr1_c" onclick="matchRight(1,'mr1_c','12')">12</div>
+      </div>
+    </div>
+    <div class="match-fb" id="mfb1"></div>
+  </div>
+
+  <!-- Match Set 2 -->
+  <div class="match-wrap" id="mwrap2">
+    <div class="match-title">ಮತ್ತೊಂದು ಸೆಟ್ · Another set</div>
+    <div class="match-row">
+      <div class="match-col" id="mleft2">
+        <div class="match-item" id="ml2_1" onclick="matchLeft(2,'ml2_1','20')">18 + 2</div>
+        <div class="match-item" id="ml2_2" onclick="matchLeft(2,'ml2_2','20')">16 + 4</div>
+        <div class="match-item" id="ml2_3" onclick="matchLeft(2,'ml2_3','20')">11 + 9</div>
+        <div class="match-item" id="ml2_4" onclick="matchLeft(2,'ml2_4','20')">12 + 8</div>
+      </div>
+      <div class="match-col" id="mright2">
+        <div class="match-item" id="mr2_a" onclick="matchRight(2,'mr2_a','20')">20</div>
+      </div>
+    </div>
+    <div class="match-fb" id="mfb2"></div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn orange" id="btn3" disabled onclick="nextTab(3)">ಮುಂದೆ ಹೋಗೋಣ! Next Step →</button>
+</div>
+
+<!-- ========== TAB 4: ಅಭ್ಯಾಸ (Final Practice) ========== -->
+<div class="tab-panel" id="tab4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-kn">ಅಭ್ಯಾಸ ಮಾಡೋಣ!</div>
+      <div class="banner-en">Final Practice!</div>
+      <div class="banner-sub">ಎಲ್ಲ ಕೂಡಿಕೆ ಲೆಕ್ಕ ಬಿಡಿಸು · Solve all addition sums!</div>
+    </div>
+  </div>
+
+  <!-- FQ1: 16+2 -->
+  <div class="q-card" id="fq1">
+    <div class="q-top">
+      <div class="q-emoji">➕</div>
+      <div class="q-kn">16 + 2 = ?</div>
+      <div class="q-en">Sixteen plus Two</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq1',this,false,'ff1')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq1',this,true,'ff1')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansFinal('fq1',this,false,'ff1')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansFinal('fq1',this,false,'ff1')"><div class="choice-num">16</div></div>
+      </div>
+      <div class="fb" id="ff1"></div>
+    </div>
+  </div>
+
+  <!-- FQ2: 11+2 -->
+  <div class="q-card" id="fq2">
+    <div class="q-top">
+      <div class="q-emoji">➕</div>
+      <div class="q-kn">11 + 2 = ?</div>
+      <div class="q-en">Eleven plus Two</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq2',this,false,'ff2')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansFinal('fq2',this,true,'ff2')"><div class="choice-num">13</div></div>
+        <div class="choice" onclick="ansFinal('fq2',this,false,'ff2')"><div class="choice-num">14</div></div>
+        <div class="choice" onclick="ansFinal('fq2',this,false,'ff2')"><div class="choice-num">11</div></div>
+      </div>
+      <div class="fb" id="ff2"></div>
+    </div>
+  </div>
+
+  <!-- FQ3: 9+7 -->
+  <div class="q-card" id="fq3">
+    <div class="q-top">
+      <div class="q-emoji">➕</div>
+      <div class="q-kn">9 + 7 = ?</div>
+      <div class="q-en">Nine plus Seven</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq3',this,false,'ff3')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansFinal('fq3',this,true,'ff3')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansFinal('fq3',this,false,'ff3')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq3',this,false,'ff3')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="ff3"></div>
+    </div>
+  </div>
+
+  <!-- FQ4: 9+9 -->
+  <div class="q-card" id="fq4">
+    <div class="q-top">
+      <div class="q-emoji">➕</div>
+      <div class="q-kn">9 + 9 = ?</div>
+      <div class="q-en">Nine plus Nine</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq4',this,false,'ff4')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq4',this,true,'ff4')"><div class="choice-num">18</div></div>
+        <div class="choice" onclick="ansFinal('fq4',this,false,'ff4')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansFinal('fq4',this,false,'ff4')"><div class="choice-num">16</div></div>
+      </div>
+      <div class="fb" id="ff4"></div>
+    </div>
+  </div>
+
+  <!-- FQ5: 12+4 -->
+  <div class="q-card" id="fq5">
+    <div class="q-top">
+      <div class="q-emoji">➕</div>
+      <div class="q-kn">12 + 4 = ?</div>
+      <div class="q-en">Twelve plus Four</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq5',this,false,'ff5')"><div class="choice-num">15</div></div>
+        <div class="choice" onclick="ansFinal('fq5',this,true,'ff5')"><div class="choice-num">16</div></div>
+        <div class="choice" onclick="ansFinal('fq5',this,false,'ff5')"><div class="choice-num">17</div></div>
+        <div class="choice" onclick="ansFinal('fq5',this,false,'ff5')"><div class="choice-num">14</div></div>
+      </div>
+      <div class="fb" id="ff5"></div>
+    </div>
+  </div>
+
+  <!-- FQ6: What is ಹತ್ತು + ಒಂದು? -->
+  <div class="q-card" id="fq6">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">ಹತ್ತು + ಒಂದು = ?</div>
+      <div class="q-en">Hattu + Ondu = ? (Ten + One)</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq6',this,false,'ff6')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansFinal('fq6',this,true,'ff6')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansFinal('fq6',this,false,'ff6')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansFinal('fq6',this,false,'ff6')"><div class="choice-num">9</div></div>
+      </div>
+      <div class="fb" id="ff6"></div>
+    </div>
+  </div>
+
+  <!-- FQ7: 7 ಬಿಡಿಗಳು + 4 ಬಿಡಿಗಳು = ? ಬಿಡಿಗಳು (from PDF tens-ones concept) -->
+  <div class="q-card" id="fq7">
+    <div class="q-top">
+      <div class="q-emoji">🕯️</div>
+      <div class="q-kn">7 ಬಿಡಿಗಳು + 4 ಬಿಡಿಗಳು = ?</div>
+      <div class="q-en">7 ones + 4 ones = ? ones</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq7',this,false,'ff7')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansFinal('fq7',this,true,'ff7')"><div class="choice-num">11</div></div>
+        <div class="choice" onclick="ansFinal('fq7',this,false,'ff7')"><div class="choice-num">12</div></div>
+        <div class="choice" onclick="ansFinal('fq7',this,false,'ff7')"><div class="choice-num">13</div></div>
+      </div>
+      <div class="fb" id="ff7"></div>
+    </div>
+  </div>
+
+  <!-- FQ8: 8 ಬಿಡಿಗಳು + 5 ಬಿಡಿಗಳು = 1 ಹತ್ತು + ? ಬಿಡಿ (from PDF) -->
+  <div class="q-card" id="fq8">
+    <div class="q-top">
+      <div class="q-emoji">🍬</div>
+      <div class="q-kn">8 + 5 = 1 ಹತ್ತು + ? ಬಿಡಿ</div>
+      <div class="q-en">8 + 5 = 1 ten + ? ones</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq8',this,false,'ff8')"><div class="choice-num">2</div><div class="choice-kn">ಎರಡು</div></div>
+        <div class="choice" onclick="ansFinal('fq8',this,true,'ff8')"><div class="choice-num">3</div><div class="choice-kn">ಮೂರು</div></div>
+        <div class="choice" onclick="ansFinal('fq8',this,false,'ff8')"><div class="choice-num">4</div><div class="choice-kn">ನಾಲ್ಕು</div></div>
+        <div class="choice" onclick="ansFinal('fq8',this,false,'ff8')"><div class="choice-num">5</div><div class="choice-kn">ಐದು</div></div>
+      </div>
+      <div class="fb" id="ff8"></div>
+    </div>
+  </div>
+
+  <!-- FQ9: 11+9 = ? (from PDF match activity) -->
+  <div class="q-card" id="fq9">
+    <div class="q-top">
+      <div class="q-emoji">➕</div>
+      <div class="q-kn">11 + 9 = ?</div>
+      <div class="q-en">Eleven plus Nine</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq9',this,false,'ff9')"><div class="choice-num">19</div></div>
+        <div class="choice" onclick="ansFinal('fq9',this,true,'ff9')"><div class="choice-num">20</div></div>
+        <div class="choice" onclick="ansFinal('fq9',this,false,'ff9')"><div class="choice-num">21</div></div>
+        <div class="choice" onclick="ansFinal('fq9',this,false,'ff9')"><div class="choice-num">18</div></div>
+      </div>
+      <div class="fb" id="ff9"></div>
+    </div>
+  </div>
+
+  <!-- FQ10: 8+5=13 → 13 = 1 ಹತ್ತು + ? -->
+  <div class="q-card" id="fq10">
+    <div class="q-top">
+      <div class="q-emoji">🧠</div>
+      <div class="q-kn">13 = 1 ಹತ್ತು + ? ಬಿಡಿಗಳು</div>
+      <div class="q-en">13 = 1 ten + ? ones</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansFinal('fq10',this,false,'ff10')"><div class="choice-num">1</div></div>
+        <div class="choice" onclick="ansFinal('fq10',this,false,'ff10')"><div class="choice-num">2</div></div>
+        <div class="choice" onclick="ansFinal('fq10',this,true,'ff10')"><div class="choice-num">3</div></div>
+        <div class="choice" onclick="ansFinal('fq10',this,false,'ff10')"><div class="choice-num">4</div></div>
+      </div>
+      <div class="fb" id="ff10"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn orange" id="btn4" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಯಿತು! Finish!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATION -->
+<div class="celeb" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🎉</span>
+    <div class="celeb-title">ಶಾಬಾಸ್! Shabash!</div>
+    <div class="celeb-sub">ನೀನು ಪಾಠ 10 ಮುಗಿಸಿದೆ!<br>You finished Lesson 10 – ಸಂಕಲನ!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐⭐⭐</div>
+    <button class="big-btn orange" onclick="document.getElementById('celeb').classList.remove('show')">🔁 ಮತ್ತೆ ಆಡು · Play Again</button>
+  </div>
+</div>
+
+<script>
+// ====== STATE ======
+let totalStars = 0;
+let tabUnlocked = [true, false, false, false, false];
+
+// Tab 0: 10 addition intro cards to tap
+const addCards = ['ac1','ac2','ac3','ac4','ac5','ac6','ac7','ac8','ac9','ac10'];
+let tab0Done = 0;
+const tab0Total = addCards.length;
+
+let tab1Done = 0, tab1Total = 6;
+let tab2Done = 0, tab2Total = 6;
+let tab3Done = 0, tab3Total = 8; // 4 from set1 + 4 from set2
+let tab4Done = 0, tab4Total = 10;
+
+// ====== INIT: tap to reveal addition cards ======
+addCards.forEach((id) => {
+  const el = document.getElementById(id);
+  el.style.cursor = 'pointer';
+  el.addEventListener('click', () => {
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    el.classList.add('tapped');
+    tab0Done++;
+    addStars(1);
+    buildDots('score0', tab0Done, tab0Total);
+    updateProgress();
+    if (tab0Done >= tab0Total) document.getElementById('btn0').disabled = false;
+  });
+});
+
+buildDots('score0', 0, tab0Total);
+buildDots('score1', 0, tab1Total);
+buildDots('score2', 0, tab2Total);
+buildDots('score3', 0, tab3Total);
+buildDots('score4', 0, tab4Total);
+updateProgress();
+
+// ====== TABS ======
+function goTab(n) {
+  if (!tabUnlocked[n]) {
+    const btn = document.getElementById('tab' + n + 'btn');
+    btn.classList.add('shaking');
+    btn.addEventListener('animationend', () => btn.classList.remove('shaking'), {once:true});
+    showToast('🔒 ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.classList.remove('active','done','unlocked','locked');
+    if (i < n && tabUnlocked[i]) t.classList.add('done');
+    else if (i === n) t.classList.add('active');
+    else if (!tabUnlocked[i]) t.classList.add('locked');
+    else t.classList.add('unlocked');
+  });
+  document.getElementById('tab' + n).classList.add('active');
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function nextTab(n) {
+  tabUnlocked[n+1] = true;
+  const nextBtn = document.getElementById('tab'+(n+1)+'btn');
+  nextBtn.classList.remove('locked');
+  nextBtn.classList.add('unlocked');
+  goTab(n+1);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ====== STARS & PROGRESS ======
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starPill').textContent = '⭐ ' + totalStars;
+  updateProgress();
+}
+function updateProgress() {
+  const totalQ = tab0Total + tab1Total + tab2Total + tab3Total + tab4Total;
+  const done = tab0Done + tab1Done + tab2Done + tab3Done + tab4Done;
+  document.getElementById('progFill').style.width = Math.round((done/totalQ)*100) + '%';
+}
+
+// ====== DOTS ======
+function buildDots(id, done, total) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i=0;i<total;i++) {
+    const d = document.createElement('div');
+    d.className = 'sdot' + (i < done ? ' done' : '');
+    c.appendChild(d);
+  }
+}
+
+// ====== GENERIC ANSWER (Tab 1 & 2) ======
+function ansQ(cardId, btn, correct, fbId, tabNum) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => {o.classList.add('disabled'); o.style.pointerEvents='none';});
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಭಲೇ! ಸರಿ!';
+    card.classList.add('done'); card.dataset.done='1';
+    // figure out which tab from card id prefix
+    if (cardId.startsWith('t1')) { tab1Done++; addStars(1); buildDots('score1',tab1Done,tab1Total); if(tab1Done>=tab1Total) document.getElementById('btn1').disabled=false; }
+    else if (cardId.startsWith('g1')) { tab2Done++; addStars(1); buildDots('score2',tab2Done,tab2Total); if(tab2Done>=tab2Total) document.getElementById('btn2').disabled=false; }
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no'; fb.textContent='❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(() => {
+      opts.forEach(o => {o.classList.remove('disabled'); o.style.pointerEvents='';});
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className='fb';
+    }, 900);
+  }
+}
+
+// ====== FINAL PRACTICE (Tab 4) ======
+function ansFinal(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => {o.classList.add('disabled'); o.style.pointerEvents='none';});
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಭಲೇ ಶಾಬಾಸ್! 🌟';
+    card.classList.add('done'); card.dataset.done='1';
+    tab4Done++; addStars(2);
+    buildDots('score4', tab4Done, tab4Total);
+    if (tab4Done >= tab4Total) document.getElementById('btn4').disabled=false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು! Try again!';
+    setTimeout(() => {
+      opts.forEach(o => {o.classList.remove('disabled'); o.style.pointerEvents='';});
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className='fb';
+    }, 900);
+  }
+}
+
+// ====== MATCH GAME (Tab 3) ======
+let matchState = {
+  1: { selectedLeft: null, selectedLeftVal: null, matchedLeft: [], matchedRight: [] },
+  2: { selectedLeft: null, selectedLeftVal: null, matchedLeft: [], matchedRight: [] }
+};
+
+function matchLeft(set, itemId, val) {
+  const state = matchState[set];
+  if (state.matchedLeft.includes(itemId)) return;
+  // deselect previous
+  if (state.selectedLeft) {
+    const prev = document.getElementById(state.selectedLeft);
+    if (prev) prev.classList.remove('selected');
+  }
+  state.selectedLeft = itemId;
+  state.selectedLeftVal = val;
+  document.getElementById(itemId).classList.add('selected');
+}
+
+function matchRight(set, itemId, val) {
+  const state = matchState[set];
+  if (!state.selectedLeft) {
+    const fb = document.getElementById('mfb'+set);
+    fb.style.display='block'; fb.style.background='#fff3e0'; fb.style.color='#e65100';
+    fb.textContent = '👈 ಮೊದಲು ಎಡ ಕಡೆ ಒತ್ತು! Tap left side first!';
+    setTimeout(() => { fb.style.display='none'; }, 1500);
+    return;
+  }
+  if (state.matchedRight.includes(itemId)) return;
+
+  const leftEl = document.getElementById(state.selectedLeft);
+  const rightEl = document.getElementById(itemId);
+
+  if (state.selectedLeftVal === val) {
+    // correct match
+    leftEl.classList.remove('selected');
+    leftEl.classList.add('matched');
+    rightEl.classList.add('matched');
+    state.matchedLeft.push(state.selectedLeft);
+    state.matchedRight.push(itemId);
+    state.selectedLeft = null;
+    state.selectedLeftVal = null;
+    tab3Done++; addStars(1);
+    buildDots('score3', tab3Done, tab3Total);
+    updateProgress();
+    if (tab3Done >= tab3Total) document.getElementById('btn3').disabled=false;
+    const fb = document.getElementById('mfb'+set);
+    fb.style.display='block'; fb.style.background='#f1f8e9'; fb.style.color='#2e7d32';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ ಜೋಡಿ!';
+    setTimeout(() => { fb.style.display='none'; }, 1200);
+  } else {
+    // wrong match
+    leftEl.classList.add('wrong-match');
+    rightEl.classList.add('wrong-match');
+    const fb = document.getElementById('mfb'+set);
+    fb.style.display='block'; fb.style.background='#ffcdd2'; fb.style.color='#c62828';
+    fb.textContent = '❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!';
+    setTimeout(() => {
+      leftEl.classList.remove('wrong-match','selected');
+      rightEl.classList.remove('wrong-match');
+      state.selectedLeft = null;
+      state.selectedLeftVal = null;
+      fb.style.display='none';
+    }, 900);
+  }
+}
+
+// ====== FINISH ======
+function finishLesson() {
+  document.getElementById('celebStars').textContent = '⭐'.repeat(Math.min(10, Math.floor(totalStars/5)));
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

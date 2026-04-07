@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಅಧ್ಯಾಯ 14: ಹಣ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#e8f5e9;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#1a237e,#283593,#3949ab);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#0d47a1,#1565c0,#1976d2);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#c5cae9;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#1a237e,#7986cb);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#283593;border-color:#9fa8da}
+.step-tab.active{background:#283593;color:#fff;border-color:#283593;box-shadow:0 4px 14px rgba(40,53,147,.45)}
+.step-tab.done{background:#e8eaf6;color:#283593;border-color:#7986cb}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#e8eaf6;border:2px solid #9fa8da;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#283593;line-height:1.6}
+
+/* COIN CARD */
+.coin-display{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #9fa8da}
+.coin-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:2px dashed #e8eaf6}
+.coin-row:last-child{border-bottom:none}
+.coin-emoji{font-size:48px;flex-shrink:0;width:70px;text-align:center}
+.coin-face{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.2);position:relative;overflow:hidden;letter-spacing:-0.5px;text-align:center;line-height:1.2}
+.coin-50p{background:radial-gradient(circle at 35% 35%,#e0e0e0,#9e9e9e);color:#333;border:3px solid #757575}
+.coin-1r{background:radial-gradient(circle at 35% 35%,#e8e8e8,#bdbdbd);color:#222;border:3px solid #9e9e9e}
+.coin-2r{background:radial-gradient(circle at 35% 35%,#f5f5f5,#bdbdbd);color:#222;border:3px solid #9e9e9e}
+.coin-5r{background:radial-gradient(circle at 35% 35%,#fff8e1,#fdd835);color:#5d4037;border:3px solid #f9a825}
+.coin-10r{background:radial-gradient(circle at 35% 35%,#fff8e1,#ffca28);color:#5d4037;border:3px solid #f9a825}
+.coin-label{font-size:18px;font-weight:900;color:#283593}
+.coin-sub{font-size:12px;font-weight:700;color:#888;margin-top:2px}
+
+/* NOTE CARD */
+.note-face{border-radius:10px;padding:10px 16px;display:inline-flex;align-items:center;justify-content:space-between;font-weight:900;font-size:16px;min-width:140px;box-shadow:0 4px 12px rgba(0,0,0,.2);position:relative;overflow:hidden;flex-shrink:0;gap:8px}
+.note-1r{background:linear-gradient(135deg,#e8eaf6,#c5cae9);color:#1a237e;border:2px solid #7986cb}
+.note-2r{background:linear-gradient(135deg,#fce4ec,#f8bbd0);color:#880e4f;border:2px solid #f06292}
+.note-5r{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20;border:2px solid #66bb6a}
+.note-10r{background:linear-gradient(135deg,#fff8e1,#fff9c4);color:#e65100;border:2px solid #ffd54f}
+.note-20r{background:linear-gradient(135deg,#fff3e0,#ffe0b2);color:#bf360c;border:2px solid #ffb74d}
+.note-50r{background:linear-gradient(135deg,#f3e5f5,#e1bee7);color:#4a148c;border:2px solid #ce93d8}
+.note-sym{font-size:24px;font-weight:900;opacity:.4}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#7986cb;background:#e8eaf6}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:36px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-bottom{border-top:2px dashed #9fa8da;padding:12px 14px}
+
+/* CHOICES */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #9fa8da;background:#e8eaf6;padding:12px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-num{font-size:24px;font-weight:900;color:#283593}
+.choice-kn{font-size:13px;font-weight:700;color:#3949ab}
+.choice-emoji{font-size:26px}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#c5cae9;transition:background .3s}
+.sdot.done{background:#3949ab}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.blue{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff}
+.big-btn.blue:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* MATCH */
+.match-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #9fa8da}
+.match-title{font-size:15px;font-weight:900;color:#283593;margin-bottom:14px;text-align:center}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.match-col{display:flex;flex-direction:column;gap:10px}
+.match-item{border-radius:16px;border:3px solid #9fa8da;background:#e8eaf6;padding:12px 8px;text-align:center;cursor:pointer;font-size:14px;font-weight:900;color:#283593;transition:all .2s;user-select:none;line-height:1.4}
+.match-item .mval{font-size:22px;font-weight:900;color:#1a237e}
+.match-item .msub{font-size:11px;font-weight:700;color:#7986cb;margin-top:2px}
+.match-item:active{transform:scale(.93)}
+.match-item.selected{border-color:#283593;background:#c5cae9}
+.match-item.matched{border-color:#43a047;background:#c8e6c9;pointer-events:none;opacity:.85}
+.match-item.wrong-match{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.match-fb{padding:10px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:10px;display:none}
+
+/* SHOP SCENE */
+.shop-scene{background:linear-gradient(135deg,#fff9c4,#fff3e0);border-radius:22px;padding:16px;margin-bottom:14px;border:3px solid #ffd54f;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.shop-title{font-size:15px;font-weight:900;color:#e65100;text-align:center;margin-bottom:12px}
+.shop-items{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.shop-item{background:#fff;border-radius:14px;padding:12px 8px;text-align:center;border:2px solid #ffd54f;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.shop-item .item-emoji{font-size:36px}
+.shop-item .item-price{font-size:18px;font-weight:900;color:#e65100;margin-top:4px}
+.shop-item .item-kn{font-size:11px;font-weight:700;color:#888}
+
+/* RUPEE SYMBOL pill */
+.rupee-sym{display:inline-block;font-size:18px;font-weight:900;color:#1a237e;background:#e8eaf6;border-radius:8px;padding:2px 8px;margin:0 2px}
+
+/* CELEBRATION */
+.celeb{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-box{background:#fff;border-radius:30px;padding:40px 30px;text-align:center;max-width:340px;width:90%;animation:celebPop .5s ease}
+@keyframes celebPop{from{transform:scale(.5)}to{transform:scale(1)}}
+.celeb-emoji{font-size:80px;display:block;margin-bottom:10px;animation:spin 1s ease}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.celeb-title{font-size:28px;font-weight:900;color:#283593;margin-bottom:6px}
+.celeb-sub{font-size:16px;font-weight:700;color:#555;margin-bottom:16px}
+.celeb-stars{font-size:36px;letter-spacing:4px;margin-bottom:20px}
+.celeb-btn{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;border:none;border-radius:20px;padding:16px 40px;font-family:'Baloo Tamma 2',sans-serif;font-size:18px;font-weight:900;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">💰 ಗಣಿತ — ಅಧ್ಯಾಯ 14: ಹಣ</div>
+  <div class="stars-pill" id="starPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🪙</span>
+  <h1>ಅಧ್ಯಾಯ 14<br>ಹಣ — Money</h1>
+  <p>ನಾಣ್ಯ ಮತ್ತು ನೋಟು • Coins and Notes</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ / Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active"  id="tab-btn-1" onclick="tryTab(1)">1️⃣ ನಾಣ್ಯ</div>
+  <div class="step-tab locked" id="tab-btn-2" onclick="tryTab(2)">2️⃣ ನೋಟು</div>
+  <div class="step-tab locked" id="tab-btn-3" onclick="tryTab(3)">3️⃣ ಜೋಡಣೆ</div>
+  <div class="step-tab locked" id="tab-btn-4" onclick="tryTab(4)">4️⃣ ಬೆಲೆ ಆರಿಸಿ</div>
+  <div class="step-tab locked" id="tab-btn-5" onclick="tryTab(5)">5️⃣ ಅಂಗಡಿ</div>
+  <div class="step-tab locked" id="tab-btn-6" onclick="tryTab(6)">6️⃣ ಮಕ್ಕಳ ಮಳಿಗೆ</div>
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ===== TAB 1: ನಾಣ್ಯಗಳು — Coins ===== -->
+<div class="tab-panel active" id="tab-1">
+  <div class="lesson-banner" style="background:#e8eaf6;color:#1a237e">
+    <div class="banner-emoji">🪙</div>
+    <div>
+      <div class="banner-kn">ನಾಣ್ಯಗಳು</div>
+      <div class="banner-en">Indian Coins — ಭಾರತೀಯ ನಾಣ್ಯಗಳು</div>
+      <div class="banner-sub">ವಸ್ತುಗಳನ್ನು ಕೊಳ್ಳಲು ಹಣ ಬೇಕಾಗುವುದು!<br>We need money to buy things!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">💡 ನಮ್ಮ ದೇಶದಲ್ಲಿ ಹಣವು <b>ನಾಣ್ಯ</b> ಮತ್ತು <b>ನೋಟು</b> ರೂಪದಲ್ಲಿದೆ!<br>In our country, money comes as <b>coins</b> (ನಾಣ್ಯ) and <b>notes</b> (ನೋಟು)!<br><b>1 ರೂಪಾಯಿ = 100 ಪೈಸೆಗಳು</b></div>
+
+  <!-- Coin intro visual -->
+  <div class="coin-display">
+    <div style="font-size:15px;font-weight:900;color:#283593;text-align:center;margin-bottom:12px">ನಾಣ್ಯಗಳ ಬೆಲೆ ಗುರುತಿಸಿ — Identify coin values</div>
+    <div class="coin-row">
+      <div class="coin-face coin-50p">50P</div>
+      <div><div class="coin-label">50 ಪೈಸೆ</div><div class="coin-sub">50 Paise</div></div>
+    </div>
+    <div class="coin-row">
+      <div class="coin-face coin-1r">₹1</div>
+      <div><div class="coin-label">1 ರೂಪಾಯಿ</div><div class="coin-sub">1 Rupee</div></div>
+    </div>
+    <div class="coin-row">
+      <div class="coin-face coin-2r">₹2</div>
+      <div><div class="coin-label">2 ರೂಪಾಯಿ</div><div class="coin-sub">2 Rupees</div></div>
+    </div>
+    <div class="coin-row">
+      <div class="coin-face coin-5r">₹5</div>
+      <div><div class="coin-label">5 ರೂಪಾಯಿ</div><div class="coin-sub">5 Rupees</div></div>
+    </div>
+    <div class="coin-row">
+      <div class="coin-face coin-10r">₹10</div>
+      <div><div class="coin-label">10 ರೂಪಾಯಿ</div><div class="coin-sub">10 Rupees</div></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="q-emoji">🪙</div>
+      <div class="q-kn">ಯಾವ ನಾಣ್ಯ <b>50 ಪೈಸೆ</b>?</div>
+      <div class="q-en">Which coin is 50 Paise?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q1',this,true,'fb1q1')">
+          <div class="coin-face coin-50p" style="width:54px;height:54px">50P</div>
+          <div class="choice-kn">50 ಪೈಸೆ ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'fb1q1')">
+          <div class="coin-face coin-5r" style="width:54px;height:54px">₹5</div>
+          <div class="choice-kn">5 ರೂಪಾಯಿ</div>
+        </div>
+      </div>
+      <div class="fb" id="fb1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="q-emoji">🪙</div>
+      <div class="q-kn"><span class="rupee-sym">₹</span> ಈ ಚಿಹ್ನೆ ಯಾವ ಭಾಷೆಗೆ ಸೇರಿದ್ದು?</div>
+      <div class="q-en">The ₹ symbol stands for?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q2',this,false,'fb1q2')">
+          <div class="choice-num">Dollar</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q2',this,true,'fb1q2')">
+          <div class="choice-num">ರೂಪಾಯಿ</div>
+          <div class="choice-kn">Rupee ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="fb1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="q-kn">1 ರೂಪಾಯಿ = ಎಷ್ಟು ಪೈಸೆಗಳು?</div>
+      <div class="q-en">1 Rupee = how many Paise?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t1q3',this,false,'fb1q3')"><div class="choice-num">10</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'fb1q3')"><div class="choice-num">50</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,true,'fb1q3')"><div class="choice-num">100</div><div class="choice-kn">✓</div></div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'fb1q3')"><div class="choice-num">25</div></div>
+      </div>
+      <div class="fb" id="fb1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="q-emoji">🪙🪙</div>
+      <div class="q-kn">ಅಮ್ಮ ಪೆನ್ಸಿಲ್ ಕೊಳ್ಳಲು ₹2 ನಾಣ್ಯ ಕೊಟ್ಟರು. ಇದು ಯಾವ ನಾಣ್ಯ?</div>
+      <div class="q-en">Which coin is used to pay ₹2?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q4',this,false,'fb1q4')">
+          <div class="coin-face coin-1r" style="width:54px;height:54px">₹1</div>
+          <div class="choice-kn">1 ರೂಪಾಯಿ</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,true,'fb1q4')">
+          <div class="coin-face coin-2r" style="width:54px;height:54px">₹2</div>
+          <div class="choice-kn">2 ರೂಪಾಯಿ ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="fb1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="q-kn">ಅಂಕಲ್ ಐಸ್ ಕ್ರೀಮ್ ಕೊಳ್ಳಲು ₹5 ಬೇಕು. ಯಾವ ನಾಣ್ಯ?</div>
+      <div class="q-en">Uncle needs ₹5 to buy ice cream. Which coin?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q5',this,true,'fb1q5')">
+          <div class="coin-face coin-5r" style="width:54px;height:54px">₹5</div>
+          <div class="choice-kn">5 ರೂಪಾಯಿ ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'fb1q5')">
+          <div class="coin-face coin-10r" style="width:54px;height:54px">₹10</div>
+          <div class="choice-kn">10 ರೂಪಾಯಿ</div>
+        </div>
+      </div>
+      <div class="fb" id="fb1q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn blue" id="btn1" disabled onclick="goTab(2)">ಮುಂದಿನ ಹಂತ ➡️ Next Step</button>
+</div>
+
+<!-- ===== TAB 2: ನೋಟುಗಳು — Notes ===== -->
+<div class="tab-panel" id="tab-2">
+  <div class="lesson-banner" style="background:#fff3e0;color:#e65100">
+    <div class="banner-emoji">💵</div>
+    <div>
+      <div class="banner-kn">ದಿನನಿತ್ಯ ಸಾಮಾನ್ಯವಾಗಿ ಬಳಸುವ ನೋಟುಗಳು</div>
+      <div class="banner-en">Commonly used Notes / Currency</div>
+      <div class="banner-sub">ನೋಟುಗಳ ಬೆಲೆ ಗುರುತಿಸಿ — Identify note values!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">💡 ನೋಟುಗಳು: ₹1, ₹2, ₹5, ₹10, ₹20, ₹50<br>Notes come in: 1, 2, 5, 10, 20, 50 Rupees</div>
+
+  <!-- Note visual -->
+  <div class="coin-display">
+    <div style="font-size:15px;font-weight:900;color:#e65100;text-align:center;margin-bottom:12px">ನೋಟುಗಳ ಬೆಲೆ — Note values</div>
+    <div class="coin-row">
+      <div class="note-face note-1r"><span class="note-sym">₹</span>1 ರೂಪಾಯಿ</div>
+    </div>
+    <div class="coin-row">
+      <div class="note-face note-2r"><span class="note-sym">₹</span>2 ರೂಪಾಯಿ</div>
+    </div>
+    <div class="coin-row">
+      <div class="note-face note-5r"><span class="note-sym">₹</span>5 ರೂಪಾಯಿ</div>
+    </div>
+    <div class="coin-row">
+      <div class="note-face note-10r"><span class="note-sym">₹</span>10 ರೂಪಾಯಿ</div>
+    </div>
+    <div class="coin-row">
+      <div class="note-face note-20r"><span class="note-sym">₹</span>20 ರೂಪಾಯಿ</div>
+    </div>
+    <div class="coin-row">
+      <div class="note-face note-50r"><span class="note-sym">₹</span>50 ರೂಪಾಯಿ</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t2q1">
+    <div class="q-top">
+      <div class="q-kn">ಯಾವ ನೋಟು <b>₹10</b>?</div>
+      <div class="q-en">Which note is ₹10?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q1',this,false,'fb2q1')">
+          <div class="note-face note-20r" style="font-size:13px;min-width:auto;padding:8px 12px"><span>₹</span>20</div>
+          <div class="choice-kn">20 ರೂಪಾಯಿ</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q1',this,true,'fb2q1')">
+          <div class="note-face note-10r" style="font-size:13px;min-width:auto;padding:8px 12px"><span>₹</span>10</div>
+          <div class="choice-kn">10 ರೂಪಾಯಿ ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="fb2q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t2q2">
+    <div class="q-top">
+      <div class="q-kn">ಅಮ್ಮ ಬಾಳೆಹಣ್ಣು ಕೊಳ್ಳಲು ₹2 ನೋಟು ಕೊಟ್ಟರು. ಈ ನೋಟು ಯಾವ ಬಣ್ಣ?</div>
+      <div class="q-en">Which colour is the ₹2 note? (ಕೆಂಪು = red, ಹಸಿರು = green)</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q2',this,true,'fb2q2')">
+          <div class="note-face note-2r" style="font-size:13px;min-width:auto;padding:8px 12px"><span>₹</span>2</div>
+          <div class="choice-kn">ಕೆಂಪು / Red ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q2',this,false,'fb2q2')">
+          <div class="note-face note-5r" style="font-size:13px;min-width:auto;padding:8px 12px"><span>₹</span>5</div>
+          <div class="choice-kn">ಹಸಿರು / Green</div>
+        </div>
+      </div>
+      <div class="fb" id="fb2q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t2q3">
+    <div class="q-top">
+      <div class="q-kn">ಯಾವ ನೋಟು ₹50?</div>
+      <div class="q-en">Which note shows ₹50?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t2q3',this,false,'fb2q3')">
+          <div class="note-face note-10r" style="font-size:12px;min-width:auto;padding:6px 8px">₹10</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'fb2q3')">
+          <div class="note-face note-20r" style="font-size:12px;min-width:auto;padding:6px 8px">₹20</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,true,'fb2q3')">
+          <div class="note-face note-50r" style="font-size:12px;min-width:auto;padding:6px 8px">₹50</div>
+          <div class="choice-kn">✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'fb2q3')">
+          <div class="note-face note-5r" style="font-size:12px;min-width:auto;padding:6px 8px">₹5</div>
+        </div>
+      </div>
+      <div class="fb" id="fb2q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t2q4">
+    <div class="q-top">
+      <div class="q-kn">ನಾಣ್ಯ (Coin) ಮತ್ತು ನೋಟು (Note) — ₹10 ಎರಡರಲ್ಲೂ ಬರುತ್ತಾ?</div>
+      <div class="q-en">Does ₹10 come as both a coin AND a note?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q4',this,true,'fb2q4')">
+          <div class="choice-emoji">✅</div>
+          <div class="choice-kn">ಹೌದು / Yes ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'fb2q4')">
+          <div class="choice-emoji">❌</div>
+          <div class="choice-kn">ಇಲ್ಲ / No</div>
+        </div>
+      </div>
+      <div class="fb" id="fb2q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t2q5">
+    <div class="q-top">
+      <div class="q-kn">ಬಲೂನ್ ₹5 ಬೆಲೆ ಇದೆ. ₹5 ನೋಟು ಯಾವ ಬಣ್ಣ?</div>
+      <div class="q-en">Balloon costs ₹5. ₹5 note is which colour?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q5',this,true,'fb2q5')">
+          <div class="note-face note-5r" style="font-size:12px;min-width:auto;padding:6px 10px">₹5</div>
+          <div class="choice-kn">ಹಸಿರು / Green ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'fb2q5')">
+          <div class="note-face note-50r" style="font-size:12px;min-width:auto;padding:6px 10px">₹50</div>
+          <div class="choice-kn">ನೇರಳೆ / Purple</div>
+        </div>
+      </div>
+      <div class="fb" id="fb2q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn blue" id="btn2" disabled onclick="goTab(3)">ಮುಂದಿನ ಹಂತ ➡️</button>
+</div>
+
+<!-- ===== TAB 3: ಜೋಡಣೆ — Match coin/note to value ===== -->
+<div class="tab-panel" id="tab-3">
+  <div class="lesson-banner" style="background:#e8f5e9;color:#1b5e20">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-kn">ಹೊಂದಿಸಿ — ಹಣ (ಚಿಹ್ನೆಯಲ್ಲಿ) ↔ ನಾಣ್ಯ / ನೋಟು</div>
+      <div class="banner-en">Match money symbol to coin/note</div>
+      <div class="banner-sub">ಕೆಳಗೆ ತೋರಿಸಿದಂತೆ ಹೊಂದಿಸಿ!<br>Match as shown below!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">💡 ಮೊದಲು ₹ ಚಿಹ್ನೆ ಒತ್ತಿ, ನಂತರ ಸರಿಯಾದ ನಾಣ್ಯ / ನೋಟು ಒತ್ತಿ!<br>Tap ₹ amount first, then tap the matching coin/note!</div>
+
+  <!-- Coin match -->
+  <div class="match-wrap">
+    <div class="match-title">🪙 ನಾಣ್ಯ ಜೋಡಣೆ — Coin Match</div>
+    <div class="match-row">
+      <div class="match-col">
+        <div class="match-item" id="m3l1" onclick="matchLeft(3,'m3l1',1)"><div class="mval">₹ 1</div><div class="msub">ಒಂದು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3l2" onclick="matchLeft(3,'m3l2',5)"><div class="mval">₹ 5</div><div class="msub">ಐದು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3l3" onclick="matchLeft(3,'m3l3',2)"><div class="mval">₹ 2</div><div class="msub">ಎರಡು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3l4" onclick="matchLeft(3,'m3l4',10)"><div class="mval">₹ 10</div><div class="msub">ಹತ್ತು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3l5" onclick="matchLeft(3,'m3l5',0.5)"><div class="mval">50 ಪೈಸೆ</div><div class="msub">50 Paise</div></div>
+      </div>
+      <div class="match-col">
+        <div class="match-item" id="m3r1" onclick="matchRight(3,'m3r1',5)">
+          <div class="coin-face coin-5r" style="width:44px;height:44px;margin:0 auto">₹5</div><div class="msub">5 ರೂಪಾಯಿ ನಾಣ್ಯ</div>
+        </div>
+        <div class="match-item" id="m3r2" onclick="matchRight(3,'m3r2',1)">
+          <div class="coin-face coin-1r" style="width:44px;height:44px;margin:0 auto">₹1</div><div class="msub">1 ರೂಪಾಯಿ ನಾಣ್ಯ</div>
+        </div>
+        <div class="match-item" id="m3r3" onclick="matchRight(3,'m3r3',10)">
+          <div class="coin-face coin-10r" style="width:44px;height:44px;margin:0 auto">₹10</div><div class="msub">10 ರೂಪಾಯಿ ನಾಣ್ಯ</div>
+        </div>
+        <div class="match-item" id="m3r4" onclick="matchRight(3,'m3r4',0.5)">
+          <div class="coin-face coin-50p" style="width:44px;height:44px;margin:0 auto">50P</div><div class="msub">50 ಪೈಸೆ ನಾಣ್ಯ</div>
+        </div>
+        <div class="match-item" id="m3r5" onclick="matchRight(3,'m3r5',2)">
+          <div class="coin-face coin-2r" style="width:44px;height:44px;margin:0 auto">₹2</div><div class="msub">2 ರೂಪಾಯಿ ನಾಣ್ಯ</div>
+        </div>
+      </div>
+    </div>
+    <div class="match-fb" id="mfb3"></div>
+  </div>
+
+  <!-- Note match -->
+  <div class="match-wrap">
+    <div class="match-title">💵 ನೋಟು ಜೋಡಣೆ — Note Match</div>
+    <div class="match-row">
+      <div class="match-col">
+        <div class="match-item" id="m3nl1" onclick="matchLeft(31,'m3nl1',2)"><div class="mval">₹ 2</div><div class="msub">ಎರಡು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3nl2" onclick="matchLeft(31,'m3nl2',10)"><div class="mval">₹ 10</div><div class="msub">ಹತ್ತು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3nl3" onclick="matchLeft(31,'m3nl3',5)"><div class="mval">₹ 5</div><div class="msub">ಐದು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3nl4" onclick="matchLeft(31,'m3nl4',20)"><div class="mval">₹ 20</div><div class="msub">ಇಪ್ಪತ್ತು ರೂಪಾಯಿ</div></div>
+        <div class="match-item" id="m3nl5" onclick="matchLeft(31,'m3nl5',1)"><div class="mval">₹ 1</div><div class="msub">ಒಂದು ರೂಪಾಯಿ</div></div>
+      </div>
+      <div class="match-col">
+        <div class="match-item" id="m3nr1" onclick="matchRight(31,'m3nr1',5)"><div class="note-face note-5r" style="font-size:12px;min-width:auto;padding:6px 10px;margin:0 auto">₹5 ನೋಟು</div></div>
+        <div class="match-item" id="m3nr2" onclick="matchRight(31,'m3nr2',20)"><div class="note-face note-20r" style="font-size:12px;min-width:auto;padding:6px 10px;margin:0 auto">₹20 ನೋಟು</div></div>
+        <div class="match-item" id="m3nr3" onclick="matchRight(31,'m3nr3',1)"><div class="note-face note-1r" style="font-size:12px;min-width:auto;padding:6px 10px;margin:0 auto">₹1 ನೋಟು</div></div>
+        <div class="match-item" id="m3nr4" onclick="matchRight(31,'m3nr4',2)"><div class="note-face note-2r" style="font-size:12px;min-width:auto;padding:6px 10px;margin:0 auto">₹2 ನೋಟು</div></div>
+        <div class="match-item" id="m3nr5" onclick="matchRight(31,'m3nr5',10)"><div class="note-face note-10r" style="font-size:12px;min-width:auto;padding:6px 10px;margin:0 auto">₹10 ನೋಟು</div></div>
+      </div>
+    </div>
+    <div class="match-fb" id="mfb31"></div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn blue" id="btn3" disabled onclick="goTab(4)">ಮುಂದಿನ ಹಂತ ➡️</button>
+</div>
+
+<!-- ===== TAB 4: ಬೆಲೆ ಆರಿಸಿ — Pick the right coin/note ===== -->
+<div class="tab-panel" id="tab-4">
+  <div class="lesson-banner" style="background:#fce4ec;color:#880e4f">
+    <div class="banner-emoji">🍬</div>
+    <div>
+      <div class="banner-kn">ವಸ್ತುಗಳ ಬೆಲೆಗೆ ಸರಿ ಹೊಂದುವ ನಾಣ್ಯ ಆರಿಸಿ!</div>
+      <div class="banner-en">Choose the right coin/note for the price!</div>
+      <div class="banner-sub">ಮಾದರಿ: 50 ಪೈಸೆ ಮಿಠಾಯಿ → 50p ನಾಣ್ಯ<br>Example: 50p sweet → 50 paise coin</div>
+    </div>
+  </div>
+
+  <div class="info-pill">💡 ವಸ್ತುವಿನ ಬೆಲೆ ನೋಡಿ, ಸರಿಯಾದ ನಾಣ್ಯ ಅಥವಾ ನೋಟು ಆರಿಸಿ!<br>Look at the price, pick the matching coin or note!</div>
+
+  <!-- Q1: Candy 50p -->
+  <div class="q-card" id="t4q1">
+    <div class="q-top">
+      <div class="q-emoji">🍬</div>
+      <div class="q-kn">ಮಿಠಾಯಿ ಬೆಲೆ <b>50 ಪೈಸೆ</b>. ಯಾವ ನಾಣ್ಯ ಕೊಡಬೇಕು?</div>
+      <div class="q-en">Candy costs 50 paise. Which coin to give?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q1',this,true,'fb4q1')">
+          <div class="coin-face coin-50p" style="width:54px;height:54px;margin:0 auto">50P</div>
+          <div class="choice-kn">50 ಪೈಸೆ ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'fb4q1')">
+          <div class="coin-face coin-5r" style="width:54px;height:54px;margin:0 auto">₹5</div>
+          <div class="choice-kn">5 ರೂಪಾಯಿ</div>
+        </div>
+      </div>
+      <div class="fb" id="fb4q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2: Pencil ₹5 -->
+  <div class="q-card" id="t4q2">
+    <div class="q-top">
+      <div class="q-emoji">✏️</div>
+      <div class="q-kn">ಪೆನ್ಸಿಲ್ ಬೆಲೆ <b>₹5</b>. ಯಾವ ನಾಣ್ಯ / ನೋಟು ಕೊಡಬೇಕು?</div>
+      <div class="q-en">Pencil costs ₹5. Which coin OR note?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q2',this,false,'fb4q2')">
+          <div class="coin-face coin-1r" style="width:44px;height:44px;margin:0 auto">₹1</div>
+          <div class="choice-kn">₹1</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,true,'fb4q2')">
+          <div class="coin-face coin-5r" style="width:44px;height:44px;margin:0 auto">₹5</div>
+          <div class="choice-kn">₹5 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,false,'fb4q2')">
+          <div class="coin-face coin-2r" style="width:44px;height:44px;margin:0 auto">₹2</div>
+          <div class="choice-kn">₹2</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,false,'fb4q2')">
+          <div class="note-face note-50r" style="font-size:11px;min-width:auto;padding:4px 6px">₹50</div>
+          <div class="choice-kn">₹50</div>
+        </div>
+      </div>
+      <div class="fb" id="fb4q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3: Cucumber ₹1 -->
+  <div class="q-card" id="t4q3">
+    <div class="q-top">
+      <div class="q-emoji">🥒</div>
+      <div class="q-kn">ಸೌತೆಕಾಯಿ ಬೆಲೆ <b>₹1</b>. ಯಾವ ನಾಣ್ಯ?</div>
+      <div class="q-en">Cucumber costs ₹1. Which coin?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q3',this,true,'fb4q3')">
+          <div class="coin-face coin-1r" style="width:54px;height:54px;margin:0 auto">₹1</div>
+          <div class="choice-kn">₹1 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,false,'fb4q3')">
+          <div class="coin-face coin-10r" style="width:54px;height:54px;margin:0 auto">₹10</div>
+          <div class="choice-kn">₹10</div>
+        </div>
+      </div>
+      <div class="fb" id="fb4q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: Banana ₹2 -->
+  <div class="q-card" id="t4q4">
+    <div class="q-top">
+      <div class="q-emoji">🍌</div>
+      <div class="q-kn">ಬಾಳೆಹಣ್ಣು ಬೆಲೆ <b>₹2</b>. ಯಾವ ನಾಣ್ಯ / ನೋಟು?</div>
+      <div class="q-en">Banana costs ₹2. Which coin/note?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q4',this,false,'fb4q4')">
+          <div class="note-face note-20r" style="font-size:11px;min-width:auto;padding:4px 8px">₹20</div>
+          <div class="choice-kn">₹20</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,true,'fb4q4')">
+          <div class="note-face note-2r" style="font-size:11px;min-width:auto;padding:4px 8px">₹2</div>
+          <div class="choice-kn">₹2 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'fb4q4')">
+          <div class="note-face note-5r" style="font-size:11px;min-width:auto;padding:4px 8px">₹5</div>
+          <div class="choice-kn">₹5</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'fb4q4')">
+          <div class="note-face note-10r" style="font-size:11px;min-width:auto;padding:4px 8px">₹10</div>
+          <div class="choice-kn">₹10</div>
+        </div>
+      </div>
+      <div class="fb" id="fb4q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: Onion ₹10 -->
+  <div class="q-card" id="t4q5">
+    <div class="q-top">
+      <div class="q-emoji">🧅</div>
+      <div class="q-kn">ಈರುಳ್ಳಿ ಬೆಲೆ <b>₹10</b>. ಯಾವ ನೋಟು ಕೊಡಬೇಕು?</div>
+      <div class="q-en">Onion costs ₹10. Which note?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q5',this,false,'fb4q5')">
+          <div class="note-face note-50r" style="font-size:11px;min-width:auto;padding:4px 10px">₹50</div>
+          <div class="choice-kn">₹50</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q5',this,true,'fb4q5')">
+          <div class="note-face note-10r" style="font-size:11px;min-width:auto;padding:4px 10px">₹10</div>
+          <div class="choice-kn">₹10 ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="fb4q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: Pumpkin ₹20 -->
+  <div class="q-card" id="t4q6">
+    <div class="q-top">
+      <div class="q-emoji">🎃</div>
+      <div class="q-kn">ಕುಂಬಳಕಾಯಿ ಬೆಲೆ <b>₹20</b>. ಯಾವ ನೋಟು?</div>
+      <div class="q-en">Pumpkin costs ₹20. Which note?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q6',this,false,'fb4q6')">
+          <div class="note-face note-5r" style="font-size:11px;min-width:auto;padding:4px 6px">₹5</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'fb4q6')">
+          <div class="note-face note-10r" style="font-size:11px;min-width:auto;padding:4px 6px">₹10</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,true,'fb4q6')">
+          <div class="note-face note-20r" style="font-size:11px;min-width:auto;padding:4px 6px">₹20</div>
+          <div class="choice-kn">✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'fb4q6')">
+          <div class="note-face note-50r" style="font-size:11px;min-width:auto;padding:4px 6px">₹50</div>
+        </div>
+      </div>
+      <div class="fb" id="fb4q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn blue" id="btn4" disabled onclick="goTab(5)">ಮುಂದಿನ ಹಂತ ➡️</button>
+</div>
+
+<!-- ===== TAB 5: ಅಂಗಡಿ — ಹಣ ಕೂಡುವುದು ===== -->
+<div class="tab-panel" id="tab-5">
+  <div class="lesson-banner" style="background:#fff9c4;color:#f57f17">
+    <div class="banner-emoji">🏪</div>
+    <div>
+      <div class="banner-kn">ಹಣ — ಕೂಡುವುದು</div>
+      <div class="banner-en">Adding Money — ₹10 + ₹5 = ₹15</div>
+      <div class="banner-sub">ವಸ್ತುಗಳ ಬೆಲೆ ನೋಟು ನೋಡಿ ಬೆಲೆ ಹೇಳಿ!<br>Look at the notes and tell the price!</div>
+    </div>
+  </div>
+
+  <div class="shop-scene">
+    <div class="shop-title">🛒 ಅಂಗಡಿ ಆಟ — Shop Game</div>
+    <div style="font-size:13px;font-weight:700;color:#555;text-align:center;margin-bottom:10px">ಮಾದರಿ: ₹10 + ₹5 = <b>₹15</b> (Pen ಬೆಲೆ)</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px">
+      <div class="note-face note-10r" style="font-size:12px;padding:6px 10px">₹10</div>
+      <span style="font-size:24px;font-weight:900;color:#e65100;align-self:center">+</span>
+      <div class="note-face note-5r" style="font-size:12px;padding:6px 10px">₹5</div>
+      <span style="font-size:24px;font-weight:900;color:#e65100;align-self:center">=</span>
+      <span style="font-size:24px;font-weight:900;color:#1a237e;align-self:center">₹15 ✓</span>
+    </div>
+  </div>
+
+  <!-- Q1: ₹10+₹2 = ₹12 (Custard apple) -->
+  <div class="q-card" id="t5q1">
+    <div class="q-top">
+      <div class="q-emoji">🍈</div>
+      <div class="q-kn">ಸೀತಾಫಲ ಕೊಳ್ಳಲು: <span class="rupee-sym">₹10</span> + <span class="rupee-sym">₹2</span> = ?</div>
+      <div class="q-en">Custard apple: ₹10 note + ₹2 note = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q1',this,false,'fb5q1')"><div class="choice-num">₹10</div></div>
+        <div class="choice" onclick="ansQ('t5q1',this,true,'fb5q1')"><div class="choice-num">₹12</div><div class="choice-kn">✓</div></div>
+        <div class="choice" onclick="ansQ('t5q1',this,false,'fb5q1')"><div class="choice-num">₹20</div></div>
+        <div class="choice" onclick="ansQ('t5q1',this,false,'fb5q1')"><div class="choice-num">₹8</div></div>
+      </div>
+      <div class="fb" id="fb5q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2: ₹5+₹10 = ₹15 (Pineapple) -->
+  <div class="q-card" id="t5q2">
+    <div class="q-top">
+      <div class="q-emoji">🍍</div>
+      <div class="q-kn">ಅನಾನಸ್: <span class="rupee-sym">₹5</span> + <span class="rupee-sym">₹10</span> = ?</div>
+      <div class="q-en">Pineapple: ₹5 note + ₹10 note = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q2',this,false,'fb5q2')"><div class="choice-num">₹5</div></div>
+        <div class="choice" onclick="ansQ('t5q2',this,true,'fb5q2')"><div class="choice-num">₹15</div><div class="choice-kn">✓</div></div>
+        <div class="choice" onclick="ansQ('t5q2',this,false,'fb5q2')"><div class="choice-num">₹50</div></div>
+        <div class="choice" onclick="ansQ('t5q2',this,false,'fb5q2')"><div class="choice-num">₹20</div></div>
+      </div>
+      <div class="fb" id="fb5q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3: ₹10+₹1 = ₹11 -->
+  <div class="q-card" id="t5q3">
+    <div class="q-top">
+      <div class="q-emoji">🍊</div>
+      <div class="q-kn">ಹಣ್ಣು: <span class="rupee-sym">₹10</span> + <span class="rupee-sym">₹1</span> = ?</div>
+      <div class="q-en">Fruit: ₹10 note + ₹1 coin = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q3',this,true,'fb5q3')"><div class="choice-num">₹11</div><div class="choice-kn">✓</div></div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'fb5q3')"><div class="choice-num">₹10</div></div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'fb5q3')"><div class="choice-num">₹9</div></div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'fb5q3')"><div class="choice-num">₹21</div></div>
+      </div>
+      <div class="fb" id="fb5q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: ₹5+₹2 = ₹7 (Flute) -->
+  <div class="q-card" id="t5q4">
+    <div class="q-top">
+      <div class="q-emoji">🎺</div>
+      <div class="q-kn">ಕೊಳಲು: <span class="rupee-sym">₹5</span> + <span class="rupee-sym">₹2</span> = ?</div>
+      <div class="q-en">Flute: ₹5 + ₹2 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q4',this,false,'fb5q4')"><div class="choice-num">₹5</div></div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'fb5q4')"><div class="choice-num">₹3</div></div>
+        <div class="choice" onclick="ansQ('t5q4',this,true,'fb5q4')"><div class="choice-num">₹7</div><div class="choice-kn">✓</div></div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'fb5q4')"><div class="choice-num">₹52</div></div>
+      </div>
+      <div class="fb" id="fb5q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: ₹20+₹5 = ₹25 (Glass) -->
+  <div class="q-card" id="t5q5">
+    <div class="q-top">
+      <div class="q-emoji">🥤</div>
+      <div class="q-kn">ಗ್ಲಾಸ್: <span class="rupee-sym">₹20</span> + <span class="rupee-sym">₹5</span> = ?</div>
+      <div class="q-en">Glass: ₹20 + ₹5 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q5',this,false,'fb5q5')"><div class="choice-num">₹20</div></div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'fb5q5')"><div class="choice-num">₹15</div></div>
+        <div class="choice" onclick="ansQ('t5q5',this,true,'fb5q5')"><div class="choice-num">₹25</div><div class="choice-kn">✓</div></div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'fb5q5')"><div class="choice-num">₹205</div></div>
+      </div>
+      <div class="fb" id="fb5q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score5"></div>
+  <button class="big-btn blue" id="btn5" disabled onclick="goTab(6)">ಮುಂದಿನ ಹಂತ ➡️</button>
+</div>
+
+<!-- ===== TAB 6: ಮಕ್ಕಳ ಮಳಿಗೆ — Kids Toy Shop ===== -->
+<div class="tab-panel" id="tab-6">
+  <div class="lesson-banner" style="background:#f3e5f5;color:#4a148c">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-kn">ಮಕ್ಕಳ ಮಳಿಗೆ</div>
+      <div class="banner-en">Children's Toy Shop — Final Challenge!</div>
+      <div class="banner-sub">ಬೆಲೆ ನೋಡಿ ಸರಿಯಾದ ಆಟಿಕೆ ಆರಿಸಿ!<br>See the price, choose what you can buy!</div>
+    </div>
+  </div>
+
+  <!-- Shop price list -->
+  <div class="shop-scene">
+    <div class="shop-title">🏷️ ಆಟಿಕೆ ಬೆಲೆ ಪಟ್ಟಿ — Toy Price List</div>
+    <div class="shop-items">
+      <div class="shop-item">
+        <div class="item-emoji">🚗</div>
+        <div class="item-price">₹10</div>
+        <div class="item-kn">ಕಾರು / Car</div>
+      </div>
+      <div class="shop-item">
+        <div class="item-emoji">🪆</div>
+        <div class="item-price">₹5</div>
+        <div class="item-kn">ಗೊಂಬೆ / Doll</div>
+      </div>
+      <div class="shop-item">
+        <div class="item-emoji">🥁</div>
+        <div class="item-price">₹2</div>
+        <div class="item-kn">ಡೋಲು / Drum</div>
+      </div>
+      <div class="shop-item">
+        <div class="item-emoji">🚲</div>
+        <div class="item-price">₹5</div>
+        <div class="item-kn">ಸೈಕಲ್ / Cycle</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1: ₹10 → 2 toys from PDF -->
+  <div class="q-card" id="t6q1">
+    <div class="q-top">
+      <div class="q-kn"><span class="rupee-sym">₹10</span> ನಲ್ಲಿ ಯಾವ <b>ಎರಡು</b> ಆಟಿಕೆ ಕೊಳ್ಳಬಹುದು?</div>
+      <div class="q-en">With ₹10, which TWO toys can you buy?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t6q1',this,true,'fb6q1')">
+          <div class="choice-emoji">🚗 + 🥁</div>
+          <div class="choice-kn">Car(₹10)+Drum(₹2)? No wait…<br>🪆(₹5)+🚲(₹5) ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q1',this,false,'fb6q1')">
+          <div class="choice-emoji">🚗 + 🪆</div>
+          <div class="choice-kn">₹10+₹5 = ₹15 (Too much!)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb6q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2: ₹10 → 1 toy only -->
+  <div class="q-card" id="t6q2">
+    <div class="q-top">
+      <div class="q-kn"><span class="rupee-sym">₹10</span> ನಲ್ಲಿ ಯಾವ <b>ಒಂದು</b> ಆಟಿಕೆ ಕೊಳ್ಳಬಹುದು?</div>
+      <div class="q-en">With ₹10, which ONE toy can you buy?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t6q2',this,true,'fb6q2')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-kn">Car = ₹10 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q2',this,false,'fb6q2')">
+          <div class="choice-emoji">🚗🪆</div>
+          <div class="choice-kn">Car+Doll = ₹15</div>
+        </div>
+      </div>
+      <div class="fb" id="fb6q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3: ₹5 → 1 toy -->
+  <div class="q-card" id="t6q3">
+    <div class="q-top">
+      <div class="q-kn"><span class="rupee-sym">₹5</span> ನಲ್ಲಿ ಯಾವ <b>ಒಂದು</b> ಆಟಿಕೆ ಕೊಳ್ಳಬಹುದು?</div>
+      <div class="q-en">With ₹5, which ONE toy can you buy?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t6q3',this,true,'fb6q3')">
+          <div class="choice-emoji">🪆</div>
+          <div class="choice-kn">Doll = ₹5 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q3',this,false,'fb6q3')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-kn">Car = ₹10 (Too much!)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb6q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: ₹5 → 2 toys (drum+drum or drum+something) -->
+  <div class="q-card" id="t6q4">
+    <div class="q-top">
+      <div class="q-kn"><span class="rupee-sym">₹5</span> ನಲ್ಲಿ ಯಾವ <b>ಎರಡು</b> ಆಟಿಕೆ? (2+2=₹4? or 2+3?)</div>
+      <div class="q-en">With ₹5, you can buy Drum(₹2) + what?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t6q4',this,false,'fb6q4')">
+          <div class="choice-emoji">🚗 + 🥁</div>
+          <div class="choice-kn">₹10+₹2 = ₹12</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q4',this,true,'fb6q4')">
+          <div class="choice-emoji">🥁 + 🥁</div>
+          <div class="choice-kn">₹2+₹2 = ₹4 ✓ (change back!)</div>
+        </div>
+      </div>
+      <div class="fb" id="fb6q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: Which costs most? -->
+  <div class="q-card" id="t6q5">
+    <div class="q-top">
+      <div class="q-kn">ಯಾವ ಆಟಿಕೆ ಅತ್ಯಂತ ದುಬಾರಿ (most expensive)?</div>
+      <div class="q-en">Which toy costs the most?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t6q5',this,true,'fb6q5')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-num">₹10</div>
+          <div class="choice-kn">Car ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q5',this,false,'fb6q5')">
+          <div class="choice-emoji">🪆</div>
+          <div class="choice-num">₹5</div>
+          <div class="choice-kn">Doll</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q5',this,false,'fb6q5')">
+          <div class="choice-emoji">🥁</div>
+          <div class="choice-num">₹2</div>
+          <div class="choice-kn">Drum</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q5',this,false,'fb6q5')">
+          <div class="choice-emoji">🚲</div>
+          <div class="choice-num">₹5</div>
+          <div class="choice-kn">Cycle</div>
+        </div>
+      </div>
+      <div class="fb" id="fb6q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: Cheapest -->
+  <div class="q-card" id="t6q6">
+    <div class="q-top">
+      <div class="q-kn">ಯಾವ ಆಟಿಕೆ ಅತ್ಯಂತ ಅಗ್ಗ (cheapest)?</div>
+      <div class="q-en">Which toy costs the least?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t6q6',this,false,'fb6q6')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-num">₹10</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q6',this,false,'fb6q6')">
+          <div class="choice-emoji">🪆</div>
+          <div class="choice-num">₹5</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q6',this,true,'fb6q6')">
+          <div class="choice-emoji">🥁</div>
+          <div class="choice-num">₹2</div>
+          <div class="choice-kn">Drum ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t6q6',this,false,'fb6q6')">
+          <div class="choice-emoji">🚲</div>
+          <div class="choice-num">₹5</div>
+        </div>
+      </div>
+      <div class="fb" id="fb6q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score6"></div>
+  <button class="big-btn blue" id="btn6" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಯಿತು! Finish!</button>
+</div>
+
+</div><!-- end content -->
+
+<!-- CELEBRATION -->
+<div class="celeb" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಶಾಬಾಸ್! Well Done!</div>
+    <div class="celeb-sub">ಅಧ್ಯಾಯ 14 — ಹಣ ಪೂರ್ಣ ಮಾಡಿದ್ದೀರಿ!<br>You finished Chapter 14 — Money!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <div style="font-size:14px;color:#777;margin-bottom:16px">ನೀವು ನಾಣ್ಯ ಮತ್ತು ನೋಟು ಕಲಿತಿದ್ದೀರಿ!<br>You learned about coins (ನಾಣ್ಯ) and notes (ನೋಟು)! 🪙💵</div>
+    <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">✅ ಮುಂದೆ ಹೋಗಿ</button>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let totalStars = 0;
+let unlockedTab = 1;
+let activeTab = 1;
+
+const totals = {1:5, 2:5, 3:10, 4:6, 5:5, 6:6};
+let done = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+
+function buildDots(id, d, total) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'sdot' + (i < d ? ' done' : '');
+    el.appendChild(dot);
+  }
+}
+for (let t = 1; t <= 6; t++) buildDots('score'+t, 0, totals[t]);
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starPill').textContent = '⭐ ' + totalStars;
+}
+
+function updateProgress() {
+  let total = 0, d = 0;
+  for (let t = 1; t <= 6; t++) { total += totals[t]; d += done[t]; }
+  document.getElementById('progFill').style.width = Math.round(d/total*100) + '%';
+}
+
+// ===== TAB NAV =====
+function tryTab(n) {
+  if (n <= unlockedTab) { goTab(n); }
+  else {
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    setTimeout(() => btn.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function goTab(n) {
+  document.getElementById('tab-'+activeTab).classList.remove('active');
+  document.getElementById('tab-btn-'+activeTab).classList.remove('active');
+  document.getElementById('tab-btn-'+activeTab).classList.add('done');
+  activeTab = n;
+  if (n > unlockedTab) { unlockedTab = n; }
+  document.getElementById('tab-btn-'+n).classList.remove('locked','unlocked','done');
+  document.getElementById('tab-btn-'+n).classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== ANSWER =====
+function ansQ(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => { o.classList.add('disabled'); o.style.pointerEvents='none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ! Well done!';
+    card.classList.add('done');
+    card.dataset.done = '1';
+    addStars(1);
+    // find tab number
+    const tnum = parseInt(cardId.replace('t','').charAt(0));
+    done[tnum]++;
+    buildDots('score'+tnum, done[tnum], totals[tnum]);
+    if (done[tnum] >= totals[tnum]) document.getElementById('btn'+tnum).disabled = false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className = 'fb no';
+    fb.textContent = '❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(() => {
+      opts.forEach(o => { o.classList.remove('disabled'); o.style.pointerEvents=''; });
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className = 'fb';
+    }, 900);
+  }
+}
+
+// ===== MATCH STATE =====
+// set 3 = coins, set 31 = notes, set 6+ = tab6 (not used, tab6 has no match)
+let matchStates = {};
+
+function initMatch(set, total) {
+  matchStates[set] = { selectedLeft:null, selectedLeftVal:null, matchedLeft:[], matchedRight:[], done:0, total };
+}
+initMatch(3, 5);
+initMatch(31, 5);
+
+function matchLeft(set, itemId, val) {
+  const s = matchStates[set];
+  if (!s || s.matchedLeft.includes(itemId)) return;
+  if (s.selectedLeft) {
+    const prev = document.getElementById(s.selectedLeft);
+    if (prev) prev.classList.remove('selected');
+  }
+  s.selectedLeft = itemId;
+  s.selectedLeftVal = val;
+  document.getElementById(itemId).classList.add('selected');
+}
+
+function matchRight(set, itemId, val) {
+  const s = matchStates[set];
+  if (!s || !s.selectedLeft) {
+    const fb = document.getElementById('mfb'+set);
+    fb.style.display='block'; fb.style.background='#fff3e0'; fb.style.color='#e65100';
+    fb.textContent='👈 ಮೊದಲು ಎಡ ಕಡೆ ಒತ್ತಿ! Tap the amount first!';
+    setTimeout(()=>{fb.style.display='none';},1500);
+    return;
+  }
+  if (s.matchedRight.includes(itemId)) return;
+  const leftEl = document.getElementById(s.selectedLeft);
+  const rightEl = document.getElementById(itemId);
+  const fb = document.getElementById('mfb'+set);
+  if (s.selectedLeftVal === val) {
+    leftEl.classList.remove('selected'); leftEl.classList.add('matched');
+    rightEl.classList.add('matched');
+    s.matchedLeft.push(s.selectedLeft); s.matchedRight.push(itemId);
+    s.selectedLeft = null; s.selectedLeftVal = null;
+    s.done++;
+    addStars(1);
+    fb.style.display='block'; fb.style.background='#f1f8e9'; fb.style.color='#2e7d32';
+    fb.textContent='✅ ಸರಿ ಜೋಡಿ! Correct match!';
+    setTimeout(()=>{fb.style.display='none';},1200);
+    // track in done[3]
+    done[3]++;
+    buildDots('score3', done[3], totals[3]);
+    if (done[3] >= totals[3]) document.getElementById('btn3').disabled = false;
+    updateProgress();
+  } else {
+    leftEl.classList.add('wrong-match'); rightEl.classList.add('wrong-match');
+    fb.style.display='block'; fb.style.background='#ffcdd2'; fb.style.color='#c62828';
+    fb.textContent='❌ ತಪ್ಪು! Try again!';
+    setTimeout(()=>{
+      leftEl.classList.remove('wrong-match','selected');
+      rightEl.classList.remove('wrong-match');
+      s.selectedLeft=null; s.selectedLeftVal=null;
+      fb.style.display='none';
+    },900);
+  }
+}
+
+function finishLesson() {
+  const n = Math.max(3, Math.min(10, Math.floor(totalStars/4)));
+  document.getElementById('celebStars').textContent = '⭐'.repeat(n);
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

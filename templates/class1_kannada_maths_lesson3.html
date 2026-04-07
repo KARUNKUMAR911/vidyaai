@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 3: ಸಂಖ್ಯೆಗಳು (1–9)</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8e1;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#e65100,#f57c00);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:17px;color:#fff;font-weight:900;letter-spacing:.3px}
+.stars-pill{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:13px;font-weight:900;cursor:pointer}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#e65100,#f57c00,#ffcc02);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.9);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.12);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#e0e0e0;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#e65100,#ffcc02);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* TABS BAR */
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#e65100;border-color:#ffcc80}
+.step-tab.active{background:#e65100;color:#fff;border-color:#e65100;box-shadow:0 4px 14px rgba(230,81,0,.4)}
+.step-tab.done{background:#fff3e0;color:#e65100;border-color:#ff8f00}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#4e342e;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONTENT */
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:56px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.5}
+
+/* NUMBER TEACH CARD */
+.num-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);overflow:hidden;border-left:6px solid #f57c00}
+.num-inner{padding:16px;display:flex;align-items:center;gap:16px}
+.num-big{font-size:72px;font-weight:900;color:#e65100;line-height:1;min-width:80px;text-align:center;flex-shrink:0}
+.num-kn-word{font-size:28px;font-weight:900;color:#333;margin-bottom:4px}
+.num-examples{font-size:13px;font-weight:700;color:#888;line-height:1.6}
+
+/* OBJECTS SHOWCASE */
+.obj-showcase{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.obj-cell{background:#fff;border-radius:18px;padding:14px 10px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.09);border:3px solid #ffe0b2}
+.obj-cell .obj-emoji{font-size:40px;display:block;margin-bottom:6px}
+.obj-cell .obj-kn{font-size:14px;font-weight:900;color:#e65100}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#ff8f00;background:#fff8e1}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px;display:flex;align-items:center;gap:14px}
+.q-vis{font-size:52px;line-height:1;flex-shrink:0;text-align:center;min-width:64px}
+.q-label{font-size:11px;font-weight:900;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-kn{font-size:16px;font-weight:900;color:#444;line-height:1.5;margin-bottom:3px}
+.q-en{font-size:13px;font-weight:700;color:#888}
+.q-bottom{border-top:2px dashed #e8e8e8;padding:12px 14px}
+
+/* CHOICE BUTTONS */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #ffe0b2;background:#fff8e1;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-icon{font-size:30px;line-height:1}
+.choice-kn{font-size:18px;font-weight:900;color:#e65100}
+.choice-en{font-size:12px;font-weight:700;color:#f57c00}
+.choice.correct{border-color:#e65100;background:#ffe0b2;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+/* FEEDBACK */
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#fff3e0;color:#e65100;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* BIG BUTTON */
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.orange{background:linear-gradient(135deg,#e65100,#f57c00);color:#fff}
+.big-btn.orange:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* QUIZ */
+.quiz-wrap{background:#fff;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.quiz-num{font-size:12px;color:#999;font-weight:900;text-align:center;margin-bottom:8px}
+.quiz-q{font-size:20px;font-weight:900;color:#e65100;text-align:center;margin-bottom:18px;line-height:1.4}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#fff8e1;border:3px solid #ffcc80;border-radius:16px;padding:18px 8px;text-align:center;cursor:pointer;transition:all .18s;font-size:26px;font-weight:900;color:#e65100;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none}
+.quiz-opt-sub{font-size:12px;font-weight:700;color:#f57c00}
+.quiz-opt:active{transform:scale(.92)}
+.quiz-opt.right{border-color:#e65100;background:#ffe0b2;pointer-events:none}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none}
+
+/* DOT COUNTER */
+.dot-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;justify-content:center}
+.num-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;background:#fff3e0;border:3px solid #ffcc80;color:#e65100;transition:all .3s;cursor:pointer;user-select:none}
+.num-dot:active{transform:scale(.88)}
+.num-dot.lit{background:#e65100;border-color:#e65100;color:#fff}
+
+/* MORE/LESS SECTION */
+.compare-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.compare-box{background:#fff;border-radius:20px;padding:16px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.09);border:3px solid #ffe0b2;cursor:pointer;transition:all .2s;user-select:none}
+.compare-box:active{transform:scale(.94)}
+.compare-box .cb-emoji{font-size:28px;margin-bottom:6px;display:block;line-height:1.2}
+.compare-box .cb-num{font-size:28px;font-weight:900;color:#e65100;margin-bottom:2px}
+.compare-box .cb-kn{font-size:13px;font-weight:700;color:#888}
+.compare-box.selected-more{border-color:#2e7d32;background:#c8e6c9}
+.compare-box.selected-less{border-color:#1565c0;background:#bbdefb}
+.compare-box.wrong{border-color:#c62828;background:#ffcdd2;animation:wobble .4s ease}
+.compare-box.correct{border-color:#2e7d32;background:#c8e6c9}
+
+/* NUMBER LINE */
+.numline-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.numline-title{font-size:15px;font-weight:900;color:#e65100;text-align:center;margin-bottom:14px}
+.numline{display:flex;align-items:center;gap:4px;overflow-x:auto;padding:6px 0;scrollbar-width:none;justify-content:center;flex-wrap:wrap}
+.numline::-webkit-scrollbar{display:none}
+.nl-item{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;border:3px solid #ffcc80;background:#fff8e1;color:#e65100;flex-shrink:0;transition:all .3s}
+.nl-item.active-nl{background:#e65100;color:#fff;border-color:#e65100;transform:scale(1.15)}
+.nl-arr{font-size:20px;color:#ffcc80;font-weight:900}
+
+/* MATCH GAME */
+.match-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.match-title{font-size:15px;font-weight:900;color:#e65100;margin-bottom:14px;text-align:center}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:10px}
+.match-left{display:flex;flex-direction:column;gap:10px}
+.match-right{display:flex;flex-direction:column;gap:10px}
+.match-item{background:#fff8e1;border:3px solid #ffcc80;border-radius:16px;padding:12px;text-align:center;cursor:pointer;font-size:22px;font-weight:900;color:#e65100;user-select:none;transition:all .2s;min-height:54px;display:flex;align-items:center;justify-content:center}
+.match-item:active{transform:scale(.92)}
+.match-item.selected{border-color:#e65100;background:#ffe0b2}
+.match-item.matched{border-color:#2e7d32;background:#c8e6c9;pointer-events:none}
+.match-item.wrong-match{border-color:#c62828;background:#ffcdd2;animation:wobble .4s ease}
+
+/* SEQUENCE */
+.seq-wrap{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.seq-title{font-size:14px;font-weight:900;color:#e65100;margin-bottom:12px;text-align:center}
+.seq-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+.seq-box{width:46px;height:46px;border-radius:12px;border:3px solid #ffcc80;background:#fff8e1;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#e65100;flex-shrink:0}
+.seq-box.blank{background:#f5f5f5;border-color:#e0e0e0;cursor:pointer}
+.seq-box.filled{background:#ffe0b2;border-color:#e65100;animation:popIn .3s ease}
+.seq-box.wrong-seq{background:#ffcdd2;border-color:#c62828;animation:wobble .4s ease}
+.seq-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+.seq-opt{width:46px;height:46px;border-radius:12px;border:3px solid #ffe0b2;background:#fff8e1;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#e65100;cursor:pointer;transition:all .2s;user-select:none}
+.seq-opt:active{transform:scale(.88)}
+.seq-opt.used{opacity:.35;pointer-events:none}
+
+/* SEC HEAD */
+.sec-head{font-size:13px;font-weight:900;color:#e65100;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-left:4px}
+
+/* CELEBRATE */
+.celeb{position:fixed;inset:0;background:rgba(230,81,0,.95);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;text-align:center;padding:20px}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-e{font-size:90px;margin-bottom:12px;animation:float 2s ease-in-out infinite}
+.celeb-t{font-size:30px;font-weight:900;color:#fff;margin-bottom:8px}
+.celeb-s{font-size:15px;color:rgba(255,255,255,.9);font-weight:700;margin-bottom:8px;line-height:1.6}
+.celeb-stars{font-size:22px;color:#ffd700;font-weight:900;margin-bottom:28px}
+.celeb-btn{background:#ffd700;color:#e65100;font-family:'Baloo Tamma 2',sans-serif;font-size:20px;font-weight:900;padding:16px 44px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+/* INFO BOX */
+.info-box{background:linear-gradient(135deg,#fff8e1,#fff3e0);border:3px solid #ffcc80;border-radius:20px;padding:16px;margin-bottom:14px}
+.info-box-title{font-size:15px;font-weight:900;color:#e65100;margin-bottom:8px}
+.info-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:14px;font-weight:700;color:#555}
+.info-row .bullet{font-size:18px}
+
+/* ACTIVITY CARD */
+.act-card{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 4px 18px rgba(0,0,0,.09);border-top:5px solid #f57c00}
+.act-title{font-size:16px;font-weight:900;color:#e65100;margin-bottom:12px}
+.act-sub{font-size:13px;font-weight:700;color:#888;margin-bottom:10px}
+
+/* DOTS for scoring */
+.score-dots{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap;justify-content:center}
+.sdot{width:16px;height:16px;border-radius:50%;background:#e0e0e0;transition:background .3s}
+.sdot.done{background:#e65100}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="back-btn" onclick="history.back()">← ಹಿಂದೆ</button>
+  <div class="topbar-title">🔢 ಗಣಿತ — ತರಗತಿ 1</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🔢</span>
+  <h1>ಪಾಠ 3: ಸಂಖ್ಯೆಗಳು (1–9)</h1>
+  <p>Numbers 1–9 · ಮಾತ್ರ ಟ್ಯಾಪ್ ಮಾಡಿ, ಟೈಪ್ ಬೇಡ! · No typing needed!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS BAR -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="0" onclick="tryTab(0)">📖 ಕಲಿಯೋಣ</div>
+  <div class="step-tab locked" data-tab="1" onclick="tryTab(1)">🔢 1–5</div>
+  <div class="step-tab locked" data-tab="2" onclick="tryTab(2)">🔢 6–9</div>
+  <div class="step-tab locked" data-tab="3" onclick="tryTab(3)">↔️ ಹೆಚ್ಚು-ಕಡಿಮೆ</div>
+  <div class="step-tab locked" data-tab="4" onclick="tryTab(4)">🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked" data-tab="5" onclick="tryTab(5)">🔢 ಕ್ರಮ</div>
+  <div class="step-tab locked" data-tab="6" onclick="tryTab(6)">📝 ಒಟ್ಟು ಪರೀಕ್ಷೆ</div>
+</div>
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">⚠️ ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ===== TAB 0: INTRO LEARN ===== -->
+<div class="tab-panel active" id="panel-0">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);color:#e65100">
+    <div class="banner-emoji">📖</div>
+    <div>
+      <div class="banner-kn">ಸಂಖ್ಯೆಗಳು (1–9)</div>
+      <div class="banner-en">Numbers 1–9</div>
+      <div class="banner-sub">ಈ ಪಾಠದಲ್ಲಿ ನೀನು ಕಲಿಯುವೆ:<br>
+        ✅ ಸಮಾನ ಸಂಖ್ಯೆಯ ವಸ್ತುಗಳನ್ನು ಹೊಂದಿಸುವೆ<br>
+        ✅ ಹೆಚ್ಚು, ಕಡಿಮೆ ಗುರುತಿಸುವೆ<br>
+        ✅ 1 ರಿಂದ 9 ರ ಅಂಕೆಗಳನ್ನು ಓದುವೆ, ಬರೆಯುವೆ<br>
+        ✅ ಹಿಂದಿನ, ಮುಂದಿನ ಸಂಖ್ಯೆ ಗುರುತಿಸುವೆ</div>
+    </div>
+  </div>
+
+  <div class="sec-head">📸 ಚಿತ್ರದ ಬಗ್ಗೆ ಕಲಿಯೋಣ — Let's Observe!</div>
+  <div class="info-box">
+    <div class="info-box-title">🖼️ ಚಿತ್ರದಲ್ಲಿ ಏನಿದೆ?</div>
+    <div class="info-row"><span class="bullet">🌳</span> ಮರ — Tree</div>
+    <div class="info-row"><span class="bullet">🐦</span> ಪಕ್ಷಿ — Bird</div>
+    <div class="info-row"><span class="bullet">🐜</span> ಇರುವೆ — Ant</div>
+    <div class="info-row"><span class="bullet">🎈</span> ಬಲೂನು — Balloon</div>
+    <div class="info-row"><span class="bullet">🐓</span> ಬಾತುಕೋಳಿ — Duck</div>
+    <div class="info-row"><span class="bullet">👦</span> ಮಕ್ಕಳು — Children</div>
+  </div>
+
+  <!-- Numbers 1-9 showcase -->
+  <div class="sec-head">🔢 ಸಂಖ್ಯೆಗಳು ನೋಡೋಣ — Numbers 1 to 9</div>
+
+  <!-- 1 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">1</div>
+      <div>
+        <div class="num-kn-word">ಒಂದು</div>
+        <div class="num-examples">☀️ 1 ಸೂರ್ಯ · 🐦 1 ಹಕ್ಕಿ · 🌳 1 ಮರ · 🐒 1 ಮಂಗ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">2</div>
+      <div>
+        <div class="num-kn-word">ಎರಡು</div>
+        <div class="num-examples">🐦🐦 2 ಹಕ್ಕಿಗಳು · 🐄🐄 2 ಎತ್ತುಗಳು · ⚙️⚙️ 2 ಚಕ್ರಗಳು · 🐕🐕 2 ನಾಯಿಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">3</div>
+      <div>
+        <div class="num-kn-word">ಮೂರು</div>
+        <div class="num-examples">🐔🐔🐔 3 ಕೋಳಿಗಳು · 🏠🏠🏠 3 ಮನೆಗಳು · 🌳🌳🌳 3 ಮರಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">4</div>
+      <div>
+        <div class="num-kn-word">ನಾಲ್ಕು</div>
+        <div class="num-examples">🏺🏺🏺🏺 4 ಮಡಕೆಗಳು · 🍶🍶🍶🍶 4 ಪಾತ್ರೆಗಳು · 💦💦💦💦 4 ಲೋಟಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">5</div>
+      <div>
+        <div class="num-kn-word">ಐದು</div>
+        <div class="num-examples">🚗🚗🚗🚗🚗 5 ಕಾರುಗಳು · ⚽⚽⚽⚽⚽ 5 ಚೆಂಡುಗಳು · 🪁🪁🪁🪁🪁 5 ಗಾಳಿಪಟಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">6</div>
+      <div>
+        <div class="num-kn-word">ಆರು</div>
+        <div class="num-examples">👧👦👧👦👧👦 6 ಮಕ್ಕಳು · 🪆🪆🪆🪆🪆🪆 6 ಗೊಂಬೆಗಳು · 💨💨💨💨💨💨 6 ಫ್ಯಾನ್‌ಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">7</div>
+      <div>
+        <div class="num-kn-word">ಏಳು</div>
+        <div class="num-examples">🏺🏺🏺🏺🏺🏺🏺 7 ಹೂಜಿಗಳು · 🏮🏮🏮🏮🏮🏮🏮 7 ಕುಂಡಗಳು · 🪔🪔🪔🪔🪔🪔🪔 7 ಮಡಕೆಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">8</div>
+      <div>
+        <div class="num-kn-word">ಎಂಟು</div>
+        <div class="num-examples">👩👩👩👩👩👩👩👩 8 ಮಕ್ಕಳು · 🍽️×8 8 ತಟ್ಟೆಗಳು · 🪣×8 8 ಬಕೆಟ್‌ಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="num-card">
+    <div class="num-inner">
+      <div class="num-big">9</div>
+      <div>
+        <div class="num-kn-word">ಒಂಬತ್ತು</div>
+        <div class="num-examples">⚽×9 9 ಚೆಂಡುಗಳು · ⭐×9 9 ನಕ್ಷತ್ರಗಳು · 🥭×9 9 ಮಾವಿನಹಣ್ಣುಗಳು</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Song -->
+  <div class="sec-head">🎵 ಏಣಿಸೋಣ ಬಾ — Counting Song!</div>
+  <div class="info-box">
+    <div class="info-box-title">🎵 ಏಣಿಸೋಣ ಬಾ (ಸೇಬು ಹಾಡು)</div>
+    <div style="font-size:14px;font-weight:700;color:#555;line-height:2">
+      ಒಂದು ಒಂದು ಒಂದು — ಒಂದು ಸೇಬು ತಂದು — ಇಟ್ಟಳು ನಮ್ಮ ಚಂದು 🍎<br>
+      ಎರಡು ಎರಡು ಎರಡು — ಎರಡು ಸೇಬು ತಂದು — ಹಂಚಿದಳಮ್ಮ ಸಿಂಧು 🍎🍎<br>
+      ಮೂರು ಮೂರು ಮೂರು — ಒಟ್ಟು ಮೂರು ಸೇಬು — ಹಿಡಿದನು ನಮ್ಮ ಬಾಬು 🍎🍎🍎<br>
+      ನಾಲ್ಕು ನಾಲ್ಕು ನಾಲ್ಕು — ಬುಟ್ಟಿಯಲಿ ಸೇಬು ನಾಲ್ಕು — ಹಂಚಲು ಇಷ್ಟು ಸಾಕು 🍎🍎🍎🍎<br>
+      ಐದು ಐದು ಐದು — ತಂದು ಸೇಬು ಐದು — ಬುಟ್ಟಿಯಲಿಟ್ಟ ಸೈಯದ್ದು 🍎🍎🍎🍎🍎<br>
+      ಆರು ಆರು ಆರು — ಚೀಲದಿ ಸೇಬು ಆರು — ನೋಡಿದ ನಮ್ಮ ಚಂದ್ರ 🍎×6<br>
+      ಏಳು ಏಳು ಏಳು — ಕೊಂಡ ಸೇಬು ಏಳು — ಮಾಡದೆ ಇಟ್ಟನು ಹೋಳು 🍎×7<br>
+      ಎಂಟು ಎಂಟು ಎಂಟು — ಎಂಟು ಸೇಬಿನ ಗಂಟು — ಹೊತ್ತು ತಂದನು ಪಿಂಟು 🍎×8<br>
+      ಒಂಬತ್ತು ಒಂಬತ್ತು ಒಂಬತ್ತು — ಬಣ್ಣದ ಸೇಬು ಒಂಬತ್ತು — ತಿನ್ನಲು ಬಹಳ ಗಮ್ಮತ್ತು 🍎×9
+    </div>
+  </div>
+
+  <!-- Number Line Preview -->
+  <div class="numline-wrap">
+    <div class="numline-title">📏 ಸಂಖ್ಯಾ ತೋರಣ — Number Line</div>
+    <div class="numline">
+      <div class="nl-item">1</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">2</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">3</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">4</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">5</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">6</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">7</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">8</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item">9</div>
+    </div>
+  </div>
+
+  <button class="big-btn orange" onclick="completeTab(0)">ಮುಂದೆ ಹೋಗು → 1–5 ಕಲಿಯೋಣ!</button>
+</div>
+
+<!-- ===== TAB 1: Numbers 1–5 QUIZ ===== -->
+<div class="tab-panel" id="panel-1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#2e7d32">
+    <div class="banner-emoji">1️⃣</div>
+    <div>
+      <div class="banner-kn">ಸಂಖ್ಯೆ 1 ರಿಂದ 5</div>
+      <div class="banner-en">Numbers 1 to 5</div>
+      <div class="banner-sub">ಸರಿಯಾದ ಉತ್ತರ ಟ್ಯಾಪ್ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <!-- Interactive dot counter -->
+  <div class="act-card">
+    <div class="act-title">🔴 ಚುಕ್ಕಿ ಎಣಿಸು — Tap to Count!</div>
+    <div class="act-sub">ಚುಕ್ಕಿಗಳನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ ಸಂಖ್ಯೆ ತಿಳಿದುಕೋ</div>
+    <div class="dot-row" id="dotCounter1">
+      <div class="num-dot" onclick="toggleDot(this,'dc1')">🍎</div>
+      <div class="num-dot" onclick="toggleDot(this,'dc1')">🍎</div>
+      <div class="num-dot" onclick="toggleDot(this,'dc1')">🍎</div>
+    </div>
+    <div style="text-align:center;font-size:28px;font-weight:900;color:#e65100;margin-top:6px" id="dc1Count">ಟ್ಯಾಪ್ ಮಾಡು!</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="q1-0">
+    <div class="q-top">
+      <div class="q-vis">🍎🍎</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ಸೇಬುಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many apples?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q1-0',this,false,'q1fb')"><span class="choice-kn">1</span><span class="choice-en">ಒಂದು</span></div>
+        <div class="choice" onclick="ansQ('q1-0',this,true,'q1fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('q1-0',this,false,'q1fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('q1-0',this,false,'q1fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+      </div>
+      <div class="fb" id="q1fb"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="q1-1">
+    <div class="q-top">
+      <div class="q-vis">🐔🐔🐔</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ಕೋಳಿಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many hens?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q1-1',this,false,'q2fb')"><span class="choice-kn">1</span><span class="choice-en">ಒಂದು</span></div>
+        <div class="choice" onclick="ansQ('q1-1',this,false,'q2fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('q1-1',this,true,'q2fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('q1-1',this,false,'q2fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+      </div>
+      <div class="fb" id="q2fb"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="q1-2">
+    <div class="q-top">
+      <div class="q-vis">🏠🏠🏠🏠</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ಮನೆಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many houses?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q1-2',this,false,'q3fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('q1-2',this,false,'q3fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('q1-2',this,true,'q3fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+        <div class="choice" onclick="ansQ('q1-2',this,false,'q3fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+      </div>
+      <div class="fb" id="q3fb"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="q1-3">
+    <div class="q-top">
+      <div class="q-vis">⚽⚽⚽⚽⚽</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ಚೆಂಡುಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many balls?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q1-3',this,false,'q4fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('q1-3',this,false,'q4fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+        <div class="choice" onclick="ansQ('q1-3',this,true,'q4fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+        <div class="choice" onclick="ansQ('q1-3',this,false,'q4fb')"><span class="choice-kn">6</span><span class="choice-en">ಆರು</span></div>
+      </div>
+      <div class="fb" id="q4fb"></div>
+    </div>
+  </div>
+
+  <!-- Q5: Which number? -->
+  <div class="q-card" id="q1-4">
+    <div class="q-top">
+      <div class="q-vis">4️⃣</div>
+      <div>
+        <div class="q-label">ಕನ್ನಡದಲ್ಲಿ ಹೇಳು</div>
+        <div class="q-kn">4 ಅನ್ನು ಕನ್ನಡದಲ್ಲಿ ಹೇಗೆ ಹೇಳುವೆ?<br><span style="font-size:13px;color:#888">4 in Kannada is?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('q1-4',this,false,'q5fb')"><span class="choice-kn">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('q1-4',this,true,'q5fb')"><span class="choice-kn">ನಾಲ್ಕು</span></div>
+        <div class="choice" onclick="ansQ('q1-4',this,false,'q5fb')"><span class="choice-kn">ಐದು</span></div>
+        <div class="choice" onclick="ansQ('q1-4',this,false,'q5fb')"><span class="choice-kn">ಎರಡು</span></div>
+      </div>
+      <div class="fb" id="q5fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn orange" id="btn1" onclick="completeTab(1)" disabled>ಉತ್ತರಿಸಿದ ನಂತರ ಮುಂದೆ ಹೋಗು →</button>
+</div>
+
+<!-- ===== TAB 2: Numbers 6–9 QUIZ ===== -->
+<div class="tab-panel" id="panel-2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);color:#1565c0">
+    <div class="banner-emoji">6️⃣</div>
+    <div>
+      <div class="banner-kn">ಸಂಖ್ಯೆ 6 ರಿಂದ 9</div>
+      <div class="banner-en">Numbers 6 to 9</div>
+      <div class="banner-sub">ಸರಿಯಾದ ಉತ್ತರ ಟ್ಯಾಪ್ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="q2-0">
+    <div class="q-top">
+      <div class="q-vis">🕯️🕯️🕯️🕯️🕯️🕯️</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ದೀಪಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many lamps?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q2-0',this,false,'q2-1fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+        <div class="choice" onclick="ansQ('q2-0',this,false,'q2-1fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+        <div class="choice" onclick="ansQ('q2-0',this,true,'q2-1fb')"><span class="choice-kn">6</span><span class="choice-en">ಆರು</span></div>
+        <div class="choice" onclick="ansQ('q2-0',this,false,'q2-1fb')"><span class="choice-kn">7</span><span class="choice-en">ಏಳು</span></div>
+      </div>
+      <div class="fb" id="q2-1fb"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="q2-1">
+    <div class="q-top">
+      <div class="q-vis">🦋🦋🦋🦋🦋🦋🦋</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ಚಿಟ್ಟೆಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many butterflies?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q2-1',this,false,'q2-2fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+        <div class="choice" onclick="ansQ('q2-1',this,false,'q2-2fb')"><span class="choice-kn">6</span><span class="choice-en">ಆರು</span></div>
+        <div class="choice" onclick="ansQ('q2-1',this,true,'q2-2fb')"><span class="choice-kn">7</span><span class="choice-en">ಏಳು</span></div>
+        <div class="choice" onclick="ansQ('q2-1',this,false,'q2-2fb')"><span class="choice-kn">8</span><span class="choice-en">ಎಂಟು</span></div>
+      </div>
+      <div class="fb" id="q2-2fb"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="q2-2">
+    <div class="q-top">
+      <div class="q-vis">🌸🌸🌸🌸🌸🌸🌸🌸</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ಹೂವುಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many flowers?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q2-2',this,false,'q2-3fb')"><span class="choice-kn">6</span><span class="choice-en">ಆರು</span></div>
+        <div class="choice" onclick="ansQ('q2-2',this,false,'q2-3fb')"><span class="choice-kn">7</span><span class="choice-en">ಏಳು</span></div>
+        <div class="choice" onclick="ansQ('q2-2',this,true,'q2-3fb')"><span class="choice-kn">8</span><span class="choice-en">ಎಂಟು</span></div>
+        <div class="choice" onclick="ansQ('q2-2',this,false,'q2-3fb')"><span class="choice-kn">9</span><span class="choice-en">ಒಂಬತ್ತು</span></div>
+      </div>
+      <div class="fb" id="q2-3fb"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="q2-3">
+    <div class="q-top">
+      <div class="q-vis">⭐⭐⭐⭐⭐⭐⭐⭐⭐</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಇಲ್ಲಿ ಎಷ್ಟು ನಕ್ಷತ್ರಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many stars?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q2-3',this,false,'q2-4fb')"><span class="choice-kn">6</span><span class="choice-en">ಆರು</span></div>
+        <div class="choice" onclick="ansQ('q2-3',this,false,'q2-4fb')"><span class="choice-kn">7</span><span class="choice-en">ಏಳು</span></div>
+        <div class="choice" onclick="ansQ('q2-3',this,false,'q2-4fb')"><span class="choice-kn">8</span><span class="choice-en">ಎಂಟು</span></div>
+        <div class="choice" onclick="ansQ('q2-3',this,true,'q2-4fb')"><span class="choice-kn">9</span><span class="choice-en">ಒಂಬತ್ತು</span></div>
+      </div>
+      <div class="fb" id="q2-4fb"></div>
+    </div>
+  </div>
+
+  <!-- Q5: word -->
+  <div class="q-card" id="q2-4">
+    <div class="q-top">
+      <div class="q-vis">8️⃣</div>
+      <div>
+        <div class="q-label">ಕನ್ನಡದಲ್ಲಿ ಹೇಳು</div>
+        <div class="q-kn">8 ಅನ್ನು ಕನ್ನಡದಲ್ಲಿ ಹೇಗೆ ಹೇಳುವೆ?<br><span style="font-size:13px;color:#888">8 in Kannada is?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('q2-4',this,false,'q2-5fb')"><span class="choice-kn">ಏಳು</span></div>
+        <div class="choice" onclick="ansQ('q2-4',this,false,'q2-5fb')"><span class="choice-kn">ಒಂಬತ್ತು</span></div>
+        <div class="choice" onclick="ansQ('q2-4',this,true,'q2-5fb')"><span class="choice-kn">ಎಂಟು</span></div>
+        <div class="choice" onclick="ansQ('q2-4',this,false,'q2-5fb')"><span class="choice-kn">ಆರು</span></div>
+      </div>
+      <div class="fb" id="q2-5fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn orange" id="btn2" onclick="completeTab(2)" disabled>ಮುಂದೆ ಹೋಗು →</button>
+</div>
+
+<!-- ===== TAB 3: ಹೆಚ್ಚು - ಕಡಿಮೆ (MORE / LESS) ===== -->
+<div class="tab-panel" id="panel-3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);color:#880e4f">
+    <div class="banner-emoji">↔️</div>
+    <div>
+      <div class="banner-kn">ಹೆಚ್ಚು — ಕಡಿಮೆ</div>
+      <div class="banner-en">More — Less</div>
+      <div class="banner-sub">ಯಾವ ಗುಂಪಿನಲ್ಲಿ ಹೆಚ್ಚು / ಕಡಿಮೆ ಇದೆ ಎಂದು ಟ್ಯಾಪ್ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <!-- More/Less intro -->
+  <div class="info-box" style="background:linear-gradient(135deg,#fce4ec,#fff);border-color:#f48fb1">
+    <div class="info-box-title" style="color:#880e4f">📌 ನೆನಪಿಟ್ಟುಕೋ</div>
+    <div class="info-row">🔺 <strong>ಹೆಚ್ಚು (More)</strong> = ಜಾಸ್ತಿ ವಸ್ತುಗಳಿರುವ ಗುಂಪು</div>
+    <div class="info-row">🔻 <strong>ಕಡಿಮೆ (Less)</strong> = ಕಡಿಮೆ ವಸ್ತುಗಳಿರುವ ಗುಂಪು</div>
+  </div>
+
+  <div class="sec-head">🔺 ಯಾವುದರಲ್ಲಿ ಹೆಚ್ಚು? — Tap the group with MORE</div>
+
+  <!-- More Q1 -->
+  <div class="q-card" id="q3-0">
+    <div class="q-top" style="flex-direction:column;align-items:flex-start">
+      <div class="q-label">ಹೆಚ್ಚು ಇರುವ ಗುಂಪನ್ನು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="compare-pair">
+        <div class="compare-box" onclick="moreQ('q3-0',this,false,'q3-0fb','.compare-pair')">
+          <span class="cb-emoji">⚽⚽⚽⚽</span>
+          <div class="cb-num">4</div>
+          <div class="cb-kn">ನಾಲ್ಕು ಚೆಂಡುಗಳು</div>
+        </div>
+        <div class="compare-box" onclick="moreQ('q3-0',this,true,'q3-0fb','.compare-pair')">
+          <span class="cb-emoji">⚽⚽⚽⚽⚽⚽⚽</span>
+          <div class="cb-num">7</div>
+          <div class="cb-kn">ಏಳು ಚೆಂಡುಗಳು</div>
+        </div>
+      </div>
+      <div class="fb" id="q3-0fb"></div>
+    </div>
+  </div>
+
+  <!-- More Q2 -->
+  <div class="q-card" id="q3-1">
+    <div class="q-top" style="flex-direction:column;align-items:flex-start">
+      <div class="q-label">ಹೆಚ್ಚು ಇರುವ ಗುಂಪನ್ನು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="compare-pair">
+        <div class="compare-box" onclick="moreQ('q3-1',this,true,'q3-1fb','.compare-pair')">
+          <span class="cb-emoji">🍎🍎🍎🍎🍎🍎🍎🍎🍎</span>
+          <div class="cb-num">9</div>
+          <div class="cb-kn">ಒಂಬತ್ತು ಸೇಬುಗಳು</div>
+        </div>
+        <div class="compare-box" onclick="moreQ('q3-1',this,false,'q3-1fb','.compare-pair')">
+          <span class="cb-emoji">🍎🍎🍎🍎🍎</span>
+          <div class="cb-num">5</div>
+          <div class="cb-kn">ಐದು ಸೇಬುಗಳು</div>
+        </div>
+      </div>
+      <div class="fb" id="q3-1fb"></div>
+    </div>
+  </div>
+
+  <!-- More Q3 -->
+  <div class="q-card" id="q3-2">
+    <div class="q-top" style="flex-direction:column;align-items:flex-start">
+      <div class="q-label">ಹೆಚ್ಚು ಇರುವ ಗುಂಪನ್ನು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="compare-pair">
+        <div class="compare-box" onclick="moreQ('q3-2',this,false,'q3-2fb','.compare-pair')">
+          <span class="cb-emoji">🌺🌺🌺</span>
+          <div class="cb-num">3</div>
+          <div class="cb-kn">ಮೂರು ಹೂವುಗಳು</div>
+        </div>
+        <div class="compare-box" onclick="moreQ('q3-2',this,true,'q3-2fb','.compare-pair')">
+          <span class="cb-emoji">🌺🌺🌺🌺🌺🌺</span>
+          <div class="cb-num">6</div>
+          <div class="cb-kn">ಆರು ಹೂವುಗಳು</div>
+        </div>
+      </div>
+      <div class="fb" id="q3-2fb"></div>
+    </div>
+  </div>
+
+  <div class="sec-head">🔻 ಯಾವುದರಲ್ಲಿ ಕಡಿಮೆ? — Tap the group with LESS</div>
+
+  <!-- Less Q1 -->
+  <div class="q-card" id="q3-3">
+    <div class="q-top" style="flex-direction:column;align-items:flex-start">
+      <div class="q-label">ಕಡಿಮೆ ಇರುವ ಗುಂಪನ್ನು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="compare-pair">
+        <div class="compare-box" onclick="lessQ('q3-3',this,false,'q3-3fb')">
+          <span class="cb-emoji">🕯️🕯️🕯️🕯️🕯️🕯️🕯️🕯️</span>
+          <div class="cb-num">8</div>
+          <div class="cb-kn">ಎಂಟು ದೀಪಗಳು</div>
+        </div>
+        <div class="compare-box" onclick="lessQ('q3-3',this,true,'q3-3fb')">
+          <span class="cb-emoji">🕯️🕯️🕯️</span>
+          <div class="cb-num">3</div>
+          <div class="cb-kn">ಮೂರು ದೀಪಗಳು</div>
+        </div>
+      </div>
+      <div class="fb" id="q3-3fb"></div>
+    </div>
+  </div>
+
+  <!-- Less Q2 -->
+  <div class="q-card" id="q3-4">
+    <div class="q-top" style="flex-direction:column;align-items:flex-start">
+      <div class="q-label">ಕಡಿಮೆ ಇರುವ ಗುಂಪನ್ನು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="compare-pair">
+        <div class="compare-box" onclick="lessQ('q3-4',this,true,'q3-4fb')">
+          <span class="cb-emoji">🐦🐦</span>
+          <div class="cb-num">2</div>
+          <div class="cb-kn">ಎರಡು ಹಕ್ಕಿಗಳು</div>
+        </div>
+        <div class="compare-box" onclick="lessQ('q3-4',this,false,'q3-4fb')">
+          <span class="cb-emoji">🐦🐦🐦🐦🐦🐦🐦</span>
+          <div class="cb-num">7</div>
+          <div class="cb-kn">ಏಳು ಹಕ್ಕಿಗಳು</div>
+        </div>
+      </div>
+      <div class="fb" id="q3-4fb"></div>
+    </div>
+  </div>
+
+  <!-- Less Q3 -->
+  <div class="q-card" id="q3-5">
+    <div class="q-top" style="flex-direction:column;align-items:flex-start">
+      <div class="q-label">ಕಡಿಮೆ ಇರುವ ಗುಂಪನ್ನು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="compare-pair">
+        <div class="compare-box" onclick="lessQ('q3-5',this,false,'q3-5fb')">
+          <span class="cb-emoji">🥭🥭🥭🥭🥭🥭</span>
+          <div class="cb-num">6</div>
+          <div class="cb-kn">ಆರು ಮಾವಿನಹಣ್ಣು</div>
+        </div>
+        <div class="compare-box" onclick="lessQ('q3-5',this,true,'q3-5fb')">
+          <span class="cb-emoji">🥭🥭🥭🥭</span>
+          <div class="cb-num">4</div>
+          <div class="cb-kn">ನಾಲ್ಕು ಮಾವಿನಹಣ್ಣು</div>
+        </div>
+      </div>
+      <div class="fb" id="q3-5fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn orange" id="btn3" onclick="completeTab(3)" disabled>ಮುಂದೆ ಹೋಗು →</button>
+</div>
+
+<!-- ===== TAB 4: MATCH (ಹೊಂದಿಸು) ===== -->
+<div class="tab-panel" id="panel-4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);color:#283593">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-kn">ಸಮಾನ ಸಂಖ್ಯೆ ಹೊಂದಿಸು</div>
+      <div class="banner-en">Match Equal Numbers</div>
+      <div class="banner-sub">ಸಮಾನ ಸಂಖ್ಯೆಯ ಗುಂಪನ್ನು ಜೋಡಿ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <div class="sec-head">🔗 ಸಂಖ್ಯೆ ಮತ್ತು ಗುಂಪನ್ನು ಹೊಂದಿಸು — Match the number to the group</div>
+
+  <!-- Match game -->
+  <div class="match-wrap" id="matchGame">
+    <div class="match-title">ಮೊದಲು ಎಡಭಾಗದ ಸಂಖ್ಯೆ ಟ್ಯಾಪ್ ಮಾಡು, ನಂತರ ಬಲಭಾಗದ ಗುಂಪು ಟ್ಯಾಪ್ ಮಾಡು</div>
+    <div class="match-row">
+      <div class="match-left" id="matchLeft">
+        <div class="match-item" data-val="3" onclick="selectLeft(this)">3 ಮೂರು</div>
+        <div class="match-item" data-val="1" onclick="selectLeft(this)">1 ಒಂದು</div>
+        <div class="match-item" data-val="5" onclick="selectLeft(this)">5 ಐದು</div>
+        <div class="match-item" data-val="2" onclick="selectLeft(this)">2 ಎರಡು</div>
+        <div class="match-item" data-val="4" onclick="selectLeft(this)">4 ನಾಲ್ಕು</div>
+      </div>
+      <div class="match-right" id="matchRight">
+        <div class="match-item" data-val="1" onclick="selectRight(this)">🌺</div>
+        <div class="match-item" data-val="4" onclick="selectRight(this)">🌺🌺🌺🌺</div>
+        <div class="match-item" data-val="2" onclick="selectRight(this)">🌺🌺</div>
+        <div class="match-item" data-val="5" onclick="selectRight(this)">🌺🌺🌺🌺🌺</div>
+        <div class="match-item" data-val="3" onclick="selectRight(this)">🌺🌺🌺</div>
+      </div>
+    </div>
+    <div class="fb" id="matchFb" style="display:none;text-align:center;font-size:15px;font-weight:900;padding:10px;border-radius:14px;margin-top:8px"></div>
+  </div>
+
+  <!-- Match game 2 (6-9) -->
+  <div class="match-wrap" id="matchGame2">
+    <div class="match-title">ಮತ್ತೊಮ್ಮೆ ಹೊಂದಿಸು — 6 ರಿಂದ 9</div>
+    <div class="match-row">
+      <div class="match-left" id="matchLeft2">
+        <div class="match-item" data-val="7" onclick="selectLeft2(this)">7 ಏಳು</div>
+        <div class="match-item" data-val="6" onclick="selectLeft2(this)">6 ಆರು</div>
+        <div class="match-item" data-val="9" onclick="selectLeft2(this)">9 ಒಂಬತ್ತು</div>
+        <div class="match-item" data-val="8" onclick="selectLeft2(this)">8 ಎಂಟು</div>
+      </div>
+      <div class="match-right" id="matchRight2">
+        <div class="match-item" data-val="9" onclick="selectRight2(this)">⭐⭐⭐⭐⭐⭐⭐⭐⭐</div>
+        <div class="match-item" data-val="6" onclick="selectRight2(this)">⭐⭐⭐⭐⭐⭐</div>
+        <div class="match-item" data-val="8" onclick="selectRight2(this)">⭐⭐⭐⭐⭐⭐⭐⭐</div>
+        <div class="match-item" data-val="7" onclick="selectRight2(this)">⭐⭐⭐⭐⭐⭐⭐</div>
+      </div>
+    </div>
+    <div class="fb" id="matchFb2" style="display:none;text-align:center;font-size:15px;font-weight:900;padding:10px;border-radius:14px;margin-top:8px"></div>
+  </div>
+
+  <button class="big-btn orange" id="btn4" onclick="completeTab(4)" disabled>ಮುಂದೆ ಹೋಗು →</button>
+</div>
+
+<!-- ===== TAB 5: SEQUENCE (ಕ್ರಮ - Before/After) ===== -->
+<div class="tab-panel" id="panel-5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);color:#4a148c">
+    <div class="banner-emoji">🔢</div>
+    <div>
+      <div class="banner-kn">ಅನುಕ್ರಮ ಸಂಖ್ಯೆಗಳು</div>
+      <div class="banner-en">Number Sequence & Before/After</div>
+      <div class="banner-sub">ಮುಂದಿನ ಮತ್ತು ಹಿಂದಿನ ಸಂಖ್ಯೆ ಆಯ್ಕೆ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <!-- Number line interactive -->
+  <div class="numline-wrap">
+    <div class="numline-title">📏 ಸಂಖ್ಯಾ ತೋರಣ — Number Line 1–9</div>
+    <div class="numline">
+      <div class="nl-item" onclick="highlightNL(this)">1</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">2</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">3</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">4</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">5</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">6</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">7</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">8</div>
+      <div class="nl-arr">→</div>
+      <div class="nl-item" onclick="highlightNL(this)">9</div>
+    </div>
+  </div>
+
+  <div class="sec-head">➡️ ಮುಂದಿನ ಸಂಖ್ಯೆ — What comes AFTER?</div>
+
+  <!-- After Q1 -->
+  <div class="q-card" id="q5-0">
+    <div class="q-top">
+      <div class="q-vis">3️⃣</div>
+      <div>
+        <div class="q-label">ಮುಂದಿನ ಸಂಖ್ಯೆ</div>
+        <div class="q-kn">3 ರ ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:13px;color:#888">What comes after 3?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q5-0',this,false,'q5-0fb')"><span class="choice-kn">2</span></div>
+        <div class="choice" onclick="ansQ('q5-0',this,true,'q5-0fb')"><span class="choice-kn">4</span></div>
+        <div class="choice" onclick="ansQ('q5-0',this,false,'q5-0fb')"><span class="choice-kn">5</span></div>
+        <div class="choice" onclick="ansQ('q5-0',this,false,'q5-0fb')"><span class="choice-kn">6</span></div>
+      </div>
+      <div class="fb" id="q5-0fb"></div>
+    </div>
+  </div>
+
+  <!-- After Q2 -->
+  <div class="q-card" id="q5-1">
+    <div class="q-top">
+      <div class="q-vis">6️⃣</div>
+      <div>
+        <div class="q-label">ಮುಂದಿನ ಸಂಖ್ಯೆ</div>
+        <div class="q-kn">6 ರ ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:13px;color:#888">What comes after 6?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q5-1',this,false,'q5-1fb')"><span class="choice-kn">5</span></div>
+        <div class="choice" onclick="ansQ('q5-1',this,true,'q5-1fb')"><span class="choice-kn">7</span></div>
+        <div class="choice" onclick="ansQ('q5-1',this,false,'q5-1fb')"><span class="choice-kn">8</span></div>
+        <div class="choice" onclick="ansQ('q5-1',this,false,'q5-1fb')"><span class="choice-kn">9</span></div>
+      </div>
+      <div class="fb" id="q5-1fb"></div>
+    </div>
+  </div>
+
+  <!-- After Q3 -->
+  <div class="q-card" id="q5-2">
+    <div class="q-top">
+      <div class="q-vis">8️⃣</div>
+      <div>
+        <div class="q-label">ಮುಂದಿನ ಸಂಖ್ಯೆ</div>
+        <div class="q-kn">8 ರ ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:13px;color:#888">What comes after 8?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q5-2',this,false,'q5-2fb')"><span class="choice-kn">7</span></div>
+        <div class="choice" onclick="ansQ('q5-2',this,false,'q5-2fb')"><span class="choice-kn">6</span></div>
+        <div class="choice" onclick="ansQ('q5-2',this,true,'q5-2fb')"><span class="choice-kn">9</span></div>
+        <div class="choice" onclick="ansQ('q5-2',this,false,'q5-2fb')"><span class="choice-kn">5</span></div>
+      </div>
+      <div class="fb" id="q5-2fb"></div>
+    </div>
+  </div>
+
+  <div class="sec-head">⬅️ ಹಿಂದಿನ ಸಂಖ್ಯೆ — What comes BEFORE?</div>
+
+  <!-- Before Q1 -->
+  <div class="q-card" id="q5-3">
+    <div class="q-top">
+      <div class="q-vis">5️⃣</div>
+      <div>
+        <div class="q-label">ಹಿಂದಿನ ಸಂಖ್ಯೆ</div>
+        <div class="q-kn">5 ರ ಹಿಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:13px;color:#888">What comes before 5?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q5-3',this,false,'q5-3fb')"><span class="choice-kn">3</span></div>
+        <div class="choice" onclick="ansQ('q5-3',this,true,'q5-3fb')"><span class="choice-kn">4</span></div>
+        <div class="choice" onclick="ansQ('q5-3',this,false,'q5-3fb')"><span class="choice-kn">6</span></div>
+        <div class="choice" onclick="ansQ('q5-3',this,false,'q5-3fb')"><span class="choice-kn">7</span></div>
+      </div>
+      <div class="fb" id="q5-3fb"></div>
+    </div>
+  </div>
+
+  <!-- Before Q2 -->
+  <div class="q-card" id="q5-4">
+    <div class="q-top">
+      <div class="q-vis">9️⃣</div>
+      <div>
+        <div class="q-label">ಹಿಂದಿನ ಸಂಖ್ಯೆ</div>
+        <div class="q-kn">9 ರ ಹಿಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:13px;color:#888">What comes before 9?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('q5-4',this,false,'q5-4fb')"><span class="choice-kn">6</span></div>
+        <div class="choice" onclick="ansQ('q5-4',this,false,'q5-4fb')"><span class="choice-kn">5</span></div>
+        <div class="choice" onclick="ansQ('q5-4',this,true,'q5-4fb')"><span class="choice-kn">8</span></div>
+        <div class="choice" onclick="ansQ('q5-4',this,false,'q5-4fb')"><span class="choice-kn">7</span></div>
+      </div>
+      <div class="fb" id="q5-4fb"></div>
+    </div>
+  </div>
+
+  <!-- Missing number sequence -->
+  <div class="sec-head">🔢 ಬಿಟ್ಟ ಸಂಖ್ಯೆ ತುಂಬು — Fill the Missing Number</div>
+
+  <div class="seq-wrap" id="seqGame1">
+    <div class="seq-title">ಖಾಲಿ ಜಾಗದ ಸಂಖ್ಯೆ ಆಯ್ಕೆ ಮಾಡು!</div>
+    <div class="seq-row">
+      <div class="seq-box">1</div>
+      <div class="seq-box blank" id="sq1b1" data-ans="2"></div>
+      <div class="seq-box">3</div>
+      <div class="seq-box blank" id="sq1b2" data-ans="4"></div>
+      <div class="seq-box">5</div>
+    </div>
+    <div class="seq-opts" id="sq1opts">
+      <div class="seq-opt" onclick="fillSeq('sq1b1','sq1opts',this,2,'seqFb1')">2</div>
+      <div class="seq-opt" onclick="fillSeq('sq1b2','sq1opts',this,4,'seqFb1')">4</div>
+      <div class="seq-opt" onclick="fillSeqWrong('sq1opts',this,'seqFb1')">6</div>
+      <div class="seq-opt" onclick="fillSeqWrong('sq1opts',this,'seqFb1')">7</div>
+    </div>
+    <div class="fb" id="seqFb1"></div>
+  </div>
+
+  <div class="seq-wrap" id="seqGame2">
+    <div class="seq-title">ಖಾಲಿ ಜಾಗದ ಸಂಖ್ಯೆ ಆಯ್ಕೆ ಮಾಡು!</div>
+    <div class="seq-row">
+      <div class="seq-box blank" id="sq2b1" data-ans="6"></div>
+      <div class="seq-box">7</div>
+      <div class="seq-box blank" id="sq2b2" data-ans="8"></div>
+      <div class="seq-box">9</div>
+    </div>
+    <div class="seq-opts" id="sq2opts">
+      <div class="seq-opt" onclick="fillSeq('sq2b1','sq2opts',this,6,'seqFb2')">6</div>
+      <div class="seq-opt" onclick="fillSeq('sq2b2','sq2opts',this,8,'seqFb2')">8</div>
+      <div class="seq-opt" onclick="fillSeqWrong('sq2opts',this,'seqFb2')">4</div>
+      <div class="seq-opt" onclick="fillSeqWrong('sq2opts',this,'seqFb2')">5</div>
+    </div>
+    <div class="fb" id="seqFb2"></div>
+  </div>
+
+  <div class="score-dots" id="score5">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn orange" id="btn5" onclick="completeTab(5)" disabled>ಮುಂದೆ ಹೋಗು → ಅಂತಿಮ ಪರೀಕ್ಷೆ!</button>
+</div>
+
+<!-- ===== TAB 6: FINAL QUIZ ===== -->
+<div class="tab-panel" id="panel-6">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#fff59d);color:#f57f17">
+    <div class="banner-emoji">📝</div>
+    <div>
+      <div class="banner-kn">ಅಂತಿಮ ಪರೀಕ್ಷೆ</div>
+      <div class="banner-en">Final Quiz — Show What You Know!</div>
+      <div class="banner-sub">ಎಲ್ಲ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸು!</div>
+    </div>
+  </div>
+
+  <!-- Quiz Q1 -->
+  <div class="quiz-wrap" id="fq1">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 1 / 8</div>
+    <div class="quiz-q">🍎🍎🍎🍎🍎🍎🍎<br>ಇಲ್ಲಿ ಎಷ್ಟು ಸೇಬುಗಳಿವೆ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,false)"><span>5</span><span class="quiz-opt-sub">ಐದು</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,false)"><span>6</span><span class="quiz-opt-sub">ಆರು</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,true)"><span>7</span><span class="quiz-opt-sub">ಏಳು</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,false)"><span>8</span><span class="quiz-opt-sub">ಎಂಟು</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q2 -->
+  <div class="quiz-wrap" id="fq2">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 2 / 8</div>
+    <div class="quiz-q">ಐದು = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,false)"><span>3</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,false)"><span>4</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,true)"><span>5</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,false)"><span>6</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q3 -->
+  <div class="quiz-wrap" id="fq3">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 3 / 8</div>
+    <div class="quiz-q">🐦🐦🐦 ಗಿಂತ 🐦🐦🐦🐦🐦🐦🐦<br>ಯಾವುದರಲ್ಲಿ ಹೆಚ್ಚು ಹಕ್ಕಿಗಳಿವೆ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq3',this,false)">🐦🐦🐦<br><span class="quiz-opt-sub">3 ಹಕ್ಕಿಗಳು</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq3',this,true)">🐦🐦🐦🐦🐦🐦🐦<br><span class="quiz-opt-sub">7 ಹಕ್ಕಿಗಳು</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q4 -->
+  <div class="quiz-wrap" id="fq4">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 4 / 8</div>
+    <div class="quiz-q">4 ರ ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:14px;color:#888">After 4 comes ___?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,false)"><span>3</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,true)"><span>5</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,false)"><span>6</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,false)"><span>7</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q5 -->
+  <div class="quiz-wrap" id="fq5">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 5 / 8</div>
+    <div class="quiz-q">7 ರ ಹಿಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><span style="font-size:14px;color:#888">Before 7 comes ___?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,false)"><span>5</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,true)"><span>6</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,false)"><span>8</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,false)"><span>9</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q6 -->
+  <div class="quiz-wrap" id="fq6">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 6 / 8</div>
+    <div class="quiz-q">ಒಂಬತ್ತು = ಯಾವ ಅಂಕೆ?<br><span style="font-size:14px;color:#888">ಒಂಬತ್ತು = which number?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,false)"><span>7</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,false)"><span>8</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,true)"><span>9</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,false)"><span>6</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q7 -->
+  <div class="quiz-wrap" id="fq7">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 7 / 8</div>
+    <div class="quiz-q">🌺🌺 vs 🌺🌺🌺🌺🌺🌺🌺🌺<br>ಯಾವುದರಲ್ಲಿ ಕಡಿಮೆ ಹೂವುಗಳಿವೆ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq7',this,true)">🌺🌺<br><span class="quiz-opt-sub">2 ಹೂವುಗಳು</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq7',this,false)">🌺🌺🌺🌺🌺🌺🌺🌺<br><span class="quiz-opt-sub">8 ಹೂವುಗಳು</span></div>
+    </div>
+  </div>
+
+  <!-- Quiz Q8 -->
+  <div class="quiz-wrap" id="fq8">
+    <div class="quiz-num">ಪ್ರಶ್ನೆ 8 / 8</div>
+    <div class="quiz-q">1, 2, 3, __, 5 — ಖಾಲಿ ತುಂಬು!</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq8',this,false)"><span>6</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq8',this,true)"><span>4</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq8',this,false)"><span>7</span></div>
+      <div class="quiz-opt" onclick="fQuiz('fq8',this,false)"><span>8</span></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="scoreFinal">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn orange" id="btnFinal" onclick="showCeleb()" disabled>🎉 ಮುಗಿಯಿತು! Finish!</button>
+</div>
+
+</div><!-- end content -->
+
+<!-- CELEBRATE -->
+<div class="celeb" id="celeb">
+  <div class="celeb-e">🎉</div>
+  <div class="celeb-t">ಭಲೇ! ಅದ್ಭುತ! 🌟</div>
+  <div class="celeb-s">
+    ಪಾಠ 3 ಮುಗಿಯಿತು!<br>
+    ನೀನು ಈಗ 1 ರಿಂದ 9 ರ ಸಂಖ್ಯೆಗಳನ್ನು ಕಲಿತೆ!<br>
+    ಹೆಚ್ಚು–ಕಡಿಮೆ, ಮುಂದಿನ–ಹಿಂದಿನ ಸಂಖ್ಯೆ ಎಲ್ಲ ಗೊತ್ತಾಯಿತು!<br>
+    Chapter 3: Numbers 1–9 — Completed! ✅
+  </div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">✅ ಮುಗಿಸು</button>
+</div>
+
+<script>
+// ===== STATE =====
+let tabDone = [true,false,false,false,false,false,false];
+let totalStars = 0;
+
+// Tab completion tracking
+let tab1Done = 0, tab2Done = 0, tab3Done = 0, tab5Done = 0, finalDone = 0;
+const tab1Total = 5, tab2Total = 5, tab3Total = 6, tab5Total = 5, finalTotal = 8;
+
+// Match game state
+let selectedLeft = null, selectedRight = null;
+let matchScore = 0, matchTotal = 5;
+let selectedLeft2 = null, selectedRight2 = null;
+let match2Score = 0, match2Total = 4;
+let matchAllDone = false;
+
+// Sequence fill state
+let sq1Filled = 0, sq2Filled = 0;
+
+// ===== NAVIGATION =====
+function tryTab(idx){
+  if(!tabDone[idx-1] && idx > 0){
+    const tab = document.querySelector(`[data-tab="${idx}"]`);
+    tab.classList.add('shaking');
+    tab.addEventListener('animationend',()=>tab.classList.remove('shaking'),{once:true});
+    showToast();
+    return;
+  }
+  switchTab(idx);
+}
+
+function switchTab(idx){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+idx).classList.add('active');
+  const tab = document.querySelector(`[data-tab="${idx}"]`);
+  tab.classList.add('active');
+  tab.classList.remove('locked','unlocked','done');
+  updateProgress();
+}
+
+function showToast(){
+  const t = document.getElementById('lockToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function updateProgress(){
+  const done = tabDone.filter(Boolean).length - 1;
+  const pct = Math.round((done/6)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('starsNum').textContent = totalStars;
+}
+
+function completeTab(idx){
+  tabDone[idx+1] = true;
+  const nextTab = document.querySelector(`[data-tab="${idx+1}"]`);
+  if(nextTab){
+    nextTab.classList.remove('locked');
+    nextTab.classList.add('unlocked');
+  }
+  const curTab = document.querySelector(`[data-tab="${idx}"]`);
+  curTab.classList.remove('active');
+  curTab.classList.add('done');
+  switchTab(idx+1);
+  addStars(3);
+}
+
+function addStars(n){
+  totalStars += n;
+  document.getElementById('starsNum').textContent = totalStars;
+}
+
+// ===== DOT COUNTER =====
+const dotCounts = {};
+function toggleDot(el, id){
+  el.classList.toggle('lit');
+  const row = el.closest('.dot-row');
+  const count = row.querySelectorAll('.num-dot.lit').length;
+  dotCounts[id] = count;
+  const display = document.getElementById(id+'Count');
+  const words = ['','ಒಂದು','ಎರಡು','ಮೂರು','ನಾಲ್ಕು','ಐದು','ಆರು','ಏಳು','ಎಂಟು','ಒಂಬತ್ತು'];
+  display.textContent = count > 0 ? `${count} — ${words[count]||count}` : 'ಟ್ಯಾಪ್ ಮಾಡು!';
+}
+
+// ===== ANSWER Q (standard multiple choice) =====
+function ansQ(cardId, btn, correct, fbId){
+  const card = document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const allBtns = btn.closest('.choices').querySelectorAll('.choice');
+  allBtns.forEach(b=>b.classList.add('disabled'));
+  const fb = document.getElementById(fbId);
+
+  if(correct){
+    btn.classList.add('correct');
+    fb.className='fb ok';
+    fb.textContent='✅ ಸರಿ ಉತ್ತರ! Correct!';
+    card.classList.add('done');
+    addStars(1);
+    // track tab score
+    trackTabScore(cardId);
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    setTimeout(()=>card.classList.remove('wrong-flash'),500);
+    fb.className='fb no';
+    fb.textContent='❌ ತಪ್ಪು! Try again!';
+    // re-enable after brief moment
+    setTimeout(()=>{
+      allBtns.forEach(b=>b.classList.remove('disabled'));
+      btn.classList.remove('wrong');
+      fb.style.display='none';
+    },1000);
+  }
+}
+
+function trackTabScore(cardId){
+  if(cardId.startsWith('q1-')){ tab1Done++; updateDots('score1',tab1Done,tab1Total); if(tab1Done>=tab1Total){ document.getElementById('btn1').disabled=false; } }
+  else if(cardId.startsWith('q2-')){ tab2Done++; updateDots('score2',tab2Done,tab2Total); if(tab2Done>=tab2Total){ document.getElementById('btn2').disabled=false; } }
+  else if(cardId.startsWith('q5-')){ tab5Done++; updateDots('score5',tab5Done,tab5Total); checkTab5Btn(); }
+}
+
+function updateDots(id, done, total){
+  const dots = document.querySelectorAll(`#${id} .sdot`);
+  for(let i=0;i<Math.min(done,dots.length);i++) dots[i].classList.add('done');
+}
+
+// ===== MORE / LESS =====
+function moreQ(cardId, btn, correct, fbId){
+  const card = document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const pair = btn.closest('.compare-pair');
+  pair.querySelectorAll('.compare-box').forEach(b=>b.style.pointerEvents='none');
+  const fb = document.getElementById(fbId);
+  if(correct){
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಸರಿ! ಹೆಚ್ಚು ಸರಿಯಾಗಿ ಗುರುತಿಸಿದೆ! Correct - More!';
+    card.classList.add('done'); addStars(1); tab3Done++; updateDots('score3',tab3Done,tab3Total);
+    checkTab3Btn();
+  } else {
+    btn.classList.add('wrong');
+    fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು! ಇನ್ನೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸು!';
+    card.classList.add('wrong-flash'); setTimeout(()=>card.classList.remove('wrong-flash'),500);
+    setTimeout(()=>{ pair.querySelectorAll('.compare-box').forEach(b=>{ b.style.pointerEvents=''; b.classList.remove('wrong'); }); btn.classList.remove('wrong'); fb.style.display='none'; },1000);
+  }
+}
+
+function lessQ(cardId, btn, correct, fbId){
+  const card = document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const pair = btn.closest('.compare-pair');
+  pair.querySelectorAll('.compare-box').forEach(b=>b.style.pointerEvents='none');
+  const fb = document.getElementById(fbId);
+  if(correct){
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಸರಿ! ಕಡಿಮೆ ಸರಿಯಾಗಿ ಗುರುತಿಸಿದೆ! Correct - Less!';
+    card.classList.add('done'); addStars(1); tab3Done++; updateDots('score3',tab3Done,tab3Total);
+    checkTab3Btn();
+  } else {
+    btn.classList.add('wrong');
+    fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು! ಇನ್ನೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸು!';
+    card.classList.add('wrong-flash'); setTimeout(()=>card.classList.remove('wrong-flash'),500);
+    setTimeout(()=>{ pair.querySelectorAll('.compare-box').forEach(b=>{ b.style.pointerEvents=''; b.classList.remove('wrong'); }); btn.classList.remove('wrong'); fb.style.display='none'; },1000);
+  }
+}
+
+function checkTab3Btn(){
+  if(tab3Done >= tab3Total) document.getElementById('btn3').disabled = false;
+}
+
+// ===== MATCH GAME =====
+let leftSel = null, rightSel = null;
+function selectLeft(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchLeft .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  leftSel = el;
+  tryMatch();
+}
+function selectRight(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchRight .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  rightSel = el;
+  tryMatch();
+}
+function tryMatch(){
+  if(!leftSel || !rightSel) return;
+  if(leftSel.dataset.val === rightSel.dataset.val){
+    leftSel.classList.add('matched'); rightSel.classList.add('matched');
+    leftSel.classList.remove('selected'); rightSel.classList.remove('selected');
+    matchScore++;
+    const fb = document.getElementById('matchFb');
+    fb.style.display='block'; fb.style.background='#c8e6c9'; fb.style.color='#2e7d32'; fb.textContent='✅ ಸರಿ ಜೋಡಣೆ! Correct Match!';
+    addStars(1);
+    if(matchScore >= matchTotal){ setTimeout(()=>{ fb.textContent='🎉 ಎಲ್ಲ ಜೋಡಿ ಆದವು! All matched!'; checkMatch12Done(); },500); }
+  } else {
+    leftSel.classList.add('wrong-match'); rightSel.classList.add('wrong-match');
+    const fb = document.getElementById('matchFb');
+    fb.style.display='block'; fb.style.background='#ffcdd2'; fb.style.color='#c62828'; fb.textContent='❌ ತಪ್ಪು ಜೋಡಣೆ! Wrong match!';
+    setTimeout(()=>{ leftSel.classList.remove('wrong-match','selected'); rightSel.classList.remove('wrong-match','selected'); leftSel=null; rightSel=null; fb.style.display='none'; },900);
+    return;
+  }
+  leftSel=null; rightSel=null;
+}
+
+let leftSel2=null, rightSel2=null;
+function selectLeft2(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchLeft2 .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected'); leftSel2=el; tryMatch2();
+}
+function selectRight2(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchRight2 .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected'); rightSel2=el; tryMatch2();
+}
+function tryMatch2(){
+  if(!leftSel2||!rightSel2) return;
+  if(leftSel2.dataset.val===rightSel2.dataset.val){
+    leftSel2.classList.add('matched'); rightSel2.classList.add('matched');
+    leftSel2.classList.remove('selected'); rightSel2.classList.remove('selected');
+    match2Score++; addStars(1);
+    const fb=document.getElementById('matchFb2');
+    fb.style.display='block'; fb.style.background='#c8e6c9'; fb.style.color='#2e7d32'; fb.textContent='✅ ಸರಿ ಜೋಡಣೆ!';
+    if(match2Score>=match2Total){ setTimeout(()=>{ fb.textContent='🎉 ಎಲ್ಲ ಜೋಡಿ ಆದವು!'; checkMatch12Done(); },500); }
+  } else {
+    leftSel2.classList.add('wrong-match'); rightSel2.classList.add('wrong-match');
+    const fb=document.getElementById('matchFb2');
+    fb.style.display='block'; fb.style.background='#ffcdd2'; fb.style.color='#c62828'; fb.textContent='❌ ತಪ್ಪು!';
+    setTimeout(()=>{ leftSel2.classList.remove('wrong-match','selected'); rightSel2.classList.remove('wrong-match','selected'); leftSel2=null; rightSel2=null; fb.style.display='none'; },900);
+    return;
+  }
+  leftSel2=null; rightSel2=null;
+}
+function checkMatch12Done(){
+  if(matchScore>=matchTotal && match2Score>=match2Total && !matchAllDone){
+    matchAllDone=true;
+    document.getElementById('btn4').disabled=false;
+  }
+}
+
+// ===== SEQUENCE FILL =====
+function fillSeq(boxId, optsId, btn, val, fbId){
+  const box = document.getElementById(boxId);
+  if(box.classList.contains('filled')) return;
+  box.textContent = val;
+  box.classList.remove('blank');
+  box.classList.add('filled');
+  btn.classList.add('used');
+  addStars(1);
+  const fb = document.getElementById(fbId);
+  fb.className='fb ok'; fb.textContent='✅ ಸರಿ! Correct!';
+  // check if both in this game are filled
+  if(optsId==='sq1opts'){
+    sq1Filled++;
+    if(sq1Filled>=2){ tab5Done++; updateDots('score5',tab5Done,tab5Total); checkTab5Btn(); }
+  } else {
+    sq2Filled++;
+    if(sq2Filled>=2){ tab5Done++; updateDots('score5',tab5Done,tab5Total); checkTab5Btn(); }
+  }
+}
+function fillSeqWrong(optsId, btn, fbId){
+  btn.classList.add('wrong-match');
+  const fb=document.getElementById(fbId);
+  fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು ಸಂಖ್ಯೆ! Wrong number!';
+  setTimeout(()=>{ btn.classList.remove('wrong-match'); fb.style.display='none'; },900);
+}
+function checkTab5Btn(){
+  if(tab5Done>=3 && sq1Filled>=2 && sq2Filled>=2) document.getElementById('btn5').disabled=false;
+}
+
+// ===== NUMBER LINE HIGHLIGHT =====
+function highlightNL(el){
+  document.querySelectorAll('.nl-item').forEach(n=>n.classList.remove('active-nl'));
+  el.classList.add('active-nl');
+}
+
+// ===== FINAL QUIZ =====
+function fQuiz(cardId, btn, correct){
+  const wrap = document.getElementById(cardId);
+  if(wrap.dataset.done) return;
+  const opts = wrap.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  if(correct){
+    btn.classList.add('right');
+    wrap.dataset.done='1';
+    addStars(2); finalDone++;
+    updateDots('scoreFinal',finalDone,finalTotal);
+    if(finalDone>=finalTotal) document.getElementById('btnFinal').disabled=false;
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(()=>{ opts.forEach(o=>o.style.pointerEvents=''); btn.classList.remove('wrong'); },900);
+  }
+}
+
+// ===== CELEBRATE =====
+function showCeleb(){
+  document.getElementById('celebStars').textContent = '⭐'.repeat(Math.min(5,Math.floor(totalStars/5)));
+  document.getElementById('celeb').classList.add('show');
+}
+
+// ===== INIT =====
+updateProgress();
+</script>
+</body>
+</html>

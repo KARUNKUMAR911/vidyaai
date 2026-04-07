@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಅಧ್ಯಾಯ 16: ತೂಕ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#e8f5e9;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#1b5e20,#2e7d32,#43a047);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#1b5e20,#66bb6a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#2e7d32;border-color:#a5d6a7}
+.step-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32;box-shadow:0 4px 14px rgba(46,125,50,.45)}
+.step-tab.done{background:#e8f5e9;color:#2e7d32;border-color:#66bb6a}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#1b5e20;line-height:1.7}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#66bb6a;background:#e8f5e9}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:38px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-bottom{border-top:2px dashed #a5d6a7;padding:12px 14px}
+
+/* CHOICES */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #a5d6a7;background:#e8f5e9;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+.choice:active{transform:scale(.92)}
+.choice-kn{font-size:16px;font-weight:900;color:#1b5e20}
+.choice-emoji{font-size:32px}
+.choice-sub{font-size:11px;font-weight:700;color:#388e3c}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#c8e6c9;transition:background .3s}
+.sdot.done{background:#2e7d32}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.green{background:linear-gradient(135deg,#1b5e20,#43a047);color:#fff}
+.big-btn.green:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* CONCEPT VISUAL BOX */
+.concept-box{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #a5d6a7}
+.concept-row{display:flex;align-items:center;justify-content:space-around;padding:12px 0;border-bottom:2px dashed #e8f5e9}
+.concept-row:last-child{border-bottom:none}
+.concept-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.concept-label{font-size:13px;font-weight:900;padding:4px 14px;border-radius:20px;text-align:center}
+.lbl-heavy{background:#ffccbc;color:#bf360c}
+.lbl-light{background:#b3e5fc;color:#01579b}
+.concept-vs{font-size:22px;font-weight:900;color:#ccc}
+
+/* BALANCE SCALE VISUAL */
+.scale-wrap{background:linear-gradient(135deg,#f1f8e9,#e8f5e9);border-radius:18px;padding:16px;margin-bottom:10px;border:3px solid #a5d6a7;text-align:center}
+.scale-beam{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:4px}
+.scale-pan{width:70px;height:36px;border-radius:0 0 50% 50%;border:3px solid #2e7d32;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative}
+.scale-rod{width:3px;background:#2e7d32;height:44px}
+.scale-rod.tilt-left{transform:rotate(-12deg);transform-origin:center}
+.scale-rod.tilt-right{transform:rotate(12deg);transform-origin:center}
+.scale-center{font-size:18px;margin:0 6px}
+.scale-caption{font-size:13px;font-weight:900;color:#1b5e20;margin-top:6px}
+
+/* THICK / THIN visual */
+.thickness-row{display:flex;align-items:center;gap:16px;padding:10px 0;justify-content:center}
+.thick-bar{height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;padding:0 12px}
+.thin-bar{height:10px;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding:0 8px}
+
+/* CELEBRATION */
+.celeb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.celeb-overlay.show{opacity:1;pointer-events:auto}
+.celeb-box{background:#fff;border-radius:28px;padding:32px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.celeb-emoji{font-size:64px;display:block;animation:float 2s ease-in-out infinite}
+.celeb-title{font-size:24px;font-weight:900;color:#1b5e20;margin:12px 0 6px}
+.celeb-sub{font-size:15px;font-weight:700;color:#555;margin-bottom:16px;line-height:1.6}
+.celeb-stars{font-size:36px;margin:8px 0 20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">⚖️ ಪಾಠ 16 — ತೂಕ (Weight)</div>
+  <div class="stars-pill" id="starsPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">⚖️</span>
+  <h1>ತೂಕ ಕಲಿಯೋಣ!</h1>
+  <p>Let's learn about Weight! • ತಟ್ಟು ಮಾಡಿ ಕಲಿಯಿರಿ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ • Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active"  id="tab-btn-1" onclick="tryTab(1)">📦 ದಪ್ಪ–ತೆಳು</div>
+  <div class="step-tab locked"  id="tab-btn-2" onclick="tryTab(2)">⚖️ ಭಾರ–ಹಗುರ</div>
+  <div class="step-tab locked"  id="tab-btn-3" onclick="tryTab(3)">🔍 ಗುರುತಿಸು</div>
+  <div class="step-tab locked"  id="tab-btn-4" onclick="tryTab(4)">🎯 ಅಭ್ಯಾಸ</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════
+     TAB 1 : ದಪ್ಪ – ತೆಳು  (Thick – Thin)
+══════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-1">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#fff9c4)">
+    <div class="banner-emoji">📦</div>
+    <div>
+      <div class="banner-kn">ದಪ್ಪ ಮತ್ತು ತೆಳು</div>
+      <div class="banner-en">Thick and Thin</div>
+      <div class="banner-sub">ವಸ್ತುಗಳ ನಡುವೆ ವ್ಯತ್ಯಾಸ ಗುರುತಿಸೋಣ • Let's spot the difference!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    📦 ದೊಡ್ಡ ಡ್ರಮ್ <strong>ದಪ್ಪ</strong>ವಾಗಿದೆ • The big drum is <strong>Thick</strong><br>
+    🪶 ಸಣ್ಣ ಡ್ರಮ್ <strong>ತೆಳು</strong>ವಾಗಿದೆ • The small drum is <strong>Thin</strong><br>
+    🐘 ಆನೆಯ ಕಾಲು <strong>ದಪ್ಪ</strong> • Elephant's leg is <strong>Thick</strong><br>
+    🪶 ಆನೆಯ ಬಾಲ <strong>ತೆಳು</strong> • Elephant's tail is <strong>Thin</strong>
+  </div>
+
+  <!-- Visual concept -->
+  <div class="concept-box">
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:60px;line-height:1">🥁</div>
+        <div class="concept-label lbl-heavy">ದಪ್ಪ • Thick</div>
+        <div style="font-size:11px;font-weight:700;color:#888;text-align:center">ದೊಡ್ಡ ಡ್ರಮ್<br>Big drum</div>
+      </div>
+      <div class="concept-vs">VS</div>
+      <div class="concept-item">
+        <div style="font-size:36px;line-height:1">🥁</div>
+        <div class="concept-label lbl-light">ತೆಳು • Thin</div>
+        <div style="font-size:11px;font-weight:700;color:#888;text-align:center">ಸಣ್ಣ ಡ್ರಮ್<br>Small drum</div>
+      </div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:50px;line-height:1">🦵</div>
+        <div class="concept-label lbl-heavy">ದಪ್ಪ • Thick</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಆನೆ ಕಾಲು</div>
+      </div>
+      <div class="concept-vs">VS</div>
+      <div class="concept-item">
+        <div style="font-size:30px;line-height:1">〰️</div>
+        <div class="concept-label lbl-light">ತೆಳು • Thin</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಆನೆ ಬಾಲ</div>
+      </div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:50px;line-height:1">🪢</div>
+        <div class="concept-label lbl-heavy">ದಪ್ಪ • Thick</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಹಗ್ಗ • Rope</div>
+      </div>
+      <div class="concept-vs">VS</div>
+      <div class="concept-item">
+        <div style="font-size:30px;line-height:1">🧵</div>
+        <div class="concept-label lbl-light">ತೆಳು • Thin</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ದಾರ • Thread</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="q-emoji">🪵📏</div>
+      <div class="q-kn">ಯಾವುದು <strong>ದಪ್ಪ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which one is <strong>Thick</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q1',this,true,'f1q1')">
+          <div class="choice-emoji">🪵</div>
+          <div class="choice-kn">ಮರದ ತುಂಡು</div>
+          <div class="choice-sub">Log — Thick</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')">
+          <div class="choice-emoji">🥢</div>
+          <div class="choice-kn">ಕಡ್ಡಿ</div>
+          <div class="choice-sub">Stick — Thin</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="q-emoji">🪢🧵</div>
+      <div class="q-kn">ಹಗ್ಗ ಮತ್ತು ದಾರ — ಯಾವುದು <strong>ತೆಳು</strong>?</div>
+      <div class="q-en">Rope and thread — which is <strong>Thin</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')">
+          <div class="choice-emoji">🪢</div>
+          <div class="choice-kn">ಹಗ್ಗ</div>
+          <div class="choice-sub">Rope — Thick</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q2',this,true,'f1q2')">
+          <div class="choice-emoji">🧵</div>
+          <div class="choice-kn">ದಾರ</div>
+          <div class="choice-sub">Thread — Thin ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="q-emoji">📚🗒️</div>
+      <div class="q-kn">ದೊಡ್ಡ ಪುಸ್ತಕ ಮತ್ತು ತೆಳ್ಳನೆ ಪುಸ್ತಕ — ಯಾವುದು <strong>ದಪ್ಪ</strong>?</div>
+      <div class="q-en">Big book and thin book — which is <strong>Thick</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q3',this,true,'f1q3')">
+          <div class="choice-emoji">📚</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಪುಸ್ತಕ</div>
+          <div class="choice-sub">Big Book — Thick ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')">
+          <div class="choice-emoji">🗒️</div>
+          <div class="choice-kn">ತೆಳ್ಳನೆ ಪುಸ್ತಕ</div>
+          <div class="choice-sub">Thin Book — Thin</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="q-emoji">🐘🐍</div>
+      <div class="q-kn">ಆನೆಯ ಕಾಲು ಮತ್ತು ಹಾವು — ಯಾವುದು <strong>ತೆಳು</strong>?</div>
+      <div class="q-en">Elephant leg and Snake — which is <strong>Thin</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-emoji">🦵</div>
+          <div class="choice-kn">ಆನೆ ಕಾಲು</div>
+          <div class="choice-sub">Elephant Leg — Thick</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,true,'f1q4')">
+          <div class="choice-emoji">🐍</div>
+          <div class="choice-kn">ಹಾವು</div>
+          <div class="choice-sub">Snake — Thin ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="q-emoji">🕯️🕯️</div>
+      <div class="q-kn">ದಪ್ಪ ಮೇಣಬತ್ತಿ ಮತ್ತು ತೆಳ್ಳನೆ ಮೇಣಬತ್ತಿ — ಯಾವುದು <strong>ದಪ್ಪ</strong>?</div>
+      <div class="q-en">Thick candle and thin candle — which is <strong>Thick</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q5',this,true,'f1q5')">
+          <div class="choice-emoji" style="font-size:44px">🕯️</div>
+          <div class="choice-kn">ದಪ್ಪ ಮೇಣಬತ್ತಿ</div>
+          <div class="choice-sub">Thick Candle ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji" style="font-size:26px">🕯️</div>
+          <div class="choice-kn">ತೆಳ್ಳನೆ ಮೇಣಬತ್ತಿ</div>
+          <div class="choice-sub">Thin Candle</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn green" id="btn1" disabled onclick="unlockNext(2)">ಮುಂದೆ ಹೋಗಿ → ಭಾರ–ಹಗುರ ✨</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 : ಭಾರ – ಹಗುರ  (Heavy – Light)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-2">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#e8f5e9)">
+    <div class="banner-emoji">⚖️</div>
+    <div>
+      <div class="banner-kn">ಭಾರ – ಹಗುರ</div>
+      <div class="banner-en">Heavy – Light</div>
+      <div class="banner-sub">ಯಾವ ವಸ್ತು ಭಾರ? ಯಾವುದು ಹಗುರ? • Which is heavy? Which is light?</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🪨 ಕಲ್ಲು <strong>ಭಾರ</strong>ವಾಗಿದೆ • Stone is <strong>Heavy</strong><br>
+    🌿 ಮರದ ತುಂಡು <strong>ಹಗುರ</strong>ವಾಗಿದೆ • Wood piece is <strong>Light</strong><br>
+    🪶 ಹಕ್ಕಿ ಪುಕ್ಕ <strong>ಹಗುರ</strong> • Bird feather is <strong>Light</strong><br>
+    🧸 ಗೊಂಬೆಯು <strong>ಭಾರ</strong> • Teddy bear is <strong>Heavy</strong><br>
+    🎃 ಕುಂಬಳಕಾಯಿ <strong>ಭಾರ</strong> • Pumpkin is <strong>Heavy</strong><br>
+    🍊 ಕಿತ್ತಲೇಹಣ್ಣು <strong>ಹಗುರ</strong> • Orange is <strong>Light</strong>
+  </div>
+
+  <!-- Concept visual -->
+  <div class="concept-box">
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:56px;line-height:1">🪨</div>
+        <div class="concept-label lbl-heavy">ಭಾರ • Heavy</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಕಲ್ಲು • Stone</div>
+      </div>
+      <div class="concept-vs">VS</div>
+      <div class="concept-item">
+        <div style="font-size:48px;line-height:1">🌿</div>
+        <div class="concept-label lbl-light">ಹಗುರ • Light</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಮರ ತುಂಡು</div>
+      </div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:56px;line-height:1">🎃</div>
+        <div class="concept-label lbl-heavy">ಭಾರ • Heavy</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಕುಂಬಳಕಾಯಿ</div>
+      </div>
+      <div class="concept-vs">VS</div>
+      <div class="concept-item">
+        <div style="font-size:44px;line-height:1">🍊</div>
+        <div class="concept-label lbl-light">ಹಗುರ • Light</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಕಿತ್ತಲೇ</div>
+      </div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-item">
+        <div style="font-size:52px;line-height:1">🧸</div>
+        <div class="concept-label lbl-heavy">ಭಾರ • Heavy</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಗೊಂಬೆ</div>
+      </div>
+      <div class="concept-vs">VS</div>
+      <div class="concept-item">
+        <div style="font-size:44px;line-height:1">🪶</div>
+        <div class="concept-label lbl-light">ಹಗುರ • Light</div>
+        <div style="font-size:11px;font-weight:700;color:#888">ಪುಕ್ಕ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t2q1">
+    <div class="q-top">
+      <div class="q-emoji">🪨🌸</div>
+      <div class="q-kn">ಕಲ್ಲು ಮತ್ತು ಹೂವು — ಯಾವುದು <strong>ಭಾರ</strong>?</div>
+      <div class="q-en">Stone and Flower — which is <strong>Heavy</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q1',this,true,'f2q1')">
+          <div class="choice-emoji">🪨</div>
+          <div class="choice-kn">ಕಲ್ಲು</div>
+          <div class="choice-sub">Stone — Heavy ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಹೂವು</div>
+          <div class="choice-sub">Flower — Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t2q2">
+    <div class="q-top">
+      <div class="q-emoji">🪶🧸</div>
+      <div class="q-kn">ಪುಕ್ಕ ಮತ್ತು ಗೊಂಬೆ — ಯಾವುದು <strong>ಹಗುರ</strong>?</div>
+      <div class="q-en">Feather and Teddy — which is <strong>Light</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q2',this,true,'f2q2')">
+          <div class="choice-emoji">🪶</div>
+          <div class="choice-kn">ಪುಕ್ಕ</div>
+          <div class="choice-sub">Feather — Light ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')">
+          <div class="choice-emoji">🧸</div>
+          <div class="choice-kn">ಗೊಂಬೆ</div>
+          <div class="choice-sub">Teddy — Heavy</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t2q3">
+    <div class="q-top">
+      <div class="q-emoji">🎃🍊</div>
+      <div class="q-kn">ಕುಂಬಳಕಾಯಿ ಮತ್ತು ಕಿತ್ತಲೇ — ಯಾವುದು <strong>ಭಾರ</strong>?</div>
+      <div class="q-en">Pumpkin and Orange — which is <strong>Heavier</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q3',this,true,'f2q3')">
+          <div class="choice-emoji">🎃</div>
+          <div class="choice-kn">ಕುಂಬಳಕಾಯಿ</div>
+          <div class="choice-sub">Pumpkin — Heavy ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')">
+          <div class="choice-emoji">🍊</div>
+          <div class="choice-kn">ಕಿತ್ತಲೇ</div>
+          <div class="choice-sub">Orange — Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t2q4">
+    <div class="q-top">
+      <div class="q-emoji">🐶🐱</div>
+      <div class="q-kn">ನಾಯಿ ಮತ್ತು ಬೆಕ್ಕು — ಯಾವುದು <strong>ಭಾರ</strong>?</div>
+      <div class="q-en">Dog and Cat — which is <strong>Heavier</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q4',this,true,'f2q4')">
+          <div class="choice-emoji">🐶</div>
+          <div class="choice-kn">ನಾಯಿ</div>
+          <div class="choice-sub">Dog — Heavier ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')">
+          <div class="choice-emoji">🐱</div>
+          <div class="choice-kn">ಬೆಕ್ಕು</div>
+          <div class="choice-sub">Cat — Lighter</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t2q5">
+    <div class="q-top">
+      <div class="q-emoji">⚽🔵</div>
+      <div class="q-kn">ಫುಟ್‌ಬಾಲ್ ಮತ್ತು ಪ್ಲಾಸ್ಟಿಕ್ ಚೆಂಡು — ಯಾವುದು <strong>ಹಗುರ</strong>?</div>
+      <div class="q-en">Football and Plastic ball — which is <strong>Lighter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-emoji">⚽</div>
+          <div class="choice-kn">ಫುಟ್‌ಬಾಲ್</div>
+          <div class="choice-sub">Football — Heavy</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,true,'f2q5')">
+          <div class="choice-emoji">🔵</div>
+          <div class="choice-kn">ಪ್ಲಾಸ್ಟಿಕ್ ಚೆಂಡು</div>
+          <div class="choice-sub">Plastic Ball — Light ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t2q6">
+    <div class="q-top">
+      <div class="q-emoji">📚📚</div>
+      <div class="q-kn">ದೊಡ್ಡ ಪುಸ್ತಕ ಮತ್ತು ಸಣ್ಣ ಪುಸ್ತಕ — ಯಾವುದು <strong>ಭಾರ</strong>?</div>
+      <div class="q-en">Big book and Small book — which is <strong>Heavier</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q6',this,true,'f2q6')">
+          <div class="choice-emoji" style="font-size:40px">📚</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಪುಸ್ತಕ</div>
+          <div class="choice-sub">Big Book — Heavy ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q6',this,false,'f2q6')">
+          <div class="choice-emoji" style="font-size:24px">📗</div>
+          <div class="choice-kn">ಸಣ್ಣ ಪುಸ್ತಕ</div>
+          <div class="choice-sub">Small Book — Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn green" id="btn2" disabled onclick="unlockNext(3)">ಮುಂದೆ ಹೋಗಿ → ಗುರುತಿಸು ✨</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 : ಗುರುತಿಸು  (Identify Heavy / Light)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-3">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#e8f5e9)">
+    <div class="banner-emoji">🔍</div>
+    <div>
+      <div class="banner-kn">ಭಾರ ಅಥವಾ ಹಗುರ?</div>
+      <div class="banner-en">Heavy or Light? Identify!</div>
+      <div class="banner-sub">ಪ್ರತಿ ವಸ್ತು ನೋಡಿ ಆರಿಸಿ • Look at each object and choose!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    💡 ಭಾರವಾದ ವಸ್ತುಗಳು: 🪨ಕಲ್ಲು, 🎃ಕುಂಬಳ, 🐶ನಾಯಿ, 🧸ಗೊಂಬೆ, 🔒ಬೀಗ, 🪣ಬಕೆಟ್<br>
+    💡 ಹಗುರ ವಸ್ತುಗಳು: 🪶ಪುಕ್ಕ, 🍊ಕಿತ್ತಲೇ, 🗝️ಕೀ, 🖍️ಕ್ರೆಯಾನ್, 🧴ಬಾಟಲಿ
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t3q1">
+    <div class="q-top">
+      <div class="q-emoji">🪣</div>
+      <div class="q-kn">ನೀರು ತುಂಬಿದ ಬಕೆಟ್ <strong>ಭಾರ</strong>ವೋ ಅಥವಾ <strong>ಹಗುರ</strong>ವೋ?</div>
+      <div class="q-en">A bucket full of water — <strong>Heavy</strong> or <strong>Light</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q1',this,true,'f3q1')">
+          <div class="choice-emoji">⬇️🪣</div>
+          <div class="choice-kn">ಭಾರ</div>
+          <div class="choice-sub">Heavy ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')">
+          <div class="choice-emoji">⬆️🪣</div>
+          <div class="choice-kn">ಹಗುರ</div>
+          <div class="choice-sub">Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t3q2">
+    <div class="q-top">
+      <div class="q-emoji">🗝️</div>
+      <div class="q-kn">ಒಂದು ಚಾವಿ (Key) <strong>ಭಾರ</strong>ವೋ ಅಥವಾ <strong>ಹಗುರ</strong>ವೋ?</div>
+      <div class="q-en">A key — <strong>Heavy</strong> or <strong>Light</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">⬇️🗝️</div>
+          <div class="choice-kn">ಭಾರ</div>
+          <div class="choice-sub">Heavy</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,true,'f3q2')">
+          <div class="choice-emoji">⬆️🗝️</div>
+          <div class="choice-kn">ಹಗುರ</div>
+          <div class="choice-sub">Light ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t3q3">
+    <div class="q-top">
+      <div class="q-emoji">🔒</div>
+      <div class="q-kn">ಒಂದು ಬೀಗ (Lock) <strong>ಭಾರ</strong>ವೋ ಅಥವಾ <strong>ಹಗುರ</strong>ವೋ?</div>
+      <div class="q-en">A lock — <strong>Heavy</strong> or <strong>Light</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q3',this,true,'f3q3')">
+          <div class="choice-emoji">⬇️🔒</div>
+          <div class="choice-kn">ಭಾರ</div>
+          <div class="choice-sub">Heavy ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">⬆️🔒</div>
+          <div class="choice-kn">ಹಗುರ</div>
+          <div class="choice-sub">Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t3q4">
+    <div class="q-top">
+      <div class="q-emoji">🖍️</div>
+      <div class="q-kn">ಒಂದು ಕ್ರೆಯಾನ್ — <strong>ಭಾರ</strong>ವೋ ಅಥವಾ <strong>ಹಗುರ</strong>ವೋ?</div>
+      <div class="q-en">One crayon — <strong>Heavy</strong> or <strong>Light</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')">
+          <div class="choice-emoji">⬇️🖍️</div>
+          <div class="choice-kn">ಭಾರ</div>
+          <div class="choice-sub">Heavy</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q4',this,true,'f3q4')">
+          <div class="choice-emoji">⬆️🖍️</div>
+          <div class="choice-kn">ಹಗುರ</div>
+          <div class="choice-sub">Light ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t3q5">
+    <div class="q-top">
+      <div class="q-emoji">📦🖍️</div>
+      <div class="q-kn">ಕ್ರೆಯಾನ್ ಡಬ್ಬ (box of crayons) — <strong>ಭಾರ</strong>ವೋ ಅಥವಾ <strong>ಹಗುರ</strong>ವೋ?</div>
+      <div class="q-en">A box of many crayons — <strong>Heavy</strong> or <strong>Light</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q5',this,true,'f3q5')">
+          <div class="choice-emoji">⬇️📦</div>
+          <div class="choice-kn">ಭಾರ</div>
+          <div class="choice-sub">Heavy ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')">
+          <div class="choice-emoji">⬆️📦</div>
+          <div class="choice-kn">ಹಗುರ</div>
+          <div class="choice-sub">Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t3q6">
+    <div class="q-top">
+      <div class="q-emoji">🍎🍃</div>
+      <div class="q-kn">ಸೇಬು ಮತ್ತು ಎಲೆ — ಯಾವುದು <strong>ಹಗುರ</strong>?</div>
+      <div class="q-en">Apple and Leaf — which is <strong>Lighter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q6',this,false,'f3q6')">
+          <div class="choice-emoji">🍎</div>
+          <div class="choice-kn">ಸೇಬು</div>
+          <div class="choice-sub">Apple — Heavier</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q6',this,true,'f3q6')">
+          <div class="choice-emoji">🍃</div>
+          <div class="choice-kn">ಎಲೆ</div>
+          <div class="choice-sub">Leaf — Lighter ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn green" id="btn3" disabled onclick="unlockNext(4)">ಮುಂದೆ ಹೋಗಿ → ಅಭ್ಯಾಸ ✨</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 : ಅಭ್ಯಾಸ  (Final Mix Practice)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-4">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#e8f5e9)">
+    <div class="banner-emoji">🎯</div>
+    <div>
+      <div class="banner-kn">ಎಲ್ಲಾ ಕಲಿತದ್ದನ್ನು ಪ್ರಯತ್ನಿಸಿ!</div>
+      <div class="banner-en">Final Practice — All Together!</div>
+      <div class="banner-sub">ದಪ್ಪ–ತೆಳು, ಭಾರ–ಹಗುರ • Thick–Thin, Heavy–Light</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t4q1">
+    <div class="q-top">
+      <div class="q-emoji">🐘🦜</div>
+      <div class="q-kn">ಆನೆ ಮತ್ತು ಗಿಣಿ — ಯಾವುದು <strong>ಭಾರ</strong>?</div>
+      <div class="q-en">Elephant and Parrot — which is <strong>Heavier</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q1',this,true,'f4q1')">
+          <div class="choice-emoji">🐘</div>
+          <div class="choice-kn">ಆನೆ</div>
+          <div class="choice-sub">Elephant — Heaviest! ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')">
+          <div class="choice-emoji">🦜</div>
+          <div class="choice-kn">ಗಿಣಿ</div>
+          <div class="choice-sub">Parrot — Light</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t4q2">
+    <div class="q-top">
+      <div class="q-emoji">🧴🪣</div>
+      <div class="q-kn">ಖಾಲಿ ಬಾಟಲಿ ಮತ್ತು ನೀರು ತುಂಬಿದ ಬಕೆಟ್ — ಯಾವುದು <strong>ಹಗುರ</strong>?</div>
+      <div class="q-en">Empty bottle and full bucket — which is <strong>Lighter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q2',this,true,'f4q2')">
+          <div class="choice-emoji">🧴</div>
+          <div class="choice-kn">ಖಾಲಿ ಬಾಟಲಿ</div>
+          <div class="choice-sub">Empty Bottle — Lighter ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')">
+          <div class="choice-emoji">🪣</div>
+          <div class="choice-kn">ನೀರು ಬಕೆಟ್</div>
+          <div class="choice-sub">Water Bucket — Heavy</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t4q3">
+    <div class="q-top">
+      <div class="q-emoji">🎋🥢</div>
+      <div class="q-kn">ಬಿದಿರಿನ ಕಂಬ ಮತ್ತು ತೀಲಿ — ಯಾವುದು <strong>ದಪ್ಪ</strong>?</div>
+      <div class="q-en">Bamboo pole and toothpick — which is <strong>Thick</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q3',this,true,'f4q3')">
+          <div class="choice-emoji">🎋</div>
+          <div class="choice-kn">ಬಿದಿರು ಕಂಬ</div>
+          <div class="choice-sub">Bamboo — Thick ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,false,'f4q3')">
+          <div class="choice-emoji">🥢</div>
+          <div class="choice-kn">ತೀಲಿ</div>
+          <div class="choice-sub">Toothpick — Thin</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t4q4">
+    <div class="q-top">
+      <div class="q-emoji">🧲🪶</div>
+      <div class="q-kn">ಕಬ್ಬಿಣದ ಮ್ಯಾಗ್ನೆಟ್ ಮತ್ತು ಗರಿ — ಯಾವುದು <strong>ಹಗುರ</strong>?</div>
+      <div class="q-en">Iron magnet and feather — which is <strong>Lighter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-emoji">🧲</div>
+          <div class="choice-kn">ಮ್ಯಾಗ್ನೆಟ್</div>
+          <div class="choice-sub">Magnet — Heavy</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,true,'f4q4')">
+          <div class="choice-emoji">🪶</div>
+          <div class="choice-kn">ಗರಿ</div>
+          <div class="choice-sub">Feather — Light ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t4q5">
+    <div class="q-top">
+      <div class="q-emoji">🧴🪣</div>
+      <div class="q-kn">ಸಾಬೂನು ದಪ್ಪ ಇರುವ ಚಕ್ಕೆ ಮತ್ತು ತೆಳ್ಳನ ಚಕ್ಕೆ — ಯಾವುದು <strong>ದಪ್ಪ</strong>?</div>
+      <div class="q-en">Big soap and small flat soap — which is <strong>Thick</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q5',this,true,'f4q5')">
+          <div class="choice-emoji" style="font-size:44px">🧼</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಸಾಬೂನು</div>
+          <div class="choice-sub">Big Soap — Thick ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')">
+          <div class="choice-emoji" style="font-size:26px">🧼</div>
+          <div class="choice-kn">ಸಣ್ಣ ಸಾಬೂನು</div>
+          <div class="choice-sub">Small Soap — Thin</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6: 4-choice mix -->
+  <div class="q-card" id="t4q6">
+    <div class="q-top">
+      <div class="q-emoji">🪨🪶🎃🍃</div>
+      <div class="q-kn">ಈ ನಾಲ್ಕರಲ್ಲಿ ಅತ್ಯಂತ <strong>ಹಗುರ</strong>ವಾದ ವಸ್ತು ಯಾವುದು?</div>
+      <div class="q-en">Among these four — which is the <strong>Lightest</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-emoji">🪨</div>
+          <div class="choice-kn">ಕಲ್ಲು</div>
+          <div class="choice-sub">Stone</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,true,'f4q6')">
+          <div class="choice-emoji">🪶</div>
+          <div class="choice-kn">ಗರಿ</div>
+          <div class="choice-sub">Feather ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-emoji">🎃</div>
+          <div class="choice-kn">ಕುಂಬಳ</div>
+          <div class="choice-sub">Pumpkin</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-emoji">🍊</div>
+          <div class="choice-kn">ಕಿತ್ತಲೇ</div>
+          <div class="choice-sub">Orange</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="t4q7">
+    <div class="q-top">
+      <div class="q-emoji">🪴🌳</div>
+      <div class="q-kn">ಸಣ್ಣ ಗಿಡ ಮತ್ತು ದೊಡ್ಡ ಮರ — ಯಾವುದು <strong>ಭಾರ</strong>?</div>
+      <div class="q-en">Small plant and Big tree — which is <strong>Heavier</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q7',this,false,'f4q7')">
+          <div class="choice-emoji">🪴</div>
+          <div class="choice-kn">ಸಣ್ಣ ಗಿಡ</div>
+          <div class="choice-sub">Small Plant — Lighter</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q7',this,true,'f4q7')">
+          <div class="choice-emoji">🌳</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಮರ</div>
+          <div class="choice-sub">Big Tree — Heavier ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q7"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn green" id="btn4" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಸಿ! Finish Lesson!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- Lock Toast -->
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಅದ್ಭುತ! ಭಲೇ!</div>
+    <div class="celeb-sub">ನೀವು ಪಾಠ 16 ಮುಗಿಸಿದಿರಿ!<br>You finished Lesson 16 — ತೂಕ!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="big-btn green" onclick="document.getElementById('celeb').classList.remove('show')">ಮತ್ತೆ ಆಟವಾಡಿ 🔄</button>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────
+let totalStars = 0;
+let activeTab  = 1;
+let unlockedTab = 1;
+
+const totals = {1:5, 2:6, 3:6, 4:7};
+const done   = {1:0, 2:0, 3:0, 4:0};
+
+Object.keys(totals).forEach(t => buildDots('score'+t, 0, totals[t]));
+
+function buildDots(id, d, total) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'sdot' + (i < d ? ' done' : '');
+    el.appendChild(dot);
+  }
+}
+
+function updateProgress() {
+  const totalQ = Object.values(totals).reduce((a,b)=>a+b,0);
+  const doneQ  = Object.values(done).reduce((a,b)=>a+b,0);
+  document.getElementById('progFill').style.width = (doneQ/totalQ*100)+'%';
+}
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starsPill').textContent = '⭐ ' + totalStars;
+}
+
+// ── TAB NAVIGATION ─────────────────────────────
+function tryTab(n) {
+  if (n <= unlockedTab) { goTab(n); }
+  else {
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    setTimeout(()=> btn.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function goTab(n) {
+  document.getElementById('tab-'+activeTab).classList.remove('active');
+  const prevBtn = document.getElementById('tab-btn-'+activeTab);
+  prevBtn.classList.remove('active');
+  if (n > activeTab) prevBtn.classList.add('done');
+  activeTab = n;
+  if (n > unlockedTab) unlockedTab = n;
+  const btn = document.getElementById('tab-btn-'+n);
+  btn.classList.remove('locked','unlocked','done');
+  btn.classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function unlockNext(n) {
+  const nextBtn = document.getElementById('tab-btn-'+n);
+  nextBtn.classList.remove('locked');
+  nextBtn.classList.add('unlocked');
+  unlockedTab = n;
+  goTab(n);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+// ── ANSWER ─────────────────────────────────────
+function ansQ(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o=>{ o.classList.add('disabled'); o.style.pointerEvents='none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ! Well done!';
+    card.classList.add('done');
+    card.dataset.done = '1';
+    addStars(1);
+    // extract tab number from cardId e.g. t2q3 → 2
+    const tnum = parseInt(cardId.charAt(1));
+    done[tnum]++;
+    buildDots('score'+tnum, done[tnum], totals[tnum]);
+    if (done[tnum] >= totals[tnum]) document.getElementById('btn'+tnum).disabled = false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className = 'fb no';
+    fb.textContent = '❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(()=>{
+      opts.forEach(o=>{ o.classList.remove('disabled'); o.style.pointerEvents=''; });
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className = 'fb';
+    }, 900);
+  }
+}
+
+function finishLesson() {
+  const n = Math.max(3, Math.min(10, Math.floor(totalStars/3)));
+  document.getElementById('celebStars').textContent = '⭐'.repeat(n);
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

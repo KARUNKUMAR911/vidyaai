@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 1 • Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #e64a19;
+    --deep:    #bf360c;
+    --gold:    #f9a825;
+    --cream:   #fff8f0;
+    --ink:     #1a1a2e;
+    --muted:   #6b7280;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #bf360c 0%, #e64a19 55%, #f9a825 100%);
+    padding: 36px 20px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.38);
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 30px;
+    margin-bottom: 18px;
+  }
+  .header-icon { font-size: 60px; display: block; margin-bottom: 10px; }
+  .header h1 {
+    font-family: 'Baloo Tamma 2', cursive;
+    font-size: clamp(24px, 6vw, 38px);
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.18);
+  }
+  .header h1 span {
+    display: block;
+    font-size: 0.6em;
+    font-weight: 600;
+    opacity: 0.88;
+    margin-top: 2px;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    padding: 24px 16px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--muted);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  /* CHAPTER LIST */
+  .chapters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 16px 48px;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.35s ease both;
+  }
+  .card:hover  { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+  .card:active { transform: scale(0.98); }
+
+  .card-accent {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    border-radius: 20px 0 0 20px;
+    background: var(--acc);
+  }
+
+  .card-icon {
+    width: 46px; height: 46px;
+    border-radius: 13px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .card-body { flex: 1; min-width: 0; }
+
+  .card-num {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--muted);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .card-kn {
+    font-family: 'Baloo Tamma 2', cursive;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .card-en {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .card-arrow { font-size: 18px; color: #d1d5db; flex-shrink: 0; }
+
+  /* Per-chapter colors */
+  .c1  { --acc:#e91e63; --bg:#fce4ec; }
+  .c2  { --acc:#ff6f00; --bg:#fff3e0; }
+  .c3  { --acc:#2e7d32; --bg:#e8f5e9; }
+  .c4  { --acc:#1565c0; --bg:#e3f2fd; }
+  .c5  { --acc:#6a1b9a; --bg:#f3e5f5; }
+  .c6  { --acc:#bf360c; --bg:#fbe9e7; }
+  .c7  { --acc:#00796b; --bg:#e0f7fa; }
+  .c8  { --acc:#827717; --bg:#f9fbe7; }
+  .c9  { --acc:#e91e63; --bg:#fce4ec; }
+  .c10 { --acc:#2e7d32; --bg:#e8f5e9; }
+  .c11 { --acc:#ff6f00; --bg:#fff3e0; }
+  .c12 { --acc:#1565c0; --bg:#e3f2fd; }
+  .c13 { --acc:#6a1b9a; --bg:#f3e5f5; }
+  .c14 { --acc:#bf360c; --bg:#fbe9e7; }
+  .c15 { --acc:#00796b; --bg:#e0f7fa; }
+  .c16 { --acc:#827717; --bg:#f9fbe7; }
+  .c17 { --acc:#e91e63; --bg:#fce4ec; }
+  .c18 { --acc:#2e7d32; --bg:#e8f5e9; }
+  .c19 { --acc:#ff6f00; --bg:#fff3e0; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .card:nth-child(1)  { animation-delay:.04s }
+  .card:nth-child(2)  { animation-delay:.08s }
+  .card:nth-child(3)  { animation-delay:.12s }
+  .card:nth-child(4)  { animation-delay:.16s }
+  .card:nth-child(5)  { animation-delay:.20s }
+  .card:nth-child(6)  { animation-delay:.24s }
+  .card:nth-child(7)  { animation-delay:.28s }
+  .card:nth-child(8)  { animation-delay:.32s }
+  .card:nth-child(9)  { animation-delay:.36s }
+  .card:nth-child(10) { animation-delay:.40s }
+  .card:nth-child(11) { animation-delay:.44s }
+  .card:nth-child(12) { animation-delay:.48s }
+  .card:nth-child(13) { animation-delay:.52s }
+  .card:nth-child(14) { animation-delay:.56s }
+  .card:nth-child(15) { animation-delay:.60s }
+  .card:nth-child(16) { animation-delay:.64s }
+  .card:nth-child(17) { animation-delay:.68s }
+  .card:nth-child(18) { animation-delay:.72s }
+  .card:nth-child(19) { animation-delay:.76s }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">📚 VidyaAI</div>
+  <span class="header-icon">🔢</span>
+  <h1>
+    ೧ನೇ ತರಗತಿ ಗಣಿತ
+    <span>Class 1 • Mathematics</span>
+  </h1>
+</div>
+
+<div class="section-label">📐 All Chapters</div>
+
+<div class="chapters-list">
+
+  <a href="/class/1/kannada/maths/lesson1" class="card c1">
+    <div class="card-accent"></div>
+    <div class="card-icon">🧭</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 01</div>
+      <div class="card-kn">ಸ್ಥಳಾವಕಾಶದ ಅರಿವು</div>
+      <div class="card-en">Spatial Understanding</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson2" class="card c2">
+    <div class="card-accent"></div>
+    <div class="card-icon">🔷</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 02</div>
+      <div class="card-kn">ಆಕಾರಗಳು</div>
+      <div class="card-en">Solids Around Us</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson3" class="card c3">
+    <div class="card-accent"></div>
+    <div class="card-icon">🔢</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 03</div>
+      <div class="card-kn">ಸಂಖ್ಯೆಗಳು (1 ರಿಂದ 9)</div>
+      <div class="card-en">Digits 1 to 9</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson4" class="card c4">
+    <div class="card-accent"></div>
+    <div class="card-icon">0️⃣</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 04</div>
+      <div class="card-kn">ಸೊನ್ನೆ</div>
+      <div class="card-en">Zero</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson5" class="card c5">
+    <div class="card-accent"></div>
+    <div class="card-icon">➕</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 05</div>
+      <div class="card-kn">ಸಂಕಲನ (ಮೊತ್ತ 9 ರವರೆಗೆ)</div>
+      <div class="card-en">Addition (Sum ≤ 9)</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson6" class="card c6">
+    <div class="card-accent"></div>
+    <div class="card-icon">➖</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 06</div>
+      <div class="card-kn">ವ್ಯವಕಲನ (ವ್ಯತ್ಯಾಸ 9 ರವರೆಗೆ)</div>
+      <div class="card-en">Subtraction (Diff ≤ 9)</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson7" class="card c7">
+    <div class="card-accent"></div>
+    <div class="card-icon">🔟</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 07</div>
+      <div class="card-kn">ಸಂಖ್ಯೆ 10</div>
+      <div class="card-en">Number 10</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson8" class="card c8">
+    <div class="card-accent"></div>
+    <div class="card-icon">🏗️</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 08</div>
+      <div class="card-kn">ಬಿಡಿ ಮತ್ತು ಹತ್ತರ ಗುಂಪುಗಳು</div>
+      <div class="card-en">Units and Tens</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson9" class="card c9">
+    <div class="card-accent"></div>
+    <div class="card-icon">🔢</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 09</div>
+      <div class="card-kn">ಸಂಖ್ಯೆಗಳು 11 ರಿಂದ 20</div>
+      <div class="card-en">Numbers 11 to 20</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson10" class="card c10">
+    <div class="card-accent"></div>
+    <div class="card-icon">➕</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 10</div>
+      <div class="card-kn">ಸಂಕಲನ (ಮೊತ್ತ 20 ಮೀರದಂತೆ)</div>
+      <div class="card-en">Addition (Sum ≤ 20)</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson11" class="card c11">
+    <div class="card-accent"></div>
+    <div class="card-icon">➖</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 11</div>
+      <div class="card-kn">ವ್ಯವಕಲನ (ವ್ಯತ್ಯಾಸ 20 ಮೀರದಂತೆ)</div>
+      <div class="card-en">Subtraction (Diff ≤ 20)</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson12" class="card c12">
+    <div class="card-accent"></div>
+    <div class="card-icon">💯</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 12</div>
+      <div class="card-kn">ಸಂಖ್ಯೆಗಳು (21 ರಿಂದ 99)</div>
+      <div class="card-en">Numbers 21 to 99</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson13" class="card c13">
+    <div class="card-accent"></div>
+    <div class="card-icon">🧠</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 13</div>
+      <div class="card-kn">ಮಾನಸಿಕ ಲೆಕ್ಕಾಚಾರ</div>
+      <div class="card-en">Mental Arithmetic</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson14" class="card c14">
+    <div class="card-accent"></div>
+    <div class="card-icon">💰</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 14</div>
+      <div class="card-kn">ಹಣ</div>
+      <div class="card-en">Money</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson15" class="card c15">
+    <div class="card-accent"></div>
+    <div class="card-icon">📏</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 15</div>
+      <div class="card-kn">ಉದ್ದ</div>
+      <div class="card-en">Length</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson16" class="card c16">
+    <div class="card-accent"></div>
+    <div class="card-icon">⚖️</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 16</div>
+      <div class="card-kn">ತೂಕ</div>
+      <div class="card-en">Weight</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson17" class="card c17">
+    <div class="card-accent"></div>
+    <div class="card-icon">🕐</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 17</div>
+      <div class="card-kn">ಕಾಲ</div>
+      <div class="card-en">Time</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+  <a href="/class/1/kannada/maths/lesson18" class="card c18">
+    <div class="card-accent"></div>
+    <div class="card-icon">📊</div>
+    <div class="card-body">
+      <div class="card-num">Chapter 18</div>
+      <div class="card-kn">ದತ್ತಾಂಶಗಳ ಜೋಡಣೆ</div>
+      <div class="card-en">Data Handling</div>
+    </div>
+    <div class="card-arrow">›</div>
+  </a>
+
+</div>
+
+</body>
+</html>

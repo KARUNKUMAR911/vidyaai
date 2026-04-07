@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 4: ಸೊನ್ನೆ (0)</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#e8f5e9;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:17px;color:#fff;font-weight:900;letter-spacing:.3px}
+.stars-pill{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:13px;font-weight:900;cursor:pointer}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1b5e20,#2e7d32,#66bb6a);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.9);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.12);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#e0e0e0;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#1b5e20,#66bb6a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* TABS BAR */
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#2e7d32;border-color:#a5d6a7}
+.step-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32;box-shadow:0 4px 14px rgba(46,125,50,.4)}
+.step-tab.done{background:#f1f8e9;color:#2e7d32;border-color:#388e3c}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1b5e20;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONTENT */
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:56px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.5}
+
+/* ZERO SHOWCASE */
+.zero-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);overflow:hidden;border-left:6px solid #2e7d32}
+.zero-inner{padding:20px;display:flex;align-items:center;gap:16px}
+.zero-big{font-size:90px;font-weight:900;color:#2e7d32;line-height:1;min-width:100px;text-align:center;flex-shrink:0}
+.zero-kn-word{font-size:32px;font-weight:900;color:#333;margin-bottom:6px}
+.zero-def{font-size:14px;font-weight:700;color:#555;line-height:1.7}
+
+/* SCENE CARD - shows picture story */
+.scene-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,.09);overflow:hidden;border:3px solid #c8e6c9}
+.scene-header{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);padding:12px 16px;font-size:15px;font-weight:900;color:#2e7d32}
+.scene-body{padding:14px 16px}
+.scene-row{display:flex;gap:10px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.scene-row::-webkit-scrollbar{display:none}
+.scene-box{flex-shrink:0;background:#f9fbe7;border-radius:16px;padding:12px 10px;text-align:center;border:3px solid #c8e6c9;min-width:72px}
+.scene-box .sb-emoji{font-size:32px;display:block;margin-bottom:4px;line-height:1}
+.scene-box .sb-num{font-size:22px;font-weight:900;color:#2e7d32;margin-bottom:2px}
+.scene-box .sb-kn{font-size:11px;font-weight:700;color:#888}
+.scene-box.zero-box{background:#ffebee;border-color:#ef9a9a}
+.scene-box.zero-box .sb-num{color:#c62828}
+
+/* STORY HIGHLIGHT */
+.story-box{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:3px solid #a5d6a7;border-radius:18px;padding:14px 16px;margin-bottom:12px;font-size:14px;font-weight:700;color:#333;line-height:1.8}
+.story-kn{font-size:16px;font-weight:900;color:#1b5e20;margin-bottom:6px}
+.story-highlight{background:#c8e6c9;border-radius:10px;padding:8px 14px;font-size:18px;font-weight:900;color:#1b5e20;text-align:center;margin-top:8px}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#388e3c;background:#f1f8e9}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px;display:flex;align-items:center;gap:14px}
+.q-vis{font-size:44px;line-height:1;flex-shrink:0;text-align:center;min-width:64px}
+.q-label{font-size:11px;font-weight:900;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-kn{font-size:16px;font-weight:900;color:#444;line-height:1.5;margin-bottom:3px}
+.q-en{font-size:13px;font-weight:700;color:#888}
+.q-bottom{border-top:2px dashed #e8e8e8;padding:12px 14px}
+
+/* CHOICE BUTTONS */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #a5d6a7;background:#f1f8e9;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-icon{font-size:30px;line-height:1}
+.choice-kn{font-size:22px;font-weight:900;color:#2e7d32}
+.choice-en{font-size:12px;font-weight:700;color:#388e3c}
+.choice.correct{border-color:#2e7d32;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+/* FEEDBACK */
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#e8f5e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* BIG BUTTON */
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.green{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff}
+.big-btn.green:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* MATCH GAME */
+.match-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.match-title{font-size:15px;font-weight:900;color:#2e7d32;margin-bottom:14px;text-align:center}
+.match-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:10px}
+.match-left{display:flex;flex-direction:column;gap:10px}
+.match-right{display:flex;flex-direction:column;gap:10px}
+.match-item{background:#f1f8e9;border:3px solid #a5d6a7;border-radius:16px;padding:12px;text-align:center;cursor:pointer;font-size:20px;font-weight:900;color:#2e7d32;user-select:none;transition:all .2s;min-height:54px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px}
+.match-item:active{transform:scale(.92)}
+.match-item.selected{border-color:#2e7d32;background:#c8e6c9}
+.match-item.matched{border-color:#1b5e20;background:#a5d6a7;pointer-events:none}
+.match-item.wrong-match{border-color:#c62828;background:#ffcdd2;animation:wobble .4s ease}
+
+/* TRACING PRACTICE */
+.trace-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.trace-title{font-size:15px;font-weight:900;color:#2e7d32;text-align:center;margin-bottom:12px}
+.trace-grid{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.trace-box{width:56px;height:56px;border-radius:14px;border:3px solid #a5d6a7;background:#f1f8e9;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#2e7d32;cursor:pointer;transition:all .3s;user-select:none;position:relative}
+.trace-box:first-child{background:#2e7d32;color:#fff;border-color:#2e7d32;animation:pulse-green 2s infinite}
+.trace-box.dotted{color:#c8e6c9;background:#f9fbe7}
+.trace-box.filled{background:#c8e6c9;color:#2e7d32;border-color:#388e3c;animation:popIn .3s ease}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,.4)}50%{box-shadow:0 0 0 8px rgba(46,125,50,0)}}
+
+/* EMPTY/FULL COMPARISON */
+.compare-wrap{margin-bottom:14px}
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.compare-item{background:#fff;border-radius:20px;padding:14px 10px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.09);border:3px solid #a5d6a7}
+.compare-item .ci-emoji{font-size:44px;display:block;margin-bottom:8px;min-height:52px;line-height:52px}
+.compare-item .ci-num{font-size:28px;font-weight:900;color:#2e7d32;margin-bottom:3px}
+.compare-item .ci-kn{font-size:13px;font-weight:700;color:#888}
+.compare-item.zero-item{border-color:#ef9a9a}
+.compare-item.zero-item .ci-num{color:#c62828}
+
+/* QUIZ WRAP */
+.quiz-wrap{background:#fff;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.quiz-q{font-size:18px;font-weight:900;color:#2e7d32;text-align:center;margin-bottom:16px;line-height:1.5}
+.quiz-vis{font-size:48px;text-align:center;margin-bottom:12px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{background:#f1f8e9;border:3px solid #a5d6a7;border-radius:16px;padding:18px 8px;text-align:center;cursor:pointer;transition:all .18s;font-size:26px;font-weight:900;color:#2e7d32;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none}
+.quiz-opt-sub{font-size:12px;font-weight:700;color:#388e3c}
+.quiz-opt:active{transform:scale(.92)}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;pointer-events:none}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none}
+
+/* SEC HEAD */
+.sec-head{font-size:13px;font-weight:900;color:#2e7d32;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-left:4px}
+
+/* INFO BOX */
+.info-box{background:linear-gradient(135deg,#f1f8e9,#e8f5e9);border:3px solid #a5d6a7;border-radius:20px;padding:16px;margin-bottom:14px}
+.info-box-title{font-size:15px;font-weight:900;color:#2e7d32;margin-bottom:8px}
+.info-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:14px;font-weight:700;color:#555}
+.info-row .bullet{font-size:18px}
+
+/* ACT CARD */
+.act-card{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 4px 18px rgba(0,0,0,.09);border-top:5px solid #2e7d32}
+.act-title{font-size:16px;font-weight:900;color:#2e7d32;margin-bottom:12px}
+.act-sub{font-size:13px;font-weight:700;color:#888;margin-bottom:10px}
+
+/* SCORE DOTS */
+.score-dots{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap;justify-content:center}
+.sdot{width:16px;height:16px;border-radius:50%;background:#e0e0e0;transition:background .3s}
+.sdot.done{background:#2e7d32}
+
+/* CELEBRATE */
+.celeb{position:fixed;inset:0;background:rgba(27,94,32,.96);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;text-align:center;padding:20px}
+.celeb.show{opacity:1;pointer-events:all}
+.celeb-e{font-size:90px;margin-bottom:12px;animation:float 2s ease-in-out infinite}
+.celeb-t{font-size:30px;font-weight:900;color:#fff;margin-bottom:8px}
+.celeb-s{font-size:15px;color:rgba(255,255,255,.9);font-weight:700;margin-bottom:8px;line-height:1.6}
+.celeb-stars{font-size:22px;color:#ffd700;font-weight:900;margin-bottom:28px}
+.celeb-btn{background:#ffd700;color:#1b5e20;font-family:'Baloo Tamma 2',sans-serif;font-size:20px;font-weight:900;padding:16px 44px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+/* ROPE GAME */
+.rope-stage{background:#e8f5e9;border-radius:20px;padding:16px;margin-bottom:14px;text-align:center}
+.rope-vis{font-size:28px;margin-bottom:10px;min-height:40px;line-height:1.4}
+.rope-count{font-size:60px;font-weight:900;color:#2e7d32;margin:8px 0}
+.rope-kn{font-size:20px;font-weight:900;color:#555;margin-bottom:12px}
+.rope-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.rope-btn{background:#2e7d32;color:#fff;border:none;border-radius:16px;padding:14px 24px;font-family:'Baloo Tamma 2',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .2s;user-select:none}
+.rope-btn:active{transform:scale(.92)}
+.rope-btn.remove{background:#c62828}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="back-btn" onclick="history.back()">← ಹಿಂದೆ</button>
+  <div class="topbar-title">🔢 ಗಣಿತ — ತರಗತಿ 1</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">0️⃣</span>
+  <h1>ಪಾಠ 4: ಸೊನ್ನೆ (0)</h1>
+  <p>Zero · ಮಾತ್ರ ಟ್ಯಾಪ್ ಮಾಡಿ, ಟೈಪ್ ಬೇಡ! · No typing needed!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS BAR -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="0" onclick="tryTab(0)">📖 ಕಲಿಯೋಣ</div>
+  <div class="step-tab locked" data-tab="1" onclick="tryTab(1)">🪡 ದಾರ ಆಟ</div>
+  <div class="step-tab locked" data-tab="2" onclick="tryTab(2)">🧺 ಬುಟ್ಟಿ ಆಟ</div>
+  <div class="step-tab locked" data-tab="3" onclick="tryTab(3)">✍️ ಬರಿ 0</div>
+  <div class="step-tab locked" data-tab="4" onclick="tryTab(4)">🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked" data-tab="5" onclick="tryTab(5)">📝 ಪರೀಕ್ಷೆ</div>
+</div>
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">⚠️ ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ===== TAB 0: INTRO LEARN ===== -->
+<div class="tab-panel active" id="panel-0">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#c8e6c9);color:#1b5e20">
+    <div class="banner-emoji">0️⃣</div>
+    <div>
+      <div class="banner-kn">ಸೊನ್ನೆ (0) — Zero</div>
+      <div class="banner-en">Lesson 4 · ಪಾಠ 4</div>
+      <div class="banner-sub">ಈ ಪಾಠದಲ್ಲಿ ನೀನು ಕಲಿಯುವೆ:<br>
+        ✅ ಸೊನ್ನೆಯ ಅರ್ಥ ತಿಳಿದುಕೊಳ್ಳುವೆ<br>
+        ✅ "ಒಂದೂ ಇಲ್ಲ" = "ಸೊನ್ನೆ" ಎಂದು ತಿಳಿಯುವೆ<br>
+        ✅ 0 ಅಂಕೆ ಬರೆಯಲು ಕಲಿಯುವೆ</div>
+    </div>
+  </div>
+
+  <!-- What is Zero -->
+  <div class="sec-head">💡 ಸೊನ್ನೆ ಎಂದರೇನು? — What is Zero?</div>
+
+  <div class="zero-card">
+    <div class="zero-inner">
+      <div class="zero-big">0</div>
+      <div>
+        <div class="zero-kn-word">ಸೊನ್ನೆ</div>
+        <div class="zero-def">
+          ಒಂದೂ ಇಲ್ಲ, ಯಾರೂ ಇಲ್ಲ, ಏನೂ ಇಲ್ಲ —<br>
+          ಎಂಬುದನ್ನು <strong>"ಸೊನ್ನೆ"</strong> ಎಂದು ಹೇಳುತ್ತೇವೆ.<br>
+          <span style="color:#888">Nothing at all = Zero (0)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 1: Rope & Hen (from PDF page 1) -->
+  <div class="sec-head">🪡 ಕಥೆ 1: ದಾರ ಮತ್ತು ಕೋಳಿ — Rope & Hen Story</div>
+  <div class="scene-card">
+    <div class="scene-header">🌳 ದಾರ ಹಿಡಿದು ಜೋತಾಡುತ್ತಿರುವ ಕೋಳಿಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+    <div class="scene-body">
+      <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:10px">ಚಿತ್ರ 1 ರಿಂದ 0 ರವರೆಗೆ ನೋಡು 👇</div>
+      <div class="scene-row">
+        <div class="scene-box"><span class="sb-emoji">🐔🐔🐔🐔</span><div class="sb-num">4</div><div class="sb-kn">ನಾಲ್ಕು</div></div>
+        <div class="scene-box"><span class="sb-emoji">🐔🐔🐔</span><div class="sb-num">3</div><div class="sb-kn">ಮೂರು</div></div>
+        <div class="scene-box"><span class="sb-emoji">🐔🐔</span><div class="sb-num">2</div><div class="sb-kn">ಎರಡು</div></div>
+        <div class="scene-box"><span class="sb-emoji">🐔</span><div class="sb-num">1</div><div class="sb-kn">ಒಂದು</div></div>
+        <div class="scene-box zero-box"><span class="sb-emoji" style="font-size:28px;display:block;min-height:40px;line-height:40px">🚫</span><div class="sb-num">0</div><div class="sb-kn">ಸೊನ್ನೆ!</div></div>
+      </div>
+      <div class="story-box">
+        <div class="story-kn">ತಂತಿ ಹಿಡಿದು ಜೋತಾಡುತ್ತಿರುವ ಒಂದು ಕೋಳಿಯೂ ಇಲ್ಲ.</div>
+        <div style="font-size:13px;color:#666;margin-bottom:6px">No hen is hanging on the rope.</div>
+        <div class="story-highlight">ಕೋಳಿಗಳ ಸಂಖ್ಯೆ = <strong>ಸೊನ್ನೆ (0)</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 2: Rope Jump kids (from PDF page 2) -->
+  <div class="sec-head">🏃 ಕಥೆ 2: ಹಗ್ಗದಾಟ — Rope Jump Story</div>
+  <div class="scene-card">
+    <div class="scene-header">👧 ಹಗ್ಗದಾಟ ಆಡುತ್ತಿರುವ ಮಕ್ಕಳ ಸಂಖ್ಯೆ?</div>
+    <div class="scene-body">
+      <div class="scene-row">
+        <div class="scene-box"><span class="sb-emoji">👧👦👧</span><div class="sb-num">3</div><div class="sb-kn">ಮೂರು</div></div>
+        <div class="scene-box"><span class="sb-emoji">👧👦</span><div class="sb-num">2</div><div class="sb-kn">ಎರಡು</div></div>
+        <div class="scene-box zero-box"><span class="sb-emoji" style="font-size:28px;display:block;min-height:40px;line-height:40px">🚫</span><div class="sb-num">0</div><div class="sb-kn">ಸೊನ್ನೆ!</div></div>
+      </div>
+      <div class="story-box">
+        <div class="story-kn">ಯಾರೂ ಹಗ್ಗದಾಟ ಆಡುತ್ತಿಲ್ಲ ಅಂದರೆ, ಹಗ್ಗದಾಟ ಆಡುತ್ತಿರುವ ಮಕ್ಕಳ ಸಂಖ್ಯೆ "ಸೊನ್ನೆ" (0).</div>
+        <div style="font-size:13px;color:#666;margin-bottom:6px">Nobody is playing rope jump = the number of children is zero (0).</div>
+        <div class="story-highlight">ಮಕ್ಕಳ ಸಂಖ್ಯೆ = <strong>ಸೊನ್ನೆ (0)</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 3: Basket of fruits (from PDF page 2) -->
+  <div class="sec-head">🧺 ಕಥೆ 3: ಬುಟ್ಟಿಯ ಹಣ್ಣುಗಳು — Fruits in Basket</div>
+  <div class="scene-card">
+    <div class="scene-header">🍎 ಪ್ರತಿ ಬುಟ್ಟಿಯಲ್ಲಿರುವ ಹಣ್ಣುಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?</div>
+    <div class="scene-body">
+      <div class="scene-row">
+        <div class="scene-box"><span class="sb-emoji">🍎🍎🍎🍎🍎</span><div class="sb-num">5</div><div class="sb-kn">ಐದು</div></div>
+        <div class="scene-box"><span class="sb-emoji">🍎🍎</span><div class="sb-num">2</div><div class="sb-kn">ಎರಡು</div></div>
+        <div class="scene-box zero-box"><span class="sb-emoji" style="font-size:28px;display:block;min-height:40px;line-height:40px">🧺</span><div class="sb-num">0</div><div class="sb-kn">ಸೊನ್ನೆ!</div></div>
+      </div>
+      <div class="story-box">
+        <div class="story-kn">ಬುಟ್ಟಿಯಲ್ಲಿ ಒಂದು ಹಣ್ಣೂ ಇಲ್ಲ. ಅಂದರೆ ಬುಟ್ಟಿಯಲ್ಲಿರುವ ಹಣ್ಣುಗಳ ಸಂಖ್ಯೆ "ಸೊನ್ನೆ" (0).</div>
+        <div style="font-size:13px;color:#666;margin-bottom:6px">The basket has no fruit = the number of fruits is zero (0).</div>
+        <div class="story-highlight">ಹಣ್ಣುಗಳ ಸಂಖ್ಯೆ = <strong>ಸೊನ್ನೆ (0)</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Rule Box -->
+  <div class="info-box">
+    <div class="info-box-title">🌟 ಮುಖ್ಯ ನಿಯಮ — Key Rule</div>
+    <div class="info-row"><span class="bullet">🚫</span> ಒಂದೂ ಇಲ್ಲ → ಸೊನ್ನೆ (0)</div>
+    <div class="info-row"><span class="bullet">🚫</span> ಯಾರೂ ಇಲ್ಲ → ಸೊನ್ನೆ (0)</div>
+    <div class="info-row"><span class="bullet">🚫</span> ಏನೂ ಇಲ್ಲ → ಸೊನ್ನೆ (0)</div>
+    <div class="info-row" style="margin-top:8px;background:#c8e6c9;padding:10px;border-radius:12px">
+      <span class="bullet">✍️</span> ಸೊನ್ನೆಯನ್ನು ಹೀಗೆ ಬರೆಯುತ್ತೇವೆ: <strong style="font-size:24px;color:#1b5e20">  0</strong>
+    </div>
+    <div style="font-size:12px;color:#666;margin-top:8px;font-weight:700">Nothing at all, nobody at all, not even one = we write it as "0"</div>
+  </div>
+
+  <!-- Examples from PDF page 3 -->
+  <div class="sec-head">📸 ಇನ್ನಷ್ಟು ಉದಾಹರಣೆಗಳು — More Examples</div>
+  <div class="compare-wrap">
+    <div class="compare-row">
+      <div class="compare-item zero-item">
+        <span class="ci-emoji">🧵</span>
+        <div class="ci-num">0</div>
+        <div class="ci-kn">ತಂತಿಯ ಮೇಲೆ ಒಂದು ಕೋಳಿಯೂ ಇಲ್ಲ = ಸೊನ್ನೆ</div>
+      </div>
+      <div class="compare-item zero-item">
+        <span class="ci-emoji">🧺</span>
+        <div class="ci-num">0</div>
+        <div class="ci-kn">ಬುಟ್ಟಿಯಲ್ಲಿ ಒಂದು ಹಣ್ಣೂ ಇಲ್ಲ = ಸೊನ್ನೆ</div>
+      </div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-item zero-item">
+        <span class="ci-emoji">🫙</span>
+        <div class="ci-num">0</div>
+        <div class="ci-kn">ಡಬ್ಬದಲ್ಲಿ ಒಂದೂ ಚಾಕೊಲೇಟ್ ಇಲ್ಲ = ಸೊನ್ನೆ</div>
+      </div>
+      <div class="compare-item zero-item">
+        <span class="ci-emoji">🪴</span>
+        <div class="ci-num">0</div>
+        <div class="ci-kn">ಗಿಡದಲ್ಲಿ ಒಂದು ಹೂವೂ ಇಲ್ಲ = ಸೊನ್ನೆ</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="big-btn green" onclick="completeTab(0)">ಮುಂದೆ ಹೋಗು → ದಾರ ಆಟ! 🪡</button>
+</div>
+
+<!-- ===== TAB 1: ROPE GAME ===== -->
+<div class="tab-panel" id="panel-1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20">
+    <div class="banner-emoji">🪡</div>
+    <div>
+      <div class="banner-kn">ದಾರ ಆಟ — Rope Game</div>
+      <div class="banner-en">Tap the buttons to remove hens, then answer!</div>
+      <div class="banner-sub">ಕೋಳಿಗಳನ್ನು ತೆಗೆದು ಸೊನ್ನೆ ಮಾಡು! · Remove all to make zero!</div>
+    </div>
+  </div>
+
+  <!-- Interactive rope game -->
+  <div class="act-card">
+    <div class="act-title">🐔 ದಾರದ ಮೇಲಿಂದ ಕೋಳಿಗಳನ್ನು ತೆಗೆ!</div>
+    <div class="act-sub">ಒಂದೊಂದಾಗಿ ತೆಗೆಯಿರಿ, ಸೊನ್ನೆ ಮಾಡಿ!</div>
+    <div class="rope-stage">
+      <div class="rope-vis" id="ropeVis">🐔🐔🐔🐔</div>
+      <div class="rope-count" id="ropeCount">4</div>
+      <div class="rope-kn" id="ropeKn">ನಾಲ್ಕು</div>
+      <div class="rope-btns">
+        <button class="rope-btn remove" onclick="removeFromRope()">− ಒಂದು ತೆಗೆ</button>
+        <button class="rope-btn" onclick="resetRope()">↺ ಮತ್ತೆ ಶುರು</button>
+      </div>
+    </div>
+    <div class="fb" id="ropeFb"></div>
+  </div>
+
+  <!-- Questions about zero from rope scene -->
+  <div class="q-card" id="r1">
+    <div class="q-top">
+      <div class="q-vis">🧵</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ತಂತಿ ಮೇಲೆ ಯಾವ ಕೋಳಿಯೂ ಇಲ್ಲ. ಸಂಖ್ಯೆ ಎಷ್ಟು?<br><span style="font-size:13px;color:#888">No hen on rope. What number?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('r1',this,false,'r1fb')"><span class="choice-kn">1</span><span class="choice-en">ಒಂದು</span></div>
+        <div class="choice" onclick="ansQ('r1',this,false,'r1fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('r1',this,false,'r1fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('r1',this,true,'r1fb')"><span class="choice-kn">0</span><span class="choice-en">ಸೊನ್ನೆ</span></div>
+      </div>
+      <div class="fb" id="r1fb"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="r2">
+    <div class="q-top">
+      <div class="q-vis">🏃</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಯಾರೂ ಹಗ್ಗದಾಟ ಆಡುತ್ತಿಲ್ಲ. ಮಕ್ಕಳ ಸಂಖ್ಯೆ?<br><span style="font-size:13px;color:#888">Nobody playing. How many children?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('r2',this,true,'r2fb')"><span class="choice-kn">0</span><span class="choice-en">ಸೊನ್ನೆ</span></div>
+        <div class="choice" onclick="ansQ('r2',this,false,'r2fb')"><span class="choice-kn">1</span><span class="choice-en">ಒಂದು</span></div>
+        <div class="choice" onclick="ansQ('r2',this,false,'r2fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+        <div class="choice" onclick="ansQ('r2',this,false,'r2fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+      </div>
+      <div class="fb" id="r2fb"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="r3">
+    <div class="q-top">
+      <div class="q-vis">🪴</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಗಿಡದಲ್ಲಿ ಒಂದು ಹೂವೂ ಇಲ್ಲ. ಹೂವಿನ ಸಂಖ್ಯೆ?<br><span style="font-size:13px;color:#888">No flowers on plant. Number of flowers?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('r3',this,false,'r3fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('r3',this,true,'r3fb')"><span class="choice-kn">0</span><span class="choice-en">ಸೊನ್ನೆ</span></div>
+        <div class="choice" onclick="ansQ('r3',this,false,'r3fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('r3',this,false,'r3fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+      </div>
+      <div class="fb" id="r3fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn green" id="btn1" disabled onclick="completeTab(1)">ಮುಂದೆ ಹೋಗು → ಬುಟ್ಟಿ ಆಟ! 🧺</button>
+</div>
+
+<!-- ===== TAB 2: BASKET GAME ===== -->
+<div class="tab-panel" id="panel-2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);color:#e65100">
+    <div class="banner-emoji">🧺</div>
+    <div>
+      <div class="banner-kn">ಬುಟ್ಟಿ ಆಟ — Basket Game</div>
+      <div class="banner-en">Look at each picture — choose the correct number!</div>
+      <div class="banner-sub">ಚಿತ್ರ ನೋಡಿ ಸರಿಯಾದ ಸಂಖ್ಯೆ ಆಯ್ಕೆ ಮಾಡು</div>
+    </div>
+  </div>
+
+  <!-- interactive basket tap-to-remove -->
+  <div class="act-card">
+    <div class="act-title">🍎 ಬುಟ್ಟಿಯಿಂದ ಹಣ್ಣು ತೆಗೆ, ಸೊನ್ನೆ ಮಾಡು!</div>
+    <div class="act-sub">ಒಂದೊಂದಾಗಿ ತೆಗೆಯಿರಿ!</div>
+    <div class="rope-stage" style="background:#fff8e1">
+      <div class="rope-vis" id="basketVis">🍎🍎🍎🍎🍎</div>
+      <div class="rope-count" id="basketCount" style="color:#e65100">5</div>
+      <div class="rope-kn" id="basketKn">ಐದು</div>
+      <div class="rope-btns">
+        <button class="rope-btn remove" onclick="removeFromBasket()">🍎 ಒಂದು ತೆಗೆ</button>
+        <button class="rope-btn" style="background:#e65100" onclick="resetBasket()">↺ ಮತ್ತೆ ಶುರು</button>
+      </div>
+    </div>
+    <div class="fb" id="basketFb"></div>
+  </div>
+
+  <!-- Questions: see image, what's the count -->
+  <div class="q-card" id="b1">
+    <div class="q-top">
+      <div class="q-vis">🫙</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಡಬ್ಬ ಖಾಲಿ ಇದೆ — ಚಾಕೊಲೇಟ್ ಇಲ್ಲ. ಸಂಖ್ಯೆ?<br><span style="font-size:13px;color:#888">Jar is empty — no chocolates. What number?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('b1',this,false,'b1fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+        <div class="choice" onclick="ansQ('b1',this,true,'b1fb')"><span class="choice-kn">0</span><span class="choice-en">ಸೊನ್ನೆ</span></div>
+        <div class="choice" onclick="ansQ('b1',this,false,'b1fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('b1',this,false,'b1fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+      </div>
+      <div class="fb" id="b1fb"></div>
+    </div>
+  </div>
+
+  <!-- Picture counting - basket with fruits -->
+  <div class="q-card" id="b2">
+    <div class="q-top">
+      <div class="q-vis">🍎🍎🍎</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಬುಟ್ಟಿಯಲ್ಲಿ ಎಷ್ಟು ಸೇಬುಗಳಿವೆ?<br><span style="font-size:13px;color:#888">How many apples in the basket?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('b2',this,false,'b2fb')"><span class="choice-kn">0</span><span class="choice-en">ಸೊನ್ನೆ</span></div>
+        <div class="choice" onclick="ansQ('b2',this,false,'b2fb')"><span class="choice-kn">2</span><span class="choice-en">ಎರಡು</span></div>
+        <div class="choice" onclick="ansQ('b2',this,true,'b2fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('b2',this,false,'b2fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+      </div>
+      <div class="fb" id="b2fb"></div>
+    </div>
+  </div>
+
+  <!-- Empty vs full basket choose zero -->
+  <div class="q-card" id="b3">
+    <div class="q-top">
+      <div class="q-vis">🧺</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಬುಟ್ಟಿ ಖಾಲಿ. ಒಂದು ಹಣ್ಣೂ ಇಲ್ಲ. ಸಂಖ್ಯೆ ಎಷ್ಟು?<br><span style="font-size:13px;color:#888">Empty basket. Not one fruit. What number?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('b3',this,true,'b3fb')">
+          <span class="choice-icon">0️⃣</span>
+          <span class="choice-kn">0 — ಸೊನ್ನೆ</span>
+          <span class="choice-en">Zero / ಒಂದೂ ಇಲ್ಲ</span>
+        </div>
+        <div class="choice" onclick="ansQ('b3',this,false,'b3fb')">
+          <span class="choice-icon">🍎🍎🍎</span>
+          <span class="choice-kn">3 — ಮೂರು</span>
+          <span class="choice-en">Three / ಮೂರು ಇವೆ</span>
+        </div>
+      </div>
+      <div class="fb" id="b3fb"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="b4">
+    <div class="q-top">
+      <div class="q-vis">🐔🐔🐔🐔🐔</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ದಾರದ ಮೇಲೆ ಐದು ಕೋಳಿಗಳಿವೆ. ಸಂಖ್ಯೆ?<br><span style="font-size:13px;color:#888">Five hens on rope. Number?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('b4',this,false,'b4fb')"><span class="choice-kn">0</span><span class="choice-en">ಸೊನ್ನೆ</span></div>
+        <div class="choice" onclick="ansQ('b4',this,false,'b4fb')"><span class="choice-kn">3</span><span class="choice-en">ಮೂರು</span></div>
+        <div class="choice" onclick="ansQ('b4',this,false,'b4fb')"><span class="choice-kn">4</span><span class="choice-en">ನಾಲ್ಕು</span></div>
+        <div class="choice" onclick="ansQ('b4',this,true,'b4fb')"><span class="choice-kn">5</span><span class="choice-en">ಐದು</span></div>
+      </div>
+      <div class="fb" id="b4fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn green" id="btn2" disabled onclick="completeTab(2)">ಮುಂದೆ ಹೋಗು → 0 ಬರಿ! ✍️</button>
+</div>
+
+<!-- ===== TAB 3: WRITE 0 (TRACING) ===== -->
+<div class="tab-panel" id="panel-3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);color:#283593">
+    <div class="banner-emoji">✍️</div>
+    <div>
+      <div class="banner-kn">ಸೊನ್ನೆ ಬರೆಯಲು ಕಲಿ — Learn to Write 0</div>
+      <div class="banner-en">Tap each box to trace the number!</div>
+      <div class="banner-sub">ಒಂದೊಂದು ಚೌಕಕ್ಕೆ ಟ್ಯಾಪ್ ಮಾಡು · Tap each box!</div>
+    </div>
+  </div>
+
+  <!-- Tracing 0 -->
+  <div class="trace-wrap">
+    <div class="trace-title">0 ಅನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ ತಿದ್ದು! Tap to trace 0!</div>
+    <div class="trace-grid" id="traceRow1">
+      <div class="trace-box">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,1)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,1)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,1)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,1)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,1)">0</div>
+    </div>
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#888;margin:8px 0">ಮತ್ತೊಂದು ಸಾಲು — Another row!</div>
+    <div class="trace-grid" id="traceRow2">
+      <div class="trace-box dotted" onclick="traceTap(this,2)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,2)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,2)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,2)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,2)">0</div>
+      <div class="trace-box dotted" onclick="traceTap(this,2)">0</div>
+    </div>
+    <div class="fb" id="traceFb"></div>
+  </div>
+
+  <!-- Where is zero quiz -->
+  <div class="sec-head">🔍 ಸೊನ್ನೆ ಯಾವುದು? — Which one is zero?</div>
+
+  <div class="q-card" id="w1">
+    <div class="q-top">
+      <div class="q-vis">🔢</div>
+      <div>
+        <div class="q-label">ಸೊನ್ನೆ ಆರಿಸು</div>
+        <div class="q-kn">ಕೆಳಗಿನ ಸಂಖ್ಯೆಗಳಲ್ಲಿ ಸೊನ್ನೆ ಯಾವುದು?<br><span style="font-size:13px;color:#888">Which of these is zero?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w1',this,false,'w1fb')"><span class="choice-kn">5</span></div>
+        <div class="choice" onclick="ansQ('w1',this,false,'w1fb')"><span class="choice-kn">3</span></div>
+        <div class="choice" onclick="ansQ('w1',this,true,'w1fb')"><span class="choice-kn">0</span></div>
+        <div class="choice" onclick="ansQ('w1',this,false,'w1fb')"><span class="choice-kn">1</span></div>
+      </div>
+      <div class="fb" id="w1fb"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="w2">
+    <div class="q-top">
+      <div class="q-vis">🤔</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">"ಒಂದೂ ಇಲ್ಲ" ಎಂದರೆ ಯಾವ ಸಂಖ್ಯೆ?<br><span style="font-size:13px;color:#888">"Not even one" means which number?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('w2',this,true,'w2fb')">
+          <span class="choice-icon">0️⃣</span>
+          <span class="choice-kn">0 ಸೊನ್ನೆ</span>
+        </div>
+        <div class="choice" onclick="ansQ('w2',this,false,'w2fb')">
+          <span class="choice-icon">1️⃣</span>
+          <span class="choice-kn">1 ಒಂದು</span>
+        </div>
+      </div>
+      <div class="fb" id="w2fb"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="w3">
+    <div class="q-top">
+      <div class="q-vis">📝</div>
+      <div>
+        <div class="q-label">ಸಂಖ್ಯೆ ಹೇಳು</div>
+        <div class="q-kn">ಸೊನ್ನೆಯ ಅಂಕೆ ಹೇಗಿರುತ್ತದೆ?<br><span style="font-size:13px;color:#888">What does the digit zero look like?</span></div>
+      </div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w3',this,false,'w3fb')"><span class="choice-kn" style="font-size:32px">1</span></div>
+        <div class="choice" onclick="ansQ('w3',this,true,'w3fb')"><span class="choice-kn" style="font-size:32px">0</span></div>
+        <div class="choice" onclick="ansQ('w3',this,false,'w3fb')"><span class="choice-kn" style="font-size:32px">8</span></div>
+        <div class="choice" onclick="ansQ('w3',this,false,'w3fb')"><span class="choice-kn" style="font-size:32px">6</span></div>
+      </div>
+      <div class="fb" id="w3fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn green" id="btn3" disabled onclick="completeTab(3)">ಮುಂದೆ ಹೋಗು → ಹೊಂದಿಸು! 🔗</button>
+</div>
+
+<!-- ===== TAB 4: MATCH GAME ===== -->
+<div class="tab-panel" id="panel-4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f2f1,#b2dfdb);color:#004d40">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-kn">ಹೊಂದಿಸು — Match It!</div>
+      <div class="banner-en">Match the picture to the correct number!</div>
+      <div class="banner-sub">ಚಿತ್ರ ಮತ್ತು ಸಂಖ್ಯೆ ಜೋಡಿ ಮಾಡು · Tap left then right!</div>
+    </div>
+  </div>
+
+  <!-- Match 1: scenes to zero or non-zero -->
+  <div class="match-wrap">
+    <div class="match-title">🎯 ಸರಿಯಾದ ಸಂಖ್ಯೆ ಜೋಡಿ ಮಾಡು! Match the correct number!</div>
+    <div style="font-size:13px;color:#888;font-weight:700;text-align:center;margin-bottom:12px">ಮೊದಲು ಎಡಗಡೆ ಟ್ಯಾಪ್ ಮಾಡು, ಆಮೇಲೆ ಬಲಗಡೆ · Tap left then right</div>
+    <div class="match-row">
+      <div class="match-left" id="matchLeft1">
+        <div class="match-item" data-val="0" onclick="selectLeft1(this)">🧺<div style="font-size:12px;color:#666">ಖಾಲಿ ಬುಟ್ಟಿ</div></div>
+        <div class="match-item" data-val="3" onclick="selectLeft1(this)">🍎🍎🍎<div style="font-size:12px;color:#666">ಮೂರು ಸೇಬು</div></div>
+        <div class="match-item" data-val="0" onclick="selectLeft1(this)" style="background:#ffebee;border-color:#ef9a9a">🪴<div style="font-size:12px;color:#666">ಹೂವಿಲ್ಲದ ಗಿಡ</div></div>
+        <div class="match-item" data-val="2" onclick="selectLeft1(this)">🐔🐔<div style="font-size:12px;color:#666">ಎರಡು ಕೋಳಿ</div></div>
+      </div>
+      <div class="match-right" id="matchRight1">
+        <div class="match-item" data-val="3" onclick="selectRight1(this)">3<div style="font-size:13px;color:#666">ಮೂರು</div></div>
+        <div class="match-item" data-val="0" onclick="selectRight1(this)" style="background:#ffebee;border-color:#ef9a9a">0<div style="font-size:13px;color:#c62828">ಸೊನ್ನೆ</div></div>
+        <div class="match-item" data-val="2" onclick="selectRight1(this)">2<div style="font-size:13px;color:#666">ಎರಡು</div></div>
+        <div class="match-item" data-val="0" onclick="selectRight1(this)" style="background:#ffebee;border-color:#ef9a9a">0<div style="font-size:13px;color:#c62828">ಸೊನ್ನೆ</div></div>
+      </div>
+    </div>
+    <div class="fb" id="matchFb1" style="display:none"></div>
+  </div>
+
+  <!-- Match 2: word to number -->
+  <div class="match-wrap">
+    <div class="match-title">📝 ಕನ್ನಡ ಪದ ಮತ್ತು ಅಂಕೆ ಜೋಡಿ! Match Kannada word to digit!</div>
+    <div class="match-row">
+      <div class="match-left" id="matchLeft2">
+        <div class="match-item" data-val="0" onclick="selectLeft2(this)">ಸೊನ್ನೆ</div>
+        <div class="match-item" data-val="2" onclick="selectLeft2(this)">ಎರಡು</div>
+        <div class="match-item" data-val="5" onclick="selectLeft2(this)">ಐದು</div>
+        <div class="match-item" data-val="3" onclick="selectLeft2(this)">ಮೂರು</div>
+      </div>
+      <div class="match-right" id="matchRight2">
+        <div class="match-item" data-val="5" onclick="selectRight2(this)">5</div>
+        <div class="match-item" data-val="0" onclick="selectRight2(this)" style="background:#ffebee;border-color:#ef9a9a">0</div>
+        <div class="match-item" data-val="3" onclick="selectRight2(this)">3</div>
+        <div class="match-item" data-val="2" onclick="selectRight2(this)">2</div>
+      </div>
+    </div>
+    <div class="fb" id="matchFb2" style="display:none"></div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn green" id="btn4" disabled onclick="completeTab(4)">ಮುಂದೆ ಹೋಗು → ಪರೀಕ್ಷೆ! 📝</button>
+</div>
+
+<!-- ===== TAB 5: FINAL QUIZ ===== -->
+<div class="tab-panel" id="panel-5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);color:#880e4f">
+    <div class="banner-emoji">📝</div>
+    <div>
+      <div class="banner-kn">ಒಟ್ಟು ಪರೀಕ್ಷೆ — Final Test!</div>
+      <div class="banner-en">Show what you know about zero!</div>
+      <div class="banner-sub">ನೀನು ಸೊನ್ನೆ ಕಲಿತಿರುವೆ! ಈಗ ಪರೀಕ್ಷೆ ಮಾಡೋಣ!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-wrap" id="fq1">
+    <div style="font-size:11px;font-weight:900;color:#999;text-align:center;margin-bottom:6px">ಪ್ರಶ್ನೆ 1 / 6</div>
+    <div class="quiz-vis">🫙</div>
+    <div class="quiz-q">ಡಬ್ಬ ಖಾಲಿ — ಚಾಕೊಲೇಟ್ ಇಲ್ಲ. ಸಂಖ್ಯೆ?<br><span style="font-size:14px;color:#666">Empty jar — no chocolates. Number?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,true)">0<div class="quiz-opt-sub">ಸೊನ್ನೆ</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,false)">1<div class="quiz-opt-sub">ಒಂದು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,false)">3<div class="quiz-opt-sub">ಮೂರು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq1',this,false)">5<div class="quiz-opt-sub">ಐದು</div></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-wrap" id="fq2">
+    <div style="font-size:11px;font-weight:900;color:#999;text-align:center;margin-bottom:6px">ಪ್ರಶ್ನೆ 2 / 6</div>
+    <div class="quiz-vis">🍎🍎🍎🍎</div>
+    <div class="quiz-q">ಬುಟ್ಟಿಯಲ್ಲಿ ಎಷ್ಟು ಸೇಬಿವೆ?<br><span style="font-size:14px;color:#666">How many apples in the basket?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,false)">0<div class="quiz-opt-sub">ಸೊನ್ನೆ</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,false)">2<div class="quiz-opt-sub">ಎರಡು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,false)">3<div class="quiz-opt-sub">ಮೂರು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq2',this,true)">4<div class="quiz-opt-sub">ನಾಲ್ಕು</div></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-wrap" id="fq3">
+    <div style="font-size:11px;font-weight:900;color:#999;text-align:center;margin-bottom:6px">ಪ್ರಶ್ನೆ 3 / 6</div>
+    <div class="quiz-vis">🏃🏃</div>
+    <div class="quiz-q">ಎರಡು ಮಕ್ಕಳು ಆಡುತ್ತಿದ್ದಾರೆ. ಸಂಖ್ಯೆ?<br><span style="font-size:14px;color:#666">Two children are playing. Number?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq3',this,false)">0<div class="quiz-opt-sub">ಸೊನ್ನೆ</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq3',this,true)">2<div class="quiz-opt-sub">ಎರಡು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq3',this,false)">3<div class="quiz-opt-sub">ಮೂರು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq3',this,false)">5<div class="quiz-opt-sub">ಐದು</div></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-wrap" id="fq4">
+    <div style="font-size:11px;font-weight:900;color:#999;text-align:center;margin-bottom:6px">ಪ್ರಶ್ನೆ 4 / 6</div>
+    <div class="quiz-vis">🧺</div>
+    <div class="quiz-q">ಬುಟ್ಟಿ ಖಾಲಿ. ಹಣ್ಣಿಲ್ಲ. ಸಂಖ್ಯೆ?<br><span style="font-size:14px;color:#666">Basket empty. No fruit. Number?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,true)">0<div class="quiz-opt-sub">ಸೊನ್ನೆ</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,false)">4<div class="quiz-opt-sub">ನಾಲ್ಕು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,false)">2<div class="quiz-opt-sub">ಎರಡು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq4',this,false)">1<div class="quiz-opt-sub">ಒಂದು</div></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-wrap" id="fq5">
+    <div style="font-size:11px;font-weight:900;color:#999;text-align:center;margin-bottom:6px">ಪ್ರಶ್ನೆ 5 / 6</div>
+    <div class="quiz-vis">🪴</div>
+    <div class="quiz-q">ಗಿಡದಲ್ಲಿ ಒಂದು ಹೂವೂ ಇಲ್ಲ. ಅಂದರೆ ಹೂವಿನ ಸಂಖ್ಯೆ ಎಷ್ಟು?<br><span style="font-size:14px;color:#666">Not a single flower on the plant. Number?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,false)">3<div class="quiz-opt-sub">ಮೂರು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,false)">5<div class="quiz-opt-sub">ಐದು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,true)">0<div class="quiz-opt-sub">ಸೊನ್ನೆ</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq5',this,false)">2<div class="quiz-opt-sub">ಎರಡು</div></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-wrap" id="fq6">
+    <div style="font-size:11px;font-weight:900;color:#999;text-align:center;margin-bottom:6px">ಪ್ರಶ್ನೆ 6 / 6</div>
+    <div class="quiz-vis">🐔🐔🐔</div>
+    <div class="quiz-q">ದಾರದ ಮೇಲೆ ಎಷ್ಟು ಕೋಳಿಗಳಿವೆ?<br><span style="font-size:14px;color:#666">How many hens on the rope?</span></div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,false)">0<div class="quiz-opt-sub">ಸೊನ್ನೆ</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,false)">2<div class="quiz-opt-sub">ಎರಡು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,true)">3<div class="quiz-opt-sub">ಮೂರು</div></div>
+      <div class="quiz-opt" onclick="fQuiz('fq6',this,false)">5<div class="quiz-opt-sub">ಐದು</div></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="scoreFinal"></div>
+  <button class="big-btn green" id="btnFinal" disabled onclick="showCeleb()">🎉 ಪಾಠ ಮುಗಿಸು!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATE -->
+<div class="celeb" id="celeb">
+  <div class="celeb-e">🎉</div>
+  <div class="celeb-t">ಭಲೇ! ಶಾಬಾಶ್! 🌟</div>
+  <div class="celeb-s">
+    ನೀನು ಪಾಠ 4 ಮುಗಿಸಿದೆ!<br>
+    ಸೊನ್ನೆ (0) ಕಲಿತೆ — ಬಹಳ ಚೆನ್ನಾಗಿ ಮಾಡಿದೆ!<br>
+    You learned Zero (0)! Well done!
+  </div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">✅ ಸರಿ!</button>
+</div>
+
+<script>
+// ===== STATE =====
+let totalStars = 0;
+let tabStatus = [0,1,1,1,1,1]; // 0=active/unlocked, 1=locked, 2=done
+let tab1Done=0, tab2Done=0, tab3Done=0, tab4Done=0, finalDone=0;
+const tab1Total=3, tab2Total=4, tab3Total=3, tab4Total=8, finalTotal=6;
+let traceRow1Count=0, traceRow2Count=0, traceDone=false;
+
+// Match state
+let m1Left=null, m1Right=null, m1Score=0, m1Total=4;
+let m2Left=null, m2Right=null, m2Score=0, m2Total=4;
+let matchAllDone=false;
+
+// Rope & basket
+const kns=['ಸೊನ್ನೆ','ಒಂದು','ಎರಡು','ಮೂರು','ನಾಲ್ಕು','ಐದು'];
+const emojis=['','🐔','🐔🐔','🐔🐔🐔','🐔🐔🐔🐔','🐔🐔🐔🐔🐔'];
+const fruitsEmoji=['','🍎','🍎🍎','🍎🍎🍎','🍎🍎🍎🍎','🍎🍎🍎🍎🍎'];
+let ropeN=4, basketN=5;
+
+// ===== STARS =====
+function addStars(n){
+  totalStars+=n;
+  document.getElementById('starsNum').textContent=totalStars;
+}
+
+// ===== PROGRESS =====
+function updateProgress(){
+  const done = tabStatus.filter(s=>s===2).length;
+  document.getElementById('progFill').style.width=(done/6*100)+'%';
+}
+
+// ===== TABS =====
+function tryTab(i){
+  if(i===0){switchTab(0);return;}
+  if(tabStatus[i]===1){
+    const tab=document.querySelectorAll('.step-tab')[i];
+    tab.classList.add('shaking');
+    setTimeout(()=>tab.classList.remove('shaking'),500);
+    showToast();
+    return;
+  }
+  switchTab(i);
+}
+function switchTab(i){
+  document.querySelectorAll('.tab-panel').forEach((p,idx)=>{
+    p.classList.toggle('active',idx===i);
+  });
+  document.querySelectorAll('.step-tab').forEach((t,idx)=>{
+    t.classList.remove('active');
+    if(idx===i) t.classList.add('active');
+  });
+  window.scrollTo(0,0);
+}
+function completeTab(i){
+  tabStatus[i]=2;
+  const tabs=document.querySelectorAll('.step-tab');
+  tabs[i].classList.remove('active');
+  tabs[i].classList.add('done');
+  if(i+1<tabStatus.length){
+    tabStatus[i+1]=0;
+    tabs[i+1].classList.remove('locked');
+    tabs[i+1].classList.add('unlocked');
+  }
+  updateProgress();
+  switchTab(i+1);
+  addStars(3);
+}
+function showToast(){
+  const t=document.getElementById('lockToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ===== ANSWER QUESTIONS =====
+function ansQ(cardId, btn, correct, fbId){
+  const card=document.getElementById(cardId);
+  if(card.dataset.done) return;
+  const choices=card.querySelectorAll('.choice');
+  choices.forEach(c=>c.classList.add('disabled'));
+  const fb=document.getElementById(fbId);
+  if(correct){
+    btn.classList.add('correct');
+    card.classList.add('done');
+    card.dataset.done='1';
+    fb.className='fb ok';
+    fb.textContent='✅ ಶಾಬಾಶ್! Correct! ಸರಿ!';
+    addStars(1);
+    // track per tab
+    if(['r1','r2','r3'].includes(cardId)){
+      tab1Done++;
+      buildDots('score1',tab1Done,tab1Total);
+      if(tab1Done>=tab1Total) document.getElementById('btn1').disabled=false;
+    } else if(['b1','b2','b3','b4'].includes(cardId)){
+      tab2Done++;
+      buildDots('score2',tab2Done,tab2Total);
+      if(tab2Done>=tab2Total) document.getElementById('btn2').disabled=false;
+    } else if(['w1','w2','w3'].includes(cardId)){
+      tab3Done++;
+      buildDots('score3',tab3Done,tab3Total);
+      checkTab3Btn();
+    }
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className='fb no';
+    fb.textContent='❌ ತಪ್ಪು! Try again! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು!';
+    setTimeout(()=>{
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      choices.forEach(c=>c.classList.remove('disabled'));
+      fb.style.display='none';
+    },900);
+  }
+}
+
+function checkTab3Btn(){
+  if(tab3Done>=tab3Total && traceDone)
+    document.getElementById('btn3').disabled=false;
+}
+
+// ===== ROPE GAME =====
+function removeFromRope(){
+  if(ropeN===0){
+    const fb=document.getElementById('ropeFb');
+    fb.className='fb ok';
+    fb.textContent='✅ ಸೊನ್ನೆ! Zero! ಒಂದೂ ಇಲ್ಲ!';
+    return;
+  }
+  ropeN--;
+  updateRopeDisplay();
+  if(ropeN===0){
+    const fb=document.getElementById('ropeFb');
+    fb.className='fb ok';
+    fb.textContent='🎉 ಸೊನ್ನೆ ಮಾಡಿದೆ! You made zero! ಒಂದೂ ಇಲ್ಲ!';
+    addStars(1);
+  }
+}
+function resetRope(){
+  ropeN=4;
+  updateRopeDisplay();
+  document.getElementById('ropeFb').style.display='none';
+}
+function updateRopeDisplay(){
+  document.getElementById('ropeVis').textContent=ropeN===0?'🚫 ಒಂದೂ ಇಲ್ಲ!':emojis[ropeN];
+  document.getElementById('ropeCount').textContent=ropeN;
+  document.getElementById('ropeKn').textContent=kns[ropeN];
+}
+
+// ===== BASKET GAME =====
+function removeFromBasket(){
+  if(basketN===0){
+    document.getElementById('basketFb').className='fb ok';
+    document.getElementById('basketFb').textContent='✅ ಸೊನ್ನೆ! Zero!';
+    return;
+  }
+  basketN--;
+  updateBasketDisplay();
+  if(basketN===0){
+    document.getElementById('basketFb').className='fb ok';
+    document.getElementById('basketFb').textContent='🎉 ಬುಟ್ಟಿ ಖಾಲಿ — ಸೊನ್ನೆ! Basket empty — zero!';
+    addStars(1);
+  }
+}
+function resetBasket(){
+  basketN=5;
+  updateBasketDisplay();
+  document.getElementById('basketFb').style.display='none';
+}
+function updateBasketDisplay(){
+  document.getElementById('basketVis').textContent=basketN===0?'🧺 ಖಾಲಿ!':fruitsEmoji[basketN];
+  document.getElementById('basketCount').textContent=basketN;
+  document.getElementById('basketKn').textContent=kns[basketN];
+}
+
+// ===== TRACING =====
+function traceTap(el, row){
+  if(el.classList.contains('filled')) return;
+  el.classList.remove('dotted');
+  el.classList.add('filled');
+  addStars(1);
+  if(row===1){
+    traceRow1Count++;
+    if(traceRow1Count>=5){
+      document.getElementById('traceFb').className='fb ok';
+      document.getElementById('traceFb').textContent='✅ ಮೊದಲ ಸಾಲು ಮುಗಿಯಿತು! Row 1 done!';
+    }
+  } else {
+    traceRow2Count++;
+    if(traceRow2Count>=6){
+      traceDone=true;
+      document.getElementById('traceFb').className='fb ok';
+      document.getElementById('traceFb').textContent='🎉 ಎರಡೂ ಸಾಲು ಮುಗಿಯಿತು! Both rows done! ಭಲೇ!';
+      addStars(2);
+      checkTab3Btn();
+    }
+  }
+}
+
+// ===== MATCH GAME 1 =====
+function selectLeft1(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchLeft1 .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  m1Left=el;
+  tryMatch1();
+}
+function selectRight1(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchRight1 .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  m1Right=el;
+  tryMatch1();
+}
+function tryMatch1(){
+  if(!m1Left||!m1Right) return;
+  const fb=document.getElementById('matchFb1');
+  if(m1Left.dataset.val===m1Right.dataset.val){
+    m1Left.classList.add('matched'); m1Right.classList.add('matched');
+    m1Left.classList.remove('selected'); m1Right.classList.remove('selected');
+    m1Score++; addStars(1);
+    fb.style.display='block'; fb.style.background='#c8e6c9'; fb.style.color='#1b5e20'; fb.textContent='✅ ಸರಿ! Correct match!';
+    if(m1Score>=m1Total){ setTimeout(()=>{ fb.textContent='🎉 ಎಲ್ಲ ಜೋಡಿ ಆದವು!'; checkMatchAllDone(); },400); }
+  } else {
+    m1Left.classList.add('wrong-match'); m1Right.classList.add('wrong-match');
+    fb.style.display='block'; fb.style.background='#ffcdd2'; fb.style.color='#c62828'; fb.textContent='❌ ತಪ್ಪು! Try again!';
+    setTimeout(()=>{ m1Left.classList.remove('wrong-match','selected'); m1Right.classList.remove('wrong-match','selected'); m1Left=null; m1Right=null; fb.style.display='none'; },900);
+    return;
+  }
+  m1Left=null; m1Right=null;
+}
+
+// ===== MATCH GAME 2 =====
+function selectLeft2(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchLeft2 .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  m2Left=el;
+  tryMatch2();
+}
+function selectRight2(el){
+  if(el.classList.contains('matched')) return;
+  document.querySelectorAll('#matchRight2 .match-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  m2Right=el;
+  tryMatch2();
+}
+function tryMatch2(){
+  if(!m2Left||!m2Right) return;
+  const fb=document.getElementById('matchFb2');
+  if(m2Left.dataset.val===m2Right.dataset.val){
+    m2Left.classList.add('matched'); m2Right.classList.add('matched');
+    m2Left.classList.remove('selected'); m2Right.classList.remove('selected');
+    m2Score++; addStars(1);
+    fb.style.display='block'; fb.style.background='#c8e6c9'; fb.style.color='#1b5e20'; fb.textContent='✅ ಸರಿ! Correct!';
+    if(m2Score>=m2Total){ setTimeout(()=>{ fb.textContent='🎉 ಎಲ್ಲ ಜೋಡಿ ಆದವು!'; checkMatchAllDone(); },400); }
+  } else {
+    m2Left.classList.add('wrong-match'); m2Right.classList.add('wrong-match');
+    fb.style.display='block'; fb.style.background='#ffcdd2'; fb.style.color='#c62828'; fb.textContent='❌ ತಪ್ಪು!';
+    setTimeout(()=>{ m2Left.classList.remove('wrong-match','selected'); m2Right.classList.remove('wrong-match','selected'); m2Left=null; m2Right=null; fb.style.display='none'; },900);
+    return;
+  }
+  m2Left=null; m2Right=null;
+}
+function checkMatchAllDone(){
+  if(m1Score>=m1Total && m2Score>=m2Total && !matchAllDone){
+    matchAllDone=true;
+    // count as 8 total
+    tab4Done=8;
+    buildDots('score4',tab4Done,tab4Total);
+    document.getElementById('btn4').disabled=false;
+  }
+}
+
+// ===== FINAL QUIZ =====
+function fQuiz(cardId, btn, correct){
+  const wrap=document.getElementById(cardId);
+  if(wrap.dataset.done) return;
+  const opts=wrap.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  if(correct){
+    btn.classList.add('right');
+    wrap.dataset.done='1';
+    addStars(2); finalDone++;
+    buildDots('scoreFinal',finalDone,finalTotal);
+    if(finalDone>=finalTotal) document.getElementById('btnFinal').disabled=false;
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(()=>{ opts.forEach(o=>o.style.pointerEvents=''); btn.classList.remove('wrong'); },900);
+  }
+}
+
+// ===== DOTS =====
+function buildDots(id, done, total){
+  const container=document.getElementById(id);
+  if(!container) return;
+  container.innerHTML='';
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');
+    d.className='sdot'+(i<done?' done':'');
+    container.appendChild(d);
+  }
+}
+
+// ===== CELEBRATE =====
+function showCeleb(){
+  document.getElementById('celebStars').textContent='⭐'.repeat(Math.min(7,Math.floor(totalStars/4)));
+  document.getElementById('celeb').classList.add('show');
+}
+
+// ===== INIT =====
+buildDots('score1',0,tab1Total);
+buildDots('score2',0,tab2Total);
+buildDots('score3',0,tab3Total);
+buildDots('score4',0,8);
+buildDots('scoreFinal',0,finalTotal);
+updateProgress();
+</script>
+</body>
+</html>

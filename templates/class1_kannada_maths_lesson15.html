@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಅಧ್ಯಾಯ 15: ಉದ್ದ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff3e0;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#bf360c,#d84315,#e64a19);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#bf360c,#d84315,#f4511e);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#ffccbc;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#bf360c,#ff7043);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#bf360c;border-color:#ffab91}
+.step-tab.active{background:#bf360c;color:#fff;border-color:#bf360c;box-shadow:0 4px 14px rgba(191,54,12,.45)}
+.step-tab.done{background:#fbe9e7;color:#bf360c;border-color:#ff7043}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#fbe9e7;border:2px solid #ffab91;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#bf360c;line-height:1.6}
+
+/* COMPARE DISPLAY */
+.compare-box{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #ffab91}
+.compare-row{display:flex;align-items:flex-end;justify-content:center;gap:20px;padding:12px 0;border-bottom:2px dashed #fbe9e7}
+.compare-row:last-child{border-bottom:none}
+.compare-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.compare-label{font-size:14px;font-weight:900;padding:4px 12px;border-radius:20px;margin-top:4px}
+.label-long{background:#c8e6c9;color:#1b5e20}
+.label-short{background:#ffcdd2;color:#b71c1c}
+.label-tall{background:#bbdefb;color:#0d47a1}
+.label-small{background:#fff9c4;color:#f57f17}
+.label-high{background:#e1bee7;color:#4a148c}
+.label-low{background:#b2dfdb;color:#004d40}
+
+/* PENCIL VISUAL */
+.pencil-long{display:inline-block;background:linear-gradient(90deg,#ff8f00,#ffca28);height:22px;border-radius:4px 0 0 4px;position:relative}
+.pencil-short{display:inline-block;background:linear-gradient(90deg,#1565c0,#42a5f5);height:22px;border-radius:4px 0 0 4px;position:relative}
+.pencil-tip{display:inline-block;width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;vertical-align:top}
+.tip-long{border-left:14px solid #e65100}
+.tip-short{border-left:14px solid #0d47a1}
+
+/* QUESTION CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#ff7043;background:#fbe9e7}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:36px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-bottom{border-top:2px dashed #ffab91;padding:12px 14px}
+
+/* CHOICES */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #ffab91;background:#fbe9e7;padding:12px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-kn{font-size:16px;font-weight:900;color:#bf360c}
+.choice-emoji{font-size:28px}
+.choice-sub{font-size:11px;font-weight:700;color:#e64a19}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#ffccbc;transition:background .3s}
+.sdot.done{background:#e64a19}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.orange{background:linear-gradient(135deg,#bf360c,#e64a19);color:#fff}
+.big-btn.orange:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* VISUAL COMPARE */
+.vis-compare{background:#fff;border-radius:18px;padding:16px;margin-bottom:10px;border:3px solid #ffab91;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.vis-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.vis-row:last-child{margin-bottom:0}
+.vis-bar{height:28px;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:12px;font-weight:900;color:#fff;flex-shrink:0}
+.vis-bar-long{background:linear-gradient(90deg,#e65100,#ff8f00);min-width:180px}
+.vis-bar-short{background:linear-gradient(90deg,#1565c0,#42a5f5);width:90px}
+.vis-label{font-size:13px;font-weight:900;color:#555}
+
+/* MEASURE CARD */
+.measure-card{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;border:3px solid #ffab91;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.measure-title{font-size:15px;font-weight:900;color:#bf360c;text-align:center;margin-bottom:12px}
+.measure-unit{display:flex;align-items:center;gap:12px;padding:12px;background:#fbe9e7;border-radius:14px;margin-bottom:10px}
+.measure-unit-emoji{font-size:40px}
+.measure-unit-info{font-size:14px;font-weight:900;color:#bf360c;line-height:1.5}
+
+/* SIZE VISUAL ITEMS */
+.size-visual{display:flex;justify-content:space-around;align-items:flex-end;padding:16px;background:#fff8f5;border-radius:16px;margin-bottom:10px;min-height:120px}
+.size-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.size-item .item-emoji{line-height:1}
+.size-item .item-label{font-size:12px;font-weight:900;padding:3px 10px;border-radius:12px}
+
+/* CELEBRATION */
+.celeb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.celeb-overlay.show{opacity:1;pointer-events:auto}
+.celeb-box{background:#fff;border-radius:28px;padding:32px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.celeb-emoji{font-size:64px;display:block;animation:float 2s ease-in-out infinite}
+.celeb-title{font-size:24px;font-weight:900;color:#bf360c;margin:12px 0 6px}
+.celeb-sub{font-size:15px;font-weight:700;color:#555;margin-bottom:16px;line-height:1.6}
+.celeb-stars{font-size:36px;margin:8px 0 20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">📏 ಪಾಠ 15 — ಉದ್ದ (Length)</div>
+  <div class="stars-pill" id="starsPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">📏</span>
+  <h1>ಉದ್ದ ಕಲಿಯೋಣ!</h1>
+  <p>Let's learn about Length! • ತಟ್ಟು ಮಾಡಿ ಕಲಿಯಿರಿ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ • Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-btn-1" onclick="tryTab(1)">📏 ಉದ್ದ-ಗಿಡ್ಡ</div>
+  <div class="step-tab locked" id="tab-btn-2" onclick="tryTab(2)">📐 ಎತ್ತರ-ಗಿಡ್ಡ</div>
+  <div class="step-tab locked" id="tab-btn-3" onclick="tryTab(3)">🪁 ಎತ್ತರ-ತಗ್ಗು</div>
+  <div class="step-tab locked" id="tab-btn-4" onclick="tryTab(4)">🤲 ಅಳತೆ</div>
+  <div class="step-tab locked" id="tab-btn-5" onclick="tryTab(5)">🎯 ಅಭ್ಯಾಸ</div>
+</div>
+
+<div class="content">
+
+<!-- ===== TAB 1: ಉದ್ದ - ಗಿಡ್ಡ ===== -->
+<div class="tab-panel active" id="tab-1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fbe9e7,#fff3e0)">
+    <div class="banner-emoji">📏</div>
+    <div>
+      <div class="banner-kn">ಉದ್ದ – ಗಿಡ್ಡ</div>
+      <div class="banner-en">Long – Short</div>
+      <div class="banner-sub">ಎರಡು ಪೆನ್ಸಿಲ್‌ಗಳನ್ನು ನೋಡಿ • Look at the two pencils</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🌸 ಗುಲಾಬಿ ಪೆನ್ಸಿಲ್ <strong>ಉದ್ದ</strong>ವಾಗಿದೆ • Pink pencil is <strong>Long</strong><br>
+    💙 ನೀಲಿ ಪೆನ್ಸಿಲ್ <strong>ಗಿಡ್ಡ</strong>ವಾಗಿದೆ • Blue pencil is <strong>Short</strong>
+  </div>
+
+  <div class="vis-compare">
+    <div class="vis-row">
+      <div class="vis-bar vis-bar-long">🌸 ಉದ್ದ (Long)</div>
+    </div>
+    <div class="vis-row">
+      <div class="vis-bar vis-bar-short">💙 ಗಿಡ್ಡ (Short)</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="q-emoji">🪥🪥</div>
+      <div class="q-kn">ಯಾವ ಟೂತ್‌ಬ್ರಷ್ <strong>ಉದ್ದ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which toothbrush is <strong>Long</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q1',this,true,'f1q1')">
+          <div class="choice-emoji">🟡🪥</div>
+          <div class="choice-kn">ಹಳದಿ ಉದ್ದ</div>
+          <div class="choice-sub">Yellow - Long</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')">
+          <div class="choice-emoji">🔴🪥</div>
+          <div class="choice-kn">ಕೆಂಪು ಗಿಡ್ಡ</div>
+          <div class="choice-sub">Red - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="q-emoji">📏📏</div>
+      <div class="q-kn">ಯಾವ ಸ್ಕೇಲ್ <strong>ಗಿಡ್ಡ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which ruler is <strong>Short</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')">
+          <div class="choice-emoji">📏</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಸ್ಕೇಲ್</div>
+          <div class="choice-sub">Big Ruler - Long</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q2',this,true,'f1q2')">
+          <div class="choice-emoji">📐</div>
+          <div class="choice-kn">ಚಿಕ್ಕ ಸ್ಕೇಲ್</div>
+          <div class="choice-sub">Small Ruler - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="q-emoji">🐍🐛</div>
+      <div class="q-kn">ಯಾವ ಪ್ರಾಣಿ <strong>ಉದ್ದ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which animal is <strong>Longer</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q3',this,true,'f1q3')">
+          <div class="choice-emoji">🐍</div>
+          <div class="choice-kn">ಹಾವು</div>
+          <div class="choice-sub">Snake - Long</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')">
+          <div class="choice-emoji">🐛</div>
+          <div class="choice-kn">ಹುಳ</div>
+          <div class="choice-sub">Worm - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="q-emoji">🚂🚗</div>
+      <div class="q-kn">ಯಾವ ವಾಹನ <strong>ಗಿಡ್ಡ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which vehicle is <strong>Shorter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-emoji">🚂</div>
+          <div class="choice-kn">ರೈಲು</div>
+          <div class="choice-sub">Train - Long</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,true,'f1q4')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-kn">ಕಾರು</div>
+          <div class="choice-sub">Car - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: order longest to shortest -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="q-emoji">🐟🐜🐢</div>
+      <div class="q-kn">ಯಾವ ಪ್ರಾಣಿ ಅತ್ಯಂತ <strong>ಉದ್ದ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which animal is the <strong>Longest</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">🐜</div>
+          <div class="choice-kn">ಇರುವೆ</div>
+          <div class="choice-sub">Ant</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,true,'f1q5')">
+          <div class="choice-emoji">🐟</div>
+          <div class="choice-kn">ಮೀನು</div>
+          <div class="choice-sub">Fish - Longest</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">🐢</div>
+          <div class="choice-kn">ಆಮೆ</div>
+          <div class="choice-sub">Tortoise</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">🐍</div>
+          <div class="choice-kn">ಹಾವು</div>
+          <div class="choice-sub">Snake</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn orange" id="btn1" disabled onclick="unlockNext(2)">ಮುಂದೆ ಹೋಗಿ → ಎತ್ತರ-ಗಿಡ್ಡ ✨</button>
+</div>
+
+<!-- ===== TAB 2: ಎತ್ತರ - ಗಿಡ್ಡ ===== -->
+<div class="tab-panel" id="tab-2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#e8f5e9)">
+    <div class="banner-emoji">🌴</div>
+    <div>
+      <div class="banner-kn">ಎತ್ತರ – ಗಿಡ್ಡ</div>
+      <div class="banner-en">Tall – Short</div>
+      <div class="banner-sub">ನಾನು ಎತ್ತರ • ನಾನು ಗಿಡ್ಡ • I am Tall • I am Short</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🌴 ತಾಳೆ ಮರ <strong>ಎತ್ತರ</strong>ವಾಗಿದೆ • Palm tree is <strong>Tall</strong><br>
+    🌳 ಪೊದೆ ಮರ <strong>ಗಿಡ್ಡ</strong>ವಾಗಿದೆ • Bush tree is <strong>Short</strong>
+  </div>
+
+  <div class="compare-box">
+    <div class="compare-row">
+      <div class="compare-item">
+        <div style="font-size:70px;line-height:1">🌴</div>
+        <div class="compare-label label-tall">ಎತ್ತರ • Tall</div>
+      </div>
+      <div style="font-size:30px;font-weight:900;color:#ccc;padding-bottom:20px">VS</div>
+      <div class="compare-item">
+        <div style="font-size:40px;line-height:1">🌳</div>
+        <div class="compare-label label-small">ಗಿಡ್ಡ • Short</div>
+      </div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div style="font-size:70px;line-height:1">🐴</div>
+        <div class="compare-label label-tall">ಎತ್ತರ • Tall</div>
+      </div>
+      <div style="font-size:30px;font-weight:900;color:#ccc;padding-bottom:20px">VS</div>
+      <div class="compare-item">
+        <div style="font-size:40px;line-height:1">🐐</div>
+        <div class="compare-label label-small">ಗಿಡ್ಡ • Short</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t2q1">
+    <div class="q-top">
+      <div class="q-emoji">👩‍👦</div>
+      <div class="q-kn">ಯಾರು <strong>ಎತ್ತರ</strong>ವಾಗಿದ್ದಾರೆ?</div>
+      <div class="q-en">Who is <strong>Taller</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q1',this,true,'f2q1')">
+          <div class="choice-emoji">👩</div>
+          <div class="choice-kn">ಅಕ್ಕ/ಅಮ್ಮ</div>
+          <div class="choice-sub">Akka/Amma - Tall</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')">
+          <div class="choice-emoji">👦</div>
+          <div class="choice-kn">ಮಗು</div>
+          <div class="choice-sub">Child - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t2q2">
+    <div class="q-top">
+      <div class="q-emoji">🏠🏢</div>
+      <div class="q-kn">ಯಾವ ಕಟ್ಟಡ <strong>ಗಿಡ್ಡ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which building is <strong>Shorter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q2',this,true,'f2q2')">
+          <div class="choice-emoji">🏠</div>
+          <div class="choice-kn">ಸಣ್ಣ ಮನೆ</div>
+          <div class="choice-sub">Small House - Short</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')">
+          <div class="choice-emoji">🏢</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಕಟ್ಟಡ</div>
+          <div class="choice-sub">Big Building - Tall</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t2q3">
+    <div class="q-top">
+      <div class="q-emoji">🦒🐄</div>
+      <div class="q-kn">ಯಾವ ಪ್ರಾಣಿ <strong>ಎತ್ತರ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which animal is <strong>Taller</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q3',this,true,'f2q3')">
+          <div class="choice-emoji">🦒</div>
+          <div class="choice-kn">ಜಿರಾಫೆ</div>
+          <div class="choice-sub">Giraffe - Tallest!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')">
+          <div class="choice-emoji">🐄</div>
+          <div class="choice-kn">ಹಸು</div>
+          <div class="choice-sub">Cow - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t2q4">
+    <div class="q-top">
+      <div class="q-emoji">🕯️🔋</div>
+      <div class="q-kn">ಯಾವ ವಸ್ತು <strong>ಎತ್ತರ</strong>ವಾಗಿದೆ?</div>
+      <div class="q-en">Which object is <strong>Taller</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q4',this,true,'f2q4')">
+          <div class="choice-emoji">🕯️</div>
+          <div class="choice-kn">ಉದ್ದ ಮೇಣಬತ್ತಿ</div>
+          <div class="choice-sub">Long Candle - Tall</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')">
+          <div class="choice-emoji">🔋</div>
+          <div class="choice-kn">ಬ್ಯಾಟರಿ</div>
+          <div class="choice-sub">Battery - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t2q5">
+    <div class="q-top">
+      <div class="q-emoji">🦅🐔</div>
+      <div class="q-kn">ಶಾಹಮೃಗ ಮತ್ತು ಕೋಳಿ — ಯಾವುದು <strong>ಗಿಡ್ಡ</strong>?</div>
+      <div class="q-en">Ostrich and Hen — which is <strong>Shorter</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-emoji">🦅</div>
+          <div class="choice-kn">ಶಾಹಮೃಗ</div>
+          <div class="choice-sub">Ostrich - Tall</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,true,'f2q5')">
+          <div class="choice-emoji">🐔</div>
+          <div class="choice-kn">ಕೋಳಿ</div>
+          <div class="choice-sub">Hen - Short!</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn orange" id="btn2" disabled onclick="unlockNext(3)">ಮುಂದೆ ಹೋಗಿ → ಎತ್ತರ-ತಗ್ಗು ✨</button>
+</div>
+
+<!-- ===== TAB 3: ಎತ್ತರ - ತಗ್ಗು ===== -->
+<div class="tab-panel" id="tab-3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#f3e5f5)">
+    <div class="banner-emoji">🪁</div>
+    <div>
+      <div class="banner-kn">ಎತ್ತರ – ತಗ್ಗು</div>
+      <div class="banner-en">High – Low</div>
+      <div class="banner-sub">ಮೇಲೆ ಮತ್ತು ಕೆಳಗೆ • Above and Below</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🦅 ಹದ್ದು <strong>ಎತ್ತರ</strong>ದಲ್ಲಿ ಹಾರುತ್ತಿದೆ • Eagle flies <strong>High</strong><br>
+    🦋 ಚಿಟ್ಟೆ <strong>ತಗ್ಗಿ</strong>ನಲ್ಲಿ ಹಾರುತ್ತಿದೆ • Butterfly flies <strong>Low</strong>
+  </div>
+
+  <div class="compare-box">
+    <div class="compare-row" style="min-height:120px;position:relative;flex-direction:column;align-items:stretch">
+      <div style="display:flex;justify-content:space-around;align-items:flex-start;width:100%;padding:10px 0">
+        <div class="compare-item">
+          <div style="font-size:50px">🪁</div>
+          <div class="compare-label label-high">ಎತ್ತರ • High</div>
+          <div style="font-size:11px;font-weight:700;color:#888;text-align:center;margin-top:4px">ಹಸಿರು ಗಾಳಿಪಟ<br>Green Kite</div>
+        </div>
+        <div class="compare-item" style="margin-top:50px">
+          <div style="font-size:40px">🔺</div>
+          <div class="compare-label label-low">ತಗ್ಗು • Low</div>
+          <div style="font-size:11px;font-weight:700;color:#888;text-align:center;margin-top:4px">ಕೆಂಪು ಗಾಳಿಪಟ<br>Red Kite</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t3q1">
+    <div class="q-top">
+      <div class="q-emoji">🖼️🖼️</div>
+      <div class="q-kn">ಗೋಡೆಯ ಮೇಲೆ ಯಾವ ಚಿತ್ರ <strong>ಎತ್ತರ</strong>ದಲ್ಲಿದೆ?</div>
+      <div class="q-en">Which picture on the wall is placed <strong>Higher</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q1',this,true,'f3q1')">
+          <div class="choice-emoji">🖼️</div>
+          <div class="choice-kn">ಮೇಲಿನ ಚಿತ್ರ</div>
+          <div class="choice-sub">Upper Picture - High</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')">
+          <div class="choice-emoji">🏝️</div>
+          <div class="choice-kn">ಕೆಳಗಿನ ಚಿತ್ರ</div>
+          <div class="choice-sub">Lower Picture - Low</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t3q2">
+    <div class="q-top">
+      <div class="q-emoji">🍇🦊</div>
+      <div class="q-kn">ದ್ರಾಕ್ಷಿ ಗೊಂಚಲು <strong>ಎತ್ತರ</strong>ದಲ್ಲಿದೆಯೋ ಅಥವಾ <strong>ತಗ್ಗು</strong>ದಲ್ಲಿ?</div>
+      <div class="q-en">The grape bunch is <strong>High</strong> or <strong>Low</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q2',this,true,'f3q2')">
+          <div class="choice-emoji">⬆️🍇</div>
+          <div class="choice-kn">ಎತ್ತರದಲ್ಲಿ</div>
+          <div class="choice-sub">High up!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">⬇️🍇</div>
+          <div class="choice-kn">ತಗ್ಗಿನಲ್ಲಿ</div>
+          <div class="choice-sub">Down Low</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t3q3">
+    <div class="q-top">
+      <div class="q-emoji">🕊️🦋</div>
+      <div class="q-kn">ಯಾವ ಹಕ್ಕಿ <strong>ಎತ್ತರ</strong>ದಲ್ಲಿ ಹಾರುತ್ತಿದೆ?</div>
+      <div class="q-en">Which bird is flying <strong>High</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q3',this,true,'f3q3')">
+          <div class="choice-emoji">🕊️</div>
+          <div class="choice-kn">ಹದ್ದು/ಪಾರಿವಾಳ</div>
+          <div class="choice-sub">Dove - Flies High</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">🦋</div>
+          <div class="choice-kn">ಚಿಟ್ಟೆ</div>
+          <div class="choice-sub">Butterfly - Flies Low</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t3q4">
+    <div class="q-top">
+      <div class="q-emoji">🚰🚰</div>
+      <div class="q-kn">ಯಾವ ನಳ್ಳಿ <strong>ತಗ್ಗಿ</strong>ನಲ್ಲಿದೆ?</div>
+      <div class="q-en">Which tap is placed <strong>Low</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')">
+          <div class="choice-emoji">⬆️🚰</div>
+          <div class="choice-kn">ಮೇಲಿನ ನಳ್ಳಿ</div>
+          <div class="choice-sub">Upper Tap - High</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q4',this,true,'f3q4')">
+          <div class="choice-emoji">⬇️🚰</div>
+          <div class="choice-kn">ಕೆಳಗಿನ ನಳ್ಳಿ</div>
+          <div class="choice-sub">Lower Tap - Low!</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t3q5">
+    <div class="q-top">
+      <div class="q-emoji">🌳🐦</div>
+      <div class="q-kn">ಹಕ್ಕಿ ಮರದ ಮೇಲೆ ಇದ್ದಾಗ ಅದು <strong>ಎತ್ತರ</strong>ದಲ್ಲಿದೆಯೋ?</div>
+      <div class="q-en">When the bird is on top of the tree, is it <strong>High</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q5',this,true,'f3q5')">
+          <div class="choice-emoji">✅</div>
+          <div class="choice-kn">ಹೌದು!</div>
+          <div class="choice-sub">Yes! - High</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')">
+          <div class="choice-emoji">❌</div>
+          <div class="choice-kn">ಇಲ್ಲ</div>
+          <div class="choice-sub">No</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn orange" id="btn3" disabled onclick="unlockNext(4)">ಮುಂದೆ ಹೋಗಿ → ಅಳತೆ ✨</button>
+</div>
+
+<!-- ===== TAB 4: ಅಳತೆ ===== -->
+<div class="tab-panel" id="tab-4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#fff8e1)">
+    <div class="banner-emoji">🤲</div>
+    <div>
+      <div class="banner-kn">ಅಳತೆ ಮಾಡೋಣ!</div>
+      <div class="banner-en">Let's Measure!</div>
+      <div class="banner-sub">ಮೊಳ, ಗೇಣು, ಪಾದ • Span, Hand-span, Foot</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    👁️ ಈ ಮೂರು ಅಳತೆಗಳನ್ನು ಕಲಿಯಿರಿ! • Learn these 3 measurements!
+  </div>
+
+  <div class="measure-card">
+    <div class="measure-title">📏 ಅನೌಪಚಾರಿಕ ಅಳತೆಗಳು • Informal Measurements</div>
+    <div class="measure-unit">
+      <div class="measure-unit-emoji">🤲</div>
+      <div class="measure-unit-info">
+        <strong>ಮೊಳ (Mola)</strong><br>
+        ಮೊಣಕೈಯಿಂದ ಬೆರಳ ತುದಿ • Elbow to fingertip<br>
+        <span style="color:#888;font-size:12px">= 1 Cubit / ಒಂದು ಮೊಳ</span>
+      </div>
+    </div>
+    <div class="measure-unit">
+      <div class="measure-unit-emoji">✋</div>
+      <div class="measure-unit-info">
+        <strong>ಗೇಣು (Genu)</strong><br>
+        ಹೆಬ್ಬೆರಳಿನಿಂದ ಕಿರು ಬೆರಳ ತುದಿ • Thumb to little finger<br>
+        <span style="color:#888;font-size:12px">= 1 Hand-span / ಒಂದು ಗೇಣು</span>
+      </div>
+    </div>
+    <div class="measure-unit">
+      <div class="measure-unit-emoji">🦶</div>
+      <div class="measure-unit-info">
+        <strong>ಪಾದ (Pada)</strong><br>
+        ಒಂದು ಕಾಲ ಹೆಜ್ಜೆ • One foot step<br>
+        <span style="color:#888;font-size:12px">= 1 Foot-length / ಒಂದು ಪಾದ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    💡 ಲಕ್ಷ್ಮೀ: ಹೂ ಹಾರ = <strong>1 ಮೊಳ</strong><br>
+    💡 ಗೌರಿ: ಹೂ ಹಾರ = <strong>2 ಗೇಣು</strong><br>
+    💡 ರಾಮು: ಕೋಲಿನ ಉದ್ದ = <strong>5 ಪಾದ</strong><br>
+    💡 ಜಾನ್: TV ಉದ್ದ = <strong>5 ಗೇಣು</strong>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t4q1">
+    <div class="q-top">
+      <div class="q-emoji">🤲</div>
+      <div class="q-kn"><strong>ಮೊಳ</strong> ಎಂದರೆ ಯಾವ ಅಳತೆ?</div>
+      <div class="q-en">What does <strong>Mola (ಮೊಳ)</strong> measure from?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q1',this,true,'f4q1')">
+          <div class="choice-emoji">💪</div>
+          <div class="choice-kn">ಮೊಣಕೈ → ಬೆರಳ</div>
+          <div class="choice-sub">Elbow to Finger</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')">
+          <div class="choice-emoji">🦶</div>
+          <div class="choice-kn">ಕಾಲ ಹೆಜ್ಜೆ</div>
+          <div class="choice-sub">Foot Step</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t4q2">
+    <div class="q-top">
+      <div class="q-emoji">✋</div>
+      <div class="q-kn"><strong>ಗೇಣು</strong> ಎಂದರೆ ಯಾವ ಅಳತೆ?</div>
+      <div class="q-en">What is a <strong>Genu (ಗೇಣು)</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')">
+          <div class="choice-emoji">🦶</div>
+          <div class="choice-kn">ಕಾಲ ಹೆಜ್ಜೆ</div>
+          <div class="choice-sub">Foot step</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,true,'f4q2')">
+          <div class="choice-emoji">✋</div>
+          <div class="choice-kn">ಹೆಬ್ಬೆರಳ → ಕಿರು ಬೆರಳ</div>
+          <div class="choice-sub">Thumb to little finger</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t4q3">
+    <div class="q-top">
+      <div class="q-emoji">🦶</div>
+      <div class="q-kn"><strong>ಪಾದ</strong>ದಿಂದ ಏನನ್ನು ಅಳೆಯುತ್ತಾರೆ?</div>
+      <div class="q-en">What do we measure with <strong>Pada (ಪಾದ / foot)</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q3',this,false,'f4q3')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಹೂ ಹಾರ</div>
+          <div class="choice-sub">Flower garland</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,true,'f4q3')">
+          <div class="choice-emoji">🏫</div>
+          <div class="choice-kn">ತರಗತಿ ಕೊಠಡಿ</div>
+          <div class="choice-sub">Classroom length!</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t4q4">
+    <div class="q-top">
+      <div class="q-emoji">📺</div>
+      <div class="q-kn">ಜಾನ್ TV ಉದ್ದ = <strong>5 ಗೇಣು</strong>. ಯಾವ ಅಳತೆ ಬಳಸಿದ?</div>
+      <div class="q-en">John measured TV = 5. Which unit did he use?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-emoji">🤲</div>
+          <div class="choice-kn">ಮೊಳ</div>
+          <div class="choice-sub">Mola</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,true,'f4q4')">
+          <div class="choice-emoji">✋</div>
+          <div class="choice-kn">ಗೇಣು</div>
+          <div class="choice-sub">Genu ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-emoji">🦶</div>
+          <div class="choice-kn">ಪಾದ</div>
+          <div class="choice-sub">Pada</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-emoji">📏</div>
+          <div class="choice-kn">ಸ್ಕೇಲ್</div>
+          <div class="choice-sub">Ruler</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t4q5">
+    <div class="q-top">
+      <div class="q-emoji">🛏️</div>
+      <div class="q-kn">ಸಲ್ಮಾ ಮಂಚ ಅಳೆದಳು = <strong>6 ಮೊಳ</strong>. ಸರಿ ಅಥವಾ ತಪ್ಪು?</div>
+      <div class="q-en">Salma measured the bed = 6 Mola. Bed is measured using Mola?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q5',this,true,'f4q5')">
+          <div class="choice-emoji">✅</div>
+          <div class="choice-kn">ಹೌದು! ಸರಿ!</div>
+          <div class="choice-sub">Yes! Correct!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')">
+          <div class="choice-emoji">❌</div>
+          <div class="choice-kn">ಇಲ್ಲ</div>
+          <div class="choice-sub">No</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn orange" id="btn4" disabled onclick="unlockNext(5)">ಮುಂದೆ ಹೋಗಿ → ಅಭ್ಯಾಸ ✨</button>
+</div>
+
+<!-- ===== TAB 5: ಅಭ್ಯಾಸ (Final Practice) ===== -->
+<div class="tab-panel" id="tab-5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#fff3e0)">
+    <div class="banner-emoji">🎯</div>
+    <div>
+      <div class="banner-kn">ಅಭ್ಯಾಸ!</div>
+      <div class="banner-en">Final Practice! Mix of everything!</div>
+      <div class="banner-sub">ಎಲ್ಲಾ ಕಲಿತದ್ದನ್ನು ಪ್ರಯತ್ನಿಸಿ • Try all you learned!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t5q1">
+    <div class="q-top">
+      <div class="q-emoji">🥒🌶️</div>
+      <div class="q-kn">ಸೌತೆಕಾಯಿ ಮತ್ತು ಮೆಣಸಿನಕಾಯಿ — ಯಾವುದು <strong>ಉದ್ದ</strong>?</div>
+      <div class="q-en">Cucumber and Chili — which is <strong>Longer</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q1',this,true,'f5q1')">
+          <div class="choice-emoji">🥒</div>
+          <div class="choice-kn">ಸೌತೆಕಾಯಿ</div>
+          <div class="choice-sub">Cucumber - Long!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q1',this,false,'f5q1')">
+          <div class="choice-emoji">🌶️</div>
+          <div class="choice-kn">ಮೆಣಸಿನಕಾಯಿ</div>
+          <div class="choice-sub">Chili - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t5q2">
+    <div class="q-top">
+      <div class="q-emoji">🏀⚽</div>
+      <div class="q-kn">ಎತ್ತರ-ತಗ್ಗು: ಬಾಸ್ಕೆಟ್ ಬಾಲ್ ರಿಂಗ್ <strong>ಎತ್ತರ</strong>ದಲ್ಲಿದೆಯೋ ಅಥವಾ <strong>ತಗ್ಗಿ</strong>ನಲ್ಲಿ?</div>
+      <div class="q-en">Basketball ring — is it placed <strong>High</strong> or <strong>Low</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q2',this,true,'f5q2')">
+          <div class="choice-emoji">⬆️🏀</div>
+          <div class="choice-kn">ಎತ್ತರದಲ್ಲಿ</div>
+          <div class="choice-sub">High up!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q2',this,false,'f5q2')">
+          <div class="choice-emoji">⬇️🏀</div>
+          <div class="choice-kn">ತಗ್ಗಿನಲ್ಲಿ</div>
+          <div class="choice-sub">Down Low</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t5q3">
+    <div class="q-top">
+      <div class="q-emoji">🏫</div>
+      <div class="q-kn">ಆಶಾ ತರಗತಿ ಕೊಠಡಿ ಅಳೆದಳು = <strong>18 ಪಾದ</strong>. ಯಾವ ಅಳತೆ ಬಳಸಿದಳು?</div>
+      <div class="q-en">Asha measured classroom = 18. Which unit did she use?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q3',this,false,'f5q3')">
+          <div class="choice-emoji">🤲</div>
+          <div class="choice-kn">ಮೊಳ</div>
+          <div class="choice-sub">Mola</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'f5q3')">
+          <div class="choice-emoji">✋</div>
+          <div class="choice-kn">ಗೇಣು</div>
+          <div class="choice-sub">Genu</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q3',this,true,'f5q3')">
+          <div class="choice-emoji">🦶</div>
+          <div class="choice-kn">ಪಾದ</div>
+          <div class="choice-sub">Pada ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'f5q3')">
+          <div class="choice-emoji">📏</div>
+          <div class="choice-kn">ಸ್ಕೇಲ್</div>
+          <div class="choice-sub">Ruler</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t5q4">
+    <div class="q-top">
+      <div class="q-emoji">🦒🐘🐁</div>
+      <div class="q-kn">ಮೂರು ಪ್ರಾಣಿಗಳಲ್ಲಿ ಅತ್ಯಂತ <strong>ಎತ್ತರ</strong> ಯಾವುದು?</div>
+      <div class="q-en">Among 3 animals, which is the <strong>Tallest</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q4',this,true,'f5q4')">
+          <div class="choice-emoji">🦒</div>
+          <div class="choice-kn">ಜಿರಾಫೆ</div>
+          <div class="choice-sub">Giraffe - Tallest!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-emoji">🐘</div>
+          <div class="choice-kn">ಆನೆ</div>
+          <div class="choice-sub">Elephant</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-emoji">🐁</div>
+          <div class="choice-kn">ಇಲಿ</div>
+          <div class="choice-sub">Mouse - Short</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-emoji">🐄</div>
+          <div class="choice-kn">ಹಸು</div>
+          <div class="choice-sub">Cow</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t5q5">
+    <div class="q-top">
+      <div class="q-emoji">🚌🚂🚗🚐</div>
+      <div class="q-kn">ನಾಲ್ಕು ವಾಹನಗಳಲ್ಲಿ ಅತ್ಯಂತ <strong>ಉದ್ದ</strong> ಯಾವುದು?</div>
+      <div class="q-en">Among 4 vehicles, which is the <strong>Longest</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q5',this,false,'f5q5')">
+          <div class="choice-emoji">🚌</div>
+          <div class="choice-kn">ಬಸ್</div>
+          <div class="choice-sub">Bus</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q5',this,true,'f5q5')">
+          <div class="choice-emoji">🚂</div>
+          <div class="choice-kn">ರೈಲು</div>
+          <div class="choice-sub">Train - Longest!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'f5q5')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-kn">ಕಾರು</div>
+          <div class="choice-sub">Car</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'f5q5')">
+          <div class="choice-emoji">🚐</div>
+          <div class="choice-kn">ವ್ಯಾನ್</div>
+          <div class="choice-sub">Van</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t5q6">
+    <div class="q-top">
+      <div class="q-emoji">🪜🪜</div>
+      <div class="q-kn">ಎರಡು ಏಣಿಗಳಲ್ಲಿ ಯಾವುದು <strong>ಎತ್ತರ</strong>?</div>
+      <div class="q-en">Between two ladders, which is <strong>Taller</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q6',this,true,'f5q6')">
+          <div class="choice-emoji" style="font-size:40px">🪜</div>
+          <div class="choice-kn">ದೊಡ್ಡ ಏಣಿ</div>
+          <div class="choice-sub">Big Ladder - Tall</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q6',this,false,'f5q6')">
+          <div class="choice-emoji" style="font-size:24px">🪜</div>
+          <div class="choice-kn">ಚಿಕ್ಕ ಏಣಿ</div>
+          <div class="choice-sub">Small Ladder - Short</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7: Ordering -->
+  <div class="q-card" id="t5q7">
+    <div class="q-top">
+      <div class="q-emoji">🌶️🥒🍆</div>
+      <div class="q-kn">ಅತ್ಯಂತ <strong>ಗಿಡ್ಡ</strong> ತರಕಾರಿ ಯಾವುದು?</div>
+      <div class="q-en">Which vegetable is the <strong>Shortest</strong>?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q7',this,false,'f5q7')">
+          <div class="choice-emoji">🥒</div>
+          <div class="choice-kn">ಸೌತೆ</div>
+          <div class="choice-sub">Cucumber</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q7',this,false,'f5q7')">
+          <div class="choice-emoji">🍆</div>
+          <div class="choice-kn">ಬದನೆ</div>
+          <div class="choice-sub">Brinjal</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q7',this,true,'f5q7')">
+          <div class="choice-emoji">🌶️</div>
+          <div class="choice-kn">ಮೆಣಸಿನ</div>
+          <div class="choice-sub">Chili - Shortest!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q7',this,false,'f5q7')">
+          <div class="choice-emoji">🫑</div>
+          <div class="choice-kn">ಕ್ಯಾಪ್ಸಿಕಮ್</div>
+          <div class="choice-sub">Capsicum</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q7"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score5"></div>
+  <button class="big-btn orange" id="btn5" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಸಿ! Finish Lesson!</button>
+</div>
+
+</div><!-- end content -->
+
+<!-- Lock Toast -->
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಅದ್ಭುತ! ಭಲೇ!</div>
+    <div class="celeb-sub">ನೀವು ಪಾಠ 15 ಮುಗಿಸಿದಿರಿ!<br>You finished Lesson 15 — ಉದ್ದ!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="big-btn orange" onclick="document.getElementById('celeb').classList.remove('show')">ಮತ್ತೆ ಆಟವಾಡಿ 🔄</button>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let totalStars = 0;
+let activeTab = 1;
+let unlockedTab = 1;
+
+const totals = {1:5, 2:5, 3:5, 4:5, 5:7};
+const done   = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+// Build score dots
+Object.keys(totals).forEach(t => buildDots('score'+t, 0, totals[t]));
+
+function buildDots(id, done, total) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'sdot' + (i < done ? ' done' : '');
+    el.appendChild(d);
+  }
+}
+
+function updateProgress() {
+  const totalQ = Object.values(totals).reduce((a,b)=>a+b,0);
+  const doneQ  = Object.values(done).reduce((a,b)=>a+b,0);
+  document.getElementById('progFill').style.width = (doneQ/totalQ*100)+'%';
+}
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starsPill').textContent = '⭐ ' + totalStars;
+}
+
+// ===== TAB NAVIGATION =====
+function tryTab(n) {
+  if (n <= unlockedTab) { goTab(n); }
+  else {
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    setTimeout(() => btn.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function goTab(n) {
+  document.getElementById('tab-'+activeTab).classList.remove('active');
+  document.getElementById('tab-btn-'+activeTab).classList.remove('active');
+  if (n > activeTab) document.getElementById('tab-btn-'+activeTab).classList.add('done');
+  activeTab = n;
+  if (n > unlockedTab) unlockedTab = n;
+  const btn = document.getElementById('tab-btn-'+n);
+  btn.classList.remove('locked','unlocked','done');
+  btn.classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function unlockNext(n) {
+  const nextBtn = document.getElementById('tab-btn-'+n);
+  nextBtn.classList.remove('locked');
+  nextBtn.classList.add('unlocked');
+  unlockedTab = n;
+  goTab(n);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== ANSWER =====
+function ansQ(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o => { o.classList.add('disabled'); o.style.pointerEvents='none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ! Well done!';
+    card.classList.add('done');
+    card.dataset.done = '1';
+    addStars(1);
+    // find tab
+    const tnum = parseInt(cardId.replace('t',''));
+    done[tnum]++;
+    buildDots('score'+tnum, done[tnum], totals[tnum]);
+    if (done[tnum] >= totals[tnum]) document.getElementById('btn'+tnum).disabled = false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className = 'fb no';
+    fb.textContent = '❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(() => {
+      opts.forEach(o => { o.classList.remove('disabled'); o.style.pointerEvents=''; });
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className = 'fb';
+    }, 900);
+  }
+}
+
+function finishLesson() {
+  const n = Math.max(3, Math.min(10, Math.floor(totalStars/3)));
+  document.getElementById('celebStars').textContent = '⭐'.repeat(n);
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>

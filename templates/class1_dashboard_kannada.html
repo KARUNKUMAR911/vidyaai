@@ -156,7 +156,7 @@
     <div class="progress-section">
         <div class="progress-header">
             <div class="progress-title">📊 ನನ್ನ ಪ್ರಗತಿ</div>
-        <div class="progress-count" id="progressCount">2 ರಲ್ಲಿ 0 ವಿಷಯ</div>
+        <div class="progress-count" id="progressCount">3 ರಲ್ಲಿ 0 ವಿಷಯ</div>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
@@ -176,7 +176,7 @@
 
     <div class="subjects-grid">
 
-        <a href="/class/1/kannada/chapters" class="subject-card c1" style="grid-column: span 2;">
+        <a href="/class/1/kannada/chapters" class="subject-card c1">
             <div class="card-badge">📘 ವಿಷಯ</div>
             <span class="card-icon">🌸</span>
             <div class="card-title">ಕನ್ನಡ</div>
@@ -185,7 +185,16 @@
             <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
         </a>
 
-        <a href="/class/1/english" class="subject-card c2" style="grid-column: span 2;">
+        <a href="/class/1/kannada/maths" class="subject-card c2">
+            <div class="card-badge">📘 ವಿಷಯ</div>
+            <span class="card-icon">🔢</span>
+            <div class="card-title">ಗಣಿತ</div>
+            <div class="card-sub">ಗಣಿತ ಪಾಠಗಳು</div>
+            <div class="card-en">Mathematics</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-maths"></div></div>
+        </a>
+
+        <a href="/class/1/english" class="subject-card c3" style="grid-column: span 2;">
             <div class="card-badge">📘 ವಿಷಯ</div>
             <span class="card-icon">📝</span>
             <div class="card-title">English</div>
@@ -222,7 +231,7 @@ async function loadProgress() {
         const res = await fetch('/api/progress/load?grade=1');
         const data = await res.json();
         let completed = 0;
-        const subjects = ['kannada','english'];
+        const subjects = ['kannada','maths','english'];
         subjects.forEach(s => {
             const p = data[s];
             const bar = document.getElementById(`prog-${s}`);
@@ -232,8 +241,8 @@ async function loadProgress() {
                 if (pct===100) completed++;
             }
         });
-        document.getElementById('progressCount').textContent = `2 ರಲ್ಲಿ ${completed} ವಿಷಯ`;
-        document.getElementById('progressFill').style.width = `${Math.round((completed/2)*100)}%`;
+        document.getElementById('progressCount').textContent = `3 ರಲ್ಲಿ ${completed} ವಿಷಯ`;
+        document.getElementById('progressFill').style.width = `${Math.round((completed/3)*100)}%`;
         const stars = Object.values(data).reduce((s,p)=>s+(p.stars||0),0);
         document.getElementById('totalStars').textContent = stars;
     } catch(e) {}

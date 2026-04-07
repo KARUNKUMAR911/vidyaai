@@ -278,6 +278,23 @@ def class1_kannada_chapters():
     # Kannada subject chapter index (used by both English-medium and Kannada-medium).
     return render_template('class1_kannada_chapters.html', student=student)
 
+@app.route('/class/1/kannada/maths')
+def class1_kannada_maths_chapters():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_kannada_maths_chapters.html', student=student)
+
+@app.route('/class/1/kannada/maths/lesson<int:lesson_num>')
+def class1_kannada_maths_lesson(lesson_num: int):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    # Lessons are stored as templates/class1_kannada_maths_lesson{N}.html
+    if lesson_num < 1 or lesson_num > 18:
+        return redirect('/class/1/kannada/maths')
+    return render_template(f'class1_kannada_maths_lesson{lesson_num}.html', student=student)
+
 # Class 1 Kannada lessons
 @app.route('/class/1/kannada/vandane')
 def class1_kannada_vandane():
