@@ -267,6 +267,15 @@ def class1_kannada_dashboard():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
+    # Kannada-medium Class 1 dashboard (overall).
+    return render_template('class1_dashboard_kannada.html', student=student)
+
+@app.route('/class/1/kannada/chapters')
+def class1_kannada_chapters():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    # Kannada subject chapter index (used by both English-medium and Kannada-medium).
     return render_template('class1_kannada_chapters.html', student=student)
 
 # Class 1 Kannada lessons
