@@ -1,82 +1,1269 @@
 <!DOCTYPE html>
 <html lang="kn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 13: ಮಾನಸಿಕ ಲೆಕ್ಕಾಚಾರ</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Noto Sans Kannada", "Segoe UI", sans-serif;
-      background: #fff8f0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      color: #1f2937;
-      padding: 20px;
-    }
-    .card {
-      width: min(560px, 100%);
-      background: white;
-      border-radius: 22px;
-      padding: 22px 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
-      border: 1px solid #f3f4f6;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #ede9fe;
-      color: #5b21b6;
-      font-weight: 900;
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      margin-bottom: 14px;
-    }
-    h1 {
-      font-size: 22px;
-      font-weight: 1000;
-      margin-bottom: 8px;
-      line-height: 1.25;
-    }
-    p {
-      font-size: 14px;
-      color: #6b7280;
-      font-weight: 700;
-      margin-bottom: 18px;
-      line-height: 1.5;
-    }
-    .row { display: flex; gap: 10px; flex-wrap: wrap; }
-    a {
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      font-weight: 900;
-      font-size: 13px;
-    }
-    .primary { background: #7c3aed; color: white; }
-    .ghost { background: #f3f4f6; color: #111827; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 13: ಮಾನಸಿಕ ಲೆಕ್ಕಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#f1f8e9;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#2e7d32,#388e3c,#66bb6a);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.28)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900;letter-spacing:.2px}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1b5e20,#2e7d32,#66bb6a);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#2e7d32,#66bb6a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* TABS BAR */
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#2e7d32;border-color:#a5d6a7}
+.step-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32;box-shadow:0 4px 14px rgba(46,125,50,.45)}
+.step-tab.done{background:#e8f5e9;color:#2e7d32;border-color:#66bb6a}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONTENT */
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+/* INFO BOX */
+.info-box{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.09);border:3px solid #a5d6a7}
+.info-box-title{font-size:15px;font-weight:900;color:#2e7d32;margin-bottom:10px}
+.info-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:14px;font-weight:700;color:#444;line-height:1.5}
+.info-row .bullet{font-size:20px;flex-shrink:0}
+
+/* Q CARD */
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#66bb6a;background:#e8f5e9}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:38px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-sum{font-size:28px;font-weight:900;color:#2e7d32;text-align:center;margin:8px 0;background:#e8f5e9;border-radius:14px;padding:10px}
+.q-bottom{border-top:2px dashed #a5d6a7;padding:12px 14px}
+
+/* CHOICES */
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.three{grid-template-columns:1fr 1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #a5d6a7;background:#e8f5e9;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.choice:active{transform:scale(.92)}
+.choice-num{font-size:28px;font-weight:900;color:#2e7d32}
+.choice-kn{font-size:13px;font-weight:700;color:#388e3c}
+.choice-emoji{font-size:26px}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+/* FEEDBACK */
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+/* SCORE DOTS */
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px;justify-content:center}
+.sdot{width:16px;height:16px;border-radius:50%;background:#c8e6c9;transition:background .3s}
+.sdot.done{background:#2e7d32}
+
+/* BIG BTN */
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.green{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff}
+.big-btn.green:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* SECTION HEAD */
+.sec-head{font-size:13px;font-weight:900;color:#2e7d32;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;padding-left:4px}
+
+/* DEMO CARD */
+.demo-card{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:3px solid #a5d6a7;border-radius:22px;padding:18px;margin-bottom:14px;text-align:center}
+.demo-title{font-size:15px;font-weight:900;color:#2e7d32;margin-bottom:10px}
+.demo-sum-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;flex-wrap:wrap}
+.demo-num{font-size:40px;font-weight:900;color:#1b5e20;background:#fff;border-radius:14px;padding:8px 16px;min-width:56px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.demo-op{font-size:32px;font-weight:900;color:#388e3c}
+.demo-eq{font-size:32px;font-weight:900;color:#388e3c}
+.demo-ans{font-size:40px;font-weight:900;color:#fff;background:#2e7d32;border-radius:14px;padding:8px 16px;min-width:56px;box-shadow:0 4px 14px rgba(46,125,50,.4)}
+.demo-trick{font-size:14px;font-weight:700;color:#555;margin-top:10px;background:#fff;border-radius:12px;padding:10px;line-height:1.6}
+
+/* FINGER DEMO */
+.finger-demo{font-size:42px;text-align:center;letter-spacing:4px;margin:8px 0;line-height:1.4}
+
+/* STORY CARD */
+.story-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.09);border-left:6px solid #66bb6a}
+.story-text{font-size:15px;font-weight:700;color:#333;line-height:1.7;margin-bottom:10px}
+.story-q{font-size:16px;font-weight:900;color:#2e7d32;margin-bottom:10px;text-align:center}
+
+/* NUMBER CIRCLE GAME */
+.ncircle-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.09);border:3px solid #a5d6a7}
+.ncircle-title{font-size:15px;font-weight:900;color:#2e7d32;margin-bottom:12px;text-align:center}
+.ncircle-layout{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+.nc-center{width:70px;height:70px;border-radius:50%;background:#2e7d32;color:#fff;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(46,125,50,.4)}
+.nc-spokes{display:flex;flex-direction:column;gap:8px}
+.nc-spoke{display:flex;align-items:center;gap:6px}
+.nc-num{width:42px;height:42px;border-radius:12px;background:#e8f5e9;border:3px solid #a5d6a7;font-size:18px;font-weight:900;color:#2e7d32;display:flex;align-items:center;justify-content:center}
+.nc-op{font-size:16px;font-weight:900;color:#388e3c}
+.nc-ans-box{width:48px;height:48px;border-radius:12px;background:#fff;border:3px solid #a5d6a7;font-size:20px;font-weight:900;color:#2e7d32;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;user-select:none}
+.nc-ans-box:active{transform:scale(.88)}
+.nc-ans-box.correct{background:#c8e6c9;border-color:#43a047;animation:popIn .3s ease}
+.nc-ans-box.wrong{background:#ffcdd2;border-color:#e53935;animation:wobble .4s ease}
+.nc-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.nc-opt{width:48px;height:48px;border-radius:12px;background:#e8f5e9;border:3px solid #a5d6a7;font-size:20px;font-weight:900;color:#2e7d32;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;user-select:none}
+.nc-opt:active{transform:scale(.88)}
+.nc-opt.used{opacity:.3;pointer-events:none}
+
+/* SEQUENCE GAME */
+.seq-wrap{background:#fff;border-radius:22px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid #a5d6a7}
+.seq-title{font-size:14px;font-weight:900;color:#2e7d32;margin-bottom:10px;text-align:center}
+.seq-row{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.seq-num{width:46px;height:46px;border-radius:12px;background:#e8f5e9;border:3px solid #a5d6a7;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#2e7d32;flex-shrink:0}
+.seq-blank{width:46px;height:46px;border-radius:12px;background:#f5f5f5;border:3px dashed #bdbdbd;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;flex-shrink:0;cursor:pointer;transition:all .2s}
+.seq-blank.filled{background:#c8e6c9;border:3px solid #43a047;color:#2e7d32;cursor:default;animation:popIn .3s ease}
+.seq-blank.wrong{background:#ffcdd2;border:3px solid #e53935;color:#c62828;animation:wobble .4s ease}
+.seq-arr{font-size:18px;color:#a5d6a7;font-weight:900}
+.seq-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.seq-opt{width:46px;height:46px;border-radius:12px;background:#e8f5e9;border:3px solid #a5d6a7;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#2e7d32;cursor:pointer;transition:all .2s;user-select:none}
+.seq-opt:active{transform:scale(.88)}
+.seq-opt.used{opacity:.3;pointer-events:none}
+
+/* TRUE/FALSE */
+.tf-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;overflow:hidden}
+.tf-card.done{border-color:#66bb6a;background:#e8f5e9}
+.tf-card.wrong-flash{animation:wrongFlash .4s ease}
+.tf-top{padding:16px;text-align:center}
+.tf-stmt{font-size:18px;font-weight:900;color:#333;background:#f1f8e9;border-radius:14px;padding:14px;margin-bottom:12px;line-height:1.5}
+.tf-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}
+.tf-btn{padding:16px;border-radius:16px;border:3px solid #a5d6a7;background:#e8f5e9;font-size:20px;font-weight:900;cursor:pointer;transition:all .18s;user-select:none;text-align:center}
+.tf-btn:active{transform:scale(.92)}
+.tf-btn.t{color:#2e7d32}
+.tf-btn.f{color:#c62828;border-color:#ef9a9a;background:#ffebee}
+.tf-btn.correct{background:#c8e6c9;border-color:#43a047;animation:popIn .3s ease}
+.tf-btn.wrong{background:#ffcdd2;border-color:#e53935;animation:wobble .4s ease}
+.tf-btn.disabled{pointer-events:none}
+
+/* CELEBRATE */
+.celeb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.celeb-overlay.show{opacity:1;pointer-events:auto}
+.celeb-box{background:#fff;border-radius:28px;padding:32px 24px;text-align:center;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.celeb-emoji{font-size:64px;display:block;animation:float 2s ease-in-out infinite}
+.celeb-title{font-size:24px;font-weight:900;color:#2e7d32;margin:12px 0 6px}
+.celeb-sub{font-size:15px;font-weight:700;color:#555;margin-bottom:14px;line-height:1.6}
+.celeb-stars{font-size:36px;margin:8px 0 20px}
+.celeb-close{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;border:none;border-radius:50px;padding:14px 36px;font-family:'Baloo Tamma 2',sans-serif;font-size:18px;font-weight:900;cursor:pointer}
+</style>
 </head>
 <body>
-  <div class="card">
-    <div class="badge">🧠 ಪಾಠ 13</div>
-    <h1>ಮಾನಸಿಕ ಲೆಕ್ಕಾಚಾರ (Lesson 13)</h1>
-    <p>
-      ಈ ಪಾಠದ ಫೈಲ್ ಇನ್ನೂ ಸೇರಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು <b>Lesson 13</b> HTML ಫೈಲ್ ನೀಡಿ ಅಥವಾ
-      ನೀವು ಬಯಸಿದರೆ ನಾನು ಇದನ್ನು ಇಂಗ್ಲಿಷ್ ಮಾಧ್ಯಮದ ಪಾಠಕ್ಕೆ ಸಂಪರ್ಕ ಮಾಡುತ್ತೇನೆ.
-    </p>
-    <div class="row">
-      <a class="primary" href="/class/1/kannada/maths">← ಹಿಂದಕ್ಕೆ (ಅಧ್ಯಾಯಗಳು)</a>
-      <a class="ghost" href="/class/1/kannada">🏠 ಡ್ಯಾಶ್ಬೋರ್ಡ್</a>
+
+<div class="topbar">
+  <div class="topbar-title">🧠 ಪಾಠ 13 — ಮಾನಸಿಕ ಲೆಕ್ಕಗಳು</div>
+  <div class="stars-pill" id="starsPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🧮</span>
+  <h1>ಮಾನಸಿಕ ಲೆಕ್ಕಗಳು</h1>
+  <p>Mental Maths • ಮನಸ್ಸಿನಲ್ಲೇ ಲೆಕ್ಕ ಮಾಡೋಣ! • No typing — just tap!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ • Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" id="tab-btn-1" onclick="tryTab(1)">📖 ಕಲಿಯೋಣ</div>
+  <div class="step-tab locked" id="tab-btn-2" onclick="tryTab(2)">➕ ಕೂಡಿಸು</div>
+  <div class="step-tab locked" id="tab-btn-3" onclick="tryTab(3)">🔢 ಸರಣಿ</div>
+  <div class="step-tab locked" id="tab-btn-4" onclick="tryTab(4)">📖 ಪ್ರಶ್ನೆಗಳು</div>
+  <div class="step-tab locked" id="tab-btn-5" onclick="tryTab(5)">✅ ಸರಿ-ತಪ್ಪು</div>
+  <div class="step-tab locked" id="tab-btn-6" onclick="tryTab(6)">🏆 ಅಂತಿಮ ಪರೀಕ್ಷೆ</div>
+</div>
+
+<div class="lock-toast" id="lockToast">⚠️ ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ===== TAB 1: LEARN ===== -->
+<div class="tab-panel active" id="tab-1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20">
+    <div class="banner-emoji">🧠</div>
+    <div>
+      <div class="banner-kn">ಮಾನಸಿಕ ಲೆಕ್ಕಗಳು</div>
+      <div class="banner-en">Mental Maths — Think in your head!</div>
+      <div class="banner-sub">ಒಂದಂಕಿಯ ಎರಡು ಸಂಖ್ಯೆಗಳನ್ನು ಮಾನಸಿಕವಾಗಿ ಕೂಡುವೆ<br>Add two single-digit numbers in your mind!</div>
     </div>
   </div>
+
+  <!-- Core concept -->
+  <div class="info-box">
+    <div class="info-box-title">💡 ಮಾನಸಿಕ ಲೆಕ್ಕ ಅಂದರೇನು?</div>
+    <div class="info-row"><span class="bullet">🧠</span> ಲೆಕ್ಕ ಮಾಡಲು ಪೆನ್ನು, ಪೇಪರ್ ಬೇಡ!</div>
+    <div class="info-row"><span class="bullet">🖐️</span> ಬೆರಳು ಅಥವಾ ಮನಸ್ಸಿನಲ್ಲೇ ಲೆಕ್ಕ ಮಾಡೋಣ!</div>
+    <div class="info-row"><span class="bullet">✅</span> ಒಂದಂಕಿಯ ಎರಡು ಸಂಖ್ಯೆಗಳನ್ನು ಮಾನಸಿಕವಾಗಿ ಕೂಡಬಹುದು</div>
+  </div>
+
+  <!-- Key Example from PDF -->
+  <div class="sec-head">📸 ಉದಾಹರಣೆ ನೋಡೋಣ</div>
+
+  <div class="demo-card">
+    <div class="demo-title">5 ಹಣ್ಣುಗಳು + 3 ಹಣ್ಣುಗಳು = ಎಷ್ಟು?</div>
+    <div class="demo-sum-row">
+      <div class="demo-num">5</div>
+      <div class="demo-op">+</div>
+      <div class="demo-num">3</div>
+      <div class="demo-eq">=</div>
+      <div class="demo-ans">8</div>
+    </div>
+    <div class="finger-demo">🍎🍎🍎🍎🍎 + 🍎🍎🍎 = 🍎🍎🍎🍎🍎🍎🍎🍎</div>
+    <div class="demo-trick">💡 ಟ್ರಿಕ್: <strong>5 ಆದ ಮೇಲೆ → 6, 7, 8</strong><br>ಬೆರಳಲ್ಲಿ 5 ತೋರಿಸಿ, ನಂತರ 3 ಬಾರಿ ಎಣಿಸು<br>Think: 5 → count 3 more → 6, 7, 8 = 8!</div>
+  </div>
+
+  <!-- How to count mentally -->
+  <div class="sec-head">🖐️ ಬೆರಳಲ್ಲಿ ಹೇಗೆ ಎಣಿಸುವೆ?</div>
+
+  <div class="info-box">
+    <div class="info-box-title">3 + 3 + 2 = 8 — ಹೇಗೆ?</div>
+    <div style="text-align:center;font-size:28px;font-weight:900;color:#2e7d32;margin:10px 0">3 + 3 + 2 = 8</div>
+    <div class="info-row"><span class="bullet">1️⃣</span> ಮೊದಲು 3 ತೋರಿಸು → <span style="font-size:20px">🖐️(3)</span></div>
+    <div class="info-row"><span class="bullet">2️⃣</span> ಮತ್ತೆ 3 ಎಣಿಸು → 4, 5, 6</div>
+    <div class="info-row"><span class="bullet">3️⃣</span> ನಂತರ 2 ಎಣಿಸು → 7, 8</div>
+    <div class="info-row"><span class="bullet">✅</span> ಉತ್ತರ = <strong>8!</strong></div>
+  </div>
+
+  <!-- More examples -->
+  <div class="sec-head">🎯 ಇನ್ನಷ್ಟು ಉದಾಹರಣೆಗಳು</div>
+
+  <div class="demo-card">
+    <div class="demo-title">4 ಚಾಕೊಲೇಟ್‌ಗಳು + 2 ಚಾಕೊಲೇಟ್‌ಗಳು</div>
+    <div class="demo-sum-row">
+      <div class="demo-num">4</div><div class="demo-op">+</div>
+      <div class="demo-num">2</div><div class="demo-eq">=</div>
+      <div class="demo-ans">6</div>
+    </div>
+    <div class="finger-demo">🍫🍫🍫🍫 + 🍫🍫</div>
+    <div class="demo-trick">💡 4 ಆದ ಮೇಲೆ → 5, 6 → ಉತ್ತರ = <strong>6</strong></div>
+  </div>
+
+  <div class="demo-card">
+    <div class="demo-title">5 ಗಿಳಿಗಳು + 4 ಗಿಳಿಗಳು</div>
+    <div class="demo-sum-row">
+      <div class="demo-num">5</div><div class="demo-op">+</div>
+      <div class="demo-num">4</div><div class="demo-eq">=</div>
+      <div class="demo-ans">9</div>
+    </div>
+    <div class="finger-demo">🦜🦜🦜🦜🦜 + 🦜🦜🦜🦜</div>
+    <div class="demo-trick">💡 5 ಆದ ಮೇಲೆ → 6, 7, 8, 9 → ಉತ್ತರ = <strong>9</strong></div>
+  </div>
+
+  <div class="demo-card">
+    <div class="demo-title">3 ಮೊಲಗಳು + 6 ಮೊಲಗಳು</div>
+    <div class="demo-sum-row">
+      <div class="demo-num">3</div><div class="demo-op">+</div>
+      <div class="demo-num">6</div><div class="demo-eq">=</div>
+      <div class="demo-ans">9</div>
+    </div>
+    <div class="finger-demo">🐰🐰🐰 + 🐰🐰🐰🐰🐰🐰</div>
+    <div class="demo-trick">💡 ದೊಡ್ಡ ಸಂಖ್ಯೆಯಿಂದ ಶುರು ಮಾಡು: 6 → 7, 8, 9 → ಉತ್ತರ = <strong>9</strong></div>
+  </div>
+
+  <div class="demo-card">
+    <div class="demo-title">2 ಚೆಂಡುಗಳು + 7 ಚೆಂಡುಗಳು</div>
+    <div class="demo-sum-row">
+      <div class="demo-num">2</div><div class="demo-op">+</div>
+      <div class="demo-num">7</div><div class="demo-eq">=</div>
+      <div class="demo-ans">9</div>
+    </div>
+    <div class="finger-demo">⚽⚽ + ⚽⚽⚽⚽⚽⚽⚽</div>
+    <div class="demo-trick">💡 7 → 8, 9 → ಉತ್ತರ = <strong>9</strong></div>
+  </div>
+
+  <!-- Number bonds concept -->
+  <div class="sec-head">🔗 ಎರಡು ಬದಿಯೂ ಸಮ — Equal both sides!</div>
+  <div class="info-box">
+    <div class="info-box-title">✨ 12 = __ + 8 → 12 = 4 + 8</div>
+    <div class="info-row"><span class="bullet">💡</span> ಒಂದು ಬದಿ ಗೊತ್ತಿದ್ದರೆ, ಇನ್ನೊಂದು ಬದಿ ಹುಡುಕಬಹುದು!</div>
+    <div style="text-align:center;margin:10px 0">
+      <span style="font-size:22px;font-weight:900;color:#2e7d32">6 + __ = 10 → 6 + 4 = 10 ✅</span>
+    </div>
+    <div style="text-align:center;margin:10px 0">
+      <span style="font-size:22px;font-weight:900;color:#2e7d32">10 + __ = 15 → 10 + 5 = 15 ✅</span>
+    </div>
+  </div>
+
+  <button class="big-btn green" onclick="completeTab(1)">ಮುಂದೆ ಹೋಗು → ಕೂಡಿಸು! ➕</button>
+</div>
+
+<!-- ===== TAB 2: ADDITION QUIZ ===== -->
+<div class="tab-panel" id="tab-2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8);color:#33691e">
+    <div class="banner-emoji">➕</div>
+    <div>
+      <div class="banner-kn">ಮಾನಸಿಕವಾಗಿ ಕೂಡಿಸು!</div>
+      <div class="banner-en">Add mentally — tap the answer!</div>
+      <div class="banner-sub">ಮನಸ್ಸಿನಲ್ಲೇ ಯೋಚಿಸಿ ಸರಿ ಉತ್ತರ ಟ್ಯಾಪ್ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <!-- Q1: 2+1 -->
+  <div class="q-card" id="a1">
+    <div class="q-top">
+      <div class="q-emoji">✏️✏️ + ✏️</div>
+      <div class="q-sum">2 + 1 = ?</div>
+      <div class="q-en">2 pencils + 1 pencil = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a1',this,false,'a1fb')"><span class="choice-num">2</span></div>
+        <div class="choice" onclick="ansQ('a1',this,true,'a1fb')"><span class="choice-num">3</span></div>
+        <div class="choice" onclick="ansQ('a1',this,false,'a1fb')"><span class="choice-num">4</span></div>
+        <div class="choice" onclick="ansQ('a1',this,false,'a1fb')"><span class="choice-num">5</span></div>
+      </div>
+      <div class="fb" id="a1fb"></div>
+    </div>
+  </div>
+
+  <!-- Q2: 7+2 -->
+  <div class="q-card" id="a2">
+    <div class="q-top">
+      <div class="q-emoji">🦜🦜🦜🦜🦜🦜🦜 + 🦜🦜</div>
+      <div class="q-sum">7 + 2 = ?</div>
+      <div class="q-en">7 parrots + 2 parrots = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a2',this,false,'a2fb')"><span class="choice-num">8</span></div>
+        <div class="choice" onclick="ansQ('a2',this,true,'a2fb')"><span class="choice-num">9</span></div>
+        <div class="choice" onclick="ansQ('a2',this,false,'a2fb')"><span class="choice-num">10</span></div>
+        <div class="choice" onclick="ansQ('a2',this,false,'a2fb')"><span class="choice-num">11</span></div>
+      </div>
+      <div class="fb" id="a2fb"></div>
+    </div>
+  </div>
+
+  <!-- Q3: 5+3 -->
+  <div class="q-card" id="a3">
+    <div class="q-top">
+      <div class="q-emoji">🍎🍎🍎🍎🍎 + 🍎🍎🍎</div>
+      <div class="q-sum">5 + 3 = ?</div>
+      <div class="q-kn">5 ಹಣ್ಣುಗಳು + 3 ಹಣ್ಣುಗಳು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a3',this,false,'a3fb')"><span class="choice-num">6</span></div>
+        <div class="choice" onclick="ansQ('a3',this,false,'a3fb')"><span class="choice-num">7</span></div>
+        <div class="choice" onclick="ansQ('a3',this,true,'a3fb')"><span class="choice-num">8</span></div>
+        <div class="choice" onclick="ansQ('a3',this,false,'a3fb')"><span class="choice-num">9</span></div>
+      </div>
+      <div class="fb" id="a3fb"></div>
+    </div>
+  </div>
+
+  <!-- Q4: 8+4 -->
+  <div class="q-card" id="a4">
+    <div class="q-top">
+      <div class="q-emoji">📚📚📚📚📚📚📚📚 + 📚📚📚📚</div>
+      <div class="q-sum">8 + 4 = ?</div>
+      <div class="q-kn">8 ಪುಸ್ತಕಗಳು + 4 ಪುಸ್ತಕಗಳು</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a4',this,false,'a4fb')"><span class="choice-num">10</span></div>
+        <div class="choice" onclick="ansQ('a4',this,false,'a4fb')"><span class="choice-num">11</span></div>
+        <div class="choice" onclick="ansQ('a4',this,true,'a4fb')"><span class="choice-num">12</span></div>
+        <div class="choice" onclick="ansQ('a4',this,false,'a4fb')"><span class="choice-num">13</span></div>
+      </div>
+      <div class="fb" id="a4fb"></div>
+    </div>
+  </div>
+
+  <!-- Q5: 6+6 -->
+  <div class="q-card" id="a5">
+    <div class="q-top">
+      <div class="q-sum">6 + 6 = ?</div>
+      <div class="q-kn">6 ⚽ + 6 ⚽ = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a5',this,false,'a5fb')"><span class="choice-num">10</span></div>
+        <div class="choice" onclick="ansQ('a5',this,false,'a5fb')"><span class="choice-num">11</span></div>
+        <div class="choice" onclick="ansQ('a5',this,true,'a5fb')"><span class="choice-num">12</span></div>
+        <div class="choice" onclick="ansQ('a5',this,false,'a5fb')"><span class="choice-num">13</span></div>
+      </div>
+      <div class="fb" id="a5fb"></div>
+    </div>
+  </div>
+
+  <!-- Q6: 7+7 -->
+  <div class="q-card" id="a6">
+    <div class="q-top">
+      <div class="q-sum">7 + 7 = ?</div>
+      <div class="q-kn">7 🎈 + 7 🎈 = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a6',this,false,'a6fb')"><span class="choice-num">12</span></div>
+        <div class="choice" onclick="ansQ('a6',this,true,'a6fb')"><span class="choice-num">14</span></div>
+        <div class="choice" onclick="ansQ('a6',this,false,'a6fb')"><span class="choice-num">15</span></div>
+        <div class="choice" onclick="ansQ('a6',this,false,'a6fb')"><span class="choice-num">16</span></div>
+      </div>
+      <div class="fb" id="a6fb"></div>
+    </div>
+  </div>
+
+  <!-- Q7: 8+8 -->
+  <div class="q-card" id="a7">
+    <div class="q-top">
+      <div class="q-sum">8 + 8 = ?</div>
+      <div class="q-kn">8 🪄 + 8 🪄 = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a7',this,false,'a7fb')"><span class="choice-num">14</span></div>
+        <div class="choice" onclick="ansQ('a7',this,false,'a7fb')"><span class="choice-num">15</span></div>
+        <div class="choice" onclick="ansQ('a7',this,true,'a7fb')"><span class="choice-num">16</span></div>
+        <div class="choice" onclick="ansQ('a7',this,false,'a7fb')"><span class="choice-num">17</span></div>
+      </div>
+      <div class="fb" id="a7fb"></div>
+    </div>
+  </div>
+
+  <!-- Q8: Fill blank 6+?=10 -->
+  <div class="q-card" id="a8">
+    <div class="q-top">
+      <div class="q-sum">6 + __ = 10</div>
+      <div class="q-kn">ಖಾಲಿ ತುಂಬು — Fill the blank</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a8',this,false,'a8fb')"><span class="choice-num">3</span></div>
+        <div class="choice" onclick="ansQ('a8',this,true,'a8fb')"><span class="choice-num">4</span></div>
+        <div class="choice" onclick="ansQ('a8',this,false,'a8fb')"><span class="choice-num">5</span></div>
+        <div class="choice" onclick="ansQ('a8',this,false,'a8fb')"><span class="choice-num">6</span></div>
+      </div>
+      <div class="fb" id="a8fb"></div>
+    </div>
+  </div>
+
+  <!-- Q9: 10+?=15 -->
+  <div class="q-card" id="a9">
+    <div class="q-top">
+      <div class="q-sum">10 + __ = 15</div>
+      <div class="q-kn">ಖಾಲಿ ತುಂಬು — Fill the blank</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a9',this,false,'a9fb')"><span class="choice-num">4</span></div>
+        <div class="choice" onclick="ansQ('a9',this,true,'a9fb')"><span class="choice-num">5</span></div>
+        <div class="choice" onclick="ansQ('a9',this,false,'a9fb')"><span class="choice-num">6</span></div>
+        <div class="choice" onclick="ansQ('a9',this,false,'a9fb')"><span class="choice-num">7</span></div>
+      </div>
+      <div class="fb" id="a9fb"></div>
+    </div>
+  </div>
+
+  <!-- Q10: ?+3=10 -->
+  <div class="q-card" id="a10">
+    <div class="q-top">
+      <div class="q-sum">__ + 3 = 10</div>
+      <div class="q-kn">ಖಾಲಿ ತುಂಬು — Fill the blank</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('a10',this,false,'a10fb')"><span class="choice-num">6</span></div>
+        <div class="choice" onclick="ansQ('a10',this,true,'a10fb')"><span class="choice-num">7</span></div>
+        <div class="choice" onclick="ansQ('a10',this,false,'a10fb')"><span class="choice-num">8</span></div>
+        <div class="choice" onclick="ansQ('a10',this,false,'a10fb')"><span class="choice-num">9</span></div>
+      </div>
+      <div class="fb" id="a10fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="sdots2">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn green" id="btn2" onclick="completeTab(2)" disabled>ಮುಂದೆ ಹೋಗು → ಸರಣಿ 🔢</button>
+</div>
+
+<!-- ===== TAB 3: SEQUENCES ===== -->
+<div class="tab-panel" id="tab-3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#f0f4c3);color:#33691e">
+    <div class="banner-emoji">🔢</div>
+    <div>
+      <div class="banner-kn">ಸಂಖ್ಯಾ ಸರಣಿ</div>
+      <div class="banner-en">Number Sequences — Find the pattern!</div>
+      <div class="banner-sub">ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು? ಮತ್ತು ಹಿಂದಕ್ಕೆ ಎಣಿಸು!</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-box-title">📌 ಹೇಗೆ ಗೊತ್ತಾಗುತ್ತೆ?</div>
+    <div class="info-row"><span class="bullet">➕</span> <strong>2, 4, 6...</strong> → ಎರಡೆರಡು ಹೆಚ್ಚುತ್ತಾ ಸಾಗಿದೆ! → 6 + 2 = <strong>8</strong></div>
+    <div class="info-row"><span class="bullet">➖</span> <strong>12, 9, 6...</strong> → ಸಂಖ್ಯೆಗಳು ಕಡಿಮೆಯಾಗುತ್ತಾ ಸಾಗಿದೆ → ಪ್ರತಿ ಬಾರಿ 3 ಕಡಿಮೆ → 6 − 3 = <strong>3</strong></div>
+    <div class="info-row"><span class="bullet">💡</span> ಮೊದಲು ವ್ಯತ್ಯಾಸ ನೋಡು, ನಂತರ ಮುಂದಿನ ಸಂಖ್ಯೆ ಹೇಳು!</div>
+  </div>
+
+  <div class="sec-head">⬆️ ಹೆಚ್ಚುತ್ತಾ ಹೋಗುವ ಸರಣಿ — Going Up</div>
+
+  <!-- SEQ 1: 3,6,9,? -->
+  <div class="seq-wrap" id="sq1">
+    <div class="seq-title">🔢 3, 6, 9, __ → ಪ್ರತಿ ಬಾರಿ 3 ಹೆಚ್ಚು (+3)</div>
+    <div class="seq-row">
+      <div class="seq-num">3</div><div class="seq-arr">→</div>
+      <div class="seq-num">6</div><div class="seq-arr">→</div>
+      <div class="seq-num">9</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq1b1" data-ans="12"></div>
+    </div>
+    <div class="seq-opts" id="sq1opts">
+      <div class="seq-opt" onclick="fillSeq('sq1b1','sq1opts',this,12,'sq1fb','sq1')">12</div>
+      <div class="seq-opt" onclick="seqWrong('sq1opts',this,'sq1fb')">10</div>
+      <div class="seq-opt" onclick="seqWrong('sq1opts',this,'sq1fb')">11</div>
+      <div class="seq-opt" onclick="seqWrong('sq1opts',this,'sq1fb')">13</div>
+    </div>
+    <div class="fb" id="sq1fb"></div>
+  </div>
+
+  <!-- SEQ 2: 4,8,12,? -->
+  <div class="seq-wrap" id="sq2">
+    <div class="seq-title">🔢 4, 8, 12, __ → ಪ್ರತಿ ಬಾರಿ 4 ಹೆಚ್ಚು (+4)</div>
+    <div class="seq-row">
+      <div class="seq-num">4</div><div class="seq-arr">→</div>
+      <div class="seq-num">8</div><div class="seq-arr">→</div>
+      <div class="seq-num">12</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq2b1" data-ans="16"></div>
+    </div>
+    <div class="seq-opts" id="sq2opts">
+      <div class="seq-opt" onclick="fillSeq('sq2b1','sq2opts',this,16,'sq2fb','sq2')">16</div>
+      <div class="seq-opt" onclick="seqWrong('sq2opts',this,'sq2fb')">14</div>
+      <div class="seq-opt" onclick="seqWrong('sq2opts',this,'sq2fb')">15</div>
+      <div class="seq-opt" onclick="seqWrong('sq2opts',this,'sq2fb')">18</div>
+    </div>
+    <div class="fb" id="sq2fb"></div>
+  </div>
+
+  <!-- SEQ 3: 2,4,6,? -->
+  <div class="seq-wrap" id="sq3">
+    <div class="seq-title">🔢 2, 4, 6, __ → ಎರಡೆರಡು ಹೆಚ್ಚು (+2)</div>
+    <div class="seq-row">
+      <div class="seq-num">2</div><div class="seq-arr">→</div>
+      <div class="seq-num">4</div><div class="seq-arr">→</div>
+      <div class="seq-num">6</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq3b1" data-ans="8"></div>
+    </div>
+    <div class="seq-opts" id="sq3opts">
+      <div class="seq-opt" onclick="fillSeq('sq3b1','sq3opts',this,8,'sq3fb','sq3')">8</div>
+      <div class="seq-opt" onclick="seqWrong('sq3opts',this,'sq3fb')">7</div>
+      <div class="seq-opt" onclick="seqWrong('sq3opts',this,'sq3fb')">9</div>
+      <div class="seq-opt" onclick="seqWrong('sq3opts',this,'sq3fb')">10</div>
+    </div>
+    <div class="fb" id="sq3fb"></div>
+  </div>
+
+  <!-- SEQ 4: 5,7,9,? -->
+  <div class="seq-wrap" id="sq4">
+    <div class="seq-title">🔢 5, 7, 9, __ → ಎರಡೆರಡು ಹೆಚ್ಚು (+2)</div>
+    <div class="seq-row">
+      <div class="seq-num">5</div><div class="seq-arr">→</div>
+      <div class="seq-num">7</div><div class="seq-arr">→</div>
+      <div class="seq-num">9</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq4b1" data-ans="11"></div>
+    </div>
+    <div class="seq-opts" id="sq4opts">
+      <div class="seq-opt" onclick="fillSeq('sq4b1','sq4opts',this,11,'sq4fb','sq4')">11</div>
+      <div class="seq-opt" onclick="seqWrong('sq4opts',this,'sq4fb')">10</div>
+      <div class="seq-opt" onclick="seqWrong('sq4opts',this,'sq4fb')">12</div>
+      <div class="seq-opt" onclick="seqWrong('sq4opts',this,'sq4fb')">13</div>
+    </div>
+    <div class="fb" id="sq4fb"></div>
+  </div>
+
+  <div class="sec-head">⬇️ ಕಡಿಮೆಯಾಗುತ್ತಾ ಹೋಗುವ ಸರಣಿ — Going Down</div>
+
+  <!-- SEQ 5: 8,6,4,? -->
+  <div class="seq-wrap" id="sq5">
+    <div class="seq-title">🔢 8, 6, 4, __ → ಪ್ರತಿ ಬಾರಿ 2 ಕಡಿಮೆ (−2)</div>
+    <div class="seq-row">
+      <div class="seq-num">8</div><div class="seq-arr">→</div>
+      <div class="seq-num">6</div><div class="seq-arr">→</div>
+      <div class="seq-num">4</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq5b1" data-ans="2"></div>
+    </div>
+    <div class="seq-opts" id="sq5opts">
+      <div class="seq-opt" onclick="fillSeq('sq5b1','sq5opts',this,2,'sq5fb','sq5')">2</div>
+      <div class="seq-opt" onclick="seqWrong('sq5opts',this,'sq5fb')">3</div>
+      <div class="seq-opt" onclick="seqWrong('sq5opts',this,'sq5fb')">5</div>
+      <div class="seq-opt" onclick="seqWrong('sq5opts',this,'sq5fb')">1</div>
+    </div>
+    <div class="fb" id="sq5fb"></div>
+  </div>
+
+  <!-- SEQ 6: 10,8,6,? -->
+  <div class="seq-wrap" id="sq6">
+    <div class="seq-title">🔢 10, 8, 6, __ → ಪ್ರತಿ ಬಾರಿ 2 ಕಡಿಮೆ (−2)</div>
+    <div class="seq-row">
+      <div class="seq-num">10</div><div class="seq-arr">→</div>
+      <div class="seq-num">8</div><div class="seq-arr">→</div>
+      <div class="seq-num">6</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq6b1" data-ans="4"></div>
+    </div>
+    <div class="seq-opts" id="sq6opts">
+      <div class="seq-opt" onclick="fillSeq('sq6b1','sq6opts',this,4,'sq6fb','sq6')">4</div>
+      <div class="seq-opt" onclick="seqWrong('sq6opts',this,'sq6fb')">3</div>
+      <div class="seq-opt" onclick="seqWrong('sq6opts',this,'sq6fb')">5</div>
+      <div class="seq-opt" onclick="seqWrong('sq6opts',this,'sq6fb')">2</div>
+    </div>
+    <div class="fb" id="sq6fb"></div>
+  </div>
+
+  <!-- SEQ 7: 12,10,8,? -->
+  <div class="seq-wrap" id="sq7">
+    <div class="seq-title">🔢 12, 10, 8, __ → (−2)</div>
+    <div class="seq-row">
+      <div class="seq-num">12</div><div class="seq-arr">→</div>
+      <div class="seq-num">10</div><div class="seq-arr">→</div>
+      <div class="seq-num">8</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq7b1" data-ans="6"></div>
+    </div>
+    <div class="seq-opts" id="sq7opts">
+      <div class="seq-opt" onclick="fillSeq('sq7b1','sq7opts',this,6,'sq7fb','sq7')">6</div>
+      <div class="seq-opt" onclick="seqWrong('sq7opts',this,'sq7fb')">5</div>
+      <div class="seq-opt" onclick="seqWrong('sq7opts',this,'sq7fb')">7</div>
+      <div class="seq-opt" onclick="seqWrong('sq7opts',this,'sq7fb')">4</div>
+    </div>
+    <div class="fb" id="sq7fb"></div>
+  </div>
+
+  <!-- SEQ 8: 20,15,10,? -->
+  <div class="seq-wrap" id="sq8">
+    <div class="seq-title">🔢 20, 15, 10, __ → ಪ್ರತಿ ಬಾರಿ 5 ಕಡಿಮೆ (−5)</div>
+    <div class="seq-row">
+      <div class="seq-num">20</div><div class="seq-arr">→</div>
+      <div class="seq-num">15</div><div class="seq-arr">→</div>
+      <div class="seq-num">10</div><div class="seq-arr">→</div>
+      <div class="seq-blank" id="sq8b1" data-ans="5"></div>
+    </div>
+    <div class="seq-opts" id="sq8opts">
+      <div class="seq-opt" onclick="fillSeq('sq8b1','sq8opts',this,5,'sq8fb','sq8')">5</div>
+      <div class="seq-opt" onclick="seqWrong('sq8opts',this,'sq8fb')">4</div>
+      <div class="seq-opt" onclick="seqWrong('sq8opts',this,'sq8fb')">6</div>
+      <div class="seq-opt" onclick="seqWrong('sq8opts',this,'sq8fb')">8</div>
+    </div>
+    <div class="fb" id="sq8fb"></div>
+  </div>
+
+  <div class="score-dots" id="sdots3">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn green" id="btn3" onclick="completeTab(3)" disabled>ಮುಂದೆ ಹೋಗು → ಪ್ರಶ್ನೆಗಳು 📖</button>
+</div>
+
+<!-- ===== TAB 4: WORD PROBLEMS ===== -->
+<div class="tab-panel" id="tab-4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#fff9c4);color:#33691e">
+    <div class="banner-emoji">📖</div>
+    <div>
+      <div class="banner-kn">ಪ್ರಶ್ನೆಗಳು — Word Problems</div>
+      <div class="banner-en">Read the story, tap the answer!</div>
+      <div class="banner-sub">ಕಥೆ ಓದಿ ಉತ್ತರ ಟ್ಯಾಪ್ ಮಾಡು!</div>
+    </div>
+  </div>
+
+  <!-- Story 1: Books -->
+  <div class="q-card" id="w1">
+    <div class="q-top">
+      <div class="q-emoji">📚</div>
+      <div class="story-card" style="background:#f1f8e9;border:none;padding:0;box-shadow:none">
+        <div class="story-text">ಕಪಾಟಿನ ಒಂದು ಗೂಡಿನಲ್ಲಿ <strong>5 ಪುಸ್ತಕಗಳು</strong>, ಮತ್ತೊಂದು ಗೂಡಿನಲ್ಲಿ <strong>4 ಪುಸ್ತಕಗಳಿವೆ</strong>. ಕಪಾಟಿನಲ್ಲಿರುವ ಒಟ್ಟು ಪುಸ್ತಕಗಳು ಎಷ್ಟು?<br><em>A cupboard has 5 books in one shelf and 4 books in another. Total books?</em></div>
+      </div>
+      <div class="q-sum">5 + 4 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w1',this,false,'w1fb')"><span class="choice-num">7</span></div>
+        <div class="choice" onclick="ansQ('w1',this,false,'w1fb')"><span class="choice-num">8</span></div>
+        <div class="choice" onclick="ansQ('w1',this,true,'w1fb')"><span class="choice-num">9</span></div>
+        <div class="choice" onclick="ansQ('w1',this,false,'w1fb')"><span class="choice-num">10</span></div>
+      </div>
+      <div class="fb" id="w1fb"></div>
+    </div>
+  </div>
+
+  <!-- Story 2: Sumalu money -->
+  <div class="q-card" id="w2">
+    <div class="q-top">
+      <div class="q-emoji">💰</div>
+      <div class="story-card" style="background:#f1f8e9;border:none;padding:0;box-shadow:none">
+        <div class="story-text">ಸುಮಳು ಅವಳ ಅಮ್ಮನಿಂದ ರೂ. <strong>5</strong> ಮತ್ತು ಅಪ್ಪನಿಂದ ರೂ. <strong>10</strong> ಪಡೆಯುತ್ತಾಳೆ. ಸುಮಳು ತನ್ನ ಪೋಷಕರಿಂದ ಪಡೆದ ಒಟ್ಟು ಹಣ ಎಷ್ಟು?<br><em>Sumalu gets ₹5 from mother and ₹10 from father. Total?</em></div>
+      </div>
+      <div class="q-sum">5 + 10 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w2',this,false,'w2fb')"><span class="choice-num">13</span></div>
+        <div class="choice" onclick="ansQ('w2',this,false,'w2fb')"><span class="choice-num">14</span></div>
+        <div class="choice" onclick="ansQ('w2',this,true,'w2fb')"><span class="choice-num">15</span></div>
+        <div class="choice" onclick="ansQ('w2',this,false,'w2fb')"><span class="choice-num">16</span></div>
+      </div>
+      <div class="fb" id="w2fb"></div>
+    </div>
+  </div>
+
+  <!-- Story 3: Fruits -->
+  <div class="q-card" id="w3">
+    <div class="q-top">
+      <div class="q-emoji">🥭🍎</div>
+      <div class="story-card" style="background:#f1f8e9;border:none;padding:0;box-shadow:none">
+        <div class="story-text">ಒಬ್ಬ ಹಣ್ಣು ಮಾರುವವನ ಬುಟ್ಟಿಯಲ್ಲಿ <strong>9 ಮಾವಿನ ಹಣ್ಣುಗಳು</strong> ಮತ್ತು <strong>8 ಸೇಬು ಹಣ್ಣುಗಳಿವೆ</strong>. ಬುಟ್ಟಿಯಲ್ಲಿ ಒಟ್ಟು ಎಷ್ಟು ಹಣ್ಣುಗಳಿವೆ?<br><em>A fruit seller has 9 mangoes and 8 apples. Total fruits?</em></div>
+      </div>
+      <div class="q-sum">9 + 8 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w3',this,false,'w3fb')"><span class="choice-num">15</span></div>
+        <div class="choice" onclick="ansQ('w3',this,false,'w3fb')"><span class="choice-num">16</span></div>
+        <div class="choice" onclick="ansQ('w3',this,true,'w3fb')"><span class="choice-num">17</span></div>
+        <div class="choice" onclick="ansQ('w3',this,false,'w3fb')"><span class="choice-num">18</span></div>
+      </div>
+      <div class="fb" id="w3fb"></div>
+    </div>
+  </div>
+
+  <!-- Story 4: Books Raju -->
+  <div class="q-card" id="w4">
+    <div class="q-top">
+      <div class="q-emoji">📚</div>
+      <div class="story-card" style="background:#f1f8e9;border:none;padding:0;box-shadow:none">
+        <div class="story-text">ರಾಜು <strong>7 ಪುಸ್ತಕಗಳನ್ನು</strong> ಪುಸ್ತಕದ ಚೀಲದಲ್ಲಿ ಮತ್ತು <strong>6 ಪುಸ್ತಕಗಳನ್ನು</strong> ಕಪಾಟಿನಲ್ಲಿಡುತ್ತಾನೆ. ಒಟ್ಟು ಪುಸ್ತಕಗಳ ಸಂಖ್ಯೆ?<br><em>Raju has 7 books in bag and 6 in cupboard. Total?</em></div>
+      </div>
+      <div class="q-sum">7 + 6 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w4',this,false,'w4fb')"><span class="choice-num">11</span></div>
+        <div class="choice" onclick="ansQ('w4',this,false,'w4fb')"><span class="choice-num">12</span></div>
+        <div class="choice" onclick="ansQ('w4',this,true,'w4fb')"><span class="choice-num">13</span></div>
+        <div class="choice" onclick="ansQ('w4',this,false,'w4fb')"><span class="choice-num">14</span></div>
+      </div>
+      <div class="fb" id="w4fb"></div>
+    </div>
+  </div>
+
+  <!-- Story 5: Balloons -->
+  <div class="q-card" id="w5">
+    <div class="q-top">
+      <div class="q-emoji">🎈</div>
+      <div class="story-card" style="background:#f1f8e9;border:none;padding:0;box-shadow:none">
+        <div class="story-text">ಒಬ್ಬ ಬಲೂನು ಮಾರುವವನು, ಬಲಗೈಯಲ್ಲಿ <strong>3 ಬಲೂನುಗಳನ್ನು</strong> ಮತ್ತು ಎಡಗೈಯಲ್ಲಿ <strong>6 ಬಲೂನುಗಳನ್ನು</strong> ಹಿಡಿದುಕೊಂಡಿದ್ದಾನೆ. ಅವನ ಬಳಿ ಎಷ್ಟು ಬಲೂನುಗಳಿವೆ?<br><em>A balloon seller holds 3 in right hand and 6 in left. Total?</em></div>
+      </div>
+      <div class="q-sum">3 + 6 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w5',this,false,'w5fb')"><span class="choice-num">7</span></div>
+        <div class="choice" onclick="ansQ('w5',this,false,'w5fb')"><span class="choice-num">8</span></div>
+        <div class="choice" onclick="ansQ('w5',this,true,'w5fb')"><span class="choice-num">9</span></div>
+        <div class="choice" onclick="ansQ('w5',this,false,'w5fb')"><span class="choice-num">10</span></div>
+      </div>
+      <div class="fb" id="w5fb"></div>
+    </div>
+  </div>
+
+  <!-- Story 6: Bangles Lata -->
+  <div class="q-card" id="w6">
+    <div class="q-top">
+      <div class="q-emoji">💍</div>
+      <div class="story-card" style="background:#f1f8e9;border:none;padding:0;box-shadow:none">
+        <div class="story-text">ಲತಾ ಒಂದು ಕೈಗೆ <strong>8 ಬಳೆಗಳನ್ನು</strong> ಮತ್ತೊಂದು ಕೈಗೆ <strong>6 ಬಳೆಗಳನ್ನು</strong> ತೊಟ್ಟುಕೊಂಡಿದ್ದಾಳೆ. ಲತಾಳು ತೊಟ್ಟಿರುವ ಒಟ್ಟು ಬಳೆಗಳು ಎಷ್ಟು?<br><em>Lata wears 8 bangles on one hand and 6 on other. Total?</em></div>
+      </div>
+      <div class="q-sum">8 + 6 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('w6',this,false,'w6fb')"><span class="choice-num">12</span></div>
+        <div class="choice" onclick="ansQ('w6',this,false,'w6fb')"><span class="choice-num">13</span></div>
+        <div class="choice" onclick="ansQ('w6',this,true,'w6fb')"><span class="choice-num">14</span></div>
+        <div class="choice" onclick="ansQ('w6',this,false,'w6fb')"><span class="choice-num">15</span></div>
+      </div>
+      <div class="fb" id="w6fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="sdots4">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn green" id="btn4" onclick="completeTab(4)" disabled>ಮುಂದೆ ಹೋಗು → ಸರಿ-ತಪ್ಪು ✅</button>
+</div>
+
+<!-- ===== TAB 5: TRUE / FALSE ===== -->
+<div class="tab-panel" id="tab-5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#fce4ec);color:#1b5e20">
+    <div class="banner-emoji">✅❌</div>
+    <div>
+      <div class="banner-kn">ಸರಿಯೋ ಅಥವಾ ತಪ್ಪೋ?</div>
+      <div class="banner-en">True or False?</div>
+      <div class="banner-sub">ಕೆಳಗಿನ ಹೇಳಿಕೆಗಳನ್ನು ಸರಿಯೋ ಅಥವಾ ತಪ್ಪೋ ಎಂದು ಹೇಳು!</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="border-color:#a5d6a7">
+    <div class="info-box-title">📌 ನೆನಪಿಟ್ಟುಕೋ</div>
+    <div class="info-row"><span class="bullet">✅</span> ಸರಿ (True) = ಲೆಕ್ಕ ಸರಿಯಾಗಿದ್ದರೆ</div>
+    <div class="info-row"><span class="bullet">❌</span> ತಪ್ಪು (False) = ಲೆಕ್ಕ ತಪ್ಪಾಗಿದ್ದರೆ</div>
+  </div>
+
+  <!-- TF1: 3+2=5 TRUE -->
+  <div class="tf-card" id="tf1">
+    <div class="tf-top">
+      <div class="tf-stmt">3 + 2 = 5</div>
+    </div>
+    <div class="tf-btns">
+      <div class="tf-btn t" onclick="tfAns('tf1',this,true,'tf1fb')">✅ ಸರಿ</div>
+      <div class="tf-btn f" onclick="tfAns('tf1',this,false,'tf1fb')">❌ ತಪ್ಪು</div>
+    </div>
+    <div class="fb" id="tf1fb" style="margin:0 16px 12px"></div>
+  </div>
+
+  <!-- TF2: 6+6=4 FALSE -->
+  <div class="tf-card" id="tf2">
+    <div class="tf-top">
+      <div class="tf-stmt">6 + 6 = 4</div>
+    </div>
+    <div class="tf-btns">
+      <div class="tf-btn t" onclick="tfAns('tf2',this,false,'tf2fb')">✅ ಸರಿ</div>
+      <div class="tf-btn f" onclick="tfAns('tf2',this,true,'tf2fb')">❌ ತಪ್ಪು</div>
+    </div>
+    <div class="fb" id="tf2fb" style="margin:0 16px 12px"></div>
+  </div>
+
+  <!-- TF3: Seete 3+2=6 FALSE -->
+  <div class="tf-card" id="tf3">
+    <div class="tf-top">
+      <div class="tf-stmt">ಸೀತೆಯು ಬೆಳಿಗ್ಗೆ 3 ಬಾಳೆಹಣ್ಣುಗಳನ್ನು ಸಂಜೆ 2 ಬಾಳೆಹಣ್ಣುಗಳನ್ನು ತಿಂದರೆ, ಅವಳು ದಿನದಲ್ಲಿ ಒಟ್ಟು 6 ಬಾಳೆಹಣ್ಣುಗಳನ್ನು ತಿಂದಳು.<br><em>Seeta ate 3 bananas morning + 2 evening = 6 total?</em></div>
+    </div>
+    <div class="tf-btns">
+      <div class="tf-btn t" onclick="tfAns('tf3',this,false,'tf3fb')">✅ ಸರಿ</div>
+      <div class="tf-btn f" onclick="tfAns('tf3',this,true,'tf3fb')">❌ ತಪ್ಪು</div>
+    </div>
+    <div class="fb" id="tf3fb" style="margin:0 16px 12px"></div>
+  </div>
+
+  <!-- TF4: Raju 3+5=8 TRUE -->
+  <div class="tf-card" id="tf4">
+    <div class="tf-top">
+      <div class="tf-stmt">ರಾಜು ಒಂದು ಹಾಡನ್ನು, ಬೆಳಿಗ್ಗೆ 3 ಬಾರಿ ಮತ್ತು ಸಂಜೆ 5 ಬಾರಿ ಅಭ್ಯಾಸ ಮಾಡಿದರೆ, ಅವನು ದಿನದಲ್ಲಿ ಆ ಹಾಡನ್ನು 8 ಬಾರಿ ಅಭ್ಯಾಸ ಮಾಡಿರುತ್ತಾನೆ.<br><em>Raju practiced 3 times morning + 5 times evening = 8 total?</em></div>
+    </div>
+    <div class="tf-btns">
+      <div class="tf-btn t" onclick="tfAns('tf4',this,true,'tf4fb')">✅ ಸರಿ</div>
+      <div class="tf-btn f" onclick="tfAns('tf4',this,false,'tf4fb')">❌ ತಪ್ಪು</div>
+    </div>
+    <div class="fb" id="tf4fb" style="margin:0 16px 12px"></div>
+  </div>
+
+  <!-- TF5: Rama 5+4=10 FALSE -->
+  <div class="tf-card" id="tf5">
+    <div class="tf-top">
+      <div class="tf-stmt">ರಾಮನ ಜೇಬಿನಲ್ಲಿ 5 ಗೋಲಿಗಳಿವೆ, ರಹೀಮನ ಬಳಿ 4 ಗೋಲಿಗಳಿವೆ. ಅವರಿಬ್ಬರ ಬಳಿ ಇರುವ ಗೋಲಿಗಳ ಸಂಖ್ಯೆ 10.<br><em>Rama has 5 + Rahim has 4 = 10 total?</em></div>
+    </div>
+    <div class="tf-btns">
+      <div class="tf-btn t" onclick="tfAns('tf5',this,false,'tf5fb')">✅ ಸರಿ</div>
+      <div class="tf-btn f" onclick="tfAns('tf5',this,true,'tf5fb')">❌ ತಪ್ಪು</div>
+    </div>
+    <div class="fb" id="tf5fb" style="margin:0 16px 12px"></div>
+  </div>
+
+  <!-- TF6: Charana 5+7=15 FALSE -->
+  <div class="tf-card" id="tf6">
+    <div class="tf-top">
+      <div class="tf-stmt">ಚರಣನ ಬಳಿ 5 ಪೆನ್ನುಗಳು, ಚಂದನಾಳ ಬಳಿ 7 ಪೆನ್ನುಗಳಿವೆ. ಅವರಿಬ್ಬರ ಬಳಿ ಇರುವ ಪೆನ್ನುಗಳ ಸಂಖ್ಯೆ 15.<br><em>Charana has 5 pens + Chandana has 7 pens = 15?</em></div>
+    </div>
+    <div class="tf-btns">
+      <div class="tf-btn t" onclick="tfAns('tf6',this,false,'tf6fb')">✅ ಸರಿ</div>
+      <div class="tf-btn f" onclick="tfAns('tf6',this,true,'tf6fb')">❌ ತಪ್ಪು</div>
+    </div>
+    <div class="fb" id="tf6fb" style="margin:0 16px 12px"></div>
+  </div>
+
+  <div class="score-dots" id="sdots5">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn green" id="btn5" onclick="completeTab(5)" disabled>ಮುಂದೆ ಹೋಗು → ಅಂತಿಮ ಪರೀಕ್ಷೆ 🏆</button>
+</div>
+
+<!-- ===== TAB 6: FINAL QUIZ ===== -->
+<div class="tab-panel" id="tab-6">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#fffde7);color:#f57f17">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-kn">ಅಂತಿಮ ಪರೀಕ್ಷೆ</div>
+      <div class="banner-en">Final Quiz — Show what you know!</div>
+      <div class="banner-sub">ಎಲ್ಲ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸು!</div>
+    </div>
+  </div>
+
+  <!-- FQ1 -->
+  <div class="q-card" id="fq1">
+    <div class="q-top">
+      <div class="q-sum">9 + 2 = ?</div>
+      <div class="q-kn">9 🍎 + 2 🍎 = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq1',this,false,'fq1fb')"><span class="choice-num">9</span></div>
+        <div class="choice" onclick="ansQ('fq1',this,false,'fq1fb')"><span class="choice-num">10</span></div>
+        <div class="choice" onclick="ansQ('fq1',this,true,'fq1fb')"><span class="choice-num">11</span></div>
+        <div class="choice" onclick="ansQ('fq1',this,false,'fq1fb')"><span class="choice-num">12</span></div>
+      </div>
+      <div class="fb" id="fq1fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ2 -->
+  <div class="q-card" id="fq2">
+    <div class="q-top">
+      <div class="q-sum">16 + 4 = ?</div>
+      <div class="q-kn">16 📚 + 4 📚 = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq2',this,false,'fq2fb')"><span class="choice-num">18</span></div>
+        <div class="choice" onclick="ansQ('fq2',this,false,'fq2fb')"><span class="choice-num">19</span></div>
+        <div class="choice" onclick="ansQ('fq2',this,true,'fq2fb')"><span class="choice-num">20</span></div>
+        <div class="choice" onclick="ansQ('fq2',this,false,'fq2fb')"><span class="choice-num">21</span></div>
+      </div>
+      <div class="fb" id="fq2fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ3: sequence -->
+  <div class="q-card" id="fq3">
+    <div class="q-top">
+      <div class="q-sum">9, 11, 13, __ = ?</div>
+      <div class="q-kn">ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು? (+2 pattern)</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq3',this,false,'fq3fb')"><span class="choice-num">14</span></div>
+        <div class="choice" onclick="ansQ('fq3',this,true,'fq3fb')"><span class="choice-num">15</span></div>
+        <div class="choice" onclick="ansQ('fq3',this,false,'fq3fb')"><span class="choice-num">16</span></div>
+        <div class="choice" onclick="ansQ('fq3',this,false,'fq3fb')"><span class="choice-num">17</span></div>
+      </div>
+      <div class="fb" id="fq3fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ4: fill blank -->
+  <div class="q-card" id="fq4">
+    <div class="q-top">
+      <div class="q-sum">12 = __ + 6</div>
+      <div class="q-kn">ಖಾಲಿ ತುಂಬು — Fill the blank</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq4',this,false,'fq4fb')"><span class="choice-num">4</span></div>
+        <div class="choice" onclick="ansQ('fq4',this,false,'fq4fb')"><span class="choice-num">5</span></div>
+        <div class="choice" onclick="ansQ('fq4',this,true,'fq4fb')"><span class="choice-num">6</span></div>
+        <div class="choice" onclick="ansQ('fq4',this,false,'fq4fb')"><span class="choice-num">7</span></div>
+      </div>
+      <div class="fb" id="fq4fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ5: down sequence -->
+  <div class="q-card" id="fq5">
+    <div class="q-top">
+      <div class="q-sum">9, 6, 3, __ = ?</div>
+      <div class="q-kn">ಹಿಂದಕ್ಕೆ ಎಣಿಸು — Count down (−3 pattern)</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq5',this,false,'fq5fb')"><span class="choice-num">2</span></div>
+        <div class="choice" onclick="ansQ('fq5',this,true,'fq5fb')"><span class="choice-num">0</span></div>
+        <div class="choice" onclick="ansQ('fq5',this,false,'fq5fb')"><span class="choice-num">1</span></div>
+        <div class="choice" onclick="ansQ('fq5',this,false,'fq5fb')"><span class="choice-num">4</span></div>
+      </div>
+      <div class="fb" id="fq5fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ6: 3+3=? -->
+  <div class="q-card" id="fq6">
+    <div class="q-top">
+      <div class="q-sum">3 + 3 = ?</div>
+      <div class="q-kn">3 🎯 + 3 🎯 = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq6',this,false,'fq6fb')"><span class="choice-num">5</span></div>
+        <div class="choice" onclick="ansQ('fq6',this,true,'fq6fb')"><span class="choice-num">6</span></div>
+        <div class="choice" onclick="ansQ('fq6',this,false,'fq6fb')"><span class="choice-num">7</span></div>
+        <div class="choice" onclick="ansQ('fq6',this,false,'fq6fb')"><span class="choice-num">8</span></div>
+      </div>
+      <div class="fb" id="fq6fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ7: word problem -->
+  <div class="q-card" id="fq7">
+    <div class="q-top">
+      <div class="q-emoji">🎈🎈🎈 + 🎈🎈🎈🎈🎈🎈</div>
+      <div class="q-kn">ಬಲಗೈಯಲ್ಲಿ 3 ಬಲೂನು + ಎಡಗೈಯಲ್ಲಿ 6 ಬಲೂನು = ಒಟ್ಟು?</div>
+      <div class="q-sum">3 + 6 = ?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq7',this,false,'fq7fb')"><span class="choice-num">7</span></div>
+        <div class="choice" onclick="ansQ('fq7',this,false,'fq7fb')"><span class="choice-num">8</span></div>
+        <div class="choice" onclick="ansQ('fq7',this,true,'fq7fb')"><span class="choice-num">9</span></div>
+        <div class="choice" onclick="ansQ('fq7',this,false,'fq7fb')"><span class="choice-num">10</span></div>
+      </div>
+      <div class="fb" id="fq7fb"></div>
+    </div>
+  </div>
+
+  <!-- FQ8 -->
+  <div class="q-card" id="fq8">
+    <div class="q-top">
+      <div class="q-sum">10 + 9 = ?</div>
+      <div class="q-kn">10 ⭐ + 9 ⭐ = ಎಷ್ಟು?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('fq8',this,false,'fq8fb')"><span class="choice-num">17</span></div>
+        <div class="choice" onclick="ansQ('fq8',this,false,'fq8fb')"><span class="choice-num">18</span></div>
+        <div class="choice" onclick="ansQ('fq8',this,true,'fq8fb')"><span class="choice-num">19</span></div>
+        <div class="choice" onclick="ansQ('fq8',this,false,'fq8fb')"><span class="choice-num">20</span></div>
+      </div>
+      <div class="fb" id="fq8fb"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="sdots6">
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+    <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+  <button class="big-btn green" id="btn6" onclick="showCeleb()" disabled>🎉 ಮುಗಿಯಿತು! Finish!</button>
+</div>
+
+</div><!-- end content -->
+
+<!-- CELEBRATE -->
+<div class="celeb-overlay" id="celebOverlay">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಭಲೇ! ಅದ್ಭುತ! 🌟</div>
+    <div class="celeb-sub">
+      ಪಾಠ 13 ಮಾನಸಿಕ ಲೆಕ್ಕಗಳು ಮುಗಿಯಿತು!<br>
+      ನೀನು ಈಗ ಮನಸ್ಸಿನಲ್ಲೇ ಲೆಕ್ಕ ಮಾಡಬಲ್ಲೆ!<br>
+      ✅ ಮಾನಸಿಕವಾಗಿ ಕೂಡಿಸಿದೆ<br>
+      ✅ ಸಂಖ್ಯಾ ಸರಣಿ ಕಲಿತೆ<br>
+      ✅ ಪ್ರಶ್ನೆಗಳನ್ನು ಬಿಡಿಸಿದೆ!
+    </div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐⭐⭐</div>
+    <button class="celeb-close" onclick="document.getElementById('celebOverlay').classList.remove('show')">✅ ಮುಗಿಸು</button>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let tabDone = [true, false, false, false, false, false, false];
+let totalStars = 0;
+let tabScores = {2:0,3:0,4:0,5:0,6:0};
+let tabTotals = {2:10,3:8,4:6,5:6,6:8};
+let seqDone = {sq1:false,sq2:false,sq3:false,sq4:false,sq5:false,sq6:false,sq7:false,sq8:false};
+
+// ===== NAVIGATION =====
+function tryTab(n){
+  if(!tabDone[n-1]){
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    btn.addEventListener('animationend',()=>btn.classList.remove('shaking'),{once:true});
+    const t = document.getElementById('lockToast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+    return;
+  }
+  switchTab(n);
+}
+
+function switchTab(n){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  for(let i=1;i<=6;i++){
+    const btn=document.getElementById('tab-btn-'+i);
+    btn.classList.remove('active','unlocked','done','locked');
+    if(i===n){ btn.classList.add('active'); }
+    else if(tabDone[i]){ btn.classList.add('done'); }
+    else if(tabDone[i-1]){ btn.classList.add('unlocked'); }
+    else { btn.classList.add('locked'); }
+  }
+  document.getElementById('tab-'+n).classList.add('active');
+  updateProgress();
+}
+
+function updateProgress(){
+  const done=tabDone.filter(Boolean).length-1;
+  document.getElementById('progFill').style.width=Math.round((done/6)*100)+'%';
+  document.getElementById('starsPill').textContent='⭐ '+totalStars;
+}
+
+function completeTab(n){
+  tabDone[n]=true;
+  const nextBtn=document.getElementById('tab-btn-'+(n+1));
+  if(nextBtn){ nextBtn.classList.remove('locked'); nextBtn.classList.add('unlocked'); }
+  const cur=document.getElementById('tab-btn-'+n);
+  cur.classList.remove('active'); cur.classList.add('done');
+  addStars(5);
+  switchTab(n+1);
+}
+
+function addStars(n){
+  totalStars+=n;
+  document.getElementById('starsPill').textContent='⭐ '+totalStars;
+}
+
+// ===== ANSWER STANDARD QUESTION =====
+function ansQ(cardId,btn,correct,fbId){
+  const card=document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const allBtns=btn.closest('.choices').querySelectorAll('.choice');
+  allBtns.forEach(b=>b.classList.add('disabled'));
+  const fb=document.getElementById(fbId);
+  if(correct){
+    btn.classList.add('correct');
+    fb.className='fb ok';
+    fb.textContent='✅ ಸರಿ ಉತ್ತರ! Correct!';
+    card.classList.add('done');
+    addStars(1);
+    // track which tab
+    const tabN=getTabForCard(cardId);
+    if(tabN){ tabScores[tabN]++; updateDots('sdots'+tabN,tabScores[tabN],tabTotals[tabN]); checkTabBtn(tabN); }
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    setTimeout(()=>card.classList.remove('wrong-flash'),500);
+    fb.className='fb no';
+    fb.textContent='❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು! Try again!';
+    setTimeout(()=>{
+      allBtns.forEach(b=>b.classList.remove('disabled'));
+      btn.classList.remove('wrong');
+      fb.style.display='none';
+    },1000);
+  }
+}
+
+function getTabForCard(id){
+  if(['a1','a2','a3','a4','a5','a6','a7','a8','a9','a10'].includes(id)) return 2;
+  if(['w1','w2','w3','w4','w5','w6'].includes(id)) return 4;
+  if(['fq1','fq2','fq3','fq4','fq5','fq6','fq7','fq8'].includes(id)) return 6;
+  return null;
+}
+
+// ===== TRUE / FALSE =====
+function tfAns(cardId,btn,correct,fbId){
+  const card=document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const allBtns=card.querySelectorAll('.tf-btn');
+  allBtns.forEach(b=>b.classList.add('disabled'));
+  const fb=document.getElementById(fbId);
+  if(correct){
+    btn.classList.add('correct');
+    fb.className='fb ok'; fb.textContent='✅ ಸರಿ! Correct!';
+    card.classList.add('done'); addStars(1);
+    tabScores[5]++; updateDots('sdots5',tabScores[5],tabTotals[5]);
+    checkTabBtn(5);
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    setTimeout(()=>card.classList.remove('wrong-flash'),500);
+    fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು! Try again!';
+    setTimeout(()=>{
+      allBtns.forEach(b=>b.classList.remove('disabled'));
+      btn.classList.remove('wrong');
+      fb.style.display='none';
+    },1000);
+  }
+}
+
+// ===== SEQUENCES =====
+function fillSeq(blankId,optsId,btn,ans,fbId,seqId){
+  const blank=document.getElementById(blankId);
+  if(blank.classList.contains('filled')) return;
+  blank.textContent=ans;
+  blank.classList.remove('seq-blank');
+  blank.classList.add('filled');
+  btn.classList.add('used');
+  addStars(1);
+  const fb=document.getElementById(fbId);
+  fb.className='fb ok'; fb.textContent='✅ ಸರಿ! Correct!';
+  seqDone[seqId]=true;
+  tabScores[3]++; updateDots('sdots3',tabScores[3],tabTotals[3]);
+  checkTabBtn(3);
+}
+
+function seqWrong(optsId,btn,fbId){
+  btn.style.background='#ffcdd2'; btn.style.borderColor='#e53935';
+  const fb=document.getElementById(fbId);
+  fb.className='fb no'; fb.textContent='❌ ತಪ್ಪು! Wrong! Try again!';
+  setTimeout(()=>{ btn.style.background=''; btn.style.borderColor=''; fb.style.display='none'; },900);
+}
+
+// ===== CHECK TAB BUTTON =====
+function checkTabBtn(tabN){
+  const btn=document.getElementById('btn'+tabN);
+  if(!btn) return;
+  if(tabScores[tabN]>=tabTotals[tabN]) btn.disabled=false;
+}
+
+// ===== UPDATE DOTS =====
+function updateDots(id,done,total){
+  const dots=document.querySelectorAll('#'+id+' .sdot');
+  for(let i=0;i<Math.min(done,dots.length);i++) dots[i].classList.add('done');
+}
+
+// ===== CELEBRATE =====
+function showCeleb(){
+  const stars=Math.min(5,Math.floor(totalStars/8));
+  document.getElementById('celebStars').textContent='⭐'.repeat(Math.max(3,stars));
+  document.getElementById('celebOverlay').classList.add('show');
+}
+
+// ===== INIT =====
+updateProgress();
+</script>
 </body>
 </html>
-

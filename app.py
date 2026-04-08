@@ -291,9 +291,47 @@ def class1_kannada_maths_lesson(lesson_num: int):
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     # Lessons are stored as templates/class1_kannada_maths_lesson{N}.html
-    if lesson_num < 1 or lesson_num > 18:
+    if lesson_num < 1 or lesson_num > 19:
         return redirect('/class/1/kannada/maths')
     return render_template(f'class1_kannada_maths_lesson{lesson_num}.html', student=student)
+
+# Kannada-medium EVS index (lessons currently reuse the English-medium EVS lesson pages)
+@app.route('/class/1/kannada/evs')
+def class1_kannada_evs_chapters():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1_kannada_evs_chapters.html', student=student)
+
+@app.route('/class/1/kannada/evs/lesson<int:lesson_num>')
+def class1_kannada_evs_lesson(lesson_num: int):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+
+    # Map "lesson number" to the existing English-medium EVS templates so links work.
+    lesson_templates = {
+        1:  'class1_evs_chapter1.html',
+        2:  'class1_evs_chapter2.html',
+        3:  'class1_evs_chapter3.html',
+        4:  'class1_evs_chapter4.html',
+        5:  'class1_evs_chapter5.html',
+        6:  'class1_evs_chapter6_my_house.html',
+        7:  'class1_evs_chapter7_clean_habits.html',
+        8:  'class1_evs_chapter8_safety_and_discipline.html',
+        9:  'class1_evs_chapter9_transportation.html',
+        10: 'class1_evs_chapter10_family.html',
+        11: 'class1_evs_chapter11_neighbourhood.html',
+        12: 'class1_evs_chapter12_play_the_game.html',
+        13: 'class1_evs_chapter13_i_need_these.html',
+        14: 'class1_evs_chapter14_heavenly_friends.html',
+        15: 'class1_evs_chapter15_around_us.html',
+    }
+
+    tpl = lesson_templates.get(lesson_num)
+    if not tpl:
+        return redirect('/class/1/kannada/evs')
+    return render_template(tpl, student=student)
 
 # Class 1 Kannada lessons
 @app.route('/class/1/kannada/vandane')

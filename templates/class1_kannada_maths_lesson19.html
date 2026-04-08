@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಗಣಿತ ತರಗತಿ 1 — ಪಾಠ 19: ವಿನ್ಯಾಸಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@700;800;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8e1;min-height:100vh;overflow-x:hidden}
+
+.topbar{background:linear-gradient(135deg,#1565c0,#1976d2,#42a5f5);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.topbar-title{font-size:15px;color:#fff;font-weight:900}
+.stars-pill{background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900}
+
+.hero{background:linear-gradient(160deg,#1565c0,#1976d2,#42a5f5);padding:20px 20px 64px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-emoji{font-size:72px;display:block;margin-bottom:6px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:22px;color:#fff;font-weight:900;margin-bottom:4px;line-height:1.3}
+.hero p{font-size:13px;color:rgba(255,255,255,.93);font-weight:700}
+
+.prog-wrap{margin:-36px 14px 14px;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.13);position:relative;z-index:10}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px}
+.prog-bar{background:#bbdefb;border-radius:10px;height:16px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#1565c0,#42a5f5);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%}
+
+.steps-bar{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-tab{flex-shrink:0;padding:10px 16px;border-radius:50px;font-size:13px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none}
+.step-tab.unlocked{background:#fff;color:#1565c0;border-color:#90caf9}
+.step-tab.active{background:#1565c0;color:#fff;border-color:#1565c0;box-shadow:0 4px 14px rgba(21,101,192,.45)}
+.step-tab.done{background:#e3f2fd;color:#1565c0;border-color:#42a5f5}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:900;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:90vw;text-align:center}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.content{padding:4px 14px 130px}
+.tab-panel{display:none;animation:fadeIn .3s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:22px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.banner-emoji{font-size:52px;flex-shrink:0}
+.banner-kn{font-size:20px;font-weight:900;margin-bottom:2px}
+.banner-en{font-size:14px;font-weight:900;opacity:.8;margin-bottom:3px}
+.banner-sub{font-size:12px;font-weight:700;opacity:.7;line-height:1.6}
+
+.info-pill{background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#1565c0;line-height:1.7}
+
+.q-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden}
+.q-card.done{border-color:#42a5f5;background:#e3f2fd}
+.q-card.wrong-flash{animation:wrongFlash .4s ease}
+@keyframes wrongFlash{0%,100%{background:#fff}50%{background:#ffebee}}
+.q-top{padding:16px 16px 10px}
+.q-emoji{font-size:38px;text-align:center;margin-bottom:8px}
+.q-kn{font-size:16px;font-weight:900;color:#333;line-height:1.5;margin-bottom:3px;text-align:center}
+.q-en{font-size:13px;font-weight:700;color:#888;text-align:center;margin-bottom:6px}
+.q-bottom{border-top:2px dashed #90caf9;padding:12px 14px}
+
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.three{grid-template-columns:1fr 1fr 1fr}
+.choices.four{grid-template-columns:1fr 1fr}
+.choice{border-radius:18px;border:3px solid #90caf9;background:#e3f2fd;padding:14px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+.choice:active{transform:scale(.92)}
+.choice-kn{font-size:16px;font-weight:900;color:#1565c0}
+.choice-emoji{font-size:32px}
+.choice-sub{font-size:11px;font-weight:700;color:#1976d2}
+.choice-pat{font-size:24px;font-weight:900;color:#1565c0;letter-spacing:2px;line-height:1.4}
+.choice.correct{border-color:#43a047;background:#c8e6c9;animation:popIn .3s ease}
+.choice.wrong{border-color:#e53935;background:#ffcdd2;animation:wobble .4s ease}
+.choice.disabled{pointer-events:none}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+.fb{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none}
+.fb.ok{background:#f1f8e9;color:#2e7d32;display:block}
+.fb.no{background:#ffcdd2;color:#c62828;display:block}
+
+.score-dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.sdot{width:16px;height:16px;border-radius:50%;background:#bbdefb;transition:background .3s}
+.sdot.done{background:#1565c0}
+
+.big-btn{width:100%;padding:18px;border:none;border-radius:20px;font-family:'Baloo Tamma 2',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.big-btn:active{transform:scale(.97)}
+.big-btn.blue{background:linear-gradient(135deg,#1565c0,#42a5f5);color:#fff}
+.big-btn.blue:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* PATTERN DISPLAY */
+.pattern-demo{background:linear-gradient(135deg,#e3f2fd,#fff8e1);border-radius:18px;padding:18px 14px;margin-bottom:14px;text-align:center;border:3px solid #90caf9}
+.pat-row{font-size:36px;letter-spacing:4px;line-height:1.5;margin:6px 0}
+.pat-label{font-size:13px;font-weight:900;color:#1565c0;margin-top:6px}
+
+.concept-box{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 3px 16px rgba(0,0,0,.08);border:3px solid #90caf9}
+.concept-title{font-size:16px;font-weight:900;color:#1565c0;margin-bottom:10px;text-align:center}
+
+.stamp-demo{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:10px 0;font-size:32px}
+.growing-demo{display:flex;flex-direction:column;gap:6px;padding:8px 0}
+.grow-row{display:flex;gap:4px;align-items:center}
+.grow-num{font-size:14px;font-weight:900;color:#1565c0;width:20px}
+.grow-shapes{font-size:28px;letter-spacing:2px}
+
+.celeb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.celeb-overlay.show{opacity:1;pointer-events:auto}
+.celeb-box{background:#fff;border-radius:28px;padding:32px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.celeb-emoji{font-size:64px;display:block;animation:float 2s ease-in-out infinite}
+.celeb-title{font-size:24px;font-weight:900;color:#1565c0;margin:12px 0 6px}
+.celeb-sub{font-size:15px;font-weight:700;color:#555;margin-bottom:16px;line-height:1.6}
+.celeb-stars{font-size:36px;margin:8px 0 20px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🎨 ಪಾಠ 19 — ವಿನ್ಯಾಸಗಳು (Patterns)</div>
+  <div class="stars-pill" id="starsPill">⭐ 0</div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🎨</span>
+  <h1>ವಿನ್ಯಾಸಗಳು ಕಲಿಯೋಣ!</h1>
+  <p>Let's learn Patterns! • ತಟ್ಟು ಮಾಡಿ ಕಲಿಯಿರಿ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿಮ್ಮ ಪ್ರಗತಿ • Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" id="tab-btn-1" onclick="tryTab(1)">🌱 ಹಂತ 1</div>
+  <div class="step-tab locked" id="tab-btn-2" onclick="tryTab(2)">🍃 ಹಂತ 2</div>
+  <div class="step-tab locked" id="tab-btn-3" onclick="tryTab(3)">🌸 ಹಂತ 3</div>
+  <div class="step-tab locked" id="tab-btn-4" onclick="tryTab(4)">⭐ ಹಂತ 4</div>
+  <div class="step-tab locked" id="tab-btn-5" onclick="tryTab(5)">🏆 ಹಂತ 5</div>
+</div>
+
+<div class="content">
+
+<!-- ========== TAB 1: ವಿನ್ಯಾಸ ಅಂದರೇನು? ========== -->
+<div class="tab-panel active" id="tab-1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <div class="banner-emoji">🎨</div>
+    <div>
+      <div class="banner-kn">ವಿನ್ಯಾಸ ಅಂದರೇನು?</div>
+      <div class="banner-en">What is a Pattern?</div>
+      <div class="banner-sub">ಪುನಃ ಪುನಃ ಬರುವ ಆಕಾರ = ವಿನ್ಯಾಸ!<br>Repeating shapes = Pattern!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    📖 ಸುತ್ತಮುತ್ತ ನೋಡಿ — ಎಲೆಗಳಲ್ಲಿ, ಹೂಗಳಲ್ಲಿ, ಬೆರಳ ಗುರುತಿನಲ್ಲಿ ವಿನ್ಯಾಸ ಇದೆ!<br>
+    Look around — leaves, flowers, fingerprints all have patterns!
+  </div>
+
+  <!-- Concept: what is pattern -->
+  <div class="concept-box">
+    <div class="concept-title">🌟 ವಿನ್ಯಾಸ ನೋಡಿ! See a Pattern!</div>
+    <div class="pattern-demo">
+      <div class="pat-row">🔴 🔵 🔴 🔵 🔴 🔵</div>
+      <div class="pat-label">ಕೆಂಪು, ನೀಲಿ, ಕೆಂಪು, ನೀಲಿ... ← ಇದು ವಿನ್ಯಾಸ! Red, Blue repeating = Pattern!</div>
+    </div>
+    <div class="pattern-demo">
+      <div class="pat-row">🌸 🌸 🌼 🌸 🌸 🌼</div>
+      <div class="pat-label">ಗುಲಾಬಿ, ಗುಲಾಬಿ, ಹಳದಿ ← ಇದು ವಿನ್ಯಾಸ!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t1q1">
+    <div class="q-top">
+      <div class="q-emoji">🤔</div>
+      <div class="q-kn">ಯಾವುದು ವಿನ್ಯಾಸ? Which one is a pattern?</div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q1',this,false,'f1q1')">
+          <div class="choice-pat">🔴🔵🟡🟢</div>
+          <div class="choice-sub">Random / ಯಾದೃಚ್ಛಿಕ</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q1',this,true,'f1q1')">
+          <div class="choice-pat">🔴🔵🔴🔵</div>
+          <div class="choice-sub">Pattern! ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t1q2">
+    <div class="q-top">
+      <div class="q-emoji">🌿</div>
+      <div class="q-kn">ತರಕಾರಿ ಹೋಳಿನ ಅಚ್ಚು ಬಳಸಿ ವಿನ್ಯಾಸ ಮಾಡಬಹುದೇ?<br><small>Can we make patterns with vegetable stamps?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q2',this,true,'f1q2')">
+          <div class="choice-emoji">✅</div>
+          <div class="choice-kn">ಹೌದು! Yes!</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q2',this,false,'f1q2')">
+          <div class="choice-emoji">❌</div>
+          <div class="choice-kn">ಇಲ್ಲ! No!</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t1q3">
+    <div class="q-top">
+      <div class="q-emoji">🎨</div>
+      <div class="q-kn">ಯಾವ ವಸ್ತುಗಳಿಂದ ಅಚ್ಚು ಮಾಡಬಹುದು?<br><small>Which can we use to stamp patterns?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')">
+          <div class="choice-emoji">📚</div>
+          <div class="choice-kn">ಪುಸ್ತಕ</div>
+          <div class="choice-sub">Book</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q3',this,true,'f1q3')">
+          <div class="choice-emoji">🫛</div>
+          <div class="choice-kn">ತರಕಾರಿ</div>
+          <div class="choice-sub">Vegetable ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')">
+          <div class="choice-emoji">🚗</div>
+          <div class="choice-kn">ಕಾರು</div>
+          <div class="choice-sub">Car</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q3',this,false,'f1q3')">
+          <div class="choice-emoji">🪑</div>
+          <div class="choice-kn">ಕುರ್ಚಿ</div>
+          <div class="choice-sub">Chair</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t1q4">
+    <div class="q-top">
+      <div class="q-emoji">🍂</div>
+      <div class="q-kn">ಎಲೆ ಅಚ್ಚಿನಲ್ಲಿ ಎಷ್ಟು ಬಾರಿ ಒಂದೇ ಆಕಾರ ಬರುತ್ತದೆ?<br><small>In leaf printing, how many times does the same shape appear?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-kn">1 ಬಾರಿ</div>
+          <div class="choice-sub">Once</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,false,'f1q4')">
+          <div class="choice-kn">2 ಬಾರಿ</div>
+          <div class="choice-sub">Twice</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q4',this,true,'f1q4')">
+          <div class="choice-kn">ಅನೇಕ ಬಾರಿ</div>
+          <div class="choice-sub">Many times ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t1q5">
+    <div class="q-top">
+      <div class="q-emoji">🔵</div>
+      <div class="q-kn">ವಿನ್ಯಾಸದಲ್ಲಿ ಆಕಾರಗಳು ಹೇಗೆ ಇರುತ್ತವೆ?<br><small>In a pattern, shapes appear in what way?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t1q5',this,true,'f1q5')">
+          <div class="choice-emoji">🔄</div>
+          <div class="choice-kn">ಕ್ರಮಬದ್ಧ</div>
+          <div class="choice-sub">In order ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t1q5',this,false,'f1q5')">
+          <div class="choice-emoji">🎲</div>
+          <div class="choice-kn">ಯಾದೃಚ್ಛಿಕ</div>
+          <div class="choice-sub">Random</div>
+        </div>
+      </div>
+      <div class="fb" id="f1q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score1"></div>
+  <button class="big-btn blue" id="btn1" disabled onclick="finishTab(1)">ಮುಂದಿನ ಹಂತ ➡️ Next Step</button>
+</div>
+
+<!-- ========== TAB 2: ಎಲೆ ಮತ್ತು ಬೆರಳ ವಿನ್ಯಾಸ ========== -->
+<div class="tab-panel" id="tab-2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <div class="banner-emoji">🍃</div>
+    <div>
+      <div class="banner-kn">ಎಲೆ ಮತ್ತು ಬೆರಳ ವಿನ್ಯಾಸ</div>
+      <div class="banner-en">Leaf & Finger Patterns</div>
+      <div class="banner-sub">ಬೇರೆ ಬೇರೆ ಆಕಾರದ ಎಲೆಗಳಿಂದ ಮತ್ತು ಹೆಬ್ಬೆರಳಿನಿಂದ<br>ಸ್ವಂತ ವಿನ್ಯಾಸ ಮಾಡಬಹುದು!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🌿 ಬೇರೆ ಬೇರೆ ಆಕಾರ ಇರುವ ಎಲೆಗಳನ್ನು ಬಳಸಿ ವಿನ್ಯಾಸ ಮಾಡಬಹುದು.<br>
+    👍 ಹೆಬ್ಬೆರಳನ್ನು ಒತ್ತಿ ಮಾಡಿದ ವಿನ್ಯಾಸ — ಹೂವಿನ ಆಕಾರ ಆಗುತ್ತದೆ!
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">👍 ಹೆಬ್ಬೆರಳ ಹೂ! Thumb Flower!</div>
+    <div style="text-align:center;padding:10px 0;font-size:20px;line-height:2">
+      1 ಹೆಬ್ಬೆರಳು → 🌕<br>
+      2 ಹೆಬ್ಬೆರಳು → 🌕🌕<br>
+      3 → 🌕🌕🌕<br>
+      5 ಹೆಬ್ಬೆರಳು → ಹೂ ಆಕಾರ! 🌸
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#388e3c;text-align:center">ಹೆಚ್ಚು ಹೆಬ್ಬೆರಳು ಒತ್ತಿದಷ್ಟೂ ದೊಡ್ಡ ಹೂ! More thumbs = bigger flower!</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t2q1">
+    <div class="q-top">
+      <div class="q-emoji">🍃</div>
+      <div class="q-kn">ಎಲೆ ಅಚ್ಚು ವಿನ್ಯಾಸದಲ್ಲಿ ಯಾವ ಎಲೆ ಬಳಸಬಹುದು?<br><small>Which leaf can be used for leaf pattern printing?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q1',this,false,'f2q1')">
+          <div class="choice-emoji">🌹</div>
+          <div class="choice-kn">ಒಂದೇ ಆಕಾರ</div>
+          <div class="choice-sub">Only one shape</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q1',this,true,'f2q1')">
+          <div class="choice-emoji">🍃🍂🌿</div>
+          <div class="choice-kn">ಬೇರೆ ಬೇರೆ ಆಕಾರ</div>
+          <div class="choice-sub">Different shapes ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t2q2">
+    <div class="q-top">
+      <div class="q-emoji">👍</div>
+      <div class="q-kn">ಹೆಬ್ಬೆರಳಿನ ಗುರುತನ್ನು ಒತ್ತಿದರೆ ಏನು ಆಗುತ್ತದೆ?<br><small>When you press thumb prints together, what do you see?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q2',this,true,'f2q2')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಹೂ ಆಕಾರ</div>
+          <div class="choice-sub">Flower shape ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q2',this,false,'f2q2')">
+          <div class="choice-emoji">🏠</div>
+          <div class="choice-kn">ಮನೆ ಆಕಾರ</div>
+          <div class="choice-sub">House shape</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t2q3">
+    <div class="q-top">
+      <div class="q-emoji">🌸</div>
+      <div class="q-kn">ಹೆಬ್ಬೆರಳ ಹೂವಿಗೆ ಎಷ್ಟು ದಳಗಳು ಬೇಕು?<br><small>How many thumb prints to make a flower with 5 petals?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')">
+          <div class="choice-kn">3</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,true,'f2q3')">
+          <div class="choice-kn">5</div>
+          <div class="choice-sub">✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q3',this,false,'f2q3')">
+          <div class="choice-kn">10</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t2q4">
+    <div class="q-top">
+      <div class="q-emoji">✋</div>
+      <div class="q-kn">ಕೈ ಬೆರಳ ಅಚ್ಚಿನಿಂದ ಯಾವ ಆಕಾರ ಮಾಡಬಹುದು?<br><small>Using full handprint, which animal can we make?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q4',this,true,'f2q4')">
+          <div class="choice-emoji">🦋</div>
+          <div class="choice-kn">ಚಿಟ್ಟೆ / ಹಕ್ಕಿ</div>
+          <div class="choice-sub">Butterfly / Bird ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q4',this,false,'f2q4')">
+          <div class="choice-emoji">🐘</div>
+          <div class="choice-kn">ಆನೆ</div>
+          <div class="choice-sub">Elephant</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t2q5">
+    <div class="q-top">
+      <div class="q-emoji">🎨</div>
+      <div class="q-kn">ಎಲೆ ಅಚ್ಚು ವಿನ್ಯಾಸ ಯಾಕೆ ಸ್ವಾರಸ್ಯಕರ?<br><small>Why is leaf printing interesting?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t2q5',this,true,'f2q5')">
+          <div class="choice-emoji">🌈</div>
+          <div class="choice-kn">ಅನೇಕ ಆಕಾರ ಮತ್ತು ಬಣ್ಣ</div>
+          <div class="choice-sub">Many shapes & colors ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t2q5',this,false,'f2q5')">
+          <div class="choice-emoji">😴</div>
+          <div class="choice-kn">ಒಂದೇ ಆಕಾರ</div>
+          <div class="choice-sub">Same shape always</div>
+        </div>
+      </div>
+      <div class="fb" id="f2q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score2"></div>
+  <button class="big-btn blue" id="btn2" disabled onclick="finishTab(2)">ಮುಂದಿನ ಹಂತ ➡️ Next Step</button>
+</div>
+
+<!-- ========== TAB 3: ಬಣ್ಣದ ವಿನ್ಯಾಸ ========== -->
+<div class="tab-panel" id="tab-3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <div class="banner-emoji">🎨</div>
+    <div>
+      <div class="banner-kn">ಬಣ್ಣದ ವಿನ್ಯಾಸ</div>
+      <div class="banner-en">Colour Patterns</div>
+      <div class="banner-sub">ಸೂಚನೆಯಂತೆ ಬಣ್ಣ ತುಂಬಿ!<br>Fill colours as instructed!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🟥🟦 ಕ್ರಮವಾಗಿ ಬಣ್ಣ ತುಂಬಿದರೆ ವಿನ್ಯಾಸ ಆಗುತ್ತದೆ!<br>
+    Fill colours in order → You get a pattern!
+  </div>
+
+  <!-- Concept: colour patterns from PDF exercise 1 -->
+  <div class="concept-box">
+    <div class="concept-title">📐 ಆಕಾರ ವಿನ್ಯಾಸ! Shape Patterns!</div>
+    <div style="text-align:center;padding:10px;font-size:14px;font-weight:700;color:#444;line-height:2.2">
+      <div>□○ □○ □○ □○</div>
+      <div style="color:#c62828">← □ ಕ್ಕೆ ಕೆಂಪು, ○ ಕ್ಕೆ ಬೇರೆ ಬಣ್ಣ = ವಿನ್ಯಾಸ!</div>
+      <div>□△○□ □△○□ □△○□</div>
+      <div style="color:#2e7d32">← □ ಕ್ಕೆ ಹಸಿರು = ವಿನ್ಯಾಸ!</div>
+      <div>○○△ ○○△ ○○△</div>
+      <div style="color:#1565c0">← ○ ಕ್ಕೆ ನೀಲಿ = ವಿನ್ಯಾಸ!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t3q1">
+    <div class="q-top">
+      <div class="q-emoji">🟥</div>
+      <div class="q-kn">□○ □○ □○ — ಈ ವಿನ್ಯಾಸದಲ್ಲಿ □ ಕ್ಕೆ ಯಾವ ಬಣ್ಣ?<br><small>In □○ □○ pattern, what colour for □?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t3q1',this,true,'f3q1')">
+          <div class="choice-emoji">🟥</div>
+          <div class="choice-kn">ಕೆಂಪು</div>
+          <div class="choice-sub">Red ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')">
+          <div class="choice-emoji">🟦</div>
+          <div class="choice-kn">ನೀಲಿ</div>
+          <div class="choice-sub">Blue</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q1',this,false,'f3q1')">
+          <div class="choice-emoji">🟨</div>
+          <div class="choice-kn">ಹಳದಿ</div>
+          <div class="choice-sub">Yellow</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t3q2">
+    <div class="q-top">
+      <div class="q-emoji">🟩</div>
+      <div class="q-kn">□△○□ □△○□ — ಈ ವಿನ್ಯಾಸದಲ್ಲಿ □ ಕ್ಕೆ ಯಾವ ಬಣ್ಣ?<br><small>In □△○□ pattern, what colour for □?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">🟥</div>
+          <div class="choice-kn">ಕೆಂಪು</div>
+          <div class="choice-sub">Red</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,true,'f3q2')">
+          <div class="choice-emoji">🟩</div>
+          <div class="choice-kn">ಹಸಿರು</div>
+          <div class="choice-sub">Green ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q2',this,false,'f3q2')">
+          <div class="choice-emoji">🟨</div>
+          <div class="choice-kn">ಹಳದಿ</div>
+          <div class="choice-sub">Yellow</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t3q3">
+    <div class="q-top">
+      <div class="q-emoji">🔵</div>
+      <div class="q-kn">○○△ ○○△ — ○ ಕ್ಕೆ ಯಾವ ಬಣ್ಣ?<br><small>In ○○△ pattern, what colour for ○?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">🟥</div>
+          <div class="choice-kn">ಕೆಂಪು</div>
+          <div class="choice-sub">Red</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,false,'f3q3')">
+          <div class="choice-emoji">🟩</div>
+          <div class="choice-kn">ಹಸಿರು</div>
+          <div class="choice-sub">Green</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q3',this,true,'f3q3')">
+          <div class="choice-emoji">🟦</div>
+          <div class="choice-kn">ನೀಲಿ</div>
+          <div class="choice-sub">Blue ✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t3q4">
+    <div class="q-top">
+      <div class="q-emoji">🔴</div>
+      <div class="q-kn">🔴⬜🔴⬜ — ಮುಂದೆ ಯಾವ ಬಣ್ಣ ಬರುತ್ತದೆ?<br><small>🔴⬜🔴⬜ — What colour comes next?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t3q4',this,true,'f3q4')">
+          <div class="choice-emoji">🔴</div>
+          <div class="choice-kn">ಕೆಂಪು</div>
+          <div class="choice-sub">Red ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q4',this,false,'f3q4')">
+          <div class="choice-emoji">🟦</div>
+          <div class="choice-kn">ನೀಲಿ</div>
+          <div class="choice-sub">Blue</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t3q5">
+    <div class="q-top">
+      <div class="q-emoji">🌈</div>
+      <div class="q-kn">🔴🟢🔵 🔴🟢🔵 🔴... ಮುಂದೆ?<br><small>What comes after 🔴?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')">
+          <div class="choice-emoji">🔴</div>
+          <div class="choice-kn">ಕೆಂಪು</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q5',this,true,'f3q5')">
+          <div class="choice-emoji">🟢</div>
+          <div class="choice-kn">ಹಸಿರು ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t3q5',this,false,'f3q5')">
+          <div class="choice-emoji">🟡</div>
+          <div class="choice-kn">ಹಳದಿ</div>
+        </div>
+      </div>
+      <div class="fb" id="f3q5"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score3"></div>
+  <button class="big-btn blue" id="btn3" disabled onclick="finishTab(3)">ಮುಂದಿನ ಹಂತ ➡️ Next Step</button>
+</div>
+
+<!-- ========== TAB 4: ವಿನ್ಯಾಸ ಮುಂದುವರೆಸಿ ========== -->
+<div class="tab-panel" id="tab-4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ede7f6,#d1c4e9)">
+    <div class="banner-emoji">🔮</div>
+    <div>
+      <div class="banner-kn">ವಿನ್ಯಾಸ ಮುಂದುವರೆಸಿ</div>
+      <div class="banner-en">Continue the Pattern</div>
+      <div class="banner-sub">ವಿನ್ಯಾಸ ಕಂಡುಹಿಡಿದು ಮುಂದಿನ ಎರಡನ್ನು ಬರೆ!<br>Find the pattern → write the next two!</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    👀 ಗಮನವಾಗಿ ನೋಡಿ — ಯಾವ ಆಕಾರ ಪದೇ ಪದೇ ಬರುತ್ತದೆ?<br>
+    Look carefully — which shape keeps repeating?
+  </div>
+
+  <!-- Concept from PDF exercise 2 -->
+  <div class="concept-box">
+    <div class="concept-title">🔁 ವಿನ್ಯಾಸ ಮುಂದುವರೆಸಿ! Continue the Pattern!</div>
+    <div style="padding:10px;font-size:15px;font-weight:700;color:#444;line-height:2.5">
+      <div>□○○, □○○, <span style="color:#7b1fa2">□○○</span>, <span style="color:#7b1fa2">□○○</span></div>
+      <div>○○○, ○○○, <span style="color:#7b1fa2">○○○</span>, <span style="color:#7b1fa2">○○○</span></div>
+      <div>△△△○, △△△○, <span style="color:#7b1fa2">△△△○</span>, <span style="color:#7b1fa2">△△△○</span></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t4q1">
+    <div class="q-top">
+      <div class="q-emoji">🔁</div>
+      <div class="q-kn">□○○, □○○, ______<br><small>□○○ pattern — what comes next?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q1',this,true,'f4q1')">
+          <div class="choice-pat">□○○</div>
+          <div class="choice-sub">✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q1',this,false,'f4q1')">
+          <div class="choice-pat">○□□</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t4q2">
+    <div class="q-top">
+      <div class="q-emoji">🔺</div>
+      <div class="q-kn">△△△○, △△△○, ______<br><small>What comes next?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q2',this,false,'f4q2')">
+          <div class="choice-pat">○△△△</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q2',this,true,'f4q2')">
+          <div class="choice-pat">△△△○</div>
+          <div class="choice-sub">✓</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t4q3">
+    <div class="q-top">
+      <div class="q-emoji">🟤</div>
+      <div class="q-kn">↑↑↑↑↓, ↑↑↑↑↓, ______<br><small>T T T T ⊥ pattern — what comes next?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q3',this,true,'f4q3')">
+          <div class="choice-pat">↑↑↑↑↓</div>
+          <div class="choice-sub">✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q3',this,false,'f4q3')">
+          <div class="choice-pat">↓↓↓↓↑</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4: growing pattern — circles from PDF -->
+  <div class="q-card" id="t4q4">
+    <div class="q-top">
+      <div class="q-emoji">⭕</div>
+      <div class="q-kn">1 ⭕, 2 ⭕⭕, 3 ⭕⭕⭕ — ಮುಂದೆ 4 ಕ್ಕೆ ಎಷ್ಟು?<br><small>Growing pattern — how many circles for 4th?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-kn">3</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,true,'f4q4')">
+          <div class="choice-kn">4</div>
+          <div class="choice-sub">✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q4',this,false,'f4q4')">
+          <div class="choice-kn">5</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5: circle segments from PDF exercise 3 -->
+  <div class="q-card" id="t4q5">
+    <div class="q-top">
+      <div class="q-emoji">🔵</div>
+      <div class="q-kn">⊖ → ⊕ → ⊛ — ಈ ವಿನ್ಯಾಸ ಹೇಗಿದೆ?<br><small>Circle gets more lines. What is this pattern?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q5',this,true,'f4q5')">
+          <div class="choice-emoji">📈</div>
+          <div class="choice-kn">ಹೆಚ್ಚಾಗುತ್ತದೆ</div>
+          <div class="choice-sub">Growing pattern ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q5',this,false,'f4q5')">
+          <div class="choice-emoji">📉</div>
+          <div class="choice-kn">ಕಡಿಮೆಯಾಗುತ್ತದೆ</div>
+          <div class="choice-sub">Shrinking</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t4q6">
+    <div class="q-top">
+      <div class="q-emoji">🌻</div>
+      <div class="q-kn">🌸, 🌸🌸, 🌸🌸🌸, ___<br><small>Each time 1 flower adds. What is next?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t4q6',this,true,'f4q6')">
+          <div class="choice-pat">🌸🌸🌸🌸</div>
+          <div class="choice-sub">4 flowers ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t4q6',this,false,'f4q6')">
+          <div class="choice-pat">🌸🌸🌸🌸🌸🌸</div>
+          <div class="choice-sub">6 flowers</div>
+        </div>
+      </div>
+      <div class="fb" id="f4q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score4"></div>
+  <button class="big-btn blue" id="btn4" disabled onclick="finishTab(4)">ಮುಂದಿನ ಹಂತ ➡️ Next Step</button>
+</div>
+
+<!-- ========== TAB 5: ಬಿಟ್ಟ ವಿನ್ಯಾಸ ತುಂಬಿ ========== -->
+<div class="tab-panel" id="tab-5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe0b2)">
+    <div class="banner-emoji">🧩</div>
+    <div>
+      <div class="banner-kn">ಬಿಟ್ಟ ವಿನ್ಯಾಸ ತುಂಬಿ</div>
+      <div class="banner-en">Fill the Missing Pattern</div>
+      <div class="banner-sub">ಮಧ್ಯೆ ಬಿಟ್ಟ ಆಕಾರ ಯಾವುದು?<br>Which shape is missing in the middle?</div>
+    </div>
+  </div>
+
+  <div class="info-pill">
+    🧩 ವಿನ್ಯಾಸ ನೋಡಿ — ಯಾವ ಆಕಾರ ಬಿಟ್ಟು ಹೋಗಿದೆ?<br>
+    Look at the pattern — which shape is missing?
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="t5q1">
+    <div class="q-top">
+      <div class="q-emoji">❓</div>
+      <div class="q-kn">🔴, ❓, 🔴, 🔵 — ಮಧ್ಯದ ಆಕಾರ ಯಾವುದು?<br><small>🔴 ? 🔴 🔵 — what is missing?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q1',this,true,'f5q1')">
+          <div class="choice-emoji">🔵</div>
+          <div class="choice-kn">ನೀಲಿ ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q1',this,false,'f5q1')">
+          <div class="choice-emoji">🔴</div>
+          <div class="choice-kn">ಕೆಂಪು</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="t5q2">
+    <div class="q-top">
+      <div class="q-emoji">🔺</div>
+      <div class="q-kn">△△△○, △△△○, ❓△△○ — ಬಿಟ್ಟ ಆಕಾರ?<br><small>What is the missing shape?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q2',this,true,'f5q2')">
+          <div class="choice-pat">△</div>
+          <div class="choice-sub">Triangle ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q2',this,false,'f5q2')">
+          <div class="choice-pat">○</div>
+          <div class="choice-sub">Circle</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="t5q3">
+    <div class="q-top">
+      <div class="q-emoji">🌿</div>
+      <div class="q-kn">🌸🍃🌸🍃, ❓🍃🌸🍃 — ಬಿಟ್ಟ ಆಕಾರ?<br><small>What is missing?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q3',this,true,'f5q3')">
+          <div class="choice-emoji">🌸</div>
+          <div class="choice-kn">ಹೂ ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q3',this,false,'f5q3')">
+          <div class="choice-emoji">🍃</div>
+          <div class="choice-kn">ಎಲೆ</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="t5q4">
+    <div class="q-top">
+      <div class="q-emoji">🔢</div>
+      <div class="q-kn">1, 2, ❓, 4, 5 — ಬಿಟ್ಟ ಸಂಖ್ಯೆ?<br><small>Number pattern: 1, 2, ?, 4, 5 — what is missing?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices three">
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-kn">2</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,true,'f5q4')">
+          <div class="choice-kn">3 ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q4',this,false,'f5q4')">
+          <div class="choice-kn">6</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="t5q5">
+    <div class="q-top">
+      <div class="q-emoji">🎭</div>
+      <div class="q-kn">😀😢😀😢, 😀❓😀😢 — ಬಿಟ್ಟ ಮುಖ?<br><small>What face is missing?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices two">
+        <div class="choice" onclick="ansQ('t5q5',this,true,'f5q5')">
+          <div class="choice-emoji">😢</div>
+          <div class="choice-kn">ಅಳುವ ✓</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q5',this,false,'f5q5')">
+          <div class="choice-emoji">😀</div>
+          <div class="choice-kn">ನಗುವ</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="t5q6">
+    <div class="q-top">
+      <div class="q-emoji">🌟</div>
+      <div class="q-kn">ವಿನ್ಯಾಸ ಕಲಿಯಲು ಏನು ಬಳಸಬಹುದು?<br><small>What can we use to learn & make patterns?</small></div>
+    </div>
+    <div class="q-bottom">
+      <div class="choices four">
+        <div class="choice" onclick="ansQ('t5q6',this,false,'f5q6')">
+          <div class="choice-emoji">📱</div>
+          <div class="choice-kn">ಫೋನ್</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q6',this,true,'f5q6')">
+          <div class="choice-emoji">🍃</div>
+          <div class="choice-kn">ಎಲೆ ✓</div>
+          <div class="choice-sub">Leaves</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q6',this,true,'f5q6')">
+          <div class="choice-emoji">👍</div>
+          <div class="choice-kn">ಬೆರಳು ✓</div>
+          <div class="choice-sub">Fingers</div>
+        </div>
+        <div class="choice" onclick="ansQ('t5q6',this,false,'f5q6')">
+          <div class="choice-emoji">🚀</div>
+          <div class="choice-kn">ರಾಕೆಟ್</div>
+        </div>
+      </div>
+      <div class="fb" id="f5q6"></div>
+    </div>
+  </div>
+
+  <div class="score-dots" id="score5"></div>
+  <button class="big-btn blue" id="btn5" disabled onclick="finishLesson()">🎉 ಪಾಠ ಮುಗಿಸಿ! Finish Lesson!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- Lock Toast -->
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<!-- Celebration -->
+<div class="celeb-overlay" id="celeb">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಅದ್ಭುತ! ಭಲೇ!</div>
+    <div class="celeb-sub">ನೀವು ಪಾಠ 19 ಮುಗಿಸಿದಿರಿ!<br>You finished Lesson 19 — ವಿನ್ಯಾಸಗಳು (Patterns)!<br>🎨 ನೀವು ಈಗ ವಿನ್ಯಾಸ ತಜ್ಞರು!</div>
+    <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+    <button class="big-btn blue" onclick="document.getElementById('celeb').classList.remove('show')">ಮತ್ತೆ ಆಟವಾಡಿ 🔄</button>
+  </div>
+</div>
+
+<script>
+let totalStars = 0;
+let activeTab  = 1;
+let unlockedTab = 1;
+
+const totals = {1:5, 2:5, 3:5, 4:6, 5:6};
+const done   = {1:0, 2:0, 3:0, 4:0, 5:0};
+
+Object.keys(totals).forEach(t => buildDots('score'+t, 0, totals[t]));
+
+function buildDots(id, d, total) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'sdot' + (i < d ? ' done' : '');
+    el.appendChild(dot);
+  }
+}
+
+function updateProgress() {
+  const totalQ = Object.values(totals).reduce((a,b)=>a+b,0);
+  const doneQ  = Object.values(done).reduce((a,b)=>a+b,0);
+  document.getElementById('progFill').style.width = (doneQ/totalQ*100)+'%';
+}
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('starsPill').textContent = '⭐ ' + totalStars;
+}
+
+function tryTab(n) {
+  if (n <= unlockedTab) { goTab(n); }
+  else {
+    const btn = document.getElementById('tab-btn-'+n);
+    btn.classList.add('shaking');
+    setTimeout(()=> btn.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function goTab(n) {
+  document.getElementById('tab-'+activeTab).classList.remove('active');
+  const prevBtn = document.getElementById('tab-btn-'+activeTab);
+  prevBtn.classList.remove('active');
+  if (n > activeTab) prevBtn.classList.add('done');
+  activeTab = n;
+  if (n > unlockedTab) unlockedTab = n;
+  const btn = document.getElementById('tab-btn-'+n);
+  btn.classList.remove('locked','unlocked','done');
+  btn.classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function finishTab(n) {
+  const next = n + 1;
+  const nextBtn = document.getElementById('tab-btn-'+next);
+  if (nextBtn) {
+    nextBtn.classList.remove('locked');
+    nextBtn.classList.add('unlocked');
+    unlockedTab = next;
+    goTab(next);
+  }
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+function ansQ(cardId, btn, correct, fbId) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const opts = card.querySelectorAll('.choice');
+  opts.forEach(o=>{ o.classList.add('disabled'); o.style.pointerEvents='none'; });
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'fb ok';
+    fb.textContent = '✅ ಭಲೇ! ಸರಿ! Well done!';
+    card.classList.add('done');
+    card.dataset.done = '1';
+    addStars(1);
+    const tnum = parseInt(cardId.charAt(1));
+    done[tnum]++;
+    buildDots('score'+tnum, done[tnum], totals[tnum]);
+    if (done[tnum] >= totals[tnum]) document.getElementById('btn'+tnum).disabled = false;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('wrong-flash');
+    fb.className = 'fb no';
+    fb.textContent = '❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ! Try again!';
+    setTimeout(()=>{
+      opts.forEach(o=>{ o.classList.remove('disabled'); o.style.pointerEvents=''; });
+      btn.classList.remove('wrong');
+      card.classList.remove('wrong-flash');
+      fb.className = 'fb';
+    }, 900);
+  }
+}
+
+function finishLesson() {
+  const n = Math.max(3, Math.min(10, Math.floor(totalStars/3)));
+  document.getElementById('celebStars').textContent = '⭐'.repeat(n);
+  document.getElementById('celeb').classList.add('show');
+}
+</script>
+</body>
+</html>
