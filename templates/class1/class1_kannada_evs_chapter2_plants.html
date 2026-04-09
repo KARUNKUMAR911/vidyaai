@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 2: ಸುತ್ತಲ ಸಸ್ಯಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#2e7d32);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:24px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#69f0ae); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#43a047; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1b5e20;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── ICON GRID 2 ── */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:42px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:14px; color:#1b5e20; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#2e7d32; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ── 3-COL GRID ── */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:32px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:11px; color:#1b5e20; }
+.icon-card3 .ic-name-kn { font-size:11px; font-weight:900; color:#2e7d32; margin-top:2px; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #a5d6a7; background:#e8f5e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1b5e20; transform:scale(1.3); }
+
+/* ── MATCH GAME ── */
+.match-container { margin-bottom:16px; }
+.match-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.match-card {
+  background:#fff; border-radius:16px; padding:14px 10px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#1b5e20;
+  transition:all .2s; user-select:none; min-height:60px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:4px;
+}
+.match-card .mc-icon { font-size:30px; }
+.match-card:active { transform:scale(.95); }
+.match-card.selected { background:#c8e6c9; border-color:#1b5e20; box-shadow:0 0 0 3px rgba(27,94,32,.3); }
+.match-card.matched  { background:#e8f5e9; border-color:#43a047; opacity:.7; cursor:default; }
+.match-card.wrong-flash { animation:wobble .4s ease; background:#ffcdd2; border-color:#e53935; }
+.match-score-row { text-align:center; font-family:'Fredoka One',cursive; font-size:16px; color:#1b5e20; margin-bottom:10px; }
+
+/* ── SORT GAME ── */
+.sort-pool { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; justify-content:center; min-height:60px; }
+.sort-chip {
+  background:#fff; border:3px solid #a5d6a7; border-radius:50px; padding:10px 16px;
+  font-family:'Fredoka One',cursive; font-size:15px; cursor:pointer; user-select:none;
+  transition:all .2s; display:flex; align-items:center; gap:6px;
+}
+.sort-chip:active { transform:scale(.93); }
+.sort-chip.placed { opacity:.4; pointer-events:none; }
+.sort-bins { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.sort-bin {
+  background:#fff; border-radius:18px; padding:14px 10px; min-height:110px; text-align:center;
+  box-shadow:0 3px 14px rgba(0,0,0,.1); border:3px dashed #a5d6a7;
+}
+.sort-bin-title { font-family:'Fredoka One',cursive; font-size:14px; color:#1b5e20; margin-bottom:8px; }
+.sort-bin-items { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; min-height:50px; }
+.sort-placed-chip {
+  background:#e8f5e9; border:2px solid #43a047; border-radius:30px; padding:6px 12px;
+  font-family:'Fredoka One',cursive; font-size:13px; color:#1b5e20;
+}
+.sort-placed-chip.wrong-item { background:#ffcdd2; border-color:#e53935; color:#b71c1c; }
+.sort-check-btn {
+  display:block; width:100%; padding:16px; border-radius:18px; border:none;
+  font-family:'Fredoka One',cursive; font-size:17px; cursor:pointer;
+  background:linear-gradient(135deg,#f57f17,#ffb300); color:#fff;
+  box-shadow:0 5px 16px rgba(245,127,23,.35); transition:all .2s; margin-bottom:12px;
+}
+.sort-check-btn:active { transform:scale(.97); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer;
+  background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff;
+  box-shadow:0 6px 20px rgba(27,94,32,.35); transition:all .2s; margin-top:10px;
+}
+.nav-btn:disabled { opacity:.4; cursor:not-allowed; }
+.nav-btn:not(:disabled):active { transform:scale(.97); }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  display:none; position:fixed; inset:0; background:linear-gradient(135deg,#1b5e20,#43a047);
+  z-index:1000; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px 20px; text-align:center;
+}
+.celeb-screen.show { display:flex; }
+.celeb-trophy { font-size:90px; animation:trophyPop 1s ease both; }
+@keyframes trophyPop { 0%{transform:scale(0) rotate(-20deg)} 60%{transform:scale(1.2) rotate(5deg)} 100%{transform:scale(1) rotate(0)} }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:34px; color:#fff; margin:14px 0 8px; }
+.celeb-sub { font-size:16px; color:rgba(255,255,255,.92); font-weight:800; line-height:1.8; white-space:pre-wrap; }
+.celeb-stars { font-size:22px; color:#ffe082; margin:16px 0; font-weight:900; letter-spacing:2px; }
+.celeb-restart {
+  margin-top:24px; padding:16px 40px; border-radius:50px; border:none;
+  font-family:'Fredoka One',cursive; font-size:20px; background:#fff; color:#1b5e20;
+  cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.2); transition:transform .2s;
+}
+.celeb-restart:active { transform:scale(.95); }
+
+/* ── CONFETTI ── */
+.confetti-piece { position:fixed; width:10px; height:10px; top:-10px; animation:confettiFall 3s ease-in forwards; z-index:999; border-radius:2px; pointer-events:none; }
+@keyframes confettiFall {
+  0%  { transform:translateY(0) rotate(0deg); opacity:1; }
+  80% { opacity:1; }
+  100%{ transform:translateY(100vh) rotate(720deg); opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span style="font-size:22px">🌿</span>
+    <span class="topbar-title">ಪಾಠ 2 · ಸುತ್ತಲ ಸಸ್ಯಗಳು</span>
+  </div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🌱</span>
+  <h1>ಸುತ್ತಲ ಸಸ್ಯಗಳು</h1>
+  <p>Plants Around Us · Class 1 EVS</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">📚 ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab unlocked" id="tab-learn"   onclick="handleTabClick('learn')">   🌿 1. ಕಲಿ</div>
+  <div class="step-tab locked"   id="tab-trees"   onclick="handleTabClick('trees')">   🌳 2. ಮರಗಳು</div>
+  <div class="step-tab locked"   id="tab-veggies" onclick="handleTabClick('veggies')"> 🥕 3. ತರಕಾರಿ</div>
+  <div class="step-tab locked"   id="tab-fruits"  onclick="handleTabClick('fruits')">  🍎 4. ಹಣ್ಣುಗಳು</div>
+  <div class="step-tab locked"   id="tab-flowers" onclick="handleTabClick('flowers')"> 🌸 5. ಹೂಗಳು</div>
+  <div class="step-tab locked"   id="tab-sort"    onclick="handleTabClick('sort')">    🎯 6. ವಿಂಗಡಿಸು</div>
+  <div class="step-tab locked"   id="tab-match"   onclick="handleTabClick('match')">   🔗 7. ಜೋಡಿ</div>
+  <div class="step-tab locked"   id="tab-bigquiz" onclick="handleTabClick('bigquiz')"> 🏆 8. ದೊಡ್ಡ ಆಟ</div>
+</div>
+
+<div id="lockToast" class="lock-toast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ════════ TAB 1 — LEARN ════════ -->
+<div class="tab-panel active" id="panel-learn">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">🌿</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20">ಸಸ್ಯಗಳು ಯಾವುವು?</div>
+      <div class="banner-sub" style="color:#2e7d32">What are plants?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌱 ಸಸ್ಯ ಎಂದರೇನು? · What is a plant?</div>
+    <div class="ic-text">ನಮ್ಮ ಮನೆ, ಶಾಲೆ ಮತ್ತು ಸುತ್ತಲೂ ಅನೇಕ ಸಸ್ಯಗಳು ಇವೆ.<br>
+    <span style="color:#888">Many plants grow around our home and school.</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌳 ಮರ · Tree</div>
+    <div class="ic-text">ದೊಡ್ಡ ಕಾಂಡ ಇರುವ ಸಸ್ಯ. ತಾಳೆ, ಮಾವು, ತೆಂಗಿನ ಮರ.<br>
+    <span style="color:#888">Big tall plant with thick trunk. E.g. Coconut, Mango.</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌿 ಗಿಡ · Shrub / Small Plant</div>
+    <div class="ic-text">ಸಣ್ಣ ಗಿಡಗಳು. ಟೊಮ್ಯಾಟೊ, ಬದನೆ, ಮೆಣಸಿನಕಾಯಿ.<br>
+    <span style="color:#888">Small plants. E.g. Tomato, Brinjal, Chilli.</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌻 ಹೂ ಸಸ್ಯ · Flowering Plant</div>
+    <div class="ic-text">ಸೂರ್ಯಕಾಂತಿ, ಗುಲಾಬಿ, ದಾಸವಾಳ — ಹೂ ಬಿಡುವ ಗಿಡಗಳು.<br>
+    <span style="color:#888">Sunflower, Rose, Hibiscus — plants that give flowers.</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🍇 ಬಳ್ಳಿ · Creeper / Climber</div>
+    <div class="ic-text">ನೆಲದ ಮೇಲೆ ಅಥವಾ ಬೇಲಿ ಮೇಲೆ ಹಬ್ಬುವ ಗಿಡ. ದ್ರಾಕ್ಷಿ, ಕಲ್ಲಂಗಡಿ, ಕುಂಬಳ.<br>
+    <span style="color:#888">Creeping/climbing plants. E.g. Grapes, Watermelon, Pumpkin.</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌾 ಧಾನ್ಯ ಸಸ್ಯ · Grain Plant</div>
+    <div class="ic-text">ಅಕ್ಕಿ ಕೊಡುವ ಸಸ್ಯ — ಭತ್ತ. ಇವು ನಮಗೆ ಆಹಾರ ಕೊಡುತ್ತವೆ.<br>
+    <span style="color:#888">Rice plant (paddy) gives us food grain — rice.</span></div>
+  </div>
+
+  <button class="nav-btn" onclick="completeTab('learn','trees')">ಮುಂದೆ ➜ ಮರಗಳ ಬಗ್ಗೆ ಕಲಿ 🌳</button>
+</div>
+
+<!-- ════════ TAB 2 — TREES ════════ -->
+<div class="tab-panel" id="panel-trees">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">🌳</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20">ಮರಗಳು</div>
+      <div class="banner-sub" style="color:#2e7d32">Trees Around Us</div>
+    </div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card" style="animation-delay:.05s">
+      <span class="ic-icon">🥭</span>
+      <div class="ic-name">Mango Tree</div>
+      <div class="ic-name-kn">ಮಾವಿನ ಮರ</div>
+      <div class="ic-desc">Gives sweet mangoes 🥭</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.1s">
+      <span class="ic-icon">🥥</span>
+      <div class="ic-name">Coconut Tree</div>
+      <div class="ic-name-kn">ತೆಂಗಿನ ಮರ</div>
+      <div class="ic-desc">Tall tree, gives coconut 🥥</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.15s">
+      <span class="ic-icon">🍌</span>
+      <div class="ic-name">Banana Tree</div>
+      <div class="ic-name-kn">ಬಾಳೆ ಮರ</div>
+      <div class="ic-desc">Gives bananas 🍌</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.2s">
+      <span class="ic-icon">🍈</span>
+      <div class="ic-name">Jackfruit Tree</div>
+      <div class="ic-name-kn">ಹಲಸಿನ ಮರ</div>
+      <div class="ic-desc">Big green fruit 🫙</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.25s">
+      <span class="ic-icon">🍎</span>
+      <div class="ic-name">Pomegranate Tree</div>
+      <div class="ic-name-kn">ದಾಳಿಂಬೆ ಮರ</div>
+      <div class="ic-desc">Red seeds inside 🌹</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.3s">
+      <span class="ic-icon">🎋</span>
+      <div class="ic-name">Bamboo</div>
+      <div class="ic-name-kn">ಬಿದಿರು ಮರ</div>
+      <div class="ic-desc">Tall hollow grass 🎋</div>
+    </div>
+  </div>
+
+  <!-- Trees Quiz -->
+  <div class="q-dots" id="treesQuizDots"></div>
+  <div id="treesQuizContainer"></div>
+  <button class="nav-btn" id="treesNextBtn" disabled style="opacity:.4" onclick="completeTab('trees','veggies')">ಮುಂದೆ ➜ ತರಕಾರಿ 🥕</button>
+</div>
+
+<!-- ════════ TAB 3 — VEGGIES ════════ -->
+<div class="tab-panel" id="panel-veggies">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">
+    <span class="banner-emoji">🥕</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20">ತರಕಾರಿ ಗಿಡಗಳು</div>
+      <div class="banner-sub" style="color:#2e7d32">Vegetable Plants</div>
+    </div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3" style="animation-delay:.05s">
+      <span class="ic-icon">🍅</span>
+      <div class="ic-name">Tomato</div>
+      <div class="ic-name-kn">ಟೊಮ್ಯಾಟೊ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.1s">
+      <span class="ic-icon">🍆</span>
+      <div class="ic-name">Brinjal</div>
+      <div class="ic-name-kn">ಬದನೆ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.15s">
+      <span class="ic-icon">🥕</span>
+      <div class="ic-name">Carrot</div>
+      <div class="ic-name-kn">ಗಜ್ಜರಿ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.2s">
+      <span class="ic-icon">🌶️</span>
+      <div class="ic-name">Chilli</div>
+      <div class="ic-name-kn">ಮೆಣಸಿನಕಾಯಿ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.25s">
+      <span class="ic-icon">🥒</span>
+      <div class="ic-name">Cucumber / Okra</div>
+      <div class="ic-name-kn">ಸೌತೆ / ಬೆಂಡೆ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.3s">
+      <span class="ic-icon">🎃</span>
+      <div class="ic-name">Pumpkin</div>
+      <div class="ic-name-kn">ಕುಂಬಳ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.35s">
+      <span class="ic-icon">🥔</span>
+      <div class="ic-name">Potato</div>
+      <div class="ic-name-kn">ಆಲೂಗಡ್ಡೆ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.4s">
+      <span class="ic-icon">🫛</span>
+      <div class="ic-name">Beans</div>
+      <div class="ic-name-kn">ಅವರೆ ಕಾಯಿ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.45s">
+      <span class="ic-icon">🌽</span>
+      <div class="ic-name">Maize / Corn</div>
+      <div class="ic-name-kn">ಜೋಳ</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌱 ಭೂಮಿಯಲ್ಲಿ ಬೆಳೆಯುವ ತರಕಾರಿ · Underground Vegetables</div>
+    <div class="ic-text">🥕 ಗಜ್ಜರಿ · Carrot &nbsp;&nbsp; 🥔 ಆಲೂಗಡ್ಡೆ · Potato &nbsp;&nbsp; 🟣 ಬೀಟ್‌ರೂಟ್ · Beetroot<br>
+    ಇವು ಮಣ್ಣಿನ ಒಳಗೆ ಬೆಳೆಯುತ್ತವೆ! <span style="color:#888">These grow underground!</span></div>
+  </div>
+
+  <!-- Veggies Quiz -->
+  <div class="q-dots" id="veggiesQuizDots"></div>
+  <div id="veggiesQuizContainer"></div>
+  <button class="nav-btn" id="veggiesNextBtn" disabled style="opacity:.4" onclick="completeTab('veggies','fruits')">ಮುಂದೆ ➜ ಹಣ್ಣುಗಳು 🍎</button>
+</div>
+
+<!-- ════════ TAB 4 — FRUITS ════════ -->
+<div class="tab-panel" id="panel-fruits">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#fff176)">
+    <span class="banner-emoji">🍎</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">ಹಣ್ಣುಗಳು</div>
+      <div class="banner-sub" style="color:#bf360c">Fruits from Plants</div>
+    </div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card" style="animation-delay:.05s; border-color:#ffe082;">
+      <span class="ic-icon">🍉</span>
+      <div class="ic-name">Watermelon</div>
+      <div class="ic-name-kn">ಕಲ್ಲಂಗಡಿ</div>
+      <div class="ic-desc">Creeper plant 🌿</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.1s; border-color:#ffe082;">
+      <span class="ic-icon">🥭</span>
+      <div class="ic-name">Mango</div>
+      <div class="ic-name-kn">ಮಾವಿನ ಹಣ್ಣು</div>
+      <div class="ic-desc">From mango tree 🌳</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.15s; border-color:#ffe082;">
+      <span class="ic-icon">🍇</span>
+      <div class="ic-name">Grapes</div>
+      <div class="ic-name-kn">ದ್ರಾಕ್ಷಿ</div>
+      <div class="ic-desc">Grows on a vine 🍇</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.2s; border-color:#ffe082;">
+      <span class="ic-icon">🥥</span>
+      <div class="ic-name">Coconut</div>
+      <div class="ic-name-kn">ತೆಂಗಿನಕಾಯಿ</div>
+      <div class="ic-desc">From coconut tree 🌴</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.25s; border-color:#ffe082;">
+      <span class="ic-icon">🍍</span>
+      <div class="ic-name">Pineapple</div>
+      <div class="ic-name-kn">ಅನಾನಸ್</div>
+      <div class="ic-desc">Grows on ground 🌱</div>
+    </div>
+    <div class="icon-card" style="animation-delay:.3s; border-color:#ffe082;">
+      <span class="ic-icon">🥜</span>
+      <div class="ic-name">Groundnut</div>
+      <div class="ic-name-kn">ಕಡಲೆಕಾಯಿ</div>
+      <div class="ic-desc">Grows underground 🌍</div>
+    </div>
+  </div>
+
+  <!-- Fruits Quiz -->
+  <div class="q-dots" id="fruitsQuizDots"></div>
+  <div id="fruitsQuizContainer"></div>
+  <button class="nav-btn" id="fruitsNextBtn" disabled style="opacity:.4" onclick="completeTab('fruits','flowers')">ಮುಂದೆ ➜ ಹೂಗಳು 🌸</button>
+</div>
+
+<!-- ════════ TAB 5 — FLOWERS ════════ -->
+<div class="tab-panel" id="panel-flowers">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+    <span class="banner-emoji">🌸</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f">ಹೂ ಸಸ್ಯಗಳು</div>
+      <div class="banner-sub" style="color:#ad1457">Flowering Plants</div>
+    </div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3" style="animation-delay:.05s; border-color:#f48fb1;">
+      <span class="ic-icon">🌻</span>
+      <div class="ic-name">Sunflower</div>
+      <div class="ic-name-kn">ಸೂರ್ಯಕಾಂತಿ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.1s; border-color:#f48fb1;">
+      <span class="ic-icon">🌹</span>
+      <div class="ic-name">Rose</div>
+      <div class="ic-name-kn">ಗುಲಾಬಿ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.15s; border-color:#f48fb1;">
+      <span class="ic-icon">🌺</span>
+      <div class="ic-name">Hibiscus</div>
+      <div class="ic-name-kn">ದಾಸವಾಳ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.2s; border-color:#f48fb1;">
+      <span class="ic-icon">🌼</span>
+      <div class="ic-name">Marigold</div>
+      <div class="ic-name-kn">ಚೆಂಡು ಹೂ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.25s; border-color:#f48fb1;">
+      <span class="ic-icon">🪷</span>
+      <div class="ic-name">Lotus</div>
+      <div class="ic-name-kn">ತಾವರೆ</div>
+    </div>
+    <div class="icon-card3" style="animation-delay:.3s; border-color:#f48fb1;">
+      <span class="ic-icon">💐</span>
+      <div class="ic-name">Dahlia</div>
+      <div class="ic-name-kn">ದಾಲಿಯಾ</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e91e63;">
+    <div class="ic-title" style="color:#880e4f">🪷 ತಾವರೆ ಹೂ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ? · Where does Lotus grow?</div>
+    <div class="ic-text">ತಾವರೆ ಹೂ ನೀರಿನಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ! 🌊<br>
+    <span style="color:#888">Lotus grows in water! It is India's National Flower.</span></div>
+  </div>
+
+  <!-- Flowers Quiz -->
+  <div class="q-dots" id="flowersQuizDots"></div>
+  <div id="flowersQuizContainer"></div>
+  <button class="nav-btn" id="flowersNextBtn" disabled style="opacity:.4" style="background:linear-gradient(135deg,#880e4f,#e91e63);" onclick="completeTab('flowers','sort')">ಮುಂದೆ ➜ ವಿಂಗಡಿಸು 🎯</button>
+</div>
+
+<!-- ════════ TAB 6 — SORT GAME ════════ -->
+<div class="tab-panel" id="panel-sort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">
+    <span class="banner-emoji">🎯</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1">ಸರಿಯಾಗಿ ವಿಂಗಡಿಸು!</div>
+      <div class="banner-sub" style="color:#1565c0">Sort them correctly!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#1976d2;">
+    <div class="ic-title" style="color:#0d47a1">👆 ಹೇಗೆ ಆಡುವುದು · How to play</div>
+    <div class="ic-text">ಕೆಳಗಿನ ಸಸ್ಯಗಳನ್ನು ಸರಿಯಾದ ಗುಂಪಿನಲ್ಲಿ ಹಾಕು.<br>
+    <span style="color:#888">Tap a plant, then tap the correct group below!</span></div>
+  </div>
+
+  <div class="sort-pool" id="sortPool"></div>
+  <div class="sort-bins">
+    <div class="sort-bin">
+      <div class="sort-bin-title">🌳 ಮರ · Trees</div>
+      <div class="sort-bin-items" id="bin-tree"></div>
+    </div>
+    <div class="sort-bin">
+      <div class="sort-bin-title">🥕 ತರಕಾರಿ · Veggie</div>
+      <div class="sort-bin-items" id="bin-veggie"></div>
+    </div>
+    <div class="sort-bin">
+      <div class="sort-bin-title">🍎 ಹಣ್ಣು · Fruit</div>
+      <div class="sort-bin-items" id="bin-fruit"></div>
+    </div>
+    <div class="sort-bin">
+      <div class="sort-bin-title">🌸 ಹೂ · Flower</div>
+      <div class="sort-bin-items" id="bin-flower"></div>
+    </div>
+  </div>
+  <button class="sort-check-btn" id="sortCheckBtn" onclick="checkSort()">✅ ತಿಳಿಸು · Check!</button>
+  <button class="nav-btn" id="sortNextBtn" disabled style="opacity:.4" onclick="completeTab('sort','match')">ಮುಂದೆ ➜ ಜೋಡಿ 🔗</button>
+</div>
+
+<!-- ════════ TAB 7 — MATCH GAME ════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c">ಜೋಡಿ ಮಾಡು!</div>
+      <div class="banner-sub" style="color:#6a1b9a">Match Plant to its Fruit/Product!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#7b1fa2;">
+    <div class="ic-title" style="color:#4a148c">👆 ಹೇಗೆ ಆಡುವುದು · How to play</div>
+    <div class="ic-text">ಎಡಗಡೆ ಸಸ್ಯ ಆರಿಸು, ನಂತರ ಬಲಗಡೆ ಸರಿಯಾದ ಹಣ್ಣು ಆರಿಸು!<br>
+    <span style="color:#888">Tap a plant on the left, then tap its fruit on the right!</span></div>
+  </div>
+
+  <div class="match-score-row">🎯 ಜೋಡಿ: <span id="matchScore">0</span> / 6</div>
+  <div id="matchPairsContainer"></div>
+  <button class="nav-btn" id="matchNextBtn" disabled style="opacity:.4" onclick="completeTab('match','bigquiz')">ಮುಂದೆ ➜ ದೊಡ್ಡ ಆಟ 🏆</button>
+</div>
+
+<!-- ════════ TAB 8 — BIG QUIZ ════════ -->
+<div class="tab-panel" id="panel-bigquiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#ffe082)">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100">ದೊಡ್ಡ ಆಟ!</div>
+      <div class="banner-sub" style="color:#bf360c">Super Final Quiz!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="bigquizDots"></div>
+  <div id="bigquizContainer"></div>
+  <button class="nav-btn" id="bigquizFinishBtn" disabled style="opacity:.4" onclick="showCelebration()">🏆 ಮುಗಿಸು! Finish!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">ಭಲೇ! ಬ್ರಾವೋ! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-restart" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡು · Play Again</button>
+</div>
+
+<script>
+/* ════ GLOBAL STATE ════ */
+let stars = 0;
+let toastTimer = null;
+const tabOrder = ['learn','trees','veggies','fruits','flowers','sort','match','bigquiz'];
+const doneTabs = new Set();
+
+/* ════ TAB NAVIGATION ════ */
+function handleTabClick(name){
+  const idx = tabOrder.indexOf(name);
+  if(doneTabs.has(name) || name === tabOrder.find(t => !doneTabs.has(t))){
+    goTab(name); return;
+  }
+  // check if it's the active unlocked tab
+  const prevDone = idx === 0 || doneTabs.has(tabOrder[idx-1]);
+  const alreadyActive = document.getElementById('panel-'+name).classList.contains('active');
+  if(prevDone && !alreadyActive){ goTab(name); return; }
+  if(!prevDone){
+    shakeLock(name);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+  }
+}
+
+function goTab(name){
+  tabOrder.forEach(t => {
+    document.getElementById('panel-'+t).classList.remove('active');
+  });
+  document.getElementById('panel-'+name).classList.add('active');
+  tabOrder.forEach((t,i)=>{
+    const el = document.getElementById('tab-'+t);
+    el.className = 'step-tab';
+    if(doneTabs.has(t)) el.classList.add('done');
+    else if(t===name) el.classList.add('active');
+    else if(i===0 || doneTabs.has(tabOrder[i-1])) el.classList.add('unlocked');
+    else el.classList.add('locked');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function completeTab(current, next){
+  doneTabs.add(current);
+  updateProgress();
+  const el = document.getElementById('tab-'+next);
+  if(el) el.classList.remove('locked');
+  goTab(next);
+}
+
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+function shakeLock(name){
+  const el = document.getElementById('tab-'+name);
+  el.classList.remove('shaking'); void el.offsetWidth;
+  el.classList.add('shaking');
+  setTimeout(()=>el.classList.remove('shaking'),600);
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ════ QUIZ ENGINE ════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ_${containerID}(this,${i},${q.correct})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+  window['answerQ_'+containerID] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+  render();
+}
+
+/* ════ TREES QUIZ ════ */
+renderQuestions({
+  containerID:'treesQuizContainer', dotsID:'treesQuizDots', nextBtnID:'treesNextBtn',
+  questions:[
+    {visual:'🥭',question:'ಮಾವಿನ ಹಣ್ಣು ಯಾವ ಮರದಿಂದ ಬರುತ್ತದೆ?\nMango comes from which tree?',options:['🎋 ಬಿದಿರು','🥭 ಮಾವಿನ ಮರ','🌴 ತಾಳೆ ಮರ','🌳 ಹಲಸಿನ ಮರ'],correct:1},
+    {visual:'🥥',question:'ತೆಂಗಿನಕಾಯಿ ಯಾವ ಮರದಿಂದ ಬರುತ್ತದೆ?\nCoconut comes from ___?',options:['🌿 ಬಳ್ಳಿ','🥥 ತೆಂಗಿನ ಮರ','🌱 ಸಣ್ಣ ಗಿಡ','🎋 ಬಿದಿರು'],correct:1},
+    {visual:'🍌',question:'ಬಾಳೆಹಣ್ಣು ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nWhere do bananas grow?',options:['🌊 ನೀರಿನಲ್ಲಿ','🥔 ಮಣ್ಣಿನಲ್ಲಿ','🍌 ಬಾಳೆ ಮರದಲ್ಲಿ','☁️ ಆಕಾಶದಲ್ಲಿ'],correct:2},
+    {visual:'🌳',question:'ಹಲಸಿನ ಹಣ್ಣು ಯಾವ ಮರದ ಮೇಲೆ ಬೆಳೆಯುತ್ತದೆ?\nJackfruit grows on ___?',options:['🍌 ಬಾಳೆ ಮರ','🥥 ತೆಂಗಿನ ಮರ','🌳 ಹಲಸಿನ ಮರ','🥭 ಮಾವಿನ ಮರ'],correct:2},
+  ]
+});
+
+/* ════ VEGGIES QUIZ ════ */
+renderQuestions({
+  containerID:'veggiesQuizContainer', dotsID:'veggiesQuizDots', nextBtnID:'veggiesNextBtn',
+  questions:[
+    {visual:'🥕',question:'ಗಜ್ಜರಿ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nCarrot grows ___?',options:['🌳 ಮರದ ಮೇಲೆ','🌊 ನೀರಿನಲ್ಲಿ','🌱 ಮಣ್ಣಿನ ಒಳಗೆ','☁️ ಆಕಾಶದಲ್ಲಿ'],correct:2},
+    {visual:'🍆',question:'ಬದನೆ ಯಾವ ಗಿಡದಿಂದ ಬರುತ್ತದೆ?\nBrinjal comes from ___?',options:['🌳 ದೊಡ್ಡ ಮರ','🍆 ಸಣ್ಣ ಗಿಡ','🌊 ನೀರು','🌾 ಭತ್ತ'],correct:1},
+    {visual:'🌶️',question:'ಮೆಣಸಿನಕಾಯಿ ಯಾವ ಬಣ್ಣ?\nWhat colour is a ripe chilli?',options:['🟢 ಹಸಿರು','🟡 ಹಳದಿ','🔴 ಕೆಂಪು','🔵 ನೀಲಿ'],correct:2},
+    {visual:'🎃',question:'ಕುಂಬಳ ಯಾವ ಬಗೆಯ ಸಸ್ಯ?\nPumpkin grows on ___?',options:['🌳 ಮರ','🌿 ಬಳ್ಳಿ ಗಿಡ','🌾 ಭತ್ತ','🌹 ಹೂ ಗಿಡ'],correct:1},
+    {visual:'🥔',question:'ಆಲೂಗಡ್ಡೆ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nPotato grows ___?',options:['🌳 ಮರದ ಮೇಲೆ','☁️ ಆಕಾಶದಲ್ಲಿ','🌊 ನೀರಿನಲ್ಲಿ','🌱 ಮಣ್ಣಿನ ಒಳಗೆ'],correct:3},
+  ]
+});
+
+/* ════ FRUITS QUIZ ════ */
+renderQuestions({
+  containerID:'fruitsQuizContainer', dotsID:'fruitsQuizDots', nextBtnID:'fruitsNextBtn',
+  questions:[
+    {visual:'🍉',question:'ಕಲ್ಲಂಗಡಿ ಯಾವ ಬಗೆಯ ಸಸ್ಯ?\nWatermelon grows on ___?',options:['🌳 ಮರ','🌿 ಬಳ್ಳಿ ಗಿಡ','🌸 ಹೂ ಗಿಡ','🌾 ಭತ್ತ'],correct:1},
+    {visual:'🍇',question:'ದ್ರಾಕ್ಷಿ ಯಾವ ಗಿಡದಿಂದ ಬರುತ್ತದೆ?\nGrapes come from ___?',options:['🌳 ಮರ','🥔 ಭೂಮಿ ಒಳಗಿನಿಂದ','🍇 ಬಳ್ಳಿ ಗಿಡ','🌸 ಹೂ ಗಿಡ'],correct:2},
+    {visual:'🥜',question:'ಕಡಲೆಕಾಯಿ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nGroundnut grows ___?',options:['🌳 ಮರದ ಮೇಲೆ','🌿 ಬಳ್ಳಿ ಮೇಲೆ','🌱 ಮಣ್ಣಿನ ಒಳಗೆ','☁️ ಆಕಾಶದಲ್ಲಿ'],correct:2},
+    {visual:'🍍',question:'ಅನಾನಸ್ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nPineapple grows ___?',options:['🌳 ಮರದ ಮೇಲೆ','🌱 ನೆಲದ ಮೇಲೆ','🌊 ನೀರಿನಲ್ಲಿ','🌿 ಬಳ್ಳಿ ಮೇಲೆ'],correct:1},
+  ]
+});
+
+/* ════ FLOWERS QUIZ ════ */
+renderQuestions({
+  containerID:'flowersQuizContainer', dotsID:'flowersQuizDots', nextBtnID:'flowersNextBtn',
+  questions:[
+    {visual:'🌻',question:'ಈ ಹೂ ಯಾವುದು?\nWhich flower is this?',options:['🌹 ಗುಲಾಬಿ','🌼 ಚೆಂಡು ಹೂ','🌻 ಸೂರ್ಯಕಾಂತಿ','🌺 ದಾಸವಾಳ'],correct:2},
+    {visual:'🪷',question:'ತಾವರೆ ಹೂ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nWhere does Lotus grow?',options:['🌳 ಮರದ ಮೇಲೆ','🌊 ನೀರಿನಲ್ಲಿ','🌱 ಮಣ್ಣಿನಲ್ಲಿ','☁️ ಆಕಾಶದಲ್ಲಿ'],correct:1},
+    {visual:'🌼',question:'ಹಳದಿ ಚೆಂಡು ಹೂ ಹೆಸರೇನು?\nThe yellow flower at festivals is ___?',options:['🌹 ಗುಲಾಬಿ','🌼 ಚೆಂಡು ಹೂ (ಮ್ಯಾರಿಗೋಲ್ಡ್)','🌺 ದಾಸವಾಳ','🌻 ಸೂರ್ಯಕಾಂತಿ'],correct:1},
+    {visual:'🌹',question:'ಗುಲಾಬಿ ಯಾವ ಬಣ್ಣ?\nRose is commonly ___?',options:['🟢 ಹಸಿರು','🔵 ನೀಲಿ','🔴 ಕೆಂಪು','🟡 ಹಳದಿ'],correct:2},
+  ]
+});
+
+/* ════ SORT GAME ════ */
+const sortItems = [
+  {emoji:'🥭', name:'ಮಾವು', cat:'tree'},
+  {emoji:'🥕', name:'ಗಜ್ಜರಿ', cat:'veggie'},
+  {emoji:'🍇', name:'ದ್ರಾಕ್ಷಿ', cat:'fruit'},
+  {emoji:'🌹', name:'ಗುಲಾಬಿ', cat:'flower'},
+  {emoji:'🥥', name:'ತೆಂಗಿನ ಮರ', cat:'tree'},
+  {emoji:'🍆', name:'ಬದನೆ', cat:'veggie'},
+  {emoji:'🍉', name:'ಕಲ್ಲಂಗಡಿ', cat:'fruit'},
+  {emoji:'🌻', name:'ಸೂರ್ಯಕಾಂತಿ', cat:'flower'},
+  {emoji:'🍌', name:'ಬಾಳೆ ಮರ', cat:'tree'},
+  {emoji:'🌶️', name:'ಮೆಣಸಿನಕಾಯಿ', cat:'veggie'},
+  {emoji:'🍍', name:'ಅನಾನಸ್', cat:'fruit'},
+  {emoji:'🪷', name:'ತಾವರೆ', cat:'flower'},
+];
+let sortSelected = null;
+let sortPlacements = {}; // item index -> bin
+
+function initSort(){
+  const pool = document.getElementById('sortPool');
+  pool.innerHTML = sortItems.map((it,i)=>
+    `<div class="sort-chip" id="sort-chip-${i}" onclick="sortSelectItem(${i})">
+      ${it.emoji} ${it.name}
+    </div>`).join('');
+  ['tree','veggie','fruit','flower'].forEach(b => {
+    document.getElementById('bin-'+b).innerHTML='';
+  });
+  sortPlacements = {}; sortSelected = null;
+}
+initSort();
+
+function sortSelectItem(i){
+  if(sortPlacements[i] !== undefined) return;
+  sortSelected = i;
+  document.querySelectorAll('.sort-chip').forEach(c => c.style.boxShadow='');
+  const chip = document.getElementById('sort-chip-'+i);
+  if(chip) chip.style.boxShadow = '0 0 0 3px #1b5e20';
+}
+
+// Make bins tappable
+['tree','veggie','fruit','flower'].forEach(b=>{
+  document.getElementById('bin-'+b).parentElement.onclick = ()=> sortDropToBin(b);
+});
+
+function sortDropToBin(bin){
+  if(sortSelected === null) return;
+  const i = sortSelected;
+  if(sortPlacements[i] !== undefined) return;
+  sortPlacements[i] = bin;
+  sortSelected = null;
+  document.querySelectorAll('.sort-chip').forEach(c => c.style.boxShadow='');
+  // show in bin
+  const binEl = document.getElementById('bin-'+bin);
+  const it = sortItems[i];
+  binEl.innerHTML += `<div class="sort-placed-chip" id="placed-${i}">${it.emoji} ${it.name}</div>`;
+}
+
+function checkSort(){
+  let allCorrect = true;
+  let allPlaced = Object.keys(sortPlacements).length === sortItems.length;
+  if(!allPlaced){
+    showToast('ಎಲ್ಲ ಗಿಡಗಳನ್ನು ಹಾಕು! Place all plants first!'); return;
+  }
+  sortItems.forEach((it,i)=>{
+    const el = document.getElementById('placed-'+i);
+    if(!el) return;
+    if(sortPlacements[i] !== it.cat){
+      el.classList.add('wrong-item'); allCorrect = false;
+    }
+  });
+  if(allCorrect){
+    stars += 3; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('sortNextBtn').disabled = false;
+    document.getElementById('sortNextBtn').style.opacity = '1';
+    showToast('🎉 ಭಲೇ! ಎಲ್ಲ ಸರಿ! All correct! +3⭐');
+    document.getElementById('sortCheckBtn').style.display = 'none';
+  } else {
+    showToast('❌ ಕೆಲವು ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು! Some wrong, try again!');
+    setTimeout(()=> { initSort(); }, 1800);
+  }
+}
+
+/* ════ MATCH GAME ════ */
+const matchPairs = [
+  {plant:'🌴 ತೆಂಗಿನ ಮರ', fruit:'🥥 ತೆಂಗಿನಕಾಯಿ', id:0},
+  {plant:'🥭 ಮಾವಿನ ಮರ', fruit:'🥭 ಮಾವಿನ ಹಣ್ಣು', id:1},
+  {plant:'🌿 ಬಳ್ಳಿ ಗಿಡ', fruit:'🍇 ದ್ರಾಕ್ಷಿ', id:2},
+  {plant:'🌱 ಭತ್ತ ಗಿಡ', fruit:'🍚 ಅಕ್ಕಿ', id:3},
+  {plant:'🌻 ಸೂರ್ಯಕಾಂತಿ', fruit:'🌻 ಬೀಜ / ಎಣ್ಣೆ', id:4},
+  {plant:'🍌 ಬಾಳೆ ಮರ', fruit:'🍌 ಬಾಳೆಹಣ್ಣು', id:5},
+];
+let matchSelectedLeft = null, matchDone = 0;
+
+function initMatch(){
+  const shuffledRight = [...matchPairs].sort(()=>Math.random()-.5);
+  const c = document.getElementById('matchPairsContainer');
+  c.innerHTML = matchPairs.map((p,i)=>`
+    <div class="match-row">
+      <div class="match-card" id="ml-${p.id}" onclick="matchSelectLeft(${p.id})">
+        <span class="mc-icon">${p.plant.split(' ')[0]}</span>
+        <span>${p.plant.split(' ').slice(1).join(' ')}</span>
+      </div>
+      <div class="match-card" id="mr-${shuffledRight[i].id}" onclick="matchSelectRight(${shuffledRight[i].id})">
+        <span class="mc-icon">${shuffledRight[i].fruit.split(' ')[0]}</span>
+        <span>${shuffledRight[i].fruit.split(' ').slice(1).join(' ')}</span>
+      </div>
+    </div>`).join('');
+}
+initMatch();
+
+function matchSelectLeft(id){
+  document.querySelectorAll('[id^="ml-"]').forEach(el=>{
+    if(!el.classList.contains('matched')) el.classList.remove('selected');
+  });
+  const el = document.getElementById('ml-'+id);
+  if(el.classList.contains('matched')) return;
+  el.classList.add('selected');
+  matchSelectedLeft = id;
+}
+
+function matchSelectRight(id){
+  if(matchSelectedLeft === null){ showToast('ಮೊದಲು ಎಡಗಡೆ ಸಸ್ಯ ಆರಿಸು! Pick a plant first!'); return; }
+  const lEl = document.getElementById('ml-'+matchSelectedLeft);
+  const rEl = document.getElementById('mr-'+id);
+  if(rEl.classList.contains('matched')) return;
+  if(matchSelectedLeft === id){
+    // Correct!
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelectedLeft = null;
+    if(matchDone === matchPairs.length){
+      setTimeout(()=>{
+        document.getElementById('matchNextBtn').disabled = false;
+        document.getElementById('matchNextBtn').style.opacity = '1';
+      }, 400);
+    }
+  } else {
+    // Wrong
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(()=>{ lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelectedLeft=null; },600);
+  }
+}
+
+/* ════ BIG QUIZ ════ */
+renderQuestions({
+  containerID:'bigquizContainer', dotsID:'bigquizDots', nextBtnID:'bigquizFinishBtn',
+  questions:[
+    {visual:'🏆🌱',question:'🏆 ಸಸ್ಯಗಳಿಂದ ನಮಗೆ ____?\nPlants give us ___?',options:['🪨 ಕಲ್ಲು','🍎 ಆಹಾರ ಮತ್ತು ಆಮ್ಲಜನಕ!','💧 ಉಪ್ಪು ನೀರು','🔥 ಬೆಂಕಿ'],correct:1},
+    {visual:'🏆🪷',question:'🏆 ಭಾರತದ ರಾಷ್ಟ್ರೀಯ ಹೂ ಯಾವುದು?\nNational Flower of India?',options:['🌹 ಗುಲಾಬಿ','🌻 ಸೂರ್ಯಕಾಂತಿ','🪷 ತಾವರೆ!','🌺 ದಾಸವಾಳ'],correct:2},
+    {visual:'🏆🥕',question:'🏆 ಮಣ್ಣಿನ ಒಳಗೆ ಬೆಳೆಯುವ ತರಕಾರಿ?\nVegetable that grows underground?',options:['🍅 ಟೊಮ್ಯಾಟೊ','🍆 ಬದನೆ','🌽 ಮೆಕ್ಕೆಜೋಳ','🥕 ಗಜ್ಜರಿ!'],correct:3},
+    {visual:'🏆🌾',question:'🏆 ಅಕ್ಕಿ ಯಾವ ಸಸ್ಯದಿಂದ ಸಿಗುತ್ತದೆ?\nRice comes from which plant?',options:['🌽 ಜೋಳ','🌾 ಭತ್ತ!','🥭 ಮಾವು','🌿 ಬಳ್ಳಿ'],correct:1},
+    {visual:'🏆🌊',question:'🏆 ತಾವರೆ ಎಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ?\nWhere does lotus grow?',options:['🏜️ ಮರಳಿನಲ್ಲಿ','🌳 ಮರದ ಮೇಲೆ','🌊 ನೀರಿನಲ್ಲಿ!','☁️ ಆಕಾಶದಲ್ಲಿ'],correct:2},
+    {visual:'🏆🍎',question:'🏆 ಹಣ್ಣು ಮತ್ತು ತರಕಾರಿ ನಮಗೆ ___?\nFruits and vegetables keep us ___?',options:['🤒 ಅನಾರೋಗ್ಯ','😴 ಆಯಾಸ','💪 ಆರೋಗ್ಯ ಮತ್ತು ಶಕ್ತಿ!','😢 ದುಃಖ'],correct:2},
+    {visual:'🏆🌿',question:'🏆 ಬಳ್ಳಿ ಗಿಡ ಎಂದರೇನು?\nWhat is a creeper plant?',options:['🌳 ದೊಡ್ಡ ಮರ','🌿 ನೆಲದ ಮೇಲೆ ಹಬ್ಬುವ ಗಿಡ!','🥔 ಮಣ್ಣಿನಲ್ಲಿ ಬೆಳೆಯುವ ಗಿಡ','🌸 ಹೂ ಗಿಡ ಮಾತ್ರ'],correct:1},
+    {visual:'🏆🥥',question:'🏆 ತೆಂಗಿನ ಮರ ಯಾವ ಬಗೆ?\nCoconut tree is a ___?',options:['🌿 ಬಳ್ಳಿ','🌱 ಸಣ್ಣ ಗಿಡ','🌳 ದೊಡ್ಡ ಮರ!','🌸 ಹೂ ಗಿಡ'],correct:2},
+    {visual:'🏆🌻',question:'🏆 ಸೂರ್ಯಕಾಂತಿ ಹೂ ___?\nSunflower always faces ___?',options:['🌙 ಚಂದ್ರ','⭐ ನಕ್ಷತ್ರ','☀️ ಸೂರ್ಯ!','🌊 ನೀರು'],correct:2},
+    {visual:'🏆🌱',question:'🏆 ಸಸ್ಯಗಳು ಬೆಳೆಯಲು ಏನು ಬೇಕು?\nPlants need ___ to grow?',options:['🪨 ಕಲ್ಲು','💡 ವಿದ್ಯುತ್','☀️ ನೀರು, ಮಣ್ಣು & ಬೆಳಕು!','🔥 ಬೆಂಕಿ'],correct:2},
+  ]
+});
+
+/* ════ CELEBRATION ════ */
+function showCelebration(){
+  doneTabs.add('bigquiz'); updateProgress();
+  spawnConfetti();
+  document.getElementById('celebSub').textContent =
+    'ನೀನು ಎಲ್ಲಾ ಸಸ್ಯಗಳನ್ನು ಕಲಿತೆ! 🌿\nYou learned all the plants! 🌱\nTrees, Veggies, Fruits & Flowers! 🥭🥕🍎🌸\nYou are a PLANT CHAMPION! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti(){
+  const colors=['#4caf50','#ff9800','#e91e63','#2196f3','#ffeb3b','#9c27b0'];
+  for(let i=0;i<60;i++){
+    const p = document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left = Math.random()*100+'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2+'s';
+    p.style.animationDuration = (2+Math.random()*2)+'s';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 5000);
+  }
+}
+
+function restartAll(){ location.reload(); }
+</script>
+</body>
+</html>

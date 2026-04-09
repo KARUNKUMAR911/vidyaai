@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 9: ಕೂ... ಚುಕು.. ಬುಕು..</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f4fd; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#0d47a1,#1565c0); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1976d2,#64b5f6); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1976d2; border-color:#bbdefb; }
+.step-tab.active   { background:#1976d2; color:#fff; border-color:#1976d2; box-shadow:0 4px 14px rgba(25,118,210,.4); }
+.step-tab.done     { background:#e3f2fd; color:#1976d2; border-color:#64b5f6; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1976d2;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1976d2; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* VEHICLE GRID */
+.vehicle-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.vehicle-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #bbdefb;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.vehicle-card .vc-icon { font-size:48px; display:block; margin-bottom:6px; }
+.vehicle-card .vc-name { font-family:'Fredoka One',cursive; font-size:15px; color:#1976d2; }
+.vehicle-card .vc-name-kn { font-size:13px; font-weight:900; color:#0d47a1; margin-top:2px; }
+.vehicle-card .vc-sound { font-size:11px; font-weight:800; color:#42a5f5; margin-top:3px; }
+
+/* PATH CARDS */
+.path-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.path-card {
+  border-radius:18px; padding:14px 10px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); animation:cardPop .4s ease both;
+}
+.path-card.road  { background:#fff9c4; border:3px solid #f9a825; }
+.path-card.rail  { background:#fce4ec; border:3px solid #e91e63; }
+.path-card.water { background:#e3f2fd; border:3px solid #2196f3; }
+.path-card.air   { background:#f3e5f5; border:3px solid #9c27b0; }
+.path-card .pc-icon { font-size:40px; display:block; margin-bottom:6px; }
+.path-card .pc-name { font-family:'Fredoka One',cursive; font-size:14px; color:#333; }
+.path-card .pc-kn { font-size:12px; font-weight:900; color:#555; margin-top:2px; }
+.path-label { font-family:'Fredoka One',cursive; font-size:15px; text-align:center; padding:8px; border-radius:12px; margin-bottom:8px; }
+
+/* TAP LEARN CARDS */
+.tap-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #bbdefb; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#e3f2fd; border-color:#1976d2; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#1976d2; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+.tc-reveal { font-size:13px; font-weight:900; color:#1976d2; margin-top:6px; display:none; }
+.tap-card.tapped .tc-reveal { display:block; }
+.tap-hint { text-align:center; font-size:13px; font-weight:900; color:#888; margin:-4px 0 10px; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #bbdefb; background:#e3f2fd; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1976d2; transform:scale(1.3); }
+
+/* MATCH GAME */
+.match-wrap { background:#fff; border-radius:20px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,.1); margin-bottom:14px; }
+.match-title { font-family:'Fredoka One',cursive; font-size:17px; color:#1976d2; text-align:center; margin-bottom:12px; }
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.match-item {
+  background:#e3f2fd; border:3px solid #bbdefb; border-radius:14px; padding:12px 8px; text-align:center;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#333; cursor:pointer;
+  transition:all .2s; user-select:none; margin-bottom:8px; line-height:1.4;
+}
+.match-item:active { transform:scale(.95); }
+.match-item.selected { background:#bbdefb; border-color:#1976d2; transform:scale(1.04); }
+.match-item.matched { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; cursor:default; }
+.match-item.wrong-flash { background:#ffcdd2; border-color:#e53935; animation:wobble .4s ease; }
+.match-score { text-align:center; font-family:'Fredoka One',cursive; font-size:15px; color:#555; margin-bottom:10px; }
+.match-done-msg { text-align:center; background:#c8e6c9; border-radius:16px; padding:14px; font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; display:none; margin-bottom:10px; }
+
+/* SONG CARD */
+.song-card {
+  background:linear-gradient(135deg,#e3f2fd,#bbdefb); border-radius:20px; padding:18px;
+  margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #64b5f6;
+}
+.song-title { font-family:'Fredoka One',cursive; font-size:18px; color:#0d47a1; text-align:center; margin-bottom:12px; }
+.song-line {
+  background:#fff; border-radius:12px; padding:10px 14px; margin-bottom:8px;
+  font-family:'Fredoka One',cursive; font-size:15px; color:#1976d2; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08); cursor:pointer; user-select:none;
+  transition:transform .15s;
+}
+.song-line:active { transform:scale(.97); background:#e3f2fd; }
+
+/* NEXT BTN */
+.next-btn {
+  width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:18px; color:#fff; cursor:pointer;
+  background:#ccc; margin-top:10px; transition:all .3s; pointer-events:none;
+}
+.next-btn.ready {
+  background:linear-gradient(135deg,#1976d2,#0d47a1);
+  box-shadow:0 6px 20px rgba(25,118,210,.4); pointer-events:all;
+}
+.next-btn.ready:active { transform:scale(.97); }
+
+/* CELEBRATION */
+.celeb-screen {
+  display:none; position:fixed; inset:0; background:linear-gradient(160deg,#0d47a1,#1e88e5);
+  z-index:1000; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px; text-align:center;
+}
+.celeb-screen.show { display:flex; }
+.celeb-emoji { font-size:80px; animation:heroFloat 2s infinite; margin-bottom:16px; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:30px; color:#fff; margin-bottom:12px; }
+.celeb-stars { font-size:22px; color:#ffd54f; margin-bottom:16px; font-weight:900; }
+.celeb-sub { font-family:'Fredoka One',cursive; font-size:16px; color:rgba(255,255,255,.9); white-space:pre-wrap; line-height:1.7; margin-bottom:24px; }
+.celeb-btn { background:#ffd54f; color:#0d47a1; font-family:'Fredoka One',cursive; font-size:18px;
+  padding:16px 40px; border-radius:50px; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.2); }
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; top:-20px; width:10px; height:18px; border-radius:3px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall { to { top:110vh; transform:rotate(720deg) translateX(40px); opacity:0; } }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">🚂 ಪಾಠ 9 · Lesson 9</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🚂🚌✈️🚲🛥️</span>
+  <h1>ಕೂ... ಚುಕು.. ಬುಕು..</h1>
+  <p>ಸಾರಿಗೆ ಸಾಧನಗಳ ಬಗ್ಗೆ ಕಲಿಯೋಣ! · Let's learn about transport!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-learn" onclick="tryTab('learn')">🚗 ಕಲಿ</div>
+  <div class="step-tab locked" id="tab-sounds" onclick="tryTab('sounds')">🔊 ಶಬ್ದ</div>
+  <div class="step-tab locked" id="tab-paths" onclick="tryTab('paths')">🛣️ ಮಾರ್ಗ</div>
+  <div class="step-tab locked" id="tab-match" onclick="tryTab('match')">🔗 ಜೋಡಿ</div>
+  <div class="step-tab locked" id="tab-song" onclick="tryTab('song')">🎵 ಹಾಡು</div>
+  <div class="step-tab locked" id="tab-quiz" onclick="tryTab('quiz')">❓ ಪ್ರಶ್ನೆ</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════ TAB 1: LEARN ═══════════════════ -->
+<div class="tab-panel active" id="panel-learn">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🚗</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ವಾಹನಗಳು · Vehicles</div>
+      <div class="banner-sub" style="color:#1976d2;">ಎಲ್ಲ ವಾಹನಗಳ ಬಗ್ಗೆ ತಿಳಿಯೋಣ! · Tap each to know more!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">ವಾಹನ ಎಂದರೇನು? · What is a Vehicle?</div>
+    <div class="ic-text">ನಾವು ಒಂದು ಜಾಗದಿಂದ ಮತ್ತೊಂದು ಜಾಗಕ್ಕೆ ಹೋಗಲು ಬಳಸುವ ಸಾಧನಗಳನ್ನು ವಾಹನ ಎನ್ನುತ್ತೇವೆ. ✨<br>
+    Things we use to go from one place to another are called <b>vehicles</b>.</div>
+  </div>
+
+  <div class="vehicle-grid">
+    <div class="vehicle-card" style="animation-delay:.05s">
+      <span class="vc-icon">🚲</span>
+      <div class="vc-name">Bicycle</div>
+      <div class="vc-name-kn">ಸೈಕಲ್</div>
+      <div class="vc-sound">ಟ್ರಿನ್ ಟ್ರಿನ್!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.10s">
+      <span class="vc-icon">🛵</span>
+      <div class="vc-name">Scooter</div>
+      <div class="vc-name-kn">ಸ್ಕೂಟರ್</div>
+      <div class="vc-sound">ಪೋಂ ಪೋಂ!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.15s">
+      <span class="vc-icon">🚗</span>
+      <div class="vc-name">Car</div>
+      <div class="vc-name-kn">ಮೋಟಾರು ಗಾಡಿ</div>
+      <div class="vc-sound">ಪೀ... ಪೀ...</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.20s">
+      <span class="vc-icon">🚛</span>
+      <div class="vc-name">Lorry / Truck</div>
+      <div class="vc-name-kn">ಲಾರಿ</div>
+      <div class="vc-sound">ಭೋಂ ಭೋಂ!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.25s">
+      <span class="vc-icon">🚌</span>
+      <div class="vc-name">Bus</div>
+      <div class="vc-name-kn">ಬಸ್ಸು</div>
+      <div class="vc-sound">ಪೋಂ ಪೋಂ!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.30s">
+      <span class="vc-icon">🚂</span>
+      <div class="vc-name">Train</div>
+      <div class="vc-name-kn">ರೈಲು ಗಾಡಿ</div>
+      <div class="vc-sound">ಚುಕು ಬುಕು!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.35s">
+      <span class="vc-icon">🛺</span>
+      <div class="vc-name">Auto Rickshaw</div>
+      <div class="vc-name-kn">ಆಟೋ ರಿಕ್ಷಾ</div>
+      <div class="vc-sound">ಪಟ ಪಟ!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.40s">
+      <span class="vc-icon">🛥️</span>
+      <div class="vc-name">Boat / Doni</div>
+      <div class="vc-name-kn">ದೋಣಿ</div>
+      <div class="vc-sound">ತೇಲುತ್ತದೆ!</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.45s">
+      <span class="vc-icon">✈️</span>
+      <div class="vc-name">Aeroplane</div>
+      <div class="vc-name-kn">ವಿಮಾನ</div>
+      <div class="vc-sound">ವ್ರೂಂ...</div>
+    </div>
+    <div class="vehicle-card" style="animation-delay:.50s">
+      <span class="vc-icon">🐂</span>
+      <div class="vc-name">Bullock Cart</div>
+      <div class="vc-name-kn">ಬಂಡಿ</div>
+      <div class="vc-sound">ತರ ತರ!</div>
+    </div>
+  </div>
+
+  <button class="next-btn ready" onclick="completeTab('learn','sounds')">ಮುಂದೆ ಹೋಗು · Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════ TAB 2: SOUNDS ═══════════════════ -->
+<div class="tab-panel" id="panel-sounds">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">🔊</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ವಾಹನದ ಶಬ್ದ · Vehicle Sounds</div>
+      <div class="banner-sub" style="color:#ad1457;">ಪ್ರತಿ ಕಾರ್ಡ್ ಒತ್ತಿ ತಿಳಿ! · Tap every card!</div>
+    </div>
+  </div>
+
+  <p class="tap-hint">👇 ಎಲ್ಲ ಕಾರ್ಡ್ ಒತ್ತು · Tap ALL cards to continue</p>
+
+  <div class="tap-card" id="tc0" onclick="tapCard(0)">
+    <span class="tc-icon">🚲</span>
+    <div>
+      <div class="tc-text">ಸೈಕಲ್ · Bicycle</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">🔔 ಟ್ರಿನ್ ಟ್ರಿನ್ ಟ್ರಿನ್!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="tc1" onclick="tapCard(1)">
+    <span class="tc-icon">🛵</span>
+    <div>
+      <div class="tc-text">ಸ್ಕೂಟರ್ · Scooter</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">📢 ಪೋಂ ಪೋಂ ಪೋಂ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="tc2" onclick="tapCard(2)">
+    <span class="tc-icon">🚂</span>
+    <div>
+      <div class="tc-text">ರೈಲು · Train</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">🚂 ಕೂ... ಚುಕು ಬುಕು ಚುಕು ಬುಕು!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="tc3" onclick="tapCard(3)">
+    <span class="tc-icon">🚌</span>
+    <div>
+      <div class="tc-text">ಬಸ್ಸು · Bus</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">🚌 ಪೋಂ ಪೋಂ! ರಸ್ತೆಯಲ್ಲಿ ಓಡುತ್ತದೆ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="tc4" onclick="tapCard(4)">
+    <span class="tc-icon">✈️</span>
+    <div>
+      <div class="tc-text">ವಿಮಾನ · Aeroplane</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">✈️ ವ್ರೂಂ... ಬಾನಲಿ ಹಾರುತ್ತದೆ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="tc5" onclick="tapCard(5)">
+    <span class="tc-icon">🛺</span>
+    <div>
+      <div class="tc-text">ಆಟೋ ರಿಕ್ಷಾ · Auto Rickshaw</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">🛺 ಪಟ ಪಟ ಪಟ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="tc6" onclick="tapCard(6)">
+    <span class="tc-icon">🐂</span>
+    <div>
+      <div class="tc-text">ಬಂಡಿ · Bullock Cart</div>
+      <div class="tc-sub">ಶಬ್ದ ಏನು? · What sound?</div>
+      <div class="tc-reveal">🐄 ತರ ತರ... ಊರ ತುಂಬಾ ಬಂಡಿ!</div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="soundsNext" disabled onclick="completeTab('sounds','paths')">ಮುಂದೆ ಹೋಗು · Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════ TAB 3: PATHS ═══════════════════ -->
+<div class="tab-panel" id="panel-paths">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🛣️</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ವಾಹನ ಮಾರ್ಗ · Where do vehicles go?</div>
+      <div class="banner-sub" style="color:#2e7d32;">ಯಾವ ವಾಹನ ಎಲ್ಲಿ ಹೋಗುತ್ತದೆ? · Match vehicle to path!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">3 ರೀತಿ ಮಾರ್ಗಗಳು · 3 Types of Paths</div>
+    <div class="ic-text">
+      🛣️ <b>ರಸ್ತೆ (Road)</b> — ಬಸ್ಸು, ಕಾರು, ಸೈಕಲ್, ಲಾರಿ, ಆಟೋ<br>
+      🚧 <b>ಹಳಿ (Rail)</b> — ರೈಲು ಮಾತ್ರ<br>
+      🌊 <b>ನೀರು (Water)</b> — ದೋಣಿ<br>
+      ☁️ <b>ಆಕಾಶ (Sky)</b> — ವಿಮಾನ
+    </div>
+  </div>
+
+  <div class="path-label" style="background:#fff9c4; color:#f57f17;">🛣️ ರಸ್ತೆ ವಾಹನಗಳು · Road Vehicles</div>
+  <div class="path-grid">
+    <div class="path-card road"><span class="pc-icon">🚌</span><div class="pc-name">Bus · ಬಸ್ಸು</div><div class="pc-kn">ರಸ್ತೆಯಲ್ಲಿ</div></div>
+    <div class="path-card road"><span class="pc-icon">🚲</span><div class="pc-name">Bicycle · ಸೈಕಲ್</div><div class="pc-kn">ರಸ್ತೆಯಲ್ಲಿ</div></div>
+    <div class="path-card road"><span class="pc-icon">🛵</span><div class="pc-name">Scooter · ಸ್ಕೂಟರ್</div><div class="pc-kn">ರಸ್ತೆಯಲ್ಲಿ</div></div>
+    <div class="path-card road"><span class="pc-icon">🛺</span><div class="pc-name">Auto · ಆಟೋ</div><div class="pc-kn">ರಸ್ತೆಯಲ್ಲಿ</div></div>
+  </div>
+
+  <div class="path-label" style="background:#fce4ec; color:#880e4f;">🚧 ಹಳಿ ವಾಹನ · Rail Vehicle</div>
+  <div class="path-grid">
+    <div class="path-card rail" style="grid-column:span 2"><span class="pc-icon">🚂</span><div class="pc-name">Train · ರೈಲು</div><div class="pc-kn">ಕಂಬಿಯ ಮೇಲೆ ಹಳಿಯಲ್ಲಿ · On rails</div></div>
+  </div>
+
+  <div class="path-label" style="background:#e3f2fd; color:#0d47a1;">🌊 ನೀರಿನ ವಾಹನ · Water Vehicle</div>
+  <div class="path-grid">
+    <div class="path-card water" style="grid-column:span 2"><span class="pc-icon">🛥️</span><div class="pc-name">Boat / Doni · ದೋಣಿ</div><div class="pc-kn">ನೀರಿನಲ್ಲಿ ತೇಲುತ್ತದೆ · Floats on water</div></div>
+  </div>
+
+  <div class="path-label" style="background:#f3e5f5; color:#4a148c;">☁️ ಆಕಾಶ ವಾಹನ · Air Vehicle</div>
+  <div class="path-grid">
+    <div class="path-card air" style="grid-column:span 2"><span class="pc-icon">✈️</span><div class="pc-name">Aeroplane · ವಿಮಾನ</div><div class="pc-kn">ಬಾನಲಿ ಹಾರುತ್ತದೆ · Flies in sky</div></div>
+  </div>
+
+  <button class="next-btn ready" onclick="completeTab('paths','match')">ಮುಂದೆ ಹೋಗು · Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════ TAB 4: MATCH ═══════════════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🔗</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಜೋಡಿ ಮಾಡು · Match It!</div>
+      <div class="banner-sub" style="color:#bf360c;">ಎಡ ಮತ್ತು ಬಲ ಜೋಡಿಸು · Match left to right!</div>
+    </div>
+  </div>
+
+  <div class="match-wrap">
+    <div class="match-title">ವಾಹನ ➡️ ಎಲ್ಲಿ ಹೋಗುತ್ತದೆ? · Vehicle ➡️ Where does it go?</div>
+    <div class="match-score">✅ <span id="matchScore">0</span> / <span id="matchTotal">0</span> ಜೋಡಿ</div>
+    <div class="match-cols">
+      <div id="matchLeft"></div>
+      <div id="matchRight"></div>
+    </div>
+    <div class="match-done-msg" id="matchMsg">🎉 ಎಲ್ಲ ಜೋಡಿ ಮಾಡಿದೆ! · All matched!</div>
+  </div>
+
+  <button class="next-btn" id="matchNext" disabled onclick="completeTab('match','song')">ಮುಂದೆ ಹೋಗು · Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════ TAB 5: SONG ═══════════════════ -->
+<div class="tab-panel" id="panel-song">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <span class="banner-emoji">🎵</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">ಹಾಡು ನಲಿ · Song Time!</div>
+      <div class="banner-sub" style="color:#6a1b9a;">ಪ್ರತಿ ಸಾಲನ್ನು ಒತ್ತಿ ಓದು · Tap each line to read!</div>
+    </div>
+  </div>
+
+  <p class="tap-hint">👇 ಎಲ್ಲ ಸಾಲು ಒತ್ತು · Tap ALL lines to continue</p>
+
+  <div class="song-card">
+    <div class="song-title">🎵 ಹಾಡು — ವಿಧ ವಿಧ ಸಾರಿಗೆ</div>
+    <div class="song-line" id="sl0" onclick="tapSongLine(0)">🔔 ಟ್ರಿನ್ ಟ್ರಿನ್ ಟ್ರಿನ್ — ಸೈಕಲ್ ಗಾಡಿ</div>
+    <div class="song-line" id="sl1" onclick="tapSongLine(1)">📢 ಪೋಂ ಪೋಂ ಪೋಂ — ಮೋಟಾರು ಗಾಡಿ</div>
+    <div class="song-line" id="sl2" onclick="tapSongLine(2)">🚂 ಚುಕು ಬುಕು ಚುಕು ಬುಕು — ರೈಲು ಗಾಡಿ</div>
+    <div class="song-line" id="sl3" onclick="tapSongLine(3)">🐄 ಊರಿನ ತುಂಬಾ ತರ ತರ — ಬಂಡಿ</div>
+    <div class="song-line" id="sl4" onclick="tapSongLine(4)">🚌 ರಸ್ತೆಯ ನಡುವೆ ಬಸ್ಸಿನ ಓಟ</div>
+    <div class="song-line" id="sl5" onclick="tapSongLine(5)">🚂 ಕಂಬಿಯ ಮೇಲದೋ ರೈಲಿನ ಓಟ</div>
+    <div class="song-line" id="sl6" onclick="tapSongLine(6)">✈️ ಬಾನಲಿ ಹಾರಿತು ನೋಡು ವಿಮಾನ</div>
+    <div class="song-line" id="sl7" onclick="tapSongLine(7)">🌊 ತೆರೆಗಳ ಮೇಲೆ ಹಡಗಿನ ಯಾನ</div>
+    <div class="song-line" id="sl8" onclick="tapSongLine(8)">🌈 ನೋಡದೋ ನೋಡದೋ ವಿಧ ವಿಧ ಸಾರಿಗೆ</div>
+    <div class="song-line" id="sl9" onclick="tapSongLine(9)">📖 ತಿಳಿದುಕೋ ಬಗೆ ಬಗೆ ಸಾರಿಗೆ</div>
+    <div class="song-line" id="sl10" onclick="tapSongLine(10)">🚀 ಎಲ್ಲೆಡೆ ಚಲಿಸುವ ತರತರ ಸಾರಿಗೆ</div>
+    <div class="song-line" id="sl11" onclick="tapSongLine(11)">💙 ಸಂಚಾರಕೆ ಬೇಕಿವು ಎಲ್ಲರಿಗೆ ನಮ್ಮೆಲ್ಲರಿಗೆ!</div>
+  </div>
+
+  <button class="next-btn" id="songNext" disabled onclick="completeTab('song','quiz')">ಮುಂದೆ ಹೋಗು · Next Step ➡️</button>
+</div>
+
+<!-- ═══════════════════ TAB 6: QUIZ ═══════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <span class="banner-emoji">❓</span>
+    <div>
+      <div class="banner-title" style="color:#1a237e;">ಪ್ರಶ್ನೆ-ಉತ್ತರ · Quiz Time!</div>
+      <div class="banner-sub" style="color:#283593;">ಸರಿ ಉತ್ತರ ಆರಿಸು · Choose the right answer!</div>
+    </div>
+  </div>
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">🏆 ಪಾಠ ಮುಗಿಸು · Finish Lesson!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🏆</div>
+  <div class="celeb-title">ಭಲೇ ಭಲೇ! · Well Done!</div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡು · Play Again</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   CORE STATE
+══════════════════════════════════════ */
+let stars = 0;
+const tabOrder = ['learn','sounds','paths','match','song','quiz'];
+const doneTabs = new Set();
+let currentTab = 'learn';
+
+function updateProgress() {
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function tryTab(name) {
+  const idx = tabOrder.indexOf(name);
+  // check if previous tabs are all done
+  for (let i = 0; i < idx; i++) {
+    if (!doneTabs.has(tabOrder[i])) {
+      // shake and toast
+      const el = document.getElementById('tab-' + name);
+      el.classList.remove('shaking');
+      void el.offsetWidth;
+      el.classList.add('shaking');
+      setTimeout(() => el.classList.remove('shaking'), 600);
+      showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು! · Finish the previous step first!');
+      return;
+    }
+  }
+  switchTab(name);
+}
+
+function switchTab(name) {
+  currentTab = name;
+  // panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  // tabs
+  document.querySelectorAll('.step-tab').forEach(t => {
+    t.classList.remove('active','unlocked','done','locked');
+    const tname = t.id.replace('tab-','');
+    const tidx = tabOrder.indexOf(tname);
+    const cidx = tabOrder.indexOf(name);
+    if (tname === name) t.classList.add('active');
+    else if (doneTabs.has(tname)) t.classList.add('done');
+    else {
+      // check if unlocked
+      let prevDone = true;
+      for (let i = 0; i < tidx; i++) { if (!doneTabs.has(tabOrder[i])) { prevDone = false; break; } }
+      t.classList.add(prevDone ? 'unlocked' : 'locked');
+    }
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function completeTab(done, next) {
+  doneTabs.add(done);
+  stars++;
+  document.getElementById('starsNum').textContent = stars;
+  updateProgress();
+  if (next) {
+    document.getElementById('tab-'+next).classList.remove('locked');
+    document.getElementById('tab-'+next).classList.add('unlocked');
+    switchTab(next);
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 2 · SOUNDS — tap all cards
+══════════════════════════════════════ */
+const soundTapped = new Set();
+const totalSoundCards = 7;
+
+function tapCard(i) {
+  const el = document.getElementById('tc' + i);
+  if (el.classList.contains('tapped')) return;
+  el.classList.add('tapped');
+  soundTapped.add(i);
+  stars++;
+  document.getElementById('starsNum').textContent = stars;
+  if (soundTapped.size === totalSoundCards) {
+    const btn = document.getElementById('soundsNext');
+    btn.disabled = false;
+    btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 4 · MATCH GAME
+══════════════════════════════════════ */
+const matchPairs = [
+  { left:'🚌 ಬಸ್ಸು · Bus',      right:'🛣️ ರಸ್ತೆ · Road' },
+  { left:'🚲 ಸೈಕಲ್ · Bicycle', right:'🛣️ ರಸ್ತೆ / ಪಕ್ಕ · Road' },
+  { left:'🚂 ರೈಲು · Train',    right:'🚧 ಹಳಿ · Rail track' },
+  { left:'🛥️ ದೋಣಿ · Boat',    right:'🌊 ನೀರು · Water' },
+  { left:'✈️ ವಿಮಾನ · Plane',  right:'☁️ ಆಕಾಶ · Sky' },
+  { left:'🛺 ಆಟೋ · Auto',      right:'🏘️ ಊರಿನ ರಸ್ತೆ · Town road' },
+];
+let matchSelLeft = null, matchDone = 0;
+
+function buildMatch() {
+  document.getElementById('matchTotal').textContent = matchPairs.length;
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+  const shuffled = [...matchPairs].sort(() => Math.random() - .5);
+  left.innerHTML = matchPairs.map((p, i) =>
+    `<div class="match-item" id="ml-${i}" onclick="selectMatchLeft(${i})">${p.left}</div>`
+  ).join('');
+  right.innerHTML = shuffled.map(p => {
+    const origIdx = matchPairs.findIndex(m => m.right === p.right);
+    return `<div class="match-item" id="mr-${origIdx}" onclick="selectMatchRight(${origIdx})">${p.right}</div>`;
+  }).join('');
+}
+buildMatch();
+
+function selectMatchLeft(i) {
+  if (document.getElementById('ml-'+i).classList.contains('matched')) return;
+  if (matchSelLeft !== null) document.getElementById('ml-'+matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('ml-'+i).classList.add('selected');
+}
+
+function selectMatchRight(i) {
+  if (matchSelLeft === null) { showToast('👈 ಮೊದಲು ಎಡ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('ml-'+matchSelLeft);
+  const rEl = document.getElementById('mr-'+i);
+  if (rEl.classList.contains('matched')) return;
+  if (matchSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelLeft = null;
+    if (matchDone === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchMsg').style.display = 'block';
+        const btn = document.getElementById('matchNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelLeft = null; }, 600);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 5 · SONG — tap all lines
+══════════════════════════════════════ */
+const songTapped = new Set();
+const totalSongLines = 12;
+
+function tapSongLine(i) {
+  const el = document.getElementById('sl' + i);
+  el.style.background = '#bbdefb';
+  el.style.color = '#0d47a1';
+  songTapped.add(i);
+  if (songTapped.size === totalSongLines) {
+    const btn = document.getElementById('songNext');
+    btn.disabled = false;
+    btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 6 · QUIZ
+══════════════════════════════════════ */
+const quizQuestions = [
+  { visual:'🚂❓', question:'ರೈಲು ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nWhat sound does a train make?', options:['🔔 ಟ್ರಿನ್ ಟ್ರಿನ್','📢 ಪೋಂ ಪೋಂ','🚂 ಚುಕು ಬುಕು!','🛺 ಪಟ ಪಟ'], correct:2 },
+  { visual:'✈️❓', question:'ವಿಮಾನ ಎಲ್ಲಿ ಹಾರುತ್ತದೆ?\nWhere does an aeroplane fly?', options:['🌊 ನೀರಿನಲ್ಲಿ','🛣️ ರಸ್ತೆಯಲ್ಲಿ','🚧 ಹಳಿಯಲ್ಲಿ','☁️ ಬಾನಲಿ!'], correct:3 },
+  { visual:'🛥️❓', question:'ದೋಣಿ ಎಲ್ಲಿ ಚಲಿಸುತ್ತದೆ?\nWhere does a boat move?', options:['🛣️ ರಸ್ತೆ','🌊 ನೀರಿನಲ್ಲಿ!','☁️ ಆಕಾಶ','🚧 ಹಳಿ'], correct:1 },
+  { visual:'🚲❓', question:'ಸೈಕಲ್ ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nWhat sound does a bicycle make?', options:['🔔 ಟ್ರಿನ್ ಟ್ರಿನ್!','📢 ಪೋಂ ಪೋಂ','🚂 ಕೂ...','🐄 ತರ ತರ'], correct:0 },
+  { visual:'🚂❓', question:'ರೈಲು ಎಲ್ಲಿ ಚಲಿಸುತ್ತದೆ?\nWhere does a train move?', options:['🛣️ ರಸ್ತೆ','🌊 ನೀರು','🚧 ಹಳಿಯ ಮೇಲೆ!','☁️ ಆಕಾಶ'], correct:2 },
+  { visual:'🐂❓', question:'ಬಂಡಿ ಯಾರು ಎಳೆಯುತ್ತಾರೆ?\nWho pulls a bullock cart?', options:['🐕 ನಾಯಿ','🐘 ಆನೆ','🐂 ಎತ್ತು / ಹಸು!','🐓 ಕೋಳಿ'], correct:2 },
+  { visual:'🚌❓', question:'ಬಸ್ಸು ಯಾವ ಮಾರ್ಗದಲ್ಲಿ ಹೋಗುತ್ತದೆ?\nWhich path does a bus use?', options:['🌊 ನೀರು','🚧 ಹಳಿ','🛣️ ರಸ್ತೆ!','☁️ ಆಕಾಶ'], correct:2 },
+  { visual:'🛺❓', question:'ಆಟೋ ರಿಕ್ಷಾ ಎಂಥ ವಾಹನ?\nWhat kind of vehicle is an Auto Rickshaw?', options:['🌊 ನೀರಿನ ವಾಹನ','☁️ ವಾಯು ವಾಹನ','🛣️ ರಸ್ತೆ ವಾಹನ!','🚧 ಹಳಿ ವಾಹನ'], correct:2 },
+  { visual:'🎵❓', question:'ಈ ಪಾಠದ ಹಾಡಿನ ಮೊದಲ ಶಬ್ದ ಯಾವುದು?\nWhat is the first sound in this lesson\'s song?', options:['📢 ಪೋಂ ಪೋಂ','🔔 ಟ್ರಿನ್ ಟ್ರಿನ್!','🚂 ಕೂ...','🐄 ತರ ತರ'], correct:1 },
+  { visual:'🚗❓', question:'ಪಾಠ 9 ರ ಹೆಸರು ಯಾವುದು?\nWhat is the name of Lesson 9?', options:['🛡️ ಸುರಕ್ಷತೆ','🌿 ಮರ ಗಿಡ','🚂 ಕೂ... ಚುಕು.. ಬುಕು..!','🏠 ನನ್ನ ಮನೆ'], correct:2 },
+];
+let quizIdx = 0, quizAnswered = [];
+
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_, i) =>
+    `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`
+  ).join('');
+  renderQuizQ(0);
+}
+buildQuiz();
+
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-'+quizIdx).classList.remove('active');
+  document.getElementById('dot-'+quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if (correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < quizQuestions.length) {
+      document.getElementById('dot-'+quizIdx).classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1200);
+}
+
+/* ══════════════════════════════════════
+   CELEBRATION
+══════════════════════════════════════ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 9 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 9 — ಕೂ... ಚುಕು.. ಬುಕು..\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಸಾರಿಗೆ ಚಾಂಪಿಯನ್! 🚂🏆`;
+  let starStr = '';
+  for (let i = 0; i < Math.min(stars, 20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti() {
+  const colors = ['#1976d2','#64b5f6','#ffd54f','#4caf50','#ef5350','#9c27b0'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2 + 's';
+    p.style.animationDuration = (2+Math.random()*2) + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+
+function restartAll() { location.reload(); }
+
+updateProgress();
+</script>
+</body>
+</html>

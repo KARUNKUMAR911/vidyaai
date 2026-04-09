@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 1: ನಮ್ಮ ಸುತ್ತಲಿನ ಪ್ರಾಣಿಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:linear-gradient(135deg,#1b5e20,#2e7d32);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(160deg,#1b5e20,#43a047); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:24px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1b5e20,#69f0ae); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* ── STEP TABS ── */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1b5e20; border-color:#a5d6a7; }
+.step-tab.active   { background:#1b5e20; color:#fff; border-color:#1b5e20; box-shadow:0 4px 14px rgba(27,94,32,.4); }
+.step-tab.done     { background:#e8f5e9; color:#1b5e20; border-color:#43a047; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* ── TOAST ── */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── CONTENT ── */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── LESSON BANNER ── */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1b5e20;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1b5e20; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ── ICON GRID 2 ── */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:42px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:14px; color:#1b5e20; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#2e7d32; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ── 3-COL GRID ── */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:32px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:11px; color:#1b5e20; }
+.icon-card3 .ic-name-kn { font-size:11px; font-weight:900; color:#2e7d32; margin-top:2px; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #a5d6a7; background:#e8f5e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── DOTS ── */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1b5e20; transform:scale(1.3); }
+
+/* ── NAV BUTTON ── */
+.nav-btn {
+  display:block; width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer;
+  background:linear-gradient(135deg,#1b5e20,#43a047); color:#fff;
+  box-shadow:0 6px 20px rgba(27,94,32,.35); transition:all .2s; margin-top:10px;
+}
+.nav-btn:disabled { opacity:.4; cursor:not-allowed; }
+.nav-btn:not(:disabled):active { transform:scale(.97); }
+
+/* ── CELEBRATION ── */
+.celeb-screen {
+  display:none; position:fixed; inset:0; background:linear-gradient(135deg,#1b5e20,#43a047);
+  z-index:1000; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px 20px; text-align:center;
+}
+.celeb-screen.show { display:flex; animation:celebIn .5s ease; }
+@keyframes celebIn { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
+.celeb-emoji { font-size:80px; animation:heroFloat 2s ease-in-out infinite; margin-bottom:16px; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:10px; }
+.celeb-sub { font-size:16px; font-weight:800; color:rgba(255,255,255,.9); line-height:1.8; margin-bottom:20px; white-space:pre-wrap; }
+.celeb-stars { font-size:22px; font-weight:900; color:#ffeb3b; margin-bottom:24px; }
+.celeb-btn {
+  background:#fff; color:#1b5e20; padding:16px 40px; border-radius:40px; border:none;
+  font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.2);
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-title">🌿 ಪಾಠ 1 — ನಮ್ಮ ಸುತ್ತಲಿನ ಪ್ರಾಣಿಗಳು</span>
+  </div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🐄🐦🐟</span>
+  <h1>ನಮ್ಮ ಸುತ್ತಲಿನ ಪ್ರಾಣಿಗಳು</h1>
+  <p>Animals Around Us — EVS Class 1, Chapter 1</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ / Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-learn"   onclick="goTab('learn')">   🐾 ಪ್ರಾಣಿಗಳು</div>
+  <div class="step-tab locked" id="tab-sounds"  onclick="goTab('sounds')">  🔊 ಶಬ್ದಗಳು</div>
+  <div class="step-tab locked" id="tab-homes"   onclick="goTab('homes')">   🏠 ಆವಾಸ</div>
+  <div class="step-tab locked" id="tab-quiz1"   onclick="goTab('quiz1')">   ❓ ಪ್ರಶ್ನೆ 1</div>
+  <div class="step-tab locked" id="tab-quiz2"   onclick="goTab('quiz2')">   ❓ ಪ್ರಶ್ನೆ 2</div>
+  <div class="step-tab locked" id="tab-bigquiz" onclick="goTab('bigquiz')"> 🏆 ದೊಡ್ಡ ಪರೀಕ್ಷೆ</div>
+</div>
+
+<div class="lock-toast" id="lockToast">⛔ ಮೊದಲ ಹಂತ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ════════════ TAB 1: LEARN ANIMALS ════════════ -->
+<div class="tab-panel active" id="panel-learn">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🐾</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಪ್ರಾಣಿಗಳನ್ನು ಕಲಿಯೋಣ!</div>
+      <div class="banner-sub" style="color:#2e7d32;">Let's learn the animals around us</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌍 ನಮ್ಮ ಸುತ್ತ ಪ್ರಾಣಿಗಳು</div>
+    <div class="ic-text">ನಮ್ಮ ಮನೆಯ ಸುತ್ತ, ಹೊಲದಲ್ಲಿ, ಕಾಡಿನಲ್ಲಿ ಮತ್ತು ನೀರಿನಲ್ಲಿ ಅನೇಕ ಪ್ರಾಣಿಗಳು ಇವೆ.<br>Many animals live around our home, on farms, in forests, and in water! 🌿🌊</div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏘️ ನಮ್ಮ ಊರಿನ ಪ್ರಾಣಿಗಳು (Village Animals)</div>
+    <div class="ic-text">Tap each animal to learn its name!</div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card"><span class="ic-icon">🐄</span><div class="ic-name">Cow</div><div class="ic-name-kn">ಹಸು</div><div class="ic-desc">ಹಾಲು ಕೊಡುತ್ತದೆ 🥛</div></div>
+    <div class="icon-card"><span class="ic-icon">🐃</span><div class="ic-name">Buffalo</div><div class="ic-name-kn">ಎಮ್ಮೆ</div><div class="ic-desc">ಕಪ್ಪು ಹಸು 🖤</div></div>
+    <div class="icon-card"><span class="ic-icon">🐐</span><div class="ic-name">Goat</div><div class="ic-name-kn">ಆಡು / ಟಗರು</div><div class="ic-desc">ಮೇ ಮೇ ಎನ್ನುತ್ತದೆ</div></div>
+    <div class="icon-card"><span class="ic-icon">🐑</span><div class="ic-name">Sheep</div><div class="ic-name-kn">ಕುರಿ</div><div class="ic-desc">ಉಣ್ಣೆ ಕೊಡುತ್ತದೆ 🧶</div></div>
+    <div class="icon-card"><span class="ic-icon">🐓</span><div class="ic-name">Hen / Rooster</div><div class="ic-name-kn">ಕೋಳಿ</div><div class="ic-desc">ಕೊ ಕ್ಕೊ ಕ್ಕೊ</div></div>
+    <div class="icon-card"><span class="ic-icon">🐕</span><div class="ic-name">Dog</div><div class="ic-name-kn">ನಾಯಿ</div><div class="ic-desc">ಭೌ ಭೌ 🐾</div></div>
+    <div class="icon-card"><span class="ic-icon">🐈</span><div class="ic-name">Cat</div><div class="ic-name-kn">ಬೆಕ್ಕು</div><div class="ic-desc">ಮಿಯಾವ್ 😸</div></div>
+    <div class="icon-card"><span class="ic-icon">🫏</span><div class="ic-name">Donkey</div><div class="ic-name-kn">ಕತ್ತೆ</div><div class="ic-desc">ಭಾರ ಹೊರುತ್ತದೆ</div></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌊 ನೀರಿನ ಪ್ರಾಣಿಗಳು (Water Animals)</div>
+    <div class="ic-text">These animals live in rivers, ponds and lakes!</div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3"><span class="ic-icon">🐟</span><div class="ic-name">Fish</div><div class="ic-name-kn">ಮೀನು</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐢</span><div class="ic-name">Turtle</div><div class="ic-name-kn">ಆಮೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐸</span><div class="ic-name">Frog</div><div class="ic-name-kn">ಕಪ್ಪೆ</div></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌳 ಕಾಡಿನ ಪ್ರಾಣಿಗಳು (Forest Animals)</div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card"><span class="ic-icon">🐯</span><div class="ic-name">Tiger</div><div class="ic-name-kn">ಹುಲಿ</div><div class="ic-desc">ಘರ್ಜಿಸುತ್ತದೆ 🔥</div></div>
+    <div class="icon-card"><span class="ic-icon">🦁</span><div class="ic-name">Lion</div><div class="ic-name-kn">ಸಿಂಹ</div><div class="ic-desc">ರಾಜ 👑</div></div>
+    <div class="icon-card"><span class="ic-icon">🐘</span><div class="ic-name">Elephant</div><div class="ic-name-kn">ಆನೆ</div><div class="ic-desc">ದೊಡ್ಡ ಪ್ರಾಣಿ 🐘</div></div>
+    <div class="icon-card"><span class="ic-icon">🐒</span><div class="ic-name">Monkey</div><div class="ic-name-kn">ಮೊಲ</div><div class="ic-desc">ಮರದ ಮೇಲೆ ನೆಗೆಯುತ್ತದೆ</div></div>
+    <div class="icon-card"><span class="ic-icon">🐍</span><div class="ic-name">Snake</div><div class="ic-name-kn">ಹಾವು</div><div class="ic-desc">ಬುಸ್ ಬುಸ್ 🐍</div></div>
+    <div class="icon-card"><span class="ic-icon">🐇</span><div class="ic-name">Rabbit</div><div class="ic-name-kn">ಮೊಲ</div><div class="ic-desc">ಜಿಗಿಯುತ್ತದೆ 🐇</div></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🐦 ಹಕ್ಕಿಗಳು (Birds)</div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3"><span class="ic-icon">🦚</span><div class="ic-name">Peacock</div><div class="ic-name-kn">ನವಿಲು</div></div>
+    <div class="icon-card3"><span class="ic-icon">🦜</span><div class="ic-name">Parrot</div><div class="ic-name-kn">ಗಿಣಿ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐦</span><div class="ic-name">Sparrow</div><div class="ic-name-kn">ಗುಬ್ಬಿ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🦅</span><div class="ic-name">Eagle</div><div class="ic-name-kn">ಹದ್ದು</div></div>
+    <div class="icon-card3"><span class="ic-icon">🦢</span><div class="ic-name">Swan</div><div class="ic-name-kn">ಬಾತು</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐦‍⬛</span><div class="ic-name">Crow</div><div class="ic-name-kn">ಕಾಗೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🕊️</span><div class="ic-name">Pigeon</div><div class="ic-name-kn">ಪಾರಿವಾಳ</div></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🐛 ಕೀಟಗಳು (Insects)</div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3"><span class="ic-icon">🦟</span><div class="ic-name">Mosquito</div><div class="ic-name-kn">ಸೊಳ್ಳೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐜</span><div class="ic-name">Ant</div><div class="ic-name-kn">ಇರುವೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🪲</span><div class="ic-name">Cockroach</div><div class="ic-name-kn">ಜಿರಳೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🦗</span><div class="ic-name">Grasshopper</div><div class="ic-name-kn">ಮಿಡತೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🦋</span><div class="ic-name">Butterfly</div><div class="ic-name-kn">ಚಿಟ್ಟೆ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🪰</span><div class="ic-name">Fly</div><div class="ic-name-kn">ನೊಣ</div></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏠 ಮನೆಯಲ್ಲಿ ಕಂಡುಬರುವ ಪ್ರಾಣಿಗಳು (Home Animals)</div>
+  </div>
+
+  <div class="icon-grid3">
+    <div class="icon-card3"><span class="ic-icon">🦎</span><div class="ic-name">Lizard</div><div class="ic-name-kn">ಹಲ್ಲಿ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐀</span><div class="ic-name">Mouse/Rat</div><div class="ic-name-kn">ಇಲಿ</div></div>
+    <div class="icon-card3"><span class="ic-icon">🐿️</span><div class="ic-name">Squirrel</div><div class="ic-name-kn">ಅಳಿಲು</div></div>
+  </div>
+
+  <button class="nav-btn" id="learnNextBtn" onclick="completeTab('learn','sounds')">
+    ಮುಂದೆ ಹೋಗೋಣ! Next → 🔊 ಶಬ್ದಗಳು
+  </button>
+</div>
+
+<!-- ════════════ TAB 2: ANIMAL SOUNDS ════════════ -->
+<div class="tab-panel" id="panel-sounds">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🔊</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಪ್ರಾಣಿಗಳ ಶಬ್ದ!</div>
+      <div class="banner-sub" style="color:#bf360c;">Animal Sounds — ಹಾಡು ನಲಿ!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e65100;">
+    <div class="ic-title" style="color:#e65100;">🎵 ಹಾಡು ನಲಿ (Sing Along!)</div>
+    <div class="ic-text">ಪ್ರತಿ ಪ್ರಾಣಿ ಒಂದು ಶಬ್ದ ಮಾಡುತ್ತದೆ!<br>Every animal makes a special sound! 🎶</div>
+  </div>
+
+  <div class="icon-grid2">
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐕</span>
+      <div class="ic-name">ನಾಯಿ (Dog)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:16px;">ಭೌ ಭೌ!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐈</span>
+      <div class="ic-name">ಬೆಕ್ಕು (Cat)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:16px;">ಮಿಯಾವ್!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐓</span>
+      <div class="ic-name">ಕೋಳಿ (Hen)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಕೊ ಕ್ಕೊ ಕ್ಕೊ!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐸</span>
+      <div class="ic-name">ಕಪ್ಪೆ (Frog)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:16px;">ವಟರು!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐐</span>
+      <div class="ic-name">ಟಗರು (Goat)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:16px;">ಗುಟುರು!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🦢</span>
+      <div class="ic-name">ಬಾತು (Swan/Duck)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಕ್ವಾಕ್ ಕ್ವಾಕ್!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🦁</span>
+      <div class="ic-name">ಸಿಂಹ (Lion)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಘರ್ಜನೆ!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐘</span>
+      <div class="ic-name">ಆನೆ (Elephant)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:16px;">ಘೀಳು!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐍</span>
+      <div class="ic-name">ಹಾವು (Snake)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಬುಸ್ ಬುಸ್ ಬುಸ್!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐄</span>
+      <div class="ic-name">ಕರು (Calf)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಅಂಬಾ! ಹಟ್ಟಿಯ ತುಂಬಾ!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐦</span>
+      <div class="ic-name">ಗುಬ್ಬಿ (Sparrow)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಚಿಂವ್ ಚಿಂವ್ ಚಿಂವ್!</div>
+    </div>
+    <div class="icon-card" style="border-color:#ffcc80;">
+      <span class="ic-icon">🐦‍⬛</span>
+      <div class="ic-name">ಕಾಗೆ (Crow)</div>
+      <div class="ic-name-kn" style="color:#e65100;font-size:14px;">ಕಾಯ್ ಕಾಯ್ ಕಾಯ್!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#e65100;">
+    <div class="ic-title" style="color:#e65100;">🎵 ಕವಿತೆ (Poem from Book!)</div>
+    <div class="ic-text" style="line-height:2;">
+      ನಾಯಿಯ <strong>ಭೌಭೌ</strong> &nbsp;|&nbsp; ಬೆಕ್ಕಿನ <strong>ಮಿಯಾವ್</strong><br>
+      ಕೋಳಿಯ ಕೂಗದು <strong>ಕೊ ಕ್ಕೊ ಕ್ಕೊ</strong><br>
+      ಕಪ್ಪೆಯ <strong>ವಟರು</strong> &nbsp;|&nbsp; ಟಗರಿನ <strong>ಗುಟುರು</strong><br>
+      ಬಾತಿನ ಮಾತದು <strong>ಕ್ವಾಕ್ ಕ್ವಾಕ್ ಕ್ವಾಕ್</strong><br>
+      ಸಿಂಹದ <strong>ಘರ್ಜನೆ</strong> &nbsp;|&nbsp; ಆನೆಯ <strong>ಘೀಳು</strong><br>
+      ಹಾವಿನ ಸದ್ದದು <strong>ಬುಸ್ ಬುಸ್ ಬುಸ್</strong><br>
+      ಕರುಗಳ <strong>ಅಂಬಾ</strong> ಹಟ್ಟಿಯ ತುಂಬಾ<br>
+      ಗುಬ್ಬಿಯು ಉಲಿದಿದೆ <strong>ಚಿಂವ್ ಚಿಂವ್ ಚಿಂವ್</strong>
+    </div>
+  </div>
+
+  <button class="nav-btn" id="soundsNextBtn" onclick="completeTab('sounds','homes')">
+    ಮುಂದೆ ಹೋಗೋಣ! Next → 🏠 ಆವಾಸ
+  </button>
+</div>
+
+<!-- ════════════ TAB 3: WHERE ANIMALS LIVE ════════════ -->
+<div class="tab-panel" id="panel-homes">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🏠</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಪ್ರಾಣಿಗಳ ಆವಾಸ!</div>
+      <div class="banner-sub" style="color:#1565c0;">Where do animals live?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0d47a1;">
+    <div class="ic-title" style="color:#0d47a1;">🌿 ಭೂಮಿಯ ಮೇಲೆ (On Land)</div>
+    <div class="ic-text">ಈ ಪ್ರಾಣಿಗಳು ಭೂಮಿಯ ಮೇಲೆ ಜೀವಿಸುತ್ತವೆ / These animals live on land</div>
+  </div>
+  <div class="icon-grid3">
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐄</span><div class="ic-name">ಹಸು</div><div class="ic-name-kn" style="color:#0d47a1;">Cow</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐯</span><div class="ic-name">ಹುಲಿ</div><div class="ic-name-kn" style="color:#0d47a1;">Tiger</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🦁</span><div class="ic-name">ಸಿಂಹ</div><div class="ic-name-kn" style="color:#0d47a1;">Lion</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐘</span><div class="ic-name">ಆನೆ</div><div class="ic-name-kn" style="color:#0d47a1;">Elephant</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐇</span><div class="ic-name">ಮೊಲ</div><div class="ic-name-kn" style="color:#0d47a1;">Rabbit</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐒</span><div class="ic-name">ಕೋತಿ</div><div class="ic-name-kn" style="color:#0d47a1;">Monkey</div></div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0d47a1;">
+    <div class="ic-title" style="color:#0d47a1;">🌊 ನೀರಿನಲ್ಲಿ (In Water)</div>
+    <div class="ic-text">ಈ ಪ್ರಾಣಿಗಳು ನೀರಿನಲ್ಲಿ ಜೀವಿಸುತ್ತವೆ / These animals live in water</div>
+  </div>
+  <div class="icon-grid3">
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐟</span><div class="ic-name">ಮೀನು</div><div class="ic-name-kn" style="color:#0d47a1;">Fish</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐢</span><div class="ic-name">ಆಮೆ</div><div class="ic-name-kn" style="color:#0d47a1;">Turtle</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐊</span><div class="ic-name">ಮೊಸಳೆ</div><div class="ic-name-kn" style="color:#0d47a1;">Crocodile</div></div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0d47a1;">
+    <div class="ic-title" style="color:#0d47a1;">☁️ ಆಕಾಶದಲ್ಲಿ (In Sky)</div>
+    <div class="ic-text">ಈ ಪ್ರಾಣಿಗಳು ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತವೆ / These animals fly in the sky</div>
+  </div>
+  <div class="icon-grid3">
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🦚</span><div class="ic-name">ನವಿಲು</div><div class="ic-name-kn" style="color:#0d47a1;">Peacock</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🦜</span><div class="ic-name">ಗಿಣಿ</div><div class="ic-name-kn" style="color:#0d47a1;">Parrot</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🦋</span><div class="ic-name">ಚಿಟ್ಟೆ</div><div class="ic-name-kn" style="color:#0d47a1;">Butterfly</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🦅</span><div class="ic-name">ಹದ್ದು</div><div class="ic-name-kn" style="color:#0d47a1;">Eagle</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐦</span><div class="ic-name">ಗುಬ್ಬಿ</div><div class="ic-name-kn" style="color:#0d47a1;">Sparrow</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐦‍⬛</span><div class="ic-name">ಕಾಗೆ</div><div class="ic-name-kn" style="color:#0d47a1;">Crow</div></div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#0d47a1;">
+    <div class="ic-title" style="color:#0d47a1;">🏠 ಮನೆಯಲ್ಲಿ (In Home)</div>
+    <div class="ic-text">ಕಪ್ಪೆ ಎರಡು ಕಡೆ ಇರುತ್ತದೆ — ನೀರು ಮತ್ತು ಭೂಮಿ!<br>Frog lives in both water AND land! 🐸</div>
+  </div>
+  <div class="icon-grid3">
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🦎</span><div class="ic-name">ಹಲ್ಲಿ</div><div class="ic-name-kn" style="color:#0d47a1;">Lizard</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐀</span><div class="ic-name">ಇಲಿ</div><div class="ic-name-kn" style="color:#0d47a1;">Mouse</div></div>
+    <div class="icon-card3" style="border-color:#90caf9;"><span class="ic-icon">🐜</span><div class="ic-name">ಇರುವೆ</div><div class="ic-name-kn" style="color:#0d47a1;">Ant</div></div>
+  </div>
+
+  <button class="nav-btn" id="homesNextBtn" style="background:linear-gradient(135deg,#0d47a1,#1976d2);" onclick="completeTab('homes','quiz1')">
+    ಮುಂದೆ ಹೋಗೋಣ! Next → ❓ ಪ್ರಶ್ನೆ 1
+  </button>
+</div>
+
+<!-- ════════════ TAB 4: QUIZ 1 — IDENTIFY ANIMAL ════════════ -->
+<div class="tab-panel" id="panel-quiz1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">❓</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಪ್ರಶ್ನೆಗಳು!</div>
+      <div class="banner-sub" style="color:#ad1457;">ಪ್ರಾಣಿಯ ಹೆಸರು ಹೇಳು / Name the animal!</div>
+    </div>
+  </div>
+  <div class="q-dots" id="quiz1Dots"></div>
+  <div id="quiz1Steps"></div>
+  <button class="nav-btn" id="quiz1NextBtn" disabled style="opacity:.4;background:linear-gradient(135deg,#880e4f,#e91e63);" onclick="completeTab('quiz1','quiz2')">
+    ಮುಂದೆ ಹೋಗೋಣ! Next → ❓ ಪ್ರಶ್ನೆ 2
+  </button>
+</div>
+
+<!-- ════════════ TAB 5: QUIZ 2 — SOUNDS ════════════ -->
+<div class="tab-panel" id="panel-quiz2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <span class="banner-emoji">🔊</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">ಶಬ್ದ ಪ್ರಶ್ನೆಗಳು!</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Match the animal to its sound!</div>
+    </div>
+  </div>
+  <div class="q-dots" id="quiz2Dots"></div>
+  <div id="quiz2Steps"></div>
+  <button class="nav-btn" id="quiz2NextBtn" disabled style="opacity:.4;background:linear-gradient(135deg,#4a148c,#7b1fa2);" onclick="completeTab('quiz2','bigquiz')">
+    ಮುಂದೆ ಹೋಗೋಣ! Next → 🏆 ದೊಡ್ಡ ಪರೀಕ್ಷೆ
+  </button>
+</div>
+
+<!-- ════════════ TAB 6: BIG QUIZ ════════════ -->
+<div class="tab-panel" id="panel-bigquiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ದೊಡ್ಡ ಪರೀಕ್ಷೆ!</div>
+      <div class="banner-sub" style="color:#bf360c;">Big Final Quiz — All Animals!</div>
+    </div>
+  </div>
+  <div class="q-dots" id="bigquizDots"></div>
+  <div id="bigquizSteps"></div>
+  <button class="nav-btn" id="bigquizFinishBtn" disabled style="opacity:.4;background:linear-gradient(135deg,#e65100,#ff6d00);" onclick="showCelebration()">
+    🎉 ಮುಗಿಸಿದೆ! I'm Done!
+  </button>
+</div>
+
+</div><!-- end content -->
+
+<!-- CELEBRATION SCREEN -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🎉🐾🌿</div>
+  <div class="celeb-title">ಶಾಭಾಸ್! Well Done!</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡು / Play Again</button>
+</div>
+
+<script>
+/* ════ STATE ════ */
+let stars = 0;
+const tabOrder = ['learn','sounds','homes','quiz1','quiz2','bigquiz'];
+const doneTabs = new Set();
+let currentTab = 'learn';
+let toastTimer = null;
+
+/* ════ TAB LOGIC ════ */
+function goTab(name){
+  const idx = tabOrder.indexOf(name);
+  const curIdx = tabOrder.indexOf(currentTab);
+  // Check if locked
+  if(idx > curIdx && !doneTabs.has(tabOrder[idx-1]) && name !== currentTab){
+    shakeLock(name);
+    showToast('⛔ ಮೊದಲ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  // Switch
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  currentTab = name;
+  // Update tab styles
+  tabOrder.forEach((t,i)=>{
+    const el = document.getElementById('tab-'+t);
+    el.className = 'step-tab';
+    if(doneTabs.has(t)) el.classList.add('done');
+    else if(t===name) el.classList.add('active');
+    else if(i===0 || doneTabs.has(tabOrder[i-1])) el.classList.add('unlocked');
+    else el.classList.add('locked');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function completeTab(current, next){
+  doneTabs.add(current);
+  updateProgress();
+  // Unlock next
+  const el = document.getElementById('tab-'+next);
+  if(el) el.classList.remove('locked');
+  goTab(next);
+}
+
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct+'%';
+}
+
+function shakeLock(name){
+  const el = document.getElementById('tab-'+name);
+  el.classList.remove('shaking');
+  void el.offsetWidth;
+  el.classList.add('shaking');
+  setTimeout(()=>el.classList.remove('shaking'),600);
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ════ QUIZ ENGINE ════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  const container = document.getElementById(containerID);
+  const dotsEl    = document.getElementById(dotsID);
+  const nextBtn   = document.getElementById(nextBtnID);
+  let current = 0;
+  const results = [];
+
+  dotsEl.innerHTML = questions.map((_,i)=>`<div class="dot" id="${dotsID}-dot-${i}"></div>`).join('');
+
+  function render(){
+    questions.forEach((_,i)=>{
+      const d = document.getElementById(`${dotsID}-dot-${i}`);
+      d.className = 'dot';
+      if(i < current) d.classList.add(results[i]?'done-ok':'done-err');
+      if(i === current) d.classList.add('active');
+    });
+    const q = questions[current];
+    container.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" onclick="answerQ_${containerID}(this,${i},${q.correct})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  window['answerQ_'+containerID] = function(el, chosen, correct){
+    const opts = document.querySelectorAll('#'+containerID+' .q-option');
+    opts.forEach(o=>o.style.pointerEvents='none');
+    const isCorrect = chosen===correct;
+    el.classList.add(isCorrect?'correct':'wrong');
+    opts[correct].classList.add('correct');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent=stars; }
+    results[current] = isCorrect;
+    setTimeout(()=>{
+      if(current < questions.length-1){ current++; render(); }
+      else { nextBtn.disabled=false; nextBtn.style.opacity='1'; }
+    }, isCorrect ? 900 : 1300);
+  };
+
+  render();
+}
+
+/* ══════════════ QUIZ 1 — IDENTIFY ANIMALS ══════════════ */
+renderQuestions({
+  containerID:'quiz1Steps', dotsID:'quiz1Dots', nextBtnID:'quiz1NextBtn',
+  questions:[
+    {visual:'🐄',question:'ಈ ಪ್ರಾಣಿಯ ಹೆಸರು ಏನು?\nWhat is this animal?',options:['🐐 ಆಡು','🐄 ಹಸು','🐕 ನಾಯಿ','🐈 ಬೆಕ್ಕು'],correct:1},
+    {visual:'🦚',question:'ಈ ಹಕ್ಕಿ ಯಾವುದು?\nWhich bird is this?',options:['🐦 ಗುಬ್ಬಿ','🦜 ಗಿಣಿ','🦚 ನವಿಲು','🐦‍⬛ ಕಾಗೆ'],correct:2},
+    {visual:'🐟',question:'ಈ ಪ್ರಾಣಿ ಎಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ?\nWhere does this live?',options:['🌳 ಕಾಡಿನಲ್ಲಿ','☁️ ಆಕಾಶದಲ್ಲಿ','🌊 ನೀರಿನಲ್ಲಿ','🏠 ಮನೆಯಲ್ಲಿ'],correct:2},
+    {visual:'🐍',question:'ಹಾವಿನ ಹೆಸರು ಏನು?\nWhat do we call this?',options:['🐊 ಮೊಸಳೆ','🐸 ಕಪ್ಪೆ','🦎 ಹಲ್ಲಿ','🐍 ಹಾವು'],correct:3},
+    {visual:'🐘',question:'ಇದು ಯಾವ ಪ್ರಾಣಿ?\nThis big animal is a ___?',options:['🦁 ಸಿಂಹ','🐘 ಆನೆ','🐯 ಹುಲಿ','🐃 ಎಮ್ಮೆ'],correct:1},
+    {visual:'🦋',question:'ಈ ಕೀಟದ ಹೆಸರು ?\nThis insect is a ___?',options:['🐜 ಇರುವೆ','🦗 ಮಿಡತೆ','🦋 ಚಿಟ್ಟೆ','🪰 ನೊಣ'],correct:2},
+    {visual:'🐸',question:'ಕಪ್ಪೆ ಎಲ್ಲಿ ಇರುತ್ತದೆ?\nFrog lives in ___?',options:['☁️ ಆಕಾಶ','🌳 ಕಾಡು ಮಾತ್ರ','🌊 ನೀರು & ಭೂಮಿ','🏠 ಮನೆ ಮಾತ್ರ'],correct:2},
+    {visual:'🐇',question:'ಇದು ಯಾವ ಪ್ರಾಣಿ?\nWhich animal jumps a lot?',options:['🐀 ಇಲಿ','🐿️ ಅಳಿಲು','🐇 ಮೊಲ','🦎 ಹಲ್ಲಿ'],correct:2},
+  ]
+});
+
+/* ══════════════ QUIZ 2 — SOUNDS ══════════════ */
+renderQuestions({
+  containerID:'quiz2Steps', dotsID:'quiz2Dots', nextBtnID:'quiz2NextBtn',
+  questions:[
+    {visual:'🐕',question:'ನಾಯಿ ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nWhat sound does the dog make?',options:['ಮಿಯಾವ್','🐕 ಭೌ ಭೌ!','ಕ್ವಾಕ್ ಕ್ವಾಕ್','ಘರ್ಜನೆ'],correct:1},
+    {visual:'🐈',question:'ಬೆಕ್ಕು ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nWhat sound does the cat make?',options:['ಭೌ ಭೌ','ಬುಸ್ ಬುಸ್','🐈 ಮಿಯಾವ್!','ಘೀಳು'],correct:2},
+    {visual:'🐓',question:'ಕೋಳಿ ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nThe hen goes ___?',options:['ಭೌ ಭೌ','ಮಿಯಾವ್','🐓 ಕೊ ಕ್ಕೊ ಕ್ಕೊ!','ಬುಸ್ ಬುಸ್'],correct:2},
+    {visual:'🐍',question:'ಹಾವು ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nThe snake makes ___?',options:['ಘರ್ಜನೆ','ಕ್ವಾಕ್ ಕ್ವಾಕ್','ಮಿಯಾವ್','🐍 ಬುಸ್ ಬುಸ್ ಬುಸ್!'],correct:3},
+    {visual:'🐦',question:'ಗುಬ್ಬಿ ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nThe sparrow chirps ___?',options:['ಭೌ ಭೌ','🐦 ಚಿಂವ್ ಚಿಂವ್ ಚಿಂವ್!','ಘರ್ಜನೆ','ಬುಸ್ ಬುಸ್'],correct:1},
+    {visual:'🦁',question:'ಸಿಂಹ ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nThe lion ___?',options:['ಚಿಂವ್ ಚಿಂವ್','ಭೌ ಭೌ','ಮಿಯಾವ್','🦁 ಘರ್ಜನೆ!'],correct:3},
+    {visual:'🐄',question:'ಕರುಗಳು ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nCalves make ___?',options:['ಭೌ ಭೌ','🐄 ಅಂಬಾ!','ಕ್ವಾಕ್','ಚಿಂವ್ ಚಿಂವ್'],correct:1},
+    {visual:'🐘',question:'ಆನೆ ಯಾವ ಶಬ್ದ ಮಾಡುತ್ತದೆ?\nThe elephant makes ___?',options:['ಭೌ ಭೌ','ಬುಸ್ ಬುಸ್','🐘 ಘೀಳು!','ಚಿಂವ್ ಚಿಂವ್'],correct:2},
+  ]
+});
+
+/* ══════════════ BIG QUIZ ══════════════ */
+renderQuestions({
+  containerID:'bigquizSteps', dotsID:'bigquizDots', nextBtnID:'bigquizFinishBtn',
+  questions:[
+    {visual:'🏆🐄',question:'🏆 ಹಸು ನಮಗೆ ಏನು ಕೊಡುತ್ತದೆ?\nThe cow gives us ___?',options:['🥚 ಮೊಟ್ಟೆ','🥛 ಹಾಲು!','🍯 ಜೇನು','🧶 ಉಣ್ಣೆ'],correct:1},
+    {visual:'🏆🐦',question:'🏆 ಯಾವ ಪ್ರಾಣಿ ಆಕಾಶದಲ್ಲಿ ಹಾರುತ್ತದೆ?\nWhich flies in the sky?',options:['🐟 ಮೀನು','🐄 ಹಸು','🐦 ಹಕ್ಕಿ!','🐍 ಹಾವು'],correct:2},
+    {visual:'🏆🌊',question:'🏆 ಯಾವ ಪ್ರಾಣಿ ನೀರಿನಲ್ಲಿ ಜೀವಿಸುತ್ತದೆ?\nWhich lives in water?',options:['🦁 ಸಿಂಹ','🐟 ಮೀನು!','🐘 ಆನೆ','🐇 ಮೊಲ'],correct:1},
+    {visual:'🏆🦚',question:'🏆 ಭಾರತದ ರಾಷ್ಟ್ರೀಯ ಪಕ್ಷಿ ಯಾವುದು?\nNational Bird of India?',options:['🐦‍⬛ ಕಾಗೆ','🦜 ಗಿಣಿ','🦚 ನವಿಲು!','🦅 ಹದ್ದು'],correct:2},
+    {visual:'🏆🐕',question:'🏆 ನಾಯಿ ಮನೆಯ ___.\nDog is a ___ animal.',options:['🌳 ಕಾಡಿನ','🌊 ನೀರಿನ','🏠 ಮನೆಯ!','☁️ ಆಕಾಶದ'],correct:2},
+    {visual:'🏆🐍',question:'🏆 ಹಾವಿನ ಶಬ್ದ ?\nThe snake goes ___?',options:['ಭೌ ಭೌ','🐍 ಬುಸ್ ಬುಸ್!','ಮಿಯಾವ್','ಚಿಂವ್ ಚಿಂವ್'],correct:1},
+    {visual:'🏆🦋',question:'🏆 ಚಿಟ್ಟೆ ಒಂದು ___.\nButterfly is an ___.',options:['🐟 ಮೀನು','🐄 ದನ','🦋 ಕೀಟ!','🌳 ಮರ'],correct:2},
+    {visual:'🏆🐸',question:'🏆 ಕಪ್ಪೆ ಎಲ್ಲಿ ಇರುತ್ತದೆ?\nFrog lives in ___?',options:['☁️ ಆಕಾಶ','🌊 ನೀರು & ಭೂಮಿ!','🏠 ಮನೆ ಮಾತ್ರ','🌳 ಕಾಡು ಮಾತ್ರ'],correct:1},
+    {visual:'🏆🐯',question:'🏆 ಹುಲಿ ಎಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ?\nThe tiger lives in a ___?',options:['🌊 ನದಿ','🏠 ಮನೆ','🌳 ಕಾಡು!','☁️ ಆಕಾಶ'],correct:2},
+    {visual:'🏆🦁',question:'🏆 ಸಿಂಹ ಯಾವ ಪ್ರಾಣಿಗಳ ರಾಜ?\nLion is the King of ___?',options:['🐟 ಮೀನುಗಳ','🐦 ಹಕ್ಕಿಗಳ','🌳 ಕಾಡು ಪ್ರಾಣಿಗಳ!','🐜 ಕೀಟಗಳ'],correct:2},
+  ]
+});
+
+/* ══════════════ CELEBRATION ══════════════ */
+function showCelebration(){
+  doneTabs.add('bigquiz');
+  updateProgress();
+  document.getElementById('celebSub').textContent =
+    'ನೀನು ಎಲ್ಲಾ ಪ್ರಾಣಿಗಳನ್ನು ಕಲಿತೆ! 🐾\nYou learned all the animals! 🌿\nYou know animal sounds! 🔊🎵\nYou know where animals live! 🌊🌳☁️\nYou are an ANIMAL CHAMPION! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function restartAll(){
+  location.reload();
+}
+</script>
+</body>
+</html>

@@ -268,7 +268,7 @@ def class1_kannada_dashboard():
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     # Kannada-medium Class 1 dashboard (overall).
-    return render_template('class1_dashboard_kannada.html', student=student)
+    return render_template('class1/class1_dashboard_kannada.html', student=student)
 
 @app.route('/class/1/kannada/chapters')
 def class1_kannada_chapters():
@@ -276,14 +276,14 @@ def class1_kannada_chapters():
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     # Kannada subject chapter index (used by both English-medium and Kannada-medium).
-    return render_template('class1_kannada_chapters.html', student=student)
+    return render_template('class1/class1_kannada_chapters.html', student=student)
 
 @app.route('/class/1/kannada/maths')
 def class1_kannada_maths_chapters():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_maths_chapters.html', student=student)
+    return render_template('class1/class1_kannada_maths_chapters.html', student=student)
 
 @app.route('/class/1/kannada/maths/lesson<int:lesson_num>')
 def class1_kannada_maths_lesson(lesson_num: int):
@@ -301,7 +301,7 @@ def class1_kannada_evs_chapters():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_evs_chapters.html', student=student)
+    return render_template('class1/class1_kannada_evs_chapters.html', student=student)
 
 @app.route('/class/1/kannada/evs/lesson<int:lesson_num>')
 def class1_kannada_evs_lesson(lesson_num: int):
@@ -309,17 +309,18 @@ def class1_kannada_evs_lesson(lesson_num: int):
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
 
-    # Map "lesson number" to the existing English-medium EVS templates so links work.
+    # Map "lesson number" to templates. Kannada lessons exist for 1-9; the rest
+    # currently fall back to the English-medium EVS pages so navigation works.
     lesson_templates = {
-        1:  'class1_evs_chapter1.html',
-        2:  'class1_evs_chapter2.html',
-        3:  'class1_evs_chapter3.html',
-        4:  'class1_evs_chapter4.html',
-        5:  'class1_evs_chapter5.html',
-        6:  'class1_evs_chapter6_my_house.html',
-        7:  'class1_evs_chapter7_clean_habits.html',
-        8:  'class1_evs_chapter8_safety_and_discipline.html',
-        9:  'class1_evs_chapter9_transportation.html',
+        1:  'class1/class1_kannada_evs_chapter1_animals.html',
+        2:  'class1/class1_kannada_evs_chapter2_plants.html',
+        3:  'class1/class1_kannada_evs_chapter3_water.html',
+        4:  'class1/class1_kannada_evs_chapter4_food.html',
+        5:  'class1/class1_kannada_evs_chapter5_food_needed.html',
+        6:  'class1/class1_kannada_evs_chapter6_my_home.html',
+        7:  'class1/class1_kannada_evs_chapter7_swachha_abhyasagalu.html',
+        8:  'class1/class1_kannada_evs_chapter8_surakshate_shistu.html',
+        9:  'class1/class1_kannada_evs_chapter9_vehicles.html',
         10: 'class1_evs_chapter10_family.html',
         11: 'class1_evs_chapter11_neighbourhood.html',
         12: 'class1_evs_chapter12_play_the_game.html',
@@ -598,7 +599,7 @@ def class1_evs():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapters.html', student=student)
+    return render_template('class1/class1_evs_chapters.html', student=student)
 
 # Class 1 EVS lessons
 @app.route('/class/1/evs/animals')
@@ -982,8 +983,8 @@ def primary_dashboard():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    grade = session.get('student_grade', '1')
-    return render_template(f'class{grade}_dashboard.html', student=student)
+    # Keep the URL stable while allowing us to organize templates by grade.
+    return render_template('class1/class1_dashboard.html', student=student)
 
 @app.route('/class/2')
 def class2_dashboard():
@@ -1373,7 +1374,7 @@ def class1_english():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_english_chapters.html', student=student)
+    return render_template('class1/class1_english_chapters.html', student=student)
 
 @app.route('/class/1/english/alphabets')
 @app.route('/class/1/english/chapter/alphabets')

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 8: ಸುರಕ್ಷತೆ ಮತ್ತು ಶಿಸ್ತು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff3e0; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#f57c00);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#bf360c,#e64a19); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffb74d); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffccbc; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#fff3e0; color:#e65100; border-color:#ffb74d; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #e65100;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ICON GRID 2 */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #ffccbc;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:44px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:15px; color:#e65100; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#bf360c; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* DANGER / SAFE CARD */
+.ds-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.ds-card {
+  border-radius:18px; padding:14px 10px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); animation:cardPop .4s ease both;
+}
+.ds-card.danger { background:#ffebee; border:3px solid #ef9a9a; }
+.ds-card.safe   { background:#e8f5e9; border:3px solid #a5d6a7; }
+.ds-card .ds-icon { font-size:40px; display:block; margin-bottom:6px; }
+.ds-card .ds-name { font-family:'Fredoka One',cursive; font-size:14px; color:#333; }
+.ds-card .ds-kn { font-size:12px; font-weight:900; color:#555; margin-top:2px; }
+.ds-label { font-family:'Fredoka One',cursive; font-size:15px; text-align:center; padding:8px; border-radius:12px; margin-bottom:8px; }
+.ds-label.danger-lbl { background:#ffcdd2; color:#c62828; }
+.ds-label.safe-lbl   { background:#c8e6c9; color:#1b5e20; }
+
+/* TAP LEARN CARDS */
+.tap-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #ffccbc; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#ffe0b2; border-color:#f57c00; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#e65100; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+.tc-reveal { font-size:13px; font-weight:900; color:#e65100; margin-top:6px; display:none; }
+.tap-card.tapped .tc-reveal { display:block; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #ffccbc; background:#fff3e0; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#e65100; transform:scale(1.3); }
+
+/* MATCH GAME */
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.match-col-label { font-family:'Fredoka One',cursive; font-size:14px; color:#e65100; text-align:center; margin-bottom:6px; }
+.match-item {
+  background:#fff; border-radius:14px; padding:12px 8px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.1); border:3px solid #ffccbc; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:13px; color:#e65100; margin-bottom:8px;
+  transition:all .2s; user-select:none;
+}
+.match-item.selected { background:#ffe0b2; border-color:#f57c00; transform:scale(1.04); }
+.match-item.matched  { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; cursor:default; }
+.match-item.wrong-flash { background:#ffcdd2; border-color:#e53935; }
+
+/* NEXT BTN */
+.next-btn {
+  display:block; width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer;
+  background:#e0e0e0; color:#bdbdbd; margin-top:12px; transition:all .3s;
+}
+.next-btn.ready { background:linear-gradient(135deg,#e65100,#f57c00); color:#fff;
+  box-shadow:0 6px 20px rgba(230,81,0,.4); animation:pulse .8s ease-in-out infinite alternate; }
+@keyframes pulse { from{transform:scale(1)} to{transform:scale(1.02); box-shadow:0 8px 28px rgba(230,81,0,.5)} }
+.next-btn:disabled { cursor:not-allowed; }
+
+/* SECTION HEADER */
+.sec-header { font-family:'Fredoka One',cursive; font-size:17px; color:#e65100;
+  margin:14px 0 10px; display:flex; align-items:center; gap:8px; }
+
+/* SCORE ROW */
+.score-row { background:#fff; border-radius:14px; padding:10px 16px; margin-bottom:10px;
+  display:flex; justify-content:space-between; align-items:center; font-family:'Fredoka One',cursive;
+  font-size:14px; color:#e65100; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+
+/* CELEBRATION */
+.celeb-screen {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.85);
+  z-index:999; align-items:center; justify-content:center; flex-direction:column; text-align:center; padding:24px;
+}
+.celeb-screen.show { display:flex; }
+.celeb-box { background:#fff; border-radius:30px; padding:30px 24px; max-width:380px; width:100%; }
+.celeb-emoji { font-size:72px; display:block; margin-bottom:10px; animation:heroFloat 2s ease-in-out infinite; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#e65100; margin-bottom:8px; }
+.celeb-sub { font-size:14px; font-weight:800; color:#555; line-height:1.8; white-space:pre-wrap; margin-bottom:16px; }
+.celeb-stars { font-size:20px; margin-bottom:20px; }
+.restart-btn {
+  background:linear-gradient(135deg,#e65100,#f57c00); color:#fff;
+  border:none; border-radius:16px; padding:16px 32px;
+  font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer; width:100%;
+}
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; width:10px; height:10px; border-radius:2px; top:-10px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  to { transform: translateY(110vh) rotate(720deg); opacity:0; }
+}
+
+/* TRUE/FALSE CARDS */
+.tf-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #ffccbc;
+}
+.tf-question { font-family:'Fredoka One',cursive; font-size:17px; color:#333; margin-bottom:12px; line-height:1.4; }
+.tf-btns { display:flex; gap:10px; }
+.tf-btn {
+  flex:1; padding:14px; border-radius:14px; border:3px solid; font-family:'Fredoka One',cursive;
+  font-size:16px; cursor:pointer; transition:all .2s; user-select:none;
+}
+.tf-btn.true-btn  { background:#e8f5e9; border-color:#a5d6a7; color:#1b5e20; }
+.tf-btn.false-btn { background:#ffebee; border-color:#ef9a9a; color:#c62828; }
+.tf-btn.correct { animation:popIn .3s ease; }
+.tf-btn.wrong   { animation:wobble .4s ease; }
+.tf-btn.true-btn.correct  { background:#4caf50; color:#fff; border-color:#4caf50; }
+.tf-btn.false-btn.correct { background:#4caf50; color:#fff; border-color:#4caf50; }
+.tf-btn.wrong  { background:#e53935; color:#fff; border-color:#e53935; }
+
+/* SORT GAME */
+.sort-zone {
+  border-radius:18px; padding:14px; min-height:80px; margin-bottom:12px; border:3px dashed;
+}
+.sort-zone.danger-zone { background:#fff5f5; border-color:#ef9a9a; }
+.sort-zone.safe-zone   { background:#f0faf0; border-color:#a5d6a7; }
+.sort-zone-label { font-family:'Fredoka One',cursive; font-size:15px; margin-bottom:8px; }
+.sort-items-pool { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.sort-item {
+  background:#fff; border:3px solid #ffccbc; border-radius:14px; padding:10px 12px;
+  font-size:20px; cursor:pointer; transition:all .2s; user-select:none;
+  font-family:'Fredoka One',cursive; font-size:14px; display:flex; align-items:center; gap:6px;
+}
+.sort-item:active { transform:scale(.95); }
+.sort-item.placed { opacity:.4; cursor:default; pointer-events:none; }
+.sort-zone .sort-item { margin:4px; }
+
+/* PLACES GRID */
+.places-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.place-card {
+  background:#fff; border-radius:16px; padding:14px 10px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #ffccbc;
+  animation:cardPop .4s ease both;
+}
+.place-card .pl-icon { font-size:40px; display:block; margin-bottom:6px; }
+.place-card .pl-name { font-family:'Fredoka One',cursive; font-size:15px; color:#e65100; }
+.place-card .pl-kn   { font-size:12px; font-weight:900; color:#bf360c; margin-top:2px; }
+.place-card .pl-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">📘 EVS ಪಾಠ 8 · Lesson 8</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🛡️</span>
+  <h1>ಸುರಕ್ಷತೆ ಮತ್ತು ಶಿಸ್ತು</h1>
+  <p>Surakshate Mattu Shistu · Safety and Discipline</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="0" onclick="switchTab(0)">🧠 1. ಕಲಿ</div>
+  <div class="step-tab locked" data-tab="1" onclick="switchTab(1)">⚠️ 2. ಅಪಾಯ</div>
+  <div class="step-tab locked" data-tab="2" onclick="switchTab(2)">✅ 3. ಶಿಸ್ತು</div>
+  <div class="step-tab locked" data-tab="3" onclick="switchTab(3)">🏘️ 4. ಸ್ಥಳಗಳು</div>
+  <div class="step-tab locked" data-tab="4" onclick="switchTab(4)">🎯 5. ಆಟ</div>
+  <div class="step-tab locked" data-tab="5" onclick="switchTab(5)">❓ 6. ಪ್ರಶ್ನೆ</div>
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲು ಹಿಂದಿನ ಹೆಜ್ಜೆ ಮುಗಿಸು! Finish the previous step first!</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ══════════════════════════ TAB 1: LEARN ══════════════════════════ -->
+<div class="tab-panel active" id="tab-0">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#f57c00);">
+    <span class="banner-emoji">🛡️</span>
+    <div>
+      <div class="banner-title" style="color:#fff;">ಸುರಕ್ಷತೆ ಮತ್ತು ಶಿಸ್ತು</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.9);">Safety and Discipline</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎯 ಈ ಪಾಠದಲ್ಲಿ ನೀನು ಕಲಿಯುವೆ · What you will learn</div>
+    <div class="ic-text">
+      🛡️ ವೈಯಕ್ತಿಕ ಸುರಕ್ಷತೆಯನ್ನು ಅರಿಯುವೆ<br>
+      <small style="color:#888;">Personal Safety · ನಿಮ್ಮನ್ನು ಹೇಗೆ ರಕ್ಷಿಸಿಕೊಳ್ಳಬೇಕು</small><br><br>
+      ⏳ ಸರತಿಯಲ್ಲಿ ಕಾಯುವೆ<br>
+      <small style="color:#888;">Wait in Queue · ಸಾಲಿನಲ್ಲಿ ನಿಲ್ಲಬೇಕು</small><br><br>
+      🏥 ಅವಶ್ಯಕತೆಗಳನ್ನು ಪೂರೈಸುವ ಸೌಲಭ್ಯಗಳನ್ನು ಗುರುತಿಸುವೆ<br>
+      <small style="color:#888;">Identify Community Services · ಊರಿನ ಸ್ಥಳಗಳನ್ನು ಗುರುತಿಸಬೇಕು</small>
+    </div>
+  </div>
+
+  <div class="sec-header">⚠️ ಈ ಚಿತ್ರಗಳನ್ನು ನೋಡು · Look at these dangers — ಎಲ್ಲ ತಟ್ಟಿ ನೋಡು!</div>
+
+  <div class="tap-card" onclick="tapLearn(this)">
+    <span class="tc-icon">⚡</span>
+    <div>
+      <div class="tc-text">ವಿದ್ಯುತ್ · Electricity</div>
+      <div class="tc-sub">ಮನೆಯ ಪ್ಲಗ್ / ಸ್ವಿಚ್ ಮುಟ್ಟಬೇಡ!</div>
+      <div class="tc-reveal">🚫 Electric shock ಆಗಬಹುದು! Don't touch plugs or switches.</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapLearn(this)">
+    <span class="tc-icon">🧱</span>
+    <div>
+      <div class="tc-text">ಎತ್ತರದ ಗೋಡೆ · High Wall</div>
+      <div class="tc-sub">ಗೋಡೆ ಮೇಲೆ ಹತ್ತಿ ಕೂರಬೇಡ!</div>
+      <div class="tc-reveal">🚫 ಬಿದ್ದರೆ ನೋವಾಗುತ್ತದೆ! Falling from height is dangerous.</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapLearn(this)">
+    <span class="tc-icon">✂️</span>
+    <div>
+      <div class="tc-text">ಚೂಪಾದ ವಸ್ತು · Sharp Objects</div>
+      <div class="tc-sub">ಕತ್ತರಿ / ಚಾಕು ಆಡಿಸಬೇಡ!</div>
+      <div class="tc-reveal">🚫 ರಕ್ತ ಬರಬಹುದು! Sharp things can cut and hurt you.</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapLearn(this)">
+    <span class="tc-icon">🔥</span>
+    <div>
+      <div class="tc-text">ಬೆಂಕಿ · Fire</div>
+      <div class="tc-sub">ಬೆಂಕಿ ಕಡ್ಡಿ / ಮೇಣಬತ್ತಿ ಮುಟ್ಟಬೇಡ!</div>
+      <div class="tc-reveal">🚫 ಸುಟ್ಟು ಕೊಳ್ಳಬಹುದು! Fire burns and can hurt you badly.</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapLearn(this)">
+    <span class="tc-icon">🚗</span>
+    <div>
+      <div class="tc-text">ರಸ್ತೆ · Road</div>
+      <div class="tc-sub">ರಸ್ತೆಯಲ್ಲಿ ಓಡಾಡುವಾಗ ಎಚ್ಚರ!</div>
+      <div class="tc-reveal">🚫 ವಾಹನ ಅಪಘಾತ ಆಗಬಹುದು! Be careful near roads and traffic.</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapLearn(this)">
+    <span class="tc-icon">🐜</span>
+    <div>
+      <div class="tc-text">ಇರುವೆ / ಕ್ರಿಮಿ · Insects</div>
+      <div class="tc-sub">ಇರುವೆ ಒಂದರ ಹಿಂದೆ ಒಂದು ಸಾಲಿನಲ್ಲಿ ನಡೆಯುತ್ತವೆ!</div>
+      <div class="tc-reveal">✅ ಇರುವೆಗಳಂತೆ ನಾವೂ ಸಾಲಿನಲ್ಲಿ ನಡೆಯಬೇಕು! Ants walk in a line — we should too!</div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="learn1Btn" disabled onclick="completeTab(0)">
+    ಮುಂದೆ ಹೋಗು ➡️ Next
+  </button>
+</div>
+
+<!-- ══════════════════════════ TAB 2: DANGER SORT ══════════════════════════ -->
+<div class="tab-panel" id="tab-1">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#b71c1c,#e53935);">
+    <span class="banner-emoji">⚠️</span>
+    <div>
+      <div class="banner-title" style="color:#fff;">ಅಪಾಯ vs ಸುರಕ್ಷಿತ</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.9);">Danger vs Safe — ಯಾವುದು ಅಪಾಯ? ಯಾವುದು ಸುರಕ್ಷಿತ?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎮 ಹೇಗೆ ಆಡುವುದು · How to play</div>
+    <div class="ic-text">ಕೆಳಗಿನ ವಸ್ತುಗಳನ್ನು ತಟ್ಟಿ ಸರಿಯಾದ ಗುಂಪಿಗೆ ಹಾಕು!<br>Tap each item to put it in the correct group!</div>
+  </div>
+
+  <div id="sortPool" class="sort-items-pool"></div>
+
+  <div class="sort-zone danger-zone" id="dangerZone">
+    <div class="sort-zone-label" style="color:#c62828;">⚠️ ಅಪಾಯ · DANGER</div>
+    <div id="dangerItems"></div>
+  </div>
+
+  <div class="sort-zone safe-zone" id="safeZone">
+    <div class="sort-zone-label" style="color:#1b5e20;">✅ ಸುರಕ್ಷಿತ · SAFE</div>
+    <div id="safeItems"></div>
+  </div>
+
+  <div id="sortMsg" style="display:none;" class="info-card">
+    <div class="ic-title">🎉 ಭಲೇ! Well done!</div>
+    <div class="ic-text">ನೀನು ಎಲ್ಲ ವಸ್ತುಗಳನ್ನು ಸರಿಯಾಗಿ ಗುರುತಿಸಿದೆ! You sorted everything correctly!</div>
+  </div>
+  <div id="sortScore" style="display:none;" class="score-row">
+    <span>ಸಂಪಾದಿಸಿದ ನಕ್ಷತ್ರ · Stars earned</span><span id="sortStarsText">⭐</span>
+  </div>
+
+  <button class="next-btn" id="sort1Btn" disabled onclick="completeTab(1)">
+    ಮುಂದೆ ಹೋಗು ➡️ Next
+  </button>
+</div>
+
+<!-- ══════════════════════════ TAB 3: DISCIPLINE ══════════════════════════ -->
+<div class="tab-panel" id="tab-2">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1565c0,#1976d2);">
+    <span class="banner-emoji">✅</span>
+    <div>
+      <div class="banner-title" style="color:#fff;">ಶಿಸ್ತು · Discipline</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.9);">ಸರಿ ✓ ಅಥವಾ ತಪ್ಪು ✗ — Right or Wrong?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 ಶಿಸ್ತು ಎಂದರೆ · What is Discipline?</div>
+    <div class="ic-text">
+      🐜 ಇರುವೆಗಳಂತೆ ಒಂದರ ಹಿಂದೆ ಒಂದು ನಡೆಯುವುದು ಶಿಸ್ತು!<br>
+      <small style="color:#888;">Walking in line like ants = Discipline!</small><br><br>
+      👴 ಹಿರಿಯರ ಮಾತು ಕೇಳಬೇಕು<br>
+      <small style="color:#888;">Listen to elders — Parents, Teachers</small><br><br>
+      🏫 ಶಿಕ್ಷಕರ ಎಚ್ಚರಿಕೆ ಪಾಲಿಸಬೇಕು<br>
+      <small style="color:#888;">Follow teacher's warnings to stay safe</small>
+    </div>
+  </div>
+
+  <div class="sec-header">🎯 ಸರಿ ಯಾ ತಪ್ಪು? · True or False — ಎಲ್ಲ ತಟ್ಟಿ ಉತ್ತರಿಸು!</div>
+
+  <div id="tfContainer"></div>
+
+  <div id="tfMsg" style="display:none;" class="info-card">
+    <div class="ic-title">🎉 ಅದ್ಭುತ! Amazing!</div>
+    <div class="ic-text">ನೀನು ಶಿಸ್ತಿನ ಪ್ರಶ್ನೆಗಳನ್ನು ಮುಗಿಸಿದೆ!</div>
+  </div>
+
+  <button class="next-btn" id="tf1Btn" disabled onclick="completeTab(2)">
+    ಮುಂದೆ ಹೋಗು ➡️ Next
+  </button>
+</div>
+
+<!-- ══════════════════════════ TAB 4: COMMUNITY PLACES ══════════════════════════ -->
+<div class="tab-panel" id="tab-3">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#4a148c,#7b1fa2);">
+    <span class="banner-emoji">🏘️</span>
+    <div>
+      <div class="banner-title" style="color:#fff;">ಸೌಕರ್ಯಗಳು · Services</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.9);">ಊರಿನ ಮುಖ್ಯ ಸ್ಥಳಗಳು · Community Places</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌍 ಎಲ್ಲರಿಗೂ ಬೇಕಾದ ಸೌಕರ್ಯಗಳು · Services for Everyone</div>
+    <div class="ic-text">ಊರಿನಲ್ಲಿ ಅನೇಕ ಸ್ಥಳಗಳಿವೆ. ಅವು ನಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತವೆ.<br>Our village/town has many places that help us!</div>
+  </div>
+
+  <div class="sec-header">🏛️ ಈ ಸ್ಥಳಗಳನ್ನು ತಟ್ಟಿ ಕಲಿ! Tap each place to learn!</div>
+
+  <div class="places-grid" id="placesGrid"></div>
+
+  <div id="placesMsg" style="display:none;" class="info-card">
+    <div class="ic-title">🎉 ಭಲೇ! You know all the places!</div>
+    <div class="ic-text">ನೀನು ಊರಿನ ಎಲ್ಲ ಮುಖ್ಯ ಸ್ಥಳಗಳನ್ನು ಕಲಿತೆ! Great job!</div>
+  </div>
+
+  <button class="next-btn" id="places1Btn" disabled onclick="completeTab(3)">
+    ಮುಂದೆ ಹೋಗು ➡️ Next
+  </button>
+</div>
+
+<!-- ══════════════════════════ TAB 5: MATCH GAME ══════════════════════════ -->
+<div class="tab-panel" id="tab-4">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#00695c,#00897b);">
+    <span class="banner-emoji">🎯</span>
+    <div>
+      <div class="banner-title" style="color:#fff;">ಜೋಡಿ ಮಾಡು · Match!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.9);">ಸ್ಥಳ ಮತ್ತು ಉಪಯೋಗ ಜೋಡಿ ಮಾಡು</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎮 ಎಡಗಡೆ ತಟ್ಟಿ, ಆಮೇಲೆ ಬಲಗಡೆ ತಟ್ಟು! Tap left, then tap right!</div>
+    <div class="ic-text">ಸ್ಥಳ ಮತ್ತು ಅದರ ಉಪಯೋಗ ಜೋಡಿ ಮಾಡು! <br>Match the place with what it's used for!</div>
+  </div>
+
+  <div class="score-row">
+    <span>ಜೋಡಿ ಮಾಡಿದ · Matched</span>
+    <span id="matchScore">0</span> / <span id="matchTotal">0</span>
+  </div>
+
+  <div class="match-cols">
+    <div>
+      <div class="match-col-label">🏛️ ಸ್ಥಳ · Place</div>
+      <div id="matchLeft"></div>
+    </div>
+    <div>
+      <div class="match-col-label">💡 ಉಪಯೋಗ · Use</div>
+      <div id="matchRight"></div>
+    </div>
+  </div>
+
+  <div id="matchMsg" style="display:none;" class="info-card">
+    <div class="ic-title">🎉 ಅದ್ಭುತ! Perfect Matching!</div>
+    <div class="ic-text">ನೀನು ಎಲ್ಲ ಜೋಡಿಗಳನ್ನು ಸರಿಯಾಗಿ ಮಾಡಿದೆ!</div>
+  </div>
+
+  <button class="next-btn" id="matchNext" disabled onclick="completeTab(4)">
+    ಮುಂದೆ ಹೋಗು ➡️ Next
+  </button>
+</div>
+
+<!-- ══════════════════════════ TAB 6: QUIZ ══════════════════════════ -->
+<div class="tab-panel" id="tab-5">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e65100,#f57c00);">
+    <span class="banner-emoji">❓</span>
+    <div>
+      <div class="banner-title" style="color:#fff;">ಪ್ರಶ್ನೋತ್ತರ · Quiz Time!</div>
+      <div class="banner-sub" style="color:rgba(255,255,255,.9);">ಕಲಿತದ್ದನ್ನು ತೋರಿಸು · Show what you know!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">
+    🏆 ಫಲಿತಾಂಶ ನೋಡು · See Results!
+  </button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-box">
+    <span class="celeb-emoji">🏆</span>
+    <div class="celeb-title">ಭಲೇ ಚಾಂಪಿಯನ್! 🎉</div>
+    <div class="celeb-sub" id="celebSub"></div>
+    <div class="celeb-stars" id="celebStars"></div>
+    <button class="restart-btn" onclick="restartAll()">🔄 ಮತ್ತೊಮ್ಮೆ ಆಡು · Play Again</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   CORE STATE
+══════════════════════════════════════ */
+let stars = 0;
+let currentTab = 0;
+const unlockedTabs = new Set([0]);
+const doneTabs = new Set();
+const TOTAL_TABS = 6;
+
+function updateProgress() {
+  const pct = (doneTabs.size / TOTAL_TABS) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function switchTab(idx) {
+  const tabs = document.querySelectorAll('.step-tab');
+  if (!unlockedTabs.has(idx)) {
+    tabs[idx].classList.add('shaking');
+    setTimeout(() => tabs[idx].classList.remove('shaking'), 550);
+    showToast('🔒 ಮೊದಲು ಹಿಂದಿನ ಹೆಜ್ಜೆ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  tabs.forEach(t => { t.classList.remove('active'); if (!unlockedTabs.has(parseInt(t.dataset.tab))) t.classList.add('locked'); });
+  currentTab = idx;
+  document.getElementById('tab-' + idx).classList.add('active');
+  tabs[idx].classList.add('active');
+  tabs[idx].classList.remove('locked','unlocked');
+  document.getElementById('stepsBar').scrollLeft = tabs[idx].offsetLeft - 20;
+}
+
+function completeTab(idx) {
+  doneTabs.add(idx);
+  stars += 2;
+  document.getElementById('starsNum').textContent = stars;
+  const nextIdx = idx + 1;
+  if (nextIdx < TOTAL_TABS) {
+    unlockedTabs.add(nextIdx);
+    const tabs = document.querySelectorAll('.step-tab');
+    tabs[nextIdx].classList.remove('locked');
+    tabs[nextIdx].classList.add('unlocked');
+    setTimeout(() => switchTab(nextIdx), 300);
+  }
+  updateProgress();
+}
+
+/* ══════════════════════════════════════
+   TAB 1 · LEARN (tap cards)
+══════════════════════════════════════ */
+let learnTapped = 0;
+const learnTotal = 6;
+function tapLearn(card) {
+  if (!card.classList.contains('tapped')) {
+    card.classList.add('tapped');
+    learnTapped++;
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+    if (learnTapped >= learnTotal) {
+      const btn = document.getElementById('learn1Btn');
+      btn.disabled = false;
+      btn.classList.add('ready');
+    }
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 2 · DANGER SORT
+══════════════════════════════════════ */
+const sortData = [
+  { emoji:'⚡', label:'ವಿದ್ಯುತ್ · Electricity', type:'danger' },
+  { emoji:'🔥', label:'ಬೆಂಕಿ · Fire', type:'danger' },
+  { emoji:'✂️', label:'ಕತ್ತರಿ · Scissors', type:'danger' },
+  { emoji:'🧱', label:'ಎತ್ತರ · Height', type:'danger' },
+  { emoji:'🚗', label:'ರಸ್ತೆ · Road', type:'danger' },
+  { emoji:'🌊', label:'ನೀರಿನ ತೊಟ್ಟಿ · Water tank', type:'danger' },
+  { emoji:'🤝', label:'ಸಾಲು · Queue', type:'safe' },
+  { emoji:'👨‍🏫', label:'ಶಿಕ್ಷಕರ ಮಾತು · Teacher', type:'safe' },
+  { emoji:'🦺', label:'ಸುರಕ್ಷಾ · Safety', type:'safe' },
+  { emoji:'👴', label:'ಹಿರಿಯರು · Elders', type:'safe' },
+];
+let sortCorrect = 0;
+
+function buildSort() {
+  const pool = document.getElementById('sortPool');
+  const shuffled = [...sortData].sort(() => Math.random() - .5);
+  pool.innerHTML = shuffled.map((item, i) =>
+    `<div class="sort-item" id="si-${i}" onclick="sortTap(${i},'${item.type}')">${item.emoji} ${item.label}</div>`
+  ).join('');
+  window._sortItems = shuffled;
+}
+buildSort();
+
+function sortTap(i, type) {
+  const el = document.getElementById('si-' + i);
+  if (el.classList.contains('placed')) return;
+  el.classList.add('placed');
+  const clone = document.createElement('div');
+  clone.className = 'sort-item';
+  clone.innerHTML = el.innerHTML;
+  if (type === 'danger') {
+    document.getElementById('dangerItems').appendChild(clone);
+  } else {
+    document.getElementById('safeItems').appendChild(clone);
+  }
+  stars++;
+  document.getElementById('starsNum').textContent = stars;
+  sortCorrect++;
+  if (sortCorrect >= sortData.length) {
+    document.getElementById('sortMsg').style.display = 'block';
+    document.getElementById('sortScore').style.display = 'flex';
+    document.getElementById('sortStarsText').textContent = '⭐'.repeat(Math.min(sortCorrect, 10));
+    const btn = document.getElementById('sort1Btn');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 3 · TRUE / FALSE (Discipline)
+══════════════════════════════════════ */
+const tfData = [
+  { q:'ಸಾಲಿನಲ್ಲಿ ನಿಂತರೆ ಎಲ್ಲರಿಗೂ ನೀರು ಸಿಗುತ್ತದೆ.\nStanding in queue means everyone gets water.', ans: true },
+  { q:'ಸಾಲಿನಲ್ಲಿ ನಿಂತರೆ ಸಮಯ ಹಾಳು.\nStanding in a queue wastes time.', ans: false },
+  { q:'ಬಸ್ ಹತ್ತಲು ಸಾಲಿನಲ್ಲಿ ನಿಂತರೆ ಒಳ್ಳೆಯದು.\nIt is good to stand in a queue to board the bus.', ans: true },
+  { q:'ಸಾಲಿನಲ್ಲಿ ನಿಂತರೆ ಯಾರಿಗೂ ತೊಂದರೆಯಾಗುವುದಿಲ್ಲ.\nStanding in a queue causes no trouble to anyone.', ans: true },
+  { q:'ಹಿರಿಯರ ಮಾತು ಕೇಳಬೇಕು.\nWe should listen to elders.', ans: true },
+  { q:'ಒಬ್ಬರೇ ವಿದ್ಯುತ್ ಸ್ವಿಚ್ ಮುಟ್ಟಬಹುದು.\nChildren can touch electrical switches alone.', ans: false },
+];
+let tfDone = 0;
+
+function buildTF() {
+  const container = document.getElementById('tfContainer');
+  container.innerHTML = tfData.map((item, i) => `
+    <div class="tf-card" id="tf-${i}">
+      <div class="tf-question">${item.q}</div>
+      <div class="tf-btns">
+        <button class="tf-btn true-btn" onclick="answerTF(${i}, true, ${item.ans})">✅ ಸರಿ · True</button>
+        <button class="tf-btn false-btn" onclick="answerTF(${i}, false, ${item.ans})">❌ ತಪ್ಪು · False</button>
+      </div>
+    </div>
+  `).join('');
+}
+buildTF();
+
+function answerTF(idx, chosen, correct) {
+  const card = document.getElementById('tf-' + idx);
+  const btns = card.querySelectorAll('.tf-btn');
+  btns.forEach(b => { b.onclick = null; });
+  const isCorrect = (chosen === correct);
+  const chosenBtn = chosen ? btns[0] : btns[1];
+  const correctBtn = correct ? btns[0] : btns[1];
+  if (isCorrect) {
+    chosenBtn.classList.add('correct');
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+  } else {
+    chosenBtn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+  }
+  tfDone++;
+  if (tfDone >= tfData.length) {
+    document.getElementById('tfMsg').style.display = 'block';
+    const btn = document.getElementById('tf1Btn');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 4 · COMMUNITY PLACES
+══════════════════════════════════════ */
+const placesData = [
+  { icon:'🏥', name:'ಆಸ್ಪತ್ರೆ', en:'Hospital', desc:'ನಾವು ಅಸ್ವಸ್ಥರಾದಾಗ ಹೋಗುವ ಸ್ಥಳ · When we are sick' },
+  { icon:'🏫', name:'ಸರ್ಕಾರಿ ಶಾಲೆ', en:'School', desc:'ಕಲಿಯಲು ಹೋಗುವ ಸ್ಥಳ · Where we learn' },
+  { icon:'🚌', name:'ಬಸ್ ನಿಲ್ದಾಣ', en:'Bus Stand', desc:'ಬಸ್ ಹತ್ತಲು ಕಾಯುವ ಸ್ಥಳ · Where we wait for bus' },
+  { icon:'🏛️', name:'ಸಮುದಾಯ ಭವನ', en:'Community Hall', desc:'ಎಲ್ಲರ ಸಭೆ ನಡೆಯುವ ಸ್ಥಳ · Community meetings' },
+  { icon:'💧', name:'ನೀರಿನ ಟ್ಯಾಪ್', en:'Water Tap', desc:'ಕುಡಿಯುವ ನೀರು · Drinking water' },
+  { icon:'🕯️', name:'ಬೀದಿ ದೀಪ', en:'Street Light', desc:'ರಾತ್ರಿ ಬೆಳಕು ಕೊಡುತ್ತದೆ · Lights up road at night' },
+];
+let placesTapped = 0;
+
+function buildPlaces() {
+  const grid = document.getElementById('placesGrid');
+  grid.innerHTML = placesData.map((p, i) => `
+    <div class="place-card" id="pc-${i}" onclick="tapPlace(${i})" style="cursor:pointer;">
+      <span class="pl-icon">${p.icon}</span>
+      <div class="pl-name">${p.name}</div>
+      <div class="pl-kn">${p.en}</div>
+      <div class="pl-desc" id="pcd-${i}" style="display:none;">${p.desc}</div>
+    </div>
+  `).join('');
+}
+buildPlaces();
+
+function tapPlace(i) {
+  const card = document.getElementById('pc-' + i);
+  if (card.dataset.tapped) return;
+  card.dataset.tapped = '1';
+  card.style.background = '#fff3e0';
+  card.style.borderColor = '#f57c00';
+  document.getElementById('pcd-' + i).style.display = 'block';
+  stars++;
+  document.getElementById('starsNum').textContent = stars;
+  placesTapped++;
+  if (placesTapped >= placesData.length) {
+    document.getElementById('placesMsg').style.display = 'block';
+    const btn = document.getElementById('places1Btn');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 5 · MATCH GAME
+══════════════════════════════════════ */
+const matchPairs = [
+  { left:'🏥 ಆಸ್ಪತ್ರೆ', right:'🤒 ಅಸ್ವಸ್ಥರಾದಾಗ · When sick' },
+  { left:'🏫 ಶಾಲೆ', right:'📚 ಕಲಿಯಲು · To learn' },
+  { left:'🚌 ಬಸ್ ನಿಲ್ದಾಣ', right:'🚌 ಬಸ್ ಹತ್ತಲು · To board bus' },
+  { left:'🏛️ ಸಮುದಾಯ ಭವನ', right:'👥 ಸಭೆಗೆ · For meetings' },
+  { left:'💧 ನೀರಿನ ಟ್ಯಾಪ್', right:'🥤 ನೀರು ಕುಡಿಯಲು · To drink water' },
+  { left:'🕯️ ಬೀದಿ ದೀಪ', right:'🌙 ರಾತ್ರಿ ಬೆಳಕು · Night light' },
+];
+let matchSelLeft = null, matchDone = 0;
+
+function buildMatch() {
+  document.getElementById('matchTotal').textContent = matchPairs.length;
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+  const shuffled = [...matchPairs].sort(() => Math.random() - .5);
+  left.innerHTML = matchPairs.map((p, i) =>
+    `<div class="match-item" id="ml-${i}" onclick="selectMatchLeft(${i})">${p.left}</div>`
+  ).join('');
+  right.innerHTML = shuffled.map(p => {
+    const origIdx = matchPairs.findIndex(m => m.right === p.right);
+    return `<div class="match-item" id="mr-${origIdx}" onclick="selectMatchRight(${origIdx})">${p.right}</div>`;
+  }).join('');
+}
+buildMatch();
+
+function selectMatchLeft(i) {
+  if (document.getElementById('ml-'+i).classList.contains('matched')) return;
+  if (matchSelLeft !== null) document.getElementById('ml-'+matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('ml-'+i).classList.add('selected');
+}
+function selectMatchRight(i) {
+  if (matchSelLeft === null) { showToast('ಮೊದಲು ಎಡಗಡೆ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('ml-'+matchSelLeft);
+  const rEl = document.getElementById('mr-'+i);
+  if (rEl.classList.contains('matched')) return;
+  if (matchSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelLeft = null;
+    if (matchDone === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchMsg').style.display = 'block';
+        const btn = document.getElementById('matchNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelLeft = null; }, 600);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 6 · QUIZ
+══════════════════════════════════════ */
+const quizQuestions = [
+  { visual:'⚡❓', question:'ವಿದ್ಯುತ್ ಸ್ವಿಚ್ ಮುಟ್ಟಿದರೆ ಏನಾಗುತ್ತದೆ?\nWhat happens if you touch an electric switch?', options:['😊 ಏನೂ ಆಗುವುದಿಲ್ಲ','⚡ ವಿದ್ಯುತ್ ಶಾಕ್ ಆಗುತ್ತದೆ!','🍬 ಸಿಹಿ ಸಿಗುತ್ತದೆ','🎮 ಆಟ ಆಡಬಹುದು'], correct:1 },
+  { visual:'🐜❓', question:'ಇರುವೆಗಳು ಹೇಗೆ ನಡೆಯುತ್ತವೆ?\nHow do ants walk?', options:['🏃 ಓಡುತ್ತವೆ','🎲 ಚಿಮ್ಮುತ್ತವೆ','🐜 ಸಾಲಿನಲ್ಲಿ!','💤 ಮಲಗುತ್ತವೆ'], correct:2 },
+  { visual:'🏥❓', question:'ನಾವು ಅಸ್ವಸ್ಥರಾದಾಗ ಎಲ್ಲಿಗೆ ಹೋಗುವೆ?\nWhere do we go when we are sick?', options:['🏫 ಶಾಲೆಗೆ','🏥 ಆಸ್ಪತ್ರೆಗೆ!','🚌 ಬಸ್ ನಿಲ್ದಾಣಕ್ಕೆ','🏛️ ಭವನಕ್ಕೆ'], correct:1 },
+  { visual:'🚌❓', question:'ಬಸ್ ಹತ್ತಲು ನಾವು ಏನು ಮಾಡಬೇಕು?\nWhat should we do to board a bus?', options:['🏃 ಓಡಿ ಹತ್ತಬೇಕು','🛑 ಸಾಲಿನಲ್ಲಿ ನಿಂತು ಕಾಯಬೇಕು!','😠 ತಳ್ಳಬೇಕು','😴 ಮಲಗಬೇಕು'], correct:1 },
+  { visual:'🏫❓', question:'ಶಾಲೆ ಏಕೆ ಬೇಕು?\nWhy do we need a school?', options:['🎮 ಆಟ ಆಡಲು','📚 ಕಲಿಯಲು!','😴 ನಿದ್ದೆ ಮಾಡಲು','🍕 ತಿನ್ನಲು'], correct:1 },
+  { visual:'🔥❓', question:'ಬೆಂಕಿ ಕಡ್ಡಿ ಮುಟ್ಟಿದರೆ ಏನಾಗುತ್ತದೆ?\nWhat happens if you touch a matchstick?', options:['🍬 ಸಿಹಿ ಸಿಗುತ್ತದೆ','🎈 ಉಬ್ಬುತ್ತದೆ','🔥 ಸುಟ್ಟು ಕೊಳ್ಳಬಹುದು!','😊 ಏನೂ ಆಗುವುದಿಲ್ಲ'], correct:2 },
+  { visual:'👴❓', question:'ಹಿರಿಯರ ಮಾತನ್ನು ನಾವು ಏನು ಮಾಡಬೇಕು?\nWhat should we do with elders\' words?', options:['🙈 ನಿರ್ಲಕ್ಷಿಸಬೇಕು','😴 ನಿದ್ದೆ ಮಾಡಬೇಕು','👂 ಕೇಳಬೇಕು!','🎮 ಆಟ ಆಡಬೇಕು'], correct:2 },
+  { visual:'🕯️❓', question:'ಬೀದಿ ದೀಪ ಏಕೆ ಬೇಕು?\nWhy do we need street lights?', options:['ಅಲಂಕಾರಕ್ಕೆ','ರಾತ್ರಿ ರಸ್ತೆ ಕಾಣಲು!','ಹಗಲಿನಲ್ಲಿ ಬಳಸಲು','ನೀರು ತರಲು'], correct:1 },
+  { visual:'💧❓', question:'ಟ್ಯಾಪ್‌ನಿಂದ ನಾವು ಏನು ಪಡೆಯುತ್ತೇವೆ?\nWhat do we get from the tap?', options:['🥛 ಹಾಲು','🧃 ಜ್ಯೂಸ್','💧 ನೀರು!','🍵 ಚಾ'], correct:2 },
+  { visual:'🛡️❓', question:'ಪಾಠ 8 ರ ಹೆಸರು ಏನು?\nWhat is the name of Lesson 8?', options:['🧼 ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು','🌿 ಗಿಡಗಳು','🛡️ ಸುರಕ್ಷತೆ ಮತ್ತು ಶಿಸ್ತು!','🏠 ನನ್ನ ಮನೆ'], correct:2 },
+];
+let quizIdx = 0, quizAnswered = [];
+
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_, i) =>
+    `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`
+  ).join('');
+  renderQuizQ(0);
+}
+buildQuiz();
+
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-'+quizIdx).classList.remove('active');
+  document.getElementById('dot-'+quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if (correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < quizQuestions.length) {
+      document.getElementById('dot-'+quizIdx).classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1100);
+}
+
+/* ══════════════════════════════════════
+   CELEBRATION
+══════════════════════════════════════ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 8 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 8 — ಸುರಕ್ಷತೆ ಮತ್ತು ಶಿಸ್ತು!\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಸುರಕ್ಷತೆ ಚಾಂಪಿಯನ್! 🛡️🏆`;
+  let starStr = '';
+  for (let i = 0; i < Math.min(stars, 20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti() {
+  const colors = ['#e65100','#f57c00','#ffb74d','#ffca28','#ef5350','#42a5f5'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2 + 's';
+    p.style.animationDuration = (2+Math.random()*2) + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+
+function restartAll() { location.reload(); }
+
+updateProgress();
+</script>
+</body>
+</html>

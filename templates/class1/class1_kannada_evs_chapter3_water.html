@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 3: ನೀರು ಬೇಕು ನೀರು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e3f2fd; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#0d47a1,#1565c0);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#0d47a1,#1976d2); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:24px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#0d47a1,#4fc3f7); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#0d47a1; border-color:#90caf9; }
+.step-tab.active   { background:#0d47a1; color:#fff; border-color:#0d47a1; box-shadow:0 4px 14px rgba(13,71,161,.4); }
+.step-tab.done     { background:#e3f2fd; color:#0d47a1; border-color:#1976d2; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #0d47a1;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#0d47a1; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ICON GRID */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:42px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:14px; color:#0d47a1; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#1565c0; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ICON GRID 3 */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:32px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:11px; color:#0d47a1; }
+.icon-card3 .ic-name-kn { font-size:11px; font-weight:900; color:#1565c0; margin-top:2px; }
+
+/* STORY CARD */
+.story-card {
+  background:linear-gradient(135deg,#e3f2fd,#bbdefb); border-radius:20px; padding:18px;
+  margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #90caf9;
+}
+.story-visual { font-size:56px; text-align:center; display:block; margin-bottom:10px; }
+.story-text { font-family:'Fredoka One',cursive; font-size:17px; color:#0d47a1; line-height:1.6; text-align:center; }
+.story-sub { font-size:13px; font-weight:800; color:#555; text-align:center; margin-top:6px; }
+
+/* SONG CARD */
+.song-card {
+  background:linear-gradient(135deg,#0d47a1,#1565c0); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; box-shadow:0 6px 24px rgba(13,71,161,.4);
+}
+.song-line { font-family:'Fredoka One',cursive; font-size:16px; color:#fff; line-height:2; text-align:center; }
+.song-line span { display:inline-block; color:#4fc3f7; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #90caf9; background:#e3f2fd; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#0d47a1; transform:scale(1.3); }
+
+/* MATCH GAME */
+.match-container { margin-bottom:16px; }
+.match-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.match-card {
+  background:#fff; border-radius:16px; padding:14px 10px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:13px; color:#0d47a1;
+  transition:all .2s; user-select:none; min-height:60px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:4px;
+}
+.match-card .mc-icon { font-size:28px; }
+.match-card:active { transform:scale(.95); }
+.match-card.selected { background:#bbdefb; border-color:#0d47a1; box-shadow:0 0 0 3px rgba(13,71,161,.3); }
+.match-card.matched  { background:#e3f2fd; border-color:#1976d2; opacity:.7; cursor:default; }
+.match-card.wrong-flash { animation:wobble .4s ease; background:#ffcdd2; border-color:#e53935; }
+.match-score-row { text-align:center; font-family:'Fredoka One',cursive; font-size:16px; color:#0d47a1; margin-bottom:10px; }
+
+/* SORT GAME */
+.sort-pool { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; justify-content:center; min-height:60px; }
+.sort-chip {
+  background:#fff; border:3px solid #90caf9; border-radius:50px; padding:10px 16px;
+  font-family:'Fredoka One',cursive; font-size:14px; cursor:pointer; user-select:none;
+  transition:all .2s; display:flex; align-items:center; gap:6px;
+}
+.sort-chip:active { transform:scale(.95); }
+.sort-chip.chip-selected { background:#bbdefb; border-color:#0d47a1; box-shadow:0 0 0 3px rgba(13,71,161,.3); }
+.sort-bins { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.sort-bin {
+  background:#fff; border-radius:16px; padding:12px; min-height:100px;
+  border:3px dashed #90caf9; cursor:pointer;
+}
+.sort-bin-label { font-family:'Fredoka One',cursive; font-size:14px; color:#0d47a1; text-align:center; margin-bottom:8px; }
+.sort-placed-chip {
+  background:#bbdefb; border-radius:30px; padding:6px 10px;
+  font-family:'Fredoka One',cursive; font-size:12px; color:#0d47a1; margin:3px; display:inline-block;
+}
+.sort-placed-chip.wrong-item { background:#ffcdd2; color:#b71c1c; }
+
+/* NEXT BTN */
+.next-btn {
+  display:block; width:100%; padding:18px; border-radius:20px; font-family:'Fredoka One',cursive;
+  font-size:18px; background:linear-gradient(135deg,#0d47a1,#1976d2); color:#fff; border:none;
+  cursor:pointer; margin-top:14px; box-shadow:0 6px 20px rgba(13,71,161,.35);
+  transition:all .2s; opacity:.4;
+}
+.next-btn:not(:disabled):active { transform:scale(.97); }
+.next-btn.ready { opacity:1; }
+
+/* CELEBRATION */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(160deg,#0d47a1,#1565c0);
+  z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px 20px; opacity:0; pointer-events:none; transition:opacity .5s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:80px; animation:heroFloat 2s ease-in-out infinite; margin-bottom:10px; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#fff; text-align:center; margin-bottom:8px; }
+.celeb-sub { font-family:'Fredoka One',cursive; font-size:16px; color:#bbdefb; text-align:center; line-height:1.7; white-space:pre-wrap; margin-bottom:16px; }
+.celeb-stars { font-size:28px; text-align:center; margin-bottom:20px; }
+.celeb-btn {
+  padding:16px 40px; border-radius:50px; font-family:'Fredoka One',cursive; font-size:18px;
+  background:#fff; color:#0d47a1; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.2);
+}
+.confetti-piece {
+  position:fixed; width:10px; height:10px; border-radius:2px; top:-20px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall { to { transform:translateY(110vh) rotate(720deg); opacity:0; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <span style="font-size:22px">💧</span>
+    <span class="topbar-title">ಪಾಠ 3 — ನೀರು ಬೇಕು ನೀರು</span>
+  </div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">💧</span>
+  <h1>ನೀರು ಬೇಕು ನೀರು!</h1>
+  <p>Water is Needed! • Neeru Beeku Neeru</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ • Your Progress 🚀</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" data-tab="intro" id="tab-intro">💧 ನೀರು</div>
+  <div class="step-tab locked" data-tab="uses" id="tab-uses">🏠 ಉಪಯೋಗ</div>
+  <div class="step-tab locked" data-tab="sources" id="tab-sources">🌊 ಮೂಲ</div>
+  <div class="step-tab locked" data-tab="song" id="tab-song">🎵 ಹಾಡು</div>
+  <div class="step-tab locked" data-tab="quiz1" id="tab-quiz1">❓ ಪ್ರಶ್ನೆ 1</div>
+  <div class="step-tab locked" data-tab="match" id="tab-match">🔗 ಜೋಡಿ</div>
+  <div class="step-tab locked" data-tab="sort" id="tab-sort">📦 ವಿಂಗಡಣೆ</div>
+  <div class="step-tab locked" data-tab="bigquiz" id="tab-bigquiz">🏆 ಮಹಾ ಪ್ರಶ್ನೆ</div>
+</div>
+
+<div class="content">
+
+  <!-- TAB 1: INTRO -->
+  <div class="tab-panel active" id="panel-intro">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">💧</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ನೀರು ಬೇಕು!</div>
+        <div class="banner-sub">Water is Life!</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <span class="story-visual">🧒💧</span>
+      <div class="story-text">ಸಲೀಂಗೆ ಬಾಯಾರಿಕೆಯಾಗಿದೆ.<br>ಅವನು ನೀರು ಕುಡಿಯುತ್ತಿದ್ದಾನೆ.</div>
+      <div class="story-sub">Salim is thirsty. He is drinking water.</div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">💧 ನೀರು ಏಕೆ ಬೇಕು?</div>
+      <div class="ic-text">ನಮ್ಮಂತೆ ಗಿಡಮರಗಳಿಗೂ, ಪ್ರಾಣಿಗಳಿಗೂ ನೀರು ಬೇಕು! 🌱🐮<br><br>
+      Just like us, plants and animals also need water!</div>
+    </div>
+
+    <div class="story-card">
+      <span class="story-visual">🌱💧🌿🌺</span>
+      <div class="story-text">ಇಲ್ಲೊಂದು ಗಿಡ ಬಾಡಿದೆ.<br>ನೀರು ಹಾಕಿದ ಮೇಲೆ ಚೇತರಿಸಿಕೊಂಡಿತು!</div>
+      <div class="story-sub">A wilted plant got water and came back to life! 🌺</div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">🐦 ಕಾಗೆ ಮತ್ತು ನೀರು</div>
+      <div class="ic-text">ಕಾಗೆ ಮಡಕೆಯಲ್ಲಿ ಕಲ್ಲು ಹಾಕಿ ನೀರು ಕುಡಿಯಿತು!<br>
+      The crow dropped stones in a pot to drink water!</div>
+    </div>
+
+    <button class="next-btn ready" id="introNextBtn" onclick="completeAndNext('intro','uses')">
+      ಮುಂದೆ ಹೋಗು! ➡️ Next
+    </button>
+  </div>
+
+  <!-- TAB 2: USES OF WATER -->
+  <div class="tab-panel" id="panel-uses">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">🏠</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ನೀರಿನ ಉಪಯೋಗ</div>
+        <div class="banner-sub">Uses of Water at Home & School</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">🏡 ಮನೆಯಲ್ಲಿ ನೀರಿನ ಉಪಯೋಗ</div>
+      <div class="ic-text">ನಿನ್ನ ಮನೆಯಲ್ಲಿ ನೀರನ್ನು ಯಾವ ಯಾವ ಕೆಲಸಗಳಿಗೆ ಉಪಯೋಗಿಸುತ್ತಾರೆ?<br>
+      How do we use water at home?</div>
+    </div>
+
+    <div class="icon-grid2">
+      <div class="icon-card"><span class="ic-icon">🥛</span><div class="ic-name">Drinking</div><div class="ic-name-kn">ಕುಡಿಯಲು</div></div>
+      <div class="icon-card"><span class="ic-icon">🛁</span><div class="ic-name">Bathing</div><div class="ic-name-kn">ಸ್ನಾನಕ್ಕೆ</div></div>
+      <div class="icon-card"><span class="ic-icon">🍳</span><div class="ic-name">Cooking</div><div class="ic-name-kn">ಅಡುಗೆಗೆ</div></div>
+      <div class="icon-card"><span class="ic-icon">🪣</span><div class="ic-name">Washing Face</div><div class="ic-name-kn">ಮುಖ ತೊಳೆಯಲು</div></div>
+      <div class="icon-card"><span class="ic-icon">🧺</span><div class="ic-name">Washing Clothes</div><div class="ic-name-kn">ಬಟ್ಟೆ ಒಗೆಯಲು</div></div>
+      <div class="icon-card"><span class="ic-icon">🍽️</span><div class="ic-name">Washing Vessels</div><div class="ic-name-kn">ಪಾತ್ರೆ ತೊಳೆಯಲು</div></div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">🏫 ಶಾಲೆಯಲ್ಲಿ ಮತ್ತು ಹೊರಗೆ</div>
+      <div class="ic-text">ನಿಮ್ಮ ಶಾಲೆಯಲ್ಲಿ ನೀರನ್ನು ಯಾವ ಯಾವ ಕೆಲಸಗಳಿಗೆ ಉಪಯೋಗಿಸುತ್ತಾರೆ?<br>
+      Water is also used in school and outside!</div>
+    </div>
+
+    <div class="icon-grid2">
+      <div class="icon-card"><span class="ic-icon">🌱</span><div class="ic-name">Watering Plants</div><div class="ic-name-kn">ಗಿಡಕ್ಕೆ ನೀರು</div></div>
+      <div class="icon-card"><span class="ic-icon">🐄</span><div class="ic-name">For Animals</div><div class="ic-name-kn">ದನ ಕರುಗಳಿಗೆ</div></div>
+      <div class="icon-card"><span class="ic-icon">🌾</span><div class="ic-name">For Farming</div><div class="ic-name-kn">ಹೊಲಕ್ಕೆ</div></div>
+      <div class="icon-card"><span class="ic-icon">🏗️</span><div class="ic-name">Building Houses</div><div class="ic-name-kn">ಮನೆ ಕಟ್ಟಲು</div></div>
+      <div class="icon-card"><span class="ic-icon">⛵</span><div class="ic-name">Boats to Sail</div><div class="ic-name-kn">ದೋಣಿ ಸಾಗಲು</div></div>
+      <div class="icon-card"><span class="ic-icon">🚗</span><div class="ic-name">Washing Vehicles</div><div class="ic-name-kn">ವಾಹನ ತೊಳೆಯಲು</div></div>
+    </div>
+
+    <button class="next-btn ready" onclick="completeAndNext('uses','sources')">
+      ಮುಂದೆ ಹೋಗು! ➡️ Next
+    </button>
+  </div>
+
+  <!-- TAB 3: SOURCES OF WATER -->
+  <div class="tab-panel" id="panel-sources">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">🌊</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ನೀರಿನ ಮೂಲ</div>
+        <div class="banner-sub">Where does water come from?</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">💦 ನೀರು ಎಲ್ಲಿಂದ ಬರುತ್ತದೆ?</div>
+      <div class="ic-text">ನಿನ್ನ ಮನೆಗೆ ನೀರನ್ನು ಎಲ್ಲಿಂದ ತರುತ್ತಾರೆ?<br>
+      Where does water in your home come from?<br>
+      <br>ನಲ್ಲಿಗೆ ನೀರು ಎಲ್ಲಿಂದ ಬರುತ್ತದೆ?<br>
+      Where does tap water come from? Ask elders!</div>
+    </div>
+
+    <div class="icon-grid2">
+      <div class="icon-card" style="border-color:#4fc3f7">
+        <span class="ic-icon">🏞️</span>
+        <div class="ic-name">River</div>
+        <div class="ic-name-kn">ನದಿ</div>
+        <div class="ic-desc">ನದಿಯಿಂದ ನೀರು</div>
+      </div>
+      <div class="icon-card" style="border-color:#4fc3f7">
+        <span class="ic-icon">🪣</span>
+        <div class="ic-name">Well / Hand Pump</div>
+        <div class="ic-name-kn">ಬಾವಿ / ಕೊಳವೆ ಬಾವಿ</div>
+        <div class="ic-desc">ಬಾವಿಯಿಂದ ನೀರು</div>
+      </div>
+      <div class="icon-card" style="border-color:#4fc3f7">
+        <span class="ic-icon">🏗️</span>
+        <div class="ic-name">Water Tank</div>
+        <div class="ic-name-kn">ನೀರಿನ ತೊಟ್ಟಿ</div>
+        <div class="ic-desc">ತೊಟ್ಟಿಯಿಂದ ನೀರು</div>
+      </div>
+      <div class="icon-card" style="border-color:#4fc3f7">
+        <span class="ic-icon">🚰</span>
+        <div class="ic-name">Tap / Pipe</div>
+        <div class="ic-name-kn">ನಲ್ಲಿ</div>
+        <div class="ic-desc">ನಲ್ಲಿಯಿಂದ ನೀರು</div>
+      </div>
+      <div class="icon-card" style="border-color:#4fc3f7">
+        <span class="ic-icon">🏞️</span>
+        <div class="ic-name">Lake / Pond</div>
+        <div class="ic-name-kn">ಕೆರೆ</div>
+        <div class="ic-desc">ಕೆರೆಯಿಂದ ನೀರು</div>
+      </div>
+      <div class="icon-card" style="border-color:#4fc3f7">
+        <span class="ic-icon">🏭</span>
+        <div class="ic-name">Water Treatment</div>
+        <div class="ic-name-kn">ನೀರು ಶುದ್ಧೀಕರಣ</div>
+        <div class="ic-desc">ಶುದ್ಧ ನೀರು</div>
+      </div>
+    </div>
+
+    <button class="next-btn ready" onclick="completeAndNext('sources','song')">
+      ಮುಂದೆ ಹೋಗು! ➡️ Next
+    </button>
+  </div>
+
+  <!-- TAB 4: SONG -->
+  <div class="tab-panel" id="panel-song">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">🎵</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ಹಾಡಿ ನಲಿ!</div>
+        <div class="banner-sub">Sing & Dance! Haadi Nali!</div>
+      </div>
+    </div>
+
+    <div class="song-card">
+      <div class="song-line"><span>ಬೇಕೇ ಬೇಕು ನೀರು</span> 💧</div>
+      <div class="song-line">ಕುಡಿಯಲು ಬೇಕು ನೀರು 🥛</div>
+      <div class="song-line">ಸ್ನಾನಕೆ ಬೇಕು ನೀರು 🛁</div>
+      <div class="song-line">ಅಡುಗೆಗೆ ಬೇಕು ನೀರು 🍳</div>
+      <div class="song-line"><span>ಬೇಕೇ ಬೇಕು ನೀರು</span> 💧</div>
+      <div class="song-line">ಪಾತ್ರೆ ತೊಳೆಯಲು ನೀರು 🍽️</div>
+      <div class="song-line">ಗಿಡಕ್ಕೆ ಬೇಕು ನೀರು 🌱</div>
+      <div class="song-line">ದನ ಕರುಗಳಿಗೆ ನೀರು 🐄</div>
+      <div class="song-line"><span>ಬೇಕೇ ಬೇಕು ನೀರು</span> 💧</div>
+      <div class="song-line">ಹೊಲಕ್ಕೆ ಬೇಕು ನೀರು 🌾</div>
+      <div class="song-line">ಮನೆಯನು ಕಟ್ಟಲು ನೀರು 🏗️</div>
+      <div class="song-line">ದೋಣಿಯು ಸಾಗಲು ನೀರು ⛵</div>
+      <div class="song-line"><span>ಬೇಕೇ ಬೇಕು ನೀರು!</span> 💧💧💧</div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">🎭 ಅಭಿನಯ ಮಾಡಿ ತೋರಿಸು!</div>
+      <div class="ic-text">
+        ✅ ನೀರು ಕುಡಿಯುವಂತೆ Act out drinking water<br>
+        ✅ ಸ್ನಾನ ಮಾಡುವಂತೆ Act out bathing<br>
+        ✅ ಮುಖ ತೊಳೆಯುವಂತೆ Act out washing face<br>
+        ✅ ಬಟ್ಟೆ ಒಗೆಯುವಂತೆ Act out washing clothes<br>
+        ✅ ಗಿಡಕ್ಕೆ ನೀರು ಹಾಕುವಂತೆ Water a plant<br>
+        ✅ ನದಿ ಹರಿಯುವಂತೆ Flow like a river 🌊
+      </div>
+    </div>
+
+    <button class="next-btn ready" onclick="completeAndNext('song','quiz1')">
+      ಪ್ರಶ್ನೆಗೆ ಹೋಗೋಣ! ➡️ Let's Quiz!
+    </button>
+  </div>
+
+  <!-- TAB 5: QUIZ 1 -->
+  <div class="tab-panel" id="panel-quiz1">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">❓</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ಪ್ರಶ್ನೆ ಉತ್ತರ!</div>
+        <div class="banner-sub">Question & Answer Time!</div>
+      </div>
+    </div>
+    <div class="q-dots" id="quiz1Dots"></div>
+    <div id="quiz1Container"></div>
+    <button class="next-btn" id="quiz1NextBtn" disabled onclick="completeAndNext('quiz1','match')">
+      ಮುಂದೆ ➡️ Next
+    </button>
+  </div>
+
+  <!-- TAB 6: MATCH GAME -->
+  <div class="tab-panel" id="panel-match">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">🔗</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ಜೋಡಿ ಹಚ್ಚು!</div>
+        <div class="banner-sub">Match the pairs!</div>
+      </div>
+    </div>
+    <div class="match-score-row">✅ ಜೋಡಿ: <span id="matchScore">0</span> / 5</div>
+    <div class="match-container" id="matchPairsContainer"></div>
+    <button class="next-btn" id="matchNextBtn" disabled onclick="completeAndNext('match','sort')">
+      ಮುಂದೆ ➡️ Next
+    </button>
+  </div>
+
+  <!-- TAB 7: SORT GAME -->
+  <div class="tab-panel" id="panel-sort">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">📦</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ವಿಂಗಡಿಸು!</div>
+        <div class="banner-sub">Sort water uses!</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">📌 ಹೇಗೆ ಆಡುವುದು?</div>
+      <div class="ic-text">
+        1️⃣ ಒಂದು ಚಿಪ್ ಆರಿಸು (tap a chip)<br>
+        2️⃣ ಸರಿಯಾದ ಪೆಟ್ಟಿಗೆ ಟ್ಯಾಪ್ ಮಾಡು (tap the correct box)<br>
+        3️⃣ ಎಲ್ಲ ಸರಿಯಾಗಿ ಹಾಕು!
+      </div>
+    </div>
+
+    <div class="sort-pool" id="sortPool"></div>
+    <div class="sort-bins">
+      <div class="sort-bin" onclick="sortDropToBin('human')">
+        <div class="sort-bin-label">👤 ಮನುಷ್ಯ<br>Human</div>
+        <div id="bin-human"></div>
+      </div>
+      <div class="sort-bin" onclick="sortDropToBin('nature')">
+        <div class="sort-bin-label">🌿 ಪ್ರಕೃತಿ<br>Nature</div>
+        <div id="bin-nature"></div>
+      </div>
+    </div>
+    <button class="next-btn" id="sortCheckBtn" onclick="checkSort()" style="opacity:1;margin-bottom:10px">
+      ✅ ತಪಾಸಿಸು! Check!
+    </button>
+    <button class="next-btn" id="sortNextBtn" disabled onclick="completeAndNext('sort','bigquiz')">
+      ಮುಂದೆ ➡️ Next
+    </button>
+  </div>
+
+  <!-- TAB 8: BIG QUIZ -->
+  <div class="tab-panel" id="panel-bigquiz">
+    <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+      <span class="banner-emoji">🏆</span>
+      <div>
+        <div class="banner-title" style="color:#0d47a1">ಮಹಾ ಪ್ರಶ್ನೆ!</div>
+        <div class="banner-sub">Grand Quiz Time! Win Big!</div>
+      </div>
+    </div>
+    <div class="q-dots" id="bigquizDots"></div>
+    <div id="bigquizContainer"></div>
+    <button class="next-btn" id="bigquizFinishBtn" disabled onclick="showCelebration()">
+      🎉 ಮುಗಿಯಿತು! Finish!
+    </button>
+  </div>
+
+</div><!-- content -->
+
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🏆</div>
+  <div class="celeb-title">ಭಲೇ! ಶಾಬಾಸ್! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡು! Play Again!</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════
+   CORE STATE & NAVIGATION
+═══════════════════════════════════ */
+const tabOrder = ['intro','uses','sources','song','quiz1','match','sort','bigquiz'];
+let doneTabs = new Set();
+let stars = 0;
+
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+function switchTab(tabId){
+  const idx = tabOrder.indexOf(tabId);
+  // Check locked
+  if(idx > 0 && !doneTabs.has(tabOrder[idx-1])){
+    const el = document.getElementById('tab-'+tabId);
+    el.classList.add('shaking');
+    setTimeout(()=> el.classList.remove('shaking'), 500);
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p=> p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=> t.classList.remove('active'));
+  document.getElementById('panel-'+tabId).classList.add('active');
+  document.getElementById('tab-'+tabId).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function unlockTab(tabId){
+  const el = document.getElementById('tab-'+tabId);
+  el.classList.remove('locked');
+  el.classList.add('unlocked');
+}
+
+function completeAndNext(currentTab, nextTab){
+  doneTabs.add(currentTab);
+  document.getElementById('tab-'+currentTab).classList.remove('active');
+  document.getElementById('tab-'+currentTab).classList.add('done');
+  document.getElementById('tab-'+currentTab).textContent =
+    document.getElementById('tab-'+currentTab).textContent.replace('🔒','') + ' ✅';
+  unlockTab(nextTab);
+  updateProgress();
+  stars++;
+  document.getElementById('starsNum').textContent = stars;
+  switchTab(nextTab);
+}
+
+// Tab click handlers
+document.querySelectorAll('.step-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=> switchTab(tab.dataset.tab));
+});
+
+/* ═══════════════════════════════════
+   QUIZ ENGINE
+═══════════════════════════════════ */
+function renderQuestions({containerID, dotsID, nextBtnID, questions}){
+  let current = 0;
+  const answers = new Array(questions.length).fill(null);
+
+  const dotsEl = document.getElementById(dotsID);
+  const containerEl = document.getElementById(containerID);
+  const nextBtn = document.getElementById(nextBtnID);
+
+  function renderDots(){
+    dotsEl.innerHTML = questions.map((_, i)=>{
+      let cls = 'dot';
+      if(i === current) cls += ' active';
+      else if(answers[i] === true) cls += ' done-ok';
+      else if(answers[i] === false) cls += ' done-err';
+      return `<div class="${cls}"></div>`;
+    }).join('');
+  }
+
+  function renderQuestion(){
+    const q = questions[current];
+    containerEl.innerHTML = `
+      <div class="q-card">
+        <span class="q-visual">${q.visual}</span>
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">
+          ${q.options.map((o,i)=>`<div class="q-option" id="opt-${containerID}-${i}" onclick="pickOpt_${containerID}(${i})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+    renderDots();
+  }
+
+  window['pickOpt_'+containerID] = function(idx){
+    if(answers[current] !== null) return;
+    const isCorrect = idx === questions[current].correct;
+    answers[current] = isCorrect;
+    const opts = document.querySelectorAll(`#${containerID} .q-option`);
+    opts[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+    opts[questions[current].correct].classList.add('correct');
+    opts.forEach(o => o.style.pointerEvents='none');
+    if(isCorrect){ stars++; document.getElementById('starsNum').textContent = stars; }
+    setTimeout(()=>{
+      current++;
+      if(current < questions.length){
+        renderQuestion();
+      } else {
+        containerEl.innerHTML = `<div class="q-card"><span class="q-visual">🎉</span><div class="q-text">ಎಲ್ಲ ಪ್ರಶ್ನೆಗಳು ಮುಗಿದಿವೆ!\nAll questions done!</div></div>`;
+        renderDots();
+        nextBtn.disabled = false;
+        nextBtn.classList.add('ready');
+      }
+    }, 900);
+  };
+  renderQuestion();
+}
+
+/* ═══════════════════════════════════
+   QUIZ 1 QUESTIONS
+═══════════════════════════════════ */
+renderQuestions({
+  containerID:'quiz1Container', dotsID:'quiz1Dots', nextBtnID:'quiz1NextBtn',
+  questions:[
+    {visual:'💧🥛',question:'ನೀರನ್ನು ಯಾವ ಕೆಲಸಕ್ಕೆ ಕುಡಿಯುತ್ತೇವೆ?\nWe drink water for ___?',options:['🎨 ಬಣ್ಣ ಹಾಕಲು','💧 ಬಾಯಾರಿಕೆ ತೀರಲು!','🎵 ಹಾಡಲು','🛌 ಮಲಗಲು'],correct:1},
+    {visual:'🌱💧',question:'ಗಿಡಕ್ಕೆ ನೀರು ಹಾಕದಿದ್ದರೆ ___?\nIf we don\'t water a plant it ___?',options:['🌸 ಚೆಂದ ಆಗುತ್ತದೆ','🌱 ಚಿಗುರುತ್ತದೆ','🥀 ಬಾಡುತ್ತದೆ!','🍎 ಹಣ್ಣು ಕೊಡುತ್ತದೆ'],correct:2},
+    {visual:'🐄💧',question:'ದನ ಕರುಗಳಿಗೆ ಏನು ಬೇಕು?\nCows and calves need ___?',options:['🍕 ಪಿಜ್ಜಾ','💧 ನೀರು!','🎮 ಆಟಿಕೆ','📚 ಪುಸ್ತಕ'],correct:1},
+    {visual:'🌾💧',question:'ಹೊಲದಲ್ಲಿ ನೀರನ್ನು ___?\nIn the field, water is used for ___?',options:['🏊 ಈಜಾಡಲು','🎣 ಮೀನು ಹಿಡಿಯಲು','🌾 ಬೆಳೆ ಬೆಳೆಸಲು!','🎨 ಬಣ್ಣ ಹಾಕಲು'],correct:2},
+    {visual:'🏗️💧',question:'ಮನೆ ಕಟ್ಟಲು ___?\nTo build a house we need ___?',options:['💧 ನೀರು ಬೇಕು!','🎵 ಹಾಡು ಬೇಕು','🌙 ನಕ್ಷತ್ರ ಬೇಕು','❄️ ಮಂಜು ಬೇಕು'],correct:0},
+    {visual:'⛵💧',question:'ದೋಣಿ ಸಾಗಲು ___?\nFor a boat to sail it needs ___?',options:['🌳 ಮರ','🛣️ ರಸ್ತೆ','💧 ನೀರು!','🌬️ ಬೆಂಕಿ'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════
+   MATCH GAME
+═══════════════════════════════════ */
+const matchPairs = [
+  {left:'🥛 ಕುಡಿಯಲು', right:'💧 ದಾಹ ತೀರಿಸಲು', id:0},
+  {left:'🛁 ಸ್ನಾನ', right:'🧼 ಸ್ವಚ್ಛ ಆಗಲು', id:1},
+  {left:'🌱 ಗಿಡ', right:'💧 ನೀರು ಹಾಕಲು', id:2},
+  {left:'🍳 ಅಡುಗೆ', right:'🍲 ಅನ್ನ ಬೇಯಿಸಲು', id:3},
+  {left:'🌾 ಹೊಲ', right:'🚜 ಬೆಳೆ ಬೆಳೆಸಲು', id:4},
+];
+let matchSelectedLeft = null, matchDone = 0;
+
+function initMatch(){
+  const shuffled = [...matchPairs].sort(()=>Math.random()-.5);
+  const c = document.getElementById('matchPairsContainer');
+  c.innerHTML = matchPairs.map((p,i)=>`
+    <div class="match-row">
+      <div class="match-card" id="ml-${p.id}" onclick="matchSelectLeft(${p.id})">
+        <span class="mc-icon">${p.left.split(' ')[0]}</span>
+        <span>${p.left.split(' ').slice(1).join(' ')}</span>
+      </div>
+      <div class="match-card" id="mr-${shuffled[i].id}" onclick="matchSelectRight(${shuffled[i].id})">
+        <span class="mc-icon">${shuffled[i].right.split(' ')[0]}</span>
+        <span>${shuffled[i].right.split(' ').slice(1).join(' ')}</span>
+      </div>
+    </div>`).join('');
+}
+initMatch();
+
+function matchSelectLeft(id){
+  document.querySelectorAll('[id^="ml-"]').forEach(el=>{
+    if(!el.classList.contains('matched')) el.classList.remove('selected');
+  });
+  const el = document.getElementById('ml-'+id);
+  if(el.classList.contains('matched')) return;
+  el.classList.add('selected');
+  matchSelectedLeft = id;
+}
+
+function matchSelectRight(id){
+  if(matchSelectedLeft === null){ showToast('ಮೊದಲು ಎಡಗಡೆ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('ml-'+matchSelectedLeft);
+  const rEl = document.getElementById('mr-'+id);
+  if(rEl.classList.contains('matched')) return;
+  if(matchSelectedLeft === id){
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelectedLeft = null;
+    if(matchDone === matchPairs.length){
+      setTimeout(()=>{
+        document.getElementById('matchNextBtn').disabled = false;
+        document.getElementById('matchNextBtn').classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(()=>{ lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelectedLeft=null; }, 600);
+  }
+}
+
+/* ═══════════════════════════════════
+   SORT GAME
+═══════════════════════════════════ */
+const sortItems = [
+  {emoji:'🥛', name:'ಕುಡಿಯಲು', cat:'human'},
+  {emoji:'🛁', name:'ಸ್ನಾನ', cat:'human'},
+  {emoji:'🍳', name:'ಅಡುಗೆ', cat:'human'},
+  {emoji:'🌱', name:'ಗಿಡ', cat:'nature'},
+  {emoji:'🐄', name:'ದನ', cat:'nature'},
+  {emoji:'🌾', name:'ಹೊಲ', cat:'nature'},
+  {emoji:'🧺', name:'ಬಟ್ಟೆ', cat:'human'},
+  {emoji:'⛵', name:'ದೋಣಿ', cat:'nature'},
+];
+let sortSelected = null, sortPlacements = {};
+
+function initSort(){
+  sortSelected = null; sortPlacements = {};
+  document.getElementById('bin-human').innerHTML = '';
+  document.getElementById('bin-nature').innerHTML = '';
+  const pool = document.getElementById('sortPool');
+  pool.innerHTML = sortItems.map((it,i)=>
+    `<div class="sort-chip" id="schip-${i}" onclick="sortSelectChip(${i})">${it.emoji} ${it.name}</div>`
+  ).join('');
+}
+initSort();
+
+function sortSelectChip(i){
+  sortSelected = i;
+  document.querySelectorAll('.sort-chip').forEach(c=> c.classList.remove('chip-selected'));
+  const el = document.getElementById('schip-'+i);
+  if(el) el.classList.add('chip-selected');
+}
+
+function sortDropToBin(bin){
+  if(sortSelected === null) return;
+  const i = sortSelected;
+  if(sortPlacements[i] !== undefined) return;
+  sortPlacements[i] = bin;
+  sortSelected = null;
+  document.querySelectorAll('.sort-chip').forEach(c=> c.classList.remove('chip-selected'));
+  const el = document.getElementById('schip-'+i);
+  if(el) el.style.display = 'none';
+  const binEl = document.getElementById('bin-'+bin);
+  binEl.innerHTML += `<div class="sort-placed-chip" id="placed-${i}">${sortItems[i].emoji} ${sortItems[i].name}</div>`;
+}
+
+function checkSort(){
+  if(Object.keys(sortPlacements).length < sortItems.length){
+    showToast('ಎಲ್ಲ ಚಿಪ್ ಹಾಕು! Place all chips first!'); return;
+  }
+  let allCorrect = true;
+  sortItems.forEach((it,i)=>{
+    const el = document.getElementById('placed-'+i);
+    if(!el) return;
+    if(sortPlacements[i] !== it.cat){ el.classList.add('wrong-item'); allCorrect = false; }
+  });
+  if(allCorrect){
+    stars += 3; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('sortNextBtn').disabled = false;
+    document.getElementById('sortNextBtn').classList.add('ready');
+    showToast('🎉 ಭಲೇ! ಎಲ್ಲ ಸರಿ! All correct! +3⭐');
+    document.getElementById('sortCheckBtn').style.display = 'none';
+  } else {
+    showToast('❌ ಕೆಲವು ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು! Some wrong, try again!');
+    setTimeout(()=> initSort(), 1800);
+  }
+}
+
+/* ═══════════════════════════════════
+   BIG QUIZ
+═══════════════════════════════════ */
+renderQuestions({
+  containerID:'bigquizContainer', dotsID:'bigquizDots', nextBtnID:'bigquizFinishBtn',
+  questions:[
+    {visual:'🏆💧',question:'🏆 ನೀರು ಯಾರಿಗೆ ಬೇಕು?\nWho needs water?',options:['👤 ಮನುಷ್ಯರಿಗೆ ಮಾತ್ರ','🐄 ಪ್ರಾಣಿಗಳಿಗೆ ಮಾತ್ರ','🌱 ಗಿಡಗಳಿಗೆ ಮಾತ್ರ','💧 ಎಲ್ಲರಿಗೂ!'],correct:3},
+    {visual:'🏆🐦',question:'🏆 ಕಾಗೆ ಹೇಗೆ ನೀರು ಕುಡಿಯಿತು?\nHow did the crow drink water?',options:['🚰 ನಲ್ಲಿ ತಿರುಗಿಸಿ','🪣 ಬಾವಿಯಿಂದ','🪨 ಮಡಕೆಯಲ್ಲಿ ಕಲ್ಲು ಹಾಕಿ!','🌧️ ಮಳೆ ಕಾದು'],correct:2},
+    {visual:'🏆🌾',question:'🏆 ಹೊಲದಲ್ಲಿ ನೀರನ್ನು ___?\nWater is used in fields for ___?',options:['🏊 ಈಜಲು','🎣 ಮೀನು ಹಿಡಿಯಲು','🌾 ಬೆಳೆ ಬೆಳೆಸಲು!','🎨 ಬಣ್ಣ ಹಾಕಲು'],correct:2},
+    {visual:'🏆🚰',question:'🏆 ನಲ್ಲಿ ನೀರು ಎಲ್ಲಿಂದ ಬರುತ್ತದೆ?\nWhere does tap water come from?',options:['☁️ ಆಕಾಶದಿಂದ ನೇರ','🏭 ಕಾರ್ಖಾನೆಯಿಂದ','🏞️ ನದಿ ಕೆರೆ ಬಾವಿಯಿಂದ!','🌋 ಜ್ವಾಲಾಮುಖಿಯಿಂದ'],correct:2},
+    {visual:'🏆⛵',question:'🏆 ದೋಣಿ ಸಾಗಲು ___?\nA boat needs ___?',options:['🛣️ ರಸ್ತೆ','💧 ನೀರು!','🌳 ಮರ','🌬️ ತಂಪು ಗಾಳಿ'],correct:1},
+    {visual:'🏆🌱',question:'🏆 ಗಿಡ ಬಾಡಿದಾಗ ___?\nWhen a plant wilts we should ___?',options:['❄️ ಮಂಜು ಹಾಕು','🔥 ಬೆಂಕಿ ತಾಕಿಸು','💧 ನೀರು ಹಾಕು!','🌑 ಕತ್ತಲಲ್ಲಿ ಇಡು'],correct:2},
+    {visual:'🏆🏗️',question:'🏆 ಮನೆ ಕಟ್ಟಲು ___?\nTo build a house we use ___?',options:['🎵 ಹಾಡು','💧 ನೀರು!','🌙 ನಕ್ಷತ್ರ','❄️ ಮಂಜು'],correct:1},
+    {visual:'🏆🧺',question:'🏆 ಬಟ್ಟೆ ಒಗೆಯಲು ___?\nTo wash clothes we need ___?',options:['🔥 ಬೆಂಕಿ','🌬️ ಗಾಳಿ','💧 ನೀರು!','🌙 ಚಂದ್ರ'],correct:2},
+    {visual:'🏆🍳',question:'🏆 ಅಡುಗೆ ಮಾಡಲು ___?\nFor cooking we need ___?',options:['🎮 ಆಟಿಕೆ','📚 ಪುಸ್ತಕ','💧 ನೀರು!','🎨 ಬಣ್ಣ'],correct:2},
+    {visual:'🏆💧',question:'🏆 ನೀರಿಲ್ಲದೇ ___?\nWithout water ___?',options:['💪 ಎಲ್ಲ ಸರಿ','🎉 ಸಂತೋಷ','❌ ಜೀವನ ಇಲ್ಲ!','🌟 ಇನ್ನೂ ಚೆಂದ'],correct:2},
+  ]
+});
+
+/* ═══════════════════════════════════
+   CELEBRATION
+═══════════════════════════════════ */
+function showCelebration(){
+  doneTabs.add('bigquiz'); updateProgress();
+  spawnConfetti();
+  document.getElementById('celebSub').textContent =
+    'ನೀನು ನೀರಿನ ಪಾಠ ಕಲಿತೆ! 💧\nYou learned all about Water! 🌊\nPlants, Animals & Humans need water! 🌱🐄👤\nYou are a WATER CHAMPION! 🏆';
+  let starStr = '';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti(){
+  const colors=['#1976d2','#4fc3f7','#ff9800','#e91e63','#4caf50','#ffeb3b'];
+  for(let i=0;i<60;i++){
+    const p = document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left = Math.random()*100+'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2+'s';
+    p.style.animationDuration = (2+Math.random()*2)+'s';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 5000);
+  }
+}
+
+function restartAll(){ location.reload(); }
+</script>
+</body>
+</html>

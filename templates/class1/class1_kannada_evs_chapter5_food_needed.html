@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 5: ನಮಗೆ ಆಹಾರ ಬೇಕೇ?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#2e7d32,#43a047);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#1b5e20,#388e3c); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p  { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#2e7d32,#aed581); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#2e7d32; border-color:#a5d6a7; }
+.step-tab.active   { background:#2e7d32; color:#fff; border-color:#2e7d32; box-shadow:0 4px 14px rgba(46,125,50,.4); }
+.step-tab.done     { background:#f1f8e9; color:#2e7d32; border-color:#66bb6a; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #2e7d32;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ICON GRID 2 */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:44px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:15px; color:#2e7d32; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#1b5e20; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ICON GRID 3 */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:34px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:12px; color:#2e7d32; }
+.icon-card3 .ic-name-kn { font-size:11px; font-weight:900; color:#1b5e20; margin-top:2px; }
+
+/* SONG CARD */
+.song-card {
+  background:linear-gradient(135deg,#2e7d32,#66bb6a); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; box-shadow:0 6px 24px rgba(46,125,50,.4);
+}
+.song-line { font-family:'Fredoka One',cursive; font-size:16px; color:#fff; line-height:2.2; text-align:center; }
+.song-line span { display:inline-block; color:#f0fff0; font-size:18px; }
+.song-title { font-family:'Fredoka One',cursive; font-size:20px; color:#c8e6c9; text-align:center; margin-bottom:12px; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #a5d6a7; background:#f1f8e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#2e7d32; transform:scale(1.3); }
+
+/* TAP CARDS */
+.tap-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #a5d6a7; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#c8e6c9; border-color:#4caf50; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#2e7d32; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+
+/* NEXT BUTTON */
+.next-btn {
+  width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:20px; background:#e0e0e0; color:#aaa;
+  cursor:not-allowed; margin-top:8px; transition:all .3s; box-shadow:none;
+}
+.next-btn.ready {
+  background:linear-gradient(135deg,#2e7d32,#66bb6a); color:#fff; cursor:pointer;
+  box-shadow:0 6px 20px rgba(46,125,50,.4); animation:btnPulse 2s infinite;
+}
+@keyframes btnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+
+/* CELEBRATION */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(160deg,#1b5e20,#2e7d32);
+  z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px; opacity:0; pointer-events:none; transition:opacity .5s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:80px; animation:spin 1s ease; margin-bottom:16px; }
+@keyframes spin { 0%{transform:rotate(-20deg) scale(.5)} 100%{transform:rotate(0deg) scale(1)} }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; text-align:center; margin-bottom:10px; }
+.celeb-sub { font-family:'Fredoka One',cursive; font-size:16px; color:#c8e6c9; text-align:center; white-space:pre-wrap; line-height:1.8; margin-bottom:20px; }
+.celeb-stars { font-size:22px; color:#ffca28; margin-bottom:20px; text-align:center; }
+.restart-btn { padding:16px 40px; border-radius:60px; background:#fff; color:#2e7d32; border:none; font-family:'Fredoka One',cursive; font-size:22px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; width:12px; height:12px; border-radius:3px;
+  animation:confettiFall linear forwards; z-index:1000; top:-20px; pointer-events:none;
+}
+@keyframes confettiFall { 0%{top:-20px;opacity:1} 100%{top:110vh;opacity:0} }
+
+/* SORT GAME */
+.sort-zone {
+  background:#fff; border-radius:20px; padding:14px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); min-height:90px;
+}
+.sort-zone-label { font-family:'Fredoka One',cursive; font-size:16px; margin-bottom:8px; }
+.sort-items-pool { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.sort-chip {
+  padding:10px 14px; border-radius:50px; font-family:'Fredoka One',cursive; font-size:14px;
+  background:#fff; border:3px solid #a5d6a7; color:#2e7d32; cursor:pointer;
+  transition:all .2s; user-select:none; display:flex; align-items:center; gap:6px;
+}
+.sort-chip:active { transform:scale(.95); }
+.sort-chip.placed { opacity:.4; cursor:default; }
+.sort-chip.placed-ok { background:#c8e6c9; border-color:#4caf50; }
+.sort-chip.placed-err { background:#ffcdd2; border-color:#e53935; }
+.sort-drop-zone {
+  display:flex; flex-wrap:wrap; gap:8px; min-height:56px; padding:8px;
+  border:3px dashed #a5d6a7; border-radius:16px; background:#f9fbe7;
+}
+
+/* MATCH GAME */
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.match-col-label { font-family:'Fredoka One',cursive; font-size:14px; color:#2e7d32; text-align:center; margin-bottom:6px; }
+.match-item {
+  background:#fff; border-radius:14px; padding:12px 8px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.1); border:3px solid #a5d6a7; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#2e7d32; margin-bottom:8px;
+  transition:all .2s; user-select:none;
+}
+.match-item.selected { background:#2e7d32; color:#fff; border-color:#1b5e20; }
+.match-item.matched  { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; cursor:default; }
+.match-item.wrong-flash { animation:wobble .4s ease; background:#ffcdd2; border-color:#e53935; }
+
+/* STORY highlight */
+.story-card {
+  background:linear-gradient(135deg,#f1f8e9,#dcedc8); border-radius:20px; padding:18px;
+  margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+}
+.story-visual { font-size:56px; text-align:center; display:block; margin-bottom:10px; }
+.story-text { font-family:'Fredoka One',cursive; font-size:17px; color:#2e7d32; line-height:1.6; text-align:center; }
+.story-sub { font-size:13px; font-weight:800; color:#555; text-align:center; margin-top:6px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">📗 ಪಾಠ 5 · ನಮಗೆ ಆಹಾರ ಬೇಕೇ?</div>
+  </div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🍽️</span>
+  <h1>ನಮಗೆ ಆಹಾರ ಬೇಕೇ?</h1>
+  <p>Do We Need Food? · EVS Class 1</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-song" onclick="switchTab('song')">🎵 ಹಾಡು</div>
+  <div class="step-tab locked" id="tab-food" onclick="switchTab('food')">🍛 ಆಹಾರ</div>
+  <div class="step-tab locked" id="tab-why" onclick="switchTab('why')">💪 ಏಕೆ?</div>
+  <div class="step-tab locked" id="tab-sort" onclick="switchTab('sort')">🔀 ಜೋಡಿ</div>
+  <div class="step-tab locked" id="tab-match" onclick="switchTab('match')">🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked" id="tab-quiz" onclick="switchTab('quiz')">🧠 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ════════════════════════════════════
+     TAB 1 · SONG — ಹಾಡಿ ನಲಿ
+════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-song">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🎵</div>
+    <div>
+      <div class="banner-title" style="color:#2e7d32;">ಹಾಡಿ ನಲಿ!</div>
+      <div class="banner-sub" style="color:#388e3c;">Tap each line to read the song · ಪ್ರತಿ ಸಾಲು ಒತ್ತು</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎵 ಹಾಡು — Poem from the book</div>
+    <div class="ic-text">ಈ ಹಾಡಿನ ಪ್ರತಿ ಸಾಲನ್ನು ಒತ್ತಿ ಓದು!<br>Tap every line of the song to read it!</div>
+  </div>
+
+  <div id="songLines"></div>
+
+  <div id="songMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin-bottom:12px;">
+    🎉 ಭಲೇ! ಹಾಡು ಓದಿದೆ! Well done — song read!
+  </div>
+  <button class="next-btn" id="songNext" disabled onclick="goNext('song','food')">ಮುಂದೆ ➜ ಆಹಾರ ನೋಡೋಣ!</button>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 2 · FOOD PICTURES — ಆಹಾರ
+════════════════════════════════════ -->
+<div class="tab-panel" id="panel-food">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8);">
+    <div class="banner-emoji">🍛</div>
+    <div>
+      <div class="banner-title" style="color:#2e7d32;">ಆಹಾರ ಪದಾರ್ಥಗಳು</div>
+      <div class="banner-sub" style="color:#388e3c;">Tap every food item to learn it · ಎಲ್ಲ ತಿಂಡಿ ಒತ್ತು</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 ಚಿತ್ರ ನೋಡಿ ಕಲಿಯಿರಿ</div>
+    <div class="ic-text">ಪಾಠ 5 ರ ಆಹಾರ ಪಟ್ಟಿ — ಪ್ರತಿಯೊಂದನ್ನು ಒತ್ತು!<br>All foods from Lesson 5 — tap each one!</div>
+  </div>
+
+  <div id="foodGrid" class="icon-grid3"></div>
+
+  <div id="foodMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin-bottom:12px;">
+    🥳 ಎಲ್ಲ ಆಹಾರ ಕಲಿತೆ! You know all the foods!
+  </div>
+  <button class="next-btn" id="foodNext" disabled onclick="goNext('food','why')">ಮುಂದೆ ➜ ಆಹಾರ ಏಕೆ ಬೇಕು?</button>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 3 · WHY DO WE NEED FOOD?
+════════════════════════════════════ -->
+<div class="tab-panel" id="panel-why">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082);">
+    <div class="banner-emoji">💪</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಆಹಾರ ಏಕೆ ಬೇಕು?</div>
+      <div class="banner-sub" style="color:#bf360c;">Why do we need food? · ಒತ್ತಿ ತಿಳಿ</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📚 ಪಾಠದಿಂದ</div>
+    <div class="ic-text">ಆಹಾರ ಎರಡು ಕಾರಣಗಳಿಗೆ ಬೇಕು. ಪ್ರತಿ ಕಾರ್ಡ್ ಒತ್ತಿ ತಿಳಿ!<br>Food is needed for TWO reasons. Tap each card!</div>
+  </div>
+
+  <div id="whyCards"></div>
+
+  <div id="whyMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin-bottom:12px;">
+    🌟 ಭಲೇ! ಎರಡೂ ಕಾರಣ ತಿಳಿಯಿತು! Both reasons learned!
+  </div>
+  <button class="next-btn" id="whyNext" disabled onclick="goNext('why','sort')">ಮುಂದೆ ➜ ಆಹಾರ ಜೋಡಿಸೋಣ!</button>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 4 · SORT GAME
+════════════════════════════════════ -->
+<div class="tab-panel" id="panel-sort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">🔀</div>
+    <div>
+      <div class="banner-title" style="color:#1565c0;">ಆಹಾರ ಜೋಡಿಸು!</div>
+      <div class="banner-sub" style="color:#0d47a1;">Sort the foods by tapping them into the right group!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">👆 ಒತ್ತಿ ಜೋಡಿಸು</div>
+    <div class="ic-text">ಆಹಾರ ಒತ್ತಿ ಸರಿಯಾದ ಗುಂಪಿಗೆ ಹಾಕು!<br>Tap a food, then tap the correct group!</div>
+  </div>
+
+  <div style="margin-bottom:12px;">
+    <div style="font-family:'Fredoka One',cursive; font-size:15px; color:#555; margin-bottom:8px;">ಆಹಾರ ಆರಿಸು · Pick a food:</div>
+    <div id="sortPool" class="sort-items-pool"></div>
+  </div>
+
+  <div class="sort-zone">
+    <div class="sort-zone-label" style="color:#e65100;">🌾 ಅಕ್ಕಿ / ಬೇಳೆ / ಧಾನ್ಯ (Grains & Lentils)</div>
+    <div class="sort-drop-zone" id="zone-grain" onclick="dropSort('grain')"></div>
+  </div>
+  <div class="sort-zone">
+    <div class="sort-zone-label" style="color:#e91e63;">🥛 ಹಾಲು / ಮೊಸರು / ಬೆಣ್ಣೆ (Dairy)</div>
+    <div class="sort-drop-zone" id="zone-dairy" onclick="dropSort('dairy')"></div>
+  </div>
+  <div class="sort-zone">
+    <div class="sort-zone-label" style="color:#2e7d32;">🍎 ಹಣ್ಣು / ತರಕಾರಿ (Fruits & Vegetables)</div>
+    <div class="sort-drop-zone" id="zone-fv" onclick="dropSort('fv')"></div>
+  </div>
+
+  <div id="sortScore" style="font-family:'Fredoka One',cursive; font-size:16px; color:#2e7d32; text-align:center; margin:10px 0;"></div>
+  <div id="sortMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin-bottom:12px;">
+    🏆 ಎಲ್ಲ ಆಹಾರ ಸರಿಯಾಗಿ ಜೋಡಿಸಿದೆ! All foods sorted correctly!
+  </div>
+  <button class="next-btn" id="sortNext" disabled onclick="goNext('sort','match')">ಮುಂದೆ ➜ ಹೊಂದಿಸೋಣ!</button>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 5 · MATCH GAME
+════════════════════════════════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಹೊಂದಿಸು!</div>
+      <div class="banner-sub" style="color:#ad1457;">Match food with who eats it! · ಯಾರು ತಿನ್ನುತ್ತಾರೆ?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">👆 ಒತ್ತಿ ಜೋಡಿಸು</div>
+    <div class="ic-text">ಎಡಗಡೆ ಒತ್ತು, ನಂತರ ಬಲಗಡೆ ಒತ್ತು!<br>Tap LEFT side, then tap RIGHT side to match!</div>
+  </div>
+
+  <div style="font-family:'Fredoka One',cursive; color:#555; font-size:14px; margin-bottom:8px; text-align:center;">
+    ✅ ಹೊಂದಿಸಿದ: <span id="matchScore">0</span> / <span id="matchTotal">0</span>
+  </div>
+
+  <div class="match-cols">
+    <div>
+      <div class="match-col-label">🍽️ ಆಹಾರ (Food)</div>
+      <div id="matchLeft"></div>
+    </div>
+    <div>
+      <div class="match-col-label">👤 ಯಾರು? (Who?)</div>
+      <div id="matchRight"></div>
+    </div>
+  </div>
+
+  <div id="matchMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursible; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin-bottom:12px;">
+    🎉 ಎಲ್ಲ ಜೋಡಿ ಸರಿ! All pairs matched!
+  </div>
+  <button class="next-btn" id="matchNext" disabled onclick="goNext('match','quiz')">ಮುಂದೆ ➜ Quiz ಆಡೋಣ!</button>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 6 · QUIZ
+════════════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ede7f6,#d1c4e9);">
+    <div class="banner-emoji">🧠</div>
+    <div>
+      <div class="banner-title" style="color:#4527a0;">Quiz ಆಡೋಣ!</div>
+      <div class="banner-sub" style="color:#512da8;">Choose the right answer · ಸರಿ ಉತ್ತರ ಆರಿಸು</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">🏆 ಮುಗಿದಿತು! I'm Done!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION SCREEN -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🏆</div>
+  <div class="celeb-title">ಶಾಭಾಸ್! Well Done!</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="restart-btn" onclick="restartAll()">🔄 ಮತ್ತೊಮ್ಮೆ ಆಡು!</button>
+</div>
+
+<script>
+/* ════════════════════════════════
+   GLOBALS
+════════════════════════════════ */
+const tabOrder = ['song','food','why','sort','match','quiz'];
+let unlockedTabs = new Set(['song']);
+let doneTabs = new Set();
+let currentTab = 'song';
+let stars = 0;
+
+function updateProgress(){
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function switchTab(name){
+  if(!unlockedTabs.has(name)){
+    const el = document.getElementById('tab-'+name);
+    el.classList.add('shaking');
+    setTimeout(()=> el.classList.remove('shaking'), 550);
+    showToast('⛔ ಮೊದಲು ಮಿಂಚಿನ ಪಾಠ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  document.getElementById('panel-'+currentTab).classList.remove('active');
+  document.getElementById('tab-'+currentTab).classList.remove('active');
+  if(doneTabs.has(currentTab)) document.getElementById('tab-'+currentTab).classList.add('done');
+  else document.getElementById('tab-'+currentTab).classList.add('unlocked');
+
+  currentTab = name;
+  document.getElementById('panel-'+name).classList.add('active');
+  const tabEl = document.getElementById('tab-'+name);
+  tabEl.classList.remove('locked','unlocked','done');
+  tabEl.classList.add('active');
+}
+
+function goNext(doneTab, nextTab){
+  doneTabs.add(doneTab);
+  updateProgress();
+  unlockedTabs.add(nextTab);
+  document.getElementById('tab-'+nextTab).classList.remove('locked');
+  document.getElementById('tab-'+nextTab).classList.add('unlocked');
+  switchTab(nextTab);
+}
+
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+/* ════════════════════════════════
+   TAB 1 · SONG
+════════════════════════════════ */
+const songLines = [
+  { kn:'ಬೆಳಗ್ಗೆಯಿಂದ ಊಟವಿಲ್ಲ ಸುಸ್ತೋ ಸುಸ್ತು', en:'No food since morning — so tired!' },
+  { kn:'ಊಟ ಆದ ಮೇಲೆ ನಾನು ಮಸ್ತೋ ಮಸ್ತು', en:'After eating — I feel great!' },
+  { kn:'ಅಕ್ಕಿ, ಬೇಳೆ ಕಾಳಿನಿಂದ ಬರುವುದು ಶಕ್ತಿ', en:'Rice and lentils give us strength!' },
+  { kn:'ಹಣ್ಣು, ಕಾಯಿ ತಿಂದರೇನೇ ಬರುವುದು ಯುಕ್ತಿ', en:'Fruits and vegetables bring wisdom!' },
+  { kn:'ಹಾಲು, ಮೊಸರು, ಬೆಣ್ಣೆ ತಿಂದು ಗಟ್ಟಿ ಗಟ್ಟಿ', en:'Milk, curd, butter make us strong!' },
+  { kn:'ದಷ್ಟ ಪುಷ್ಟವಾಗಿ ದೇಹ ಜಟ್ಟಿ ಜಟ್ಟಿ', en:'The body grows healthy and sturdy!' },
+  { kn:'ಬೇಕೇ ಬೇಕು ಆಹಾರ', en:'We surely need food!' },
+  { kn:'ದೇಹವು ಬೆಳೆಯಲು ಆಕಾರ', en:'Food gives the body shape to grow!' },
+  { kn:'ಚೆಂದದ ಮನಸು, ಸುಂದರ ದೇಹ', en:'A beautiful mind, a beautiful body!' },
+  { kn:'ನೆಮ್ಮದಿ ಬದುಕಿನ ಆಧಾರ', en:'The foundation of a peaceful life!' },
+];
+
+let songTapped = new Set();
+function buildSong(){
+  const g = document.getElementById('songLines');
+  g.innerHTML = songLines.map((l,i)=>`
+    <div class="tap-card" id="sl-${i}" onclick="tapSongLine(${i})">
+      <div class="tc-icon">🎵</div>
+      <div>
+        <div class="tc-text">${l.kn}</div>
+        <div class="tc-sub">${l.en}</div>
+      </div>
+    </div>`).join('');
+}
+buildSong();
+
+function tapSongLine(i){
+  songTapped.add(i);
+  const el = document.getElementById('sl-'+i);
+  el.classList.add('tapped');
+  el.querySelector('.tc-icon').textContent = '✅';
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if(songTapped.size === songLines.length){
+    document.getElementById('songMsg').style.display = 'block';
+    const btn = document.getElementById('songNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ════════════════════════════════
+   TAB 2 · FOOD ITEMS
+════════════════════════════════ */
+const foodItems = [
+  {icon:'🫓', name:'Roti / Chapati', kn:'ಚಪಾತಿ', desc:'Wheat bread'},
+  {icon:'🍛', name:'Idli & Sambar', kn:'ಇಡ್ಲಿ ಸಾಂಬಾರ', desc:'Rice & lentil dish'},
+  {icon:'🥛', name:'Milk', kn:'ಹಾಲು', desc:'From cow / buffalo'},
+  {icon:'🥚', name:'Eggs', kn:'ಮೊಟ್ಟೆ', desc:'Protein food'},
+  {icon:'🍎', name:'Apple', kn:'ಸೇಬು', desc:'Juicy fruit'},
+  {icon:'🍗', name:'Chicken', kn:'ಕೋಳಿ ಮಾಂಸ', desc:'Non-veg food'},
+  {icon:'🥒', name:'Lady\'s Finger', kn:'ಬೆಂಡೆಕಾಯಿ', desc:'Green vegetable'},
+  {icon:'🍌', name:'Banana', kn:'ಬಾಳೆ ಹಣ್ಣು', desc:'Yellow fruit'},
+  {icon:'🥕', name:'Carrot', kn:'ಗಜ್ಜರಿ', desc:'Orange vegetable'},
+];
+
+let foodTapped = new Set();
+function buildFood(){
+  const g = document.getElementById('foodGrid');
+  g.innerHTML = foodItems.map((f,i)=>`
+    <div class="icon-card3" id="fi-${i}" onclick="tapFood(${i})" style="cursor:pointer">
+      <span class="ic-icon">${f.icon}</span>
+      <div class="ic-name">${f.name}</div>
+      <div class="ic-name-kn">${f.kn}</div>
+    </div>`).join('');
+}
+buildFood();
+
+function tapFood(i){
+  foodTapped.add(i);
+  const el = document.getElementById('fi-'+i);
+  el.style.background = '#c8e6c9'; el.style.borderColor = '#4caf50';
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if(foodTapped.size === foodItems.length){
+    document.getElementById('foodMsg').style.display = 'block';
+    const btn = document.getElementById('foodNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ════════════════════════════════
+   TAB 3 · WHY FOOD?
+════════════════════════════════ */
+const whyReasons = [
+  {
+    icon:'🌱➡️👩',
+    kn:'ದೇಹದ ಬೆಳವಣಿಗೆಗೆ ಆಹಾರ ಬೇಕು',
+    en:'Food is needed for the GROWTH of the body',
+    detail:'ಮಗು → ಮಕ್ಕಳು → ದೊಡ್ಡವರು · Baby → Child → Adult'
+  },
+  {
+    icon:'⚡💪',
+    kn:'ಕೆಲಸ ಮಾಡಲು ಬೇಕಾಗುವ ಶಕ್ತಿ ಆಹಾರದಿಂದ ಬರುತ್ತದೆ',
+    en:'The ENERGY needed to work comes from food',
+    detail:'ಓಡಲು · ಆಡಲು · ಕೆಲಸ ಮಾಡಲು · To run, play and work!'
+  },
+  {
+    icon:'🏥❤️',
+    kn:'ಆರೋಗ್ಯವಾಗಿರಲು ಆಹಾರ ಬೇಕು',
+    en:'Food keeps us HEALTHY',
+    detail:'ರೋಗ ಬರದಿರಲು · To prevent illness'
+  },
+];
+
+let whyTapped = new Set();
+function buildWhy(){
+  const g = document.getElementById('whyCards');
+  g.innerHTML = whyReasons.map((r,i)=>`
+    <div class="tap-card" id="wr-${i}" onclick="tapWhy(${i})">
+      <div class="tc-icon">${r.icon}</div>
+      <div>
+        <div class="tc-text">${r.kn}</div>
+        <div class="tc-sub">${r.en}<br><span style="color:#2e7d32;">${r.detail}</span></div>
+      </div>
+    </div>`).join('');
+}
+buildWhy();
+
+function tapWhy(i){
+  whyTapped.add(i);
+  const el = document.getElementById('wr-'+i);
+  el.classList.add('tapped');
+  el.querySelector('.tc-icon').textContent = '✅';
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if(whyTapped.size === whyReasons.length){
+    document.getElementById('whyMsg').style.display = 'block';
+    const btn = document.getElementById('whyNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ════════════════════════════════
+   TAB 4 · SORT GAME
+════════════════════════════════ */
+const sortItems = [
+  {icon:'🌾', name:'ಅಕ್ಕಿ (Rice)', zone:'grain'},
+  {icon:'🫘', name:'ಬೇಳೆ (Lentils)', zone:'grain'},
+  {icon:'🥛', name:'ಹಾಲು (Milk)', zone:'dairy'},
+  {icon:'🧈', name:'ಬೆಣ್ಣೆ (Butter)', zone:'dairy'},
+  {icon:'🥛', name:'ಮೊಸರು (Curd)', zone:'dairy'},
+  {icon:'🍌', name:'ಬಾಳೆ (Banana)', zone:'fv'},
+  {icon:'🥕', name:'ಗಜ್ಜರಿ (Carrot)', zone:'fv'},
+  {icon:'🍎', name:'ಸೇಬು (Apple)', zone:'fv'},
+  {icon:'🥒', name:'ಬೆಂಡೆ (Lady\'s finger)', zone:'fv'},
+];
+
+let sortSelected = null;
+let sortCorrect = 0;
+
+function buildSort(){
+  const pool = document.getElementById('sortPool');
+  pool.innerHTML = sortItems.map((s,i)=>`
+    <div class="sort-chip" id="sc-${i}" onclick="selectSort(${i})">
+      ${s.icon} ${s.name}
+    </div>`).join('');
+}
+buildSort();
+
+function selectSort(i){
+  if(document.getElementById('sc-'+i).classList.contains('placed')) return;
+  if(sortSelected !== null){
+    document.getElementById('sc-'+sortSelected)?.classList.remove('placed-ok');
+  }
+  sortSelected = i;
+  document.querySelectorAll('.sort-chip').forEach(c=> c.style.outline='none');
+  const el = document.getElementById('sc-'+i);
+  el.style.outline = '3px solid #2e7d32';
+  showToast('✅ ಆರಿಸಿದೆ! Now tap the group below!');
+}
+
+function dropSort(zone){
+  if(sortSelected === null){ showToast('ಮೊದಲು ಆಹಾರ ಆರಿಸು! Pick a food first!'); return; }
+  const item = sortItems[sortSelected];
+  const chipEl = document.getElementById('sc-'+sortSelected);
+  chipEl.style.outline = 'none';
+  const correct = (item.zone === zone);
+  if(correct){
+    chipEl.classList.add('placed','placed-ok');
+    const zoneEl = document.getElementById('zone-'+zone);
+    const chip = document.createElement('div');
+    chip.className = 'sort-chip placed-ok';
+    chip.style.cursor='default';
+    chip.textContent = item.icon+' '+item.name;
+    zoneEl.appendChild(chip);
+    sortCorrect++;
+    stars++; document.getElementById('starsNum').textContent=stars;
+    document.getElementById('sortScore').textContent = `✅ ${sortCorrect} / ${sortItems.length}`;
+    if(sortCorrect === sortItems.length){
+      document.getElementById('sortMsg').style.display='block';
+      const btn=document.getElementById('sortNext');
+      btn.disabled=false; btn.classList.add('ready');
+    }
+  } else {
+    chipEl.classList.add('placed-err');
+    setTimeout(()=>{ chipEl.classList.remove('placed-err'); },600);
+    showToast('❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು! Try again!');
+  }
+  sortSelected = null;
+}
+
+/* ════════════════════════════════
+   TAB 5 · MATCH GAME
+════════════════════════════════ */
+const matchPairs = [
+  {left:'🍼 ತಾಯಿ ಹಾಲು (Mother\'s milk)', right:'👶 ಶಿಶು (Baby)'},
+  {left:'🍚 ಅನ್ನ / ತಿಂಡಿ (Rice & food)', right:'👦 ಮಗು (Child)'},
+  {left:'🌾 ಹುಲ್ಲು / ಎಲೆ (Grass & leaves)', right:'🐄 ಹಸು (Cow)'},
+  {left:'🌾 ಧಾನ್ಯ / ಹಣ್ಣು (Grain & fruit)', right:'🐦 ಹಕ್ಕಿ (Bird)'},
+  {left:'🌱 ಹಸಿ ಮೇವು (Green fodder)', right:'🐐 ಆಡು (Goat)'},
+];
+
+let matchSelLeft = null;
+let matchDone = 0;
+
+function buildMatch(){
+  document.getElementById('matchTotal').textContent = matchPairs.length;
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+  const shuffled = [...matchPairs].sort(()=>Math.random()-.5);
+  left.innerHTML = matchPairs.map((_,i)=>`
+    <div class="match-item" id="ml-${i}" onclick="selectMatchLeft(${i})">${matchPairs[i].left}</div>`).join('');
+  right.innerHTML = shuffled.map((p,i)=>{
+    const origIdx = matchPairs.findIndex(m=>m.right===p.right);
+    return `<div class="match-item" id="mr-${origIdx}" onclick="selectMatchRight(${origIdx})">${p.right}</div>`;
+  }).join('');
+}
+buildMatch();
+
+function selectMatchLeft(i){
+  if(document.getElementById('ml-'+i).classList.contains('matched')) return;
+  if(matchSelLeft !== null) document.getElementById('ml-'+matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('ml-'+i).classList.add('selected');
+}
+
+function selectMatchRight(i){
+  if(matchSelLeft === null){ showToast('ಮೊದಲು ಎಡಗಡೆ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('ml-'+matchSelLeft);
+  const rEl = document.getElementById('mr-'+i);
+  if(rEl.classList.contains('matched')) return;
+  if(matchSelLeft === i){
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent=stars;
+    document.getElementById('matchScore').textContent=matchDone;
+    matchSelLeft=null;
+    if(matchDone===matchPairs.length){
+      setTimeout(()=>{
+        document.getElementById('matchMsg').style.display='block';
+        const btn=document.getElementById('matchNext');
+        btn.disabled=false; btn.classList.add('ready');
+      },400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(()=>{ lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelLeft=null; },600);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ════════════════════════════════
+   TAB 6 · QUIZ
+════════════════════════════════ */
+const quizQuestions = [
+  {visual:'😴🍽️',question:'ಬೆಳಗ್ಗೆ ಊಟ ತಿನ್ನದಿದ್ದರೆ ಏನಾಗುತ್ತದೆ?\nIf we skip breakfast, what happens?',options:['💪 ಶಕ್ತಿ ಬರುತ್ತದೆ','😴 ಸುಸ್ತು ಆಗುತ್ತದೆ!','🏃 ಓಡಬಹುದು','🎵 ಹಾಡಬಹುದು'],correct:1},
+  {visual:'🌾🫘',question:'ಅಕ್ಕಿ ಮತ್ತು ಬೇಳೆ ತಿಂದರೆ ಏನು ಬರುತ್ತದೆ?\nEating rice & lentils gives us?',options:['😴 ನಿದ್ದೆ','🎨 ಬಣ್ಣ','⚡ ಶಕ್ತಿ!','🌧️ ಮಳೆ'],correct:2},
+  {visual:'🥛🧈',question:'ಹಾಲು, ಮೊಸರು, ಬೆಣ್ಣೆ ಯಾವ ಗುಂಪು?\nMilk, Curd, Butter belong to?',options:['🌾 ಧಾನ್ಯ','🥛 ಡೈರಿ!','🍎 ಹಣ್ಣು','🍗 ಮಾಂಸ'],correct:1},
+  {visual:'🌱➡️👩',question:'ನಮ್ಮ ದೇಹ ಬೆಳೆಯಲು ಏನು ಬೇಕು?\nFor the body to GROW, we need?',options:['💤 ನಿದ್ದೆ ಮಾತ್ರ','📺 TV','🍽️ ಆಹಾರ!','🎮 ಆಟ'],correct:2},
+  {visual:'👶🍼',question:'ಶಿಶು ಏನು ಕುಡಿಯುತ್ತದೆ?\nWhat does a baby drink?',options:['☕ ಕಾಫಿ','🍺 ಜ್ಯೂಸ್','🍼 ತಾಯಿ ಹಾಲು!','🥤 ಸೋಡಾ'],correct:2},
+  {visual:'🐄🌾',question:'ಹಸು ಏನು ತಿನ್ನುತ್ತದೆ?\nWhat does a cow eat?',options:['🍗 ಕೋಳಿ','🌾 ಹುಲ್ಲು!','🍕 ಪಿಜ್ಜಾ','🍫 ಚಾಕಲೇಟ್'],correct:1},
+  {visual:'🐦🌳',question:'ಹಕ್ಕಿ ಏನು ತಿನ್ನುತ್ತದೆ?\nWhat does a bird eat?',options:['🍔 ಬರ್ಗರ್','🌾 ಧಾನ್ಯ / ಹಣ್ಣು!','🧁 ಕೇಕ್','🍜 ನೂಡಲ್ಸ್'],correct:1},
+  {visual:'💪❤️',question:'ಆಹಾರ ತಿಂದರೆ ನಮ್ಮ ದೇಹ ___?\nWhen we eat food, our body becomes?',options:['😴 ದಣಿದ','🤒 ಅನಾರೋಗ್ಯ','💪 ಆರೋಗ್ಯ ಮತ್ತು ಗಟ್ಟಿ!','😢 ದುಃಖ'],correct:2},
+  {visual:'🌳🍎🥕',question:'ಹಣ್ಣು ಮತ್ತು ತರಕಾರಿ ಯಾವ ಗುಂಪು?\nFruits and vegetables are in which group?',options:['🥛 ಡೈರಿ','🌾 ಧಾನ್ಯ','🍎 ಹಣ್ಣು/ತರಕಾರಿ!','🍗 ಮಾಂಸ'],correct:2},
+  {visual:'🏆🍽️',question:'ಆಹಾರ ತಿನ್ನುವ ಮುಖ್ಯ ಕಾರಣ ಯಾವುದು?\nThe main reason we eat food is?',options:['😋 ರುಚಿ ಮಾತ್ರ','📸 ಫೋಟೋ ತೆಗೆಯಲು','💪 ಶಕ್ತಿ ಮತ್ತು ಬೆಳವಣಿಗೆ!','🎭 ನಾಟಕ ಮಾಡಲು'],correct:2},
+];
+
+let quizIdx=0, quizAnswered=[];
+
+function buildQuiz(){
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_,i)=>`<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`).join('');
+  renderQuizQ(0);
+}
+buildQuiz();
+
+function renderQuizQ(i){
+  const q = quizQuestions[i];
+  const c = document.getElementById('quizContainer');
+  c.innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j)=>`<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen){
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o=> o.onclick=null);
+  const correct = (chosen===q.correct);
+  opts[chosen].classList.add(correct?'correct':'wrong');
+  if(!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-'+quizIdx).classList.remove('active');
+  document.getElementById('dot-'+quizIdx).classList.add(correct?'done-ok':'done-err');
+  if(correct){ stars++; document.getElementById('starsNum').textContent=stars; }
+  setTimeout(()=>{
+    quizIdx++;
+    if(quizIdx<quizQuestions.length){
+      document.getElementById('dot-'+quizIdx).classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn=document.getElementById('quizFinish');
+      btn.disabled=false; btn.classList.add('ready');
+    }
+  },1100);
+}
+
+/* ════════════════════════════════
+   CELEBRATION
+════════════════════════════════ */
+function showCelebration(){
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 5 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 5 — ನಮಗೆ ಆಹಾರ ಬೇಕೇ?\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಆಹಾರ ತಜ್ಞ! You are a FOOD CHAMPION! 🏆`;
+  let starStr='';
+  for(let i=0;i<Math.min(stars,20);i++) starStr+='⭐';
+  document.getElementById('celebStars').textContent = starStr+' '+stars+' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti(){
+  const colors=['#2e7d32','#66bb6a','#aed581','#ffca28','#4caf50','#1976d2'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'vw';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay=Math.random()*2+'s';
+    p.style.animationDuration=(2+Math.random()*2)+'s';
+    p.style.transform=`rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),5000);
+  }
+}
+
+function restartAll(){ location.reload(); }
+
+updateProgress();
+</script>
+</body>
+</html>

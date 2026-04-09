@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 7: ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e8f5e9; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#2e7d32,#43a047);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#1b5e20,#2e7d32); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#2e7d32,#81c784); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#2e7d32; border-color:#a5d6a7; }
+.step-tab.active   { background:#2e7d32; color:#fff; border-color:#2e7d32; box-shadow:0 4px 14px rgba(46,125,50,.4); }
+.step-tab.done     { background:#e8f5e9; color:#2e7d32; border-color:#66bb6a; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #2e7d32;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ICON GRID 2 */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:44px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:15px; color:#2e7d32; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#1b5e20; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ICON GRID 3 */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #a5d6a7;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:34px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:12px; color:#2e7d32; }
+.icon-card3 .ic-name-kn { font-size:11px; font-weight:900; color:#1b5e20; margin-top:2px; }
+
+/* TAP CARDS */
+.tap-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #a5d6a7; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#c8e6c9; border-color:#43a047; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#2e7d32; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #a5d6a7; background:#e8f5e9; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#2e7d32; transform:scale(1.3); }
+
+/* MATCH GAME */
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.match-col-label { font-family:'Fredoka One',cursive; font-size:14px; color:#2e7d32; text-align:center; margin-bottom:6px; }
+.match-item {
+  background:#fff; border-radius:14px; padding:12px 8px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.1); border:3px solid #a5d6a7; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:13px; color:#2e7d32; margin-bottom:8px;
+  transition:all .2s; user-select:none;
+}
+.match-item.selected { background:#2e7d32; color:#fff; border-color:#1b5e20; }
+.match-item.matched  { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; cursor:default; }
+.match-item.wrong-flash { animation:wobble .4s ease; background:#ffcdd2; border-color:#e53935; }
+
+/* BODY PARTS LABEL ACTIVITY */
+.body-label-wrap { background:#fff; border-radius:20px; padding:18px; margin-bottom:14px; box-shadow:0 3px 14px rgba(0,0,0,.09); }
+.body-label-title { font-family:'Fredoka One',cursive; font-size:17px; color:#2e7d32; margin-bottom:12px; text-align:center; }
+.body-parts-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.body-part-btn {
+  background:#e8f5e9; border:3px solid #a5d6a7; border-radius:16px; padding:14px 6px; text-align:center;
+  cursor:pointer; transition:all .2s; user-select:none;
+}
+.body-part-btn:active { transform:scale(.95); }
+.body-part-btn.picked { background:#c8e6c9; border-color:#43a047; }
+.body-part-btn .bp-emoji { font-size:36px; display:block; margin-bottom:4px; }
+.body-part-btn .bp-name { font-family:'Fredoka One',cursive; font-size:13px; color:#2e7d32; }
+.body-part-btn .bp-eng  { font-size:11px; font-weight:800; color:#888; }
+
+/* SORT ACTIVITY */
+.sort-wrap { margin-bottom:14px; }
+.sort-bucket {
+  background:#fff; border-radius:20px; padding:16px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border:3px solid #a5d6a7;
+}
+.sort-bucket-title { font-family:'Fredoka One',cursive; font-size:16px; color:#2e7d32; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.sort-items { display:flex; flex-wrap:wrap; gap:8px; min-height:48px; }
+.sort-item {
+  background:#e8f5e9; border:3px solid #a5d6a7; border-radius:30px; padding:10px 14px;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#2e7d32; cursor:pointer;
+  transition:all .2s; user-select:none; display:flex; align-items:center; gap:6px;
+}
+.sort-item:active { transform:scale(.95); }
+.sort-item.placed-clean { background:#c8e6c9; border-color:#43a047; cursor:default; }
+.sort-item.placed-dirty { background:#ffcdd2; border-color:#e53935; color:#b71c1c; cursor:default; }
+.sort-item.wrong-pick { animation:wobble .4s ease; background:#ffcdd2; border-color:#e53935; }
+
+/* NEXT BUTTON */
+.next-btn {
+  width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:20px; background:#e0e0e0; color:#aaa;
+  cursor:not-allowed; margin-top:8px; transition:all .3s; box-shadow:none;
+}
+.next-btn.ready {
+  background:linear-gradient(135deg,#2e7d32,#66bb6a); color:#fff; cursor:pointer;
+  box-shadow:0 6px 20px rgba(46,125,50,.4); animation:btnPulse 2s infinite;
+}
+@keyframes btnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+
+/* CELEBRATION */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(160deg,#1b5e20,#2e7d32);
+  z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px; opacity:0; pointer-events:none; transition:opacity .5s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:80px; animation:spin 1s ease; margin-bottom:16px; }
+@keyframes spin { 0%{transform:rotate(-20deg) scale(.5)} 100%{transform:rotate(0deg) scale(1)} }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; text-align:center; margin-bottom:10px; }
+.celeb-sub { font-family:'Fredoka One',cursive; font-size:16px; color:#c8e6c9; text-align:center; white-space:pre-wrap; line-height:1.8; margin-bottom:20px; }
+.celeb-stars { font-size:22px; color:#ffca28; margin-bottom:20px; text-align:center; }
+.restart-btn { padding:16px 40px; border-radius:60px; background:#fff; color:#2e7d32; border:none; font-family:'Fredoka One',cursive; font-size:22px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; width:12px; height:12px; border-radius:3px;
+  animation:confettiFall linear forwards; z-index:1000; top:-20px; pointer-events:none;
+}
+@keyframes confettiFall { 0%{top:-20px;opacity:1} 100%{top:110vh;opacity:0} }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">🧼 ಪಾಠ 7 · ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🧼</span>
+  <h1>ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು</h1>
+  <p>Cleanliness Habits · EVS Class 1 · Lesson 7</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-body"   onclick="switchTab('body')">🙋 ದೇಹ</div>
+  <div class="step-tab locked" id="tab-senses" onclick="switchTab('senses')">👁️ ಅಂಗಗಳು</div>
+  <div class="step-tab locked" id="tab-habits" onclick="switchTab('habits')">🚿 ಅಭ್ಯಾಸ</div>
+  <div class="step-tab locked" id="tab-items"  onclick="switchTab('items')">🪥 ವಸ್ತುಗಳು</div>
+  <div class="step-tab locked" id="tab-match"  onclick="switchTab('match')">🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked" id="tab-quiz"   onclick="switchTab('quiz')">🧠 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════
+     TAB 1 · BODY PARTS — ದೇಹದ ಭಾಗಗಳು
+═══════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-body">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🙋</div>
+    <div>
+      <div class="banner-title" style="color:#2e7d32;">ದೇಹದ ಭಾಗಗಳು!</div>
+      <div class="banner-sub" style="color:#388e3c;">ಪ್ರತಿ ಭಾಗ ಒತ್ತಿ ತಿಳಿ · Tap each body part to learn</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🙋 ನಮ್ಮ ದೇಹ ಎಂದರೇನು?</div>
+    <div class="ic-text">ನಮ್ಮ ದೇಹದಲ್ಲಿ ಅನೇಕ ಭಾಗಗಳಿವೆ. ಪ್ರತಿ ಭಾಗ ಒತ್ತಿ ಹೆಸರು ತಿಳಿ!<br>Our body has many parts. Tap each part to know the name!</div>
+  </div>
+
+  <div class="body-parts-grid" id="bodyPartsGrid"></div>
+
+  <div id="bodyMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin:12px 0;">
+    🎉 ಭಲೇ! ದೇಹದ ಭಾಗ ತಿಳಿಯಿತು!
+  </div>
+  <button class="next-btn" id="bodyNext" disabled onclick="goNext('body','senses')">ಮುಂದೆ ➜ ಅಂಗಗಳ ಉಪಯೋಗ! 👁️</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 2 · SENSE ORGANS — ಅಂಗಗಳು
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-senses">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <div class="banner-emoji">👁️</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಅಂಗಗಳ ಉಪಯೋಗ!</div>
+      <div class="banner-sub" style="color:#bf360c;">ಪ್ರತಿ ಅಂಗ ಒತ್ತಿ ಅರಿ · Tap each organ to learn its use</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🤔 ನಾನು ಯಾರು? ನನ್ನಿಂದ ನಿನಗೇನು ಉಪಯೋಗ?</div>
+    <div class="ic-text">ಪ್ರತಿ ಅಂಗ ಒತ್ತು — ಅದರ ಉಪಯೋಗ ತಿಳಿ!<br>Tap each organ — find out what it does for you!</div>
+  </div>
+
+  <div id="sensesCards"></div>
+
+  <div id="sensesMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; padding:14px; background:#fff3e0; border-radius:16px; margin-bottom:12px;">
+    🌟 ಭಲೇ! ಎಲ್ಲ ಅಂಗಗಳ ಉಪಯೋಗ ತಿಳಿಯಿತು!
+  </div>
+  <button class="next-btn" id="sensesNext" disabled onclick="goNext('senses','habits')">ಮುಂದೆ ➜ ಸ್ವಚ್ಛ ಅಭ್ಯಾಸ! 🚿</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 3 · CLEANLINESS HABITS — ಅಭ್ಯಾಸ
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-habits">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">🚿</div>
+    <div>
+      <div class="banner-title" style="color:#1565c0;">ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು!</div>
+      <div class="banner-sub" style="color:#1976d2;">ಪ್ರತಿ ಅಭ್ಯಾಸ ಒತ್ತಿ ತಿಳಿ · Tap each habit to learn</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🧹 ಪ್ರತಿ ದಿನ ಯಾವ ಅಭ್ಯಾಸ ಮಾಡಬೇಕು?</div>
+    <div class="ic-text">ಈ ಎಲ್ಲ ಕೆಲಸ ನಾವು ಪ್ರತಿ ದಿನ ಮಾಡಬೇಕು! ಪ್ರತಿ ಚಿತ್ರ ಒತ್ತು!<br>We must do all these every day! Tap each picture!</div>
+  </div>
+
+  <div id="habitsCards"></div>
+
+  <div id="habitsMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#1565c0; padding:14px; background:#bbdefb; border-radius:16px; margin-bottom:12px;">
+    🚿 ಭಲೇ! ಎಲ್ಲ ಅಭ್ಯಾಸ ತಿಳಿಯಿತು!
+  </div>
+  <button class="next-btn" id="habitsNext" disabled onclick="goNext('habits','items')">ಮುಂದೆ ➜ ಸ್ವಚ್ಛತೆ ವಸ್ತುಗಳು! 🪥</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 4 · CLEANLINESS ITEMS — ವಸ್ತುಗಳು
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-items">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🪥</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಸ್ವಚ್ಛತೆ ವಸ್ತುಗಳು!</div>
+      <div class="banner-sub" style="color:#ad1457;">ಯಾವ ವಸ್ತು ಬಳಸುವೆ? · Which items do you use?</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">✅ ನೀನು ಬಳಸುವ ವಸ್ತುಗಳನ್ನು ಒತ್ತು!</div>
+    <div class="ic-text">ಸ್ವಚ್ಛತೆಗಾಗಿ ನೀನು ಬಳಸುವ ಎಲ್ಲ ವಸ್ತುಗಳನ್ನು ಒತ್ತು!<br>Tap all items that you use to stay clean!</div>
+  </div>
+
+  <div id="itemsGrid" class="icon-grid3"></div>
+
+  <div id="itemsMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#880e4f; padding:14px; background:#fce4ec; border-radius:16px; margin-bottom:12px;">
+    🧴 ಭಲೇ! ಎಲ್ಲ ಸ್ವಚ್ಛತೆ ವಸ್ತು ಗೊತ್ತಾಯಿತು!
+  </div>
+  <button class="next-btn" id="itemsNext" disabled onclick="goNext('items','match')">ಮುಂದೆ ➜ ಹೊಂದಿಸೋಣ! 🔗</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 5 · MATCH GAME — ಹೊಂದಿಸು
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">ಹೊಂದಿಸು!</div>
+      <div class="banner-sub" style="color:#7b1fa2;">ಅಂಗ ಮತ್ತು ಕೆಲಸ ಜೋಡಿಸು · Match organ with its job!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">👆 ಎಡಗಡೆ ಒತ್ತು, ನಂತರ ಬಲಗಡೆ ಒತ್ತು!</div>
+    <div class="ic-text">Tap LEFT first, then tap RIGHT to match!</div>
+  </div>
+
+  <div style="font-family:'Fredoka One',cursive; font-size:15px; color:#555; text-align:center; margin-bottom:8px;">
+    ✅ <span id="matchScore">0</span> / <span id="matchTotal">0</span> ಸರಿ
+  </div>
+
+  <div class="match-cols">
+    <div>
+      <div class="match-col-label">🙋 ಅಂಗ / Body Part</div>
+      <div id="matchLeft"></div>
+    </div>
+    <div>
+      <div class="match-col-label">✅ ಕೆಲಸ / Job</div>
+      <div id="matchRight"></div>
+    </div>
+  </div>
+
+  <div id="matchMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#6a1b9a; padding:14px; background:#f3e5f5; border-radius:16px; margin-bottom:12px;">
+    🥳 ಎಲ್ಲ ಸರಿಯಾಗಿ ಹೊಂದಿಸಿದೆ!
+  </div>
+  <button class="next-btn" id="matchNext" disabled onclick="goNext('match','quiz')">ಮುಂದೆ ➜ Quiz! 🧠</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 6 · QUIZ
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <div class="banner-emoji">🧠</div>
+    <div>
+      <div class="banner-title" style="color:#1a237e;">Quiz ಸಮಯ!</div>
+      <div class="banner-sub" style="color:#283593;">ನೀನು ಎಷ್ಟು ತಿಳಿದಿದ್ದೀಯ? · How much do you know?</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">🏆 ಪಾಠ ಮುಗಿಸು!</button>
+</div>
+
+</div><!-- end content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION SCREEN -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🧼</div>
+  <div class="celeb-title">ಶಾಬಾಷ್! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="restart-btn" onclick="restartAll()">🔁 ಮತ್ತೆ ಆಡು!</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   STATE & TAB LOGIC
+══════════════════════════════════════ */
+const tabOrder = ['body','senses','habits','items','match','quiz'];
+let doneTabs = new Set();
+let stars = 0;
+let currentTab = 'body';
+
+function updateProgress() {
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function switchTab(name) {
+  const idx = tabOrder.indexOf(name);
+  const prevIdx = tabOrder.indexOf(currentTab);
+  // Check if locked
+  if (idx > 0 && !doneTabs.has(tabOrder[idx-1]) && name !== currentTab) {
+    const el = document.getElementById('tab-' + name);
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 520);
+    showToast('⛔ ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  // Deactivate current
+  document.getElementById('tab-' + currentTab).classList.remove('active');
+  document.getElementById('tab-' + currentTab).classList.add(doneTabs.has(currentTab) ? 'done' : 'unlocked');
+  document.getElementById('panel-' + currentTab).classList.remove('active');
+  // Activate new
+  currentTab = name;
+  const tabEl = document.getElementById('tab-' + name);
+  tabEl.classList.remove('locked','unlocked','done');
+  tabEl.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function goNext(from, to) {
+  doneTabs.add(from);
+  updateProgress();
+  // Unlock next tab
+  const nextEl = document.getElementById('tab-' + to);
+  nextEl.classList.remove('locked');
+  nextEl.classList.add('unlocked');
+  switchTab(to);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ══════════════════════════════════════
+   TAB 1 · BODY PARTS
+══════════════════════════════════════ */
+const bodyParts = [
+  { emoji:'🗣️', kn:'ತಲೆ', en:'Head' },
+  { emoji:'👁️', kn:'ಕಣ್ಣು', en:'Eye' },
+  { emoji:'👃', kn:'ಮೂಗು', en:'Nose' },
+  { emoji:'👂', kn:'ಕಿವಿ', en:'Ear' },
+  { emoji:'👄', kn:'ಬಾಯಿ', en:'Mouth' },
+  { emoji:'🦷', kn:'ಹಲ್ಲು', en:'Teeth' },
+  { emoji:'💪', kn:'ಕೈ', en:'Hand / Arm' },
+  { emoji:'🖐️', kn:'ಬೆರಳು', en:'Fingers' },
+  { emoji:'🦵', kn:'ಕಾಲು', en:'Leg' },
+  { emoji:'🦶', kn:'ಪಾದ', en:'Foot' },
+  { emoji:'🧒', kn:'ಮುಖ', en:'Face' },
+  { emoji:'💇', kn:'ಉಗುರು', en:'Nail' },
+];
+
+let bodyTapped = new Set();
+function buildBodyParts() {
+  const g = document.getElementById('bodyPartsGrid');
+  g.innerHTML = bodyParts.map((p, i) => `
+    <div class="body-part-btn" id="bp-${i}" onclick="tapBodyPart(${i})">
+      <span class="bp-emoji">${p.emoji}</span>
+      <div class="bp-name">${p.kn}</div>
+      <div class="bp-eng">${p.en}</div>
+    </div>
+  `).join('');
+}
+buildBodyParts();
+
+function tapBodyPart(i) {
+  document.getElementById('bp-'+i).classList.add('picked');
+  bodyTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (bodyTapped.size === bodyParts.length) {
+    document.getElementById('bodyMsg').style.display = 'block';
+    const btn = document.getElementById('bodyNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 2 · SENSE ORGANS
+══════════════════════════════════════ */
+const senseOrgans = [
+  { emoji:'👁️', kn:'ಕಣ್ಣು', en:'Eye', use:'ನೋಡಲು · To see things' },
+  { emoji:'👃', kn:'ಮೂಗು', en:'Nose', use:'ವಾಸನೆ ಮಾಡಲು · To smell' },
+  { emoji:'👄', kn:'ಬಾಯಿ', en:'Mouth', use:'ತಿನ್ನಲು, ಮಾತಾಡಲು · To eat & speak' },
+  { emoji:'👂', kn:'ಕಿವಿ', en:'Ear', use:'ಕೇಳಲು · To hear sounds' },
+  { emoji:'💪', kn:'ಕೈ', en:'Hand', use:'ಕೆಲಸ ಮಾಡಲು · To do work' },
+  { emoji:'🦵', kn:'ಕಾಲು', en:'Leg', use:'ನಡೆಯಲು, ಓಡಲು · To walk & run' },
+];
+let sensesTapped = new Set();
+function buildSenses() {
+  const c = document.getElementById('sensesCards');
+  c.innerHTML = senseOrgans.map((s, i) => `
+    <div class="tap-card" id="sc-${i}" onclick="tapSense(${i})">
+      <span class="tc-icon">${s.emoji}</span>
+      <div>
+        <div class="tc-text">${s.kn} · ${s.en}</div>
+        <div class="tc-sub">${s.use}</div>
+      </div>
+    </div>
+  `).join('');
+}
+buildSenses();
+function tapSense(i) {
+  document.getElementById('sc-'+i).classList.add('tapped');
+  sensesTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (sensesTapped.size === senseOrgans.length) {
+    document.getElementById('sensesMsg').style.display = 'block';
+    const btn = document.getElementById('sensesNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 3 · CLEANLINESS HABITS
+══════════════════════════════════════ */
+const habits = [
+  { emoji:'🪥', kn:'ಹಲ್ಲುಜ್ಜುವುದು', en:'Brushing teeth', when:'ಪ್ರತಿ ಬೆಳಿಗ್ಗೆ · Every morning' },
+  { emoji:'🚿', kn:'ಸ್ನಾನ ಮಾಡುವುದು', en:'Taking a bath', when:'ಪ್ರತಿ ದಿನ · Every day' },
+  { emoji:'🧼', kn:'ಕೈ ತೊಳೆಯುವುದು', en:'Washing hands', when:'ತಿನ್ನುವ ಮೊದಲು · Before eating' },
+  { emoji:'🦶', kn:'ಕಾಲು ತೊಳೆಯುವುದು', en:'Washing feet', when:'ಶಾಲೆಯಿಂದ ಬಂದ ಕೂಡಲೇ · After school' },
+  { emoji:'😊', kn:'ಮುಖ ತೊಳೆಯುವುದು', en:'Washing face', when:'ಪ್ರತಿ ದಿನ · Every day' },
+  { emoji:'💇', kn:'ತಲೆ ಬಾಚುವುದು', en:'Combing hair', when:'ಪ್ರತಿ ಬೆಳಿಗ್ಗೆ · Every morning' },
+  { emoji:'✂️', kn:'ಉಗುರು ಕತ್ತರಿಸುವುದು', en:'Cutting nails', when:'ಉದ್ದ ಆದಾಗ · When they grow long' },
+  { emoji:'👕', kn:'ಮೈ ಒರೆಸಿಕೊಳ್ಳುವುದು', en:'Drying with towel', when:'ಸ್ನಾನದ ನಂತರ · After bath' },
+  { emoji:'🙏', kn:'ಪ್ರಾರ್ಥನೆ ಮಾಡುವುದು', en:'Doing prayer', when:'ಪ್ರತಿ ದಿನ · Every day' },
+];
+let habitsTapped = new Set();
+function buildHabits() {
+  const c = document.getElementById('habitsCards');
+  c.innerHTML = habits.map((h, i) => `
+    <div class="tap-card" id="hc-${i}" onclick="tapHabit(${i})">
+      <span class="tc-icon">${h.emoji}</span>
+      <div>
+        <div class="tc-text">${h.kn} · ${h.en}</div>
+        <div class="tc-sub">${h.when}</div>
+      </div>
+    </div>
+  `).join('');
+}
+buildHabits();
+function tapHabit(i) {
+  document.getElementById('hc-'+i).classList.add('tapped');
+  habitsTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (habitsTapped.size === habits.length) {
+    document.getElementById('habitsMsg').style.display = 'block';
+    const btn = document.getElementById('habitsNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 4 · CLEANLINESS ITEMS
+══════════════════════════════════════ */
+const cleanItems = [
+  { emoji:'🪥', kn:'ಹಲ್ಲುಜ್ಜು ಬ್ರಷ್', en:'Toothbrush' },
+  { emoji:'🧴', kn:'ಟೂತ್‌ಪೇಸ್ಟ್', en:'Toothpaste' },
+  { emoji:'🧼', kn:'ಸೋಪು', en:'Soap' },
+  { emoji:'🚿', kn:'ನೀರು', en:'Water' },
+  { emoji:'🪮', kn:'ಬಾಚಣಿಗೆ', en:'Comb' },
+  { emoji:'✂️', kn:'ಉಗುರು ಕತ್ತರಿ', en:'Nail cutter' },
+  { emoji:'🏷️', kn:'ಟವೆಲ್', en:'Towel' },
+  { emoji:'🧴', kn:'ಶ್ಯಾಂಪೂ', en:'Shampoo' },
+  { emoji:'🪣', kn:'ಬಕೆಟ್', en:'Bucket' },
+];
+let itemsTapped = new Set();
+function buildItems() {
+  const g = document.getElementById('itemsGrid');
+  g.innerHTML = cleanItems.map((it, i) => `
+    <div class="icon-card3" id="it-${i}" onclick="tapItem(${i})" style="cursor:pointer;">
+      <span class="ic-icon">${it.emoji}</span>
+      <div class="ic-name">${it.kn}</div>
+      <div class="ic-name-kn">${it.en}</div>
+    </div>
+  `).join('');
+}
+buildItems();
+function tapItem(i) {
+  const el = document.getElementById('it-'+i);
+  el.style.background = '#c8e6c9';
+  el.style.borderColor = '#43a047';
+  itemsTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (itemsTapped.size === cleanItems.length) {
+    document.getElementById('itemsMsg').style.display = 'block';
+    const btn = document.getElementById('itemsNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 5 · MATCH GAME
+══════════════════════════════════════ */
+const matchPairs = [
+  { left:'👁️ ಕಣ್ಣು', right:'👀 ನೋಡಲು · To see' },
+  { left:'👃 ಮೂಗು', right:'🌸 ವಾಸನೆ · To smell' },
+  { left:'👄 ಬಾಯಿ', right:'🍎 ತಿನ್ನಲು · To eat' },
+  { left:'👂 ಕಿವಿ', right:'🔊 ಕೇಳಲು · To hear' },
+  { left:'💪 ಕೈ', right:'✏️ ಬರೆಯಲು · To write' },
+  { left:'🦵 ಕಾಲು', right:'🚶 ನಡೆಯಲು · To walk' },
+];
+let matchSelLeft = null, matchDone = 0;
+function buildMatch() {
+  document.getElementById('matchTotal').textContent = matchPairs.length;
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+  const shuffled = [...matchPairs].sort(() => Math.random() - .5);
+  left.innerHTML = matchPairs.map((p, i) =>
+    `<div class="match-item" id="ml-${i}" onclick="selectMatchLeft(${i})">${p.left}</div>`
+  ).join('');
+  right.innerHTML = shuffled.map(p => {
+    const origIdx = matchPairs.findIndex(m => m.right === p.right);
+    return `<div class="match-item" id="mr-${origIdx}" onclick="selectMatchRight(${origIdx})">${p.right}</div>`;
+  }).join('');
+}
+buildMatch();
+function selectMatchLeft(i) {
+  if (document.getElementById('ml-'+i).classList.contains('matched')) return;
+  if (matchSelLeft !== null) document.getElementById('ml-'+matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('ml-'+i).classList.add('selected');
+}
+function selectMatchRight(i) {
+  if (matchSelLeft === null) { showToast('ಮೊದಲು ಎಡಗಡೆ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('ml-'+matchSelLeft);
+  const rEl = document.getElementById('mr-'+i);
+  if (rEl.classList.contains('matched')) return;
+  if (matchSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelLeft = null;
+    if (matchDone === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchMsg').style.display = 'block';
+        const btn = document.getElementById('matchNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelLeft = null; }, 600);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 6 · QUIZ
+══════════════════════════════════════ */
+const quizQuestions = [
+  { visual:'🙋❓', question:'ಪಾಠ 7 ರ ಹೆಸರು ಏನು?\nWhat is the name of Lesson 7?', options:['🏠 ನನ್ನ ಮನೆ','🧼 ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು!','🌿 ಗಿಡಗಳು','🐄 ಪ್ರಾಣಿಗಳು'], correct:1 },
+  { visual:'👁️❓', question:'ಕಣ್ಣನ್ನು ಯಾವ ಕೆಲಸಕ್ಕೆ ಬಳಸುವೆ?\nWhat do we use eyes for?', options:['🔊 ಕೇಳಲು','👀 ನೋಡಲು!','👃 ವಾಸನೆಗೆ','🍎 ತಿನ್ನಲು'], correct:1 },
+  { visual:'👂❓', question:'ಕಿವಿಯನ್ನು ಯಾವ ಕೆಲಸಕ್ಕೆ ಬಳಸುವೆ?\nWhat do we use ears for?', options:['👀 ನೋಡಲು','✏️ ಬರೆಯಲು','🔊 ಕೇಳಲು!','🚶 ನಡೆಯಲು'], correct:2 },
+  { visual:'🪥❓', question:'ಹಲ್ಲಿಗೆ ಯಾವ ವಸ್ತು ಬಳಸುವೆ?\nWhich item do you use to clean teeth?', options:['🪮 ಬಾಚಣಿಗೆ','🪥 ಹಲ್ಲುಜ್ಜು ಬ್ರಷ್!','✂️ ಕತ್ತರಿ','🧴 ಶ್ಯಾಂಪೂ'], correct:1 },
+  { visual:'🤲❓', question:'ತಿನ್ನುವ ಮೊದಲು ಏನು ಮಾಡಬೇಕು?\nWhat should you do before eating?', options:['😴 ನಿದ್ದೆ ಮಾಡು','📺 TV ನೋಡು','🧼 ಕೈ ತೊಳೆ!','🎮 ಆಟ ಆಡು'], correct:2 },
+  { visual:'💇❓', question:'ತಲೆ ಬಾಚಲು ಯಾವ ವಸ್ತು ಬಳಸುವೆ?\nWhat do you use to comb hair?', options:['🪥 ಬ್ರಷ್','✂️ ಕತ್ತರಿ','🪮 ಬಾಚಣಿಗೆ!','🧼 ಸೋಪು'], correct:2 },
+  { visual:'🦶❓', question:'ಶಾಲೆಯಿಂದ ಮನೆಗೆ ಬಂದ ಕೂಡಲೇ ಏನು ಮಾಡುವೆ?\nWhat do you do right after coming home from school?', options:['📺 TV ನೋಡು','🦶 ಕಾಲು ತೊಳೆ!','😴 ನಿದ್ದೆ ಮಾಡು','🍕 ತಿನ್ನು'], correct:1 },
+  { visual:'✂️❓', question:'ಉಗುರು ಯಾವಾಗ ಕತ್ತರಿಸಬೇಕು?\nWhen should you cut your nails?', options:['ಎಂದಿಗೂ ಬೇಡ · Never','ಉದ್ದ ಆದಾಗ!','ವಾರಕ್ಕೆ 10 ಬಾರಿ','ಶಾಲೆಯಲ್ಲಿ ಮಾತ್ರ'], correct:1 },
+  { visual:'🖐️❓', question:'ಒಂದು ಕೈಯಲ್ಲಿ ಎಷ್ಟು ಬೆರಳು ಇರುತ್ತದೆ?\nHow many fingers are there in one hand?', options:['3️⃣ ಮೂರು','4️⃣ ನಾಲ್ಕು','5️⃣ ಐದು!','6️⃣ ಆರು'], correct:2 },
+  { visual:'🧼❓', question:'ದೇಹ ಸ್ವಚ್ಛವಾಗಿಡಲು ಏಕೆ ಬೇಕು?\nWhy should we keep our body clean?', options:['ಸುಂದರ ಕಾಣಲು ಮಾತ್ರ','ಅಧ್ಯಾಪಕರು ಹೇಳಿದ್ದಾರೆ','ಆರೋಗ್ಯ ರಕ್ಷಣೆಗಾಗಿ!','ಅಕ್ಕಪಕ್ಕದ ಮಕ್ಕಳಿಗಾಗಿ'], correct:2 },
+];
+let quizIdx = 0, quizAnswered = [];
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_, i) =>
+    `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`
+  ).join('');
+  renderQuizQ(0);
+}
+buildQuiz();
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-'+quizIdx).classList.remove('active');
+  document.getElementById('dot-'+quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if (correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < quizQuestions.length) {
+      document.getElementById('dot-'+quizIdx).classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1100);
+}
+
+/* ══════════════════════════════════════
+   CELEBRATION
+══════════════════════════════════════ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 7 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 7 — ಸ್ವಚ್ಛ ಅಭ್ಯಾಸಗಳು!\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಸ್ವಚ್ಛತೆ ಚಾಂಪಿಯನ್! 🧼🏆`;
+  let starStr = '';
+  for (let i = 0; i < Math.min(stars, 20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+function spawnConfetti() {
+  const colors = ['#2e7d32','#66bb6a','#a5d6a7','#ffca28','#4caf50','#f06292'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2 + 's';
+    p.style.animationDuration = (2+Math.random()*2) + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+function restartAll() { location.reload(); }
+
+updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 6: ನನ್ನ ಮನೆ</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#e3f2fd; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#1565c0,#1976d2);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#0d47a1,#1565c0); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#1565c0,#64b5f6); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#1565c0; border-color:#90caf9; }
+.step-tab.active   { background:#1565c0; color:#fff; border-color:#1565c0; box-shadow:0 4px 14px rgba(21,101,192,.4); }
+.step-tab.done     { background:#e3f2fd; color:#1565c0; border-color:#42a5f5; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #1565c0;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#1565c0; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* ICON GRID 2 */
+.icon-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.icon-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.icon-card .ic-icon { font-size:44px; display:block; margin-bottom:6px; }
+.icon-card .ic-name { font-family:'Fredoka One',cursive; font-size:15px; color:#1565c0; }
+.icon-card .ic-name-kn { font-size:13px; font-weight:900; color:#0d47a1; margin-top:2px; }
+.icon-card .ic-desc { font-size:11px; font-weight:800; color:#888; margin-top:2px; }
+
+/* ICON GRID 3 */
+.icon-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.icon-card3 {
+  background:#fff; border-radius:16px; padding:12px 6px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #90caf9;
+  animation:cardPop .4s ease both;
+}
+.icon-card3 .ic-icon { font-size:34px; display:block; margin-bottom:4px; }
+.icon-card3 .ic-name { font-family:'Fredoka One',cursive; font-size:12px; color:#1565c0; }
+.icon-card3 .ic-name-kn { font-size:11px; font-weight:900; color:#0d47a1; margin-top:2px; }
+
+/* SONG CARD */
+.song-card {
+  background:linear-gradient(135deg,#1565c0,#42a5f5); border-radius:20px; padding:20px 18px;
+  margin-bottom:14px; box-shadow:0 6px 24px rgba(21,101,192,.4);
+}
+.song-line { font-family:'Fredoka One',cursive; font-size:16px; color:#fff; line-height:2.2; text-align:center; }
+.song-title { font-family:'Fredoka One',cursive; font-size:20px; color:#bbdefb; text-align:center; margin-bottom:12px; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #90caf9; background:#e3f2fd; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; -webkit-tap-highlight-color:transparent; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#1565c0; transform:scale(1.3); }
+
+/* TAP CARDS */
+.tap-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #90caf9; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#bbdefb; border-color:#1976d2; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#1565c0; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+
+/* NEXT BUTTON */
+.next-btn {
+  width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:20px; background:#e0e0e0; color:#aaa;
+  cursor:not-allowed; margin-top:8px; transition:all .3s; box-shadow:none;
+}
+.next-btn.ready {
+  background:linear-gradient(135deg,#1565c0,#42a5f5); color:#fff; cursor:pointer;
+  box-shadow:0 6px 20px rgba(21,101,192,.4); animation:btnPulse 2s infinite;
+}
+@keyframes btnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+
+/* CELEBRATION */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(160deg,#0d47a1,#1565c0);
+  z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:30px; opacity:0; pointer-events:none; transition:opacity .5s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:80px; animation:spin 1s ease; margin-bottom:16px; }
+@keyframes spin { 0%{transform:rotate(-20deg) scale(.5)} 100%{transform:rotate(0deg) scale(1)} }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; text-align:center; margin-bottom:10px; }
+.celeb-sub { font-family:'Fredoka One',cursive; font-size:16px; color:#bbdefb; text-align:center; white-space:pre-wrap; line-height:1.8; margin-bottom:20px; }
+.celeb-stars { font-size:22px; color:#ffca28; margin-bottom:20px; text-align:center; }
+.restart-btn { padding:16px 40px; border-radius:60px; background:#fff; color:#1565c0; border:none; font-family:'Fredoka One',cursive; font-size:22px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; width:12px; height:12px; border-radius:3px;
+  animation:confettiFall linear forwards; z-index:1000; top:-20px; pointer-events:none;
+}
+@keyframes confettiFall { 0%{top:-20px;opacity:1} 100%{top:110vh;opacity:0} }
+
+/* DISTANCE ACTIVITY */
+.dist-table { width:100%; border-collapse:collapse; margin-bottom:14px; border-radius:16px; overflow:hidden; box-shadow:0 3px 14px rgba(0,0,0,.1); }
+.dist-table th { background:#1565c0; color:#fff; font-family:'Fredoka One',cursive; font-size:13px; padding:10px 6px; text-align:center; }
+.dist-table td { background:#fff; font-family:'Fredoka One',cursive; font-size:13px; padding:8px 6px; text-align:center; border-bottom:2px solid #e3f2fd; color:#333; }
+.dist-table tr:last-child td { border-bottom:none; }
+.dist-btn {
+  width:36px; height:36px; border-radius:50%; border:3px solid #90caf9; background:#e3f2fd;
+  font-size:16px; cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; justify-content:center;
+}
+.dist-btn.selected { background:#1565c0; border-color:#0d47a1; }
+.dist-btn:active { transform:scale(.9); }
+
+/* MATCH GAME */
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.match-col-label { font-family:'Fredoka One',cursive; font-size:14px; color:#1565c0; text-align:center; margin-bottom:6px; }
+.match-item {
+  background:#fff; border-radius:14px; padding:12px 8px; text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.1); border:3px solid #90caf9; cursor:pointer;
+  font-family:'Fredoka One',cursive; font-size:13px; color:#1565c0; margin-bottom:8px;
+  transition:all .2s; user-select:none;
+}
+.match-item.selected { background:#1565c0; color:#fff; border-color:#0d47a1; }
+.match-item.matched  { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; cursor:default; }
+.match-item.wrong-flash { animation:wobble .4s ease; background:#ffcdd2; border-color:#e53935; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">🏠 ಪಾಠ 6 · ನನ್ನ ಮನೆ</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🏠</span>
+  <h1>ನನ್ನ ಮನೆ</h1>
+  <p>My Home · EVS Class 1 · Lesson 6</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-song"  onclick="switchTab('song')">🎵 ಹಾಡು</div>
+  <div class="step-tab locked" id="tab-home"  onclick="switchTab('home')">🏠 ಮನೆ</div>
+  <div class="step-tab locked" id="tab-parts" onclick="switchTab('parts')">🪟 ಭಾಗಗಳು</div>
+  <div class="step-tab locked" id="tab-dist"  onclick="switchTab('dist')">📍 ದೂರ</div>
+  <div class="step-tab locked" id="tab-match" onclick="switchTab('match')">🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked" id="tab-quiz"  onclick="switchTab('quiz')">🧠 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════
+     TAB 1 · SONG — ಹಾಡಿ ನಲಿ
+═══════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-song">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">🎵</div>
+    <div>
+      <div class="banner-title" style="color:#1565c0;">ಹಾಡಿ ನಲಿ!</div>
+      <div class="banner-sub" style="color:#1976d2;">ಪ್ರತಿ ಸಾಲು ಒತ್ತು · Tap each line to read</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📖 ಪುಸ್ತಕದ ಹಾಡು</div>
+    <div class="ic-text">ಪ್ರತಿ ಸಾಲನ್ನು ಒತ್ತಿ ಓದು! Tap every line!</div>
+  </div>
+
+  <div id="songLines"></div>
+
+  <div id="songMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#1565c0; padding:14px; background:#bbdefb; border-radius:16px; margin-bottom:12px;">
+    🎉 ಭಲೇ! ಹಾಡು ಓದಿದೆ! Well done!
+  </div>
+  <button class="next-btn" id="songNext" disabled onclick="goNext('song','home')">ಮುಂದೆ ➜ ಮನೆ ನೋಡೋಣ! 🏠</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 2 · HOME TYPES — ಮನೆ
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-home">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <div class="banner-emoji">🏠</div>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">ಮನೆ ಎಂದರೇನು?</div>
+      <div class="banner-sub" style="color:#7b1fa2;">ಪ್ರತಿ ಮನೆ ಒತ್ತಿ ತಿಳಿ · Tap each home to learn</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏘️ ರಾಧಾ ಮತ್ತು ರಾಜ ಅವರ ಮನೆ</div>
+    <div class="ic-text">ಪಾಠದಲ್ಲಿ ರಾಧಾ ಮತ್ತು ರಾಜನ ಮನೆ ಇದೆ. ಪ್ರತಿ ಮನೆ ಒತ್ತಿ ತಿಳಿ!<br>The lesson has Radha's and Rajan's homes. Tap each to learn!</div>
+  </div>
+
+  <div id="homeCards"></div>
+
+  <div id="homeMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#1565c0; padding:14px; background:#bbdefb; border-radius:16px; margin-bottom:12px;">
+    🌟 ಭಲೇ! ಎಲ್ಲ ಮನೆ ತಿಳಿಯಿತು!
+  </div>
+  <button class="next-btn" id="homeNext" disabled onclick="goNext('home','parts')">ಮುಂದೆ ➜ ಮನೆ ಭಾಗಗಳು! 🪟</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 3 · PARTS OF HOUSE — ಭಾಗಗಳು
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-parts">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082);">
+    <div class="banner-emoji">🪟</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಮನೆಯ ಭಾಗಗಳು</div>
+      <div class="banner-sub" style="color:#bf360c;">Parts of a House · ಒತ್ತಿ ತಿಳಿ</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏠 ಕಿಟಕಿ, ಬಾಗಿಲು, ಮಾಳಿಗೆ</div>
+    <div class="ic-text">ಮನೆಯಲ್ಲಿ ಏನೇನು ಇರುತ್ತದೆ? ಪ್ರತಿ ಭಾಗ ಒತ್ತಿ ತಿಳಿ!<br>What is in a house? Tap every part to learn!</div>
+  </div>
+
+  <div id="partsGrid" class="icon-grid2"></div>
+
+  <div id="partsMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; padding:14px; background:#fff8e1; border-radius:16px; margin-bottom:12px;">
+    🏠 ಭಲೇ! ಮನೆ ಭಾಗ ತಿಳಿಯಿತು!
+  </div>
+  <button class="next-btn" id="partsNext" disabled onclick="goNext('parts','dist')">ಮುಂದೆ ➜ ದೂರ ಅಂದಾಜು ಮಾಡೋಣ! 📍</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 4 · DISTANCE ACTIVITY — ದೂರ
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-dist">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">📍</div>
+    <div>
+      <div class="banner-title" style="color:#2e7d32;">ದೂರ ಅಂದಾಜು ಮಾಡು!</div>
+      <div class="banner-sub" style="color:#388e3c;">Estimate the distance from YOUR home</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">📏 ಹತ್ತಿರ ಅಥವಾ ದೂರ?</div>
+    <div class="ic-text">ಪ್ರತಿ ಜಾಗಕ್ಕೆ ನಿನ್ನ ಮನೆಯಿಂದ ಎಷ್ಟು ದೂರ ಇದೆ? ✓ ಗುರುತು ಹಾಕು!<br>How far is each place from YOUR home? Tap to mark!</div>
+  </div>
+
+  <table class="dist-table" id="distTable">
+    <thead>
+      <tr>
+        <th>ಜಾಗ<br>Place</th>
+        <th>ಬಹಳ ಹತ್ತಿರ<br>Very Near</th>
+        <th>ಹತ್ತಿರ<br>Near</th>
+        <th>ದೂರ<br>Far</th>
+        <th>ಬಹಳ ದೂರ<br>Very Far</th>
+      </tr>
+    </thead>
+    <tbody id="distBody"></tbody>
+  </table>
+
+  <div id="distMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#2e7d32; padding:14px; background:#c8e6c9; border-radius:16px; margin-bottom:12px;">
+    🎉 ಭಲೇ! ಎಲ್ಲ ಜಾಗಗಳ ದೂರ ಅಂದಾಜು ಮಾಡಿದೆ!
+  </div>
+  <button class="next-btn" id="distNext" disabled onclick="goNext('dist','match')">ಮುಂದೆ ➜ ಹೊಂದಿಸೋಣ! 🔗</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 5 · MATCH GAME — ಹೊಂದಿಸು
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಹೊಂದಿಸು!</div>
+      <div class="banner-sub" style="color:#ad1457;">Match the question with the right answer!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">👆 ಒತ್ತಿ ಜೋಡಿಸು</div>
+    <div class="ic-text">ಎಡಗಡೆ ಒತ್ತು, ನಂತರ ಬಲಗಡೆ ಒತ್ತು!<br>Tap LEFT side first, then tap RIGHT side to match!</div>
+  </div>
+
+  <div style="font-family:'Fredoka One',cursive; font-size:15px; color:#555; text-align:center; margin-bottom:8px;">
+    ✅ <span id="matchScore">0</span> / <span id="matchTotal">0</span> ಸರಿ
+  </div>
+
+  <div class="match-cols">
+    <div>
+      <div class="match-col-label">❓ ಪ್ರಶ್ನೆ / Question</div>
+      <div id="matchLeft"></div>
+    </div>
+    <div>
+      <div class="match-col-label">✅ ಉತ್ತರ / Answer</div>
+      <div id="matchRight"></div>
+    </div>
+  </div>
+
+  <div id="matchMsg" style="display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#880e4f; padding:14px; background:#fce4ec; border-radius:16px; margin-bottom:12px;">
+    🥳 ಎಲ್ಲ ಸರಿಯಾಗಿ ಹೊಂದಿಸಿದೆ!
+  </div>
+  <button class="next-btn" id="matchNext" disabled onclick="goNext('match','quiz')">ಮುಂದೆ ➜ Quiz! 🧠</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 6 · QUIZ
+═══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <div class="banner-emoji">🧠</div>
+    <div>
+      <div class="banner-title" style="color:#283593;">Quiz Time!</div>
+      <div class="banner-sub" style="color:#303f9f;">ಒತ್ತಿ ಉತ್ತರ ಕೊಡು · Tap your answer!</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">🏆 ಪಾಠ ಮುಗಿಯಿತು!</button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION SCREEN -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🏠</div>
+  <div class="celeb-title">ಭಲೇ ಭಲೇ! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="restart-btn" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡೋಣ!</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════════ */
+let stars = 0;
+const tabOrder = ['song','home','parts','dist','match','quiz'];
+const doneTabs = new Set();
+let currentTab = 'song';
+
+/* ══════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════ */
+function switchTab(name) {
+  const idx = tabOrder.indexOf(name);
+  // check if locked
+  if (idx > 0 && !doneTabs.has(tabOrder[idx - 1])) {
+    const el = document.getElementById('tab-' + name);
+    el.classList.remove('shaking');
+    void el.offsetWidth;
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 600);
+    showToast('⛔ ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  // deactivate current
+  document.getElementById('panel-' + currentTab).classList.remove('active');
+  const oldTab = document.getElementById('tab-' + currentTab);
+  oldTab.classList.remove('active');
+  if (doneTabs.has(currentTab)) oldTab.classList.add('done');
+  else oldTab.classList.add('unlocked');
+
+  // activate new
+  currentTab = name;
+  document.getElementById('panel-' + name).classList.add('active');
+  const newTab = document.getElementById('tab-' + name);
+  newTab.classList.remove('locked','unlocked','done');
+  newTab.classList.add('active');
+}
+
+function goNext(from, to) {
+  doneTabs.add(from);
+  updateProgress();
+  // unlock next tab
+  const nextEl = document.getElementById('tab-' + to);
+  nextEl.classList.remove('locked');
+  nextEl.classList.add('unlocked');
+  switchTab(to);
+}
+
+function updateProgress() {
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ══════════════════════════════════════
+   TAB 1 · SONG
+══════════════════════════════════════ */
+const songLines = [
+  'ಮನೆ ಮನೆ ನಮ್ಮ ಮನೆ',
+  'ಕಿಟಕಿ ಬಾಗಿಲು ಇರುವ ಮನೆ',
+  'ಚೆಂದದ ತೋಟವು ಇರುವ ಮನೆ',
+  'ಮನೆ ಮನೆ ನಮ್ಮ ಮನೆ.',
+  'ಗಾಳಿ ಬೆಳಕು ಇರುವ ಮನೆ',
+  'ಶುಭ್ರ ಸ್ವಚ್ಛ ನಮ್ಮ ಮನೆ',
+  'ಕೂಡಿ ಎಲ್ಲರು ನಲಿವ ಮನೆ',
+  'ಮನೆ ಮನೆ ನಮ್ಮ ಮನೆ.',
+];
+
+let songTapped = new Set();
+
+function buildSong() {
+  const container = document.getElementById('songLines');
+  container.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'song-card';
+  card.innerHTML = '<div class="song-title">🎵 ಹಾಡಿ ನಲಿ · Sing and Dance!</div>';
+  songLines.forEach((line, i) => {
+    const d = document.createElement('div');
+    d.style.cssText = 'background:rgba(255,255,255,.15);border-radius:12px;padding:10px 14px;margin-bottom:8px;cursor:pointer;transition:all .2s;font-family:\'Fredoka One\',cursive;font-size:17px;color:#fff;text-align:center;user-select:none;';
+    d.textContent = line;
+    d.onclick = () => {
+      if (songTapped.has(i)) return;
+      songTapped.add(i);
+      d.style.background = 'rgba(255,255,255,.4)';
+      d.style.transform = 'scale(1.02)';
+      stars++; document.getElementById('starsNum').textContent = stars;
+      if (songTapped.size === songLines.length) {
+        document.getElementById('songMsg').style.display = 'block';
+        const btn = document.getElementById('songNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }
+    };
+    card.appendChild(d);
+  });
+  container.appendChild(card);
+}
+buildSong();
+
+/* ══════════════════════════════════════
+   TAB 2 · HOME CARDS
+══════════════════════════════════════ */
+const homeItems = [
+  { icon:'🏘️', name:'ರಾಧಾ ಅವರ ಮನೆ', sub:"Radha's Home", desc:'ಊರಿನಲ್ಲಿ ಇದೆ · In the village. ಮನೆಯಲ್ಲಿ ಕುಟುಂಬ ಇದೆ · Family lives here.' },
+  { icon:'🏡', name:'ರಾಜನ ಮನೆ', sub:"Rajan's Home", desc:'ಹೊಲದ ಹತ್ತಿರ ಇದೆ · Near the field. ಬಾವಿ ಇದೆ · Has a well.' },
+  { icon:'👨‍👩‍👧‍👦', name:'ಕುಟುಂಬ', sub:'Family', desc:'ಅಪ್ಪ, ಅಮ್ಮ, ಮಕ್ಕಳು ಎಲ್ಲರೂ ಮನೆಯಲ್ಲಿ ಇದ್ದಾರೆ · Father, mother, children.' },
+  { icon:'🐕', name:'ಪ್ರಾಣಿಗಳು', sub:'Pets / Animals', desc:'ಮನೆಯಲ್ಲಿ ನಾಯಿ, ದನ ಸಾಕುತ್ತಾರೆ · Dogs, cows kept at home.' },
+  { icon:'🌳', name:'ತೋಟ', sub:'Garden', desc:'ಮನೆಯ ಹತ್ತಿರ ಚೆಂದದ ತೋಟ · Beautiful garden near home.' },
+  { icon:'🏠', name:'ನಮ್ಮ ಮನೆ', sub:'Our Home', desc:'ಎಲ್ಲರಿಗೂ ಮನೆ ಬೇಕು · Everyone needs a home!' },
+];
+
+let homeTapped = new Set();
+
+function buildHomeCards() {
+  const container = document.getElementById('homeCards');
+  homeItems.forEach((item, i) => {
+    const d = document.createElement('div');
+    d.className = 'tap-card';
+    d.innerHTML = `<div class="tc-icon">${item.icon}</div><div><div class="tc-text">${item.name}<br><span style="font-size:13px;color:#888">${item.sub}</span></div><div class="tc-sub">${item.desc}</div></div>`;
+    d.onclick = () => {
+      if (homeTapped.has(i)) return;
+      homeTapped.add(i);
+      d.classList.add('tapped');
+      stars++; document.getElementById('starsNum').textContent = stars;
+      if (homeTapped.size === homeItems.length) {
+        document.getElementById('homeMsg').style.display = 'block';
+        const btn = document.getElementById('homeNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }
+    };
+    container.appendChild(d);
+  });
+}
+buildHomeCards();
+
+/* ══════════════════════════════════════
+   TAB 3 · PARTS OF HOUSE
+══════════════════════════════════════ */
+const houseParts = [
+  { icon:'🪟', name:'Window', kn:'ಕಿಟಕಿ', desc:'ಗಾಳಿ & ಬೆಳಕು · Air & Light' },
+  { icon:'🚪', name:'Door', kn:'ಬಾಗಿಲು', desc:'ಒಳಗೆ / ಹೊರಗೆ · In / Out' },
+  { icon:'🏚️', name:'Roof', kn:'ಮಾಳಿಗೆ', desc:'ಮಳೆಯಿಂದ ರಕ್ಷಣೆ · Protects from rain' },
+  { icon:'🧱', name:'Wall', kn:'ಗೋಡೆ', desc:'ಮನೆ ನಿಲ್ಲಲು · Supports the house' },
+  { icon:'🪜', name:'Steps', kn:'ಮೆಟ್ಟಿಲು', desc:'ಮೇಲೆ ಹೋಗಲು · To go up' },
+  { icon:'🌿', name:'Compound', kn:'ಆವರಣ', desc:'ಮನೆ ಸುತ್ತ · Around the house' },
+];
+
+let partsTapped = new Set();
+
+function buildParts() {
+  const grid = document.getElementById('partsGrid');
+  houseParts.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'icon-card';
+    d.innerHTML = `<span class="ic-icon">${p.icon}</span><div class="ic-name">${p.name}</div><div class="ic-name-kn">${p.kn}</div><div class="ic-desc">${p.desc}</div>`;
+    d.style.cursor = 'pointer';
+    d.onclick = () => {
+      if (partsTapped.has(i)) return;
+      partsTapped.add(i);
+      d.style.background = '#bbdefb';
+      d.style.borderColor = '#1565c0';
+      stars++; document.getElementById('starsNum').textContent = stars;
+      if (partsTapped.size === houseParts.length) {
+        document.getElementById('partsMsg').style.display = 'block';
+        const btn = document.getElementById('partsNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }
+    };
+    grid.appendChild(d);
+  });
+}
+buildParts();
+
+/* ══════════════════════════════════════
+   TAB 4 · DISTANCE ACTIVITY
+══════════════════════════════════════ */
+const distPlaces = [
+  { kn:'ಗೆಳೆಯ/ಗೆಳತಿಯ ಮನೆ', en:"Friend's house" },
+  { kn:'ಕೈ ಪಂಪು / ನಲ್ಲಿ', en:'Hand pump / Tap' },
+  { kn:'ಶಾಲೆ', en:'School' },
+  { kn:'ಅಂಗಡಿ', en:'Shop' },
+  { kn:'ಅಂಗನವಾಡಿ', en:'Anganwadi' },
+  { kn:'ಬಾವಿ', en:'Well' },
+  { kn:'ಬಸ್ ನಿಲ್ದಾಣ', en:'Bus stand' },
+  { kn:'ಕಚೇರಿ / ಆಸ್ಪತ್ರೆ', en:'Office / Hospital' },
+];
+
+const distCols = ['bh','h','d','bd'];
+const distLabels = ['ಬಹಳ ಹತ್ತಿರ','ಹತ್ತಿರ','ದೂರ','ಬಹಳ ದೂರ'];
+const distSelections = {};
+let distFilled = 0;
+
+function buildDist() {
+  const tbody = document.getElementById('distBody');
+  distPlaces.forEach((place, i) => {
+    distSelections[i] = null;
+    const tr = document.createElement('tr');
+    let html = `<td style="text-align:left;padding-left:8px;"><span style="font-family:'Fredoka One',cursive;font-size:13px;color:#1565c0;">${place.kn}</span><br><span style="font-size:10px;color:#888;">${place.en}</span></td>`;
+    distCols.forEach((col, ci) => {
+      html += `<td><button class="dist-btn" id="db-${i}-${col}" onclick="selectDist(${i},'${col}')">${['🏃','🚶','🚌','✈️'][ci]}</button></td>`;
+    });
+    tr.innerHTML = html;
+    tbody.appendChild(tr);
+  });
+}
+buildDist();
+
+function selectDist(row, col) {
+  const prev = distSelections[row];
+  if (prev) {
+    document.getElementById(`db-${row}-${prev}`).classList.remove('selected');
+  }
+  if (prev === col) {
+    distSelections[row] = null;
+    distFilled = Object.values(distSelections).filter(v => v !== null).length;
+    return;
+  }
+  distSelections[row] = col;
+  document.getElementById(`db-${row}-${col}`).classList.add('selected');
+  if (!prev) {
+    stars++; document.getElementById('starsNum').textContent = stars;
+  }
+  distFilled = Object.values(distSelections).filter(v => v !== null).length;
+  if (distFilled === distPlaces.length) {
+    document.getElementById('distMsg').style.display = 'block';
+    const btn = document.getElementById('distNext');
+    btn.disabled = false; btn.classList.add('ready');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 5 · MATCH GAME
+══════════════════════════════════════ */
+const matchPairs = [
+  { left:'🏘️ ರಾಧಾ ಅವರ ಮನೆ ಎಲ್ಲಿದೆ?', right:'🌾 ಊರಿನಲ್ಲಿ · In the village' },
+  { left:'🪟 ಮನೆಯಲ್ಲಿ ಗಾಳಿ & ಬೆಳಕು ಬರುವುದು?', right:'🪟 ಕಿಟಕಿಯಿಂದ · Through window' },
+  { left:'💧 ರಾಜನ ಮನೆ ಹತ್ತಿರ ಏನಿದೆ?', right:'🌊 ಬಾವಿ · A well' },
+  { left:'👨‍👩‍👧 ಮನೆಯಲ್ಲಿ ಯಾರು ಇರುತ್ತಾರೆ?', right:'👨‍👩‍👧 ಕುಟುಂಬ · Family' },
+  { left:'🏫 ಶಾಲೆ ಎಲ್ಲಿದೆ?', right:'📍 ಮನೆಯ ಹತ್ತಿರ ಅಥವಾ ದೂರ · Near or Far from home' },
+];
+
+let matchSelLeft = null;
+let matchDone = 0;
+
+function buildMatch() {
+  document.getElementById('matchTotal').textContent = matchPairs.length;
+  const left = document.getElementById('matchLeft');
+  const right = document.getElementById('matchRight');
+  const shuffled = [...matchPairs].sort(() => Math.random() - .5);
+  left.innerHTML = matchPairs.map((p, i) =>
+    `<div class="match-item" id="ml-${i}" onclick="selectMatchLeft(${i})">${p.left}</div>`
+  ).join('');
+  right.innerHTML = shuffled.map((p) => {
+    const origIdx = matchPairs.findIndex(m => m.right === p.right);
+    return `<div class="match-item" id="mr-${origIdx}" onclick="selectMatchRight(${origIdx})">${p.right}</div>`;
+  }).join('');
+}
+buildMatch();
+
+function selectMatchLeft(i) {
+  if (document.getElementById('ml-' + i).classList.contains('matched')) return;
+  if (matchSelLeft !== null) document.getElementById('ml-' + matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('ml-' + i).classList.add('selected');
+}
+
+function selectMatchRight(i) {
+  if (matchSelLeft === null) { showToast('ಮೊದಲು ಎಡಗಡೆ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('ml-' + matchSelLeft);
+  const rEl = document.getElementById('mr-' + i);
+  if (rEl.classList.contains('matched')) return;
+  if (matchSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelLeft = null;
+    if (matchDone === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchMsg').style.display = 'block';
+        const btn = document.getElementById('matchNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash', 'selected'); rEl.classList.remove('wrong-flash'); matchSelLeft = null; }, 600);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 6 · QUIZ
+══════════════════════════════════════ */
+const quizQuestions = [
+  { visual:'🏠❓', question:'ಪಾಠ 6 ರ ಹೆಸರು ಏನು?\nWhat is the name of Lesson 6?', options:['🍽️ ಆಹಾರ','🏠 ನನ್ನ ಮನೆ!','🌧️ ಮಳೆ','🌳 ಮರ'], correct:1 },
+  { visual:'🪟🚪', question:'ಮನೆಯಲ್ಲಿ ಗಾಳಿ ಬೆಳಕು ಬರಲು ಏನು ಬೇಕು?\nFor air and light to enter the house, what is needed?', options:['🌧️ ಮಳೆ','🪟 ಕಿಟಕಿ ಬಾಗಿಲು!','🐄 ದನ','🌾 ಹೊಲ'], correct:1 },
+  { visual:'🏘️👧', question:'ರಾಧಾ ಅವರ ಮನೆ ಎಲ್ಲಿ ಇದೆ?\nWhere is Radha\'s house located?', options:['🌊 ಸಮುದ್ರ ಹತ್ತಿರ','🏙️ ನಗರದಲ್ಲಿ','🌾 ಊರಿನಲ್ಲಿ!','✈️ ವಿಮಾನ ನಿಲ್ದಾಣ ಹತ್ತಿರ'], correct:2 },
+  { visual:'💧🏡', question:'ರಾಜನ ಮನೆ ಹತ್ತಿರ ಏನಿದೆ?\nWhat is near Rajan\'s house?', options:['🏫 ಶಾಲೆ','🌊 ಬಾವಿ!','🛒 ಅಂಗಡಿ','✈️ ವಿಮಾನ'], correct:1 },
+  { visual:'📏🏃', question:'"ಬಹಳ ಹತ್ತಿರ" ಎಂದರೆ ಏನು?\nWhat does "Bahala Hattira" mean?', options:['ಬಹಳ ದೂರ · Very far','ಹತ್ತಿರ · Near','ಬಹಳ ಹತ್ತಿರ · Very near!','ದೂರ · Far'], correct:2 },
+  { visual:'👨‍👩‍👧‍👦🏠', question:'ಮನೆಯಲ್ಲಿ ಯಾರು ಇರುತ್ತಾರೆ?\nWho lives in the house?', options:['😺 ಬೆಕ್ಕು ಮಾತ್ರ','👨‍👩‍👧‍👦 ಕುಟುಂಬ!','🤖 ರೋಬಾಟ್','👻 ಭೂತ'], correct:1 },
+  { visual:'🎵🏠', question:'ಹಾಡಿನಲ್ಲಿ "ಶುಭ್ರ ಸ್ವಚ್ಛ ನಮ್ಮ ಮನೆ" ಅಂದರೆ?\n"Shubhra Swaccha Namma Mane" means?', options:['ದೊಡ್ಡ ಮನೆ · Big house','ಹಳೆ ಮನೆ · Old house','ಶುದ್ಧ ಮನೆ · Clean and pure home!','ಮಾರಾಟ ಮನೆ · House for sale'], correct:2 },
+  { visual:'🚌📍', question:'ಬಸ್ ನಿಲ್ದಾಣ ಮನೆಯಿಂದ ___?\nBus stand from home is ___?', options:['ಖಂಡಿತ ಹತ್ತಿರ','ಖಂಡಿತ ದೂರ','ಅಂದಾಜು ಮಾಡಬೇಕು!','ನಮಗೆ ಗೊತ್ತಿಲ್ಲ'], correct:2 },
+  { visual:'🪟🔢', question:'ರಾಧಾ ಮನೆಯಲ್ಲಿ ಕಿಟಕಿ ಬಾಗಿಲು ಎಷ್ಟು ಇದೆ ಎಂದು ಯಾರು ಹೇಳಬೇಕು?\nWho should count the windows in Radha\'s home?', options:['ಅಧ್ಯಾಪಕರು · Teacher only','ಮನೆಯವರು only','ನಾವೇ ನೋಡಿ ಹೇಳಬೇಕು!','ನಾಯಿ'], correct:2 },
+  { visual:'🏆🏠', question:'ಮನೆ ಏಕೆ ಬೇಕು?\nWhy do we need a home?', options:['📺 TV ನೋಡಲು','🎮 ಆಟ ಆಡಲು','🏠 ಆಶ್ರಯ, ಸುರಕ್ಷೆ ಮತ್ತು ಕುಟುಂಬ!','😴 ನಿದ್ದೆ ಮಾತ್ರ'], correct:2 },
+];
+
+let quizIdx = 0, quizAnswered = [];
+
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_, i) =>
+    `<div class="dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
+  ).join('');
+  renderQuizQ(0);
+}
+buildQuiz();
+
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  const c = document.getElementById('quizContainer');
+  c.innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt, j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-' + quizIdx).classList.remove('active');
+  document.getElementById('dot-' + quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if (correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < quizQuestions.length) {
+      document.getElementById('dot-' + quizIdx).classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1100);
+}
+
+/* ══════════════════════════════════════
+   CELEBRATION
+══════════════════════════════════════ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 6 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 6 — ನನ್ನ ಮನೆ!\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಮನೆ ತಜ್ಞ! You are a HOME CHAMPION! 🏠`;
+  let starStr = '';
+  for (let i = 0; i < Math.min(stars, 20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti() {
+  const colors = ['#1565c0','#42a5f5','#90caf9','#ffca28','#4caf50','#f06292'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDelay = Math.random() * 2 + 's';
+    p.style.animationDuration = (2 + Math.random() * 2) + 's';
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+
+function restartAll() { location.reload(); }
+
+updateProgress();
+</script>
+</body>
+</html>
