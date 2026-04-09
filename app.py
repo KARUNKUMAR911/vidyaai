@@ -321,12 +321,12 @@ def class1_kannada_evs_lesson(lesson_num: int):
         7:  'class1/class1_kannada_evs_chapter7_swachha_abhyasagalu.html',
         8:  'class1/class1_kannada_evs_chapter8_surakshate_shistu.html',
         9:  'class1/class1_kannada_evs_chapter9_vehicles.html',
-        10: 'class1_evs_chapter10_family.html',
-        11: 'class1_evs_chapter11_neighbourhood.html',
-        12: 'class1_evs_chapter12_play_the_game.html',
-        13: 'class1_evs_chapter13_i_need_these.html',
-        14: 'class1_evs_chapter14_heavenly_friends.html',
-        15: 'class1_evs_chapter15_around_us.html',
+        10: 'class1/class1_evs_chapter10_family.html',
+        11: 'class1/class1_evs_chapter11_neighbourhood.html',
+        12: 'class1/class1_evs_chapter12_play_the_game.html',
+        13: 'class1/class1_evs_chapter13_i_need_these.html',
+        14: 'class1/class1_evs_chapter14_heavenly_friends.html',
+        15: 'class1/class1_evs_chapter15_around_us.html',
     }
 
     tpl = lesson_templates.get(lesson_num)
@@ -607,105 +607,105 @@ def class1_evs_animals():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter1.html', student=student)
+    return render_template('class1/class1_evs_chapter1.html', student=student)
 
 @app.route('/class/1/evs/plants')
 def class1_evs_plants():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter2.html', student=student)
+    return render_template('class1/class1_evs_chapter2.html', student=student)
 
 @app.route('/class/1/evs/water')
 def class1_evs_water():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter3.html', student=student)
+    return render_template('class1/class1_evs_chapter3.html', student=student)
 
 @app.route('/class/1/evs/delicious-food')
 def class1_evs_delicious_food():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter4.html', student=student)
+    return render_template('class1/class1_evs_chapter4.html', student=student)
 
 @app.route('/class/1/evs/do-we-need-food')
 def class1_evs_do_we_need_food():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter5.html', student=student)
+    return render_template('class1/class1_evs_chapter5.html', student=student)
 
 @app.route('/class/1/evs/my-house')
 def class1_evs_my_house():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter6_my_house.html', student=student)
+    return render_template('class1/class1_evs_chapter6_my_house.html', student=student)
 
 @app.route('/class/1/evs/clean-habits')
 def class1_evs_clean_habits():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter7_clean_habits.html', student=student)
+    return render_template('class1/class1_evs_chapter7_clean_habits.html', student=student)
 
 @app.route('/class/1/evs/safety-discipline')
 def class1_evs_safety_discipline():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter8_safety_and_discipline.html', student=student)
+    return render_template('class1/class1_evs_chapter8_safety_and_discipline.html', student=student)
 
 @app.route('/class/1/evs/transportation')
 def class1_evs_transportation():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter9_transportation.html', student=student)
+    return render_template('class1/class1_evs_chapter9_transportation.html', student=student)
 
 @app.route('/class/1/evs/i-and-my-family')
 def class1_evs_i_and_my_family():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter10_family.html', student=student)
+    return render_template('class1/class1_evs_chapter10_family.html', student=student)
 
 @app.route('/class/1/evs/neighbourhood')
 def class1_evs_neighbourhood():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter11_neighbourhood.html', student=student)
+    return render_template('class1/class1_evs_chapter11_neighbourhood.html', student=student)
 
 @app.route('/class/1/evs/play-the-game')
 def class1_evs_play_the_game():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter12_play_the_game.html', student=student)
+    return render_template('class1/class1_evs_chapter12_play_the_game.html', student=student)
 
 @app.route('/class/1/evs/i-need-these')
 def class1_evs_i_need_these():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter13_i_need_these.html', student=student)
+    return render_template('class1/class1_evs_chapter13_i_need_these.html', student=student)
 
 @app.route('/class/1/evs/heavenly-friends')
 def class1_evs_heavenly_friends():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter14_heavenly_friends.html', student=student)
+    return render_template('class1/class1_evs_chapter14_heavenly_friends.html', student=student)
 
 @app.route('/class/1/evs/around-us')
 def class1_evs_around_us():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_evs_chapter15_around_us.html', student=student)
+    return render_template('class1/class1_evs_chapter15_around_us.html', student=student)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
