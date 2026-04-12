@@ -5,11 +5,32 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'vidyaai_secret_key_2026'
+
+# Secret key from environment variable (set on Render dashboard)
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-fallback-key-change-in-prod')
+
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database', 'vidyaai.db')
+
+# Use DATABASE_URL from environment (PostgreSQL on Render) or fallback to local SQLite
+database_url = os.environ.get(
+    'DATABASE_URL',
+    'sqlite:///' + os.path.join(basedir, 'database', 'vidyaai.db')
+)
+# Render provides postgres:// but SQLAlchemy requires postgresql://
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
 os.makedirs(os.path.join(basedir, 'database'), exist_ok=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Connection pool settings — handle burst traffic from 1000 concurrent users
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_size': 10,        # keep 10 connections alive
+    'max_overflow': 20,     # allow up to 20 extra connections in a spike
+    'pool_timeout': 30,     # wait up to 30s for a free connection
+    'pool_recycle': 300,    # recycle connections every 5 min to avoid stale ones
+}
 
 db = SQLAlchemy(app)
 
