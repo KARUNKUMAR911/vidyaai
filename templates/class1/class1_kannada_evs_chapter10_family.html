@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 10: ನಾನು ಮತ್ತು ನಮ್ಮವರು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#fff8f0; min-height:100vh; overflow-x:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#e65100,#ff7043);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.6); color:#fff;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,#e65100,#bf360c); padding:18px 20px 40px; text-align:center; }
+.hero-emoji { font-size:64px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:26px; color:#fff; margin-bottom:4px; }
+.hero p { font-size:14px; color:rgba(255,255,255,.9); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-20px 16px 16px; background:#fff; border-radius:20px; padding:14px 18px; box-shadow:0 6px 24px rgba(0,0,0,.12); }
+.prog-label { font-size:13px; font-weight:900; color:#555; margin-bottom:8px; }
+.prog-bar { background:#e0e0e0; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#e65100,#ffcc80); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#fff; color:#e65100; border-color:#ffccbc; }
+.step-tab.active   { background:#e65100; color:#fff; border-color:#e65100; box-shadow:0 4px 14px rgba(230,81,0,.4); }
+.step-tab.done     { background:#fff3e0; color:#e65100; border-color:#ffcc80; }
+.step-tab.locked   { background:#f5f5f5; color:#bdbdbd; border-color:#e0e0e0; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#333; color:#fff; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:800; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.3); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.1);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.75; }
+
+/* INFO CARD */
+.info-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09); border-left:6px solid #e65100;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#444; line-height:1.7; }
+
+/* FAMILY GRID */
+.family-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.family-card {
+  background:#fff; border-radius:16px; padding:14px 8px; text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.1); border:3px solid #ffccbc;
+  animation:cardPop .4s ease both;
+}
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.family-card .fc-icon { font-size:48px; display:block; margin-bottom:6px; }
+.family-card .fc-name { font-family:'Fredoka One',cursive; font-size:15px; color:#e65100; }
+.family-card .fc-name-kn { font-size:13px; font-weight:900; color:#bf360c; margin-top:2px; }
+.family-card .fc-role { font-size:11px; font-weight:800; color:#ff8a65; margin-top:3px; }
+
+/* TAP LEARN CARDS */
+.tap-card {
+  background:#fff; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); border:3px solid #ffccbc; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#fff3e0; border-color:#e65100; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#e65100; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+.tc-reveal { font-size:13px; font-weight:900; color:#e65100; margin-top:6px; display:none; }
+.tap-card.tapped .tc-reveal { display:block; }
+.tap-hint { text-align:center; font-size:13px; font-weight:900; color:#888; margin:-4px 0 10px; }
+
+/* SONG LINES */
+.song-card {
+  background:#fff; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+}
+.song-card .song-title { font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; margin-bottom:10px; text-align:center; }
+.song-line {
+  display:block; width:100%; padding:12px 16px; margin-bottom:8px;
+  border-radius:14px; border:3px solid #ffccbc; background:#fff8f0;
+  font-family:'Fredoka One',cursive; font-size:16px; color:#555;
+  cursor:pointer; text-align:center; transition:all .2s; user-select:none;
+}
+.song-line:active { transform:scale(.97); }
+.song-line.sung { background:#fff3e0; border-color:#e65100; color:#bf360c; }
+
+/* Q CARD */
+.q-card {
+  background:#fff; border-radius:24px; padding:20px 18px; margin-bottom:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,.1); text-align:center;
+}
+.q-visual { font-size:60px; margin-bottom:10px; display:block; line-height:1.3; }
+.q-text { font-family:'Fredoka One',cursive; font-size:18px; color:#333; line-height:1.4; margin-bottom:16px; white-space:pre-wrap; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #ffccbc; background:#fff3e0; color:#444; cursor:pointer;
+  transition:all .2s; user-select:none; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; animation:popIn .3s ease; }
+.q-option.wrong   { background:#ffcdd2; border-color:#e53935; color:#b71c1c; animation:wobble .4s ease; }
+@keyframes popIn { 0%{transform:scale(.9)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wobble { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* DOTS */
+.q-dots { display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+.dot { width:12px; height:12px; border-radius:50%; background:#e0e0e0; transition:background .3s; }
+.dot.done-ok  { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.dot.active   { background:#e65100; transform:scale(1.3); }
+
+/* MATCH GAME */
+.match-wrap { background:#fff; border-radius:20px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,.1); margin-bottom:14px; }
+.match-title { font-family:'Fredoka One',cursive; font-size:17px; color:#e65100; text-align:center; margin-bottom:12px; }
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.match-col-title { font-family:'Fredoka One',cursive; font-size:13px; color:#888; text-align:center; margin-bottom:6px; }
+.match-item {
+  padding:12px 10px; border-radius:14px; border:3px solid #ffccbc; background:#fff8f0;
+  font-family:'Fredoka One',cursive; font-size:15px; color:#555; text-align:center;
+  cursor:pointer; margin-bottom:8px; transition:all .2s; user-select:none;
+}
+.match-item:active { transform:scale(.96); }
+.match-item.selected { background:#fff3e0; border-color:#e65100; color:#e65100; }
+.match-item.matched  { background:#c8e6c9; border-color:#4caf50; color:#1b5e20; pointer-events:none; }
+.match-item.wrong-flash { background:#ffcdd2; border-color:#e53935; }
+.match-score { text-align:center; font-family:'Fredoka One',cursive; font-size:15px; color:#e65100; margin-bottom:10px; }
+.match-msg { display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#4caf50; margin:10px 0; }
+
+/* NEXT BUTTON */
+.next-btn {
+  display:block; width:100%; padding:18px; border-radius:20px; border:none;
+  font-family:'Fredoka One',cursive; font-size:18px; color:#fff; cursor:pointer;
+  background:#ccc; margin-top:8px; transition:all .3s;
+}
+.next-btn.ready { background:linear-gradient(135deg,#e65100,#ff7043); box-shadow:0 6px 20px rgba(230,81,0,.4); }
+.next-btn:disabled { cursor:not-allowed; }
+
+/* CELEBRATE */
+.celeb-screen {
+  position:fixed; inset:0; background:linear-gradient(135deg,#e65100,#bf360c);
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  z-index:9999; text-align:center; padding:30px;
+}
+.celeb-screen.show { display:flex; }
+.celeb-emoji { font-size:80px; margin-bottom:16px; animation:bounce 1s ease infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; margin-bottom:10px; }
+.celeb-sub { font-size:15px; font-weight:800; color:rgba(255,255,255,.9); line-height:1.8; white-space:pre-wrap; }
+.celeb-stars { font-size:22px; margin:14px 0; }
+.restart-btn {
+  margin-top:20px; padding:16px 32px; border-radius:20px; border:none; background:#fff;
+  font-family:'Fredoka One',cursive; font-size:18px; color:#e65100; cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
+}
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; width:10px; height:10px; top:-20px; border-radius:2px;
+  animation:fall linear forwards;
+}
+@keyframes fall { to{transform:translateY(110vh) rotate(540deg); opacity:0;} }
+
+/* SECTION HEADERS */
+.section-hdr {
+  font-family:'Fredoka One',cursive; font-size:16px; color:#e65100;
+  margin:14px 0 8px; padding:8px 14px; background:#fff3e0; border-radius:12px;
+  border-left:5px solid #e65100;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">🏠 ಪಾಠ 10 · ನಾನು ಮತ್ತು ನಮ್ಮವರು</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">👨‍👩‍👧‍👦</span>
+  <h1>ನಾನು ಮತ್ತು ನಮ್ಮವರು</h1>
+  <p>Me and My People · EVS Class 1 · Lesson 10</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">📊 ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-family"     onclick="goTab('family')">🏠 1. ಕುಟುಂಬ</div>
+  <div class="step-tab locked" id="tab-members"   onclick="goTab('members')">👴👵 2. ಸದಸ್ಯರು</div>
+  <div class="step-tab locked" id="tab-relations" onclick="goTab('relations')">🔗 3. ಸಂಬಂಧ</div>
+  <div class="step-tab locked" id="tab-help"      onclick="goTab('help')">🤝 4. ಸಹಾಯ</div>
+  <div class="step-tab locked" id="tab-school"    onclick="goTab('school')">🏫 5. ಶಾಲೆ</div>
+  <div class="step-tab locked" id="tab-friends"   onclick="goTab('friends')">😊 6. ಗೆಳೆಯರು</div>
+  <div class="step-tab locked" id="tab-song"      onclick="goTab('song')">🎵 7. ಹಾಡು</div>
+  <div class="step-tab locked" id="tab-quiz"      onclick="goTab('quiz')">🧠 8. ರಸಪ್ರಶ್ನೆ</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════ TAB 1 · FAMILY INTRO ═══════════════════════════ -->
+<div class="tab-panel active" id="panel-family">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <div class="banner-emoji">🏠</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಕುಟುಂಬ · Family</div>
+      <div class="banner-sub" style="color:#bf360c;">ನಮ್ಮ ಮನೆಯ ಜನ · People of our home</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">ಸುನೀಲನ ಮನೆ 🏡</div>
+    <div class="ic-text">ಇದು ಸುನೀಲನ ಮನೆಯ ಚಿತ್ರ.<br>This is a picture of Suneel's home.<br><br>ಈ ಚಿತ್ರದಲ್ಲಿ ಸುನೀಲನ ಮನೆಯ ಜನರು ಇದ್ದಾರೆ.<br>The people in the picture are Suneel's family members.</div>
+  </div>
+
+  <div class="section-hdr">👇 ಪ್ರತಿ ಕಾರ್ಡ್ ತಟ್ಟು · Tap each card to learn!</div>
+  <p class="tap-hint">👆 ಎಲ್ಲ ಕಾರ್ಡ್ ತಟ್ಟಿದ ನಂತರ ಮುಂದೆ ಹೋಗಬಹುದು · Tap ALL cards to continue</p>
+
+  <div id="familyIntroCards">
+    <div class="tap-card" id="fi0" onclick="tapFI(0)">
+      <div class="tc-icon">👨‍👩‍👧‍👦</div>
+      <div>
+        <div class="tc-text">ಕುಟುಂಬ · Family</div>
+        <div class="tc-sub">ಮನೆಯ ಎಲ್ಲ ಜನ ಒಟ್ಟಿಗೆ · All people of a home together</div>
+        <div class="tc-reveal">ನಮ್ಮ ಕುಟುಂಬ ನಮಗೆ ಪ್ರಿಯ! Our family is dear to us! ❤️</div>
+      </div>
+    </div>
+    <div class="tap-card" id="fi1" onclick="tapFI(1)">
+      <div class="tc-icon">🏠</div>
+      <div>
+        <div class="tc-text">ನಮ್ಮ ಮನೆ · Our Home</div>
+        <div class="tc-sub">ನಾವು ಒಟ್ಟಿಗೆ ವಾಸಿಸುತ್ತೇವೆ · We live together</div>
+        <div class="tc-reveal">ಮನೆಯಲ್ಲಿ ಸಂತೋಷ! Happiness at home! 🏡</div>
+      </div>
+    </div>
+    <div class="tap-card" id="fi2" onclick="tapFI(2)">
+      <div class="tc-icon">❤️</div>
+      <div>
+        <div class="tc-text">ಪರಸ್ಪರ ಸಹಕಾರ · Helping Each Other</div>
+        <div class="tc-sub">ಮನೆ ಕೆಲಸದಲ್ಲಿ ಎಲ್ಲರೂ ಸಹಾಯ ಮಾಡುತ್ತಾರೆ</div>
+        <div class="tc-reveal">We help each other at home! 🤝</div>
+      </div>
+    </div>
+    <div class="tap-card" id="fi3" onclick="tapFI(3)">
+      <div class="tc-icon">😊</div>
+      <div>
+        <div class="tc-text">ಕೂಡಿ ಬಾಳುವ · Living Together</div>
+        <div class="tc-sub">ಒಟ್ಟಿಗೆ ಇದ್ದರೆ ಹರುಷ · Joy when together</div>
+        <div class="tc-reveal">ಕೂಡಿ ಬಾಳುವಾ ನಾವೆಲ್ಲಾ! 🌟</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="familyNext" disabled onclick="goTab('members')">
+    ಮುಂದೆ ➡️ ಸದಸ್ಯರು · Next: Family Members
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 2 · FAMILY MEMBERS ═══════════════════════════ -->
+<div class="tab-panel" id="panel-members">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">👴</div>
+    <div>
+      <div class="banner-title" style="color:#c62828;">ಕುಟುಂಬದ ಸದಸ್ಯರು</div>
+      <div class="banner-sub" style="color:#b71c1c;">Family Members · ಮನೆಯ ಜನ</div>
+    </div>
+  </div>
+
+  <div class="section-hdr">👆 ಎಲ್ಲ ಕಾರ್ಡ್ ತಟ್ಟು · Tap every card!</div>
+  <p class="tap-hint">ಮನೆಯ ಪ್ರತಿ ಜನವನ್ನು ತಿಳಿಯಿರಿ · Know each family member</p>
+
+  <div class="family-grid" id="membersGrid">
+    <div class="family-card" id="fm0" onclick="tapMember(0)">
+      <span class="fc-icon">👴</span>
+      <div class="fc-name">ತಾತ</div>
+      <div class="fc-name-kn">Grandfather</div>
+      <div class="fc-role">ಅಪ್ಪನ ಅಪ್ಪ / ಅಮ್ಮನ ಅಪ್ಪ</div>
+    </div>
+    <div class="family-card" id="fm1" onclick="tapMember(1)">
+      <span class="fc-icon">👵</span>
+      <div class="fc-name">ಅಜ್ಜಿ</div>
+      <div class="fc-name-kn">Grandmother</div>
+      <div class="fc-role">ಅಪ್ಪನ ಅಮ್ಮ / ಅಮ್ಮನ ಅಮ್ಮ</div>
+    </div>
+    <div class="family-card" id="fm2" onclick="tapMember(2)">
+      <span class="fc-icon">👨</span>
+      <div class="fc-name">ಅಪ್ಪ</div>
+      <div class="fc-name-kn">Father</div>
+      <div class="fc-role">ನಮ್ಮ ಅಪ್ಪ · Our Father</div>
+    </div>
+    <div class="family-card" id="fm3" onclick="tapMember(3)">
+      <span class="fc-icon">👩</span>
+      <div class="fc-name">ಅಮ್ಮ</div>
+      <div class="fc-name-kn">Mother</div>
+      <div class="fc-role">ನಮ್ಮ ಅಮ್ಮ · Our Mother</div>
+    </div>
+    <div class="family-card" id="fm4" onclick="tapMember(4)">
+      <span class="fc-icon">👦</span>
+      <div class="fc-name">ಅಣ್ಣ / ತಮ್ಮ</div>
+      <div class="fc-name-kn">Brother</div>
+      <div class="fc-role">Elder / Younger Brother</div>
+    </div>
+    <div class="family-card" id="fm5" onclick="tapMember(5)">
+      <span class="fc-icon">👧</span>
+      <div class="fc-name">ಅಕ್ಕ / ತಂಗಿ</div>
+      <div class="fc-name-kn">Sister</div>
+      <div class="fc-role">Elder / Younger Sister</div>
+    </div>
+    <div class="family-card" id="fm6" onclick="tapMember(6)">
+      <span class="fc-icon">👶</span>
+      <div class="fc-name">ಮಗು · ನಾನು</div>
+      <div class="fc-name-kn">Child · Me</div>
+      <div class="fc-role">ಕುಟುಂಬದ ಭಾಗ · Part of family</div>
+    </div>
+    <div class="family-card" id="fm7" onclick="tapMember(7)">
+      <span class="fc-icon">🤗</span>
+      <div class="fc-name">ಸ್ನೇಹಿತರು</div>
+      <div class="fc-name-kn">Friends nearby</div>
+      <div class="fc-role">ಸುತ್ತಲಿನ ಸ್ನೇಹಿತರು</div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="membersNext" disabled onclick="goTab('relations')">
+    ಮುಂದೆ ➡️ ಸಂಬಂಧ · Next: Relationships
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 3 · RELATIONSHIPS ═══════════════════════════ -->
+<div class="tab-panel" id="panel-relations">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಸಂಬಂಧ · Relationships</div>
+      <div class="banner-sub" style="color:#2e7d32;">ಯಾರು ಯಾರು ಏನಾಗ ಬೇಕು?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#4caf50;">
+    <div class="ic-title" style="color:#2e7d32;">🎵 ಹಾಡಿನ ಪಾಠ · Song Lesson</div>
+    <div class="ic-text">ಅಪ್ಪನ ಅಪ್ಪ = <strong>ನನ್ನ ತಾತ</strong><br>
+    ಅಮ್ಮನ ಅಪ್ಪ = <strong>ನನ್ನ ತಾತ</strong><br>
+    ಅಪ್ಪನ ಅಮ್ಮ = <strong>ನನ್ನಜ್ಜಿ</strong><br>
+    ಅಮ್ಮನ ಅಮ್ಮ = <strong>ನನಗಜ್ಜಿ</strong></div>
+  </div>
+
+  <div class="section-hdr">👆 ತಟ್ಟಿ ಕಲಿ · Tap and Learn!</div>
+  <p class="tap-hint">ಎಲ್ಲ ಕಾರ್ಡ್ ತಟ್ಟಬೇಕು · Tap all cards</p>
+
+  <div id="relCards">
+    <div class="tap-card" id="rel0" onclick="tapRel(0)">
+      <div class="tc-icon">👴</div>
+      <div>
+        <div class="tc-text">ಅಮ್ಮನ ಅಪ್ಪ ನಿನಗೇನಾಗಬೇಕು?</div>
+        <div class="tc-sub">Mother's father is your...?</div>
+        <div class="tc-reveal">✅ ನನ್ನ ತಾತ! My Grandfather! 👴</div>
+      </div>
+    </div>
+    <div class="tap-card" id="rel1" onclick="tapRel(1)">
+      <div class="tc-icon">👵</div>
+      <div>
+        <div class="tc-text">ಅಪ್ಪನ ಅಮ್ಮ ನಿನಗೇನಾಗಬೇಕು?</div>
+        <div class="tc-sub">Father's mother is your...?</div>
+        <div class="tc-reveal">✅ ನನ್ನಜ್ಜಿ! My Grandmother! 👵</div>
+      </div>
+    </div>
+    <div class="tap-card" id="rel2" onclick="tapRel(2)">
+      <div class="tc-icon">👵</div>
+      <div>
+        <div class="tc-text">ಅಮ್ಮನ ಅಮ್ಮ ನಿನಗೇನಾಗಬೇಕು?</div>
+        <div class="tc-sub">Mother's mother is your...?</div>
+        <div class="tc-reveal">✅ ನನಗಜ್ಜಿ! My Grandmother too! 👵</div>
+      </div>
+    </div>
+    <div class="tap-card" id="rel3" onclick="tapRel(3)">
+      <div class="tc-icon">👴</div>
+      <div>
+        <div class="tc-text">ಅಪ್ಪನ ಅಪ್ಪ ನಿನಗೇನಾಗಬೇಕು?</div>
+        <div class="tc-sub">Father's father is your...?</div>
+        <div class="tc-reveal">✅ ನನ್ನ ತಾತ! My Grandfather! 👴</div>
+      </div>
+    </div>
+    <div class="tap-card" id="rel4" onclick="tapRel(4)">
+      <div class="tc-icon">❤️</div>
+      <div>
+        <div class="tc-text">ಕೂಡಿ ಬಾಳುವಾ ನಾವೆಲ್ಲಾ!</div>
+        <div class="tc-sub">Let us all live together!</div>
+        <div class="tc-reveal">✅ ಎಲ್ಲರೂ ಬೇಕು ನನಗೆ! I need everyone! 🥰</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="relNext" disabled onclick="goTab('help')">
+    ಮುಂದೆ ➡️ ಸಹಾಯ · Next: Helping at Home
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 4 · HELPING AT HOME ═══════════════════════════ -->
+<div class="tab-panel" id="panel-help">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <div class="banner-emoji">🤝</div>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಮನೆ ಕೆಲಸ · Home Work</div>
+      <div class="banner-sub" style="color:#1565c0;">ಯಾರು ಸಹಾಯ ಮಾಡುತ್ತಾರೆ?</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#1976d2;">
+    <div class="ic-title" style="color:#1976d2;">ಪರಸ್ಪರ ಸಹಕಾರ 🤝</div>
+    <div class="ic-text">ಮನೆಯಲ್ಲಿ ಎಲ್ಲರೂ ಕೆಲಸ ಮಾಡುತ್ತಾರೆ.<br>Everyone works at home together.<br>ಪ್ರತಿ ಕೆಲಸಕ್ಕೆ ಯಾರು ಸಹಾಯ ಮಾಡುತ್ತಾರೆ ತಟ್ಟಿ ತಿಳಿಯಿರಿ!</div>
+  </div>
+
+  <div class="section-hdr">👆 ಎಲ್ಲ ಕಾರ್ಡ್ ತಟ್ಟು · Tap every card!</div>
+  <p class="tap-hint">ಮನೆ ಕೆಲಸ ತಿಳಿಯಿರಿ · Learn home tasks</p>
+
+  <div id="helpCards">
+    <div class="tap-card" id="hc0" onclick="tapHelp(0)">
+      <div class="tc-icon">🚿</div>
+      <div>
+        <div class="tc-text">ಸ್ನಾನ ಮಾಡಿಸುವುದು · Bathing</div>
+        <div class="tc-sub">Who helps you bathe?</div>
+        <div class="tc-reveal">✅ ಅಮ್ಮ / ಅಪ್ಪ ಸಹಾಯ ಮಾಡುತ್ತಾರೆ! Mom/Dad helps! 🛁</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc1" onclick="tapHelp(1)">
+      <div class="tc-icon">💇</div>
+      <div>
+        <div class="tc-text">ತಲೆ ಬಾಚುವುದು · Combing Hair</div>
+        <div class="tc-sub">Who combs your hair?</div>
+        <div class="tc-reveal">✅ ಅಮ್ಮ ತಲೆ ಬಾಚುತ್ತಾರೆ! Mom combs hair! 💇</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc2" onclick="tapHelp(2)">
+      <div class="tc-icon">👗</div>
+      <div>
+        <div class="tc-text">ಬಟ್ಟೆ ತೊಡಿಸುವುದು · Dressing</div>
+        <div class="tc-sub">Who helps you dress?</div>
+        <div class="tc-reveal">✅ ಅಪ್ಪ / ಅಮ್ಮ ಸಹಾಯ ಮಾಡುತ್ತಾರೆ! 👗</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc3" onclick="tapHelp(3)">
+      <div class="tc-icon">😴</div>
+      <div>
+        <div class="tc-text">ಮಲಗಿಸುವುದು · Putting to sleep</div>
+        <div class="tc-sub">Who covers you when sleeping?</div>
+        <div class="tc-reveal">✅ ಅಜ್ಜಿ / ಅಮ್ಮ ಮಲಗಿಸುತ್ತಾರೆ! 😴</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc4" onclick="tapHelp(4)">
+      <div class="tc-icon">📚</div>
+      <div>
+        <div class="tc-text">ಓದಿಸುವುದು · Help with Reading</div>
+        <div class="tc-sub">Who helps you study?</div>
+        <div class="tc-reveal">✅ ಅಮ್ಮ / ತಾತ ಓದಿಸುತ್ತಾರೆ! They help study! 📚</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc5" onclick="tapHelp(5)">
+      <div class="tc-icon">🍽️</div>
+      <div>
+        <div class="tc-text">ಊಟ ಬಡಿಸುವುದು · Serving Food</div>
+        <div class="tc-sub">Who serves you food?</div>
+        <div class="tc-reveal">✅ ಅಣ್ಣ / ಅಕ್ಕ ಸಹಾಯ ಮಾಡುತ್ತಾರೆ! Siblings help! 🍽️</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc6" onclick="tapHelp(6)">
+      <div class="tc-icon">🌿</div>
+      <div>
+        <div class="tc-text">ತೋಟ ನೀರು ಹಾಕುವುದು · Watering Plants</div>
+        <div class="tc-sub">Who waters the garden?</div>
+        <div class="tc-reveal">✅ ಅಮ್ಮ ತೋಟಕ್ಕೆ ನೀರು ಹಾಕುತ್ತಾರೆ! 🌿</div>
+      </div>
+    </div>
+    <div class="tap-card" id="hc7" onclick="tapHelp(7)">
+      <div class="tc-icon">🚲</div>
+      <div>
+        <div class="tc-text">ಸೈಕಲ್ ಕಲಿಸುವುದು · Teaching Cycling</div>
+        <div class="tc-sub">Who teaches you to cycle?</div>
+        <div class="tc-reveal">✅ ಅಪ್ಪ ಸೈಕಲ್ ಕಲಿಸುತ್ತಾರೆ! Dad teaches cycling! 🚲</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="helpNext" disabled onclick="goTab('school')">
+    ಮುಂದೆ ➡️ ಶಾಲೆ · Next: School Activities
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 5 · SCHOOL ═══════════════════════════ -->
+<div class="tab-panel" id="panel-school">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <div class="banner-emoji">🏫</div>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">ಶಾಲೆಯಲ್ಲಿ · At School</div>
+      <div class="banner-sub" style="color:#6a1b9a;">ಶಾಲೆಯ ಕೆಲಸ · School activities</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#9c27b0;">
+    <div class="ic-title" style="color:#7b1fa2;">ಶಾಲೆಯ ಕೆಲಸ 🏫</div>
+    <div class="ic-text">ಶಾಲೆಯಲ್ಲಿ ನಾವು ಅನೇಕ ಕೆಲಸ ಮಾಡುತ್ತೇವೆ.<br>We do many activities at school.<br>ಒಟ್ಟಿಗೆ ಕಲಿಯುತ್ತೇವೆ, ಆಡುತ್ತೇವೆ, ತಿನ್ನುತ್ತೇವೆ!</div>
+  </div>
+
+  <div class="section-hdr">👆 ಶಾಲೆ ಕೆಲಸ ತಿಳಿಯಿರಿ · Tap to learn school activities</div>
+  <p class="tap-hint">ಎಲ್ಲ ಕಾರ್ಡ್ ತಟ್ಟಬೇಕು · Tap all cards</p>
+
+  <div id="schoolCards">
+    <div class="tap-card" id="sc0" onclick="tapSchool(0)">
+      <div class="tc-icon">📖</div>
+      <div>
+        <div class="tc-text">ಪುಸ್ತಕ ಜೋಡಿಸುವುದು · Arranging Books</div>
+        <div class="tc-sub">Arranging books on the shelf</div>
+        <div class="tc-reveal">✅ ನಾನು ಶಾಲೆಯಲ್ಲಿ ಪುಸ್ತಕ ಜೋಡಿಸುತ್ತೇನೆ! 📚</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc1" onclick="tapSchool(1)">
+      <div class="tc-icon">🌺</div>
+      <div>
+        <div class="tc-text">ಗಿಡಕ್ಕೆ ನೀರು ಹಾಕುವುದು · Watering Plants</div>
+        <div class="tc-sub">Watering plants at school</div>
+        <div class="tc-reveal">✅ ನಾನು ಗಿಡಕ್ಕೆ ನೀರು ಹಾಕುತ್ತೇನೆ! 🌺</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc2" onclick="tapSchool(2)">
+      <div class="tc-icon">🎪</div>
+      <div>
+        <div class="tc-text">ಹಬ್ಬ ಅಲಂಕಾರ · Decoration</div>
+        <div class="tc-sub">Decorating school for celebrations</div>
+        <div class="tc-reveal">✅ ಹಬ್ಬಕ್ಕೆ ಒಟ್ಟಿಗೆ ಅಲಂಕಾರ ಮಾಡುತ್ತೇವೆ! 🎊</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc3" onclick="tapSchool(3)">
+      <div class="tc-icon">🖊️</div>
+      <div>
+        <div class="tc-text">ಕಪ್ಪು ಹಲಗೆಯ ಮೇಲೆ ಬರೆಯುವುದು</div>
+        <div class="tc-sub">Writing on the blackboard</div>
+        <div class="tc-reveal">✅ ಅ ಆ ಇ ಈ... ಕಲಿಯೋಣ! 🖊️</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc4" onclick="tapSchool(4)">
+      <div class="tc-icon">🧹</div>
+      <div>
+        <div class="tc-text">ಶಾಲೆ ಗುಡಿಸುವುದು · Sweeping</div>
+        <div class="tc-sub">Sweeping the classroom</div>
+        <div class="tc-reveal">✅ ಶಾಲೆ ಸ್ವಚ್ಛ ಮಾಡೋಣ! Let's keep school clean! 🧹</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc5" onclick="tapSchool(5)">
+      <div class="tc-icon">👩‍🏫</div>
+      <div>
+        <div class="tc-text">ಶಿಕ್ಷಕರಿಗೆ ಸಹಾಯ · Helping Teacher</div>
+        <div class="tc-sub">Helping the teacher with books</div>
+        <div class="tc-reveal">✅ ಶಿಕ್ಷಕರಿಗೆ ಸಹಾಯ ಮಾಡೋಣ! 👩‍🏫</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc6" onclick="tapSchool(6)">
+      <div class="tc-icon">🍱</div>
+      <div>
+        <div class="tc-text">ಒಟ್ಟಿಗೆ ಊಟ · Eating Together</div>
+        <div class="tc-sub">Eating lunch with friends at school</div>
+        <div class="tc-reveal">✅ ಒಟ್ಟಿಗೆ ಊಟ ಮಾಡೋಣ! Eat together! 🍱</div>
+      </div>
+    </div>
+    <div class="tap-card" id="sc7" onclick="tapSchool(7)">
+      <div class="tc-icon">📝</div>
+      <div>
+        <div class="tc-text">ಒಟ್ಟಿಗೆ ಓದುವುದು · Study Together</div>
+        <div class="tc-sub">Studying with friends</div>
+        <div class="tc-reveal">✅ ಒಟ್ಟಿಗೆ ಕಲಿದರೆ ಚೆಂದ! Better together! 📝</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="schoolNext" disabled onclick="goTab('friends')">
+    ಮುಂದೆ ➡️ ಗೆಳೆಯರು · Next: Friends
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 6 · FRIENDS ═══════════════════════════ -->
+<div class="tab-panel" id="panel-friends">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7);">
+    <div class="banner-emoji">😊</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಗೆಳೆಯರು · Friends</div>
+      <div class="banner-sub" style="color:#2e7d32;">ನಾವೆಲ್ಲರೂ ಗೆಳೆಯರು · We are all friends</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#4caf50;">
+    <div class="ic-title" style="color:#2e7d32;">ಗೆಳೆಯರ ಜೊತೆ 👫</div>
+    <div class="ic-text">ಶಾಲೆಯಲ್ಲಿ ನಮಗೆ ಗೆಳೆಯರಿದ್ದಾರೆ.<br>We have friends at school.<br>ಮನೆಯ ಹತ್ತಿರ ಗೆಳೆಯರಿದ್ದಾರೆ.<br>We have friends near our home too!</div>
+  </div>
+
+  <div class="section-hdr">🎯 ಗೆಳೆಯ-ಕಾರ್ಯ ಜೋಡಿ · Match Friend to Activity!</div>
+  <p class="tap-hint">ಎಡ ಆರಿಸಿ ಬಲ ಜೋಡಿಸಿ · Pick left then match right</p>
+
+  <div class="match-wrap">
+    <div class="match-title">⚽ ಒಟ್ಟಿಗೆ ಏನು ಮಾಡೋಣ? · What do we do together?</div>
+    <div class="match-score">✅ <span id="friendMatchScore">0</span> / 5 ಜೋಡಿ</div>
+    <div class="match-cols">
+      <div>
+        <div class="match-col-title">ಚಟುವಟಿಕೆ 🎯</div>
+        <div id="friendLeft"></div>
+      </div>
+      <div>
+        <div class="match-col-title">ಉತ್ತರ 💬</div>
+        <div id="friendRight"></div>
+      </div>
+    </div>
+    <div class="match-msg" id="friendMatchMsg">🎉 ಅದ್ಭುತ! All matched! ⭐</div>
+  </div>
+
+  <button class="next-btn" id="friendsNext" disabled onclick="goTab('song')">
+    ಮುಂದೆ ➡️ ಹಾಡು · Next: Song
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 7 · SONG ═══════════════════════════ -->
+<div class="tab-panel" id="panel-song">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <div class="banner-emoji">🎵</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಹಾಡಿ ನಲಿ · Sing & Dance</div>
+      <div class="banner-sub" style="color:#bf360c;">ಎಲ್ಲ ಸಾಲು ತಟ್ಟಿ ಹಾಡಿ · Tap each line to sing!</div>
+    </div>
+  </div>
+
+  <div class="song-card">
+    <div class="song-title">🎵 ಹಾಡು 1 · ಕೂಡಿ ಬಾಳುವಾ</div>
+    <button class="song-line" id="sl0" onclick="tapSong(0)">ಕೂಡಿ ಬಾಳುವಾ ನಾವೆಲ್ಲಾ 🏠</button>
+    <button class="song-line" id="sl1" onclick="tapSong(1)">ಎಲ್ಲರೂ ಬೇಕು ನನಗೆ ❤️</button>
+    <button class="song-line" id="sl2" onclick="tapSong(2)">ಎಲ್ಲರೂ ಕೂಡಿ ಬಾಳುತಲಿದ್ದರೆ 😊</button>
+    <button class="song-line" id="sl3" onclick="tapSong(3)">ಹರುಷವು ಎಂದೂ ಮನೆಗೆ 🌟</button>
+  </div>
+
+  <div class="song-card">
+    <div class="song-title">🎵 ಹಾಡು 2 · ಸಂಬಂಧ ಹಾಡು</div>
+    <button class="song-line" id="sl4" onclick="tapSong(4)">ಅಪ್ಪನ ಅಪ್ಪ ನನ್ನಯ ತಾತ 👴</button>
+    <button class="song-line" id="sl5" onclick="tapSong(5)">ಅಮ್ಮನ ಅಪ್ಪನೂ ನನ್ನಯ ತಾತ 👴</button>
+    <button class="song-line" id="sl6" onclick="tapSong(6)">ಅಪ್ಪನ ಅಮ್ಮ ನನ್ನಜ್ಜಿ 👵</button>
+    <button class="song-line" id="sl7" onclick="tapSong(7)">ಅಮ್ಮನ ಅಮ್ಮನೂ ನನಗಜ್ಜಿ 👵</button>
+  </div>
+
+  <div class="song-card">
+    <div class="song-title">🎵 ಹಾಡು 3 · ಗೆಳೆಯರ ಹಾಡು</div>
+    <button class="song-line" id="sl8" onclick="tapSong(8)">ನಾವೆಲ್ಲರೂ ಎಳೆಯರು 👦👧</button>
+    <button class="song-line" id="sl9" onclick="tapSong(9)">ನಾವೆಲ್ಲರೂ ಗೆಳೆಯರು 🤝</button>
+    <button class="song-line" id="sl10" onclick="tapSong(10)">ಶಾಲೆಗೆಲ್ಲ ಬರುವೆವು 🏫</button>
+    <button class="song-line" id="sl11" onclick="tapSong(11)">ಎಲ್ಲ ಸೇರಿ ಕಲಿವೆವು 📚</button>
+    <button class="song-line" id="sl12" onclick="tapSong(12)">ಎಲ್ಲ ಆಡಿ ನಲಿವೆವು ⚽🎉</button>
+  </div>
+
+  <p class="tap-hint" id="songProgress">0 / 13 ಸಾಲು ಹಾಡಿದೆ · Lines sung</p>
+
+  <button class="next-btn" id="songNext" disabled onclick="goTab('quiz')">
+    ಮುಂದೆ ➡️ ರಸಪ್ರಶ್ನೆ · Next: Quiz!
+  </button>
+</div>
+
+<!-- ═══════════════════════════ TAB 8 · QUIZ ═══════════════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🧠</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ರಸಪ್ರಶ್ನೆ · Quiz Time!</div>
+      <div class="banner-sub" style="color:#ad1457;">ಎಷ್ಟು ಕಲಿತೆ? How much did you learn?</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">
+    🎉 ಪಾಠ ಮುಗಿಸಿದೆ! · Lesson Complete!
+  </button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🎉</div>
+  <div class="celeb-title">ಅದ್ಭುತ! Wonderful!</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="restart-btn" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡು · Play Again</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════════ */
+let stars = 0;
+const TAB_ORDER = ['family','members','relations','help','school','friends','song','quiz'];
+const unlockedTabs = new Set(['family']);
+const doneTabs = new Set();
+let toastTimer = null;
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function goTab(name) {
+  if (!unlockedTabs.has(name)) {
+    const el = document.getElementById('tab-' + name);
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲಿನ ಹಂತ ಮುಗಿಸು! · Finish the previous step first!');
+    return;
+  }
+  TAB_ORDER.forEach(t => {
+    document.getElementById('panel-' + t).classList.remove('active');
+    const tab = document.getElementById('tab-' + t);
+    tab.classList.remove('active');
+    if (doneTabs.has(t)) {
+      tab.classList.remove('unlocked','locked');
+      tab.classList.add('done');
+    } else if (unlockedTabs.has(t)) {
+      tab.classList.remove('locked','done');
+      tab.classList.add('unlocked');
+    } else {
+      tab.classList.remove('unlocked','done');
+      tab.classList.add('locked');
+    }
+  });
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('stepsBar').querySelector('#tab-' + name).scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+}
+
+function unlockNext(current) {
+  doneTabs.add(current);
+  const idx = TAB_ORDER.indexOf(current);
+  if (idx + 1 < TAB_ORDER.length) {
+    const next = TAB_ORDER[idx + 1];
+    unlockedTabs.add(next);
+    const tab = document.getElementById('tab-' + next);
+    tab.classList.remove('locked');
+    tab.classList.add('unlocked');
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = (doneTabs.size / TAB_ORDER.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ══════════════════════════════════════
+   TAB 1 · FAMILY INTRO
+══════════════════════════════════════ */
+const fiTapped = new Set();
+function tapFI(i) {
+  const el = document.getElementById('fi' + i);
+  el.classList.add('tapped');
+  fiTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (fiTapped.size === 4) {
+    const btn = document.getElementById('familyNext');
+    btn.disabled = false; btn.classList.add('ready');
+    unlockNext('family');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 2 · MEMBERS
+══════════════════════════════════════ */
+const membersTapped = new Set();
+function tapMember(i) {
+  const el = document.getElementById('fm' + i);
+  el.style.background = '#fff3e0';
+  el.style.borderColor = '#e65100';
+  el.querySelector('.fc-name').style.color = '#bf360c';
+  membersTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (membersTapped.size === 8) {
+    const btn = document.getElementById('membersNext');
+    btn.disabled = false; btn.classList.add('ready');
+    unlockNext('members');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 3 · RELATIONS
+══════════════════════════════════════ */
+const relTapped = new Set();
+function tapRel(i) {
+  const el = document.getElementById('rel' + i);
+  el.classList.add('tapped');
+  relTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (relTapped.size === 5) {
+    const btn = document.getElementById('relNext');
+    btn.disabled = false; btn.classList.add('ready');
+    unlockNext('relations');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 4 · HELP AT HOME
+══════════════════════════════════════ */
+const helpTapped = new Set();
+function tapHelp(i) {
+  const el = document.getElementById('hc' + i);
+  el.classList.add('tapped');
+  helpTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (helpTapped.size === 8) {
+    const btn = document.getElementById('helpNext');
+    btn.disabled = false; btn.classList.add('ready');
+    unlockNext('help');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 5 · SCHOOL
+══════════════════════════════════════ */
+const schoolTapped = new Set();
+function tapSchool(i) {
+  const el = document.getElementById('sc' + i);
+  el.classList.add('tapped');
+  schoolTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  if (schoolTapped.size === 8) {
+    const btn = document.getElementById('schoolNext');
+    btn.disabled = false; btn.classList.add('ready');
+    unlockNext('school');
+    buildFriendMatch();
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 6 · FRIENDS MATCH
+══════════════════════════════════════ */
+const friendPairs = [
+  { left:'⚽ ಆಟ ಆಡುವುದು', right:'ಒಟ್ಟಿಗೆ ಆಡೋಣ!' },
+  { left:'📚 ಒಟ್ಟಿಗೆ ಕಲಿಯುವುದು', right:'ಎಲ್ಲ ಸೇರಿ ಓದೋಣ' },
+  { left:'🍱 ಊಟ ಮಾಡುವುದು', right:'ಶಾಲೆಯ ಊಟ' },
+  { left:'🌻 ಗಿಡ ನೆಡುವುದು', right:'ಒಟ್ಟಿಗೆ ನೆಡೋಣ' },
+  { left:'😊 ಸ್ನೇಹಿತ', right:'ನನ್ನ ಗೆಳೆಯ' }
+];
+let friendSelLeft = null, friendMatchDone = 0;
+
+function buildFriendMatch() {
+  const shuffled = [...friendPairs].sort(() => Math.random() - 0.5);
+  const left = document.getElementById('friendLeft');
+  const right = document.getElementById('friendRight');
+  left.innerHTML = friendPairs.map((p, i) =>
+    `<div class="match-item" id="fml-${i}" onclick="selectFriendLeft(${i})">${p.left}</div>`
+  ).join('');
+  right.innerHTML = shuffled.map(p => {
+    const origIdx = friendPairs.findIndex(m => m.right === p.right);
+    return `<div class="match-item" id="fmr-${origIdx}" onclick="selectFriendRight(${origIdx})">${p.right}</div>`;
+  }).join('');
+}
+buildFriendMatch();
+
+function selectFriendLeft(i) {
+  if (document.getElementById('fml-' + i).classList.contains('matched')) return;
+  if (friendSelLeft !== null) document.getElementById('fml-' + friendSelLeft)?.classList.remove('selected');
+  friendSelLeft = i;
+  document.getElementById('fml-' + i).classList.add('selected');
+}
+
+function selectFriendRight(i) {
+  if (friendSelLeft === null) { showToast('👈 ಮೊದಲು ಎಡ ಆರಿಸು! Pick left first!'); return; }
+  const lEl = document.getElementById('fml-' + friendSelLeft);
+  const rEl = document.getElementById('fmr-' + i);
+  if (rEl.classList.contains('matched')) return;
+  if (friendSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    friendMatchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('friendMatchScore').textContent = friendMatchDone;
+    friendSelLeft = null;
+    if (friendMatchDone === friendPairs.length) {
+      setTimeout(() => {
+        document.getElementById('friendMatchMsg').style.display = 'block';
+        const btn = document.getElementById('friendsNext');
+        btn.disabled = false; btn.classList.add('ready');
+        unlockNext('friends');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); friendSelLeft = null; }, 600);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 7 · SONG
+══════════════════════════════════════ */
+const songTapped = new Set();
+const totalSongLines = 13;
+
+function tapSong(i) {
+  const el = document.getElementById('sl' + i);
+  el.classList.add('sung');
+  songTapped.add(i);
+  stars++; document.getElementById('starsNum').textContent = stars;
+  document.getElementById('songProgress').textContent = songTapped.size + ' / ' + totalSongLines + ' ಸಾಲು ಹಾಡಿದೆ · Lines sung';
+  if (songTapped.size === totalSongLines) {
+    const btn = document.getElementById('songNext');
+    btn.disabled = false; btn.classList.add('ready');
+    unlockNext('song');
+    buildQuiz();
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 8 · QUIZ
+══════════════════════════════════════ */
+const quizQuestions = [
+  { visual:'👴❓', question:'ಅಪ್ಪನ ಅಪ್ಪ ನಿನಗೇನಾಗಬೇಕು?\nFather\'s father is your...?', options:['👨 ಅಪ್ಪ','👵 ಅಜ್ಜಿ','👴 ತಾತ!','👩 ಅಮ್ಮ'], correct:2 },
+  { visual:'👵❓', question:'ಅಮ್ಮನ ಅಮ್ಮ ನಿನಗೇನಾಗಬೇಕು?\nMother\'s mother is your...?', options:['👴 ತಾತ','👵 ಅಜ್ಜಿ!','👨 ಅಣ್ಣ','👧 ತಂಗಿ'], correct:1 },
+  { visual:'🏠❓', question:'ಮನೆಯಲ್ಲಿ ಎಲ್ಲರೂ ಏನು ಮಾಡುತ್ತಾರೆ?\nWhat do all family members do at home?', options:['🎮 ಆಡುತ್ತಾರೆ','❤️ ಸಹಕಾರ ಮಾಡುತ್ತಾರೆ!','😴 ಮಲಗುತ್ತಾರೆ','🏃 ಓಡುತ್ತಾರೆ'], correct:1 },
+  { visual:'🎵❓', question:'ಹಾಡಿನ ಮೊದಲ ಸಾಲು ಯಾವುದು?\nWhat is the first line of the song?', options:['ಎಲ್ಲ ಆಡಿ ನಲಿವೆವು','ಕೂಡಿ ಬಾಳುವಾ ನಾವೆಲ್ಲಾ!','ಶಾಲೆಗೆಲ್ಲ ಬರುವೆವು','ನಾವೆಲ್ಲರೂ ಗೆಳೆಯರು'], correct:1 },
+  { visual:'🤝❓', question:'ಯಾರು ಸ್ನಾನ ಮಾಡಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತಾರೆ?\nWho helps you bathe?', options:['👴 ತಾತ','👨 ಅಪ್ಪ / ಅಮ್ಮ!','😊 ಗೆಳೆಯ','🐕 ನಾಯಿ'], correct:1 },
+  { visual:'🏫❓', question:'ಶಾಲೆಯಲ್ಲಿ ನಾವು ಯಾರ ಜೊತೆ ಊಟ ಮಾಡುತ್ತೇವೆ?\nWith whom do we eat lunch at school?', options:['🐕 ನಾಯಿ','👨‍👩‍👧 ಕುಟುಂಬ','👫 ಗೆಳೆಯರ ಜೊತೆ!','😴 ಒಬ್ಬಂಟಿ'], correct:2 },
+  { visual:'👴👵❓', question:'ಅಪ್ಪನ ಅಮ್ಮ ನಿನಗೇನಾಗಬೇಕು?\nFather\'s mother is your...?', options:['👵 ಅಜ್ಜಿ!','👴 ತಾತ','👩 ಅಮ್ಮ','👧 ತಂಗಿ'], correct:0 },
+  { visual:'😊❓', question:'ಮನೆಯ ಹತ್ತಿರ ಇರುವವರನ್ನು ಏನು ಎನ್ನುತ್ತಾರೆ?\nWhat do we call people near our home?', options:['🐕 ನಾಯಿ','😊 ಸ್ನೇಹಿತರು!','🏢 ಕಟ್ಟಡ','🚗 ವಾಹನ'], correct:1 },
+  { visual:'🎵❓', question:'ಗೆಳೆಯರ ಹಾಡಿನಲ್ಲಿ ನಾವೆಲ್ಲ ಶಾಲೆಗೆ ----\nIn the friends\' song, we all ___ to school', options:['ಓಡುವೆವು','ಬರುವೆವು!','ಹೋಗುವೆವು','ಹಾರುವೆವು'], correct:1 },
+  { visual:'❤️❓', question:'ಈ ಪಾಠದ ಹೆಸರು ಏನು?\nWhat is the name of this lesson?', options:['ನನ್ನ ಶಾಲೆ','ಗಿಡ ಮರ','ನಾನು ಮತ್ತು ನಮ್ಮವರು!','ವಾಹನಗಳು'], correct:2 },
+];
+let quizIdx = 0, quizAnswered = [];
+
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_, i) =>
+    `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`
+  ).join('');
+  renderQuizQ(0);
+}
+
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-' + quizIdx).classList.remove('active');
+  document.getElementById('dot-' + quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if (correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < quizQuestions.length) {
+      document.getElementById('dot-' + quizIdx).classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1200);
+}
+
+/* ══════════════════════════════════════
+   CELEBRATION
+══════════════════════════════════════ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 10 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 10 — ನಾನು ಮತ್ತು ನಮ್ಮವರು!\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಕುಟುಂಬ ಚಾಂಪಿಯನ್! 👨‍👩‍👧‍👦🏆`;
+  let starStr = '';
+  for (let i = 0; i < Math.min(stars, 20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti() {
+  const colors = ['#e65100','#ff7043','#ffd54f','#4caf50','#ef5350','#9c27b0'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDelay = Math.random() * 2 + 's';
+    p.style.animationDuration = (2 + Math.random() * 2) + 's';
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+
+function restartAll() { location.reload(); }
+
+updateProgress();
+</script>
+</body>
+</html>

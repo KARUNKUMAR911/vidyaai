@@ -330,8 +330,7 @@ def class1_kannada_evs_lesson(lesson_num: int):
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
 
-    # Map "lesson number" to templates. Kannada lessons exist for 1-9; the rest
-    # currently fall back to the English-medium EVS pages so navigation works.
+    # Map "lesson number" to templates.
     lesson_templates = {
         1:  'class1/class1_kannada_evs_chapter1_animals.html',
         2:  'class1/class1_kannada_evs_chapter2_plants.html',
@@ -342,12 +341,12 @@ def class1_kannada_evs_lesson(lesson_num: int):
         7:  'class1/class1_kannada_evs_chapter7_swachha_abhyasagalu.html',
         8:  'class1/class1_kannada_evs_chapter8_surakshate_shistu.html',
         9:  'class1/class1_kannada_evs_chapter9_vehicles.html',
-        10: 'class1/class1_evs_chapter10_family.html',
-        11: 'class1/class1_evs_chapter11_neighbourhood.html',
-        12: 'class1/class1_evs_chapter12_play_the_game.html',
-        13: 'class1/class1_evs_chapter13_i_need_these.html',
-        14: 'class1/class1_evs_chapter14_heavenly_friends.html',
-        15: 'class1/class1_evs_chapter15_around_us.html',
+        10: 'class1/class1_kannada_evs_chapter10_family.html',
+        11: 'class1/class1_kannada_evs_chapter11_neighbourhood.html',
+        12: 'class1/class1_kannada_evs_chapter12_games.html',
+        13: 'class1/class1_kannada_evs_chapter13_needs.html',
+        14: 'class1/class1_kannada_evs_chapter14_sky.html',
+        15: 'class1/class1_kannada_evs_chapter15_surroundings.html',
     }
 
     tpl = lesson_templates.get(lesson_num)

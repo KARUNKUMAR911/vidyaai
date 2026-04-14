@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 15: ನಮ್ಮ ಸುತ್ತ-ಮುತ್ತ</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#0a2a0a; min-height:100vh; overflow-x:hidden; }
+
+/* NATURE BG */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse at 30% 20%, #1a3a1a 0%, #0a2a0a 70%);
+  pointer-events:none;
+}
+.leaf-bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.leaf-bg span {
+  position:absolute; font-size:18px; opacity:.08;
+  animation:leafFloat linear infinite;
+}
+@keyframes leafFloat {
+  0%   { transform:translateY(110vh) rotate(0deg); opacity:.08; }
+  100% { transform:translateY(-10vh) rotate(360deg); opacity:.04; }
+}
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#1a4a1a,#2d7a2d);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.2); border:2px solid rgba(255,215,0,.6); color:#ffd700;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero {
+  background:linear-gradient(160deg,#1a4a1a,#0a2a0a);
+  padding:20px 20px 44px; text-align:center; position:relative; z-index:1;
+}
+.hero-emoji { font-size:68px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:28px; color:#7dff7d; margin-bottom:4px; text-shadow:0 0 20px rgba(100,255,100,.4); }
+.hero p { font-size:14px; color:rgba(255,255,255,.85); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-22px 16px 16px; background:#1a3a1a; border-radius:20px; padding:14px 18px;
+  box-shadow:0 6px 24px rgba(0,0,0,.4); border:1px solid rgba(100,220,100,.2); position:relative; z-index:10; }
+.prog-label { font-size:13px; font-weight:900; color:#aaa; margin-bottom:8px; }
+.prog-bar { background:#2a5a2a; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#7dff7d,#4caf50); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; position:relative; z-index:10; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#1a3a1a; color:#aaa; border-color:#2a5a2a; }
+.step-tab.active   { background:#7dff7d; color:#0a2a0a; border-color:#7dff7d; box-shadow:0 4px 14px rgba(100,255,100,.4); }
+.step-tab.done     { background:#2a5a2a; color:#7dff7d; border-color:#7dff7d; }
+.step-tab.locked   { background:#0d1f0d; color:#3a5a3a; border-color:#1a2a1a; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#7dff7d; color:#0a2a0a; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:900; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.4); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; position:relative; z-index:5; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.3);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.8; }
+
+/* INFO CARD */
+.info-card {
+  background:#1a3a1a; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.3); border-left:6px solid #7dff7d;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#7dff7d; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#ccc; line-height:1.7; }
+
+/* TAP CARDS */
+.tap-card {
+  background:#1a3a1a; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.3); border:3px solid #2a5a2a; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#0d2a0d; border-color:#7dff7d; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#7dff7d; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+.tc-reveal { font-size:13px; font-weight:900; color:#90ee90; margin-top:6px; display:none; line-height:1.5; }
+.tap-card.tapped .tc-reveal { display:block; }
+.tap-hint { text-align:center; font-size:13px; font-weight:900; color:#888; margin:-4px 0 10px; }
+
+/* NATURE GRID */
+.nature-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:14px; }
+.nature-card {
+  background:#1a3a1a; border-radius:20px; padding:18px 10px; text-align:center;
+  box-shadow:0 3px 12px rgba(0,0,0,.3); border:3px solid #2a5a2a;
+  animation:cardPop .4s ease both; cursor:pointer; transition:all .2s;
+}
+.nature-card:active { transform:scale(.95); }
+.nature-card.tapped { border-color:#7dff7d; background:#0d2a0d; }
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.nature-card .sc-icon { font-size:52px; display:block; margin-bottom:8px; }
+.nature-card .sc-name { font-family:'Fredoka One',cursive; font-size:16px; color:#7dff7d; }
+.nature-card .sc-sub { font-size:11px; font-weight:800; color:#90ee90; margin-top:4px; }
+.nature-card .sc-fact { font-size:11px; font-weight:800; color:#aaa; margin-top:4px; display:none; line-height:1.4; }
+.nature-card.tapped .sc-fact { display:block; }
+
+/* SORT GAME */
+.sort-wrap { background:#1a3a1a; border-radius:20px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2a5a2a; }
+.sort-title { font-family:'Fredoka One',cursive; font-size:17px; color:#7dff7d; text-align:center; margin-bottom:12px; }
+.sort-items { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; justify-content:center; }
+.sort-item {
+  padding:10px 14px; border-radius:14px; border:3px solid #2a5a2a; background:#0d2a0d;
+  font-size:22px; cursor:pointer; transition:all .2s; user-select:none;
+}
+.sort-item:active { transform:scale(.92); }
+.sort-item.selected-sort { border-color:#7dff7d; background:#1a4a1a; transform:scale(1.05); }
+.sort-item.placed { opacity:.35; pointer-events:none; }
+.sort-buckets { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sort-bucket {
+  background:#0d1f0d; border:3px dashed #2a5a2a; border-radius:16px;
+  min-height:90px; padding:10px 8px; text-align:center; cursor:pointer; transition:all .2s;
+}
+.sort-bucket:active { background:#0d2a0d; border-color:#7dff7d; }
+.bucket-title { font-family:'Fredoka One',cursive; font-size:13px; color:#7dff7d; margin-bottom:6px; }
+.bucket-items { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; }
+.bucket-placed { font-size:22px; background:#1a3a1a; border-radius:8px; padding:4px; }
+.bucket-placed.correct { background:#1a3a1a; }
+.bucket-placed.wrong { background:#3a1a1a; }
+.sort-msg { display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:16px; color:#7dff7d; margin-top:10px; }
+
+/* MATCH GAME */
+.match-wrap { background:#1a3a1a; border-radius:20px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2a5a2a; }
+.match-title { font-family:'Fredoka One',cursive; font-size:17px; color:#7dff7d; text-align:center; margin-bottom:12px; }
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.match-col-title { font-family:'Fredoka One',cursive; font-size:13px; color:#888; text-align:center; margin-bottom:6px; }
+.match-item {
+  padding:12px 10px; border-radius:14px; border:3px solid #2a5a2a; background:#0d2a0d;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#aaa; text-align:center;
+  cursor:pointer; margin-bottom:8px; transition:all .2s; user-select:none; line-height:1.4;
+}
+.match-item:active { transform:scale(.96); }
+.match-item.selected { background:#0d2a0d; border-color:#7dff7d; color:#7dff7d; }
+.match-item.matched  { background:#1a3a1a; border-color:#4caf50; color:#81c784; pointer-events:none; }
+.match-item.wrong-flash { background:#3a1a1a; border-color:#e53935; }
+.match-score { text-align:center; font-family:'Fredoka One',cursive; font-size:15px; color:#7dff7d; margin-bottom:10px; }
+.match-msg { display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#4caf50; margin:10px 0; }
+
+/* CHOOSE GAME */
+.choose-wrap { background:#1a3a1a; border-radius:20px; padding:16px 18px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2a5a2a; }
+.choose-question { font-family:'Fredoka One',cursive; font-size:17px; color:#7dff7d; text-align:center; margin-bottom:12px; line-height:1.5; }
+.choose-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.choose-option {
+  padding:16px 10px; border-radius:16px; border:3px solid #2a5a2a; background:#0d2a0d;
+  font-family:'Fredoka One',cursive; font-size:18px; text-align:center; cursor:pointer;
+  transition:all .2s; user-select:none; line-height:1.4;
+}
+.choose-option:active { transform:scale(.94); }
+.choose-option.correct { background:#1a3a1a; border-color:#4caf50; color:#81c784; }
+.choose-option.wrong   { background:#3a1a1a; border-color:#e53935; color:#ef5350; }
+
+/* QUIZ */
+.q-dots { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+.dot { width:14px; height:14px; border-radius:50%; background:#2a5a2a; transition:all .3s; }
+.dot.active { background:#7dff7d; transform:scale(1.2); }
+.dot.done-ok { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.q-card { background:#1a3a1a; border-radius:20px; padding:20px 16px; box-shadow:0 4px 16px rgba(0,0,0,.3); border:1px solid #2a5a2a; }
+.q-visual { font-size:54px; display:block; text-align:center; margin-bottom:12px; }
+.q-text { font-family:'Fredoka One',cursive; font-size:17px; color:#7dff7d; text-align:center; margin-bottom:14px; line-height:1.5; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.q-option {
+  padding:14px 10px; border-radius:16px; border:3px solid #2a5a2a; background:#0d2a0d;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#aaa; text-align:center;
+  cursor:pointer; transition:all .2s; user-select:none; line-height:1.4;
+}
+.q-option:active { transform:scale(.94); }
+.q-option.correct { background:#1a3a1a; border-color:#4caf50; color:#81c784; }
+.q-option.wrong   { background:#3a1a1a; border-color:#e53935; color:#ef5350; }
+
+/* SONG CARD */
+.song-card {
+  background:linear-gradient(135deg,#1a3a1a,#0d2a0d);
+  border-radius:24px; padding:20px 18px; margin-bottom:14px;
+  border:2px solid #7dff7d; box-shadow:0 4px 20px rgba(100,255,100,.2);
+}
+.song-title { font-family:'Fredoka One',cursive; font-size:20px; color:#7dff7d; text-align:center; margin-bottom:14px; }
+.song-line {
+  font-size:16px; font-weight:800; color:#ccc; line-height:2; text-align:center; margin-bottom:2px;
+  padding:6px 12px; border-radius:12px; cursor:pointer; transition:all .2s; user-select:none;
+}
+.song-line:active { transform:scale(.97); }
+.song-line.lit { background:rgba(125,255,125,.15); color:#7dff7d; }
+.song-line .kn { color:#7dff7d; font-size:17px; }
+.song-line .en { color:#90ee90; font-size:12px; display:block; }
+.song-play-hint { text-align:center; font-size:12px; font-weight:900; color:#555; margin-bottom:10px; }
+
+/* BIG BTN */
+.big-btn {
+  display:block; width:100%; padding:18px; border-radius:20px;
+  border:none; font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer;
+  margin-top:14px; transition:all .2s; user-select:none;
+  background:linear-gradient(135deg,#4caf50,#2a7a2a); color:#fff;
+  box-shadow:0 6px 20px rgba(76,175,80,.4);
+}
+.big-btn:active { transform:scale(.96); }
+.big-btn:disabled { background:#1a3a1a; color:#3a6a3a; cursor:not-allowed; box-shadow:none; }
+.big-btn.ready { animation:pulse .8s ease-in-out infinite alternate; }
+@keyframes pulse { from{box-shadow:0 6px 20px rgba(76,175,80,.4)} to{box-shadow:0 6px 30px rgba(76,175,80,.8)} }
+
+/* CELEBRATION */
+.celeb-screen {
+  position:fixed; inset:0; z-index:900; background:#0a2a0a;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity .5s;
+}
+.celeb-screen.show { opacity:1; pointer-events:all; }
+.celeb-emoji { font-size:80px; animation:heroFloat 2s ease-in-out infinite; margin-bottom:16px; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:30px; color:#7dff7d; text-align:center; margin-bottom:12px; text-shadow:0 0 20px rgba(100,255,100,.5); }
+.celeb-sub { font-size:14px; font-weight:800; color:#ccc; text-align:center; white-space:pre-line; line-height:1.9; margin-bottom:18px; }
+.celeb-stars { font-size:24px; margin-bottom:22px; }
+.confetti-piece {
+  position:fixed; top:-20px; width:10px; height:10px; border-radius:2px;
+  animation:confettiFall linear forwards; pointer-events:none; z-index:999;
+}
+@keyframes confettiFall { 0%{top:-20px;opacity:1} 100%{top:110vh;opacity:0} }
+</style>
+</head>
+<body>
+
+<div class="leaf-bg" id="leafBg"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">🌿 ಪಾಠ 15 · ನಮ್ಮ ಸುತ್ತ-ಮುತ್ತ</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🌳</span>
+  <h1>ನಮ್ಮ ಸುತ್ತ-ಮುತ್ತ</h1>
+  <p>Namma Sutta-Mutta · Our Surroundings</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label">ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- STEP TABS -->
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-intro"    onclick="goTab('intro')"   >🌿 ಶುರು</div>
+  <div class="step-tab locked" id="tab-nature"   onclick="goTab('nature')"  >🏔️ ಪ್ರಕೃತಿ</div>
+  <div class="step-tab locked" id="tab-village"  onclick="goTab('village')" >🏘️ ನಮ್ಮ ಊರು</div>
+  <div class="step-tab locked" id="tab-sort"     onclick="goTab('sort')"    >🎮 ಆಟ 1</div>
+  <div class="step-tab locked" id="tab-song"     onclick="goTab('song')"    >🎵 ಹಾಡು</div>
+  <div class="step-tab locked" id="tab-match"    onclick="goTab('match')"   >🔗 ಹೊಂದಿಸು</div>
+  <div class="step-tab locked" id="tab-quiz"     onclick="goTab('quiz')"    >📝 ಪ್ರಶ್ನೆ</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════ TAB 1: INTRO ══════════════════ -->
+<div class="tab-panel active" id="panel-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a4a1a,#2d7a2d);">
+    <div class="banner-emoji">🌏</div>
+    <div>
+      <div class="banner-title" style="color:#7dff7d;">ಪಾಠ 15</div>
+      <div class="banner-sub" style="color:#ccc;">ಸ್ಥಳೀಯ ಪರಿಸರದ ಬಗ್ಗೆ ತಿಳಿಯೋಣ!<br>Let us learn about our local surroundings!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌿 ಸುತ್ತ-ಮುತ್ತ ಎಂದರೇನು? · What are surroundings?</div>
+    <div class="ic-text">ನಮ್ಮ ಮನೆ, ಶಾಲೆ, ಗದ್ದೆ, ಕಾಡು, ನದಿ — ಇವೆಲ್ಲ ನಮ್ಮ ಸುತ್ತ-ಮುತ್ತ! 🌾🏫<br><br>Our home, school, farm, forest, river — all around us are our surroundings!</div>
+  </div>
+
+  <p class="tap-hint">👇 ಪ್ರತಿ ಕಾರ್ಡ್ ಮೇಲೆ ಒತ್ತಿ ತಿಳಿಯಿರಿ · Tap each card to learn!</p>
+
+  <div class="tap-card" onclick="tapCard(this,'intro1')">
+    <div class="tc-icon">🌳</div>
+    <div>
+      <div class="tc-text">ಕಾಡು · Forest</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ಕಾಡು ಹಸಿರಾಗಿರುತ್ತದೆ. ಪ್ರಾಣಿಗಳು, ಪಕ್ಷಿಗಳು ಅಲ್ಲಿ ವಾಸಿಸುತ್ತವೆ!<br>Forests are green. Animals and birds live there! 🐘🦜</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapCard(this,'intro2')">
+    <div class="tc-icon">🏔️</div>
+    <div>
+      <div class="tc-text">ಬೆಟ್ಟ · Mountain / Hill</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ಬೆಟ್ಟದ ಬುಡದಲ್ಲಿ ಕಾಡು ಬೆಳೆಯುತ್ತದೆ. ಮೇಲಿನಿಂದ ನದಿ ಹರಿಯುತ್ತದೆ!<br>Forests grow at the foot of hills. Rivers flow from the top! 💧</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapCard(this,'intro3')">
+    <div class="tc-icon">🌊</div>
+    <div>
+      <div class="tc-text">ನದಿ · River</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ನದಿ ನೀರು ನಮಗೆ ಕುಡಿಯಲು, ಹೊಲಕ್ಕೆ ಉಪಯೋಗ ಆಗುತ್ತದೆ!<br>River water is used for drinking and farming! 🚿🌾</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapCard(this,'intro4')">
+    <div class="tc-icon">🌾</div>
+    <div>
+      <div class="tc-text">ಹೊಲ-ಗದ್ದೆ · Farm / Field</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ರೈತರು ಹೊಲದಲ್ಲಿ ಆಹಾರ ಬೆಳೆಯುತ್ತಾರೆ. ಹಸಿರು ಚೆಂದ ಕಾಣುತ್ತದೆ!<br>Farmers grow food in fields. The green fields look beautiful! 🧑‍🌾</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapCard(this,'intro5')">
+    <div class="tc-icon">🏭</div>
+    <div>
+      <div class="tc-text">ಕಾರ್ಖಾನೆ · Factory</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ಕಾರ್ಖಾನೆಗಳಿಂದ ಹೊಗೆ ಬರುತ್ತದೆ. ಇದು ಗಾಳಿಯನ್ನು ಕೆಡಿಸಬಹುದು!<br>Factories produce smoke. Too much smoke can pollute the air! ⚠️</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapCard(this,'intro6')">
+    <div class="tc-icon">🌊</div>
+    <div>
+      <div class="tc-text">ಸಮುದ್ರ · Sea / Beach</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ಸಮುದ್ರ ದಂಡೆಯಲ್ಲಿ ಮರಳು ಇರುತ್ತದೆ. ಅಲೆಗಳು ಅಪ್ಪಳಿಸುತ್ತವೆ!<br>Sandy beaches are by the sea. Waves crash on the shore! 🏖️</div>
+    </div>
+  </div>
+
+  <div class="tap-card" onclick="tapCard(this,'intro7')">
+    <div class="tc-icon">🌅</div>
+    <div>
+      <div class="tc-text">ನದಿ ದಂಡೆ · Riverbank</div>
+      <div class="tc-sub">ಒತ್ತಿ ತಿಳಿ · Tap to learn</div>
+      <div class="tc-reveal">ನದಿ ದಂಡೆ ಮಣ್ಣು ಮತ್ತು ನೀರಿನ ಸೇರ್ಪಡೆ. ಮೀನುಗಳು ಇಲ್ಲಿ ಇರುತ್ತವೆ!<br>Riverbanks are where land meets water. Fish live here! 🐟</div>
+    </div>
+  </div>
+
+  <button class="big-btn" id="introNext" disabled onclick="completeTab('intro','nature')">
+    ಮುಂದೆ ಹೋಗು · Next Step ➡️
+  </button>
+</div>
+
+<!-- ══════════════════ TAB 2: NATURE ══════════════════ -->
+<div class="tab-panel" id="panel-nature">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a3a2a,#2d7a4a);">
+    <div class="banner-emoji">🌿</div>
+    <div>
+      <div class="banner-title" style="color:#7dffaa;">ಪ್ರಕೃತಿ ಸ್ಥಳಗಳು</div>
+      <div class="banner-sub" style="color:#ccc;">Nature Places · ಎಲ್ಲವನ್ನೂ ತಿಳಿಯೋಣ!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🌍 ಪ್ರಕೃತಿ ಎಂದರೇನು? · What is Nature?</div>
+    <div class="ic-text">ನದಿ, ಕಾಡು, ಬೆಟ್ಟ, ಜಲಪಾತ, ಸರೋವರ — ಇವು ದೇವರ ಕೊಡುಗೆ!<br>Rivers, forests, hills, waterfalls, lakes — these are nature's gifts!</div>
+  </div>
+
+  <p class="tap-hint">👇 ಪ್ರತಿ ಚಿತ್ರ ಒತ್ತಿ ತಿಳಿ · Tap each picture!</p>
+
+  <div class="nature-grid">
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.05s">
+      <span class="sc-icon">🌲</span>
+      <div class="sc-name">ಕಾಡು · Forest</div>
+      <div class="sc-sub">ಕನ್ನಡ: ಅರಣ್ಯ</div>
+      <div class="sc-fact">ಕಾಡು ನಮಗೆ ಶುದ್ಧ ಗಾಳಿ ಕೊಡುತ್ತದೆ!<br>Forests give us clean air! 🌬️</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.1s">
+      <span class="sc-icon">🌾</span>
+      <div class="sc-name">ಗದ್ದೆ · Paddy Field</div>
+      <div class="sc-sub">ಕನ್ನಡ: ಭತ್ತದ ಗದ್ದೆ</div>
+      <div class="sc-fact">ಗದ್ದೆಯಲ್ಲಿ ಅಕ್ಕಿ ಬೆಳೆಯುತ್ತಾರೆ. ನಮ್ಮ ಊಟ!<br>Rice grows in paddy fields. Our food! 🍚</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.15s">
+      <span class="sc-icon">🏔️</span>
+      <div class="sc-name">ಬೆಟ್ಟ · Mountain</div>
+      <div class="sc-sub">ಕನ್ನಡ: ಪರ್ವತ</div>
+      <div class="sc-fact">ಬೆಟ್ಟದಿಂದ ನದಿ ಹರಿಯುತ್ತದೆ!<br>Rivers flow from mountains! 💧</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.2s">
+      <span class="sc-icon">🌊</span>
+      <div class="sc-name">ನದಿ · River</div>
+      <div class="sc-sub">ಕನ್ನಡ: ನದಿ</div>
+      <div class="sc-fact">ನದಿ ನೀರು ಸಿಹಿ ನೀರು. ನಾವು ಕುಡಿಯಬಹುದು!<br>River water is fresh water. We can drink it! 🥤</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.25s">
+      <span class="sc-icon">💦</span>
+      <div class="sc-name">ಜಲಪಾತ · Waterfall</div>
+      <div class="sc-sub">ಕನ್ನಡ: ಜಲಧಾರೆ</div>
+      <div class="sc-fact">ಜಲಪಾತ ಬಹಳ ಚಂದ. ಶಿವನ ಸಮುದ್ರ ಫಾಲ್ಸ್!<br>Waterfalls are beautiful. Like Shivanasamudra! 🌈</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.3s">
+      <span class="sc-icon">🏞️</span>
+      <div class="sc-name">ಕೆರೆ / ಅಣೆಕಟ್ಟು</div>
+      <div class="sc-sub">Lake / Dam</div>
+      <div class="sc-fact">ಅಣೆಕಟ್ಟಿನಲ್ಲಿ ನೀರು ಶೇಖರಿಸುತ್ತಾರೆ. ಊರಿಗೆ ನೀರು!<br>Dams store water for our towns! 💧</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.35s">
+      <span class="sc-icon">🐄</span>
+      <div class="sc-name">ಹುಲ್ಲಿನ ಮೈದಾನ</div>
+      <div class="sc-sub">Grassland / Meadow</div>
+      <div class="sc-fact">ಹಸುಗಳು ಹುಲ್ಲಿನ ಮೈದಾನದಲ್ಲಿ ಮೇಯುತ್ತವೆ!<br>Cows graze on green meadows! 🌿</div>
+    </div>
+    <div class="nature-card" onclick="tapNature(this)" style="animation-delay:.4s">
+      <span class="sc-icon">🌅</span>
+      <div class="sc-name">ಹೊಲ · Field / Farm</div>
+      <div class="sc-sub">ಕನ್ನಡ: ಕೃಷಿ ಭೂಮಿ</div>
+      <div class="sc-fact">ರೈತ ಹೊಲದಲ್ಲಿ ಕಷ್ಟಪಡುತ್ತಾನೆ. ನಾವು ಗೌರವಿಸಬೇಕು!<br>Farmers work hard. We should respect them! 🙏</div>
+    </div>
+  </div>
+
+  <button class="big-btn" id="natureNext" disabled onclick="completeTab('nature','village')">
+    ಮುಂದೆ ಹೋಗು · Next Step ➡️
+  </button>
+</div>
+
+<!-- ══════════════════ TAB 3: VILLAGE ══════════════════ -->
+<div class="tab-panel" id="panel-village">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#2a2a1a,#5a5a2a);">
+    <div class="banner-emoji">🏘️</div>
+    <div>
+      <div class="banner-title" style="color:#ffdd57;">ನಮ್ಮ ಊರಿನಲ್ಲಿ ಇದೆಯೇ?</div>
+      <div class="banner-sub" style="color:#ccc;">Is it in your village? · ✅ ಅಥವಾ ❌ ಆರಿಸಿ!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🏡 ನಮ್ಮ ಊರಿನ ಸುತ್ತ-ಮುತ್ತ</div>
+    <div class="ic-text">ಊರಿನಲ್ಲಿ ಬಾವಿ, ಶಾಲೆ, ಗದ್ದೆ, ಕಾಡು ಇರಬಹುದು. ನಿನ್ನ ಊರಿನಲ್ಲಿ ಏನಿದೆ?<br>Your village may have a well, school, farm, or forest. What is in yours?</div>
+  </div>
+
+  <p class="tap-hint">👇 ✅ ಇದೆ (Yes) ಅಥವಾ ❌ ಇಲ್ಲ (No) ಒತ್ತಿ ಆರಿಸಿ!</p>
+
+  <div id="villageCards"></div>
+
+  <button class="big-btn" id="villageNext" disabled onclick="completeTab('village','sort')">
+    ಮುಂದೆ ಹೋಗು · Next Step ➡️
+  </button>
+</div>
+
+<!-- ══════════════════ TAB 4: SORT GAME ══════════════════ -->
+<div class="tab-panel" id="panel-sort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a1a3a,#2a2a7a);">
+    <div class="banner-emoji">🎮</div>
+    <div>
+      <div class="banner-title" style="color:#7eb8ff;">ವಿಂಗಡಿಸು · Sort It!</div>
+      <div class="banner-sub" style="color:#ccc;">ನೈಸರ್ಗಿಕ ಅಥವಾ ಮಾನವ ನಿರ್ಮಿತ?<br>Natural or Made by humans?</div>
+    </div>
+  </div>
+
+  <div class="sort-wrap">
+    <div class="sort-title">🌿 ಸರಿಯಾದ ಬಕೆಟ್‌ಗೆ ಹಾಕಿ! · Drop in the right bucket!</div>
+    <div class="sort-items" id="sortItems"></div>
+    <div class="sort-buckets">
+      <div class="sort-bucket" onclick="dropSort('natural')">
+        <div class="bucket-title">🌿 ನೈಸರ್ಗಿಕ<br>Natural</div>
+        <div class="bucket-items" id="bucket-natural"></div>
+      </div>
+      <div class="sort-bucket" onclick="dropSort('manmade')">
+        <div class="bucket-title">🏭 ಮಾನವ ನಿರ್ಮಿತ<br>Man-made</div>
+        <div class="bucket-items" id="bucket-manmade"></div>
+      </div>
+    </div>
+    <div class="sort-msg" id="sortMsg">🎉 ಭೇಷ್! ಎಲ್ಲ ಸರಿ! Well done! All correct!</div>
+  </div>
+
+  <button class="big-btn" id="sortNext" disabled onclick="completeTab('sort','song')">
+    ಮುಂದೆ ಹೋಗು · Next Step ➡️
+  </button>
+</div>
+
+<!-- ══════════════════ TAB 5: SONG ══════════════════ -->
+<div class="tab-panel" id="panel-song">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#2a1a3a,#5a2a7a);">
+    <div class="banner-emoji">🎵</div>
+    <div>
+      <div class="banner-title" style="color:#da7dff;">ಹಾಡು ನಲಿ · Sing Along!</div>
+      <div class="banner-sub" style="color:#ccc;">ಪಾಠದ ಹಾಡು · The lesson song!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎤 ಹಾಡನ್ನು ಹಾಡೋಣ! · Let's sing!</div>
+    <div class="ic-text">ಪ್ರತಿ ಸಾಲನ್ನು ಒತ್ತಿ ಓದಿ. ಬೆಳಕಾಗುತ್ತದೆ! Tap each line to highlight and read!</div>
+  </div>
+
+  <p class="song-play-hint">👇 ಪ್ರತಿ ಸಾಲು ಒತ್ತಿ ಓದಿ · Tap each line</p>
+
+  <div class="song-card">
+    <div class="song-title">🎵 ಬಾರೋ ತಮ್ಮ ಬಾರೇ ತಂಗಿ</div>
+
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಬಾರೋ ತಮ್ಮ ಬಾರೇ ತಂಗಿ,</span>
+      <span class="en">Come brother, come sister,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಹಾಡನ್ನು ಹಾಡೋಣ;</span>
+      <span class="en">Let us sing a song;</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಸುತ್ತ ಮುತ್ತ ಏನೇನಿರುವುದು,</span>
+      <span class="en">What is all around us,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಎಂಬುದ ತಿಳಿಯೋಣ. 🌿</span>
+      <span class="en">Let us come to know!</span>
+    </div>
+
+    <br>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಬಂದಿತು ನೋಡು ಪೊಂವ್ ಪೊಂವ್ ಬಸ್ಸು,</span>
+      <span class="en">Look, the bus went pom pom pom,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಶಬ್ದವ ಮಾಡುತ ರಸ್ತೆಯ ಸುತ್ತು;</span>
+      <span class="en">Making noise around the road;</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಶಾಲೆಯ ಮುಂದೆ ಸಾಗುತ ಗತ್ತು</span>
+      <span class="en">Passing the school with a rumble</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಹೊರಟಿತು ಬಸ್ಸು ಜನರನು ಹೊತ್ತು. 🚌</span>
+      <span class="en">The bus left carrying passengers!</span>
+    </div>
+
+    <br>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ನೋಡಲು ಚೆಂದ ತುಂಬಿದ ಕೆರೆಯು,</span>
+      <span class="en">Beautiful to see the full lake,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಹೊಲ-ಗದ್ದೆಗಳ ಹಸಿರಿನ ಚೆಲುವು;</span>
+      <span class="en">The green beauty of farms and fields;</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಬದುವಿನ ಮೇಲೆ ನಡೆಯುವ ಜನರು,</span>
+      <span class="en">People walking on the field paths,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ತುಂಬಿದ ಬೆಳೆಗೆ ಸಂಭ್ರಮ ಜೋರು. 🌾</span>
+      <span class="en">Great joy for the full harvest!</span>
+    </div>
+
+    <br>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಊರಿನ ಸುತ್ತಲೂ ಏನಿದೆ ನೋಡು,</span>
+      <span class="en">Look what is all around the village,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಚಂದದ ನದಿಯು ಹರಿಯುವ ಜಾಡು;</span>
+      <span class="en">The path of a beautiful flowing river;</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಬೆಟ್ಟದ ಬುಡದಲಿ ಬೆಳೆದಿದೆ ಕಾಡು,</span>
+      <span class="en">A forest grows at the foot of the hill,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಅಂದದ, ಹಸಿರಿನ ಮರಗಳ ಬೀಡು. 🌲</span>
+      <span class="en">A beautiful home of green trees!</span>
+    </div>
+
+    <br>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಮರಗಳ ಮೇಲೆ ಹಕ್ಕಿಯ ಗೂಡು,</span>
+      <span class="en">Birds' nests on the trees,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಕೊಂಬೆಯ ಮೇಲೆ ಮಂಗನ ನೋಡು;</span>
+      <span class="en">Look at the monkey on the branch;</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಬಳುಕುವ ಬಾಗುವ ತೆನೆಗಳ ಹಾಡು,</span>
+      <span class="en">The swaying, bending crop stalks sing,</span>
+    </div>
+    <div class="song-line" onclick="litLine(this)">
+      <span class="kn">ಸುಂದರ ಪರಿಸರ ನನ್ನಯ ನಾಡು. 🌍</span>
+      <span class="en">Beautiful surroundings — my land!</span>
+    </div>
+  </div>
+
+  <button class="big-btn" id="songNext" disabled onclick="completeTab('song','match')">
+    ಮುಂದೆ ಹೋಗು · Next Step ➡️
+  </button>
+</div>
+
+<!-- ══════════════════ TAB 6: MATCH ══════════════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a2a3a,#2a4a6a);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#7eb8ff;">ಹೊಂದಿಸಿ · Match It!</div>
+      <div class="banner-sub" style="color:#ccc;">ಎಡ-ಬಲ ಸರಿ ಹೊಂದಿಸು!</div>
+    </div>
+  </div>
+
+  <div class="match-wrap">
+    <div class="match-title">🌿 ಸ್ಥಳ ಮತ್ತು ಅದರ ವಿಶೇಷತೆ ಹೊಂದಿಸಿ!</div>
+    <div class="match-score">✅ <span id="matchScore">0</span> / 5 ಸರಿ</div>
+    <div class="match-cols">
+      <div>
+        <div class="match-col-title">📍 ಸ್ಥಳ · Place</div>
+        <div id="matchLeft"></div>
+      </div>
+      <div>
+        <div class="match-col-title">✨ ವಿಶೇಷ · Feature</div>
+        <div id="matchRight"></div>
+      </div>
+    </div>
+    <div class="match-msg" id="matchMsg">🎉 ಎಲ್ಲ ಸರಿ! All matched!</div>
+  </div>
+
+  <button class="big-btn" id="matchNext" disabled onclick="completeTab('match','quiz')">
+    ಮುಂದೆ ಹೋಗು · Next Step ➡️
+  </button>
+</div>
+
+<!-- ══════════════════ TAB 7: QUIZ ══════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#3a1a1a,#7a2a2a);">
+    <div class="banner-emoji">📝</div>
+    <div>
+      <div class="banner-title" style="color:#ff9a9a;">ಪ್ರಶ್ನೋತ್ತರ · Quiz Time!</div>
+      <div class="banner-sub" style="color:#ccc;">ಎಷ್ಟು ತಿಳಿದಿದ್ದೀ? · How much do you know?</div>
+    </div>
+  </div>
+
+  <div class="q-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="big-btn" id="quizFinish" disabled onclick="showCelebration()">
+    🏆 ಪಾಠ ಮುಗಿಸಿದೆ! I Finished!
+  </button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast"></div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🌳</div>
+  <div class="celeb-title">ಭೇಷ್! ಭೇಷ್! 🎉<br>Well Done!</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="big-btn" onclick="restartAll()" style="max-width:280px">🔄 ಮತ್ತೆ ಆಡು · Play Again</button>
+</div>
+
+<script>
+/* ══ LEAF BG ══ */
+const leafEmojis = ['🌿','🍃','🌱','🍀','🌾','🌻'];
+const lb = document.getElementById('leafBg');
+for(let i=0;i<22;i++){
+  const s = document.createElement('span');
+  s.textContent = leafEmojis[Math.floor(Math.random()*leafEmojis.length)];
+  s.style.left = Math.random()*100+'vw';
+  s.style.animationDuration = (12+Math.random()*18)+'s';
+  s.style.animationDelay = (-Math.random()*20)+'s';
+  lb.appendChild(s);
+}
+
+/* ══ STATE ══ */
+let stars = 0;
+const tabOrder = ['intro','nature','village','sort','song','match','quiz'];
+let currentTab = 'intro';
+const doneTabs = new Set();
+let toastTimer;
+
+/* ══ TAP CARD ══ */
+const tappedCards = {};
+function tapCard(el, id) {
+  el.classList.toggle('tapped');
+  tappedCards[id] = true;
+  checkIntroReady();
+}
+function checkIntroReady() {
+  const needed = ['intro1','intro2','intro3','intro4','intro5','intro6','intro7'];
+  if(needed.every(k => tappedCards[k])) {
+    document.getElementById('introNext').disabled = false;
+    document.getElementById('introNext').classList.add('ready');
+  }
+}
+
+/* ══ NATURE TAP ══ */
+let natureTapped = 0;
+function tapNature(el) {
+  if(!el.classList.contains('tapped')) {
+    el.classList.add('tapped');
+    natureTapped++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    if(natureTapped >= 8) {
+      document.getElementById('natureNext').disabled = false;
+      document.getElementById('natureNext').classList.add('ready');
+    }
+  }
+}
+
+/* ══ VILLAGE CHOOSE ══ */
+const villageItems = [
+  { emoji:'🪣', kn:'ಬಾವಿ', en:'Well' },
+  { emoji:'🏫', kn:'ಶಾಲೆ', en:'School' },
+  { emoji:'🌊', kn:'ಸಮುದ್ರ', en:'Sea / Beach' },
+  { emoji:'🏭', kn:'ಕಾರ್ಖಾನೆ', en:'Factory' },
+  { emoji:'🌲', kn:'ಉದ್ಯಾನ', en:'Garden / Park' },
+  { emoji:'🏔️', kn:'ಬೆಟ್ಟ', en:'Hill / Mountain' },
+  { emoji:'🌾', kn:'ಗದ್ದೆ', en:'Paddy Field' },
+  { emoji:'🐘', kn:'ಕಾಡು', en:'Forest' },
+  { emoji:'🌅', kn:'ನದಿ ದಂಡೆ', en:'Riverbank' },
+];
+let villageAnswered = 0;
+function buildVillage() {
+  const c = document.getElementById('villageCards');
+  c.innerHTML = villageItems.map((it,i) => `
+    <div class="choose-wrap" id="vw-${i}">
+      <div class="choose-question">${it.emoji} ${it.kn} · ${it.en}<br><span style="font-size:13px;color:#aaa;">ನಿನ್ನ ಊರಿನಲ್ಲಿ ಇದೆಯೇ? · Is this in your village?</span></div>
+      <div class="choose-options">
+        <div class="choose-option" onclick="answerVillage(${i},'yes',this)" style="font-size:28px;">✅<br><span style="font-size:14px;">ಇದೆ · Yes</span></div>
+        <div class="choose-option" onclick="answerVillage(${i},'no',this)" style="font-size:28px;">❌<br><span style="font-size:14px;">ಇಲ್ಲ · No</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+function answerVillage(i, ans, el) {
+  const wrap = document.getElementById('vw-'+i);
+  if(wrap.dataset.done) return;
+  wrap.dataset.done = '1';
+  el.classList.add('correct');
+  villageAnswered++;
+  stars++; document.getElementById('starsNum').textContent = stars;
+  showToast(ans==='yes' ? '✅ ಚೆಂದ! Your village has it!' : '👍 ಸರಿ! Noted!');
+  if(villageAnswered >= villageItems.length) {
+    document.getElementById('villageNext').disabled = false;
+    document.getElementById('villageNext').classList.add('ready');
+    updateProgress();
+  }
+}
+
+/* ══ SORT GAME ══ */
+const sortData = [
+  { emoji:'🌲', cat:'natural' },
+  { emoji:'🌊', cat:'natural' },
+  { emoji:'🏔️', cat:'natural' },
+  { emoji:'💦', cat:'natural' },
+  { emoji:'🌾', cat:'natural' },
+  { emoji:'🏭', cat:'manmade' },
+  { emoji:'🚌', cat:'manmade' },
+  { emoji:'🏫', cat:'manmade' },
+  { emoji:'🌉', cat:'manmade' },
+];
+let sortSel = null, sortDone = 0;
+function buildSort() {
+  const items = [...sortData].sort(() => Math.random()-.5);
+  document.getElementById('sortItems').innerHTML = items.map((s,i) =>
+    `<div class="sort-item" id="si-${i}" data-cat="${s.cat}" onclick="selectSort(${i})">${s.emoji}</div>`
+  ).join('');
+}
+function selectSort(i) {
+  const el = document.getElementById('si-'+i);
+  if(el.classList.contains('placed')) return;
+  document.querySelectorAll('.sort-item').forEach(x => x.classList.remove('selected-sort'));
+  sortSel = el;
+  el.classList.add('selected-sort');
+}
+function dropSort(bucket) {
+  if(!sortSel) { showToast('👆 ಮೊದಲು ಒಂದನ್ನು ಆರಿಸಿ! Pick one first!'); return; }
+  const cat = sortSel.dataset.cat;
+  const emoji = sortSel.textContent;
+  const div = document.createElement('div');
+  div.className = 'bucket-placed';
+  div.textContent = emoji;
+  if(cat === bucket) {
+    div.classList.add('correct');
+    document.getElementById('bucket-'+bucket).appendChild(div);
+    sortSel.classList.add('placed');
+    sortDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    showToast('✅ ಸರಿ! Correct!');
+    if(sortDone >= sortData.length) {
+      document.getElementById('sortMsg').style.display = 'block';
+      document.getElementById('sortNext').disabled = false;
+      document.getElementById('sortNext').classList.add('ready');
+    }
+  } else {
+    div.classList.add('wrong');
+    showToast('❌ ತಪ್ಪು! Try again!');
+  }
+  sortSel.classList.remove('selected-sort');
+  sortSel = null;
+}
+
+/* ══ SONG LINES ══ */
+let litCount = 0;
+function litLine(el) {
+  el.classList.toggle('lit');
+  litCount++;
+  if(litCount >= 5) {
+    document.getElementById('songNext').disabled = false;
+    document.getElementById('songNext').classList.add('ready');
+  }
+}
+
+/* ══ MATCH GAME ══ */
+const matchPairs = [
+  { left:'🌲 ಕಾಡು · Forest',      right:'🦜 ಪ್ರಾಣಿ-ಪಕ್ಷಿ ವಾಸ\nAnimals & birds live here' },
+  { left:'🌾 ಗದ್ದೆ · Paddy Field', right:'🍚 ಅಕ್ಕಿ ಬೆಳೆ\nRice is grown here' },
+  { left:'🏔️ ಬೆಟ್ಟ · Mountain',   right:'💧 ನದಿ ಹುಟ್ಟುವ ಜಾಗ\nWhere rivers are born' },
+  { left:'🏞️ ಅಣೆಕಟ್ಟು · Dam',     right:'🚰 ನೀರು ಶೇಖರಣೆ\nWater is stored here' },
+  { left:'🌊 ಸಮುದ್ರ · Sea',       right:'🐟 ಮೀನುಗಾರಿಕೆ\nFishermen work here' },
+];
+let matchSelLeft = null, matchDone = 0;
+function buildMatch() {
+  const rights = matchPairs.map((p,i) => ({text:p.right, idx:i}));
+  rights.sort(() => Math.random()-.5);
+  document.getElementById('matchLeft').innerHTML = matchPairs.map((p,i) =>
+    `<div class="match-item" id="mml-${i}" onclick="selectMatchLeft(${i})">${p.left}</div>`
+  ).join('');
+  document.getElementById('matchRight').innerHTML = rights.map((r,i) =>
+    `<div class="match-item" id="mmr-${r.idx}" onclick="selectMatchRight(${r.idx})">${r.text}</div>`
+  ).join('');
+}
+function selectMatchLeft(i) {
+  if(document.getElementById('mml-'+i).classList.contains('matched')) return;
+  if(matchSelLeft !== null) document.getElementById('mml-'+matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('mml-'+i).classList.add('selected');
+}
+function selectMatchRight(i) {
+  if(matchSelLeft === null) { showToast('👈 ಮೊದಲು ಎಡ ಆರಿಸಿ! Pick left first!'); return; }
+  const lEl = document.getElementById('mml-'+matchSelLeft);
+  const rEl = document.getElementById('mmr-'+i);
+  if(rEl.classList.contains('matched')) return;
+  if(matchSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelLeft = null;
+    showToast('✅ ಸರಿ! Correct! 🎉');
+    if(matchDone === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchMsg').style.display = 'block';
+        const btn = document.getElementById('matchNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelLeft = null; }, 700);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══ QUIZ ══ */
+const quizQuestions = [
+  { visual:'🌲❓', question:'ಕಾಡು ನಮಗೆ ಏನು ಕೊಡುತ್ತದೆ?\nWhat does a forest give us?', options:['🌬️ ಶುದ್ಧ ಗಾಳಿ ✅\nClean Air','🍕 ಆಹಾರ\nPizza','📱 ಫೋನ್\nPhone','🚗 ಕಾರು\nCar'], correct:0 },
+  { visual:'🌾❓', question:'ಗದ್ದೆಯಲ್ಲಿ ಏನು ಬೆಳೆಯುತ್ತಾರೆ?\nWhat grows in paddy fields?', options:['🚌 ಬಸ್ಸು\nBus','🍚 ಅಕ್ಕಿ ✅\nRice','⭐ ನಕ್ಷತ್ರ\nStar','📚 ಪುಸ್ತಕ\nBook'], correct:1 },
+  { visual:'🏔️❓', question:'ಬೆಟ್ಟದ ಬುಡದಲ್ಲಿ ಏನು ಇರುತ್ತದೆ?\nWhat is at the foot of a hill?', options:['🌊 ಸಮುದ್ರ\nSea','🏭 ಕಾರ್ಖಾನೆ\nFactory','🌲 ಕಾಡು ✅\nForest','🏙️ ನಗರ\nCity'], correct:2 },
+  { visual:'🌊❓', question:'ನದಿ ನೀರನ್ನು ಏನಿಗೆ ಬಳಸುತ್ತಾರೆ?\nRiver water is used for?', options:['🎮 ಆಟ\nGaming','🚿 ಕುಡಿಯಲು ✅\nDrinking','📺 ಟಿವಿ\nWatching TV','✈️ ಹಾರಲು\nFlying'], correct:1 },
+  { visual:'🏭❓', question:'ಕಾರ್ಖಾನೆಯಿಂದ ಏನು ಬರುತ್ತದೆ?\nWhat comes from a factory?', options:['🌧️ ಮಳೆ\nRain','🌈 ಕಾಮನಬಿಲ್ಲು\nRainbow','💨 ಹೊಗೆ ✅\nSmoke','🐦 ಹಕ್ಕಿ\nBird'], correct:2 },
+  { visual:'🏘️❓', question:'ರೈತ ಎಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತಾನೆ?\nWhere does a farmer work?', options:['🏫 ಶಾಲೆ\nSchool','🌾 ಹೊಲ ✅\nFarm/Field','🏥 ಆಸ್ಪತ್ರೆ\nHospital','🚀 ಬಾಹ್ಯಾಕಾಶ\nSpace'], correct:1 },
+  { visual:'💦❓', question:'ಜಲಪಾತ ಹೇಗೆ ಮಾಡುತ್ತದೆ?\nWhere do waterfalls come from?', options:['ಭೂಮಿಯಿಂದ\nFrom ground','ಸಮುದ್ರದಿಂದ\nFrom sea','ಬೆಟ್ಟದಿಂದ ✅\nFrom hills','ಮೋಡದಿಂದ\nFrom clouds'], correct:2 },
+  { visual:'🌍❓', question:'ಸುತ್ತ-ಮುತ್ತ ಎಂದರೆ ಏನು?\nWhat are surroundings?', options:['ಕೇವಲ ಮನೆ\nOnly home','ಕೇವಲ ಶಾಲೆ\nOnly school','ಎಲ್ಲ ಜಾಗ ✅\nAll places around us','ಕೇವಲ ನದಿ\nOnly rivers'], correct:2 },
+];
+let quizIdx = 0, quizAnswered = [];
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_,i) => `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`).join('');
+  renderQuizQ(0);
+}
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if(!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-'+quizIdx).classList.remove('active');
+  document.getElementById('dot-'+quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if(correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  showToast(correct ? '✅ ಸರಿ! Correct! 🎉' : '❌ ತಪ್ಪು! ' + q.options[q.correct] + ' ಸರಿ!');
+  setTimeout(() => {
+    quizIdx++;
+    if(quizIdx < quizQuestions.length) {
+      document.getElementById('dot-'+quizIdx)?.classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1500);
+}
+
+/* ══ TAB NAVIGATION ══ */
+function goTab(tab) {
+  const idx = tabOrder.indexOf(tab);
+  const curIdx = tabOrder.indexOf(currentTab);
+  const el = document.getElementById('tab-'+tab);
+
+  if(el.classList.contains('locked')) {
+    if(!el.classList.contains('shaking')) {
+      el.classList.add('shaking');
+      setTimeout(() => el.classList.remove('shaking'), 550);
+    }
+    showToast('🔒 ಮೊದಲಿನ ಹೆಜ್ಜೆ ಮುಗಿಸಿ! Finish the previous step first!');
+    return;
+  }
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => { if(!t.classList.contains('locked') && !t.classList.contains('done')) t.classList.remove('active'); });
+  document.getElementById('panel-'+tab).classList.add('active');
+  el.classList.add('active');
+  currentTab = tab;
+}
+
+function completeTab(from, toUnlock) {
+  doneTabs.add(from);
+  const fromEl = document.getElementById('tab-'+from);
+  fromEl.classList.remove('active');
+  fromEl.classList.add('done');
+  fromEl.innerHTML = '✅ ' + fromEl.textContent.replace('✅ ','');
+  const toEl = document.getElementById('tab-'+toUnlock);
+  toEl.classList.remove('locked');
+  toEl.classList.add('unlocked');
+  updateProgress();
+  goTab(toUnlock);
+  document.querySelector('.steps-bar').scrollLeft += 200;
+  showToast('🎉 ಭೇಷ್! Next step unlocked!');
+}
+
+function updateProgress() {
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ══ TOAST ══ */
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ══ CELEBRATION ══ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 15 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 15 — ನಮ್ಮ ಸುತ್ತ-ಮುತ್ತ!\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಪ್ರಕೃತಿ ಚಾಂಪಿಯನ್! 🏆`;
+  let starStr = '';
+  for(let i=0; i<Math.min(stars,20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+function spawnConfetti() {
+  const colors = ['#7dff7d','#4caf50','#ffffff','#ffb700','#ff7d7d','#7eb8ff'];
+  for(let i=0;i<70;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2 + 's';
+    p.style.animationDuration = (2+Math.random()*2) + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+function restartAll() { location.reload(); }
+
+/* ══ INIT ══ */
+buildVillage();
+buildSort();
+buildMatch();
+buildQuiz();
+updateProgress();
+</script>
+</body>
+</html>

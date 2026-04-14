@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ಕನ್ನಡ EVS ತರಗತಿ 1 — ಪಾಠ 14: ಬಾನ ಗೆಳೆಯರು</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#0d0d2b; min-height:100vh; overflow-x:hidden; }
+
+/* STARS BACKGROUND */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse at 20% 20%, #1a1a4e 0%, #0d0d2b 60%);
+  pointer-events:none;
+}
+.star-bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.star-bg span {
+  position:absolute; border-radius:50%; background:#fff; animation:twinkle linear infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:.2;transform:scale(.7)} 50%{opacity:1;transform:scale(1)} }
+
+/* TOPBAR */
+.topbar {
+  background:linear-gradient(135deg,#1a1a4e,#2d2d8f);
+  padding:12px 16px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200; box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+.topbar-title { font-family:'Fredoka One',cursive; font-size:17px; color:#fff; letter-spacing:.5px; }
+.stars-pill { background:rgba(255,215,0,.2); border:2px solid rgba(255,215,0,.6); color:#ffd700;
+  padding:6px 14px; border-radius:30px; font-size:15px; font-weight:900; }
+
+/* HERO */
+.hero {
+  background:linear-gradient(160deg,#1a1a4e,#0d0d2b);
+  padding:20px 20px 44px; text-align:center; position:relative; z-index:1;
+}
+.hero-emoji { font-size:68px; display:block; margin-bottom:6px; animation:heroFloat 3s ease-in-out infinite; }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 { font-family:'Fredoka One',cursive; font-size:28px; color:#ffd700; margin-bottom:4px; text-shadow:0 0 20px rgba(255,215,0,.5); }
+.hero p { font-size:14px; color:rgba(255,255,255,.85); font-weight:700; }
+
+/* PROGRESS */
+.prog-wrap { margin:-22px 16px 16px; background:#1a1a4e; border-radius:20px; padding:14px 18px;
+  box-shadow:0 6px 24px rgba(0,0,0,.4); border:1px solid rgba(255,215,0,.2); position:relative; z-index:10; }
+.prog-label { font-size:13px; font-weight:900; color:#aaa; margin-bottom:8px; }
+.prog-bar { background:#2d2d5e; border-radius:10px; height:14px; overflow:hidden; }
+.prog-fill { background:linear-gradient(90deg,#ffd700,#ffb700); height:100%; border-radius:10px; transition:width .6s cubic-bezier(.4,0,.2,1); width:0%; }
+
+/* STEP TABS */
+.steps-bar { display:flex; gap:8px; padding:14px 16px 6px; overflow-x:auto; scrollbar-width:none; position:relative; z-index:10; }
+.steps-bar::-webkit-scrollbar { display:none; }
+.step-tab {
+  flex-shrink:0; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:900;
+  border:3px solid transparent; cursor:pointer; transition:all .25s; position:relative;
+  display:flex; align-items:center; gap:6px; white-space:nowrap; user-select:none;
+}
+.step-tab.unlocked { background:#1a1a4e; color:#aaa; border-color:#2d2d5e; }
+.step-tab.active   { background:#ffd700; color:#1a1a4e; border-color:#ffd700; box-shadow:0 4px 14px rgba(255,215,0,.4); }
+.step-tab.done     { background:#2d2d5e; color:#ffd700; border-color:#ffd700; }
+.step-tab.locked   { background:#111130; color:#444; border-color:#222244; cursor:not-allowed; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)}
+  45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)}
+}
+.step-tab.shaking { animation:shake .5s ease; }
+
+/* TOAST */
+.lock-toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(30px);
+  background:#ffd700; color:#1a1a4e; padding:12px 22px; border-radius:30px;
+  font-size:14px; font-weight:900; z-index:500; opacity:0; transition:all .3s; pointer-events:none;
+  white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.4); max-width:90vw; text-align:center;
+}
+.lock-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* CONTENT */
+.content { padding:6px 16px 120px; position:relative; z-index:5; }
+.tab-panel { display:none; animation:fadeIn .35s ease; }
+.tab-panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* LESSON BANNER */
+.lesson-banner {
+  border-radius:20px; padding:16px 18px; margin-bottom:14px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.3);
+}
+.banner-emoji { font-size:52px; }
+.banner-title { font-family:'Fredoka One',cursive; font-size:22px; }
+.banner-sub { font-size:13px; font-weight:800; opacity:.8; }
+
+/* INFO CARD */
+.info-card {
+  background:#1a1a4e; border-radius:20px; padding:16px 18px; margin-bottom:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.3); border-left:6px solid #ffd700;
+}
+.info-card .ic-title { font-family:'Fredoka One',cursive; font-size:18px; color:#ffd700; margin-bottom:6px; }
+.info-card .ic-text { font-size:15px; font-weight:800; color:#ccc; line-height:1.7; }
+
+/* TAP CARDS */
+.tap-card {
+  background:#1a1a4e; border-radius:20px; padding:18px; margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.3); border:3px solid #2d2d5e; cursor:pointer;
+  display:flex; align-items:center; gap:14px; transition:all .2s; user-select:none;
+}
+.tap-card:active { transform:scale(.97); }
+.tap-card.tapped { background:#12123a; border-color:#ffd700; }
+.tap-card .tc-icon { font-size:44px; flex-shrink:0; }
+.tap-card .tc-text { font-family:'Fredoka One',cursive; font-size:16px; color:#ffd700; line-height:1.5; }
+.tap-card .tc-sub  { font-size:12px; font-weight:800; color:#888; margin-top:3px; }
+.tc-reveal { font-size:13px; font-weight:900; color:#7eb8ff; margin-top:6px; display:none; line-height:1.5; }
+.tap-card.tapped .tc-reveal { display:block; }
+.tap-hint { text-align:center; font-size:13px; font-weight:900; color:#888; margin:-4px 0 10px; }
+
+/* SKY OBJECTS GRID */
+.sky-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:14px; }
+.sky-card {
+  background:#1a1a4e; border-radius:20px; padding:18px 10px; text-align:center;
+  box-shadow:0 3px 12px rgba(0,0,0,.3); border:3px solid #2d2d5e;
+  animation:cardPop .4s ease both; cursor:pointer; transition:all .2s;
+}
+.sky-card:active { transform:scale(.95); }
+.sky-card.tapped { border-color:#ffd700; background:#12123a; }
+@keyframes cardPop { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+.sky-card .sc-icon { font-size:52px; display:block; margin-bottom:8px; }
+.sky-card .sc-name { font-family:'Fredoka One',cursive; font-size:16px; color:#ffd700; }
+.sky-card .sc-sub { font-size:11px; font-weight:800; color:#7eb8ff; margin-top:4px; }
+.sky-card .sc-fact { font-size:11px; font-weight:800; color:#aaa; margin-top:4px; display:none; line-height:1.4; }
+.sky-card.tapped .sc-fact { display:block; }
+
+/* MATCH GAME */
+.match-wrap { background:#1a1a4e; border-radius:20px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2d2d5e; }
+.match-title { font-family:'Fredoka One',cursive; font-size:17px; color:#ffd700; text-align:center; margin-bottom:12px; }
+.match-cols { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.match-col-title { font-family:'Fredoka One',cursive; font-size:13px; color:#888; text-align:center; margin-bottom:6px; }
+.match-item {
+  padding:12px 10px; border-radius:14px; border:3px solid #2d2d5e; background:#111130;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#aaa; text-align:center;
+  cursor:pointer; margin-bottom:8px; transition:all .2s; user-select:none; line-height:1.4;
+}
+.match-item:active { transform:scale(.96); }
+.match-item.selected { background:#12123a; border-color:#ffd700; color:#ffd700; }
+.match-item.matched  { background:#1a3a1a; border-color:#4caf50; color:#81c784; pointer-events:none; }
+.match-item.wrong-flash { background:#3a1a1a; border-color:#e53935; }
+.match-score { text-align:center; font-family:'Fredoka One',cursive; font-size:15px; color:#ffd700; margin-bottom:10px; }
+.match-msg { display:none; text-align:center; font-family:'Fredoka One',cursive; font-size:18px; color:#4caf50; margin:10px 0; }
+
+/* CHOOSE GAME */
+.choose-wrap { background:#1a1a4e; border-radius:20px; padding:16px 18px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2d2d5e; }
+.choose-question { font-family:'Fredoka One',cursive; font-size:17px; color:#ffd700; text-align:center; margin-bottom:12px; line-height:1.5; }
+.choose-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.choose-option {
+  padding:18px 10px; border-radius:16px; border:3px solid #2d2d5e; background:#111130;
+  font-family:'Fredoka One',cursive; font-size:15px; color:#aaa; text-align:center;
+  cursor:pointer; transition:all .2s; user-select:none;
+}
+.choose-option:active { transform:scale(.95); }
+.choose-option.correct { background:#1a3a1a; border-color:#4caf50; color:#81c784; pointer-events:none; }
+.choose-option.wrong   { background:#3a1a1a; border-color:#e53935; color:#ef9a9a; pointer-events:none; }
+.choose-progress { text-align:center; font-family:'Fredoka One',cursive; font-size:13px; color:#ffd700; margin-bottom:10px; }
+
+/* SORT GAME */
+.sort-wrap { background:#1a1a4e; border-radius:20px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2d2d5e; }
+.sort-title { font-family:'Fredoka One',cursive; font-size:16px; color:#ffd700; text-align:center; margin-bottom:12px; line-height:1.4; }
+.sort-buckets { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.sort-bucket {
+  border-radius:16px; padding:10px 8px; min-height:90px; text-align:center;
+  border:3px dashed #2d2d5e; background:#111130; transition:all .2s;
+}
+.sort-bucket.day-bucket  { border-color:#ffb700; background:#1e1a00; }
+.sort-bucket.night-bucket { border-color:#7eb8ff; background:#0a0f2a; }
+.sort-bucket-label { font-family:'Fredoka One',cursive; font-size:13px; margin-bottom:6px; }
+.sort-items { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:10px; }
+.sort-item {
+  padding:10px 14px; border-radius:30px; font-family:'Fredoka One',cursive; font-size:15px;
+  border:3px solid #2d2d5e; background:#1a1a4e; color:#aaa; cursor:pointer; user-select:none; transition:all .2s;
+}
+.sort-item:active { transform:scale(.93); }
+.sort-item.selected-sort { background:#12123a; border-color:#ffd700; color:#ffd700; }
+.sort-item.placed { opacity:.35; pointer-events:none; }
+.sort-bucket-items { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; min-height:30px; }
+.sort-placed-item {
+  padding:4px 8px; border-radius:20px; font-family:'Fredoka One',cursive; font-size:12px;
+  background:#1a3a1a; border:2px solid #4caf50; color:#81c784;
+}
+.sort-wrong-item {
+  padding:4px 8px; border-radius:20px; font-family:'Fredoka One',cursive; font-size:12px;
+  background:#3a1a1a; border:2px solid #e53935; color:#ef9a9a;
+}
+
+/* QUIZ */
+.quiz-dots { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+.dot { width:16px; height:16px; border-radius:50%; background:#2d2d5e; transition:all .3s; }
+.dot.active { background:#ffd700; transform:scale(1.25); }
+.dot.done-ok { background:#4caf50; }
+.dot.done-err { background:#e53935; }
+.q-card { background:#1a1a4e; border-radius:20px; padding:18px; box-shadow:0 4px 16px rgba(0,0,0,.3); margin-bottom:14px; border:1px solid #2d2d5e; }
+.q-visual { font-size:54px; display:block; text-align:center; margin-bottom:8px; }
+.q-text { font-family:'Fredoka One',cursive; font-size:16px; color:#ffd700; text-align:center; line-height:1.5; margin-bottom:14px; }
+.q-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.q-option {
+  padding:14px 8px; border-radius:16px; border:3px solid #2d2d5e; background:#111130;
+  font-family:'Fredoka One',cursive; font-size:14px; color:#aaa; text-align:center;
+  cursor:pointer; transition:all .2s; user-select:none; line-height:1.3;
+}
+.q-option:active { transform:scale(.95); }
+.q-option.correct { background:#1a3a1a; border-color:#4caf50; color:#81c784; }
+.q-option.wrong   { background:#3a1a1a; border-color:#e53935; color:#ef9a9a; }
+
+/* SONG CARD */
+.song-card {
+  background:linear-gradient(135deg,#1a1a4e,#0d0d2b); border-radius:20px; padding:20px;
+  border:2px solid rgba(255,215,0,.3); margin-bottom:14px;
+  box-shadow:0 4px 20px rgba(255,215,0,.1);
+}
+.song-line { font-family:'Fredoka One',cursive; font-size:15px; color:#ffd700; margin-bottom:6px; line-height:1.6; }
+.song-line-sub { font-size:12px; font-weight:800; color:#7eb8ff; margin-bottom:12px; line-height:1.4; }
+
+/* NEXT BUTTON */
+.next-btn {
+  display:block; width:100%; padding:16px; border-radius:50px; border:none;
+  font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer;
+  background:#2d2d5e; color:#555; margin-top:10px; transition:all .3s;
+}
+.next-btn.ready { background:linear-gradient(135deg,#ffd700,#ffb700); color:#1a1a4e; box-shadow:0 6px 20px rgba(255,215,0,.4); }
+.next-btn:disabled { cursor:not-allowed; }
+
+/* CELEBRATION */
+.celeb-screen {
+  display:none; position:fixed; inset:0; background:linear-gradient(160deg,#1a1a4e,#0d0d2b);
+  z-index:1000; align-items:center; justify-content:center; flex-direction:column;
+  padding:32px 20px; text-align:center;
+}
+.celeb-screen.show { display:flex; }
+.celeb-big { font-size:80px; animation:heroFloat 2s ease-in-out infinite; margin-bottom:12px; }
+.celeb-title { font-family:'Fredoka One',cursive; font-size:28px; color:#ffd700; margin-bottom:8px; text-shadow:0 0 20px rgba(255,215,0,.5); }
+.celeb-sub { font-family:'Fredoka One',cursive; font-size:15px; color:rgba(255,255,255,.85); white-space:pre-line; line-height:1.8; margin-bottom:16px; }
+.celeb-stars { font-size:24px; margin-bottom:20px; }
+.restart-btn {
+  padding:16px 40px; border-radius:50px; border:none; background:#ffd700;
+  font-family:'Fredoka One',cursive; font-size:18px; color:#1a1a4e; cursor:pointer;
+  box-shadow:0 6px 20px rgba(255,215,0,.3);
+}
+
+/* CONFETTI */
+.confetti-piece {
+  position:fixed; top:-20px; width:12px; height:12px; border-radius:2px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall { to { transform:translateY(110vh) rotate(720deg); opacity:0; } }
+</style>
+</head>
+<body>
+
+<!-- Twinkling stars background -->
+<div class="star-bg" id="starBg"></div>
+
+<div class="topbar">
+  <div class="topbar-title">📚 ಕನ್ನಡ EVS · ಪಾಠ 14</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🌙</span>
+  <h1>ಬಾನ ಗೆಳೆಯರು</h1>
+  <p>Baana Geleyaru · Friends in the Sky!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label">📊 ನಿನ್ನ ಪ್ರಗತಿ · Your Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active" id="tab-intro"  onclick="goTab('intro')">🌤️ ಪರಿಚಯ</div>
+  <div class="step-tab locked" id="tab-sky"    onclick="goTab('sky')">☀️ ಆಕಾಶ</div>
+  <div class="step-tab locked" id="tab-day"    onclick="goTab('day')">🌞 ಹಗಲು</div>
+  <div class="step-tab locked" id="tab-night"  onclick="goTab('night')">🌙 ರಾತ್ರಿ</div>
+  <div class="step-tab locked" id="tab-sort"   onclick="goTab('sort')">🗂️ ವರ್ಗ</div>
+  <div class="step-tab locked" id="tab-match"  onclick="goTab('match')">🔗 ಜೋಡಿ</div>
+  <div class="step-tab locked" id="tab-quiz"   onclick="goTab('quiz')">🧠 ಪ್ರಶ್ನೆ</div>
+</div>
+
+<div class="lock-toast" id="lockToast"></div>
+
+<div class="content">
+
+<!-- ══════════ TAB 1: INTRO ══════════ -->
+<div class="tab-panel active" id="panel-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a1a4e,#12123a);">
+    <div class="banner-emoji">🌠</div>
+    <div>
+      <div class="banner-title" style="color:#ffd700">ಪಾಠ 14 · Lesson 14</div>
+      <div class="banner-sub" style="color:#7eb8ff">ಬಾನ ಗೆಳೆಯರು · Friends in the Sky</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">🎯 ಈ ಪಾಠದಲ್ಲಿ ನೀನು ಕಲಿಯುವೆ</div>
+    <div class="ic-text">
+      ✅ ಆಕಾಶದಲ್ಲಿ ಏನೇನು ಕಾಣುತ್ತೇವೆ? What do we see in the sky?<br>
+      ✅ ಸೂರ್ಯ · ಚಂದ್ರ · ನಕ್ಷತ್ರ · Sun · Moon · Stars<br>
+      ✅ ಹಗಲು ಮತ್ತು ರಾತ್ರಿ ಆಕಾಶ · Day sky and Night sky
+    </div>
+  </div>
+
+  <p class="tap-hint">👇 ಪ್ರತಿ ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಮಾಡಿ ಕಲಿ! Tap each card!</p>
+
+  <div class="tap-card" id="ic0" onclick="tapIntro(0)">
+    <div class="tc-icon">🔭</div>
+    <div>
+      <div class="tc-text">ಆಕಾಶ ನೋಡಿದ್ದೀಯಾ?<br><span style="font-size:13px;color:#666">Have you looked at the sky?</span></div>
+      <div class="tc-reveal">🌤️ ಹಗಲು ಆಕಾಶದಲ್ಲಿ ಸೂರ್ಯ ಇರುತ್ತಾನೆ!<br>In the day sky, we see the SUN — ಸೂರ್ಯ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="ic1" onclick="tapIntro(1)">
+    <div class="tc-icon">🌙</div>
+    <div>
+      <div class="tc-text">ರಾತ್ರಿ ಆಕಾಶದಲ್ಲಿ ಏನು ಕಾಣುತ್ತೇವೆ?<br><span style="font-size:13px;color:#666">What do we see at night?</span></div>
+      <div class="tc-reveal">🌙 ರಾತ್ರಿ ಚಂದ್ರ ಮತ್ತು ನಕ್ಷತ್ರಗಳು ಕಾಣುತ್ತವೆ!<br>At night we see the MOON — ಚಂದ್ರ and STARS — ನಕ್ಷತ್ರ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="ic2" onclick="tapIntro(2)">
+    <div class="tc-icon">⭐</div>
+    <div>
+      <div class="tc-text">ನಕ್ಷತ್ರಗಳು ಯಾಕೆ ಚಿಕ್ಕದಾಗಿ ಕಾಣುತ್ತವೆ?<br><span style="font-size:13px;color:#666">Why do stars look so tiny?</span></div>
+      <div class="tc-reveal">🌟 ನಕ್ಷತ್ರಗಳು ಬಹಳ ದೂರ ಇರುವುದರಿಂದ ಚುಕ್ಕೆಗಳಂತೆ ಕಾಣುತ್ತವೆ!<br>Stars look tiny because they are VERY far away!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="ic3" onclick="tapIntro(3)">
+    <div class="tc-icon">🌅</div>
+    <div>
+      <div class="tc-text">ಸೂರ್ಯ ಮರೆಯಾದಾಗ ಏನಾಗುತ್ತದೆ?<br><span style="font-size:13px;color:#666">What happens when the sun hides?</span></div>
+      <div class="tc-reveal">🌑 ಕತ್ತಲಾಗುತ್ತದೆ — ರಾತ್ರಿ ಆಗುತ್ತದೆ!<br>It gets DARK — Night begins!</div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="introNext" disabled onclick="activateTab('sky'); markDone('intro'); scrollToTop()">ಮುಂದೆ ಹೋಗು · Next ➡️</button>
+</div>
+
+<!-- ══════════ TAB 2: SKY OBJECTS ══════════ -->
+<div class="tab-panel" id="panel-sky">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a1a4e,#12123a);">
+    <div class="banner-emoji">🌌</div>
+    <div>
+      <div class="banner-title" style="color:#ffd700">ಆಕಾಶದ ಗೆಳೆಯರು · Sky Friends</div>
+      <div class="banner-sub" style="color:#7eb8ff">ಎಲ್ಲ ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಮಾಡಿ! Tap all cards!</div>
+    </div>
+  </div>
+
+  <p class="tap-hint">👇 ಆಕಾಶದ ಗೆಳೆಯರನ್ನು ತಿಳಿದುಕೋ! Meet your sky friends!</p>
+
+  <div class="sky-grid">
+    <div class="sky-card" id="sk0" onclick="tapSky(0)" style="animation-delay:.05s">
+      <span class="sc-icon">☀️</span>
+      <div class="sc-name">ಸೂರ್ಯ</div>
+      <div class="sc-sub">Soorya · Sun</div>
+      <div class="sc-fact">ಹಗಲು ಕಾಣುತ್ತಾನೆ.<br>Seen in the day.<br>ಬೆಳಕು ಮತ್ತು ಶಾಖ ಕೊಡುತ್ತಾನೆ.<br>Gives us light &amp; warmth.</div>
+    </div>
+    <div class="sky-card" id="sk1" onclick="tapSky(1)" style="animation-delay:.1s">
+      <span class="sc-icon">🌙</span>
+      <div class="sc-name">ಚಂದ್ರ</div>
+      <div class="sc-sub">Chandra · Moon</div>
+      <div class="sc-fact">ರಾತ್ರಿ ಕಾಣುತ್ತಾನೆ.<br>Seen at night.<br>ರಾತ್ರಿ ಬೆಳಕು ಕೊಡುತ್ತಾನೆ.<br>Gives light at night.</div>
+    </div>
+    <div class="sky-card" id="sk2" onclick="tapSky(2)" style="animation-delay:.15s">
+      <span class="sc-icon">⭐</span>
+      <div class="sc-name">ನಕ್ಷತ್ರ</div>
+      <div class="sc-sub">Nakshatra · Star</div>
+      <div class="sc-fact">ರಾತ್ರಿ ಚುಕ್ಕೆಗಳಂತೆ ಕಾಣುತ್ತವೆ.<br>Look like dots at night.<br>ಬಹಳ ದೂರ ಇರುತ್ತವೆ!<br>They are very far away!</div>
+    </div>
+    <div class="sky-card" id="sk3" onclick="tapSky(3)" style="animation-delay:.2s">
+      <span class="sc-icon">🌌</span>
+      <div class="sc-name">ಆಕಾಶ</div>
+      <div class="sc-sub">Aakaasha · Sky</div>
+      <div class="sc-fact">ಹಗಲು ನೀಲಿ ಬಣ್ಣ!<br>Blue in the day!<br>ರಾತ್ರಿ ಕಪ್ಪು ಬಣ್ಣ!<br>Dark/black at night!</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-title">✨ ನೆನಪಿಡು · Remember!</div>
+    <div class="ic-text">
+      ಸೂರ್ಯ, ಚಂದ್ರ, ನಕ್ಷತ್ರ — ಇವರೇ ನಮ್ಮ <strong style="color:#ffd700">ಬಾನ ಗೆಳೆಯರು</strong>!<br>
+      <span style="color:#7eb8ff">Sun, Moon, Stars — these are our SKY FRIENDS!</span>
+    </div>
+  </div>
+
+  <div id="skyProgress" style="text-align:center;font-family:'Fredoka One',cursive;font-size:14px;color:#ffd700;margin-bottom:10px">0 / 4 ಗೆಳೆಯರನ್ನು ಭೇಟಿ ಮಾಡಿದೆ · Friends met</div>
+  <button class="next-btn" id="skyNext" disabled onclick="activateTab('day'); markDone('sky'); scrollToTop()">ಮುಂದೆ ಹೋಗು · Next ➡️</button>
+</div>
+
+<!-- ══════════ TAB 3: DAY SKY ══════════ -->
+<div class="tab-panel" id="panel-day">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#2a1f00,#1a1200);">
+    <div class="banner-emoji">🌞</div>
+    <div>
+      <div class="banner-title" style="color:#ffd700">ಹಗಲಿನ ಆಕಾಶ · Day Sky</div>
+      <div class="banner-sub" style="color:#ffb700">ಹಗಲು ಏನು ಕಾಣುತ್ತೇವೆ?</div>
+    </div>
+  </div>
+
+  <p class="tap-hint">👇 ಎಲ್ಲ ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಮಾಡಿ ಕಲಿ! Tap to learn!</p>
+
+  <div class="tap-card" id="dc0" onclick="tapDay(0)">
+    <div class="tc-icon">☀️</div>
+    <div>
+      <div class="tc-text">ಹಗಲು ಆಕಾಶದಲ್ಲಿ<br><span style="font-size:13px;color:#666">In the day sky...</span></div>
+      <div class="tc-reveal">☀️ ಸೂರ್ಯ ಕಾಣುತ್ತಾನೆ! We see the SUN — ಸೂರ್ಯ!<br>ಸೂರ್ಯ ಬೆಳಕು ತರುತ್ತಾನೆ. Sun brings us light!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="dc1" onclick="tapDay(1)">
+    <div class="tc-icon">💛</div>
+    <div>
+      <div class="tc-text">ಸೂರ್ಯ ಏನು ಕೊಡುತ್ತಾನೆ?<br><span style="font-size:13px;color:#666">What does the sun give us?</span></div>
+      <div class="tc-reveal">☀️ ಸೂರ್ಯ ಬೆಳಕು ತರುತ್ತಾನೆ — ಹಗಲಾಗುತ್ತದೆ!<br>The sun brings LIGHT — it becomes DAY!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="dc2" onclick="tapDay(2)">
+    <div class="tc-icon">🌥️</div>
+    <div>
+      <div class="tc-text">ಹಗಲು ಆಕಾಶ ಯಾವ ಬಣ್ಣ?<br><span style="font-size:13px;color:#666">What color is the day sky?</span></div>
+      <div class="tc-reveal">💙 ಹಗಲು ಆಕಾಶ ನೀಲಿ ಬಣ್ಣ!<br>The day sky is BLUE — ನೀಲಿ!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="dc3" onclick="tapDay(3)">
+    <div class="tc-icon">🌑</div>
+    <div>
+      <div class="tc-text">ಸೂರ್ಯ ಮರೆಯಾದಾಗ?<br><span style="font-size:13px;color:#666">When the sun disappears?</span></div>
+      <div class="tc-reveal">🌑 ಕತ್ತಲಾಗುತ್ತದೆ — ರಾತ್ರಿ ಆಗುತ್ತದೆ!<br>It gets DARK — NIGHT begins! ರಾತ್ರಿ ಆಗುತ್ತದೆ!</div>
+    </div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#ffb700">
+    <div class="ic-title" style="color:#ffb700">☀️ ಹಗಲಿನ ಆಕಾಶ</div>
+    <div class="ic-text">
+      ಹಗಲು ಆಕಾಶದಲ್ಲಿ <strong style="color:#ffd700">ಸೂರ್ಯ</strong> ಕಾಣುತ್ತಾನೆ.<br>
+      <span style="color:#7eb8ff">In the day sky, we see the <strong>SUN</strong>.</span><br><br>
+      ಸೂರ್ಯ ಬೆಳಕು ತರುತ್ತಾನೆ ಮತ್ತು ಹಗಲಾಗುತ್ತದೆ.<br>
+      <span style="color:#7eb8ff">The sun brings light and it becomes day.</span>
+    </div>
+  </div>
+
+  <div id="dayProgress" style="text-align:center;font-family:'Fredoka One',cursive;font-size:14px;color:#ffd700;margin-bottom:10px">0 / 4 ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಆದವು</div>
+  <button class="next-btn" id="dayNext" disabled onclick="activateTab('night'); markDone('day'); scrollToTop()">ಮುಂದೆ ಹೋಗು · Next ➡️</button>
+</div>
+
+<!-- ══════════ TAB 4: NIGHT SKY ══════════ -->
+<div class="tab-panel" id="panel-night">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#0a0f2a,#060c22);">
+    <div class="banner-emoji">🌙</div>
+    <div>
+      <div class="banner-title" style="color:#7eb8ff">ರಾತ್ರಿ ಆಕಾಶ · Night Sky</div>
+      <div class="banner-sub" style="color:#aaa">ರಾತ್ರಿ ಏನು ಕಾಣುತ್ತೇವೆ?</div>
+    </div>
+  </div>
+
+  <p class="tap-hint">👇 ರಾತ್ರಿ ಆಕಾಶ ತಿಳಿದುಕೋ! Learn about night sky!</p>
+
+  <div class="tap-card" id="nc0" onclick="tapNight(0)">
+    <div class="tc-icon">🌙</div>
+    <div>
+      <div class="tc-text">ರಾತ್ರಿ ಆಕಾಶದಲ್ಲಿ<br><span style="font-size:13px;color:#666">In the night sky...</span></div>
+      <div class="tc-reveal">🌙 ಚಂದ್ರ ಕಾಣುತ್ತಾನೆ! We see the MOON — ಚಂದ್ರ!<br>ಚಂದ್ರ ರಾತ್ರಿ ಬೆಳಕು ಕೊಡುತ್ತಾನೆ! Moon gives light at night!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="nc1" onclick="tapNight(1)">
+    <div class="tc-icon">⭐</div>
+    <div>
+      <div class="tc-text">ರಾತ್ರಿ ಇನ್ನೇನು ಕಾಣುತ್ತೇವೆ?<br><span style="font-size:13px;color:#666">What else do we see at night?</span></div>
+      <div class="tc-reveal">⭐ ನಕ್ಷತ್ರಗಳು ಕಾಣುತ್ತವೆ! We see STARS — ನಕ್ಷತ್ರ!<br>ಚುಕ್ಕೆ ಚುಕ್ಕೆಯಾಗಿ ಕಾಣುತ್ತವೆ! They look like tiny dots!</div>
+    </div>
+  </div>
+  <div class="tap-card" id="nc2" onclick="tapNight(2)">
+    <div class="tc-icon">🔍</div>
+    <div>
+      <div class="tc-text">ನಕ್ಷತ್ರ ಚಿಕ್ಕದಾಗಿ ಯಾಕೆ?<br><span style="font-size:13px;color:#666">Why do stars look small?</span></div>
+      <div class="tc-reveal">🌟 ನಕ್ಷತ್ರಗಳು ಬಹಳ ದೂರ ಇರುವುದರಿಂದ ಚುಕ್ಕೆಗಳಂತೆ ಕಾಣುತ್ತವೆ!<br>Stars are VERY far away, so they look like tiny dots!</div>
+    </div>
+  </div>
+
+  <!-- Song from lesson -->
+  <div class="song-card">
+    <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#ffd700;text-align:center;margin-bottom:14px">🎵 ಹಾಡು ನಲಿ · Song Time!</div>
+    <div class="song-line">ಸೂರ್ಯ ಬಂದ ಬೆಳಕ ತಂದ</div>
+    <div class="song-line-sub">Soorya banda belaka tanda — The sun came and brought light</div>
+    <div class="song-line">ಹಾಡಿ ಆಡಿ ನಲಿಯೋ ಕಂದ.</div>
+    <div class="song-line-sub">Haadi aadi naliyo kanda — Sing and play, little one!</div>
+    <div class="song-line">ಚಂದಿರ ಬಂದ ಬೆಳದಿಂಗಳ ತಂದ</div>
+    <div class="song-line-sub">Chandira banda — The moon came and brought moonlight</div>
+    <div class="song-line">ಜಿಗಿದು ಕುಣಿಯೋ ಮುದ್ದಿನ ಕಂದ.</div>
+    <div class="song-line-sub">Jump and dance, dear little one!</div>
+    <div class="song-line">ತಾರೆಗಳ ಎಣಿಕೆ ಎನಿತು ಚೆಂದ</div>
+    <div class="song-line-sub">Counting the stars, how beautiful!</div>
+    <div class="song-line">ಹೊಳೆಯುವ ಮಿನುಗುವ ತಾರೆಗಳೇ</div>
+    <div class="song-line-sub">Shining, twinkling stars...</div>
+    <div class="song-line">ಬಾನಲಿ ಬೆಳಗುವ ದೀಪಗಳೇ</div>
+    <div class="song-line-sub">Lamps shining in the sky!</div>
+  </div>
+
+  <div class="info-card" style="border-left-color:#7eb8ff">
+    <div class="ic-title" style="color:#7eb8ff">🌙 ರಾತ್ರಿ ಆಕಾಶ</div>
+    <div class="ic-text">
+      ರಾತ್ರಿ ಆಕಾಶದಲ್ಲಿ <strong style="color:#7eb8ff">ಚಂದ್ರ</strong> ಮತ್ತು <strong style="color:#ffd700">ನಕ್ಷತ್ರ</strong> ಕಾಣುತ್ತವೆ.<br>
+      <span style="color:#888">At night we see the <strong>MOON</strong> and <strong>STARS</strong>.</span><br><br>
+      ನಕ್ಷತ್ರಗಳು ಬಹಳ ದೂರ ಇರುವುದರಿಂದ <strong style="color:#ffd700">ಚುಕ್ಕೆಗಳಂತೆ</strong> ಕಾಣುತ್ತವೆ.<br>
+      <span style="color:#888">Stars look like <strong>tiny dots</strong> because they are very far away.</span>
+    </div>
+  </div>
+
+  <div id="nightProgress" style="text-align:center;font-family:'Fredoka One',cursive;font-size:14px;color:#7eb8ff;margin-bottom:10px">0 / 3 ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಆದವು</div>
+  <button class="next-btn" id="nightNext" disabled onclick="activateTab('sort'); markDone('night'); scrollToTop()">ಮುಂದೆ ಹೋಗು · Next ➡️</button>
+</div>
+
+<!-- ══════════ TAB 5: SORT ══════════ -->
+<div class="tab-panel" id="panel-sort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a1a4e,#12123a);">
+    <div class="banner-emoji">🗂️</div>
+    <div>
+      <div class="banner-title" style="color:#ffd700">ಹಗಲು ಅಥವಾ ರಾತ್ರಿ?</div>
+      <div class="banner-sub" style="color:#7eb8ff">Day or Night? Sort the sky objects!</div>
+    </div>
+  </div>
+
+  <div class="sort-wrap">
+    <div class="sort-title">ಹಗಲು ಅಥವಾ ರಾತ್ರಿ ಆಕಾಶದಲ್ಲಿ ಕಾಣುವ ವಸ್ತುಗಳನ್ನು ಸರಿ ಬಾಕ್ಸ್‌ನಲ್ಲಿ ಇಡು!<br>Put each object in the correct sky box!</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:13px;color:#666;text-align:center;margin-bottom:10px">👇 ಒಂದು ಆರಿಸಿ, ಆಮೇಲೆ ಸರಿ ಬಾಕ್ಸ್‌ನಲ್ಲಿ ಟ್ಯಾಪ್ ಮಾಡು!</div>
+    <div class="sort-buckets">
+      <div class="sort-bucket day-bucket" id="bucketDay" onclick="dropSort('day')">
+        <div class="sort-bucket-label" style="color:#ffb700">☀️ ಹಗಲು<br>Day</div>
+        <div class="sort-bucket-items" id="dayItems"></div>
+      </div>
+      <div class="sort-bucket night-bucket" id="bucketNight" onclick="dropSort('night')">
+        <div class="sort-bucket-label" style="color:#7eb8ff">🌙 ರಾತ್ರಿ<br>Night</div>
+        <div class="sort-bucket-items" id="nightItems"></div>
+      </div>
+    </div>
+    <div class="sort-items" id="sortItems"></div>
+    <div id="sortMsg" class="match-msg">🎉 ಅದ್ಭುತ! ಎಲ್ಲ ಸರಿ ಮಾಡಿದೆ! ✅</div>
+  </div>
+
+  <button class="next-btn" id="sortNext" disabled onclick="activateTab('match'); markDone('sort'); scrollToTop()">ಮುಂದೆ ಹೋಗು · Next ➡️</button>
+</div>
+
+<!-- ══════════ TAB 6: MATCH ══════════ -->
+<div class="tab-panel" id="panel-match">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a1a4e,#12123a);">
+    <div class="banner-emoji">🔗</div>
+    <div>
+      <div class="banner-title" style="color:#ffd700">ಜೋಡಿ ಹುಡುಕು!</div>
+      <div class="banner-sub" style="color:#7eb8ff">Match the sky friend to its fact!</div>
+    </div>
+  </div>
+
+  <div class="match-wrap">
+    <div class="match-title">ಗೆಳೆಯ → ಸಂಗತಿ ಜೋಡಿಸು · Match friend → fact</div>
+    <div class="match-score">✅ <span id="matchScore">0</span> / 4 ಜೋಡಿ</div>
+    <div class="match-cols">
+      <div>
+        <div class="match-col-title" style="color:#ffd700">🌟 ಗೆಳೆಯರು</div>
+        <div id="matchLeft"></div>
+      </div>
+      <div>
+        <div class="match-col-title" style="color:#7eb8ff">📝 ಸಂಗತಿ · Fact</div>
+        <div id="matchRight"></div>
+      </div>
+    </div>
+    <div class="match-msg" id="matchMsg">🎉 ಎಲ್ಲ ಜೋಡಿ ಸರಿ! All matched! ✅</div>
+  </div>
+
+  <button class="next-btn" id="matchNext" disabled onclick="activateTab('quiz'); markDone('match'); buildQuiz(); scrollToTop()">ಮುಂದೆ ಹೋಗು · Next ➡️</button>
+</div>
+
+<!-- ══════════ TAB 7: QUIZ ══════════ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#1a1a4e,#12123a);">
+    <div class="banner-emoji">🧠</div>
+    <div>
+      <div class="banner-title" style="color:#ffd700">ಪ್ರಶ್ನೆ ಸಮಯ! · Quiz Time!</div>
+      <div class="banner-sub" style="color:#7eb8ff">ಸರಿ ಉತ್ತರ ಆರಿಸು! Pick the right answer!</div>
+    </div>
+  </div>
+
+  <div class="quiz-dots" id="quizDots"></div>
+  <div id="quizContainer"></div>
+
+  <button class="next-btn" id="quizFinish" disabled onclick="showCelebration()">🎉 ಪಾಠ ಮುಗಿಸಿದೆ! Finish!</button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-big">🌙</div>
+  <div class="celeb-title">ಶಾಬಾಶ್! ಅದ್ಭುತ! 🎉</div>
+  <div class="celeb-sub" id="celebSub"></div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="restart-btn" onclick="restartAll()">🔄 ಮತ್ತೆ ಆಡು · Play Again</button>
+</div>
+
+<script>
+/* ══ STAR BACKGROUND ══ */
+(function(){
+  const bg = document.getElementById('starBg');
+  for(let i=0;i<80;i++){
+    const s = document.createElement('span');
+    const size = Math.random()*3+1;
+    s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;opacity:.5`;
+    bg.appendChild(s);
+  }
+})();
+
+/* ══ STATE ══ */
+let stars = 0;
+const tabOrder = ['intro','sky','day','night','sort','match','quiz'];
+const doneTabs = new Set();
+let activeTab = 'intro';
+
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+
+function updateProgress() {
+  const pct = (doneTabs.size / tabOrder.length) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function markDone(tab) {
+  doneTabs.add(tab);
+  const el = document.getElementById('tab-' + tab);
+  if(el){ el.className = 'step-tab done'; el.textContent = el.textContent.replace(/^./,'✅'); }
+  updateProgress();
+}
+
+function activateTab(tab) {
+  const el = document.getElementById('tab-' + tab);
+  if(el && !el.classList.contains('done')) {
+    el.className = 'step-tab unlocked';
+    setTimeout(() => goTab(tab), 100);
+  }
+}
+
+function goTab(tab) {
+  const idx = tabOrder.indexOf(tab);
+  const cur = tabOrder.indexOf(activeTab);
+  const el = document.getElementById('tab-' + tab);
+  if(el && el.classList.contains('locked')) {
+    el.classList.add('shaking');
+    setTimeout(() => el.classList.remove('shaking'), 600);
+    showToast('🔒 ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸು! Finish the previous step first!');
+    return;
+  }
+  // deactivate current
+  const curEl = document.getElementById('tab-' + activeTab);
+  if(curEl && !doneTabs.has(activeTab)) curEl.className = 'step-tab unlocked';
+  else if(curEl && doneTabs.has(activeTab)) curEl.className = 'step-tab done';
+
+  document.getElementById('panel-' + activeTab).classList.remove('active');
+  activeTab = tab;
+  document.getElementById('panel-' + tab).classList.add('active');
+  if(!doneTabs.has(tab)) el.className = 'step-tab active';
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ══ TAB 1: INTRO ══ */
+let introDone = new Set();
+function tapIntro(i) {
+  const card = document.getElementById('ic'+i);
+  if(!card.classList.contains('tapped')) {
+    card.classList.add('tapped');
+    introDone.add(i);
+    stars++; document.getElementById('starsNum').textContent = stars;
+    if(introDone.size === 4) {
+      const btn = document.getElementById('introNext');
+      btn.disabled = false; btn.classList.add('ready');
+      showToast('🌟 ಅದ್ಭುತ! ಮುಂದೆ ಹೋಗು! Great! Go next!');
+    }
+  }
+}
+
+/* ══ TAB 2: SKY ══ */
+let skyDone = new Set();
+function tapSky(i) {
+  const card = document.getElementById('sk'+i);
+  if(!card.classList.contains('tapped')) {
+    card.classList.add('tapped');
+    skyDone.add(i);
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('skyProgress').textContent = skyDone.size + ' / 4 ಗೆಳೆಯರನ್ನು ಭೇಟಿ ಮಾಡಿದೆ · Friends met';
+    if(skyDone.size === 4) {
+      const btn = document.getElementById('skyNext');
+      btn.disabled = false; btn.classList.add('ready');
+      showToast('🌟 ಎಲ್ಲ ಗೆಳೆಯರನ್ನು ಭೇಟಿ ಮಾಡಿದೆ!');
+    }
+  }
+}
+
+/* ══ TAB 3: DAY ══ */
+let dayDone = new Set();
+function tapDay(i) {
+  const card = document.getElementById('dc'+i);
+  if(!card.classList.contains('tapped')) {
+    card.classList.add('tapped');
+    dayDone.add(i);
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('dayProgress').textContent = dayDone.size + ' / 4 ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಆದವು';
+    if(dayDone.size === 4) {
+      const btn = document.getElementById('dayNext');
+      btn.disabled = false; btn.classList.add('ready');
+      showToast('☀️ ಹಗಲಿನ ಆಕಾಶ ಕಲಿತೆ!');
+    }
+  }
+}
+
+/* ══ TAB 4: NIGHT ══ */
+let nightDone = new Set();
+function tapNight(i) {
+  const card = document.getElementById('nc'+i);
+  if(!card.classList.contains('tapped')) {
+    card.classList.add('tapped');
+    nightDone.add(i);
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('nightProgress').textContent = nightDone.size + ' / 3 ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಆದವು';
+    if(nightDone.size === 3) {
+      const btn = document.getElementById('nightNext');
+      btn.disabled = false; btn.classList.add('ready');
+      showToast('🌙 ರಾತ್ರಿ ಆಕಾಶ ಕಲಿತೆ!');
+    }
+  }
+}
+
+/* ══ TAB 5: SORT ══ */
+const sortItems = [
+  { emoji:'☀️', label:'ಸೂರ್ಯ · Sun', correct:'day' },
+  { emoji:'🌙', label:'ಚಂದ್ರ · Moon', correct:'night' },
+  { emoji:'⭐', label:'ನಕ್ಷತ್ರ · Star', correct:'night' },
+  { emoji:'💛', label:'ಬೆಳಕು · Light (Day)', correct:'day' },
+  { emoji:'✨', label:'ಮಿನುಗು · Twinkle', correct:'night' },
+  { emoji:'🌤️', label:'ನೀಲಿ ಆಕಾಶ · Blue Sky', correct:'day' },
+];
+let sortSel = null, sortCorrect = 0;
+
+function buildSort() {
+  const container = document.getElementById('sortItems');
+  container.innerHTML = sortItems.map((item,i) =>
+    `<div class="sort-item" id="si-${i}" onclick="selectSort(${i})">${item.emoji} ${item.label}</div>`
+  ).join('');
+}
+
+function selectSort(i) {
+  if(document.getElementById('si-'+i).classList.contains('placed')) return;
+  document.querySelectorAll('.sort-item').forEach(el => el.classList.remove('selected-sort'));
+  sortSel = i;
+  document.getElementById('si-'+i).classList.add('selected-sort');
+}
+
+function dropSort(bucket) {
+  if(sortSel === null) { showToast('👆 ಮೊದಲು ಒಂದು ಆರಿಸಿ! Pick an item first!'); return; }
+  const item = sortItems[sortSel];
+  const el = document.getElementById('si-'+sortSel);
+  const isCorrect = item.correct === bucket;
+  const span = document.createElement('span');
+  span.className = isCorrect ? 'sort-placed-item' : 'sort-wrong-item';
+  span.textContent = item.emoji + ' ' + item.label.split('·')[0];
+
+  if(isCorrect) {
+    document.getElementById(bucket + 'Items').appendChild(span);
+    el.classList.add('placed');
+    sortCorrect++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    showToast('✅ ಸರಿ! Correct!');
+    if(sortCorrect === sortItems.length) {
+      setTimeout(() => {
+        document.getElementById('sortMsg').style.display = 'block';
+        const btn = document.getElementById('sortNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 300);
+    }
+  } else {
+    const wrongBucket = document.getElementById(bucket + 'Items');
+    wrongBucket.appendChild(span);
+    showToast('❌ ತಪ್ಪು! ' + item.emoji + ' ' + (item.correct === 'day' ? '☀️ ಹಗಲು' : '🌙 ರಾತ್ರಿ') + 'ಗೆ ಸೇರುತ್ತದೆ!');
+    setTimeout(() => span.remove(), 1200);
+  }
+  sortSel = null;
+  document.querySelectorAll('.sort-item').forEach(el => el.classList.remove('selected-sort'));
+}
+
+/* ══ TAB 6: MATCH ══ */
+const matchPairs = [
+  { left:'☀️ ಸೂರ್ಯ · Sun',    right:'🌤️ ಹಗಲು ಕಾಣುತ್ತಾನೆ\nSeen in the day' },
+  { left:'🌙 ಚಂದ್ರ · Moon',   right:'🌃 ರಾತ್ರಿ ಕಾಣುತ್ತಾನೆ\nSeen at night' },
+  { left:'⭐ ನಕ್ಷತ್ರ · Star',  right:'✨ ಚುಕ್ಕೆಗಳಂತೆ ಕಾಣುತ್ತವೆ\nLook like tiny dots' },
+  { left:'🌌 ಆಕಾಶ · Sky',     right:'💙 ಹಗಲು ನೀಲಿ ಬಣ್ಣ\nBlue in the day' },
+];
+let matchSelLeft = null, matchDone = 0;
+
+function buildMatch() {
+  // shuffle right side
+  const rights = matchPairs.map((p,i) => ({text:p.right, idx:i}));
+  rights.sort(() => Math.random()-.5);
+  document.getElementById('matchLeft').innerHTML = matchPairs.map((p,i) =>
+    `<div class="match-item" id="mml-${i}" onclick="selectMatchLeft(${i})">${p.left}</div>`
+  ).join('');
+  document.getElementById('matchRight').innerHTML = rights.map((r,i) =>
+    `<div class="match-item" id="mmr-${r.idx}" onclick="selectMatchRight(${r.idx})">${r.text}</div>`
+  ).join('');
+}
+
+function selectMatchLeft(i) {
+  if(document.getElementById('mml-'+i).classList.contains('matched')) return;
+  if(matchSelLeft !== null) document.getElementById('mml-'+matchSelLeft)?.classList.remove('selected');
+  matchSelLeft = i;
+  document.getElementById('mml-'+i).classList.add('selected');
+}
+
+function selectMatchRight(i) {
+  if(matchSelLeft === null) { showToast('👈 ಮೊದಲು ಎಡ ಆರಿಸಿ! Pick left first!'); return; }
+  const lEl = document.getElementById('mml-'+matchSelLeft);
+  const rEl = document.getElementById('mmr-'+i);
+  if(rEl.classList.contains('matched')) return;
+  if(matchSelLeft === i) {
+    lEl.classList.remove('selected'); lEl.classList.add('matched');
+    rEl.classList.add('matched');
+    matchDone++;
+    stars++; document.getElementById('starsNum').textContent = stars;
+    document.getElementById('matchScore').textContent = matchDone;
+    matchSelLeft = null;
+    showToast('✅ ಸರಿ! Correct! 🎉');
+    if(matchDone === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchMsg').style.display = 'block';
+        const btn = document.getElementById('matchNext');
+        btn.disabled = false; btn.classList.add('ready');
+      }, 400);
+    }
+  } else {
+    lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+    setTimeout(() => { lEl.classList.remove('wrong-flash','selected'); rEl.classList.remove('wrong-flash'); matchSelLeft = null; }, 700);
+    showToast('❌ ಸರಿಯಿಲ್ಲ! Try again!');
+  }
+}
+
+/* ══ TAB 7: QUIZ ══ */
+const quizQuestions = [
+  { visual:'☀️❓', question:'ಹಗಲಿನ ಆಕಾಶದಲ್ಲಿ ಏನು ಕಾಣುತ್ತೇವೆ?\nWhat do we see in the day sky?', options:['🌙 ಚಂದ್ರ','⭐ ನಕ್ಷತ್ರ','☀️ ಸೂರ್ಯ ✅','🌌 ತಾರೆ'], correct:2 },
+  { visual:'🌙❓', question:'ರಾತ್ರಿ ಆಕಾಶದಲ್ಲಿ ಏನು ಕಾಣುತ್ತೇವೆ?\nWhat do we see at night?', options:['☀️ ಸೂರ್ಯ','🌙 ಚಂದ್ರ ✅','🌈 ಕಾಮನಬಿಲ್ಲು','🌤️ ಮೋಡ'], correct:1 },
+  { visual:'⭐❓', question:'ನಕ್ಷತ್ರಗಳು ಚಿಕ್ಕದಾಗಿ ಕಾಣಲು ಕಾರಣ?\nWhy do stars look tiny?', options:['ಚಿಕ್ಕ ಗಾತ್ರ\nThey are small','ತಂಪಾದ ಕಾರಣ\nBecause cold','ಬಹಳ ದೂರ ✅\nVery far away','ರಾತ್ರಿ ಕಾರಣ\nBecause night'], correct:2 },
+  { visual:'🌅❓', question:'ಸೂರ್ಯ ಮರೆಯಾದಾಗ ಏನಾಗುತ್ತದೆ?\nWhat happens when sun disappears?', options:['ಮಳೆ ಆಗುತ್ತದೆ\nIt rains','ರಾತ್ರಿ ಆಗುತ್ತದೆ ✅\nNight begins','ಹಗಲಾಗುತ್ತದೆ\nDay begins','ಬಿಸಿ ಆಗುತ್ತದೆ\nGets hot'], correct:1 },
+  { visual:'🌌❓', question:'ಹಗಲಿನ ಆಕಾಶ ಯಾವ ಬಣ್ಣ?\nWhat color is the day sky?', options:['ಕಪ್ಪು\nBlack','ಕೆಂಪು\nRed','ಹಳದಿ\nYellow','ನೀಲಿ ✅\nBlue'], correct:3 },
+  { visual:'🌟❓', question:'ಬಾನ ಗೆಳೆಯರು ಯಾರು?\nWho are our sky friends?', options:['ಮೋಡ, ಮಳೆ\nCloud, Rain','ಸೂರ್ಯ, ಚಂದ್ರ, ನಕ್ಷತ್ರ ✅\nSun, Moon, Stars','ಪಕ್ಷಿ, ಮೀನು\nBird, Fish','ಮರ, ಹೂವು\nTree, Flower'], correct:1 },
+  { visual:'🌙❓', question:'ಚಂದ್ರ ಯಾವಾಗ ಕಾಣುತ್ತಾನೆ?\nWhen do we see the moon?', options:['ಹಗಲು\nDaytime','ಬೆಳಿಗ್ಗೆ\nMorning','ರಾತ್ರಿ ✅\nNight','ಮಧ್ಯಾಹ್ನ\nAfternoon'], correct:2 },
+  { visual:'☀️❓', question:'ಸೂರ್ಯ ನಮಗೆ ಏನು ಕೊಡುತ್ತಾನೆ?\nWhat does the sun give us?', options:['ನೀರು\nWater','ಆಹಾರ\nFood','ಬೆಳಕು ✅\nLight','ಗಾಳಿ\nAir'], correct:2 },
+];
+let quizIdx = 0, quizAnswered = [];
+
+function buildQuiz() {
+  const dots = document.getElementById('quizDots');
+  dots.innerHTML = quizQuestions.map((_,i) => `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`).join('');
+  renderQuizQ(0);
+}
+
+function renderQuizQ(i) {
+  const q = quizQuestions[i];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="q-card">
+      <span class="q-visual">${q.visual}</span>
+      <div class="q-text">${q.question}</div>
+      <div class="q-options">
+        ${q.options.map((opt,j) => `<div class="q-option" id="qopt-${j}" onclick="answerQuiz(${j})">${opt}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen) {
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.q-option');
+  opts.forEach(o => o.onclick = null);
+  const correct = (chosen === q.correct);
+  opts[chosen].classList.add(correct ? 'correct' : 'wrong');
+  if(!correct) opts[q.correct].classList.add('correct');
+  quizAnswered.push(correct);
+  document.getElementById('dot-' + quizIdx).classList.remove('active');
+  document.getElementById('dot-' + quizIdx).classList.add(correct ? 'done-ok' : 'done-err');
+  if(correct) { stars++; document.getElementById('starsNum').textContent = stars; }
+  showToast(correct ? '✅ ಸರಿ! Correct! 🎉' : '❌ ತಪ್ಪು! ' + q.options[q.correct] + ' ಸರಿ!');
+  setTimeout(() => {
+    quizIdx++;
+    if(quizIdx < quizQuestions.length) {
+      document.getElementById('dot-' + quizIdx)?.classList.add('active');
+      renderQuizQ(quizIdx);
+    } else {
+      doneTabs.add('quiz'); updateProgress();
+      const btn = document.getElementById('quizFinish');
+      btn.disabled = false; btn.classList.add('ready');
+    }
+  }, 1500);
+}
+
+/* ══ CELEBRATION ══ */
+function showCelebration() {
+  spawnConfetti();
+  const correct = quizAnswered.filter(Boolean).length;
+  document.getElementById('celebSub').textContent =
+    `ನೀನು ಪಾಠ 14 ಮುಗಿಸಿದೆ! 🎉\nYou completed Lesson 14 — ಬಾನ ಗೆಳೆಯರು!\n\nQuiz: ${correct}/${quizQuestions.length} ಸರಿ ✅\nStar Score: ${stars} ⭐\n\nನೀನು ಆಕಾಶ ಚಾಂಪಿಯನ್! 🏆`;
+  let starStr = '';
+  for(let i=0; i<Math.min(stars,20); i++) starStr += '⭐';
+  document.getElementById('celebStars').textContent = starStr + ' ' + stars + ' Stars!';
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+function spawnConfetti() {
+  const colors = ['#ffd700','#7eb8ff','#ffffff','#ffb700','#4caf50','#ab47bc'];
+  for(let i=0;i<70;i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2 + 's';
+    p.style.animationDuration = (2+Math.random()*2) + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+
+function restartAll() { location.reload(); }
+
+/* ══ INIT ══ */
+buildSort();
+buildMatch();
+updateProgress();
+</script>
+</body>
+</html>
