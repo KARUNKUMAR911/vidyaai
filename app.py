@@ -314,7 +314,7 @@ def class1_kannada_maths_lesson(lesson_num: int):
     # Lessons are stored as templates/class1_kannada_maths_lesson{N}.html
     if lesson_num < 1 or lesson_num > 19:
         return redirect('/class/1/kannada/maths')
-    return render_template(f'class1_kannada_maths_lesson{lesson_num}.html', student=student)
+    return render_template(f'class1/class1_kannada_maths_lesson{lesson_num}.html', student=student)
 
 # Kannada-medium EVS index (lessons currently reuse the English-medium EVS lesson pages)
 @app.route('/class/1/kannada/evs')
@@ -360,119 +360,119 @@ def class1_kannada_vandane():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_kannada_ch1.html', student=student)
+    return render_template('class1/class1_kannada_kannada_ch1.html', student=student)
 
 @app.route('/class/1/kannada/sahakara')
 def class1_kannada_sahakara():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch2_sahakara.html', student=student)
+    return render_template('class1/class1_kannada_ch2_sahakara.html', student=student)
 
 @app.route('/class/1/kannada/ootada-eta')
 def class1_kannada_ootada_eta():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch3.html', student=student)
+    return render_template('class1/class1_kannada_ch3.html', student=student)
 
 @app.route('/class/1/kannada/hodeota')
 def class1_kannada_hodeota():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch4.html', student=student)
+    return render_template('class1/class1_kannada_ch4.html', student=student)
 
 @app.route('/class/1/kannada/rekha')
 def class1_kannada_rekha():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('kannada_ch5_rekhaabhyasa.html', student=student)
+    return render_template('class1/kannada_ch5_rekhaabhyasa.html', student=student)
 
 @app.route('/class/1/kannada/besige')
 def class1_kannada_besige():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch6_besige_raje.html', student=student)
+    return render_template('class1/class1_kannada_ch6_besige_raje.html', student=student)
 
 @app.route('/class/1/kannada/koti-akilu')
 def class1_kannada_koti_akilu():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('kannada_ch7_kooti_alilu.html', student=student)
+    return render_template('class1/kannada_ch7_kooti_alilu.html', student=student)
 
 @app.route('/class/1/kannada/pada-odu')
 def class1_kannada_pada_odu():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch8.html', student=student)
+    return render_template('class1/class1_kannada_ch8.html', student=student)
 
 @app.route('/class/1/kannada/chandira')
 def class1_kannada_chandira():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch9.html', student=student)
+    return render_template('class1/class1_kannada_ch9.html', student=student)
 
 @app.route('/class/1/kannada/gunita')
 def class1_kannada_gunita():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch10.html', student=student)
+    return render_template('class1/class1_kannada_ch10.html', student=student)
 
 @app.route('/class/1/kannada/vivekananda')
 def class1_kannada_vivekananda():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch11.html', student=student)
+    return render_template('class1/class1_kannada_ch11.html', student=student)
 
 @app.route('/class/1/kannada/ottu')
 def class1_kannada_ottu():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch12.html', student=student)
+    return render_template('class1/class1_kannada_ch12.html', student=student)
 
 @app.route('/class/1/kannada/abbasa')
 def class1_kannada_abbasa():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch13.html', student=student)
+    return render_template('class1/class1_kannada_ch13.html', student=student)
 
 @app.route('/class/1/kannada/molada-mari')
 def class1_kannada_molada_mari():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch14.html', student=student)
+    return render_template('class1/class1_kannada_ch14.html', student=student)
 
 @app.route('/class/1/kannada/shankara')
 def class1_kannada_shankara():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch15.html', student=student)
+    return render_template('class1/class1_kannada_ch15.html', student=student)
 
 @app.route('/class/1/kannada/kai-toleya')
 def class1_kannada_kai_toleya():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch16.html', student=student)
+    return render_template('class1/class1_kannada_ch16.html', student=student)
 
 @app.route('/class/1/kannada/sigadi')
 def class1_kannada_sigadi():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class1_kannada_ch17.html', student=student)
+    return render_template('class1/class1_kannada_ch17.html', student=student)
 
 @app.route('/class/1/maths')
 def class1_maths():
@@ -620,6 +620,14 @@ def class1_evs():
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     return render_template('class1/class1_evs_chapters.html', student=student)
+
+# Placeholder subject for Class 1 (avoid broken links in the dashboard).
+@app.route('/class/1/hindi')
+def class1_hindi():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class1/class1_hindi.html', student=student)
 
 # Class 1 EVS lessons
 @app.route('/class/1/evs/animals')
