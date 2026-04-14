@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — Lesson 8: Organ & Health</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#e0f2f1 0%,#b2dfdb 100%);min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#00796b,#00897b,#26a69a);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,121,107,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:17px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#00695c,#00897b,#4db6ac);padding:18px 20px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'🪥🧼🚿🧴';position:absolute;bottom:8px;left:0;right:0;font-size:30px;letter-spacing:20px;opacity:.3;animation:scrollEmoji 12s linear infinite;}
+@keyframes scrollEmoji{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);position:relative;z-index:10;}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#b2dfdb;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#00796b,#26a69a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#00897b;color:#fff;border-color:#00897b;box-shadow:0 4px 14px rgba(0,137,123,.5);}
+.step-tab.done{background:#e0f2f1;color:#00695c;border-color:#80cbc4;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#00796b;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #00897b;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#00796b;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#00796b;font-size:15px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#80cbc4;background:#e0f2f1;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#00796b;font-size:19px;}
+.scene-bottom{border-top:2px dashed #b2dfdb;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #80cbc4;background:#e0f2f1;font-family:'Baloo 2',cursive;font-size:16px;color:#00796b;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#00796b;background:#b2dfdb;color:#004d40;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#b2dfdb;color:#004d40;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#00796b,#26a69a);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.info-strip{background:linear-gradient(135deg,#e0f2f1,#b2dfdb);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #80cbc4;}
+.info-strip p{font-size:14px;font-weight:800;color:#004d40;line-height:1.7;}
+
+.plant-grid{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.plant-grid-title{font-family:'Baloo 2',cursive;font-size:15px;color:#00796b;font-weight:900;text-align:center;margin-bottom:12px;}
+.plant-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;justify-items:center;}
+.plant-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:16px;transition:transform .2s;}
+.plant-cell:hover{transform:scale(1.08);}
+.plant-cell .pe{font-size:36px;}
+.plant-cell .pn{font-family:'Baloo 2',cursive;font-size:11px;font-weight:900;text-align:center;color:#00796b;}
+
+.rule-box{background:#fff;border:3px solid #00897b;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#00796b;font-weight:900;line-height:1.7;}
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#00897b;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#00695c;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#e0f2f1;border:3px solid #80cbc4;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#00796b;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#00796b;background:#b2dfdb;color:#004d40;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#b2dfdb;color:#004d40;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(0,105,92,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#00695c;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🧼 EVS Lesson 8 — Health</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🧼</span>
+  <h1>Class 2 EVS · Lesson 8</h1>
+  <p>ORGAN & HEALTH — Keep it clean!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="morning">🌅 Morning</div>
+  <div class="step-tab locked" data-tab="eating">🍽️ Eating</div>
+  <div class="step-tab locked" data-tab="care">💅 Body Care</div>
+  <div class="step-tab locked" data-tab="night">🌙 Night</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: MORNING ══════════════ -->
+<div class="tab-panel active" id="panel-morning">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f2f1,#b2dfdb);">
+    <span class="banner-emoji">🌅</span>
+    <div>
+      <div class="banner-title" style="color:#00695c;">Morning Habits</div>
+      <div class="banner-sub" style="color:#00897b;">Wake up fresh and healthy!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🛁 Every single morning!</h3>
+    <p>Shalini and Pawan do these things every morning:</p>
+    <p>1️⃣ They get up early and <span class="hl">brush their teeth</span>! 🪥</p>
+    <p>2️⃣ They go to the <span class="hl">toilet</span> and wash hands with <span class="hl">soap</span>. 🧼</p>
+    <p>3️⃣ They <span class="hl">take a bath</span> every day! 🚿</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="m1"><div class="scene-top"><div class="scene-label">Question 1 of 4</div>
+  <div class="scene-sentence">To keep your teeth clean, you must <span class="kw">______</span> them. 🪥</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('m1','brush','correct',this)"><span class="cb-emoji">🪥</span><span class="cb-word">Brush</span></div>
+    <div class="choice-btn" onclick="answer('m1','hide','wrong',this)"><span class="cb-emoji">🙈</span><span class="cb-word">Hide</span></div>
+  </div><div class="fb-box" id="fb-m1"></div></div></div>
+
+  <div class="scenario-card" id="m2"><div class="scene-top"><div class="scene-label">Question 2 of 4</div>
+  <div class="scene-sentence">After using the toilet, wash your hands with <span class="kw">______</span>. 🧼</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('m2','soap','correct',this)"><span class="cb-emoji">🧼</span><span class="cb-word">Soap & Water</span></div>
+    <div class="choice-btn" onclick="answer('m2','dirt','wrong',this)"><span class="cb-emoji">🟤</span><span class="cb-word">Mud</span></div>
+  </div><div class="fb-box" id="fb-m2"></div></div></div>
+
+  <div class="scenario-card" id="m3"><div class="scene-top"><div class="scene-label">Question 3 of 4</div>
+  <div class="scene-sentence">Should you take a bath <span class="kw">every day</span>? 🚿</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('m3','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes!</span></div>
+    <div class="choice-btn" onclick="answer('m3','no','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+  </div><div class="fb-box" id="fb-m3"></div></div></div>
+
+  <div class="scenario-card" id="m4"><div class="scene-top"><div class="scene-label">Question 4 of 4</div>
+  <div class="scene-sentence">We should wake up <span class="kw">______</span> in the morning. 🌅</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('m4','early','correct',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Early</span></div>
+    <div class="choice-btn" onclick="answer('m4','late','wrong',this)"><span class="cb-emoji">💤</span><span class="cb-word">Late</span></div>
+  </div><div class="fb-box" id="fb-m4"></div></div></div>
+
+  <button class="big-btn primary" id="btn-morning" disabled onclick="unlockNext('morning','eating')">Next: Eating Habits! 🍽️ ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: EATING ══════════════ -->
+<div class="tab-panel" id="panel-eating">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#90caf9);">
+    <span class="banner-emoji">🍽️</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">Eating Healthy</div>
+      <div class="banner-sub" style="color:#1565c0;">Clean hands, clean water!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#1565c0;">
+    <h3 style="color:#0d47a1;">💧 Before and After Meals</h3>
+    <p>1️⃣ Always wash hands with <span class="hl" style="color:#1565c0;">soap</span> <span style="font-weight:900;">BEFORE</span> taking meals! 🧼</p>
+    <p>2️⃣ Always wash hands <span style="font-weight:900;">AFTER</span> taking meals!</p>
+    <p>3️⃣ Drink only <span class="hl" style="color:#1565c0;">clean water</span>! 💧</p>
+  </div>
+
+  <div class="section-divider" style="color:#1565c0;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="e1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">What must you do <span class="kw" style="color:#1565c0;">before</span> eating food? 🥘</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1565c0; border-color:#90caf9;" onclick="answer('e1','wash','correct',this)"><span class="cb-emoji">🧼</span><span class="cb-word">Wash hands</span></div>
+    <div class="choice-btn" style="color:#1565c0; border-color:#90caf9;" onclick="answer('e1','play','wrong',this)"><span class="cb-emoji">⚽</span><span class="cb-word">Play outside</span></div>
+  </div><div class="fb-box" id="fb-e1"></div></div></div>
+
+  <div class="scenario-card" id="e2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">What kind of water should we drink?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1565c0; border-color:#90caf9;" onclick="answer('e2','clean','correct',this)"><span class="cb-emoji">💧</span><span class="cb-word">Clean water</span></div>
+    <div class="choice-btn" style="color:#1565c0; border-color:#90caf9;" onclick="answer('e2','dirty','wrong',this)"><span class="cb-emoji">🟤</span><span class="cb-word">Muddy water</span></div>
+  </div><div class="fb-box" id="fb-e2"></div></div></div>
+
+  <div class="scenario-card" id="e3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Should we wash our hands <span class="kw" style="color:#1565c0;">after</span> meals too? 🍽️</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1565c0; border-color:#90caf9;" onclick="answer('e3','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+    <div class="choice-btn" style="color:#1565c0; border-color:#90caf9;" onclick="answer('e3','no','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+  </div><div class="fb-box" id="fb-e3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-eating" disabled onclick="unlockNext('eating','care')">Next: Body Care! 💅 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: BODY CARE ══════════════ -->
+<div class="tab-panel" id="panel-care">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">👕</span>
+    <div>
+      <div class="banner-title" style="color:#ad1457;">Taking Care of Yourself</div>
+      <div class="banner-sub" style="color:#c2185b;">Nails, hair, and clothes!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#c2185b;">
+    <h3 style="color:#ad1457;">💅 Keeping Clean</h3>
+    <p>1️⃣ Always wear <span class="hl" style="color:#c2185b;">clean, washed clothes</span>. 👕</p>
+    <p>2️⃣ After bath, <span class="hl" style="color:#c2185b;">comb your hair</span> neatly. 🪮</p>
+    <p>3️⃣ <span class="hl" style="color:#c2185b;">Trim your nails</span> at least once a week! Dirt hides inside long nails. ✂️</p>
+  </div>
+
+  <div class="section-divider" style="color:#c2185b;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="c1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">How often should you <span class="kw" style="color:#c2185b;">trim your nails</span>? 💅</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#c2185b; border-color:#f48fb1;" onclick="answer('c1','week','correct',this)"><span class="cb-emoji">✂️</span><span class="cb-word">Once a week</span></div>
+    <div class="choice-btn" style="color:#c2185b; border-color:#f48fb1;" onclick="answer('c1','never','wrong',this)"><span class="cb-emoji">👻</span><span class="cb-word">Never</span></div>
+  </div><div class="fb-box" id="fb-c1"></div></div></div>
+
+  <div class="scenario-card" id="c2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">After taking a bath, we should wear <span class="kw" style="color:#c2185b;">______</span> clothes. 👕</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#c2185b; border-color:#f48fb1;" onclick="answer('c2','clean','correct',this)"><span class="cb-emoji">✨</span><span class="cb-word">Clean & washed</span></div>
+    <div class="choice-btn" style="color:#c2185b; border-color:#f48fb1;" onclick="answer('c2','dirty','wrong',this)"><span class="cb-emoji">🦠</span><span class="cb-word">Dirty</span></div>
+  </div><div class="fb-box" id="fb-c2"></div></div></div>
+
+  <div class="scenario-card" id="c3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">We must <span class="kw" style="color:#c2185b;">______</span> our hair neatly! 🪮</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#c2185b; border-color:#f48fb1;" onclick="answer('c3','comb','correct',this)"><span class="cb-emoji">🪮</span><span class="cb-word">Comb</span></div>
+    <div class="choice-btn" style="color:#c2185b; border-color:#f48fb1;" onclick="answer('c3','mess','wrong',this)"><span class="cb-emoji">🌪️</span><span class="cb-word">Mess up</span></div>
+  </div><div class="fb-box" id="fb-c3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-care" disabled onclick="unlockNext('care','night')">Next: Night Time! 🌙 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 4: NIGHT ══════════════ -->
+<div class="tab-panel" id="panel-night">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <span class="banner-emoji">🌙</span>
+    <div>
+      <div class="banner-title" style="color:#283593;">Evening & Night</div>
+      <div class="banner-sub" style="color:#3f51b5;">After school and sleeping!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#3f51b5;">
+    <h3 style="color:#283593;">🎒 After School</h3>
+    <p>When you come home from school, the first thing you should do is <span class="hl" style="color:#3f51b5;">wash your hands, legs, and face!</span> 🧼 Then, read your lessons daily! 📚</p>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#283593;">
+    <h3 style="color:#1a237e;">🛌 Time to Sleep!</h3>
+    <p>Sleep in a well-ventilated room (windows let fresh air in 🌬️), and <span class="hl" style="color:#1a237e;">without covering your face!</span></p>
+  </div>
+  
+  <div class="rule-box" style="border-color:#3f51b5;">
+    <div class="rule-text" style="color:#283593;">"Cleanliness of the body is Health.<br><strong>Health is Wealth!</strong>" 🌟</div>
+  </div>
+
+  <div class="section-divider" style="color:#3f51b5;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="n1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">What should you do immediately after coming from <span class="kw" style="color:#3f51b5;">school</span>? 🎒</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#3f51b5; border-color:#9fa8da;" onclick="answer('n1','wash','correct',this)"><span class="cb-emoji">🧼</span><span class="cb-word">Wash hands/legs</span></div>
+    <div class="choice-btn" style="color:#3f51b5; border-color:#9fa8da;" onclick="answer('n1','sleep','wrong',this)"><span class="cb-emoji">🛌</span><span class="cb-word">Jump in bed</span></div>
+  </div><div class="fb-box" id="fb-n1"></div></div></div>
+
+  <div class="scenario-card" id="n2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">Should you cover your <span class="kw" style="color:#3f51b5;">face</span> with a blanket while sleeping?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#3f51b5; border-color:#9fa8da;" onclick="answer('n2','no','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+    <div class="choice-btn" style="color:#3f51b5; border-color:#9fa8da;" onclick="answer('n2','yes','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+  </div><div class="fb-box" id="fb-n2"></div></div></div>
+
+  <div class="scenario-card" id="n3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Cleanliness of the body is <span class="kw" style="color:#3f51b5;">______</span>. 🌟</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#3f51b5; border-color:#9fa8da;" onclick="answer('n3','health','correct',this)"><span class="cb-emoji">💪</span><span class="cb-word">Health / Wealth</span></div>
+    <div class="choice-btn" style="color:#3f51b5; border-color:#9fa8da;" onclick="answer('n3','bad','wrong',this)"><span class="cb-emoji">🗑️</span><span class="cb-word">Bad</span></div>
+  </div><div class="fb-box" id="fb-n3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-night" disabled onclick="unlockNext('night','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 5: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f2f1,#b2dfdb);">
+    <span class="banner-emoji">🏆</span>
+    <div><div class="banner-title" style="color:#00695c;">Final Quiz!</div>
+    <div class="banner-sub" style="color:#00796b;">Test your Health & Body Care Knowledge!</div></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb1"><div class="quiz-num">Question 1 of 10</div><div class="quiz-question">What do we use to brush our teeth?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">🪥 Toothbrush</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🪮 Comb</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🧼 Soap</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🔪 Knife</div></div><div class="quiz-fb" id="qfb-qb1"></div></div>
+
+  <div class="quiz-box-wrap" id="qb2"><div class="quiz-num">Question 2 of 10</div><div class="quiz-question">How often should you take a bath?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🌅 Every day</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">📅 Once a week</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🗓️ Every month</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🚫 Never</div></div><div class="quiz-fb" id="qfb-qb2"></div></div>
+
+  <div class="quiz-box-wrap" id="qb3"><div class="quiz-num">Question 3 of 10</div><div class="quiz-question">After toilet, always wash hands with:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🧼 Soap and water</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🟤 Mud</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🥤 Drink</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🍂 Leaves</div></div><div class="quiz-fb" id="qfb-qb3"></div></div>
+
+  <div class="quiz-box-wrap" id="qb4"><div class="quiz-num">Question 4 of 10</div><div class="quiz-question">Before and after eating meals, we must:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">🧼 Wash hands</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🏃 Run</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">😴 Sleep</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">📺 Watch TV</div></div><div class="quiz-fb" id="qfb-qb4"></div></div>
+
+  <div class="quiz-box-wrap" id="qb5"><div class="quiz-num">Question 5 of 10</div><div class="quiz-question">Water we drink should be ______.</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">💧 Clean</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🟤 Muddy</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🦠 Dirty</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🌶️ Spicy</div></div><div class="quiz-fb" id="qfb-qb5"></div></div>
+
+  <div class="quiz-box-wrap" id="qb6"><div class="quiz-num">Question 6 of 10</div><div class="quiz-question">Once a week, you should cut your:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">💅 Nails</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🦷 Teeth</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">👂 Ears</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">👃 Nose</div></div><div class="quiz-fb" id="qfb-qb6"></div></div>
+
+  <div class="quiz-box-wrap" id="qb7"><div class="quiz-num">Question 7 of 10</div><div class="quiz-question">After bath, hair should be ______.</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">🪮 Combed</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🎨 Painted</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">✂️ Cut</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🔥 Burnt</div></div><div class="quiz-fb" id="qfb-qb7"></div></div>
+
+  <div class="quiz-box-wrap" id="qb8"><div class="quiz-num">Question 8 of 10</div><div class="quiz-question">When coming back from school, first thing is to:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">🧼 Wash hands/legs</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🎮 Play video games</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🍫 Eat chocolate</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🛌 Sleep</div></div><div class="quiz-fb" id="qfb-qb8"></div></div>
+
+  <div class="quiz-box-wrap" id="qb9"><div class="quiz-num">Question 9 of 10</div><div class="quiz-question">While sleeping, should we cover our face?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">❌ No</div><div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">✅ Yes</div></div><div class="quiz-fb" id="qfb-qb9"></div></div>
+
+  <div class="quiz-box-wrap" id="qb10"><div class="quiz-num">Question 10 of 10</div><div class="quiz-question">Health is ______!</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">🌟 Wealth</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">🗑️ Waste</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😥 Sadness</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">🦠 Disease</div></div><div class="quiz-fb" id="qfb-qb10"></div></div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 8!</button>
+</div>
+
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">Healthy Kid!</div>
+  <div class="celeb-sub">You completed EVS Lesson 8 — Organ &amp; Health! 🎉<br>You learned all about body care and personal hygiene!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_evs_ch8_progress';
+let stars = 0;
+const tabOrder = ['morning','eating','care','night','quiz'];
+const tabDoneQ = {
+  morning: {done:0, total:4, btn:'btn-morning'},
+  eating:  {done:0, total:3, btn:'btn-eating'},
+  care:    {done:0, total:3, btn:'btn-care'},
+  night:   {done:0, total:3, btn:'btn-night'},
+};
+const cardTabMap = {
+  m1:'morning',m2:'morning',m3:'morning',m4:'morning',
+  e1:'eating',e2:'eating',e3:'eating',
+  c1:'care',c2:'care',c3:'care',
+  n1:'night',n2:'night',n3:'night',
+};
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId){document.querySelectorAll('.step-tab').forEach(t=>{t.classList.toggle('active',t.dataset.tab===tabId)});document.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.id==='panel-'+tabId)});updateProgress();}
+document.querySelectorAll('.step-tab').forEach(tab=>{tab.addEventListener('click',()=>{if(tab.classList.contains('locked')){tab.classList.add('shaking');setTimeout(()=>tab.classList.remove('shaking'),520);showToast('🔒 Finish the previous step first!');return;}document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');goTab(tab.dataset.tab);});});
+function unlockNext(currentTab,nextTab){const btn=document.querySelector(`[data-tab="${currentTab}"]`);if(btn){btn.classList.remove('active');btn.classList.add('done');}const next=document.querySelector(`[data-tab="${nextTab}"]`);if(next){next.classList.remove('locked');next.classList.add('active');}document.querySelectorAll('.step-tab').forEach(t=>{if(t.dataset.tab!==nextTab&&!t.classList.contains('done'))t.classList.remove('active');});goTab(nextTab);window.scrollTo({top:0,behavior:'smooth'});addStars(3);}
+function updateProgress(){const doneCount=document.querySelectorAll('.step-tab.done').length;const pct=Math.round((doneCount/tabOrder.length)*100);document.getElementById('progFill').style.width=pct+'%';const labels=['Step 1! 👇','Keep going! 💪','Looking good! ✨','Almost there! 🔥','Quiz time! ⭐','Lesson Complete! 🎉'];document.getElementById('progLabel').textContent=labels[doneCount]||labels[0];}
+function answer(cardId,choice,result,btnEl){const card=document.getElementById(cardId);if(card.dataset.done)return;const btns=card.querySelectorAll('.choice-btn');const fb=document.getElementById('fb-'+cardId);if(result==='correct'){card.dataset.done='1';card.classList.add('done');btns.forEach(b=>b.classList.add('locked-choice'));btnEl.classList.add('correct');fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';addStars(1);const tab=cardTabMap[cardId];if(tab){tabDoneQ[tab].done++;if(tabDoneQ[tab].done>=tabDoneQ[tab].total){document.getElementById(tabDoneQ[tab].btn).disabled=false;}}}else{btnEl.classList.add('wrong');fb.className='fb-box no';fb.textContent='❌ Try again! You can do it! 💪';setTimeout(()=>{btnEl.classList.remove('wrong');fb.style.display='none';},1500);}}
+function quizAns(boxId,btn,result){const box=document.getElementById(boxId);if(box.dataset.done)return;const opts=box.querySelectorAll('.quiz-opt');const fb=document.getElementById('qfb-'+boxId);if(result==='correct'){box.dataset.done='1';opts.forEach(o=>o.style.pointerEvents='none');btn.classList.add('right');fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';addStars(1);quizDone++;if(quizDone>=QUIZ_TOTAL){document.getElementById('btn-quiz').disabled=false;}}else{btn.classList.add('wrong');fb.className='quiz-fb no';fb.textContent='❌ Try again! 💪';setTimeout(()=>{btn.classList.remove('wrong');fb.style.display='none';},1500);}}
+function addStars(n){stars+=n;document.getElementById('starsNum').textContent=stars;saveProgress();}
+function showToast(msg){const t=document.getElementById('lockToast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showCelebration(){const s=document.getElementById('celebScreen');s.classList.add('show');const starStr=stars>=30?'⭐⭐⭐':stars>=18?'⭐⭐':'⭐';document.getElementById('celebStars').textContent=starStr;addStars(5);}
+
+function saveProgress(){try{const state={stars,quizDone,tabDoneQ:JSON.parse(JSON.stringify(tabDoneQ)),doneCards:[],doneTabs:[],doneQuizBoxes:[]};document.querySelectorAll('.scenario-card[data-done]').forEach(c=>state.doneCards.push(c.id));document.querySelectorAll('.step-tab.done').forEach(t=>state.doneTabs.push(t.dataset.tab));document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q=>state.doneQuizBoxes.push(q.id));localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){}}
+function loadProgress(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;const state=JSON.parse(raw);stars=state.stars||0;quizDone=state.quizDone||0;document.getElementById('starsNum').textContent=stars;if(state.tabDoneQ)Object.keys(state.tabDoneQ).forEach(k=>{if(tabDoneQ[k])tabDoneQ[k].done=state.tabDoneQ[k].done;});(state.doneCards||[]).forEach(id=>{const card=document.getElementById(id);if(!card)return;card.dataset.done='1';card.classList.add('done');card.querySelectorAll('.choice-btn').forEach(b=>b.classList.add('locked-choice'));card.querySelectorAll('.choice-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'correct'"))b.classList.add('correct');});const fb=document.getElementById('fb-'+id);if(fb){fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';}});(state.doneQuizBoxes||[]).forEach(id=>{const box=document.getElementById(id);if(!box)return;box.dataset.done='1';box.querySelectorAll('.quiz-opt').forEach(o=>{o.style.pointerEvents='none';if(o.getAttribute('onclick')&&o.getAttribute('onclick').includes("'correct'"))o.classList.add('right');});const fb=document.getElementById('qfb-'+id);if(fb){fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';}});(state.doneTabs||[]).forEach(tabId=>{const tab=document.querySelector(`[data-tab="${tabId}"]`);if(tab){tab.classList.remove('active','locked');tab.classList.add('done');}});Object.keys(tabDoneQ).forEach(k=>{if(tabDoneQ[k].done>=tabDoneQ[k].total){const btn=document.getElementById(tabDoneQ[k].btn);if(btn)btn.disabled=false;}});if(quizDone>=QUIZ_TOTAL){const btn=document.getElementById('btn-quiz');if(btn)btn.disabled=false;}const allDone=state.doneTabs||[];if(allDone.length>0){const lastDoneIdx=Math.max(...allDone.map(t=>tabOrder.indexOf(t)));const nextIdx=lastDoneIdx+1;if(nextIdx<tabOrder.length){const nextTab=tabOrder[nextIdx];const nextEl=document.querySelector(`[data-tab="${nextTab}"]`);if(nextEl){nextEl.classList.remove('locked');nextEl.classList.add('active');}goTab(nextTab);}else{goTab(tabOrder[tabOrder.length-1]);}}updateProgress();}catch(e){}}
+function startOver(){localStorage.removeItem(SAVE_KEY);location.reload();}
+loadProgress();
+</script>
+</body>
+</html>

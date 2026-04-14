@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 Maths — Lesson 13: Patterns</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:#ede7f6;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#4a148c,#7b1fa2,#ba68c8);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(74,20,140,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:18px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#4a148c,#7b1fa2,#e1bee7);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:24px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#e1bee7;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#4a148c,#ba68c8);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.unlocked{background:#fff;color:#7b1fa2;border-color:#e1bee7;}
+.step-tab.active{background:#7b1fa2;color:#fff;border-color:#7b1fa2;box-shadow:0 4px 14px rgba(123,31,162,.5);}
+.step-tab.done{background:#ede7f6;color:#4a148c;border-color:#e1bee7;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#4a148c;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #7b1fa2;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#7b1fa2;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#4a148c;font-size:15px;}
+
+/* SCENARIO CARDS */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#ce93d8;background:#ede7f6;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#7b1fa2;font-size:19px;}
+.scene-bottom{border-top:2px dashed #ce93d8;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #ce93d8;background:#ede7f6;font-family:'Baloo 2',cursive;font-size:16px;color:#7b1fa2;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* BIG BUTTONS */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#4a148c,#ba68c8);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#ede7f6,#e1bee7);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #ce93d8;}
+.info-strip p{font-size:14px;font-weight:800;color:#4a148c;line-height:1.7;}
+
+/* RULE BOX */
+.rule-box{background:#fff;border:3px solid #7b1fa2;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#7b1fa2;font-weight:900;line-height:1.7;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#4a148c;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#ede7f6;border:3px solid #ce93d8;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#7b1fa2;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* SECTION DIVIDER */
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#7b1fa2;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* PATTERN STRIP */
+.pattern-strip{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);text-align:center;overflow-x:auto;}
+.pattern-strip-title{font-family:'Baloo 2',cursive;font-size:15px;color:#7b1fa2;font-weight:900;margin-bottom:10px;}
+.pattern-row{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:8px 0;font-size:28px;}
+.pat-shape{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;font-size:22px;font-weight:900;transition:transform .3s;}
+.pat-shape:hover{transform:scale(1.15);}
+.pat-q{width:44px;height:44px;border:3px dashed #7b1fa2;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:18px;color:#7b1fa2;}
+
+/* TILE VISUAL */
+.tile-visual{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.tile-visual-title{font-family:'Baloo 2',cursive;font-size:15px;color:#4a148c;font-weight:900;text-align:center;margin-bottom:10px;}
+.tile-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;}
+.tile-cell{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;transition:transform .2s;}
+.tile-cell:hover{transform:scale(1.1);}
+
+/* NUMBER SEQUENCE */
+.num-seq{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.num-seq-title{font-family:'Baloo 2',cursive;font-size:15px;color:#7b1fa2;font-weight:900;text-align:center;margin-bottom:10px;}
+.num-row{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;margin:8px 0;}
+.num-cell{background:linear-gradient(135deg,#7b1fa2,#9c27b0);color:#fff;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:16px;font-weight:900;}
+.num-arrow{font-size:16px;color:#7b1fa2;font-weight:900;}
+.num-blank{background:#fff;border:3px dashed #7b1fa2;color:#7b1fa2;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:16px;font-weight:900;}
+.rule-tag{display:inline-block;background:#e1bee7;color:#4a148c;padding:4px 12px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:900;margin-top:6px;}
+
+/* SPLIT VISUAL */
+.split-visual{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.split-row{display:flex;align-items:center;justify-content:center;gap:6px;margin:6px 0;font-family:'Baloo 2',cursive;font-size:16px;font-weight:900;color:#4a148c;}
+.split-num{background:linear-gradient(135deg,#7b1fa2,#9c27b0);color:#fff;padding:6px 12px;border-radius:12px;min-width:36px;text-align:center;}
+.split-eq{color:#7b1fa2;}
+.split-plus{color:#e91e63;}
+
+/* ODD-EVEN GRID */
+.oe-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:10px 0;}
+.oe-cell{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:15px;font-weight:900;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.oe-odd{background:linear-gradient(135deg,#fdd835,#f9a825);}
+.oe-even{background:linear-gradient(135deg,#42a5f5,#1976d2);}
+
+/* CREATIVE ACTIVITY */
+.activity-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid #e1bee7;}
+.activity-title{font-family:'Baloo 2',cursive;font-size:16px;color:#7b1fa2;font-weight:900;margin-bottom:8px;text-align:center;}
+.activity-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0;}
+.activity-item{background:linear-gradient(135deg,#f3e5f5,#e1bee7);padding:8px 14px;border-radius:14px;font-family:'Baloo 2',cursive;font-size:13px;color:#4a148c;font-weight:900;display:flex;align-items:center;gap:4px;}
+
+/* CELEB */
+.celeb-screen{position:fixed;inset:0;background:rgba(74,20,140,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#4a148c;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🔷 Lesson 13 — Patterns</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🔷</span>
+  <h1>Class 2 Maths · Lesson 13</h1>
+  <p>PATTERNS — Shapes, Numbers &amp; Designs!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="shapes">🔶 Shape Patterns</div>
+  <div class="step-tab locked" data-tab="extend">🔮 Extend Patterns</div>
+  <div class="step-tab locked" data-tab="numbers">🔢 Number Patterns</div>
+  <div class="step-tab locked" data-tab="split">✂️ Split &amp; Create</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: SHAPE PATTERNS ══════════════ -->
+<div class="tab-panel active" id="panel-shapes">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ede7f6,#ce93d8);">
+    <span class="banner-emoji">🔶</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">Patterns Around Us!</div>
+      <div class="banner-sub" style="color:#6a1b9a;">We see patterns everywhere — tiles, clothes, floors!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌟 What is a Pattern?</h3>
+    <p>A <span class="hl">pattern</span> is an orderly arrangement of designs, colours, or shapes.</p>
+    <p>👉 Chinni and Ginni saw beautiful <span class="hl">tile patterns</span> on the pavement! 🧱</p>
+    <p>👉 They saw <span class="hl">iron grill patterns</span> on the park wall! 🏗️</p>
+    <p>👉 We find patterns in <span class="hl">bed sheets</span> 🛏️, <span class="hl">sarees</span> 👗, <span class="hl">floors</span> 🏠, and <span class="hl">tiles</span>!</p>
+    <p>👉 The <span class="hl">same shape repeats</span> regularly in a pattern!</p>
+  </div>
+
+  <div class="tile-visual">
+    <div class="tile-visual-title">🧱 Tile Patterns — Look Around You!</div>
+    <div class="tile-grid">
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+      <div class="tile-cell" style="background:#7b1fa2;">🟪</div>
+      <div class="tile-cell" style="background:#e91e63;">🟥</div>
+    </div>
+  </div>
+
+  <div class="pattern-strip">
+    <div class="pattern-strip-title">🔶 Repeating Shape Patterns</div>
+    <div class="pattern-row">
+      <span class="pat-shape" style="background:#e91e63;color:#fff;">▲</span>
+      <span class="pat-shape" style="background:#2196f3;color:#fff;">●</span>
+      <span class="pat-shape" style="background:#e91e63;color:#fff;">▲</span>
+      <span class="pat-shape" style="background:#2196f3;color:#fff;">●</span>
+      <span class="pat-shape" style="background:#e91e63;color:#fff;">▲</span>
+      <span class="pat-shape" style="background:#2196f3;color:#fff;">●</span>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:#888;margin-top:4px;">▲ and ● repeat alternately!</div>
+    <div class="pattern-row" style="margin-top:12px;">
+      <span class="pat-shape" style="background:#4caf50;color:#fff;">■</span>
+      <span class="pat-shape" style="background:#4caf50;color:#fff;">■</span>
+      <span class="pat-shape" style="background:#ff9800;color:#fff;">◆</span>
+      <span class="pat-shape" style="background:#4caf50;color:#fff;">■</span>
+      <span class="pat-shape" style="background:#4caf50;color:#fff;">■</span>
+      <span class="pat-shape" style="background:#ff9800;color:#fff;">◆</span>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:#888;margin-top:4px;">■ ■ ◆ repeats!</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">📌 Repetition of the same shapes at regular intervals is called a PATTERN!<br>🔶 Shapes, colours, designs — all can make patterns!</div>
+  </div>
+
+  <div class="info-strip">
+    <p>🌟 Look around you! Can you spot patterns? <strong>Bed sheets</strong> 🛏️, <strong>sarees</strong> 👗, <strong>floor tiles</strong> 🧱, and <strong>iron grills</strong> all have patterns!</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sp1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 5</div>
+      <div class="scene-sentence">A <span class="kw">pattern</span> is an orderly arrangement of…</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sp1','shapes','correct',this)">
+          <span class="cb-emoji">🔷</span><span class="cb-word">Shapes & Designs</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sp1','random','wrong',this)">
+          <span class="cb-emoji">🎲</span><span class="cb-word">Random Things</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sp1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sp2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 5</div>
+      <div class="scene-sentence">Where can we find <span class="kw">patterns</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sp2','everywhere','correct',this)">
+          <span class="cb-emoji">🌍</span><span class="cb-word">Tiles, Clothes, Floors</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sp2','nowhere','wrong',this)">
+          <span class="cb-emoji">❌</span><span class="cb-word">Nowhere</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sp2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sp3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 5</div>
+      <div class="scene-sentence">In a pattern, the same shape <span class="kw">_____</span> regularly.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sp3','repeats','correct',this)">
+          <span class="cb-emoji">🔁</span><span class="cb-word">Repeats</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sp3','hides','wrong',this)">
+          <span class="cb-emoji">🙈</span><span class="cb-word">Hides</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sp3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sp4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 5</div>
+      <div class="scene-sentence">▲ ● ▲ ● ▲ ● — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sp4','triangle','correct',this)">
+          <span class="cb-emoji">🔺</span><span class="cb-word">▲ Triangle</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sp4','square','wrong',this)">
+          <span class="cb-emoji">🟧</span><span class="cb-word">■ Square</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sp4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="sp5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 5</div>
+      <div class="scene-sentence">■ ■ ◆ ■ ■ ◆ — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sp5','square','correct',this)">
+          <span class="cb-emoji">🟩</span><span class="cb-word">■ ■ (two squares)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sp5','diamond','wrong',this)">
+          <span class="cb-emoji">🔶</span><span class="cb-word">◆ ◆ (two diamonds)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sp5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-shapes" disabled onclick="unlockNext('shapes','extend')">Next: Extend Patterns! 🔮 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: EXTEND PATTERNS ══════════════ -->
+<div class="tab-panel" id="panel-extend">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7);">
+    <span class="banner-emoji">🔮</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Extend the Pattern!</div>
+      <div class="banner-sub" style="color:#2e7d32;">Look carefully and find what comes next!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌟 How to Extend a Pattern</h3>
+    <p>Look at the shapes and colours in order!</p>
+    <p>👉 Find the <span class="hl">repeating part</span> — what group keeps coming back? 🔁</p>
+    <p>👉 Then <span class="hl">continue</span> the pattern by repeating that group!</p>
+    <p>👉 Naseem is making a <span class="hl">bead necklace</span> 📿 — help her pick the next bead!</p>
+  </div>
+
+  <div class="pattern-strip">
+    <div class="pattern-strip-title">📿 Naseem's Bead Necklace</div>
+    <div class="pattern-row">
+      <span class="pat-shape" style="background:#e53935;border-radius:50%;">🔴</span>
+      <span class="pat-shape" style="background:#1976d2;border-radius:50%;">🔵</span>
+      <span class="pat-shape" style="background:#fdd835;border-radius:50%;">🟡</span>
+      <span class="pat-shape" style="background:#e53935;border-radius:50%;">🔴</span>
+      <span class="pat-shape" style="background:#1976d2;border-radius:50%;">🔵</span>
+      <span class="pat-shape" style="background:#fdd835;border-radius:50%;">🟡</span>
+      <span class="pat-q">?</span>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:#888;">Pattern: 🔴🔵🟡 repeats → Next is 🔴!</div>
+  </div>
+
+  <div class="pattern-strip">
+    <div class="pattern-strip-title">🧩 Shape + Colour Patterns</div>
+    <div class="pattern-row">
+      <span class="pat-shape" style="background:#4caf50;color:#fff;">●</span>
+      <span class="pat-shape" style="background:#ff9800;color:#fff;">▲</span>
+      <span class="pat-shape" style="background:#4caf50;color:#fff;">●</span>
+      <span class="pat-shape" style="background:#ff9800;color:#fff;">▲</span>
+      <span class="pat-q">?</span>
+      <span class="pat-q">?</span>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:#888;">Pattern: 🟢▲ repeats → Next = 🟢▲</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">🔑 To extend a pattern:<br>1️⃣ Find the repeating group<br>2️⃣ Continue the same order!</div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="ex1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">🔴🔵🟡 🔴🔵🟡 — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ex1','red','correct',this)">
+          <span class="cb-emoji">🔴</span><span class="cb-word">Red</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex1','blue','wrong',this)">
+          <span class="cb-emoji">🔵</span><span class="cb-word">Blue</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex1','yellow','wrong',this)">
+          <span class="cb-emoji">🟡</span><span class="cb-word">Yellow</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ex1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="ex2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">⭐🌙⭐🌙⭐ — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ex2','moon','correct',this)">
+          <span class="cb-emoji">🌙</span><span class="cb-word">Moon</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex2','star','wrong',this)">
+          <span class="cb-emoji">⭐</span><span class="cb-word">Star</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ex2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="ex3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">🟩🟩🔶🟩🟩🔶 — What are the next <span class="kw">two</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ex3','green','correct',this)">
+          <span class="cb-emoji">🟩🟩</span><span class="cb-word">Two Greens</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex3','orange','wrong',this)">
+          <span class="cb-emoji">🔶🔶</span><span class="cb-word">Two Oranges</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ex3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="ex4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">🌺🌻🌺🌻🌺 — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ex4','sunflower','correct',this)">
+          <span class="cb-emoji">🌻</span><span class="cb-word">Sunflower</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex4','hibiscus','wrong',this)">
+          <span class="cb-emoji">🌺</span><span class="cb-word">Hibiscus</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ex4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="ex5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">▲▲●▲▲●▲▲ — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ex5','circle','correct',this)">
+          <span class="cb-emoji">🔵</span><span class="cb-word">● Circle</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex5','triangle','wrong',this)">
+          <span class="cb-emoji">🔺</span><span class="cb-word">▲ Triangle</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ex5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="ex6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">🍎🍌🍌🍎🍌🍌 — What comes <span class="kw">next</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ex6','apple','correct',this)">
+          <span class="cb-emoji">🍎</span><span class="cb-word">Apple</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ex6','banana','wrong',this)">
+          <span class="cb-emoji">🍌</span><span class="cb-word">Banana</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ex6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-extend" disabled onclick="unlockNext('extend','numbers')">Next: Number Patterns! 🔢 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: NUMBER PATTERNS ══════════════ -->
+<div class="tab-panel" id="panel-numbers">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffcc80);">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Number Patterns!</div>
+      <div class="banner-sub" style="color:#f57c00;">Numbers follow rules — add or subtract to continue!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌟 What is a Number Pattern?</h3>
+    <p>A <span class="hl">Number Pattern</span> is an orderly arrangement of numbers!</p>
+    <p>👉 <span class="hl">1, 2, 3, 4, 5…</span> → Rule: Add 1 each time! ➕1️⃣</p>
+    <p>👉 <span class="hl">2, 4, 6, 8, 10…</span> → Rule: Add 2 each time! ➕2️⃣</p>
+    <p>👉 <span class="hl">100, 90, 80, 70…</span> → Rule: Subtract 10 each time! ➖🔟</p>
+    <p>👉 Every number follows a <span class="hl">definite rule</span>!</p>
+  </div>
+
+  <div class="num-seq">
+    <div class="num-seq-title">➕ Adding Pattern: +1</div>
+    <div class="num-row">
+      <span class="num-cell">1</span><span class="num-arrow">→</span>
+      <span class="num-cell">2</span><span class="num-arrow">→</span>
+      <span class="num-cell">3</span><span class="num-arrow">→</span>
+      <span class="num-cell">4</span><span class="num-arrow">→</span>
+      <span class="num-cell">5</span><span class="num-arrow">→</span>
+      <span class="num-cell">6</span>
+    </div>
+    <div style="text-align:center;"><span class="rule-tag">Rule: Add 1 each time!</span></div>
+  </div>
+
+  <div class="num-seq">
+    <div class="num-seq-title">➕ Adding Pattern: +2</div>
+    <div class="num-row">
+      <span class="num-cell">2</span><span class="num-arrow">→</span>
+      <span class="num-cell">4</span><span class="num-arrow">→</span>
+      <span class="num-cell">6</span><span class="num-arrow">→</span>
+      <span class="num-cell">8</span><span class="num-arrow">→</span>
+      <span class="num-cell">10</span><span class="num-arrow">→</span>
+      <span class="num-cell">12</span>
+    </div>
+    <div style="text-align:center;"><span class="rule-tag">Rule: Add 2 each time!</span></div>
+  </div>
+
+  <div class="num-seq">
+    <div class="num-seq-title">➖ Subtracting Pattern: −10</div>
+    <div class="num-row">
+      <span class="num-cell" style="background:linear-gradient(135deg,#e53935,#ef5350);">100</span><span class="num-arrow">→</span>
+      <span class="num-cell" style="background:linear-gradient(135deg,#e53935,#ef5350);">90</span><span class="num-arrow">→</span>
+      <span class="num-cell" style="background:linear-gradient(135deg,#e53935,#ef5350);">80</span><span class="num-arrow">→</span>
+      <span class="num-cell" style="background:linear-gradient(135deg,#e53935,#ef5350);">70</span><span class="num-arrow">→</span>
+      <span class="num-cell" style="background:linear-gradient(135deg,#e53935,#ef5350);">60</span>
+    </div>
+    <div style="text-align:center;"><span class="rule-tag" style="background:#ffcdd2;color:#c62828;">Rule: Subtract 10 each time!</span></div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">📌 Number Pattern = Numbers in order following a rule!<br>➕ Add a number = pattern goes UP<br>➖ Subtract a number = pattern goes DOWN</div>
+  </div>
+
+  <div class="section-divider">— FIND THE NEXT NUMBER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="np1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 7</div>
+      <div class="scene-sentence">15, 20, 25, 30, 35, <span class="kw">___</span> (Rule: +5)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np1','38','wrong',this)">
+          <span class="cb-emoji">3️⃣8️⃣</span><span class="cb-word">38</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np1','40','correct',this)">
+          <span class="cb-emoji">4️⃣0️⃣</span><span class="cb-word">40</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np1','45','wrong',this)">
+          <span class="cb-emoji">4️⃣5️⃣</span><span class="cb-word">45</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="np2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 7</div>
+      <div class="scene-sentence">15, 13, 11, 9, <span class="kw">___</span> (Rule: −2)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np2','8','wrong',this)">
+          <span class="cb-emoji">8️⃣</span><span class="cb-word">8</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np2','7','correct',this)">
+          <span class="cb-emoji">7️⃣</span><span class="cb-word">7</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np2','6','wrong',this)">
+          <span class="cb-emoji">6️⃣</span><span class="cb-word">6</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="np3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 7</div>
+      <div class="scene-sentence">8, 11, 14, <span class="kw">___</span>, 20 (Rule: +3)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np3','16','wrong',this)">
+          <span class="cb-emoji">1️⃣6️⃣</span><span class="cb-word">16</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np3','17','correct',this)">
+          <span class="cb-emoji">1️⃣7️⃣</span><span class="cb-word">17</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np3','18','wrong',this)">
+          <span class="cb-emoji">1️⃣8️⃣</span><span class="cb-word">18</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="np4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 7</div>
+      <div class="scene-sentence">50, 45, 40, 35, <span class="kw">___</span> (Rule: −5)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np4','25','wrong',this)">
+          <span class="cb-emoji">2️⃣5️⃣</span><span class="cb-word">25</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np4','30','correct',this)">
+          <span class="cb-emoji">3️⃣0️⃣</span><span class="cb-word">30</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np4','32','wrong',this)">
+          <span class="cb-emoji">3️⃣2️⃣</span><span class="cb-word">32</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="np5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 7</div>
+      <div class="scene-sentence">9, 19, 29, 39, <span class="kw">___</span> (Rule: +10)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np5','49','correct',this)">
+          <span class="cb-emoji">4️⃣9️⃣</span><span class="cb-word">49</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np5','40','wrong',this)">
+          <span class="cb-emoji">4️⃣0️⃣</span><span class="cb-word">40</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np5','50','wrong',this)">
+          <span class="cb-emoji">5️⃣0️⃣</span><span class="cb-word">50</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="np6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 7</div>
+      <div class="scene-sentence">39, 32, 25, 18, <span class="kw">___</span> (Rule: −7)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np6','10','wrong',this)">
+          <span class="cb-emoji">🔟</span><span class="cb-word">10</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np6','11','correct',this)">
+          <span class="cb-emoji">1️⃣1️⃣</span><span class="cb-word">11</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np6','12','wrong',this)">
+          <span class="cb-emoji">1️⃣2️⃣</span><span class="cb-word">12</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="scenario-card" id="np7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 7</div>
+      <div class="scene-sentence">30, 25, 20, 15, <span class="kw">___</span>, 5 (Rule: −5)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('np7','10','correct',this)">
+          <span class="cb-emoji">🔟</span><span class="cb-word">10</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np7','12','wrong',this)">
+          <span class="cb-emoji">1️⃣2️⃣</span><span class="cb-word">12</span>
+        </div>
+        <div class="choice-btn" onclick="answer('np7','8','wrong',this)">
+          <span class="cb-emoji">8️⃣</span><span class="cb-word">8</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-np7"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-numbers" disabled onclick="unlockNext('numbers','split')">Next: Split & Create! ✂️ ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 4: SPLIT & CREATE ══════════════ -->
+<div class="tab-panel" id="panel-split">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7);">
+    <span class="banner-emoji">✂️</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Split Numbers &amp; Creative Patterns!</div>
+      <div class="banner-sub" style="color:#2e7d32;">Break numbers into parts &amp; make your own patterns!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌟 Splitting Numbers into Patterns!</h3>
+    <p>We can <span class="hl">split</span> a number into smaller parts!</p>
+    <p>👉 <span class="hl">2 = 1 + 1</span></p>
+    <p>👉 <span class="hl">3 = 1 + 1 + 1</span></p>
+    <p>👉 <span class="hl">4 = 1 + 2 + 1</span></p>
+    <p>👉 <span class="hl">5 = 1 + 3 + 1</span></p>
+    <p>👉 See the pattern? The middle number goes up by 1 each time! 🔼</p>
+  </div>
+
+  <div class="split-visual">
+    <div class="num-seq-title">✂️ Splitting Pattern</div>
+    <div class="split-row"><span class="split-num">2</span><span class="split-eq">=</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">1</span></div>
+    <div class="split-row"><span class="split-num">3</span><span class="split-eq">=</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">1</span></div>
+    <div class="split-row"><span class="split-num">4</span><span class="split-eq">=</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">2</span><span class="split-plus">+</span><span class="split-num">1</span></div>
+    <div class="split-row"><span class="split-num">5</span><span class="split-eq">=</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">3</span><span class="split-plus">+</span><span class="split-num">1</span></div>
+    <div class="split-row"><span class="split-num">6</span><span class="split-eq">=</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">4</span><span class="split-plus">+</span><span class="split-num">1</span></div>
+    <div class="split-row"><span class="split-num">7</span><span class="split-eq">=</span><span class="split-num">1</span><span class="split-plus">+</span><span class="split-num">5</span><span class="split-plus">+</span><span class="split-num">1</span></div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🎨 Splitting 16 Many Ways!</h3>
+    <p>One number can be split in <span class="hl">different ways</span>!</p>
+    <p>👉 <span class="hl">16 = 8 + 8</span> (two 8s)</p>
+    <p>👉 <span class="hl">16 = 4 + 4 + 4 + 4</span> (four 4s)</p>
+    <p>👉 <span class="hl">16 = 2+2+2+2+2+2+2+2</span> (eight 2s)</p>
+    <p>👉 <span class="hl">16 = 1+1+1+…+1</span> (sixteen 1s!)</p>
+  </div>
+
+  <div class="teach-card">
+    <h3>🎯 Odd & Even Number Pattern</h3>
+    <p>Numbers ending in <span class="hl">1, 3, 5, 7, 9</span> are <span class="hl" style="color:#f9a825;">ODD</span> numbers! 🟡</p>
+    <p>Numbers ending in <span class="hl">2, 4, 6, 8, 0</span> are <span class="hl" style="color:#1976d2;">EVEN</span> numbers! 🔵</p>
+  </div>
+
+  <div class="pattern-strip">
+    <div class="pattern-strip-title">🎯 Odd (Yellow) vs Even (Blue) Pattern</div>
+    <div class="oe-grid">
+      <div class="oe-cell oe-odd">1</div><div class="oe-cell oe-even">2</div><div class="oe-cell oe-odd">3</div><div class="oe-cell oe-even">4</div><div class="oe-cell oe-odd">5</div>
+      <div class="oe-cell oe-even">6</div><div class="oe-cell oe-odd">7</div><div class="oe-cell oe-even">8</div><div class="oe-cell oe-odd">9</div><div class="oe-cell oe-even">10</div>
+      <div class="oe-cell oe-odd">11</div><div class="oe-cell oe-even">12</div><div class="oe-cell oe-odd">13</div><div class="oe-cell oe-even">14</div><div class="oe-cell oe-odd">15</div>
+      <div class="oe-cell oe-even">16</div><div class="oe-cell oe-odd">17</div><div class="oe-cell oe-even">18</div><div class="oe-cell oe-odd">19</div><div class="oe-cell oe-even">20</div>
+      <div class="oe-cell oe-odd">21</div><div class="oe-cell oe-even">22</div><div class="oe-cell oe-odd">23</div><div class="oe-cell oe-even">24</div><div class="oe-cell oe-odd">25</div>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:#888;margin-top:6px;">🟡 Yellow = Odd &nbsp;|&nbsp; 🔵 Blue = Even — They alternate!</div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🎨 Creative Patterns!</h3>
+    <p>You can make patterns using:</p>
+    <p>👉 <span class="hl">Vegetable stamps</span> — Onion, carrot, ladies finger! 🥕🧅</p>
+    <p>👉 <span class="hl">Leaf prints</span> — Dip leaves in paint and stamp! 🍃</p>
+    <p>👉 <span class="hl">Thumb prints</span> — Make birds and fish! 👍🐦</p>
+    <p>👉 <span class="hl">2D shapes</span> — Arrange triangles on a board! 🔺</p>
+    <p>👉 <span class="hl">Dot grid rangoli</span> — Connect dots to make designs! ✨</p>
+  </div>
+
+  <div class="activity-card">
+    <div class="activity-title">🎨 Fun Pattern Activities from Your Book!</div>
+    <div class="activity-items">
+      <div class="activity-item">🥕 Vegetable Stamp</div>
+      <div class="activity-item">🍃 Leaf Print</div>
+      <div class="activity-item">👍 Thumb Print</div>
+      <div class="activity-item">✏️ Matchstick Pattern</div>
+      <div class="activity-item">🔲 Dot Grid Rangoli</div>
+      <div class="activity-item">🔺 Triangle Board</div>
+    </div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">If 5 = 1 + 3 + 1, then 6 = 1 + <span class="kw">___</span> + 1</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sc1','3','wrong',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc1','4','correct',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc1','5','wrong',this)">
+          <span class="cb-emoji">5️⃣</span><span class="cb-word">5</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sc1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">16 = 8 + 8. How many <span class="kw">4s</span> make 16?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sc2','3','wrong',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3 fours</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc2','4','correct',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4 fours</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc2','5','wrong',this)">
+          <span class="cb-emoji">5️⃣</span><span class="cb-word">5 fours</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sc2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Numbers ending in 1, 3, 5, 7, 9 are called <span class="kw">_____</span> numbers.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sc3','odd','correct',this)">
+          <span class="cb-emoji">🟡</span><span class="cb-word">Odd</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc3','even','wrong',this)">
+          <span class="cb-emoji">🔵</span><span class="cb-word">Even</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sc3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">Is the number <span class="kw">14</span> odd or even?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sc4','even','correct',this)">
+          <span class="cb-emoji">🔵</span><span class="cb-word">Even</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc4','odd','wrong',this)">
+          <span class="cb-emoji">🟡</span><span class="cb-word">Odd</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sc4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="sc5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">Which of these can you use to make <span class="kw">stamp patterns</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sc5','veg','correct',this)">
+          <span class="cb-emoji">🥕</span><span class="cb-word">Vegetables &amp; Leaves</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc5','air','wrong',this)">
+          <span class="cb-emoji">💨</span><span class="cb-word">Air</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sc5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="sc6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">If 7 = 1 + 5 + 1, then 8 = 1 + <span class="kw">___</span> + 1</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('sc6','5','wrong',this)">
+          <span class="cb-emoji">5️⃣</span><span class="cb-word">5</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc6','6','correct',this)">
+          <span class="cb-emoji">6️⃣</span><span class="cb-word">6</span>
+        </div>
+        <div class="choice-btn" onclick="answer('sc6','7','wrong',this)">
+          <span class="cb-emoji">7️⃣</span><span class="cb-word">7</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-sc6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-split" disabled onclick="unlockNext('split','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 5: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ede7f6,#ce93d8);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">Final Quiz!</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Show what you know about Patterns!</div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>🌟 You've learnt everything! Now let's see how much you remember! Answer all 10 questions to finish Lesson 13!</p>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-box-wrap" id="qb1">
+    <div class="quiz-num">Question 1 of 10</div>
+    <div class="quiz-question">A pattern is a _____ arrangement of shapes or numbers.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">📋 Orderly</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🎲 Random</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🤷 Messy</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">💤 Boring</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-box-wrap" id="qb2">
+    <div class="quiz-num">Question 2 of 10</div>
+    <div class="quiz-question">🔴🔵🔴🔵🔴 — What comes next? 🤔</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🔴 Red</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🔵 Blue</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🟡 Yellow</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🟢 Green</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-box-wrap" id="qb3">
+    <div class="quiz-num">Question 3 of 10</div>
+    <div class="quiz-question">2, 4, 6, 8, ___ — What's the rule &amp; next number?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🔢 10 (Add 2)</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🔢 9 (Add 1)</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🔢 12 (Add 4)</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🔢 11 (Add 3)</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-box-wrap" id="qb4">
+    <div class="quiz-num">Question 4 of 10</div>
+    <div class="quiz-question">100, 90, 80, 70, ___ — What's the rule?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">➖ 60 (Subtract 10)</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">➕ 110 (Add 10)</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">➖ 65 (Subtract 5)</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">➖ 50 (Subtract 20)</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-box-wrap" id="qb5">
+    <div class="quiz-num">Question 5 of 10</div>
+    <div class="quiz-question">If 5 = 1 + 3 + 1, what does 6 equal in this pattern? ✂️</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">1 + 3 + 2</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">1 + 4 + 1</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">2 + 2 + 2</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">1 + 5 + 1</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-box-wrap" id="qb6">
+    <div class="quiz-num">Question 6 of 10</div>
+    <div class="quiz-question">Numbers ending in 2, 4, 6, 8, 0 are called _____ numbers.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🟡 Odd</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">🔵 Even</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🟢 Prime</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🔴 Special</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-box-wrap" id="qb7">
+    <div class="quiz-num">Question 7 of 10</div>
+    <div class="quiz-question">15, 20, 25, 30, ___ — What is the next number? 🔢</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">35 (+5)</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">40 (+10)</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">32 (+2)</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">33 (+3)</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-box-wrap" id="qb8">
+    <div class="quiz-num">Question 8 of 10</div>
+    <div class="quiz-question">You can make stamp patterns using _____ 🥕</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">🥕 Vegetables &amp; Leaves</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">💧 Water</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">💨 Wind</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🔥 Fire</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-box-wrap" id="qb9">
+    <div class="quiz-num">Question 9 of 10</div>
+    <div class="quiz-question">⭐🌙🌙⭐🌙🌙⭐ — What comes next?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">🌙🌙 (Two moons)</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">⭐⭐ (Two stars)</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">⭐🌙 (Star moon)</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🌙 (One moon)</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-box-wrap" id="qb10">
+    <div class="quiz-num">Question 10 of 10</div>
+    <div class="quiz-question">Is 17 an ODD or EVEN number? 🤔</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">🟡 Odd</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">🔵 Even</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">Both</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">Neither</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb10"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 13!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">Amazing Work!</div>
+  <div class="celeb-sub">You completed Lesson 13 — Patterns! 🎉<br>You can spot, extend &amp; create patterns with shapes &amp; numbers!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_lesson13_progress';
+let stars = 0;
+const tabOrder = ['shapes','extend','numbers','split','quiz'];
+
+const tabDoneQ = {
+  shapes:   {done:0, total:5, btn:'btn-shapes'},
+  extend:   {done:0, total:6, btn:'btn-extend'},
+  numbers:  {done:0, total:7, btn:'btn-numbers'},
+  split:    {done:0, total:6, btn:'btn-split'},
+};
+
+const cardTabMap = {
+  sp1:'shapes',sp2:'shapes',sp3:'shapes',sp4:'shapes',sp5:'shapes',
+  ex1:'extend',ex2:'extend',ex3:'extend',ex4:'extend',ex5:'extend',ex6:'extend',
+  np1:'numbers',np2:'numbers',np3:'numbers',np4:'numbers',np5:'numbers',np6:'numbers',np7:'numbers',
+  sc1:'split',sc2:'split',sc3:'split',sc4:'split',sc5:'split',sc6:'split',
+};
+
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId) {
+  document.querySelectorAll('.step-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + tabId);
+  });
+  updateProgress();
+}
+
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(() => tab.classList.remove('shaking'), 520);
+      showToast('🔒 Finish the previous step first!');
+      return;
+    }
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    goTab(tab.dataset.tab);
+  });
+});
+
+function unlockNext(currentTab, nextTab) {
+  const btn = document.querySelector(`[data-tab="${currentTab}"]`);
+  if (btn) { btn.classList.remove('active'); btn.classList.add('done'); }
+  const next = document.querySelector(`[data-tab="${nextTab}"]`);
+  if (next) { next.classList.remove('locked'); next.classList.add('active'); }
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab !== nextTab && !t.classList.contains('done')) t.classList.remove('active');
+  });
+  goTab(nextTab);
+  window.scrollTo({top:0, behavior:'smooth'});
+  addStars(3);
+}
+
+function updateProgress() {
+  const doneCount = document.querySelectorAll('.step-tab.done').length;
+  const pct = Math.round((doneCount / tabOrder.length) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['Start with Step 1! 👇','Great! Keep going! 💪','Halfway there! 🔥','Almost done! 🚀','Nearly finished! ⚡','Lesson Complete! 🎉'];
+  document.getElementById('progLabel').textContent = labels[doneCount] || labels[0];
+}
+
+function answer(cardId, choice, result, btnEl) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const btns = card.querySelectorAll('.choice-btn');
+  const fb = document.getElementById('fb-' + cardId);
+  if (result === 'correct') {
+    card.dataset.done = '1';
+    card.classList.add('done');
+    btns.forEach(b => b.classList.add('locked-choice'));
+    btnEl.classList.add('correct');
+    fb.className = 'fb-box ok'; fb.textContent = '✅ Correct! Well done! 🌟';
+    addStars(1);
+    const tab = cardTabMap[cardId];
+    if (tab) {
+      tabDoneQ[tab].done++;
+      if (tabDoneQ[tab].done >= tabDoneQ[tab].total) {
+        document.getElementById(tabDoneQ[tab].btn).disabled = false;
+      }
+    }
+  } else {
+    btnEl.classList.add('wrong');
+    fb.className = 'fb-box no'; fb.textContent = '❌ Try again! You can do it! 💪';
+    setTimeout(() => {
+      btnEl.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 1500);
+  }
+}
+
+function quizAns(boxId, btn, result) {
+  const box = document.getElementById(boxId);
+  if (box.dataset.done) return;
+  const opts = box.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + boxId);
+  if (result === 'correct') {
+    box.dataset.done = '1';
+    opts.forEach(o => o.style.pointerEvents = 'none');
+    btn.classList.add('right');
+    fb.className = 'quiz-fb ok'; fb.textContent = '✅ Correct! Superstar! ⭐';
+    addStars(1);
+    quizDone++;
+    if (quizDone >= QUIZ_TOTAL) {
+      document.getElementById('btn-quiz').disabled = false;
+    }
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-fb no'; fb.textContent = '❌ Try again! 💪';
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 1500);
+  }
+}
+
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+  saveProgress();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function showCelebration() {
+  const s = document.getElementById('celebScreen');
+  s.classList.add('show');
+  const starStr = stars >= 30 ? '⭐⭐⭐' : stars >= 18 ? '⭐⭐' : '⭐';
+  document.getElementById('celebStars').textContent = starStr;
+  addStars(5);
+}
+
+/* ── SAVE / LOAD PROGRESS ── */
+function saveProgress() {
+  try {
+    const state = {
+      stars,
+      quizDone,
+      tabDoneQ: JSON.parse(JSON.stringify(tabDoneQ)),
+      doneCards: [],
+      doneTabs: [],
+      doneQuizBoxes: []
+    };
+    document.querySelectorAll('.scenario-card[data-done]').forEach(c => state.doneCards.push(c.id));
+    document.querySelectorAll('.step-tab.done').forEach(t => state.doneTabs.push(t.dataset.tab));
+    document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q => state.doneQuizBoxes.push(q.id));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    stars = state.stars || 0;
+    quizDone = state.quizDone || 0;
+    document.getElementById('starsNum').textContent = stars;
+
+    // Restore tabDoneQ counts
+    if (state.tabDoneQ) {
+      Object.keys(state.tabDoneQ).forEach(k => {
+        if (tabDoneQ[k]) tabDoneQ[k].done = state.tabDoneQ[k].done;
+      });
+    }
+
+    // Restore done cards
+    (state.doneCards || []).forEach(id => {
+      const card = document.getElementById(id);
+      if (!card) return;
+      card.dataset.done = '1';
+      card.classList.add('done');
+      card.querySelectorAll('.choice-btn').forEach(b => b.classList.add('locked-choice'));
+      card.querySelectorAll('.choice-btn').forEach(b => {
+        if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'correct'")) {
+          b.classList.add('correct');
+        }
+      });
+      const fb = document.getElementById('fb-' + id);
+      if (fb) { fb.className = 'fb-box ok'; fb.textContent = '✅ Correct! Well done! 🌟'; }
+    });
+
+    // Restore done quiz boxes
+    (state.doneQuizBoxes || []).forEach(id => {
+      const box = document.getElementById(id);
+      if (!box) return;
+      box.dataset.done = '1';
+      box.querySelectorAll('.quiz-opt').forEach(o => {
+        o.style.pointerEvents = 'none';
+        if (o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'")) {
+          o.classList.add('right');
+        }
+      });
+      const fb = document.getElementById('qfb-' + id);
+      if (fb) { fb.className = 'quiz-fb ok'; fb.textContent = '✅ Correct! Superstar! ⭐'; }
+    });
+
+    // Restore done tabs and unlock next
+    (state.doneTabs || []).forEach(tabId => {
+      const tab = document.querySelector(`[data-tab="${tabId}"]`);
+      if (tab) { tab.classList.remove('active','locked'); tab.classList.add('done'); }
+    });
+
+    // Enable buttons for completed tab groups
+    Object.keys(tabDoneQ).forEach(k => {
+      if (tabDoneQ[k].done >= tabDoneQ[k].total) {
+        const btn = document.getElementById(tabDoneQ[k].btn);
+        if (btn) btn.disabled = false;
+      }
+    });
+    if (quizDone >= QUIZ_TOTAL) {
+      const btn = document.getElementById('btn-quiz');
+      if (btn) btn.disabled = false;
+    }
+
+    // Find the latest active tab
+    const allDone = state.doneTabs || [];
+    if (allDone.length > 0) {
+      const lastDoneIdx = Math.max(...allDone.map(t => tabOrder.indexOf(t)));
+      const nextIdx = lastDoneIdx + 1;
+      if (nextIdx < tabOrder.length) {
+        const nextTab = tabOrder[nextIdx];
+        const nextEl = document.querySelector(`[data-tab="${nextTab}"]`);
+        if (nextEl) { nextEl.classList.remove('locked'); nextEl.classList.add('active'); }
+        goTab(nextTab);
+      } else {
+        goTab(tabOrder[tabOrder.length - 1]);
+      }
+    }
+
+    updateProgress();
+  } catch(e) {}
+}
+
+function startOver() {
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
+}
+
+// Load saved progress on page load
+loadProgress();
+</script>
+</body>
+</html>

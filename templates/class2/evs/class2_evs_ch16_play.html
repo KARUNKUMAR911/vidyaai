@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — Lesson 16: Play and Enjoy</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#fff3e0 0%,#ffe0b2 100%);min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#e65100,#f57c00,#ff9800);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(230,81,0,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:17px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#bf360c,#e65100,#ff9800);padding:18px 20px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'🏏♟️⚽🎲🏸🏎️';position:absolute;bottom:8px;left:0;right:0;font-size:30px;letter-spacing:15px;opacity:.3;animation:scrollEmoji 12s linear infinite;}
+@keyframes scrollEmoji{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);position:relative;z-index:10;}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#ffe0b2;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#e65100,#ff9800);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#e65100;color:#fff;border-color:#bf360c;box-shadow:0 4px 14px rgba(230,81,0,.4);}
+.step-tab.done{background:#fff3e0;color:#bf360c;border-color:#ffcc80;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#e65100;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #f57c00;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#e65100;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#f57c00;font-size:15px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#ffcc80;background:#fff3e0;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#e65100;font-size:19px;}
+.scene-bottom{border-top:2px dashed #ffe0b2;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #ffcc80;background:#fff3e0;font-family:'Baloo 2',cursive;font-size:16px;color:#e65100;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#e65100;background:#ffcc80;color:#bf360c;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#ffcc80;color:#bf360c;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#e65100,#ff9800);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.info-strip{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #ffcc80;}
+.info-strip p{font-size:14px;font-weight:800;color:#bf360c;line-height:1.7;}
+
+.plant-grid{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.plant-grid-title{font-family:'Baloo 2',cursive;font-size:15px;color:#e65100;font-weight:900;text-align:center;margin-bottom:12px;}
+.plant-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;justify-items:center;}
+.plant-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:16px;transition:transform .2s;}
+.plant-cell:hover{transform:scale(1.08);}
+.plant-cell .pe{font-size:36px;}
+.plant-cell .pn{font-family:'Baloo 2',cursive;font-size:11px;font-weight:900;text-align:center;color:#e65100;}
+
+.rule-box{background:#fff;border:3px solid #ff9800;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#e65100;font-weight:900;line-height:1.7;}
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#ff9800;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#bf360c;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#fff3e0;border:3px solid #ffcc80;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#e65100;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#e65100;background:#ffe0b2;color:#bf360c;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#ffe0b2;color:#bf360c;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(191,54,12,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#e65100;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🎮 EVS Lesson 16 — Play</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">⚽</span>
+  <h1>Class 2 EVS · Lesson 16</h1>
+  <p>PLAY AND ENJOY — Games are fun!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="play">🎮 Play!</div>
+  <div class="step-tab locked" data-tab="indoor">🏠 Indoor</div>
+  <div class="step-tab locked" data-tab="outdoor">🌳 Outdoor</div>
+  <div class="step-tab locked" data-tab="items">🥎 Items</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: PLAY ══════════════ -->
+<div class="tab-panel active" id="panel-play">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🏃</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Time to Play!</div>
+      <div class="banner-sub" style="color:#f57c00;">A hundred types of games!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🏅 Fun with Friends!</h3>
+    <p>Games are fun! We play games at <span class="hl">home</span> and in <span class="hl">school</span>.</p>
+    <p>There are Two Types of Games:</p>
+    <p>1. <span class="hl">Indoor Games</span> (Played Inside!)</p>
+    <p>2. <span class="hl">Outdoor Games</span> (Played Outside!)</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="p1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Should we play games with our friends?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('p1','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+    <div class="choice-btn" onclick="answer('p1','no','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+  </div><div class="fb-box" id="fb-p1"></div></div></div>
+
+  <div class="scenario-card" id="p2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">A game played <span class="kw">inside</span> the house is called an:</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('p2','indoor','correct',this)"><span class="cb-emoji">🏠</span><span class="cb-word">Indoor Game</span></div>
+    <div class="choice-btn" onclick="answer('p2','outdoor','wrong',this)"><span class="cb-emoji">🌳</span><span class="cb-word">Outdoor Game</span></div>
+  </div><div class="fb-box" id="fb-p2"></div></div></div>
+
+  <div class="scenario-card" id="p3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">A game played <span class="kw">outside</span> the house is called an:</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('p3','outdoor','correct',this)"><span class="cb-emoji">🌳</span><span class="cb-word">Outdoor Game</span></div>
+    <div class="choice-btn" onclick="answer('p3','indoor','wrong',this)"><span class="cb-emoji">🏠</span><span class="cb-word">Indoor Game</span></div>
+  </div><div class="fb-box" id="fb-p3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-play" disabled onclick="unlockNext('play','indoor')">Next: Indoor Games! 🏠 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: INDOOR ══════════════ -->
+<div class="tab-panel" id="panel-indoor">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <span class="banner-emoji">🏠</span>
+    <div>
+      <div class="banner-title" style="color:#283593;">Indoor Games</div>
+      <div class="banner-sub" style="color:#3949ab;">Played inside the house or school!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#3949ab;">
+    <h3 style="color:#283593;">♟️ Sit on the Floor!</h3>
+    <p>Games which are played <span class="hl" style="color:#3949ab;">inside</span> the school or house are called indoor games.</p>
+    <p>Examples: <span class="hl" style="color:#3949ab;">Chess</span>, <span class="hl" style="color:#3949ab;">Carrom</span>, <span class="hl" style="color:#3949ab;">Snake and Ladder</span>, and Game of Squares! 🎲</p>
+  </div>
+
+  <div class="section-divider" style="color:#283593;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="i1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Is <span class="kw" style="color:#3949ab;">Carrom</span> played inside or outside?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#283593; border-color:#9fa8da;" onclick="answer('i1','inside','correct',this)"><span class="cb-emoji">🏠</span><span class="cb-word">Inside (Indoor)</span></div>
+    <div class="choice-btn" style="color:#283593; border-color:#9fa8da;" onclick="answer('i1','outside','wrong',this)"><span class="cb-emoji">🌳</span><span class="cb-word">Outside</span></div>
+  </div><div class="fb-box" id="fb-i1"></div></div></div>
+
+  <div class="scenario-card" id="i2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">Which of these is an <span class="kw" style="color:#3949ab;">Indoor Game</span>?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#283593; border-color:#9fa8da;" onclick="answer('i2','chess','correct',this)"><span class="cb-emoji">♟️</span><span class="cb-word">Chess</span></div>
+    <div class="choice-btn" style="color:#283593; border-color:#9fa8da;" onclick="answer('i2','cricket','wrong',this)"><span class="cb-emoji">🏏</span><span class="cb-word">Cricket</span></div>
+  </div><div class="fb-box" id="fb-i2"></div></div></div>
+
+  <div class="scenario-card" id="i3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Where do you play <span class="kw" style="color:#3949ab;">Snake and Ladder</span>? 🐍</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#283593; border-color:#9fa8da;" onclick="answer('i3','floor','correct',this)"><span class="cb-emoji">🏠</span><span class="cb-word">Sit on the Floor</span></div>
+    <div class="choice-btn" style="color:#283593; border-color:#9fa8da;" onclick="answer('i3','ground','wrong',this)"><span class="cb-emoji">🌳</span><span class="cb-word">Big Playground</span></div>
+  </div><div class="fb-box" id="fb-i3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-indoor" style="background:#3949ab;color:#fff;" disabled onclick="unlockNext('indoor','outdoor')">Next: Outdoor Games! 🌳 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: OUTDOOR ══════════════ -->
+<div class="tab-panel" id="panel-outdoor">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🌳</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Outdoor Games</div>
+      <div class="banner-sub" style="color:#2e7d32;">Rush to the playground!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#2e7d32;">
+    <h3 style="color:#1b5e20;">🏏 Playing in the Sun!</h3>
+    <p>Games which are played <span class="hl" style="color:#2e7d32;">outside</span> the school or house are called outdoor games.</p>
+    <p>Examples: <span class="hl" style="color:#2e7d32;">Cricket, Football, Lagori, Throw Ball, Kabaddi,</span> and Skipping!</p>
+  </div>
+
+  <div class="section-divider" style="color:#2e7d32;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="o1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Where do you go to play <span class="kw" style="color:#2e7d32;">Football</span>? ⚽</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('o1','ground','correct',this)"><span class="cb-emoji">🌳</span><span class="cb-word">Playground</span></div>
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('o1','room','wrong',this)"><span class="cb-emoji">🏠</span><span class="cb-word">Bedroom</span></div>
+  </div><div class="fb-box" id="fb-o1"></div></div></div>
+
+  <div class="scenario-card" id="o2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">Is <span class="kw" style="color:#2e7d32;">Lagori</span> an Outdoor Game?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('o2','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('o2','no','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+  </div><div class="fb-box" id="fb-o2"></div></div></div>
+
+  <div class="scenario-card" id="o3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Which of these is an <span class="kw" style="color:#2e7d32;">Outdoor</span> Game?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('o3','cricket','correct',this)"><span class="cb-emoji">🏏</span><span class="cb-word">Cricket</span></div>
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('o3','chess','wrong',this)"><span class="cb-emoji">♟️</span><span class="cb-word">Chess</span></div>
+  </div><div class="fb-box" id="fb-o3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-outdoor" style="background:#2e7d32;color:#fff;" disabled onclick="unlockNext('outdoor','items')">Next: Game Items! 🥎 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 4: ITEMS ══════════════ -->
+<div class="tab-panel" id="panel-items">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <span class="banner-emoji">🥎</span>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">Game Items</div>
+      <div class="banner-sub" style="color:#8e24aa;">What do we need to play?</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#8e24aa;">
+    <h3 style="color:#6a1b9a;">🎯 Materials Used!</h3>
+    <p>We need items to play certain games!</p>
+    <p>🏏 <span class="hl" style="color:#8e24aa;">Cricket</span>: Bat, Ball, Wickets.</p>
+    <p>🎲 <span class="hl" style="color:#8e24aa;">Snake & Ladder</span>: Board, Dice, Coins.</p>
+    <p>⚽ <span class="hl" style="color:#8e24aa;">Football</span>: A big ball.</p>
+  </div>
+
+  <div class="section-divider" style="color:#8e24aa;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="m1"><div class="scene-top"><div class="scene-label">Question 1 of 2</div>
+  <div class="scene-sentence">What do you use to play <span class="kw" style="color:#8e24aa;">Cricket</span>? 🏏</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('m1','bat','correct',this)"><span class="cb-emoji">🏏</span><span class="cb-word">Bat & Ball</span></div>
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('m1','dice','wrong',this)"><span class="cb-emoji">🎲</span><span class="cb-word">Dice & Board</span></div>
+  </div><div class="fb-box" id="fb-m1"></div></div></div>
+
+  <div class="scenario-card" id="m2"><div class="scene-top"><div class="scene-label">Question 2 of 2</div>
+  <div class="scene-sentence">What is used in <span class="kw" style="color:#8e24aa;">Snake and Ladder</span>? 🐍</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('m2','dice','correct',this)"><span class="cb-emoji">🎲</span><span class="cb-word">Dice</span></div>
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('m2','bat','wrong',this)"><span class="cb-emoji">🏏</span><span class="cb-word">Bat</span></div>
+  </div><div class="fb-box" id="fb-m2"></div></div></div>
+
+  <button class="big-btn primary" id="btn-items" style="background:#8e24aa;color:#fff;" disabled onclick="unlockNext('items','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 5: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🏆</span>
+    <div><div class="banner-title" style="color:#e65100;">Final Quiz!</div>
+    <div class="banner-sub" style="color:#f57c00;">Test your Game Knowledge!</div></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb1"><div class="quiz-num">Question 1 of 10</div><div class="quiz-question">Which of these is an Indoor Game?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">♟️ Chess</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🏏 Cricket</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">⚽ Football</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🏐 Volleyball</div></div><div class="quiz-fb" id="qfb-qb1"></div></div>
+
+  <div class="quiz-box-wrap" id="qb2"><div class="quiz-num">Question 2 of 10</div><div class="quiz-question">Which of these is an Outdoor Game?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🏃 Kabaddi</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">♟️ Chess</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🎲 Ludo</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🐍 Snake & Ladder</div></div><div class="quiz-fb" id="qfb-qb2"></div></div>
+
+  <div class="quiz-box-wrap" id="qb3"><div class="quiz-num">Question 3 of 10</div><div class="quiz-question">Games played inside the house are called:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🏠 Indoor games</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🌳 Outdoor games</div></div><div class="quiz-fb" id="qfb-qb3"></div></div>
+
+  <div class="quiz-box-wrap" id="qb4"><div class="quiz-num">Question 4 of 10</div><div class="quiz-question">Games played outside the house are called:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">🌳 Outdoor games</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🏠 Indoor games</div></div><div class="quiz-fb" id="qfb-qb4"></div></div>
+
+  <div class="quiz-box-wrap" id="qb5"><div class="quiz-num">Question 5 of 10</div><div class="quiz-question">What do you need to play Carrom?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">🔲 Carrom Board</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🏏 Bat & Ball</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🥅 A Net</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🏊 A Pool</div></div><div class="quiz-fb" id="qfb-qb5"></div></div>
+
+  <div class="quiz-box-wrap" id="qb6"><div class="quiz-num">Question 6 of 10</div><div class="quiz-question">Is Hide and Seek an outdoor game?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">✅ Yes</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">❌ No</div></div><div class="quiz-fb" id="qfb-qb6"></div></div>
+
+  <div class="quiz-box-wrap" id="qb7"><div class="quiz-num">Question 7 of 10</div><div class="quiz-question">What do you use for Skipping?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">🪢 A Rope</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🏏 A Bat</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🎲 Dice</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">♟️ Chess pieces</div></div><div class="quiz-fb" id="qfb-qb7"></div></div>
+
+  <div class="quiz-box-wrap" id="qb8"><div class="quiz-num">Question 8 of 10</div><div class="quiz-question">"For cricket and football...,"</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">🌳 Rush to the grounds!</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🏠 Sit on the floor!</div></div><div class="quiz-fb" id="qfb-qb8"></div></div>
+
+  <div class="quiz-box-wrap" id="qb9"><div class="quiz-num">Question 9 of 10</div><div class="quiz-question">Where do you play a Spinning Top?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">🌳 Outside</div><div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🏠 Inside</div></div><div class="quiz-fb" id="qfb-qb9"></div></div>
+
+  <div class="quiz-box-wrap" id="qb10"><div class="quiz-num">Question 10 of 10</div><div class="quiz-question">Why do we play games?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">😊 For fun & health!</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😥 To be sad</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😠 To be angry</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😴 To sleep</div></div><div class="quiz-fb" id="qfb-qb10"></div></div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 16!</button>
+</div>
+
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🎮🏅</div>
+  <div class="celeb-title">Sports Star!</div>
+  <div class="celeb-sub">You completed EVS Lesson 16 — Play & Enjoy! 🎉<br>You are a champion at both Indoor and Outdoor games!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_evs_ch16_progress';
+let stars = 0;
+const tabOrder = ['play','indoor','outdoor','items','quiz'];
+const tabDoneQ = {
+  play:    {done:0, total:3, btn:'btn-play'},
+  indoor:  {done:0, total:3, btn:'btn-indoor'},
+  outdoor: {done:0, total:3, btn:'btn-outdoor'},
+  items:   {done:0, total:2, btn:'btn-items'},
+};
+const cardTabMap = {
+  p1:'play',p2:'play',p3:'play',
+  i1:'indoor',i2:'indoor',i3:'indoor',
+  o1:'outdoor',o2:'outdoor',o3:'outdoor',
+  m1:'items',m2:'items',
+};
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId){document.querySelectorAll('.step-tab').forEach(t=>{t.classList.toggle('active',t.dataset.tab===tabId)});document.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.id==='panel-'+tabId)});updateProgress();}
+document.querySelectorAll('.step-tab').forEach(tab=>{tab.addEventListener('click',()=>{if(tab.classList.contains('locked')){tab.classList.add('shaking');setTimeout(()=>tab.classList.remove('shaking'),520);showToast('🔒 Finish the previous step first!');return;}document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');goTab(tab.dataset.tab);});});
+function unlockNext(currentTab,nextTab){const btn=document.querySelector(`[data-tab="${currentTab}"]`);if(btn){btn.classList.remove('active');btn.classList.add('done');}const next=document.querySelector(`[data-tab="${nextTab}"]`);if(next){next.classList.remove('locked');next.classList.add('active');}document.querySelectorAll('.step-tab').forEach(t=>{if(t.dataset.tab!==nextTab&&!t.classList.contains('done'))t.classList.remove('active');});goTab(nextTab);window.scrollTo({top:0,behavior:'smooth'});addStars(3);}
+function updateProgress(){const doneCount=document.querySelectorAll('.step-tab.done').length;const pct=Math.round((doneCount/tabOrder.length)*100);document.getElementById('progFill').style.width=pct+'%';const labels=['Step 1! 👇','Keep going! 💪','Almost there! 🔥','One more step! ⭐','Quiz time! 🏆','Lesson Complete! 🎉'];document.getElementById('progLabel').textContent=labels[doneCount]||labels[0];}
+function answer(cardId,choice,result,btnEl){const card=document.getElementById(cardId);if(card.dataset.done)return;const btns=card.querySelectorAll('.choice-btn');const fb=document.getElementById('fb-'+cardId);if(result==='correct'){card.dataset.done='1';card.classList.add('done');btns.forEach(b=>b.classList.add('locked-choice'));btnEl.classList.add('correct');fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';addStars(1);const tab=cardTabMap[cardId];if(tab){tabDoneQ[tab].done++;if(tabDoneQ[tab].done>=tabDoneQ[tab].total){document.getElementById(tabDoneQ[tab].btn).disabled=false;}}}else{btnEl.classList.add('wrong');fb.className='fb-box no';fb.textContent='❌ Try again! You can do it! 💪';setTimeout(()=>{btnEl.classList.remove('wrong');fb.style.display='none';},1500);}}
+function quizAns(boxId,btn,result){const box=document.getElementById(boxId);if(box.dataset.done)return;const opts=box.querySelectorAll('.quiz-opt');const fb=document.getElementById('qfb-'+boxId);if(result==='correct'){box.dataset.done='1';opts.forEach(o=>o.style.pointerEvents='none');btn.classList.add('right');fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';addStars(1);quizDone++;if(quizDone>=QUIZ_TOTAL){document.getElementById('btn-quiz').disabled=false;}}else{btn.classList.add('wrong');fb.className='quiz-fb no';fb.textContent='❌ Try again! 💪';setTimeout(()=>{btn.classList.remove('wrong');fb.style.display='none';},1500);}}
+function addStars(n){stars+=n;document.getElementById('starsNum').textContent=stars;saveProgress();}
+function showToast(msg){const t=document.getElementById('lockToast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showCelebration(){const s=document.getElementById('celebScreen');s.classList.add('show');const starStr=stars>=30?'⭐⭐⭐':stars>=18?'⭐⭐':'⭐';document.getElementById('celebStars').textContent=starStr;addStars(5);}
+
+function saveProgress(){try{const state={stars,quizDone,tabDoneQ:JSON.parse(JSON.stringify(tabDoneQ)),doneCards:[],doneTabs:[],doneQuizBoxes:[]};document.querySelectorAll('.scenario-card[data-done]').forEach(c=>state.doneCards.push(c.id));document.querySelectorAll('.step-tab.done').forEach(t=>state.doneTabs.push(t.dataset.tab));document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q=>state.doneQuizBoxes.push(q.id));localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){}}
+function loadProgress(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;const state=JSON.parse(raw);stars=state.stars||0;quizDone=state.quizDone||0;document.getElementById('starsNum').textContent=stars;if(state.tabDoneQ)Object.keys(state.tabDoneQ).forEach(k=>{if(tabDoneQ[k])tabDoneQ[k].done=state.tabDoneQ[k].done;});(state.doneCards||[]).forEach(id=>{const card=document.getElementById(id);if(!card)return;card.dataset.done='1';card.classList.add('done');card.querySelectorAll('.choice-btn').forEach(b=>b.classList.add('locked-choice'));card.querySelectorAll('.choice-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'correct'"))b.classList.add('correct');});const fb=document.getElementById('fb-'+id);if(fb){fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';}});(state.doneQuizBoxes||[]).forEach(id=>{const box=document.getElementById(id);if(!box)return;box.dataset.done='1';box.querySelectorAll('.quiz-opt').forEach(o=>{o.style.pointerEvents='none';if(o.getAttribute('onclick')&&o.getAttribute('onclick').includes("'correct'"))o.classList.add('right');});const fb=document.getElementById('qfb-'+id);if(fb){fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';}});(state.doneTabs||[]).forEach(tabId=>{const tab=document.querySelector(`[data-tab="${tabId}"]`);if(tab){tab.classList.remove('active','locked');tab.classList.add('done');}});Object.keys(tabDoneQ).forEach(k=>{if(tabDoneQ[k].done>=tabDoneQ[k].total){const btn=document.getElementById(tabDoneQ[k].btn);if(btn)btn.disabled=false;}});if(quizDone>=QUIZ_TOTAL){const btn=document.getElementById('btn-quiz');if(btn)btn.disabled=false;}const allDone=state.doneTabs||[];if(allDone.length>0){const lastDoneIdx=Math.max(...allDone.map(t=>tabOrder.indexOf(t)));const nextIdx=lastDoneIdx+1;if(nextIdx<tabOrder.length){const nextTab=tabOrder[nextIdx];const nextEl=document.querySelector(`[data-tab="${nextTab}"]`);if(nextEl){nextEl.classList.remove('locked');nextEl.classList.add('active');}goTab(nextTab);}else{goTab(tabOrder[tabOrder.length-1]);}}updateProgress();}catch(e){}}
+function startOver(){localStorage.removeItem(SAVE_KEY);location.reload();}
+loadProgress();
+</script>
+</body>
+</html>

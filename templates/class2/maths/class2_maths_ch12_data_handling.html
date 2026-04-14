@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 Maths — Lesson 12: Data Handling</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:#fce4ec;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#880e4f,#c2185b,#f06292);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(136,14,79,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:18px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#880e4f,#c2185b,#f8bbd0);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:24px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#f8bbd0;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#880e4f,#f06292);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.unlocked{background:#fff;color:#c2185b;border-color:#f8bbd0;}
+.step-tab.active{background:#c2185b;color:#fff;border-color:#c2185b;box-shadow:0 4px 14px rgba(194,24,91,.5);}
+.step-tab.done{background:#fce4ec;color:#880e4f;border-color:#f8bbd0;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#880e4f;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #c2185b;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#c2185b;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#880e4f;font-size:15px;}
+
+/* SCENARIO CARDS */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#f8bbd0;background:#fce4ec;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#c2185b;font-size:19px;}
+.scene-bottom{border-top:2px dashed #f8bbd0;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #f8bbd0;background:#fce4ec;font-family:'Baloo 2',cursive;font-size:16px;color:#c2185b;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* BIG BUTTONS */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#880e4f,#f06292);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#fce4ec,#f8bbd0);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #f8bbd0;}
+.info-strip p{font-size:14px;font-weight:800;color:#880e4f;line-height:1.7;}
+
+/* RULE BOX */
+.rule-box{background:#fff;border:3px solid #c2185b;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#c2185b;font-weight:900;line-height:1.7;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#880e4f;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#fce4ec;border:3px solid #f8bbd0;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#c2185b;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* SECTION DIVIDER */
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#c2185b;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* DATA TABLE */
+.data-table-wrap{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);overflow-x:auto;}
+.data-table{width:100%;border-collapse:collapse;font-family:'Baloo 2',cursive;font-size:14px;}
+.data-table th{background:#c2185b;color:#fff;padding:10px 8px;text-align:center;font-size:13px;border:1px solid #ad1457;}
+.data-table td{padding:10px 8px;text-align:center;color:#333;font-weight:800;border:1px solid #f8bbd0;font-size:15px;}
+.data-table tr:nth-child(even){background:#fce4ec;}
+.data-table .total-row{background:#f8bbd0;color:#880e4f;font-weight:900;}
+
+/* COUNT VISUAL */
+.count-visual{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.count-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #f8bbd0;}
+.count-row:last-child{border-bottom:none;}
+.count-emoji{font-size:28px;}
+.count-label{font-family:'Baloo 2',cursive;font-size:14px;color:#880e4f;font-weight:900;flex:1;}
+.count-num{font-family:'Baloo 2',cursive;font-size:22px;color:#c2185b;font-weight:900;background:#fce4ec;padding:4px 14px;border-radius:12px;min-width:40px;text-align:center;}
+
+/* FISH POSTER */
+.fish-poster{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);text-align:center;}
+.fish-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0;font-size:32px;}
+.fish-poster-title{font-family:'Baloo 2',cursive;font-size:16px;color:#0d47a1;font-weight:900;margin-bottom:6px;}
+
+/* GIFT GRID */
+.gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:6px;margin:10px 0;justify-items:center;}
+.gift-item{font-size:32px;animation:giftPop .5s ease backwards;}
+@keyframes giftPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* FRUIT BASKET */
+.fruit-basket{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);text-align:center;}
+.fruit-basket-title{font-family:'Baloo 2',cursive;font-size:16px;color:#1b5e20;font-weight:900;margin-bottom:6px;}
+
+/* BAR CHART */
+.bar-chart{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.bar-chart-title{font-family:'Baloo 2',cursive;font-size:15px;color:#880e4f;font-weight:900;text-align:center;margin-bottom:12px;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.bar-label{font-family:'Baloo 2',cursive;font-size:13px;color:#555;font-weight:900;width:70px;text-align:right;}
+.bar-track{flex:1;background:#f8bbd0;border-radius:10px;height:24px;overflow:hidden;position:relative;}
+.bar-fill{height:100%;border-radius:10px;transition:width 1s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-family:'Baloo 2',cursive;font-size:12px;color:#fff;font-weight:900;}
+.bar-emoji{font-size:20px;}
+
+/* FLOWER GRID */
+.flower-grid{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:10px 0;font-size:28px;}
+
+/* BALL VISUAL */
+.ball-visual{background:linear-gradient(135deg,#f3e5f5,#ce93d8);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);text-align:center;}
+.ball-visual-title{font-family:'Baloo 2',cursive;font-size:16px;color:#4a148c;font-weight:900;margin-bottom:6px;}
+.ball-grid{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:10px 0;}
+.ball-item{display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px;font-weight:900;color:#fff;font-family:'Baloo 2',cursive;text-shadow:0 1px 2px rgba(0,0,0,.3);}
+.ball-sm{width:30px;height:30px;background:linear-gradient(135deg,#42a5f5,#1976d2);}
+.ball-md{width:42px;height:42px;background:linear-gradient(135deg,#66bb6a,#388e3c);}
+.ball-lg{width:54px;height:54px;background:linear-gradient(135deg,#ef5350,#c62828);}
+
+/* CELEB */
+.celeb-screen{position:fixed;inset:0;background:rgba(136,14,79,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#880e4f;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">📊 Lesson 12 — Data Handling</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">📊</span>
+  <h1>Class 2 Maths · Lesson 12</h1>
+  <p>DATA HANDLING — Collect, Count &amp; Compare!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="counting">🐟 Count &amp; Sort</div>
+  <div class="step-tab locked" data-tab="birthday">🎁 Birthday Gifts</div>
+  <div class="step-tab locked" data-tab="fruits">🍎 Fruit Shop</div>
+  <div class="step-tab locked" data-tab="flowers">🌸 Flowers &amp; Balls</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: COUNT & SORT ══════════════ -->
+<div class="tab-panel active" id="panel-counting">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">🐟</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Count & Sort Data</div>
+      <div class="banner-sub" style="color:#ad1457;">Appu has a poster of fishes. Let's count them!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌟 What is Data Handling?</h3>
+    <p><span class="hl">Data</span> means information we collect — like counting things!</p>
+    <p>👉 We can <span class="hl">collect</span> data by measuring and counting.</p>
+    <p>👉 We can <span class="hl">group</span> data by colour, size, or type.</p>
+    <p>👉 We can <span class="hl">compare</span> to find which is more or less.</p>
+    <p>👉 We <span class="hl">draw conclusions</span> from the data we collect!</p>
+  </div>
+
+  <div class="fish-poster">
+    <div class="fish-poster-title">🐟 Appu's Fish Poster — Count the Fishes!</div>
+    <div class="fish-grid">
+      <span>🐠</span><span>🐟</span><span>🐡</span><span>🐠</span><span>🐟</span>
+      <span>🐡</span><span>🐠</span><span>🐟</span><span>🐠</span><span>🐡</span>
+      <span>🐟</span><span>🐠</span><span>🐡</span><span>🐟</span><span>🐠</span>
+      <span>🐠</span><span>🐟</span><span>🐡</span><span>🐠</span><span>🐟</span>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:#1976d2;">🐠 = Tropical Fish &nbsp;|&nbsp; 🐟 = Blue Fish &nbsp;|&nbsp; 🐡 = Puffer Fish</div>
+  </div>
+
+  <div class="count-visual">
+    <div style="font-family:'Baloo 2',cursive;font-size:15px;color:#c2185b;font-weight:900;text-align:center;margin-bottom:8px;">Count Results 📋</div>
+    <div class="count-row">
+      <span class="count-emoji">🐠</span>
+      <span class="count-label">Tropical Fish</span>
+      <span class="count-num">8</span>
+    </div>
+    <div class="count-row">
+      <span class="count-emoji">🐟</span>
+      <span class="count-label">Blue Fish</span>
+      <span class="count-num">7</span>
+    </div>
+    <div class="count-row">
+      <span class="count-emoji">🐡</span>
+      <span class="count-label">Puffer Fish</span>
+      <span class="count-num">5</span>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">📊 Data Handling = Collect → Count → Group → Compare!<br>🐠 Most = 8 &nbsp;|&nbsp; 🐡 Least = 5</div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="ct1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 5</div>
+      <div class="scene-sentence">How many <span class="kw">kinds of fishes</span> are in Appu's poster?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ct1','2','wrong',this)">
+          <span class="cb-emoji">2️⃣</span><span class="cb-word">2 kinds</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct1','3','correct',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3 kinds</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct1','4','wrong',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4 kinds</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ct1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="ct2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 5</div>
+      <div class="scene-sentence">Which fish is <span class="kw">MORE in number</span> in the poster?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ct2','tropical','correct',this)">
+          <span class="cb-emoji">🐠</span><span class="cb-word">Tropical (8)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct2','puffer','wrong',this)">
+          <span class="cb-emoji">🐡</span><span class="cb-word">Puffer (5)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ct2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="ct3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 5</div>
+      <div class="scene-sentence">Which fish is <span class="kw">LEAST in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ct3','blue','wrong',this)">
+          <span class="cb-emoji">🐟</span><span class="cb-word">Blue Fish (7)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct3','puffer','correct',this)">
+          <span class="cb-emoji">🐡</span><span class="cb-word">Puffer Fish (5)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ct3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="ct4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 5</div>
+      <div class="scene-sentence">What is the <span class="kw">total number</span> of all fishes?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ct4','15','wrong',this)">
+          <span class="cb-emoji">1️⃣5️⃣</span><span class="cb-word">15</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct4','20','correct',this)">
+          <span class="cb-emoji">2️⃣0️⃣</span><span class="cb-word">20</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct4','18','wrong',this)">
+          <span class="cb-emoji">1️⃣8️⃣</span><span class="cb-word">18</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ct4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="ct5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 5</div>
+      <div class="scene-sentence">Data Handling means we <span class="kw">_____</span> things and compare them.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('ct5','count','correct',this)">
+          <span class="cb-emoji">🔢</span><span class="cb-word">Count</span>
+        </div>
+        <div class="choice-btn" onclick="answer('ct5','draw','wrong',this)">
+          <span class="cb-emoji">🎨</span><span class="cb-word">Draw</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-ct5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-counting" disabled onclick="unlockNext('counting','birthday')">Next: Birthday Gifts! 🎁 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: BIRTHDAY GIFTS ══════════════ -->
+<div class="tab-panel" id="panel-birthday">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffcc80);">
+    <span class="banner-emoji">🎁</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Ananya's Birthday Gifts!</div>
+      <div class="banner-sub" style="color:#f57c00;">Count and list all the gifts Ananya received!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🎂 Story Time!</h3>
+    <p><span class="hl">Suma</span> said: "Ananya has invited all of us for her birthday!"</p>
+    <p>👉 Suma, Rashmi, Peter, Krishna and Anu went to <span class="hl">Ananya's</span> house 🏠</p>
+    <p>👉 They wished her and gave gifts! 🎁</p>
+    <p>👉 Ananya said: "Oh! Very surprising! I have got many gifts!"</p>
+    <p>👉 Suma said: "You have got <span class="hl">dolls, crayons, pencil box, chocolates, pens, water bottles</span> and many more!"</p>
+    <p>👉 Let's <span class="hl">count</span> all the gifts now! 🔢</p>
+  </div>
+
+  <div class="count-visual">
+    <div style="font-family:'Baloo 2',cursive;font-size:15px;color:#e65100;font-weight:900;text-align:center;margin-bottom:8px;">🎁 Ananya's Gift List</div>
+    <div class="gift-grid">
+      <span style="animation-delay:.1s">🧸</span><span style="animation-delay:.2s">🧸</span>
+      <span style="animation-delay:.3s">🖍️</span><span style="animation-delay:.35s">🖍️</span><span style="animation-delay:.4s">🖍️</span><span style="animation-delay:.45s">🖍️</span><span style="animation-delay:.5s">🖍️</span><span style="animation-delay:.55s">🖍️</span><span style="animation-delay:.6s">🖍️</span><span style="animation-delay:.65s">🖍️</span><span style="animation-delay:.7s">🖍️</span><span style="animation-delay:.75s">🖍️</span>
+      <span style="animation-delay:.8s">🍫</span><span style="animation-delay:.85s">🍫</span><span style="animation-delay:.9s">🍫</span><span style="animation-delay:.95s">🍫</span>
+      <span style="animation-delay:1s">🧴</span><span style="animation-delay:1.05s">🧴</span>
+      <span style="animation-delay:1.1s">📦</span>
+      <span style="animation-delay:1.15s">🖊️</span><span style="animation-delay:1.2s">🖊️</span><span style="animation-delay:1.25s">🖊️</span>
+    </div>
+  </div>
+
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <tr><th>S.No.</th><th>Gifts</th><th>Number</th></tr>
+      <tr><td>1</td><td>🧸 Dolls</td><td>2</td></tr>
+      <tr><td>2</td><td>🖍️ Crayons</td><td>10</td></tr>
+      <tr><td>3</td><td>🍫 Chocolates</td><td>4</td></tr>
+      <tr><td>4</td><td>🧴 Water Bottles</td><td>2</td></tr>
+      <tr><td>5</td><td>📦 Pencil Boxes</td><td>1</td></tr>
+      <tr><td>6</td><td>🖊️ Pens</td><td>3</td></tr>
+      <tr class="total-row"><td></td><td>Total</td><td>22</td></tr>
+    </table>
+  </div>
+
+  <div class="bar-chart">
+    <div class="bar-chart-title">📊 Gift Bar Chart</div>
+    <div class="bar-row">
+      <span class="bar-label">🧸 Dolls</span>
+      <div class="bar-track"><div class="bar-fill" style="width:20%;background:linear-gradient(90deg,#e91e63,#f06292);">2</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🖍️ Crayons</span>
+      <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#ff9800,#ffb74d);">10</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🍫 Chocs</span>
+      <div class="bar-track"><div class="bar-fill" style="width:40%;background:linear-gradient(90deg,#795548,#a1887f);">4</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🧴 Bottles</span>
+      <div class="bar-track"><div class="bar-fill" style="width:20%;background:linear-gradient(90deg,#2196f3,#64b5f6);">2</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">📦 P.Box</span>
+      <div class="bar-track"><div class="bar-fill" style="width:10%;background:linear-gradient(90deg,#4caf50,#81c784);">1</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🖊️ Pens</span>
+      <div class="bar-track"><div class="bar-fill" style="width:30%;background:linear-gradient(90deg,#9c27b0,#ba68c8);">3</div></div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">🖍️ Most gifts = Crayons (10)<br>📦 Least gifts = Pencil Box (1)<br>Total gifts = 22 🎁</div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="bd1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">total gifts</span> did Ananya receive?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('bd1','18','wrong',this)">
+          <span class="cb-emoji">1️⃣8️⃣</span><span class="cb-word">18</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd1','22','correct',this)">
+          <span class="cb-emoji">2️⃣2️⃣</span><span class="cb-word">22</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd1','20','wrong',this)">
+          <span class="cb-emoji">2️⃣0️⃣</span><span class="cb-word">20</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-bd1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="bd2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">Which gift is <span class="kw">maximum in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('bd2','crayons','correct',this)">
+          <span class="cb-emoji">🖍️</span><span class="cb-word">Crayons (10)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd2','chocs','wrong',this)">
+          <span class="cb-emoji">🍫</span><span class="cb-word">Chocolates (4)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-bd2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="bd3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Which gift is <span class="kw">minimum in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('bd3','pbox','correct',this)">
+          <span class="cb-emoji">📦</span><span class="cb-word">Pencil Box (1)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd3','dolls','wrong',this)">
+          <span class="cb-emoji">🧸</span><span class="cb-word">Dolls (2)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-bd3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="bd4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">chocolates</span> did Ananya get?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('bd4','3','wrong',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd4','4','correct',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd4','5','wrong',this)">
+          <span class="cb-emoji">5️⃣</span><span class="cb-word">5</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-bd4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="bd5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">pens</span> did Ananya receive?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('bd5','2','wrong',this)">
+          <span class="cb-emoji">2️⃣</span><span class="cb-word">2</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd5','3','correct',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd5','4','wrong',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-bd5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="bd6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">Dolls and water bottles are <span class="kw">equal in number</span>. How many of each?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('bd6','1','wrong',this)">
+          <span class="cb-emoji">1️⃣</span><span class="cb-word">1 each</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd6','2','correct',this)">
+          <span class="cb-emoji">2️⃣</span><span class="cb-word">2 each</span>
+        </div>
+        <div class="choice-btn" onclick="answer('bd6','3','wrong',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3 each</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-bd6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-birthday" disabled onclick="unlockNext('birthday','fruits')">Next: Fruit Shop! 🍎 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: FRUIT SHOP ══════════════ -->
+<div class="tab-panel" id="panel-fruits">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7);">
+    <span class="banner-emoji">🍎</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Susheela's Fruit Shop!</div>
+      <div class="banner-sub" style="color:#2e7d32;">Count fruits and fill in the data table!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🛒 Story Time!</h3>
+    <p><span class="hl">Susheela</span> and her mother went to a fruit shop 🏪</p>
+    <p>👉 They bought <span class="hl">apples</span> 🍎, <span class="hl">pomegranates</span> 🍑, <span class="hl">bananas</span> 🍌 and <span class="hl">oranges</span> 🍊</p>
+    <p>👉 Susheela got curious and wanted to <span class="hl">count each type</span> of fruit!</p>
+    <p>👉 Let's help her make a data table! 📋</p>
+  </div>
+
+  <div class="fruit-basket">
+    <div class="fruit-basket-title">🛒 Susheela's Fruit Basket</div>
+    <div class="fish-grid">
+      <span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span>
+      <span>🍑</span><span>🍑</span><span>🍑</span><span>🍑</span><span>🍑</span><span>🍑</span>
+      <span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span><span>🍌</span>
+      <span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span>
+    </div>
+  </div>
+
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <tr><th>Sl.No</th><th>Fruits</th><th>Number</th></tr>
+      <tr><td>1</td><td>🍎 Apples</td><td>8</td></tr>
+      <tr><td>2</td><td>🍑 Pomegranates</td><td>6</td></tr>
+      <tr><td>3</td><td>🍌 Bananas</td><td>12</td></tr>
+      <tr><td>4</td><td>🍊 Oranges</td><td>10</td></tr>
+      <tr class="total-row"><td></td><td>Total</td><td>36</td></tr>
+    </table>
+  </div>
+
+  <div class="bar-chart">
+    <div class="bar-chart-title">📊 Fruit Count Chart</div>
+    <div class="bar-row">
+      <span class="bar-label">🍎 Apples</span>
+      <div class="bar-track"><div class="bar-fill" style="width:67%;background:linear-gradient(90deg,#e53935,#ef5350);">8</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🍑 Pomeg.</span>
+      <div class="bar-track"><div class="bar-fill" style="width:50%;background:linear-gradient(90deg,#e91e63,#f06292);">6</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🍌 Bananas</span>
+      <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#fdd835,#fff176);">12</div></div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">🍊 Oranges</span>
+      <div class="bar-track"><div class="bar-fill" style="width:83%;background:linear-gradient(90deg,#ff9800,#ffb74d);">10</div></div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>💡 From counting we know: <strong>Bananas (12)</strong> are the MOST! <strong>Pomegranates (6)</strong> are the FEWEST! Apples (8) are fewer than Oranges (10).</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="fr1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">apples</span> 🍎 did they buy?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fr1','6','wrong',this)">
+          <span class="cb-emoji">6️⃣</span><span class="cb-word">6</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr1','8','correct',this)">
+          <span class="cb-emoji">8️⃣</span><span class="cb-word">8</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr1','10','wrong',this)">
+          <span class="cb-emoji">🔟</span><span class="cb-word">10</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fr1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="fr2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">Which fruit is <span class="kw">maximum in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fr2','apples','wrong',this)">
+          <span class="cb-emoji">🍎</span><span class="cb-word">Apples (8)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr2','bananas','correct',this)">
+          <span class="cb-emoji">🍌</span><span class="cb-word">Bananas (12)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fr2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="fr3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Which fruit is <span class="kw">fewer</span> — apples or oranges?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fr3','apples','correct',this)">
+          <span class="cb-emoji">🍎</span><span class="cb-word">Apples (8)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr3','oranges','wrong',this)">
+          <span class="cb-emoji">🍊</span><span class="cb-word">Oranges (10)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fr3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="fr4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">What is the <span class="kw">total number</span> of all fruits?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fr4','30','wrong',this)">
+          <span class="cb-emoji">3️⃣0️⃣</span><span class="cb-word">30</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr4','36','correct',this)">
+          <span class="cb-emoji">3️⃣6️⃣</span><span class="cb-word">36</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr4','34','wrong',this)">
+          <span class="cb-emoji">3️⃣4️⃣</span><span class="cb-word">34</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fr4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="fr5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">pomegranates</span> 🍑 did they buy?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fr5','4','wrong',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr5','6','correct',this)">
+          <span class="cb-emoji">6️⃣</span><span class="cb-word">6</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr5','8','wrong',this)">
+          <span class="cb-emoji">8️⃣</span><span class="cb-word">8</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fr5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="fr6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">Which fruit is <span class="kw">minimum in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fr6','oranges','wrong',this)">
+          <span class="cb-emoji">🍊</span><span class="cb-word">Oranges (10)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fr6','pomegranates','correct',this)">
+          <span class="cb-emoji">🍑</span><span class="cb-word">Pomegranates (6)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fr6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-fruits" disabled onclick="unlockNext('fruits','flowers')">Next: Flowers & Balls! 🌸 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 4: FLOWERS & BALLS ══════════════ -->
+<div class="tab-panel" id="panel-flowers">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#ce93d8);">
+    <span class="banner-emoji">🌸</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">Flowers & Balls Data!</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Count flowers by type & sort balls by size!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌺 Aruna's Flower Chart</h3>
+    <p>Aruna has a chart of various kinds of coloured flowers!</p>
+    <p>👉 Let's help her <span class="hl">sort</span> the flowers and <span class="hl">count</span> them! 🔢</p>
+  </div>
+
+  <div class="count-visual" style="background:linear-gradient(135deg,#fce4ec,#fff);">
+    <div style="font-family:'Baloo 2',cursive;font-size:15px;color:#c2185b;font-weight:900;text-align:center;margin-bottom:8px;">🌺 Aruna's Flower Collection</div>
+    <div class="flower-grid">
+      <span>🌹</span><span>🌹</span><span>🌹</span><span>🌹</span><span>🌹</span><span>🌹</span><span>🌹</span>
+      <span>🌻</span><span>🌻</span><span>🌻</span><span>🌻</span><span>🌻</span>
+      <span>🌺</span><span>🌺</span><span>🌺</span><span>🌺</span><span>🌺</span><span>🌺</span>
+      <span>🪷</span><span>🪷</span><span>🪷</span><span>🪷</span>
+    </div>
+  </div>
+
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <tr><th>S.No</th><th>Flowers</th><th>Number</th></tr>
+      <tr><td>1</td><td>🌹 Rose</td><td>7</td></tr>
+      <tr><td>2</td><td>🌻 Sunflower</td><td>5</td></tr>
+      <tr><td>3</td><td>🌺 Hibiscus</td><td>6</td></tr>
+      <tr><td>4</td><td>🪷 Lotus</td><td>4</td></tr>
+      <tr class="total-row"><td></td><td>Total</td><td>22</td></tr>
+    </table>
+  </div>
+
+  <div class="teach-card">
+    <h3>⚽ Balls of Different Sizes!</h3>
+    <p>Here are balls of various sizes! Let's sort by <span class="hl">size</span>!</p>
+    <p>👉 🔵 Small balls = 6 &nbsp;|&nbsp; 🟢 Medium balls = 4 &nbsp;|&nbsp; 🔴 Big balls = 3</p>
+    <p>👉 <span class="hl">Small balls</span> are MORE in number!</p>
+  </div>
+
+  <div class="ball-visual">
+    <div class="ball-visual-title">⚽ Balls by Size</div>
+    <div class="ball-grid">
+      <div class="ball-item ball-sm">S</div>
+      <div class="ball-item ball-sm">S</div>
+      <div class="ball-item ball-md">M</div>
+      <div class="ball-item ball-lg">B</div>
+      <div class="ball-item ball-sm">S</div>
+      <div class="ball-item ball-md">M</div>
+      <div class="ball-item ball-sm">S</div>
+      <div class="ball-item ball-lg">B</div>
+      <div class="ball-item ball-md">M</div>
+      <div class="ball-item ball-sm">S</div>
+      <div class="ball-item ball-lg">B</div>
+      <div class="ball-item ball-sm">S</div>
+      <div class="ball-item ball-md">M</div>
+    </div>
+  </div>
+
+  <div class="count-visual">
+    <div style="font-family:'Baloo 2',cursive;font-size:15px;color:#4a148c;font-weight:900;text-align:center;margin-bottom:8px;">⚽ Ball Count</div>
+    <div class="count-row">
+      <div class="ball-item ball-sm" style="flex-shrink:0;">S</div>
+      <span class="count-label">Small Balls</span>
+      <span class="count-num">6</span>
+    </div>
+    <div class="count-row">
+      <div class="ball-item ball-md" style="flex-shrink:0;">M</div>
+      <span class="count-label">Medium Balls</span>
+      <span class="count-num">4</span>
+    </div>
+    <div class="count-row">
+      <div class="ball-item ball-lg" style="flex-shrink:0;">B</div>
+      <span class="count-label">Big Balls</span>
+      <span class="count-num">3</span>
+    </div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="fl1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">Which flower is <span class="kw">maximum in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fl1','rose','correct',this)">
+          <span class="cb-emoji">🌹</span><span class="cb-word">Rose (7)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl1','lotus','wrong',this)">
+          <span class="cb-emoji">🪷</span><span class="cb-word">Lotus (4)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fl1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="fl2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">Which flower is <span class="kw">minimum in number</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fl2','sunflower','wrong',this)">
+          <span class="cb-emoji">🌻</span><span class="cb-word">Sunflower (5)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl2','lotus','correct',this)">
+          <span class="cb-emoji">🪷</span><span class="cb-word">Lotus (4)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fl2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="fl3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">When comparing roses 🌹 and sunflowers 🌻, which is <span class="kw">more</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fl3','roses','correct',this)">
+          <span class="cb-emoji">🌹</span><span class="cb-word">Roses (7)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl3','sunflowers','wrong',this)">
+          <span class="cb-emoji">🌻</span><span class="cb-word">Sunflowers (5)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fl3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="fl4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">Which type of <span class="kw">ball</span> is more in number?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fl4','small','correct',this)">
+          <span class="cb-emoji">🔵</span><span class="cb-word">Small (6)</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl4','big','wrong',this)">
+          <span class="cb-emoji">🔴</span><span class="cb-word">Big (3)</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fl4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="fl5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">total flowers</span> does Aruna have?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fl5','20','wrong',this)">
+          <span class="cb-emoji">2️⃣0️⃣</span><span class="cb-word">20</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl5','22','correct',this)">
+          <span class="cb-emoji">2️⃣2️⃣</span><span class="cb-word">22</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl5','24','wrong',this)">
+          <span class="cb-emoji">2️⃣4️⃣</span><span class="cb-word">24</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fl5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="fl6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">medium balls</span> are there?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('fl6','3','wrong',this)">
+          <span class="cb-emoji">3️⃣</span><span class="cb-word">3</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl6','4','correct',this)">
+          <span class="cb-emoji">4️⃣</span><span class="cb-word">4</span>
+        </div>
+        <div class="choice-btn" onclick="answer('fl6','5','wrong',this)">
+          <span class="cb-emoji">5️⃣</span><span class="cb-word">5</span>
+        </div>
+      </div>
+      <div class="fb-box" id="fb-fl6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-flowers" disabled onclick="unlockNext('flowers','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 5: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Final Quiz!</div>
+      <div class="banner-sub" style="color:#ad1457;">Show what you know about Data Handling!</div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>🌟 You've learnt everything! Now let's see how much you remember! Answer all 10 questions to finish Lesson 12!</p>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-box-wrap" id="qb1">
+    <div class="quiz-num">Question 1 of 10</div>
+    <div class="quiz-question">What does "Data Handling" mean? 📊</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">🔢 Collecting &amp; counting information</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🎨 Drawing pictures</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🎵 Singing songs</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">📖 Reading stories</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-box-wrap" id="qb2">
+    <div class="quiz-num">Question 2 of 10</div>
+    <div class="quiz-question">Ananya got 10 crayons, 4 chocolates, 2 dolls. Which was the MOST? 🖍️</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🖍️ Crayons</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🍫 Chocolates</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🧸 Dolls</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🖊️ Pens</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-box-wrap" id="qb3">
+    <div class="quiz-num">Question 3 of 10</div>
+    <div class="quiz-question">In Susheela's basket: 🍎 8, 🍑 6, 🍌 12, 🍊 10. Which fruit is the MOST?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🍎 Apples</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🍌 Bananas</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🍊 Oranges</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🍑 Pomegranates</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-box-wrap" id="qb4">
+    <div class="quiz-num">Question 4 of 10</div>
+    <div class="quiz-question">🌹 7, 🌻 5, 🌺 6, 🪷 4. Which flower is the LEAST? 🌸</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🌹 Rose</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🌻 Sunflower</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🌺 Hibiscus</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">🪷 Lotus</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-box-wrap" id="qb5">
+    <div class="quiz-num">Question 5 of 10</div>
+    <div class="quiz-question">In data handling, what do we do FIRST? 🤔</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">📋 Collect data</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">📊 Draw a chart</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🎨 Color it</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🗑️ Throw it</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-box-wrap" id="qb6">
+    <div class="quiz-num">Question 6 of 10</div>
+    <div class="quiz-question">How many total gifts did Ananya receive? 🎁</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🔢 18</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🔢 20</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">🔢 22</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🔢 25</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-box-wrap" id="qb7">
+    <div class="quiz-num">Question 7 of 10</div>
+    <div class="quiz-question">Small balls = 6, Medium = 4, Big = 3. Which is MOST? ⚽</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">🔵 Small</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🟢 Medium</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🔴 Big</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🤷 All same</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-box-wrap" id="qb8">
+    <div class="quiz-num">Question 8 of 10</div>
+    <div class="quiz-question">🍎 8 Apples, 🍊 10 Oranges. Which is MORE?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🍎 Apples</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">🍊 Oranges</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🤷 Same</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🍌 Bananas</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-box-wrap" id="qb9">
+    <div class="quiz-num">Question 9 of 10</div>
+    <div class="quiz-question">🌹 Roses = 7, 🌻 Sunflowers = 5. Which flower is FEWER? 🌸</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🌹 Roses</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">🌻 Sunflowers</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">Both same</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🪷 Lotus</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-box-wrap" id="qb10">
+    <div class="quiz-num">Question 10 of 10</div>
+    <div class="quiz-question">What are the steps of Data Handling? 📊</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">📋 Collect → Count → Group → Compare</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">🎨 Draw → Color → Cut</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">🏃 Run → Jump → Play</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">📖 Read → Write → Sleep</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb10"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 12!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">Amazing Work!</div>
+  <div class="celeb-sub">You completed Lesson 12 — Data Handling! 🎉<br>You can Collect, Count, Group &amp; Compare Data!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_lesson12_progress';
+let stars = 0;
+const tabOrder = ['counting','birthday','fruits','flowers','quiz'];
+
+const tabDoneQ = {
+  counting:  {done:0, total:5, btn:'btn-counting'},
+  birthday:  {done:0, total:6, btn:'btn-birthday'},
+  fruits:    {done:0, total:6, btn:'btn-fruits'},
+  flowers:   {done:0, total:6, btn:'btn-flowers'},
+};
+
+const cardTabMap = {
+  ct1:'counting',ct2:'counting',ct3:'counting',ct4:'counting',ct5:'counting',
+  bd1:'birthday',bd2:'birthday',bd3:'birthday',bd4:'birthday',bd5:'birthday',bd6:'birthday',
+  fr1:'fruits',fr2:'fruits',fr3:'fruits',fr4:'fruits',fr5:'fruits',fr6:'fruits',
+  fl1:'flowers',fl2:'flowers',fl3:'flowers',fl4:'flowers',fl5:'flowers',fl6:'flowers',
+};
+
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId) {
+  document.querySelectorAll('.step-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + tabId);
+  });
+  updateProgress();
+}
+
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(() => tab.classList.remove('shaking'), 520);
+      showToast('🔒 Finish the previous step first!');
+      return;
+    }
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    goTab(tab.dataset.tab);
+  });
+});
+
+function unlockNext(currentTab, nextTab) {
+  const btn = document.querySelector(`[data-tab="${currentTab}"]`);
+  if (btn) { btn.classList.remove('active'); btn.classList.add('done'); }
+  const next = document.querySelector(`[data-tab="${nextTab}"]`);
+  if (next) { next.classList.remove('locked'); next.classList.add('active'); }
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab !== nextTab && !t.classList.contains('done')) t.classList.remove('active');
+  });
+  goTab(nextTab);
+  window.scrollTo({top:0, behavior:'smooth'});
+  addStars(3);
+}
+
+function updateProgress() {
+  const doneCount = document.querySelectorAll('.step-tab.done').length;
+  const pct = Math.round((doneCount / tabOrder.length) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['Start with Step 1! 👇','Great! Keep going! 💪','Halfway there! 🔥','Almost done! 🚀','Nearly finished! ⚡','Lesson Complete! 🎉'];
+  document.getElementById('progLabel').textContent = labels[doneCount] || labels[0];
+}
+
+function answer(cardId, choice, result, btnEl) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const btns = card.querySelectorAll('.choice-btn');
+  const fb = document.getElementById('fb-' + cardId);
+  if (result === 'correct') {
+    card.dataset.done = '1';
+    card.classList.add('done');
+    btns.forEach(b => b.classList.add('locked-choice'));
+    btnEl.classList.add('correct');
+    fb.className = 'fb-box ok'; fb.textContent = '✅ Correct! Well done! 🌟';
+    addStars(1);
+    const tab = cardTabMap[cardId];
+    if (tab) {
+      tabDoneQ[tab].done++;
+      if (tabDoneQ[tab].done >= tabDoneQ[tab].total) {
+        document.getElementById(tabDoneQ[tab].btn).disabled = false;
+      }
+    }
+  } else {
+    btnEl.classList.add('wrong');
+    fb.className = 'fb-box no'; fb.textContent = '❌ Try again! You can do it! 💪';
+    setTimeout(() => {
+      btnEl.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 1500);
+  }
+}
+
+function quizAns(boxId, btn, result) {
+  const box = document.getElementById(boxId);
+  if (box.dataset.done) return;
+  const opts = box.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + boxId);
+  if (result === 'correct') {
+    box.dataset.done = '1';
+    opts.forEach(o => o.style.pointerEvents = 'none');
+    btn.classList.add('right');
+    fb.className = 'quiz-fb ok'; fb.textContent = '✅ Correct! Superstar! ⭐';
+    addStars(1);
+    quizDone++;
+    if (quizDone >= QUIZ_TOTAL) {
+      document.getElementById('btn-quiz').disabled = false;
+    }
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-fb no'; fb.textContent = '❌ Try again! 💪';
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 1500);
+  }
+}
+
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+  saveProgress();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function showCelebration() {
+  const s = document.getElementById('celebScreen');
+  s.classList.add('show');
+  const starStr = stars >= 30 ? '⭐⭐⭐' : stars >= 18 ? '⭐⭐' : '⭐';
+  document.getElementById('celebStars').textContent = starStr;
+  addStars(5);
+}
+
+/* ── SAVE / LOAD PROGRESS ── */
+function saveProgress() {
+  try {
+    const state = {
+      stars,
+      quizDone,
+      tabDoneQ: JSON.parse(JSON.stringify(tabDoneQ)),
+      doneCards: [],
+      doneTabs: [],
+      doneQuizBoxes: []
+    };
+    document.querySelectorAll('.scenario-card[data-done]').forEach(c => state.doneCards.push(c.id));
+    document.querySelectorAll('.step-tab.done').forEach(t => state.doneTabs.push(t.dataset.tab));
+    document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q => state.doneQuizBoxes.push(q.id));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    stars = state.stars || 0;
+    quizDone = state.quizDone || 0;
+    document.getElementById('starsNum').textContent = stars;
+
+    // Restore tabDoneQ counts
+    if (state.tabDoneQ) {
+      Object.keys(state.tabDoneQ).forEach(k => {
+        if (tabDoneQ[k]) tabDoneQ[k].done = state.tabDoneQ[k].done;
+      });
+    }
+
+    // Restore done cards
+    (state.doneCards || []).forEach(id => {
+      const card = document.getElementById(id);
+      if (!card) return;
+      card.dataset.done = '1';
+      card.classList.add('done');
+      card.querySelectorAll('.choice-btn').forEach(b => b.classList.add('locked-choice'));
+      // Find and mark the correct button
+      card.querySelectorAll('.choice-btn').forEach(b => {
+        if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'correct'")) {
+          b.classList.add('correct');
+        }
+      });
+      const fb = document.getElementById('fb-' + id);
+      if (fb) { fb.className = 'fb-box ok'; fb.textContent = '✅ Correct! Well done! 🌟'; }
+    });
+
+    // Restore done quiz boxes
+    (state.doneQuizBoxes || []).forEach(id => {
+      const box = document.getElementById(id);
+      if (!box) return;
+      box.dataset.done = '1';
+      box.querySelectorAll('.quiz-opt').forEach(o => {
+        o.style.pointerEvents = 'none';
+        if (o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'")) {
+          o.classList.add('right');
+        }
+      });
+      const fb = document.getElementById('qfb-' + id);
+      if (fb) { fb.className = 'quiz-fb ok'; fb.textContent = '✅ Correct! Superstar! ⭐'; }
+    });
+
+    // Restore done tabs and unlock next
+    (state.doneTabs || []).forEach(tabId => {
+      const tab = document.querySelector(`[data-tab="${tabId}"]`);
+      if (tab) { tab.classList.remove('active','locked'); tab.classList.add('done'); }
+    });
+
+    // Enable buttons for completed tab groups
+    Object.keys(tabDoneQ).forEach(k => {
+      if (tabDoneQ[k].done >= tabDoneQ[k].total) {
+        const btn = document.getElementById(tabDoneQ[k].btn);
+        if (btn) btn.disabled = false;
+      }
+    });
+    if (quizDone >= QUIZ_TOTAL) {
+      const btn = document.getElementById('btn-quiz');
+      if (btn) btn.disabled = false;
+    }
+
+    // Find the latest active tab
+    const allDone = state.doneTabs || [];
+    if (allDone.length > 0) {
+      const lastDoneIdx = Math.max(...allDone.map(t => tabOrder.indexOf(t)));
+      const nextIdx = lastDoneIdx + 1;
+      if (nextIdx < tabOrder.length) {
+        const nextTab = tabOrder[nextIdx];
+        const nextEl = document.querySelector(`[data-tab="${nextTab}"]`);
+        if (nextEl) { nextEl.classList.remove('locked'); nextEl.classList.add('active'); }
+        goTab(nextTab);
+      } else {
+        goTab(tabOrder[tabOrder.length - 1]);
+      }
+    }
+
+    updateProgress();
+  } catch(e) {}
+}
+
+function startOver() {
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
+}
+
+// Load saved progress on page load
+loadProgress();
+</script>
+</body>
+</html>

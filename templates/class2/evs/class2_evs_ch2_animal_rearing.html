@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — Lesson 2: Animal Rearing</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#e3f2fd 0%,#e8eaf6 100%);min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#0d47a1,#1565c0,#42a5f5);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(13,71,161,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:17px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0d47a1,#1976d2,#90caf9);padding:18px 20px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'🐄🐕🐈🐓';position:absolute;bottom:8px;left:0;right:0;font-size:30px;letter-spacing:20px;opacity:.3;animation:scrollEmoji 12s linear infinite;}
+@keyframes scrollEmoji{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);position:relative;z-index:10;}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#bbdefb;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#0d47a1,#42a5f5);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.unlocked{background:#fff;color:#1565c0;border-color:#90caf9;}
+.step-tab.active{background:#1565c0;color:#fff;border-color:#1565c0;box-shadow:0 4px 14px rgba(21,101,192,.5);}
+.step-tab.done{background:#e3f2fd;color:#0d47a1;border-color:#90caf9;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#0d47a1;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #1565c0;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#1565c0;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#0d47a1;font-size:15px;}
+
+/* ANIMAL GRID */
+.animal-grid{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.animal-grid-title{font-family:'Baloo 2',cursive;font-size:15px;color:#1565c0;font-weight:900;text-align:center;margin-bottom:12px;}
+.animal-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;justify-items:center;}
+.animal-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:16px;transition:transform .2s;}
+.animal-cell:hover{transform:scale(1.08);}
+.animal-cell .ae{font-size:36px;}
+.animal-cell .an{font-family:'Baloo 2',cursive;font-size:11px;font-weight:900;text-align:center;}
+
+/* SCENARIO CARDS */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#90caf9;background:#e3f2fd;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#1565c0;font-size:19px;}
+.scene-bottom{border-top:2px dashed #90caf9;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #90caf9;background:#e3f2fd;font-family:'Baloo 2',cursive;font-size:16px;color:#1565c0;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#1565c0;background:#bbdefb;color:#0d47a1;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#bbdefb;color:#0d47a1;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* BIG BUTTONS */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#0d47a1,#42a5f5);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #90caf9;}
+.info-strip p{font-size:14px;font-weight:800;color:#0d47a1;line-height:1.7;}
+
+/* RULE BOX */
+.rule-box{background:#fff;border:3px solid #1565c0;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#1565c0;font-weight:900;line-height:1.7;}
+
+/* STORY CARD */
+.story-card{background:linear-gradient(135deg,#fff8e1,#ffe082);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.1);border-left:6px solid #f9a825;}
+.story-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#f57f17;margin-bottom:8px;}
+.story-card p{font-size:13px;font-weight:800;color:#5d4037;line-height:1.9;}
+
+/* SECTION DIVIDER */
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#1565c0;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* COMPARE TABLE */
+.compare-wrap{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.compare-title{font-family:'Baloo 2',cursive;font-size:15px;color:#1565c0;font-weight:900;text-align:center;margin-bottom:10px;}
+.compare-row{display:flex;gap:10px;margin-bottom:10px;}
+.compare-col{flex:1;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:14px;padding:12px;text-align:center;}
+.compare-col.wild{background:linear-gradient(135deg,#fff3e0,#ffe0b2);}
+.compare-col-title{font-family:'Baloo 2',cursive;font-size:13px;font-weight:900;margin-bottom:6px;}
+.compare-tag{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:12px;font-weight:900;margin:3px;}
+
+/* USES CARD */
+.uses-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.uses-title{font-family:'Baloo 2',cursive;font-size:15px;color:#1565c0;font-weight:900;text-align:center;margin-bottom:10px;}
+.uses-item{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:6px 0;background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:14px;}
+.uses-emoji{font-size:28px;}
+.uses-text{font-family:'Baloo 2',cursive;font-size:13px;color:#0d47a1;font-weight:900;}
+
+/* RIDDLE */
+.riddle-card{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.riddle-text{font-family:'Baloo 2',cursive;font-size:14px;color:#4a148c;font-weight:900;line-height:1.8;text-align:center;font-style:italic;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#0d47a1;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#e3f2fd;border:3px solid #90caf9;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#1565c0;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#1565c0;background:#bbdefb;color:#0d47a1;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#bbdefb;color:#0d47a1;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* CELEB */
+.celeb-screen{position:fixed;inset:0;background:rgba(13,71,161,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#0d47a1;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🐄 EVS Lesson 2 — Animal Rearing</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🐄</span>
+  <h1>Class 2 EVS · Lesson 2</h1>
+  <p>ANIMAL REARING — Domestic & Wild Animals!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="story">📖 The Story</div>
+  <div class="step-tab locked" data-tab="domestic">🏡 Domestic Animals</div>
+  <div class="step-tab locked" data-tab="wild">🌲 Wild Animals</div>
+  <div class="step-tab locked" data-tab="caring">❤️ Caring for Animals</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: THE STORY ══════════════ -->
+<div class="tab-panel active" id="panel-story">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe082);">
+    <span class="banner-emoji">📖</span>
+    <div>
+      <div class="banner-title" style="color:#f57f17;">The Animal Meeting!</div>
+      <div class="banner-sub" style="color:#f9a825;">The Lion King called all animals for a meeting!</div>
+    </div>
+  </div>
+
+  <div class="story-card">
+    <h3>🦁 The King's Announcement</h3>
+    <p>🦁 <strong>Lion (King):</strong> "My daughter's birthday is next month! How should we celebrate it?"</p>
+    <p>🦌 <strong>Deer:</strong> "Oh King, there is a shortage of grass in the forest! There is no food. How can we celebrate?"</p>
+    <p>🐄 <strong>Cow:</strong> "We have no problem! Our owner gives us enough grass."</p>
+    <p>🐦 <strong>Sparrow:</strong> "We also don't have a problem. We get grains everywhere."</p>
+  </div>
+
+  <div class="story-card">
+    <h3>🐒 The Solution</h3>
+    <p>🐒 <strong>Monkey:</strong> "We stay in both forest and town. So we have no food problem!"</p>
+    <p>🦁 <strong>Lion:</strong> "Let us NOT celebrate this year. Let the rain come, let grass grow. Let everyone eat well. Next year, we will celebrate in grand scale!"</p>
+    <p>🎉 The wise king cared for ALL animals! 👑</p>
+  </div>
+
+  <div class="info-strip">
+    <p>🐄 <strong>Cow</strong> gets food from her <strong>owner</strong> (domestic animal). 🦌 <strong>Deer</strong> depends on the <strong>forest</strong> for grass (wild animal).</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="s1">
+    <div class="scene-top"><div class="scene-label">Question 1 of 5</div>
+    <div class="scene-sentence">Who is the <span class="kw">King</span> of the forest? 👑</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s1','lion','correct',this)"><span class="cb-emoji">🦁</span><span class="cb-word">Lion</span></div>
+        <div class="choice-btn" onclick="answer('s1','deer','wrong',this)"><span class="cb-emoji">🦌</span><span class="cb-word">Deer</span></div>
+        <div class="choice-btn" onclick="answer('s1','cow','wrong',this)"><span class="cb-emoji">🐄</span><span class="cb-word">Cow</span></div>
+      </div>
+      <div class="fb-box" id="fb-s1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="s2">
+    <div class="scene-top"><div class="scene-label">Question 2 of 5</div>
+    <div class="scene-sentence">Why was there no food for <span class="kw">forest animals</span>?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s2','no_grass','correct',this)"><span class="cb-emoji">🌾</span><span class="cb-word">No grass grew</span></div>
+        <div class="choice-btn" onclick="answer('s2','no_water','wrong',this)"><span class="cb-emoji">💧</span><span class="cb-word">No water</span></div>
+      </div>
+      <div class="fb-box" id="fb-s2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="s3">
+    <div class="scene-top"><div class="scene-label">Question 3 of 5</div>
+    <div class="scene-sentence">Who said "Our owner gives us grass"?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s3','cow','correct',this)"><span class="cb-emoji">🐄</span><span class="cb-word">Cow</span></div>
+        <div class="choice-btn" onclick="answer('s3','lion','wrong',this)"><span class="cb-emoji">🦁</span><span class="cb-word">Lion</span></div>
+      </div>
+      <div class="fb-box" id="fb-s3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="s4">
+    <div class="scene-top"><div class="scene-label">Question 4 of 5</div>
+    <div class="scene-sentence">What did the Lion King <span class="kw">decide</span>?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s4','no_celebrate','correct',this)"><span class="cb-emoji">⏳</span><span class="cb-word">Wait for next year</span></div>
+        <div class="choice-btn" onclick="answer('s4','celebrate','wrong',this)"><span class="cb-emoji">🎉</span><span class="cb-word">Celebrate anyway</span></div>
+      </div>
+      <div class="fb-box" id="fb-s4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="s5">
+    <div class="scene-top"><div class="scene-label">Question 5 of 5</div>
+    <div class="scene-sentence">Is the cow a <span class="kw">domestic</span> or <span class="kw">wild</span> animal?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s5','domestic','correct',this)"><span class="cb-emoji">🏡</span><span class="cb-word">Domestic</span></div>
+        <div class="choice-btn" onclick="answer('s5','wild','wrong',this)"><span class="cb-emoji">🌲</span><span class="cb-word">Wild</span></div>
+      </div>
+      <div class="fb-box" id="fb-s5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-story" disabled onclick="unlockNext('story','domestic')">Next: Domestic Animals! 🏡 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: DOMESTIC ANIMALS ══════════════ -->
+<div class="tab-panel" id="panel-domestic">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7);">
+    <span class="banner-emoji">🏡</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Domestic Animals</div>
+      <div class="banner-sub" style="color:#2e7d32;">Animals we rear at home!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🐄 What Are Domestic Animals?</h3>
+    <p>Animals that are <span class="hl">reared at home</span> are called <span class="hl">domestic animals</span>. 🏡</p>
+    <p>👉 We give them <span class="hl">food</span>, <span class="hl">water</span> and <span class="hl">shelter</span>.</p>
+    <p>👉 They give us useful things like <span class="hl">milk</span> 🥛, <span class="hl">eggs</span> 🥚, and <span class="hl">wool</span> 🧶.</p>
+    <p>👉 Some animals live in our house but we don't rear them — like <span class="hl">rats</span> 🐀, <span class="hl">lizards</span> 🦎, and <span class="hl">spiders</span> 🕷️!</p>
+  </div>
+
+  <div class="animal-grid">
+    <div class="animal-grid-title">🏡 Domestic Animals</div>
+    <div class="animal-row">
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐄</span><span class="an" style="color:#1b5e20;">Cow</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐃</span><span class="an" style="color:#1b5e20;">Buffalo</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐕</span><span class="an" style="color:#1b5e20;">Dog</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐈</span><span class="an" style="color:#1b5e20;">Cat</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐐</span><span class="an" style="color:#1b5e20;">Goat</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐑</span><span class="an" style="color:#1b5e20;">Sheep</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐓</span><span class="an" style="color:#1b5e20;">Hen</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);"><span class="ae">🐇</span><span class="an" style="color:#1b5e20;">Rabbit</span></div>
+    </div>
+  </div>
+
+  <div class="uses-card">
+    <div class="uses-title">🎁 What We Get from Domestic Animals</div>
+    <div class="uses-item"><span class="uses-emoji">🐄</span><span class="uses-text">Cow → Milk 🥛, Dung (fuel)</span></div>
+    <div class="uses-item"><span class="uses-emoji">🐃</span><span class="uses-text">Buffalo/Ox → Milk, Ploughing fields 🌾</span></div>
+    <div class="uses-item"><span class="uses-emoji">🐑</span><span class="uses-text">Sheep → Wool 🧶 for sweaters</span></div>
+    <div class="uses-item"><span class="uses-emoji">🐓</span><span class="uses-text">Hen → Eggs 🥚</span></div>
+    <div class="uses-item"><span class="uses-emoji">🐕</span><span class="uses-text">Dog → Guards our house 🏠</span></div>
+    <div class="uses-item"><span class="uses-emoji">🐈</span><span class="uses-text">Cat → Catches mice 🐀</span></div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="d1">
+    <div class="scene-top"><div class="scene-label">Question 1 of 5</div>
+    <div class="scene-sentence">Animals reared at home are called <span class="kw">______</span> animals.</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d1','domestic','correct',this)"><span class="cb-emoji">🏡</span><span class="cb-word">Domestic</span></div>
+        <div class="choice-btn" onclick="answer('d1','wild','wrong',this)"><span class="cb-emoji">🌲</span><span class="cb-word">Wild</span></div>
+      </div>
+      <div class="fb-box" id="fb-d1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="d2">
+    <div class="scene-top"><div class="scene-label">Question 2 of 5</div>
+    <div class="scene-sentence">🐑 What do we get from <span class="kw">sheep</span>?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d2','wool','correct',this)"><span class="cb-emoji">🧶</span><span class="cb-word">Wool</span></div>
+        <div class="choice-btn" onclick="answer('d2','eggs','wrong',this)"><span class="cb-emoji">🥚</span><span class="cb-word">Eggs</span></div>
+        <div class="choice-btn" onclick="answer('d2','milk','wrong',this)"><span class="cb-emoji">🥛</span><span class="cb-word">Milk</span></div>
+      </div>
+      <div class="fb-box" id="fb-d2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="d3">
+    <div class="scene-top"><div class="scene-label">Question 3 of 5</div>
+    <div class="scene-sentence">🐓 Hens give us <span class="kw">______</span>.</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d3','eggs','correct',this)"><span class="cb-emoji">🥚</span><span class="cb-word">Eggs</span></div>
+        <div class="choice-btn" onclick="answer('d3','wool','wrong',this)"><span class="cb-emoji">🧶</span><span class="cb-word">Wool</span></div>
+      </div>
+      <div class="fb-box" id="fb-d3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="d4">
+    <div class="scene-top"><div class="scene-label">Question 4 of 5</div>
+    <div class="scene-sentence">🐕 Dogs help us by <span class="kw">______</span> our house.</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d4','guarding','correct',this)"><span class="cb-emoji">🛡️</span><span class="cb-word">Guarding</span></div>
+        <div class="choice-btn" onclick="answer('d4','cooking','wrong',this)"><span class="cb-emoji">🍳</span><span class="cb-word">Cooking</span></div>
+      </div>
+      <div class="fb-box" id="fb-d4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="d5">
+    <div class="scene-top"><div class="scene-label">Question 5 of 5</div>
+    <div class="scene-sentence">Which of these lives in our house but is NOT reared?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d5','rat','correct',this)"><span class="cb-emoji">🐀</span><span class="cb-word">Rat</span></div>
+        <div class="choice-btn" onclick="answer('d5','dog','wrong',this)"><span class="cb-emoji">🐕</span><span class="cb-word">Dog</span></div>
+        <div class="choice-btn" onclick="answer('d5','cow','wrong',this)"><span class="cb-emoji">🐄</span><span class="cb-word">Cow</span></div>
+      </div>
+      <div class="fb-box" id="fb-d5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-domestic" disabled onclick="unlockNext('domestic','wild')">Next: Wild Animals! 🌲 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: WILD ANIMALS ══════════════ -->
+<div class="tab-panel" id="panel-wild">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🌲</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Wild Animals</div>
+      <div class="banner-sub" style="color:#ef6c00;">Animals that live freely in the forest!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🦁 What Are Wild Animals?</h3>
+    <p>Animals that live in the <span class="hl">forest</span> 🌲 are called <span class="hl">wild animals</span>.</p>
+    <p>👉 They find their own <span class="hl">food</span> and <span class="hl">shelter</span>.</p>
+    <p>👉 Nobody feeds them — they survive on their own!</p>
+    <p>👉 Lions 🦁, tigers 🐅, elephants 🐘, deer 🦌 — all are wild animals!</p>
+  </div>
+
+  <div class="animal-grid">
+    <div class="animal-grid-title">🌲 Wild Animals</div>
+    <div class="animal-row">
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🦁</span><span class="an" style="color:#e65100;">Lion</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🐅</span><span class="an" style="color:#e65100;">Tiger</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🐘</span><span class="an" style="color:#e65100;">Elephant</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🦌</span><span class="an" style="color:#e65100;">Deer</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🐍</span><span class="an" style="color:#e65100;">Snake</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🐒</span><span class="an" style="color:#e65100;">Monkey</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🐻</span><span class="an" style="color:#e65100;">Bear</span></div>
+      <div class="animal-cell" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);"><span class="ae">🦊</span><span class="an" style="color:#e65100;">Fox</span></div>
+    </div>
+  </div>
+
+  <div class="compare-wrap">
+    <div class="compare-title">🏡 vs 🌲 — Compare!</div>
+    <div class="compare-row">
+      <div class="compare-col">
+        <div class="compare-col-title" style="color:#1b5e20;">🏡 Domestic</div>
+        <span class="compare-tag" style="background:#e8f5e9;color:#1b5e20;">🐄 Cow</span>
+        <span class="compare-tag" style="background:#e8f5e9;color:#1b5e20;">🐕 Dog</span>
+        <span class="compare-tag" style="background:#e8f5e9;color:#1b5e20;">🐈 Cat</span>
+        <span class="compare-tag" style="background:#e8f5e9;color:#1b5e20;">🐑 Sheep</span>
+      </div>
+      <div class="compare-col wild">
+        <div class="compare-col-title" style="color:#e65100;">🌲 Wild</div>
+        <span class="compare-tag" style="background:#fff3e0;color:#e65100;">🦁 Lion</span>
+        <span class="compare-tag" style="background:#fff3e0;color:#e65100;">🐅 Tiger</span>
+        <span class="compare-tag" style="background:#fff3e0;color:#e65100;">🐍 Snake</span>
+        <span class="compare-tag" style="background:#fff3e0;color:#e65100;">🦌 Deer</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="riddle-card">
+    <h3 style="color:#4a148c;font-family:'Baloo 2',cursive;font-size:15px;margin-bottom:8px;">🎵 Riddle Time! Who Am I?</h3>
+    <div class="riddle-text">"Black body and a long tail,<br>I make a hole to creep away.<br>I fool the cat with my lightning speed!" 🐀</div>
+    <div style="text-align:center;margin-top:8px;font-family:'Baloo 2',cursive;color:#7b1fa2;font-size:14px;font-weight:900;">Answer: RAT! 🐀</div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="w1">
+    <div class="scene-top"><div class="scene-label">Question 1 of 5</div>
+    <div class="scene-sentence">Animals that live in the <span class="kw">forest</span> are called?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('w1','wild','correct',this)"><span class="cb-emoji">🌲</span><span class="cb-word">Wild animals</span></div>
+        <div class="choice-btn" onclick="answer('w1','domestic','wrong',this)"><span class="cb-emoji">🏡</span><span class="cb-word">Domestic animals</span></div>
+      </div>
+      <div class="fb-box" id="fb-w1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="w2">
+    <div class="scene-top"><div class="scene-label">Question 2 of 5</div>
+    <div class="scene-sentence">🐅 Is a Tiger <span class="kw">domestic</span> or <span class="kw">wild</span>?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('w2','wild','correct',this)"><span class="cb-emoji">🌲</span><span class="cb-word">Wild</span></div>
+        <div class="choice-btn" onclick="answer('w2','domestic','wrong',this)"><span class="cb-emoji">🏡</span><span class="cb-word">Domestic</span></div>
+      </div>
+      <div class="fb-box" id="fb-w2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="w3">
+    <div class="scene-top"><div class="scene-label">Question 3 of 5</div>
+    <div class="scene-sentence">Who finds their own food? 🥩</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('w3','wild','correct',this)"><span class="cb-emoji">🦁</span><span class="cb-word">Wild animals</span></div>
+        <div class="choice-btn" onclick="answer('w3','domestic','wrong',this)"><span class="cb-emoji">🐄</span><span class="cb-word">Domestic animals</span></div>
+      </div>
+      <div class="fb-box" id="fb-w3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="w4">
+    <div class="scene-top"><div class="scene-label">Question 4 of 5</div>
+    <div class="scene-sentence">Which is the odd one out? (Not wild)</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('w4','cow','correct',this)"><span class="cb-emoji">🐄</span><span class="cb-word">Cow</span></div>
+        <div class="choice-btn" onclick="answer('w4','lion','wrong',this)"><span class="cb-emoji">🦁</span><span class="cb-word">Lion</span></div>
+        <div class="choice-btn" onclick="answer('w4','deer','wrong',this)"><span class="cb-emoji">🦌</span><span class="cb-word">Deer</span></div>
+      </div>
+      <div class="fb-box" id="fb-w4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="w5">
+    <div class="scene-top"><div class="scene-label">Question 5 of 5</div>
+    <div class="scene-sentence">🐒 Monkeys can live in <span class="kw">both</span> forest and towns. True?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('w5','true','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">True!</span></div>
+        <div class="choice-btn" onclick="answer('w5','false','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-w5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-wild" disabled onclick="unlockNext('wild','caring')">Next: Caring for Animals! ❤️ ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 4: CARING FOR ANIMALS ══════════════ -->
+<div class="tab-panel" id="panel-caring">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">❤️</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Caring for Animals</div>
+      <div class="banner-sub" style="color:#ad1457;">We rear animals with love, not just for use!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🤗 Why Do We Rear Animals?</h3>
+    <p>We rear animals for their <span class="hl">uses</span> — milk, eggs, wool, guarding. But also to <span class="hl">love and pet</span> them! ❤️</p>
+    <p>👉 <strong>Kamala</strong> rears a <span class="hl">rabbit</span> 🐇 — she feeds it grass and pets it!</p>
+    <p>👉 <strong>Salim</strong> found a <span class="hl">pigeon</span> 🕊️ — he gives it grains and water!</p>
+    <p>👉 <strong>Lara</strong> has a pet <span class="hl">cat</span> 🐈 named Pintu — she gives him milk every day!</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">❤️ Animals are reared not only for <strong>use</strong> but also to <strong>love and pet</strong> them!<br>🏥 When animals fall ill, take them to the <strong>doctor</strong> (veterinarian)!</div>
+  </div>
+
+  <div class="info-strip">
+    <p>🛁 Keep domestic animals <strong>clean</strong>. 🥗 Give them proper <strong>food</strong>. 💊 Take them to a <strong>vet</strong> when sick. 🤗 Treat them with <strong>love</strong>!</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="c1">
+    <div class="scene-top"><div class="scene-label">Question 1 of 6</div>
+    <div class="scene-sentence">Why did Kamala rear a rabbit? 🐇</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('c1','love','correct',this)"><span class="cb-emoji">❤️</span><span class="cb-word">To love & pet it</span></div>
+        <div class="choice-btn" onclick="answer('c1','sell','wrong',this)"><span class="cb-emoji">💰</span><span class="cb-word">To sell it</span></div>
+      </div>
+      <div class="fb-box" id="fb-c1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="c2">
+    <div class="scene-top"><div class="scene-label">Question 2 of 6</div>
+    <div class="scene-sentence">When animals fall <span class="kw">ill</span>, we should take them to?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('c2','vet','correct',this)"><span class="cb-emoji">🏥</span><span class="cb-word">Doctor / Vet</span></div>
+        <div class="choice-btn" onclick="answer('c2','school','wrong',this)"><span class="cb-emoji">🏫</span><span class="cb-word">School</span></div>
+      </div>
+      <div class="fb-box" id="fb-c2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="c3">
+    <div class="scene-top"><div class="scene-label">Question 3 of 6</div>
+    <div class="scene-sentence">Should we give <span class="kw">food and water</span> to domestic animals?</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('c3','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes, always!</span></div>
+        <div class="choice-btn" onclick="answer('c3','no','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+      </div>
+      <div class="fb-box" id="fb-c3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="c4">
+    <div class="scene-top"><div class="scene-label">Question 4 of 6</div>
+    <div class="scene-sentence">Should we <span class="kw">beat</span> animals? 😢</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('c4','no','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">No, never!</span></div>
+        <div class="choice-btn" onclick="answer('c4','yes','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+      </div>
+      <div class="fb-box" id="fb-c4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="c5">
+    <div class="scene-top"><div class="scene-label">Question 5 of 6</div>
+    <div class="scene-sentence">What did Salim give to his pigeon? 🕊️</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('c5','grains','correct',this)"><span class="cb-emoji">🌾</span><span class="cb-word">Grains & water</span></div>
+        <div class="choice-btn" onclick="answer('c5','toys','wrong',this)"><span class="cb-emoji">🧸</span><span class="cb-word">Toys</span></div>
+      </div>
+      <div class="fb-box" id="fb-c5"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="c6">
+    <div class="scene-top"><div class="scene-label">Question 6 of 6</div>
+    <div class="scene-sentence">We should treat animals with <span class="kw">______</span>.</div></div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('c6','love','correct',this)"><span class="cb-emoji">❤️</span><span class="cb-word">Love & care</span></div>
+        <div class="choice-btn" onclick="answer('c6','anger','wrong',this)"><span class="cb-emoji">😡</span><span class="cb-word">Anger</span></div>
+      </div>
+      <div class="fb-box" id="fb-c6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-caring" disabled onclick="unlockNext('caring','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 5: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#90caf9);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">Final Quiz!</div>
+      <div class="banner-sub" style="color:#1565c0;">Let's see what you learned about Animal Rearing!</div>
+    </div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb1"><div class="quiz-num">Question 1 of 10</div>
+    <div class="quiz-question">Animals reared at home are called?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">🏡 Domestic</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🌲 Wild</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🦋 Insects</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🐦 Birds</div>
+    </div><div class="quiz-fb" id="qfb-qb1"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb2"><div class="quiz-num">Question 2 of 10</div>
+    <div class="quiz-question">🦁 Where does a lion live?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🌲 Forest</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🏡 House</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🏫 School</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🏪 Shop</div>
+    </div><div class="quiz-fb" id="qfb-qb2"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb3"><div class="quiz-num">Question 3 of 10</div>
+    <div class="quiz-question">🐑 What do we get from sheep?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🧶 Wool</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🥚 Eggs</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🥛 Milk</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🍯 Honey</div>
+    </div><div class="quiz-fb" id="qfb-qb3"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb4"><div class="quiz-num">Question 4 of 10</div>
+    <div class="quiz-question">🐕 Dogs help us by _____ our house.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">🛡️ Guarding</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🍳 Cooking</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">📖 Reading</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🎵 Singing</div>
+    </div><div class="quiz-fb" id="qfb-qb4"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb5"><div class="quiz-num">Question 5 of 10</div>
+    <div class="quiz-question">Which is NOT a domestic animal?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">🐅 Tiger</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🐄 Cow</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🐕 Dog</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🐑 Sheep</div>
+    </div><div class="quiz-fb" id="qfb-qb5"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb6"><div class="quiz-num">Question 6 of 10</div>
+    <div class="quiz-question">🐓 Hens give us ______.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">🥚 Eggs</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🧶 Wool</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🍯 Honey</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🧀 Cheese</div>
+    </div><div class="quiz-fb" id="qfb-qb6"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb7"><div class="quiz-num">Question 7 of 10</div>
+    <div class="quiz-question">We should treat animals with _____.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">❤️ Love</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">😡 Anger</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">😢 Sadness</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">😴 Ignore</div>
+    </div><div class="quiz-fb" id="qfb-qb7"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb8"><div class="quiz-num">Question 8 of 10</div>
+    <div class="quiz-question">Who is the King of the forest?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">🦁 Lion</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🐅 Tiger</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🐘 Elephant</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🐻 Bear</div>
+    </div><div class="quiz-fb" id="qfb-qb8"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb9"><div class="quiz-num">Question 9 of 10</div>
+    <div class="quiz-question">When a pet falls ill, we take it to a ____.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">🏥 Vet / Doctor</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🏫 School</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🏪 Market</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">🏖️ Beach</div>
+    </div><div class="quiz-fb" id="qfb-qb9"></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb10"><div class="quiz-num">Question 10 of 10</div>
+    <div class="quiz-question">🐀 Rats live in our house but are NOT reared. True?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">✅ True</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">❌ False</div>
+    </div><div class="quiz-fb" id="qfb-qb10"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 2!</button>
+</div>
+
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">Animal Expert!</div>
+  <div class="celeb-sub">You completed EVS Lesson 2 — Animal Rearing! 🎉<br>You know about domestic &amp; wild animals and how to care for them!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_evs_ch2_progress';
+let stars = 0;
+const tabOrder = ['story','domestic','wild','caring','quiz'];
+const tabDoneQ = {
+  story:    {done:0, total:5, btn:'btn-story'},
+  domestic: {done:0, total:5, btn:'btn-domestic'},
+  wild:     {done:0, total:5, btn:'btn-wild'},
+  caring:   {done:0, total:6, btn:'btn-caring'},
+};
+const cardTabMap = {
+  s1:'story',s2:'story',s3:'story',s4:'story',s5:'story',
+  d1:'domestic',d2:'domestic',d3:'domestic',d4:'domestic',d5:'domestic',
+  w1:'wild',w2:'wild',w3:'wild',w4:'wild',w5:'wild',
+  c1:'caring',c2:'caring',c3:'caring',c4:'caring',c5:'caring',c6:'caring',
+};
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId){document.querySelectorAll('.step-tab').forEach(t=>{t.classList.toggle('active',t.dataset.tab===tabId)});document.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.id==='panel-'+tabId)});updateProgress();}
+document.querySelectorAll('.step-tab').forEach(tab=>{tab.addEventListener('click',()=>{if(tab.classList.contains('locked')){tab.classList.add('shaking');setTimeout(()=>tab.classList.remove('shaking'),520);showToast('🔒 Finish the previous step first!');return;}document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');goTab(tab.dataset.tab);});});
+function unlockNext(currentTab,nextTab){const btn=document.querySelector(`[data-tab="${currentTab}"]`);if(btn){btn.classList.remove('active');btn.classList.add('done');}const next=document.querySelector(`[data-tab="${nextTab}"]`);if(next){next.classList.remove('locked');next.classList.add('active');}document.querySelectorAll('.step-tab').forEach(t=>{if(t.dataset.tab!==nextTab&&!t.classList.contains('done'))t.classList.remove('active');});goTab(nextTab);window.scrollTo({top:0,behavior:'smooth'});addStars(3);}
+function updateProgress(){const doneCount=document.querySelectorAll('.step-tab.done').length;const pct=Math.round((doneCount/tabOrder.length)*100);document.getElementById('progFill').style.width=pct+'%';const labels=['Start with Step 1! 👇','Great! Keep going! 💪','Halfway there! 🔥','Almost done! 🚀','Nearly finished! ⚡','Lesson Complete! 🎉'];document.getElementById('progLabel').textContent=labels[doneCount]||labels[0];}
+function answer(cardId,choice,result,btnEl){const card=document.getElementById(cardId);if(card.dataset.done)return;const btns=card.querySelectorAll('.choice-btn');const fb=document.getElementById('fb-'+cardId);if(result==='correct'){card.dataset.done='1';card.classList.add('done');btns.forEach(b=>b.classList.add('locked-choice'));btnEl.classList.add('correct');fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';addStars(1);const tab=cardTabMap[cardId];if(tab){tabDoneQ[tab].done++;if(tabDoneQ[tab].done>=tabDoneQ[tab].total){document.getElementById(tabDoneQ[tab].btn).disabled=false;}}}else{btnEl.classList.add('wrong');fb.className='fb-box no';fb.textContent='❌ Try again! You can do it! 💪';setTimeout(()=>{btnEl.classList.remove('wrong');fb.style.display='none';},1500);}}
+function quizAns(boxId,btn,result){const box=document.getElementById(boxId);if(box.dataset.done)return;const opts=box.querySelectorAll('.quiz-opt');const fb=document.getElementById('qfb-'+boxId);if(result==='correct'){box.dataset.done='1';opts.forEach(o=>o.style.pointerEvents='none');btn.classList.add('right');fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';addStars(1);quizDone++;if(quizDone>=QUIZ_TOTAL){document.getElementById('btn-quiz').disabled=false;}}else{btn.classList.add('wrong');fb.className='quiz-fb no';fb.textContent='❌ Try again! 💪';setTimeout(()=>{btn.classList.remove('wrong');fb.style.display='none';},1500);}}
+function addStars(n){stars+=n;document.getElementById('starsNum').textContent=stars;saveProgress();}
+function showToast(msg){const t=document.getElementById('lockToast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showCelebration(){const s=document.getElementById('celebScreen');s.classList.add('show');const starStr=stars>=30?'⭐⭐⭐':stars>=18?'⭐⭐':'⭐';document.getElementById('celebStars').textContent=starStr;addStars(5);}
+
+function saveProgress(){try{const state={stars,quizDone,tabDoneQ:JSON.parse(JSON.stringify(tabDoneQ)),doneCards:[],doneTabs:[],doneQuizBoxes:[]};document.querySelectorAll('.scenario-card[data-done]').forEach(c=>state.doneCards.push(c.id));document.querySelectorAll('.step-tab.done').forEach(t=>state.doneTabs.push(t.dataset.tab));document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q=>state.doneQuizBoxes.push(q.id));localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){}}
+function loadProgress(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;const state=JSON.parse(raw);stars=state.stars||0;quizDone=state.quizDone||0;document.getElementById('starsNum').textContent=stars;if(state.tabDoneQ)Object.keys(state.tabDoneQ).forEach(k=>{if(tabDoneQ[k])tabDoneQ[k].done=state.tabDoneQ[k].done;});(state.doneCards||[]).forEach(id=>{const card=document.getElementById(id);if(!card)return;card.dataset.done='1';card.classList.add('done');card.querySelectorAll('.choice-btn').forEach(b=>b.classList.add('locked-choice'));card.querySelectorAll('.choice-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'correct'"))b.classList.add('correct');});const fb=document.getElementById('fb-'+id);if(fb){fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';}});(state.doneQuizBoxes||[]).forEach(id=>{const box=document.getElementById(id);if(!box)return;box.dataset.done='1';box.querySelectorAll('.quiz-opt').forEach(o=>{o.style.pointerEvents='none';if(o.getAttribute('onclick')&&o.getAttribute('onclick').includes("'correct'"))o.classList.add('right');});const fb=document.getElementById('qfb-'+id);if(fb){fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';}});(state.doneTabs||[]).forEach(tabId=>{const tab=document.querySelector(`[data-tab="${tabId}"]`);if(tab){tab.classList.remove('active','locked');tab.classList.add('done');}});Object.keys(tabDoneQ).forEach(k=>{if(tabDoneQ[k].done>=tabDoneQ[k].total){const btn=document.getElementById(tabDoneQ[k].btn);if(btn)btn.disabled=false;}});if(quizDone>=QUIZ_TOTAL){const btn=document.getElementById('btn-quiz');if(btn)btn.disabled=false;}const allDone=state.doneTabs||[];if(allDone.length>0){const lastDoneIdx=Math.max(...allDone.map(t=>tabOrder.indexOf(t)));const nextIdx=lastDoneIdx+1;if(nextIdx<tabOrder.length){const nextTab=tabOrder[nextIdx];const nextEl=document.querySelector(`[data-tab="${nextTab}"]`);if(nextEl){nextEl.classList.remove('locked');nextEl.classList.add('active');}goTab(nextTab);}else{goTab(tabOrder[tabOrder.length-1]);}}updateProgress();}catch(e){}}
+function startOver(){localStorage.removeItem(SAVE_KEY);location.reload();}
+loadProgress();
+</script>
+</body>
+</html>

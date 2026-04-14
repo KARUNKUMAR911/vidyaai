@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 Maths — Lesson 8: Money</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:#f0fff4;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#1b5e20,#388e3c,#81c784);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(27,94,32,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:18px;color:#fff;font-weight:900;}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#1b5e20,#388e3c,#a5d6a7);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:24px;color:#fff;margin-bottom:4px;line-height:1.2;}
+.hero p{font-size:13px;color:rgba(255,255,255,.9);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#1b5e20,#81c784);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.unlocked{background:#fff;color:#388e3c;border-color:#a5d6a7;}
+.step-tab.active{background:#388e3c;color:#fff;border-color:#388e3c;box-shadow:0 4px 14px rgba(56,142,60,.5);}
+.step-tab.done{background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1b5e20;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #388e3c;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#388e3c;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#388e3c;font-size:15px;}
+
+/* THINK CLOUD */
+.think-cloud{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:3px dashed #81c784;border-radius:20px;padding:14px 16px;margin:12px 0;text-align:center;}
+.think-cloud .cloud-title{font-family:'Baloo 2',cursive;font-size:15px;color:#388e3c;margin-bottom:6px;}
+.think-cloud .cloud-math{font-family:'Baloo 2',cursive;font-size:26px;color:#1b5e20;font-weight:900;line-height:1.6;}
+.think-cloud .cloud-step{font-size:13px;font-weight:800;color:#666;margin-top:4px;}
+
+/* COIN DISPLAY ROW */
+.coin-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0;}
+.coin-box{background:#fff;border:3px solid #a5d6a7;border-radius:16px;padding:10px 8px;text-align:center;min-width:72px;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.coin-emoji{font-size:32px;display:block;margin-bottom:4px;}
+.coin-val{font-family:'Baloo 2',cursive;font-size:13px;color:#388e3c;font-weight:900;}
+.coin-type{font-size:11px;color:#777;font-weight:800;}
+
+/* STORY STRIP */
+.story-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.story-panel{background:#fff;border-radius:16px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);border:2px solid #c8e6c9;}
+.story-panel .s-num{font-family:'Baloo 2',cursive;font-size:11px;color:#aaa;font-weight:900;margin-bottom:4px;}
+.story-panel .s-emoji{font-size:36px;margin-bottom:4px;display:block;}
+.story-panel .s-text{font-size:12px;font-weight:800;color:#444;line-height:1.4;}
+.story-panel .s-money{font-family:'Baloo 2',cursive;font-size:18px;color:#1b5e20;font-weight:900;}
+
+/* SCENARIO / CHOICE CARDS */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#a5d6a7;background:#f1f8e9;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#388e3c;font-size:19px;}
+.scene-bottom{border-top:2px dashed #a5d6a7;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #a5d6a7;background:#e8f5e9;font-family:'Baloo 2',cursive;font-size:18px;color:#388e3c;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:13px;font-weight:900;}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* BIG BUTTONS */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#1b5e20,#81c784);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* RULE BOX */
+.rule-box{background:#fff;border:3px solid #388e3c;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#388e3c;font-weight:900;line-height:1.6;}
+
+/* SECTION DIVIDER */
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#388e3c;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#aaa;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:20px;color:#388e3c;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#e8f5e9;border:3px solid #a5d6a7;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:22px;color:#388e3c;user-select:none;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #a5d6a7;}
+.info-strip p{font-size:14px;font-weight:800;color:#1b5e20;line-height:1.7;}
+
+/* MATCH GRID */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.match-item{background:#fff;border:3px solid #a5d6a7;border-radius:16px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:15px;color:#388e3c;font-weight:900;user-select:none;}
+.match-item:active{transform:scale(.93);}
+.match-item.selected{background:#388e3c;color:#fff;border-color:#388e3c;}
+.match-item.matched{background:#c8e6c9;border-color:#2e7d32;color:#1b5e20;pointer-events:none;}
+.match-item.wrong-match{background:#ffcdd2;border-color:#c62828;color:#c62828;}
+
+/* AMOUNT ADDER */
+.amount-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
+.amt-chip{background:#fff;border:3px solid #a5d6a7;border-radius:14px;padding:10px 14px;font-family:'Baloo 2',cursive;font-size:18px;color:#388e3c;cursor:pointer;transition:all .2s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.amt-chip:active{transform:scale(.9);}
+.amt-chip.picked{background:#388e3c;color:#fff;border-color:#388e3c;}
+.amt-display{background:#fff3;border:3px solid #2e7d32;border-radius:18px;padding:16px;text-align:center;margin:10px 0;}
+.amt-display .amt-num{font-family:'Baloo 2',cursive;font-size:42px;color:#1b5e20;font-weight:900;}
+.amt-display .amt-label{font-size:13px;font-weight:800;color:#555;}
+
+/* CELEBRATE */
+.celeb-screen{position:fixed;inset:0;background:rgba(27,94,32,.95);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-emoji{font-size:88px;margin-bottom:8px;animation:heroFloat 2s ease-in-out infinite;}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:30px;color:#fff;margin-bottom:6px;}
+.celeb-sub{font-size:15px;color:rgba(255,255,255,.9);font-weight:800;margin-bottom:6px;text-align:center;padding:0 30px;}
+.celeb-stars{font-size:28px;margin-bottom:24px;}
+.celeb-btn{background:#fff;color:#1b5e20;font-family:'Baloo 2',cursive;font-size:19px;padding:14px 36px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+
+/* TRANSACTION CARD */
+.transaction-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid #c8e6c9;}
+.transaction-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#388e3c;margin-bottom:10px;}
+.trans-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.trans-label{font-size:13px;font-weight:900;color:#555;min-width:70px;}
+.trans-val{font-family:'Baloo 2',cursive;font-size:20px;color:#1b5e20;font-weight:900;}
+.trans-result{font-family:'Baloo 2',cursive;font-size:22px;color:#388e3c;font-weight:900;background:#e8f5e9;border-radius:12px;padding:6px 14px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">💰 Maths · Class 2</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">💰</span>
+  <h1>Lesson 8: Money</h1>
+  <p>Tap to choose · No typing needed!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"  data-tab="intro">💰 Step 1</div>
+  <div class="step-tab locked"  data-tab="coins">🪙 Step 2</div>
+  <div class="step-tab locked"  data-tab="making">🤝 Step 3</div>
+  <div class="step-tab locked"  data-tab="addsubtract">➕➖ Step 4</div>
+  <div class="step-tab locked"  data-tab="quiz">🏆 Step 5</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════ TAB 1: INTRO ══════════════════ -->
+<div class="tab-panel active" id="panel-intro">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">💰</div>
+    <div>
+      <div class="banner-title" style="color:#388e3c;">What is Money?</div>
+      <div class="banner-sub" style="color:#1b5e20;">Learn what money is and why we need it!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🛒 Do we need money to buy things?</h3>
+    <p><span class="hl">Yes!</span> We need money to buy things.<br><br>
+    Money comes in two forms:<br>
+    🪙 <span class="hl">Coins</span> — made of <span class="hl">metal</span><br>
+    📄 <span class="hl">Currency Notes</span> — made of <span class="hl">paper</span><br><br>
+    The <span class="hl">value</span> of a coin or note is <span class="hl">written on it</span>.</p>
+  </div>
+
+  <div class="info-strip">
+    <p>💡 <span style="color:#1b5e20;">Our currency notes are made of <b>paper</b>.</span><br>
+       💡 <span style="color:#1b5e20;">Coins are made of <b>metal</b>.</span><br>
+       💡 <span style="color:#1b5e20;">The value of a coin or note is <b>written on it</b>.</span></p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">₹ — This is the <span style="font-size:20px;">Symbol of Rupee</span>!<br>
+    <span style="font-size:14px;color:#1b5e20;">1 Rupee = 100 Paise</span></div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🪙 Coins we use</h3>
+    <p>We use: <span class="hl">50 Paise · ₹1 · ₹2 · ₹5 · ₹10</span> coins<br><br>
+    <span class="hl">1 Rupee, 2 Rupees, 5 Rupees</span> and <span class="hl">10 Rupees</span> are available <span class="hl">both in coins and notes</span>!</p>
+  </div>
+
+  <div class="coin-row">
+    <div class="coin-box"><span class="coin-emoji">🪙</span><div class="coin-val">50p</div><div class="coin-type">Paise</div></div>
+    <div class="coin-box"><span class="coin-emoji">🪙</span><div class="coin-val">₹1</div><div class="coin-type">Coin</div></div>
+    <div class="coin-box"><span class="coin-emoji">🪙</span><div class="coin-val">₹2</div><div class="coin-type">Coin</div></div>
+    <div class="coin-box"><span class="coin-emoji">🪙</span><div class="coin-val">₹5</div><div class="coin-type">Coin</div></div>
+    <div class="coin-box"><span class="coin-emoji">🪙</span><div class="coin-val">₹10</div><div class="coin-type">Coin</div></div>
+  </div>
+
+  <div class="teach-card">
+    <h3>📄 Notes we use</h3>
+    <p>We use: <span class="hl">₹2 · ₹5 · ₹10 · ₹20 · ₹50</span> notes<br><br>
+    After studying this lesson you will:<br>
+    ✅ Recognise the <span class="hl">coins and currency notes</span><br>
+    ✅ Arrange different coins and notes for amounts up to <span class="hl">₹50</span><br>
+    ✅ <span class="hl">Add and subtract</span> small amounts mentally<br>
+    ✅ Do <span class="hl">transactions</span> using 3 to 4 notes</p>
+  </div>
+
+  <div class="section-divider">── TAP THE CORRECT ANSWER ──</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="qi1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 4</div>
+      <div class="scene-sentence">What are <span class="kw">coins</span> made of?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qi1','A','wrong')"><div class="cb-emoji">📄</div><div class="cb-word">Paper</div></div>
+        <div class="choice-btn" onclick="answer('qi1','B','correct')"><div class="cb-emoji">🔩</div><div class="cb-word">Metal</div></div>
+        <div class="choice-btn" onclick="answer('qi1','C','wrong')"><div class="cb-emoji">🪵</div><div class="cb-word">Wood</div></div>
+      </div>
+      <div class="fb-box" id="fb-qi1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="qi2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 4</div>
+      <div class="scene-sentence">Currency <span class="kw">notes</span> are made of?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qi2','A','correct')"><div class="cb-emoji">📄</div><div class="cb-word">Paper</div></div>
+        <div class="choice-btn" onclick="answer('qi2','B','wrong')"><div class="cb-emoji">🔩</div><div class="cb-word">Metal</div></div>
+        <div class="choice-btn" onclick="answer('qi2','C','wrong')"><div class="cb-emoji">🧱</div><div class="cb-word">Stone</div></div>
+      </div>
+      <div class="fb-box" id="fb-qi2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="qi3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 4</div>
+      <div class="scene-sentence">How many Paise make <span class="kw">1 Rupee</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qi3','A','wrong')"><div class="cb-emoji">5️⃣0️⃣</div><div class="cb-word">50</div></div>
+        <div class="choice-btn" onclick="answer('qi3','B','wrong')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">10</div></div>
+        <div class="choice-btn" onclick="answer('qi3','C','correct')"><div class="cb-emoji">💯</div><div class="cb-word">100</div></div>
+      </div>
+      <div class="fb-box" id="fb-qi3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="qi4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 4</div>
+      <div class="scene-sentence">What is the <span class="kw">symbol</span> of Rupee?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qi4','A','wrong')"><div class="cb-emoji">💲</div><div class="cb-word">$</div></div>
+        <div class="choice-btn" onclick="answer('qi4','B','correct')"><div class="cb-emoji">💚</div><div class="cb-word">₹</div></div>
+        <div class="choice-btn" onclick="answer('qi4','C','wrong')"><div class="cb-emoji">€</div><div class="cb-word">€</div></div>
+      </div>
+      <div class="fb-box" id="fb-qi4"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-intro" disabled onclick="unlockNext('intro','coins')">Next Step 🪙 →</button>
+</div>
+
+<!-- ══════════════════ TAB 2: COINS & NOTES ══════════════════ -->
+<div class="tab-panel" id="panel-coins">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🪙</div>
+    <div>
+      <div class="banner-title" style="color:#388e3c;">Identify Coins &amp; Notes!</div>
+      <div class="banner-sub" style="color:#1b5e20;">Which coin or note is which? Tap the right answer!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🪙 Different Coins we have</h3>
+    <p>🔸 <span class="hl">50 Paise</span> coin — the smallest value coin<br>
+    🔸 <span class="hl">₹1 Rupee</span> coin<br>
+    🔸 <span class="hl">₹2 Rupees</span> coin<br>
+    🔸 <span class="hl">₹5 Rupees</span> coin<br>
+    🔸 <span class="hl">₹10 Rupees</span> coin — the biggest coin value</p>
+  </div>
+
+  <div class="teach-card">
+    <h3>📄 Different Notes we have</h3>
+    <p>📗 <span class="hl">₹2 Rupees</span> note<br>
+    📗 <span class="hl">₹5 Rupees</span> note<br>
+    📗 <span class="hl">₹10 Rupees</span> note<br>
+    📗 <span class="hl">₹20 Rupees</span> note<br>
+    📗 <span class="hl">₹50 Rupees</span> note</p>
+  </div>
+
+  <div class="info-strip">
+    <p>🌟 <b>Remember!</b><br>
+    ₹1, ₹2, ₹5 and ₹10 are available <b>both in coins AND notes!</b></p>
+  </div>
+
+  <div class="section-divider">── IDENTIFY THE VALUE ──</div>
+
+  <!-- C1 -->
+  <div class="scenario-card" id="qc1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">🪙 A small coin says <span class="kw">50</span> on it. What is its value?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qc1','A','wrong')"><div class="cb-emoji">💰</div><div class="cb-word">50 Rupees</div></div>
+        <div class="choice-btn" onclick="answer('qc1','B','correct')"><div class="cb-emoji">🪙</div><div class="cb-word">50 Paise</div></div>
+        <div class="choice-btn" onclick="answer('qc1','C','wrong')"><div class="cb-emoji">5️⃣</div><div class="cb-word">5 Rupees</div></div>
+      </div>
+      <div class="fb-box" id="fb-qc1"></div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="scenario-card" id="qc2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">📄 A <span class="kw">green paper note</span> has the number 20 written on it. What note is it?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qc2','A','wrong')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10 Note</div></div>
+        <div class="choice-btn" onclick="answer('qc2','B','correct')"><div class="cb-emoji">2️⃣0️⃣</div><div class="cb-word">₹20 Note</div></div>
+        <div class="choice-btn" onclick="answer('qc2','C','wrong')"><div class="cb-emoji">2️⃣</div><div class="cb-word">₹2 Note</div></div>
+      </div>
+      <div class="fb-box" id="fb-qc2"></div>
+    </div>
+  </div>
+
+  <!-- C3 -->
+  <div class="scenario-card" id="qc3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Which is the <span class="kw">highest value note</span> we learn in this lesson?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qc3','A','wrong')"><div class="cb-emoji">2️⃣0️⃣</div><div class="cb-word">₹20</div></div>
+        <div class="choice-btn" onclick="answer('qc3','B','correct')"><div class="cb-emoji">5️⃣0️⃣</div><div class="cb-word">₹50</div></div>
+        <div class="choice-btn" onclick="answer('qc3','C','wrong')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+      </div>
+      <div class="fb-box" id="fb-qc3"></div>
+    </div>
+  </div>
+
+  <!-- C4 -->
+  <div class="scenario-card" id="qc4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">🪙 <span class="kw">₹5 Rupees</span> is available in which form?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qc4','A','wrong')"><div class="cb-emoji">📄</div><div class="cb-word">Note only</div></div>
+        <div class="choice-btn" onclick="answer('qc4','B','wrong')"><div class="cb-emoji">🪙</div><div class="cb-word">Coin only</div></div>
+        <div class="choice-btn" onclick="answer('qc4','C','correct')"><div class="cb-emoji">🪙📄</div><div class="cb-word">Both!</div></div>
+      </div>
+      <div class="fb-box" id="fb-qc4"></div>
+    </div>
+  </div>
+
+  <!-- C5 -->
+  <div class="scenario-card" id="qc5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">Which of these is <span class="kw">NOT</span> a coin value?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qc5','A','wrong')"><div class="cb-emoji">🪙</div><div class="cb-word">₹2</div></div>
+        <div class="choice-btn" onclick="answer('qc5','B','correct')"><div class="cb-emoji">📄</div><div class="cb-word">₹50</div></div>
+        <div class="choice-btn" onclick="answer('qc5','C','wrong')"><div class="cb-emoji">🪙</div><div class="cb-word">₹1</div></div>
+      </div>
+      <div class="fb-box" id="fb-qc5"></div>
+    </div>
+  </div>
+
+  <!-- C6 -->
+  <div class="scenario-card" id="qc6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">The value written on a coin is called its <span class="kw">Face Value</span>. A coin has "2" written on it. What is its face value?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qc6','A','wrong')"><div class="cb-emoji">1️⃣</div><div class="cb-word">₹1</div></div>
+        <div class="choice-btn" onclick="answer('qc6','B','correct')"><div class="cb-emoji">2️⃣</div><div class="cb-word">₹2</div></div>
+        <div class="choice-btn" onclick="answer('qc6','C','wrong')"><div class="cb-emoji">5️⃣</div><div class="cb-word">₹5</div></div>
+      </div>
+      <div class="fb-box" id="fb-qc6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-coins" disabled onclick="unlockNext('coins','making')">Next Step 🤝 →</button>
+</div>
+
+<!-- ══════════════════ TAB 3: MAKING AMOUNTS ══════════════════ -->
+<div class="tab-panel" id="panel-making">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🤝</div>
+    <div>
+      <div class="banner-title" style="color:#388e3c;">Making Amounts with Notes &amp; Coins!</div>
+      <div class="banner-sub" style="color:#1b5e20;">Arrange coins and notes to make the right amount!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>💡 How do we make ₹6?</h3>
+    <p>We can use <span class="hl">₹1, ₹2 and ₹5</span> coins only!<br><br>
+    Example: <span class="hl">₹2 + ₹2 + ₹2 = ₹6</span> ✅<br>
+    Or: <span class="hl">₹5 + ₹1 = ₹6</span> ✅<br>
+    Or: <span class="hl">₹2 + ₹2 + ₹1 + ₹1 = ₹6</span> ✅</p>
+  </div>
+
+  <div class="think-cloud">
+    <div class="cloud-title">🧠 Making ₹20 using ₹10 and ₹5</div>
+    <div class="cloud-math">₹10 + ₹10 = ₹20 ✅<br>₹10 + ₹5 + ₹5 = ₹20 ✅<br>₹5 + ₹5 + ₹5 + ₹5 = ₹20 ✅</div>
+  </div>
+
+  <div class="teach-card">
+    <h3>💡 Making ₹50 using ₹20 and ₹10</h3>
+    <p>Option 1: <span class="hl">₹20 + ₹20 + ₹10 = ₹50</span> ✅<br>
+    Option 2: <span class="hl">₹20 + ₹10 + ₹10 + ₹10 = ₹50</span> ✅</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">🧮 Count the notes and coins<br>and <span style="font-size:18px;">add them up</span> to find the total!</div>
+  </div>
+
+  <div class="section-divider">── HOW MANY NOTES? ──</div>
+
+  <!-- M1 -->
+  <div class="scenario-card" id="qm1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">₹5 notes</span> make ₹10?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qm1','A','wrong')"><div class="cb-emoji">1️⃣</div><div class="cb-word">1</div></div>
+        <div class="choice-btn" onclick="answer('qm1','B','correct')"><div class="cb-emoji">2️⃣</div><div class="cb-word">2</div></div>
+        <div class="choice-btn" onclick="answer('qm1','C','wrong')"><div class="cb-emoji">3️⃣</div><div class="cb-word">3</div></div>
+      </div>
+      <div class="fb-box" id="fb-qm1"></div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="scenario-card" id="qm2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">₹10 notes</span> make ₹30?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qm2','A','wrong')"><div class="cb-emoji">2️⃣</div><div class="cb-word">2</div></div>
+        <div class="choice-btn" onclick="answer('qm2','B','correct')"><div class="cb-emoji">3️⃣</div><div class="cb-word">3</div></div>
+        <div class="choice-btn" onclick="answer('qm2','C','wrong')"><div class="cb-emoji">4️⃣</div><div class="cb-word">4</div></div>
+      </div>
+      <div class="fb-box" id="fb-qm2"></div>
+    </div>
+  </div>
+
+  <!-- M3 -->
+  <div class="scenario-card" id="qm3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">₹1 coins</span> make ₹5?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qm3','A','wrong')"><div class="cb-emoji">4️⃣</div><div class="cb-word">4</div></div>
+        <div class="choice-btn" onclick="answer('qm3','B','correct')"><div class="cb-emoji">5️⃣</div><div class="cb-word">5</div></div>
+        <div class="choice-btn" onclick="answer('qm3','C','wrong')"><div class="cb-emoji">6️⃣</div><div class="cb-word">6</div></div>
+      </div>
+      <div class="fb-box" id="fb-qm3"></div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="scenario-card" id="qm4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">How many <span class="kw">₹20 notes</span> make ₹40?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qm4','A','wrong')"><div class="cb-emoji">1️⃣</div><div class="cb-word">1</div></div>
+        <div class="choice-btn" onclick="answer('qm4','B','correct')"><div class="cb-emoji">2️⃣</div><div class="cb-word">2</div></div>
+        <div class="choice-btn" onclick="answer('qm4','C','wrong')"><div class="cb-emoji">3️⃣</div><div class="cb-word">3</div></div>
+      </div>
+      <div class="fb-box" id="fb-qm4"></div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="scenario-card" id="qm5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">Priya has one <span class="kw">₹20 note</span> and one <span class="kw">₹10 note</span>. How much total money does she have?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qm5','A','wrong')"><div class="cb-emoji">2️⃣5️⃣</div><div class="cb-word">₹25</div></div>
+        <div class="choice-btn" onclick="answer('qm5','B','correct')"><div class="cb-emoji">3️⃣0️⃣</div><div class="cb-word">₹30</div></div>
+        <div class="choice-btn" onclick="answer('qm5','C','wrong')"><div class="cb-emoji">2️⃣0️⃣</div><div class="cb-word">₹20</div></div>
+      </div>
+      <div class="fb-box" id="fb-qm5"></div>
+    </div>
+  </div>
+
+  <!-- M6 -->
+  <div class="scenario-card" id="qm6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">A teddy bear costs <span class="kw">₹25</span>. Ravi has one ₹20 note and one ₹5 note. Can he buy it?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qm6','A','correct')"><div class="cb-emoji">✅</div><div class="cb-word">Yes! ₹20+₹5=₹25</div></div>
+        <div class="choice-btn" onclick="answer('qm6','B','wrong')"><div class="cb-emoji">❌</div><div class="cb-word">No! Not enough</div></div>
+      </div>
+      <div class="fb-box" id="fb-qm6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-making" disabled onclick="unlockNext('making','addsubtract')">Next Step ➕➖ →</button>
+</div>
+
+<!-- ══════════════════ TAB 4: ADD & SUBTRACT MONEY ══════════════════ -->
+<div class="tab-panel" id="panel-addsubtract">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">➕➖</div>
+    <div>
+      <div class="banner-title" style="color:#388e3c;">Add &amp; Subtract Money!</div>
+      <div class="banner-sub" style="color:#1b5e20;">Mental addition and subtraction of small amounts!</div>
+    </div>
+  </div>
+
+  <!-- Story panels from PDF -->
+  <div class="teach-card">
+    <h3>🍫 The Chocolate Story</h3>
+    <p>A girl asked her <span class="hl">Mom</span> for money to buy chocolate.<br><br>
+    Mom gave her three <span class="hl">₹5 notes</span>.<br>
+    She counted: <span class="hl">₹5 + ₹5 + ₹5 = ₹15</span><br><br>
+    At the shop: one chocolate costs <span class="hl">₹4</span>.<br>
+    She bought <span class="hl">3 chocolates</span>: ₹4 × 3 = <span class="hl">₹12</span><br><br>
+    She paid <span class="hl">₹12</span> and got <span class="hl">₹3 change</span> back!<br>
+    ₹15 − ₹12 = <span class="hl">₹3 remaining</span> ✅</p>
+  </div>
+
+  <div class="story-strip">
+    <div class="story-panel">
+      <div class="s-num">1. Mom gives money</div>
+      <span class="s-emoji">👩</span>
+      <div class="s-text">Take this money and buy the chocolate!</div>
+    </div>
+    <div class="story-panel">
+      <div class="s-num">2. Counting money</div>
+      <span class="s-emoji">👧</span>
+      <div class="s-money">₹5+₹5+₹5=₹15</div>
+    </div>
+    <div class="story-panel">
+      <div class="s-num">3. At the shop</div>
+      <span class="s-emoji">🏪</span>
+      <div class="s-text">One chocolate = ₹4<br>3 chocolates = ₹12</div>
+    </div>
+    <div class="story-panel">
+      <div class="s-num">4. Change received</div>
+      <span class="s-emoji">💚</span>
+      <div class="s-money">₹15 − ₹12 = ₹3</div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">💡 Money Spent + Change = Money You Had<br>
+    <span style="font-size:14px;color:#1b5e20;">₹12 + ₹3 = ₹15 ✅</span></div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🛒 Transaction using 3-4 Notes</h3>
+    <p>In a <span class="hl">transaction</span> (buying something):<br><br>
+    💸 You give money to the <span class="hl">shopkeeper</span><br>
+    💵 The shopkeeper gives you <span class="hl">change</span> back<br><br>
+    Example: You have <span class="hl">₹30</span>. You buy two items:<br>
+    🥭 Mango = <span class="hl">₹6</span><br>
+    📓 Notebook = <span class="hl">₹12</span><br>
+    Total spent = <span class="hl">₹18</span><br>
+    Change = ₹30 − ₹18 = <span class="hl">₹12</span> ✅</p>
+  </div>
+
+  <div class="section-divider">── TAP THE CORRECT ANSWER ──</div>
+
+  <!-- AS1 -->
+  <div class="scenario-card" id="qas1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">Ravi has <span class="kw">₹20</span> and spends <span class="kw">₹5</span> on a ball. How much is left?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qas1','A','wrong')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+        <div class="choice-btn" onclick="answer('qas1','B','correct')"><div class="cb-emoji">1️⃣5️⃣</div><div class="cb-word">₹15</div></div>
+        <div class="choice-btn" onclick="answer('qas1','C','wrong')"><div class="cb-emoji">2️⃣0️⃣</div><div class="cb-word">₹20</div></div>
+      </div>
+      <div class="fb-box" id="fb-qas1"></div>
+    </div>
+  </div>
+
+  <!-- AS2 -->
+  <div class="scenario-card" id="qas2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">Priya has <span class="kw">₹30</span> and spends <span class="kw">₹20</span> on candies. Change left?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qas2','A','correct')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+        <div class="choice-btn" onclick="answer('qas2','B','wrong')"><div class="cb-emoji">2️⃣0️⃣</div><div class="cb-word">₹20</div></div>
+        <div class="choice-btn" onclick="answer('qas2','C','wrong')"><div class="cb-emoji">5️⃣</div><div class="cb-word">₹5</div></div>
+      </div>
+      <div class="fb-box" id="fb-qas2"></div>
+    </div>
+  </div>
+
+  <!-- AS3 -->
+  <div class="scenario-card" id="qas3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Sita buys ice cream for <span class="kw">₹10</span> and candy for <span class="kw">₹5</span>. Total spent?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qas3','A','wrong')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+        <div class="choice-btn" onclick="answer('qas3','B','correct')"><div class="cb-emoji">1️⃣5️⃣</div><div class="cb-word">₹15</div></div>
+        <div class="choice-btn" onclick="answer('qas3','C','wrong')"><div class="cb-emoji">2️⃣0️⃣</div><div class="cb-word">₹20</div></div>
+      </div>
+      <div class="fb-box" id="fb-qas3"></div>
+    </div>
+  </div>
+
+  <!-- AS4 -->
+  <div class="scenario-card" id="qas4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">A car toy costs <span class="kw">₹40</span>. You have <span class="kw">₹50</span>. How much change do you get?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qas4','A','wrong')"><div class="cb-emoji">5️⃣</div><div class="cb-word">₹5</div></div>
+        <div class="choice-btn" onclick="answer('qas4','B','correct')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+        <div class="choice-btn" onclick="answer('qas4','C','wrong')"><div class="cb-emoji">1️⃣5️⃣</div><div class="cb-word">₹15</div></div>
+      </div>
+      <div class="fb-box" id="fb-qas4"></div>
+    </div>
+  </div>
+
+  <!-- AS5 -->
+  <div class="scenario-card" id="qas5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">At the shop: pen = <span class="kw">₹5</span>, book = <span class="kw">₹20</span>. You give <span class="kw">₹30</span>. Change?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qas5','A','wrong')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+        <div class="choice-btn" onclick="answer('qas5','B','correct')"><div class="cb-emoji">5️⃣</div><div class="cb-word">₹5</div></div>
+        <div class="choice-btn" onclick="answer('qas5','C','wrong')"><div class="cb-emoji">1️⃣5️⃣</div><div class="cb-word">₹15</div></div>
+      </div>
+      <div class="fb-box" id="fb-qas5"></div>
+    </div>
+  </div>
+
+  <!-- AS6 -->
+  <div class="scenario-card" id="qas6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">Mango = <span class="kw">₹6</span>, Kite = <span class="kw">₹3</span>, Flower = <span class="kw">₹1</span>. How much total?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('qas6','A','wrong')"><div class="cb-emoji">8️⃣</div><div class="cb-word">₹8</div></div>
+        <div class="choice-btn" onclick="answer('qas6','B','wrong')"><div class="cb-emoji">9️⃣</div><div class="cb-word">₹9</div></div>
+        <div class="choice-btn" onclick="answer('qas6','C','correct')"><div class="cb-emoji">1️⃣0️⃣</div><div class="cb-word">₹10</div></div>
+      </div>
+      <div class="fb-box" id="fb-qas6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-addsubtract" disabled onclick="unlockNext('addsubtract','quiz')">Final Quiz 🏆 →</button>
+</div>
+
+<!-- ══════════════════ TAB 5: FINAL QUIZ ══════════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🏆</div>
+    <div>
+      <div class="banner-title" style="color:#388e3c;">Final Quiz — Lesson 8!</div>
+      <div class="banner-sub" style="color:#1b5e20;">Answer all 10 questions to complete the lesson!</div>
+    </div>
+  </div>
+
+  <!-- FQ1 -->
+  <div class="quiz-box-wrap" id="qq1">
+    <div class="quiz-num">Final Quiz · 1 of 10</div>
+    <div class="quiz-question">🪙 Coins are made of ___?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq1',this,'wrong')">Paper</div>
+      <div class="quiz-opt" onclick="quizAns('qq1',this,'correct')">Metal</div>
+      <div class="quiz-opt" onclick="quizAns('qq1',this,'wrong')">Wood</div>
+      <div class="quiz-opt" onclick="quizAns('qq1',this,'wrong')">Clay</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq1"></div>
+  </div>
+
+  <!-- FQ2 -->
+  <div class="quiz-box-wrap" id="qq2">
+    <div class="quiz-num">Final Quiz · 2 of 10</div>
+    <div class="quiz-question">1 Rupee = ___ Paise?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq2',this,'wrong')">50</div>
+      <div class="quiz-opt" onclick="quizAns('qq2',this,'correct')">100</div>
+      <div class="quiz-opt" onclick="quizAns('qq2',this,'wrong')">10</div>
+      <div class="quiz-opt" onclick="quizAns('qq2',this,'wrong')">200</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq2"></div>
+  </div>
+
+  <!-- FQ3 -->
+  <div class="quiz-box-wrap" id="qq3">
+    <div class="quiz-num">Final Quiz · 3 of 10</div>
+    <div class="quiz-question">₹10 + ₹5 = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq3',this,'wrong')">₹10</div>
+      <div class="quiz-opt" onclick="quizAns('qq3',this,'correct')">₹15</div>
+      <div class="quiz-opt" onclick="quizAns('qq3',this,'wrong')">₹20</div>
+      <div class="quiz-opt" onclick="quizAns('qq3',this,'wrong')">₹5</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq3"></div>
+  </div>
+
+  <!-- FQ4 -->
+  <div class="quiz-box-wrap" id="qq4">
+    <div class="quiz-num">Final Quiz · 4 of 10</div>
+    <div class="quiz-question">₹20 − ₹10 = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq4',this,'wrong')">₹5</div>
+      <div class="quiz-opt" onclick="quizAns('qq4',this,'correct')">₹10</div>
+      <div class="quiz-opt" onclick="quizAns('qq4',this,'wrong')">₹20</div>
+      <div class="quiz-opt" onclick="quizAns('qq4',this,'wrong')">₹30</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq4"></div>
+  </div>
+
+  <!-- FQ5 -->
+  <div class="quiz-box-wrap" id="qq5">
+    <div class="quiz-num">Final Quiz · 5 of 10</div>
+    <div class="quiz-question">How many ₹10 notes make ₹50?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq5',this,'wrong')">3</div>
+      <div class="quiz-opt" onclick="quizAns('qq5',this,'wrong')">4</div>
+      <div class="quiz-opt" onclick="quizAns('qq5',this,'correct')">5</div>
+      <div class="quiz-opt" onclick="quizAns('qq5',this,'wrong')">6</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq5"></div>
+  </div>
+
+  <!-- FQ6 -->
+  <div class="quiz-box-wrap" id="qq6">
+    <div class="quiz-num">Final Quiz · 6 of 10</div>
+    <div class="quiz-question">₹50 is the largest note we study. True or False?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq6',this,'correct')">✅ True</div>
+      <div class="quiz-opt" onclick="quizAns('qq6',this,'wrong')">❌ False</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq6"></div>
+  </div>
+
+  <!-- FQ7 -->
+  <div class="quiz-box-wrap" id="qq7">
+    <div class="quiz-num">Final Quiz · 7 of 10</div>
+    <div class="quiz-question">Balloon = ₹5, Ice cream = ₹10. Total?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq7',this,'wrong')">₹10</div>
+      <div class="quiz-opt" onclick="quizAns('qq7',this,'correct')">₹15</div>
+      <div class="quiz-opt" onclick="quizAns('qq7',this,'wrong')">₹20</div>
+      <div class="quiz-opt" onclick="quizAns('qq7',this,'wrong')">₹5</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq7"></div>
+  </div>
+
+  <!-- FQ8 -->
+  <div class="quiz-box-wrap" id="qq8">
+    <div class="quiz-num">Final Quiz · 8 of 10</div>
+    <div class="quiz-question">You have ₹25. You spend ₹15. Change left?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq8',this,'correct')">₹10</div>
+      <div class="quiz-opt" onclick="quizAns('qq8',this,'wrong')">₹15</div>
+      <div class="quiz-opt" onclick="quizAns('qq8',this,'wrong')">₹5</div>
+      <div class="quiz-opt" onclick="quizAns('qq8',this,'wrong')">₹20</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq8"></div>
+  </div>
+
+  <!-- FQ9 -->
+  <div class="quiz-box-wrap" id="qq9">
+    <div class="quiz-num">Final Quiz · 9 of 10</div>
+    <div class="quiz-question">₹2 + ₹2 + ₹2 = ? (Making ₹6)</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq9',this,'wrong')">₹4</div>
+      <div class="quiz-opt" onclick="quizAns('qq9',this,'wrong')">₹5</div>
+      <div class="quiz-opt" onclick="quizAns('qq9',this,'correct')">₹6</div>
+      <div class="quiz-opt" onclick="quizAns('qq9',this,'wrong')">₹8</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq9"></div>
+  </div>
+
+  <!-- FQ10 -->
+  <div class="quiz-box-wrap" id="qq10">
+    <div class="quiz-num">Final Quiz · 10 of 10</div>
+    <div class="quiz-question">₹20 + ₹20 + ₹10 = ? (Making ₹50)</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qq10',this,'wrong')">₹40</div>
+      <div class="quiz-opt" onclick="quizAns('qq10',this,'correct')">₹50</div>
+      <div class="quiz-opt" onclick="quizAns('qq10',this,'wrong')">₹60</div>
+      <div class="quiz-opt" onclick="quizAns('qq10',this,'wrong')">₹45</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qq10"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson!</button>
+</div>
+
+</div><!-- end .content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">💰</div>
+  <div class="celeb-title">Fantastic!</div>
+  <div class="celeb-sub">You completed Lesson 8 — Money! 🏆<br>You are a Money Expert! ₹ ₹ ₹</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+</div>
+
+<script>
+let stars = 0;
+const tabOrder = ['intro','coins','making','addsubtract','quiz'];
+
+const tabDoneQ = {
+  intro:       {done:0, total:4,  btn:'btn-intro'},
+  coins:       {done:0, total:6,  btn:'btn-coins'},
+  making:      {done:0, total:6,  btn:'btn-making'},
+  addsubtract: {done:0, total:6,  btn:'btn-addsubtract'},
+  quiz:        {done:0, total:10, btn:'btn-quiz'},
+};
+
+const cardTabMap = {
+  qi1:'intro', qi2:'intro', qi3:'intro', qi4:'intro',
+  qc1:'coins', qc2:'coins', qc3:'coins', qc4:'coins', qc5:'coins', qc6:'coins',
+  qm1:'making', qm2:'making', qm3:'making', qm4:'making', qm5:'making', qm6:'making',
+  qas1:'addsubtract', qas2:'addsubtract', qas3:'addsubtract', qas4:'addsubtract', qas5:'addsubtract', qas6:'addsubtract',
+};
+
+function goTab(tabId) {
+  const tabs = document.querySelectorAll('.step-tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(t => { if (t.dataset.tab === tabId) t.classList.add('active'); else t.classList.remove('active'); });
+  panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabId));
+  updateProgress();
+}
+
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(() => tab.classList.remove('shaking'), 520);
+      showToast('🔒 Finish the previous step first!');
+      return;
+    }
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    goTab(tab.dataset.tab);
+  });
+});
+
+function unlockNext(currentTab, nextTab) {
+  const btn = document.querySelector(`[data-tab="${currentTab}"]`);
+  if (btn) { btn.classList.remove('active'); btn.classList.add('done'); }
+  const next = document.querySelector(`[data-tab="${nextTab}"]`);
+  if (next) { next.classList.remove('locked'); next.classList.add('active'); }
+  document.querySelectorAll('.step-tab').forEach(t => { if (t.dataset.tab !== nextTab && !t.classList.contains('done')) t.classList.remove('active'); });
+  goTab(nextTab);
+  window.scrollTo({top:0, behavior:'smooth'});
+  addStars(3);
+}
+
+function updateProgress() {
+  const doneCount = document.querySelectorAll('.step-tab.done').length;
+  const totalTabs = tabOrder.length;
+  const pct = Math.round((doneCount / totalTabs) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = ['Start with Step 1! 👇','Great! Keep going! 💪','Halfway there! 🔥','Almost done! 🚀','Lesson Complete! 🎉'];
+  document.getElementById('progLabel').textContent = labels[doneCount] || labels[0];
+}
+
+function answer(cardId, choice, result) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const btns = card.querySelectorAll('.choice-btn');
+  const fb = document.getElementById('fb-' + cardId);
+  if (result === 'correct') {
+    card.dataset.done = '1';
+    card.classList.add('done');
+    btns.forEach(b => b.classList.add('locked-choice'));
+    event.currentTarget.classList.add('correct');
+    fb.className = 'fb-box ok'; fb.textContent = '✅ Correct! Well done!';
+    addStars(1);
+    const tab = cardTabMap[cardId];
+    if (tab) {
+      tabDoneQ[tab].done++;
+      if (tabDoneQ[tab].done >= tabDoneQ[tab].total) {
+        document.getElementById(tabDoneQ[tab].btn).disabled = false;
+      }
+    }
+  } else {
+    event.currentTarget.classList.add('wrong');
+    fb.className = 'fb-box no'; fb.textContent = '❌ Try again! You can do it!';
+    setTimeout(() => {
+      event.currentTarget.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 900);
+  }
+}
+
+function quizAns(boxId, btn, result) {
+  const box = document.getElementById(boxId);
+  if (box.dataset.done) return;
+  const opts = box.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + boxId);
+  if (result === 'correct') {
+    box.dataset.done = '1';
+    opts.forEach(o => o.style.pointerEvents = 'none');
+    btn.classList.add('right');
+    fb.className = 'quiz-fb ok'; fb.textContent = '✅ Correct!';
+    addStars(1);
+    tabDoneQ.quiz.done++;
+    if (tabDoneQ.quiz.done >= tabDoneQ.quiz.total) {
+      document.getElementById('btn-quiz').disabled = false;
+    }
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-fb no'; fb.textContent = '❌ Try again!';
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 900);
+  }
+}
+
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function showCelebration() {
+  const s = document.getElementById('celebScreen');
+  s.classList.add('show');
+  const starStr = stars >= 25 ? '⭐⭐⭐' : stars >= 15 ? '⭐⭐' : '⭐';
+  document.getElementById('celebStars').textContent = starStr;
+  addStars(5);
+}
+</script>
+</body>
+</html>

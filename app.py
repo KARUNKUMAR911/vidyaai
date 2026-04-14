@@ -89,6 +89,9 @@ GRADE1_ENGLISH_LESSONS = [
     'story2',
 ]
 
+GRADE2_MATHS_LESSONS = [f'lesson{i}' for i in range(1, 14)]
+GRADE2_EVS_LESSONS = [f'lesson{i}' for i in range(1, 20)]
+
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -735,6 +738,81 @@ def class1_evs_around_us():
     student = Student.query.get(session['student_id'])
     return render_template('class1/evs/around_us.html', student=student)
 
+'around_us',
+]
+
+GRADE2_MATHS_LESSONS = [f'lesson{i}' for i in range(1, 14)]
+GRADE2_EVS_LESSONS = [f'lesson{i}' for i in range(1, 20)]
+
+# --- CLASS 1 MATHS LESSONS ---
+
+@app.route('/class/2/english/maths/lesson<int:num>')
+def class2_maths_lesson(num):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    
+    # Map lesson numbers to filenames
+    lesson_map = {
+        1: 'class2_maths_ch1_shapes.html',
+        2: 'class2_maths_ch2_numbers.html',
+        3: 'class2_maths_ch3_addition.html',
+        4: 'class2_maths_ch4_subtraction.html',
+        5: 'class2_maths_ch5_multiplication.html',
+        6: 'class2_maths_ch6_division.html',
+        7: 'class2_maths_ch7_mental_arithmetic.html',
+        8: 'class2_maths_ch8_money.html',
+        9: 'class2_maths_ch9_length.html',
+        10: 'class2_maths_ch10_weight.html',
+        11: 'class2_maths_lesson11_time.html',
+        12: 'class2_maths_ch12_data_handling.html',
+        13: 'class2_maths_ch13_patterns.html'
+    }
+    
+    filename = lesson_map.get(num)
+    if not filename:
+        return "Lesson not found", 404
+        
+    return render_template(f'class2/maths/{filename}', student=student)
+
+# --- CLASS 2 EVS LESSONS ---
+
+@app.route('/class/2/english/evs/lesson<int:num>')
+def class2_evs_lesson(num):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    
+    # Map lesson numbers to filenames based on chapter indices
+    lesson_map = {
+        1: 'class2_evs_ch1_animals.html',
+        2: 'class2_evs_ch2_animal_rearing.html',
+        3: 'class2_evs_ch3_plants.html',
+        4: 'class2_evs_ch4_plants_uses.html',
+        5: 'class2_evs_ch5_precious_water.html',
+        6: 'class2_evs_ch6_food.html',
+        7: 'class2_evs_ch7_house.html',
+        8: 'class2_evs_ch8_health.html',
+        9: 'class2_evs_ch9_safety.html',
+        10: 'class2_evs_ch10_property.html',
+        11: 'class2_evs_ch11_travel.html',
+        12: 'class2_evs_ch12_family.html',
+        13: 'class2_evs_ch13_festival.html',
+        14: 'class2_evs_ch14_seniors.html',
+        15: 'class2_evs_ch15_cooperation.html',
+        16: 'class2_evs_ch16_play.html',
+        17: 'class2_evs_ch17_places.html',
+        18: 'class2_evs_ch18_sky.html',
+        19: 'class2_evs_ch19_land.html'
+    }
+    
+    filename = lesson_map.get(num)
+    if not filename:
+        return "Lesson not found", 404
+        
+    return render_template(f'class2/evs/{filename}', student=student)
+
+
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'student_id' not in session:
@@ -889,6 +967,10 @@ def load_lesson_progress():
     lessons = None
     if str(grade) == '1' and subject == 'english':
         lessons = GRADE1_ENGLISH_LESSONS
+    elif str(grade) == '2' and subject == 'maths':
+        lessons = GRADE2_MATHS_LESSONS
+    elif str(grade) == '2' and subject == 'evs':
+        lessons = GRADE2_EVS_LESSONS
 
     if lessons is None:
         return jsonify({'subject': subject, 'grade': grade, 'totalLessons': 0, 'lessons': {}})
@@ -948,6 +1030,10 @@ def save_lesson_progress():
     lessons = None
     if grade == '1' and subject == 'english':
         lessons = GRADE1_ENGLISH_LESSONS
+    elif grade == '2' and subject == 'maths':
+        lessons = GRADE2_MATHS_LESSONS
+    elif grade == '2' and subject == 'evs':
+        lessons = GRADE2_EVS_LESSONS
 
     if lessons is not None:
         rows = LessonProgress.query.filter_by(
@@ -1014,12 +1100,26 @@ def primary_dashboard():
     # Keep the URL stable while allowing us to organize templates by grade.
     return render_template('class1/dashboard.html', student=student)
 
+@app.route('/class/2/maths')
+def class2_maths_index():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class2/maths/index.html', student=student)
+
+@app.route('/class/2/evs')
+def class2_evs_index():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class2/evs/index.html', student=student)
+
 @app.route('/class/2')
 def class2_dashboard():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class2_dashboard.html', student=student)
+    return render_template('class2/dashboard.html', student=student)
 
 @app.route('/class/3')
 def class3_dashboard():
@@ -1096,7 +1196,7 @@ def class2_kannada_dashboard():
     if 'student_id' not in session:
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
-    return render_template('class2_dashboard_kannada.html', student=student)
+    return render_template('class2/dashboard_kn.html', student=student)
 
 @app.route('/class/3/kannada')
 def class3_kannada_dashboard():

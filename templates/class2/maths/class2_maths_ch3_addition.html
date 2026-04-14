@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 Maths — Chapter 3: Addition</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:#fff8f0;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#e65100,#ff9800);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(230,81,0,.35);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:18px;color:#fff;font-weight:900;}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#e65100,#ff9800);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:24px;color:#fff;margin-bottom:4px;line-height:1.2;}
+.hero p{font-size:13px;color:rgba(255,255,255,.9);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.1);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#ffe0b2;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#e65100,#ff9800);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.unlocked{background:#fff;color:#e65100;border-color:#ffcc80;}
+.step-tab.active{background:#e65100;color:#fff;border-color:#e65100;box-shadow:0 4px 14px rgba(230,81,0,.45);}
+.step-tab.done{background:#fff3e0;color:#bf360c;border-color:#ffcc80;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#333;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #e65100;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#e65100;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.8;}
+.hl{color:#e65100;font-size:15px;}
+
+/* SCENARIO / CHOICE */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#ffcc80;background:#fff8f0;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:18px;color:#222;line-height:1.4;margin-bottom:4px;}
+.scene-sentence .kw{color:#e65100;font-size:20px;}
+.scene-bottom{border-top:2px dashed #ffcc80;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #ffcc80;background:#fff3e0;font-family:'Baloo 2',cursive;font-size:18px;color:#e65100;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:28px;}
+.choice-btn .cb-word{font-size:14px;font-weight:900;}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* BIG BUTTONS */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#e65100,#ff9800);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #ffcc80;}
+.info-strip p{font-size:14px;font-weight:800;color:#333;line-height:1.7;}
+
+/* ADDITION VISUAL */
+.add-visual{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0;}
+.add-num-box{background:#fff3e0;border:3px solid #ffcc80;border-radius:16px;padding:12px 20px;text-align:center;}
+.add-num-box .num-big{font-family:'Baloo 2',cursive;font-size:36px;color:#e65100;font-weight:900;}
+.add-num-box .num-label{font-size:11px;font-weight:900;color:#aaa;margin-top:2px;}
+.add-plus{font-family:'Baloo 2',cursive;font-size:36px;color:#ff9800;font-weight:900;}
+.add-equals{font-family:'Baloo 2',cursive;font-size:30px;color:#888;}
+.add-result{background:#e65100;border-radius:16px;padding:12px 20px;text-align:center;}
+.add-result .num-big{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;font-weight:900;}
+.add-result .num-label{font-size:11px;font-weight:900;color:rgba(255,255,255,.8);margin-top:2px;}
+
+/* PLACE VALUE TABLE */
+.pv-table{display:flex;gap:4px;justify-content:center;margin:10px 0;}
+.pv-cell{border:3px solid #ffcc80;border-radius:12px;padding:10px 18px;text-align:center;}
+.pv-cell-hd{font-size:11px;font-weight:900;color:#888;margin-bottom:4px;}
+.pv-cell-val{font-family:'Baloo 2',cursive;font-size:28px;color:#e65100;font-weight:900;}
+
+/* BEAD ROW */
+.bead-row{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0;align-items:center;}
+.bead-circle{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;}
+.bead-ten{background:#e65100;}
+.bead-one{background:#f44336;}
+.bead-sep{font-family:'Baloo 2',cursive;font-size:20px;color:#ff9800;margin:0 4px;}
+
+/* NUMBER LINE DISPLAY */
+.nline-container{overflow-x:auto;padding:10px 0;margin:12px 0;}
+.nline-svg{min-width:320px;display:block;margin:0 auto;}
+
+/* COLUMN ADD VISUAL */
+.col-add{background:#fff3e0;border:3px solid #ffcc80;border-radius:16px;padding:16px;margin:12px 0;display:inline-flex;flex-direction:column;align-items:flex-end;font-family:'Baloo 2',cursive;font-size:28px;color:#333;font-weight:900;min-width:140px;}
+.col-add .carry{font-size:16px;color:#e65100;align-self:flex-start;margin-bottom:2px;}
+.col-add .add-line{border-bottom:3px solid #e65100;width:100%;margin:4px 0;}
+.col-add .result-row{color:#e65100;}
+.col-add-wrap{display:flex;justify-content:center;}
+
+/* SECTION DIVIDER */
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#ffb74d;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* CELEBRATE */
+.celeb-screen{position:fixed;inset:0;background:rgba(230,81,0,.93);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-emoji{font-size:88px;margin-bottom:8px;animation:heroFloat 2s ease-in-out infinite;}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:30px;color:#fff;margin-bottom:6px;}
+.celeb-sub{font-size:15px;color:rgba(255,255,255,.9);font-weight:800;margin-bottom:6px;text-align:center;padding:0 30px;}
+.celeb-stars{font-size:28px;margin-bottom:24px;}
+.celeb-btn{background:#fff;color:#e65100;font-family:'Baloo 2',cursive;font-size:19px;padding:14px 36px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#aaa;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:17px;color:#e65100;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#fff3e0;border:3px solid #ffcc80;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:20px;color:#e65100;user-select:none;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* STORY CARD */
+.story-card{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:3px solid #ffcc80;border-radius:20px;padding:16px;margin:12px 0;}
+.story-card .story-icon{font-size:40px;text-align:center;margin-bottom:8px;}
+.story-card p{font-family:'Baloo 2',cursive;font-size:16px;color:#444;line-height:1.6;}
+.story-card .story-q{font-size:18px;color:#e65100;margin-top:8px;font-weight:900;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">➕ Maths · Class 2</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">➕</span>
+  <h1>Lesson 3: Addition</h1>
+  <p>Tap &amp; choose — no writing needed! 🎉</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar" id="stepsBar">
+  <div class="step-tab active"   data-tab="nocarry">➕ Add Without Carry</div>
+  <div class="step-tab locked"   data-tab="carry">🔝 Add With Carry</div>
+  <div class="step-tab locked"   data-tab="interchange">🔄 Swap &amp; Add</div>
+  <div class="step-tab locked"   data-tab="numline">📏 Number Line</div>
+  <div class="step-tab locked"   data-tab="wordprob">📖 Word Problems</div>
+  <div class="step-tab locked"   data-tab="quiz">🎯 Final Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ===== TAB 1: ADDITION WITHOUT CARRY ===== -->
+<div class="tab-panel active" id="panel-nocarry">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <div class="banner-emoji">➕</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Addition Without Carry</div>
+      <div class="banner-sub" style="color:#bf360c;">Sum does not exceed 99. Units stay under 10!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>How to Add: Tens &amp; Units</h3>
+    <p>When we add two numbers, we add the <span class="hl">Units first</span>, then the <span class="hl">Tens</span>.<br><br>
+    🧮 Example: Rani has <span class="hl">24</span> beads. Mary has <span class="hl">32</span> beads.<br>
+    How many beads <span class="hl">in all</span>?</p>
+    <div class="pv-table" style="margin-top:14px;">
+      <div class="pv-cell"><div class="pv-cell-hd">T</div><div class="pv-cell-val">2</div></div>
+      <div class="pv-cell"><div class="pv-cell-hd">U</div><div class="pv-cell-val">4</div></div>
+    </div>
+    <div style="text-align:center;font-family:'Baloo 2',cursive;font-size:22px;color:#e65100;margin:2px 0;">+</div>
+    <div class="pv-table">
+      <div class="pv-cell"><div class="pv-cell-hd">T</div><div class="pv-cell-val">3</div></div>
+      <div class="pv-cell"><div class="pv-cell-hd">U</div><div class="pv-cell-val">2</div></div>
+    </div>
+    <div style="text-align:center;font-family:'Baloo 2',cursive;font-size:14px;color:#888;margin:4px 0;">Units: 4 + 2 = 6 &nbsp;|&nbsp; Tens: 2 + 3 = 5</div>
+    <div class="pv-table">
+      <div class="pv-cell" style="border-color:#e65100;background:#fff3e0;"><div class="pv-cell-hd">T</div><div class="pv-cell-val" style="font-size:34px;">5</div></div>
+      <div class="pv-cell" style="border-color:#e65100;background:#fff3e0;"><div class="pv-cell-hd">U</div><div class="pv-cell-val" style="font-size:34px;">6</div></div>
+    </div>
+    <p style="text-align:center;margin-top:8px;"><span class="hl" style="font-size:20px;">5 Tens + 6 Units = 56 beads! 🎉</span></p>
+  </div>
+
+  <div class="info-strip">
+    <p>💡 <span class="hl">Always add Units first</span>, then Tens.<br>
+    In <span class="hl">no-carry</span> addition, Units stay under 10 — <span class="hl">no bundling needed!</span></p>
+  </div>
+
+  <div class="teach-card" style="margin-top:4px;">
+    <h3>Expanded Form Addition</h3>
+    <p>We can break numbers into Tens and Units:<br>
+    <span class="hl">28 + 31</span> = 20 + 8 + 30 + 1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (20 + 30) + (8 + 1)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 50 + 9<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span class="hl">59</span></p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="nc1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">What is <span class="kw">24 + 32</span>? (Units: 4+2, Tens: 2+3)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('nc1','65','wrong')"><span class="cb-word">65</span></button>
+        <button class="choice-btn" onclick="answer('nc1','56','correct')"><span class="cb-word">56</span></button>
+        <button class="choice-btn" onclick="answer('nc1','46','wrong')"><span class="cb-word">46</span></button>
+      </div>
+      <div class="fb-box" id="fb-nc1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="nc2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">There are <span class="kw">13 Maths books</span> and <span class="kw">22 Science books</span>. How many books <span class="kw">in all</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('nc2','35','correct')"><span class="cb-emoji">📚</span><span class="cb-word">35 books</span></button>
+        <button class="choice-btn" onclick="answer('nc2','33','wrong')"><span class="cb-emoji">📚</span><span class="cb-word">33 books</span></button>
+        <button class="choice-btn" onclick="answer('nc2','25','wrong')"><span class="cb-emoji">📚</span><span class="cb-word">25 books</span></button>
+      </div>
+      <div class="fb-box" id="fb-nc2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="nc3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Add: <span class="kw">41 + 12</span> = ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('nc3','53','correct')"><span class="cb-word">53</span></button>
+        <button class="choice-btn" onclick="answer('nc3','43','wrong')"><span class="cb-word">43</span></button>
+        <button class="choice-btn" onclick="answer('nc3','57','wrong')"><span class="cb-word">57</span></button>
+      </div>
+      <div class="fb-box" id="fb-nc3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="nc4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">A lungi costs <span class="kw">₹52</span> and a towel costs <span class="kw">₹23</span>. What is the <span class="kw">total cost</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('nc4','75','correct')"><span class="cb-emoji">💰</span><span class="cb-word">₹75</span></button>
+        <button class="choice-btn" onclick="answer('nc4','70','wrong')"><span class="cb-emoji">💰</span><span class="cb-word">₹70</span></button>
+        <button class="choice-btn" onclick="answer('nc4','85','wrong')"><span class="cb-emoji">💰</span><span class="cb-word">₹85</span></button>
+      </div>
+      <div class="fb-box" id="fb-nc4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="nc5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">In <span class="kw">32 + 13</span>, what do the <span class="kw">Units</span> add up to?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('nc5','5','correct')"><span class="cb-word">5</span></button>
+        <button class="choice-btn" onclick="answer('nc5','3','wrong')"><span class="cb-word">3</span></button>
+        <button class="choice-btn" onclick="answer('nc5','45','wrong')"><span class="cb-word">45</span></button>
+      </div>
+      <div class="fb-box" id="fb-nc5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="nc6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">Abacus shows T=4, U=3 for first number, and T=1, U=4 for second. What is the <span class="kw">sum</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('nc6','57','correct')"><span class="cb-word">57</span></button>
+        <button class="choice-btn" onclick="answer('nc6','75','wrong')"><span class="cb-word">75</span></button>
+        <button class="choice-btn" onclick="answer('nc6','47','wrong')"><span class="cb-word">47</span></button>
+      </div>
+      <div class="fb-box" id="fb-nc6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-nocarry" disabled onclick="nextTab('carry')">Next Step ➡️</button>
+</div>
+
+
+<!-- ===== TAB 2: ADDITION WITH CARRY ===== -->
+<div class="tab-panel" id="panel-carry">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <div class="banner-emoji">🔝</div>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Addition With Carry Over</div>
+      <div class="banner-sub" style="color:#880e4f;">When units add up to 10 or more — carry the 1!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#c2185b;">
+    <h3 style="color:#c2185b;">What is Carry Over?</h3>
+    <p>Amith has <span class="hl">26</span> sticks. Shwetha has <span class="hl">38</span> sticks.<br><br>
+    Step 1 — Add Units: <span class="hl">6 + 8 = 14</span><br>
+    14 has 1 Ten and 4 Units.<br>
+    Write <span class="hl">4</span> in Units place. <span class="hl">Carry 1</span> to Tens!<br><br>
+    Step 2 — Add Tens: <span class="hl">1 (carry) + 2 + 3 = 6</span></p>
+    <div class="col-add-wrap" style="margin-top:12px;">
+      <div class="col-add">
+        <div class="carry">carry →  ¹</div>
+        <div>2 6</div>
+        <div>+ 3 8</div>
+        <div class="add-line"></div>
+        <div class="result-row">6 4</div>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:8px;"><span class="hl" style="font-size:20px;">26 + 38 = 64 sticks! 🏆</span></p>
+  </div>
+
+  <div class="info-strip">
+    <p>💡 When Units add to <span class="hl">10 or more</span>:<br>
+    ✅ Write the <span class="hl">ones digit</span> in the Units column.<br>
+    ✅ <span class="hl">Carry 1</span> to the Tens column!</p>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#c2185b;">
+    <h3 style="color:#c2185b;">Another Example: 39 + 43</h3>
+    <p>Units: <span class="hl">9 + 3 = 12</span> → write 2, carry 1<br>
+    Tens: <span class="hl">1 + 3 + 4 = 8</span></p>
+    <div class="col-add-wrap" style="margin-top:8px;">
+      <div class="col-add">
+        <div class="carry">¹</div>
+        <div>3 9</div>
+        <div>+ 4 3</div>
+        <div class="add-line"></div>
+        <div class="result-row">8 2</div>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:8px;"><span class="hl" style="font-size:20px;">39 + 43 = 82</span></p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- C1 -->
+  <div class="scenario-card" id="c1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">Add: <span class="kw">26 + 38</span>. Units: 6+8=14 → carry 1. Tens: 1+2+3=?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('c1','64','correct')"><span class="cb-word">64</span></button>
+        <button class="choice-btn" onclick="answer('c1','54','wrong')"><span class="cb-word">54</span></button>
+        <button class="choice-btn" onclick="answer('c1','66','wrong')"><span class="cb-word">66</span></button>
+      </div>
+      <div class="fb-box" id="fb-c1"></div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="scenario-card" id="c2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">What is <span class="kw">39 + 43</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('c2','82','correct')"><span class="cb-word">82</span></button>
+        <button class="choice-btn" onclick="answer('c2','72','wrong')"><span class="cb-word">72</span></button>
+        <button class="choice-btn" onclick="answer('c2','83','wrong')"><span class="cb-word">83</span></button>
+      </div>
+      <div class="fb-box" id="fb-c2"></div>
+    </div>
+  </div>
+
+  <!-- C3 -->
+  <div class="scenario-card" id="c3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">In <span class="kw">36 + 27</span>, the Units are 6+7=13. What digit do we write in Units place?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('c3','3','correct')"><span class="cb-word">3</span></button>
+        <button class="choice-btn" onclick="answer('c3','13','wrong')"><span class="cb-word">13</span></button>
+        <button class="choice-btn" onclick="answer('c3','1','wrong')"><span class="cb-word">1</span></button>
+      </div>
+      <div class="fb-box" id="fb-c3"></div>
+    </div>
+  </div>
+
+  <!-- C4 -->
+  <div class="scenario-card" id="c4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">What is <span class="kw">48 + 24</span>? (Hint: 8+4=12, carry 1)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('c4','72','correct')"><span class="cb-word">72</span></button>
+        <button class="choice-btn" onclick="answer('c4','62','wrong')"><span class="cb-word">62</span></button>
+        <button class="choice-btn" onclick="answer('c4','74','wrong')"><span class="cb-word">74</span></button>
+      </div>
+      <div class="fb-box" id="fb-c4"></div>
+    </div>
+  </div>
+
+  <!-- C5 -->
+  <div class="scenario-card" id="c5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence">Rekha has <span class="kw">₹48</span>. Her father gives her <span class="kw">₹26</span>. How much does she have <span class="kw">in all</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('c5','74','correct')"><span class="cb-emoji">💰</span><span class="cb-word">₹74</span></button>
+        <button class="choice-btn" onclick="answer('c5','64','wrong')"><span class="cb-emoji">💰</span><span class="cb-word">₹64</span></button>
+        <button class="choice-btn" onclick="answer('c5','76','wrong')"><span class="cb-emoji">💰</span><span class="cb-word">₹76</span></button>
+      </div>
+      <div class="fb-box" id="fb-c5"></div>
+    </div>
+  </div>
+
+  <!-- C6 -->
+  <div class="scenario-card" id="c6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">When units add up to <span class="kw">10 or more</span>, what do we do with the extra Ten?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('c6','carry','correct')"><span class="cb-emoji">🔝</span><span class="cb-word">Carry 1 to Tens</span></button>
+        <button class="choice-btn" onclick="answer('c6','ignore','wrong')"><span class="cb-emoji">❌</span><span class="cb-word">Ignore it</span></button>
+        <button class="choice-btn" onclick="answer('c6','add','wrong')"><span class="cb-emoji">🤔</span><span class="cb-word">Add to Units</span></button>
+      </div>
+      <div class="fb-box" id="fb-c6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-carry" disabled onclick="nextTab('interchange')">Next Step ➡️</button>
+</div>
+
+
+<!-- ===== TAB 3: SWAP & ADD (INTERCHANGE) ===== -->
+<div class="tab-panel" id="panel-interchange">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <div class="banner-emoji">🔄</div>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Swap &amp; Add</div>
+      <div class="banner-sub" style="color:#2e7d32;">Change the order — the sum stays the same!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#388e3c;">
+    <h3 style="color:#388e3c;">Addition by Interchanging Numbers</h3>
+    <p>Veena asked Pavan: <span class="hl">"2 + 3 = ?"</span><br>
+    Pavan said: <span class="hl">"5!"</span><br><br>
+    Then Pavan asked: <span class="hl">"3 + 2 = ?"</span><br>
+    Veena said: <span class="hl">"Also 5!"</span><br><br>
+    🌟 <span class="hl">3 + 2 = 2 + 3 = 5</span><br><br>
+    Even though the numbers are <span class="hl">swapped</span>, the <span class="hl">sum stays the same!</span></p>
+    <div style="background:#e8f5e9;border-radius:14px;padding:12px;margin-top:10px;text-align:center;">
+      <div style="font-family:'Baloo 2',cursive;font-size:22px;color:#1b5e20;">8 + 3 = 11</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:22px;color:#1b5e20;">3 + 8 = 11</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:16px;color:#388e3c;margin-top:4px;">8 + 3 = 3 + 8 ✅</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#388e3c;">
+    <h3 style="color:#388e3c;">Three Numbers Too!</h3>
+    <p>Example: <span class="hl">3 + 18 + 7 = 7 + 18 + 3</span><br>
+    Both equal <span class="hl">28</span>!<br><br>
+    So: <span class="hl">22 + 13 = 13 + 22 = 35</span></p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- I1 -->
+  <div class="scenario-card" id="i1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">If <span class="kw">5 + 7 = 12</span>, what is <span class="kw">7 + 5</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('i1','12','correct')"><span class="cb-word">12 — same!</span></button>
+        <button class="choice-btn" onclick="answer('i1','13','wrong')"><span class="cb-word">13</span></button>
+        <button class="choice-btn" onclick="answer('i1','11','wrong')"><span class="cb-word">11</span></button>
+      </div>
+      <div class="fb-box" id="fb-i1"></div>
+    </div>
+  </div>
+
+  <!-- I2 -->
+  <div class="scenario-card" id="i2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence"><span class="kw">38 + 19 = 19 + ?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('i2','38','correct')"><span class="cb-word">38</span></button>
+        <button class="choice-btn" onclick="answer('i2','19','wrong')"><span class="cb-word">19</span></button>
+        <button class="choice-btn" onclick="answer('i2','57','wrong')"><span class="cb-word">57</span></button>
+      </div>
+      <div class="fb-box" id="fb-i2"></div>
+    </div>
+  </div>
+
+  <!-- I3 -->
+  <div class="scenario-card" id="i3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence"><span class="kw">13 + 24 = 24 + ?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('i3','24','wrong')"><span class="cb-word">24</span></button>
+        <button class="choice-btn" onclick="answer('i3','13','correct')"><span class="cb-word">13</span></button>
+        <button class="choice-btn" onclick="answer('i3','37','wrong')"><span class="cb-word">37</span></button>
+      </div>
+      <div class="fb-box" id="fb-i3"></div>
+    </div>
+  </div>
+
+  <!-- I4 -->
+  <div class="scenario-card" id="i4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence">Swapping numbers while adding changes the <span class="kw">sum</span>. True or False?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('i4','false','correct')"><span class="cb-emoji">✅</span><span class="cb-word">FALSE — sum stays same!</span></button>
+        <button class="choice-btn" onclick="answer('i4','true','wrong')"><span class="cb-emoji">❌</span><span class="cb-word">TRUE — sum changes</span></button>
+      </div>
+      <div class="fb-box" id="fb-i4"></div>
+    </div>
+  </div>
+
+  <!-- I5 -->
+  <div class="scenario-card" id="i5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence"><span class="kw">24 + 13 + 11 = 11 + 13 + ?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('i5','24','correct')"><span class="cb-word">24</span></button>
+        <button class="choice-btn" onclick="answer('i5','11','wrong')"><span class="cb-word">11</span></button>
+        <button class="choice-btn" onclick="answer('i5','48','wrong')"><span class="cb-word">48</span></button>
+      </div>
+      <div class="fb-box" id="fb-i5"></div>
+    </div>
+  </div>
+
+  <!-- I6 -->
+  <div class="scenario-card" id="i6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">Which of these is the <span class="kw">correct swap</span> for 38 + 46?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('i6','46+38','correct')"><span class="cb-word">46 + 38</span></button>
+        <button class="choice-btn" onclick="answer('i6','83+46','wrong')"><span class="cb-word">83 + 46</span></button>
+        <button class="choice-btn" onclick="answer('i6','38+84','wrong')"><span class="cb-word">38 + 84</span></button>
+      </div>
+      <div class="fb-box" id="fb-i6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-interchange" disabled onclick="nextTab('numline')">Next Step ➡️</button>
+</div>
+
+
+<!-- ===== TAB 4: NUMBER LINE ===== -->
+<div class="tab-panel" id="panel-numline">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#ede7f6,#d1c4e9);">
+    <div class="banner-emoji">📏</div>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">Addition on Number Line</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Jump forward to add! Sum not to exceed 9.</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#7b1fa2;">
+    <h3 style="color:#7b1fa2;">How to Use Number Line</h3>
+    <p>Raziya jumped <span class="hl">3 steps</span> and reached <span class="hl">3</span>.<br>
+    Then she jumped <span class="hl">2 more steps</span>.<br>
+    She reached <span class="hl">5</span>! So <span class="hl">3 + 2 = 5</span>.<br><br>
+    🦘 Start at the <span class="hl">first number</span>.<br>
+    🦘 Jump <span class="hl">forward</span> by the second number.<br>
+    🦘 Where you land is the <span class="hl">sum</span>!</p>
+    <div class="nline-container">
+      <svg class="nline-svg" viewBox="0 0 340 70" xmlns="http://www.w3.org/2000/svg">
+        <line x1="10" y1="40" x2="330" y2="40" stroke="#ffcc80" stroke-width="3"/>
+        <text x="325" y="44" font-size="14" fill="#e65100" font-family="sans-serif">→</text>
+        <g id="ticks-demo">
+          <line x1="10" y1="32" x2="10" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="7" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">0</text>
+          <line x1="42" y1="32" x2="42" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="39" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">1</text>
+          <line x1="74" y1="32" x2="74" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="71" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">2</text>
+          <line x1="106" y1="32" x2="106" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="103" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">3</text>
+          <line x1="138" y1="32" x2="138" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="135" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">4</text>
+          <line x1="170" y1="32" x2="170" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="167" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">5</text>
+          <line x1="202" y1="32" x2="202" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="199" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">6</text>
+          <line x1="234" y1="32" x2="234" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="231" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">7</text>
+          <line x1="266" y1="32" x2="266" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="263" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">8</text>
+          <line x1="298" y1="32" x2="298" y2="48" stroke="#e65100" stroke-width="2"/>
+          <text x="295" y="60" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">9</text>
+        </g>
+        <!-- 3+2=5 arcs -->
+        <path d="M 106 40 Q 122 10 138 40" fill="none" stroke="#c2185b" stroke-width="2.5"/>
+        <path d="M 138 40 Q 154 10 170 40" fill="none" stroke="#c2185b" stroke-width="2.5"/>
+        <!-- labels -->
+        <text x="115" y="8" font-size="10" fill="#c2185b" font-family="sans-serif" font-weight="bold">+1</text>
+        <text x="147" y="8" font-size="10" fill="#c2185b" font-family="sans-serif" font-weight="bold">+1</text>
+        <circle cx="106" cy="40" r="6" fill="#e65100"/>
+        <circle cx="170" cy="40" r="6" fill="#7b1fa2"/>
+        <text x="95" y="26" font-size="11" fill="#e65100" font-family="sans-serif" font-weight="bold">Start:3</text>
+        <text x="158" y="26" font-size="11" fill="#7b1fa2" font-family="sans-serif" font-weight="bold">End:5</text>
+      </svg>
+    </div>
+    <p style="text-align:center;"><span class="hl" style="font-size:18px;">3 + 2 = 5 ✅</span></p>
+    <p style="margin-top:8px;">The number we add is called the <span class="hl">Addend</span>. The answer is the <span class="hl">Sum</span>.<br>
+    <span class="hl">Addend + Addend = Sum</span></p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- N1 -->
+  <div class="scenario-card" id="n1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 6</div>
+      <div class="scene-sentence">On the number line: Start at <span class="kw">4</span>, jump <span class="kw">3 steps</span> forward. Where do you land?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('n1','7','correct')"><span class="cb-word">7</span></button>
+        <button class="choice-btn" onclick="answer('n1','6','wrong')"><span class="cb-word">6</span></button>
+        <button class="choice-btn" onclick="answer('n1','8','wrong')"><span class="cb-word">8</span></button>
+      </div>
+      <div class="fb-box" id="fb-n1"></div>
+    </div>
+  </div>
+
+  <!-- N2 -->
+  <div class="scenario-card" id="n2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 6</div>
+      <div class="scene-sentence">Number line: <span class="kw">1 + 5 = ?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('n2','6','correct')"><span class="cb-word">6</span></button>
+        <button class="choice-btn" onclick="answer('n2','5','wrong')"><span class="cb-word">5</span></button>
+        <button class="choice-btn" onclick="answer('n2','7','wrong')"><span class="cb-word">7</span></button>
+      </div>
+      <div class="fb-box" id="fb-n2"></div>
+    </div>
+  </div>
+
+  <!-- N3 -->
+  <div class="scenario-card" id="n3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 6</div>
+      <div class="scene-sentence">Sofiya starts at <span class="kw">4</span> and jumps <span class="kw">3 steps</span>. Where does she reach?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('n3','7','correct')"><span class="cb-word">7</span></button>
+        <button class="choice-btn" onclick="answer('n3','4','wrong')"><span class="cb-word">4</span></button>
+        <button class="choice-btn" onclick="answer('n3','5','wrong')"><span class="cb-word">5</span></button>
+      </div>
+      <div class="fb-box" id="fb-n3"></div>
+    </div>
+  </div>
+
+  <!-- N4 -->
+  <div class="scenario-card" id="n4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 6</div>
+      <div class="scene-sentence"><span class="kw">6 + 2 = ?</span> (on the number line)</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('n4','8','correct')"><span class="cb-word">8</span></button>
+        <button class="choice-btn" onclick="answer('n4','62','wrong')"><span class="cb-word">62</span></button>
+        <button class="choice-btn" onclick="answer('n4','7','wrong')"><span class="cb-word">7</span></button>
+      </div>
+      <div class="fb-box" id="fb-n4"></div>
+    </div>
+  </div>
+
+  <!-- N5 -->
+  <div class="scenario-card" id="n5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 6</div>
+      <div class="scene-sentence"><span class="kw">4 + 4 = ?</span> on the number line</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('n5','8','correct')"><span class="cb-word">8</span></button>
+        <button class="choice-btn" onclick="answer('n5','9','wrong')"><span class="cb-word">9</span></button>
+        <button class="choice-btn" onclick="answer('n5','44','wrong')"><span class="cb-word">44</span></button>
+      </div>
+      <div class="fb-box" id="fb-n5"></div>
+    </div>
+  </div>
+
+  <!-- N6 -->
+  <div class="scenario-card" id="n6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 6</div>
+      <div class="scene-sentence">In <span class="kw">Addend + Addend = Sum</span>, the <span class="kw">answer</span> is called the…?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('n6','sum','correct')"><span class="cb-emoji">🏆</span><span class="cb-word">Sum</span></button>
+        <button class="choice-btn" onclick="answer('n6','addend','wrong')"><span class="cb-emoji">🤔</span><span class="cb-word">Addend</span></button>
+        <button class="choice-btn" onclick="answer('n6','carry','wrong')"><span class="cb-emoji">🔝</span><span class="cb-word">Carry</span></button>
+      </div>
+      <div class="fb-box" id="fb-n6"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-numline" disabled onclick="nextTab('wordprob')">Next Step ➡️</button>
+</div>
+
+
+<!-- ===== TAB 5: WORD PROBLEMS ===== -->
+<div class="tab-panel" id="panel-wordprob">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);">
+    <div class="banner-emoji">📖</div>
+    <div>
+      <div class="banner-title" style="color:#006064;">Word Problems</div>
+      <div class="banner-sub" style="color:#00838f;">Real life addition — read, think, tap!</div>
+    </div>
+  </div>
+
+  <div class="info-strip" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-color:#80deea;">
+    <p>💡 Steps to solve:<br>
+    1️⃣ Find the <span class="hl">two numbers</span> in the story.<br>
+    2️⃣ Add them (check if carry is needed!)<br>
+    3️⃣ Pick the right answer!</p>
+  </div>
+
+  <div class="section-divider">— SOLVE THE STORY PROBLEMS —</div>
+
+  <!-- W1 -->
+  <div class="scenario-card" id="w1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🌹</div>
+        <p>There are <span class="hl">23 Rose plants</span> and <span class="hl">12 Marigold plants</span> in a school campus.</p>
+        <div class="story-q">How many plants in all?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w1','35','correct')"><span class="cb-emoji">🌸</span><span class="cb-word">35 plants</span></button>
+        <button class="choice-btn" onclick="answer('w1','25','wrong')"><span class="cb-emoji">🌸</span><span class="cb-word">25 plants</span></button>
+        <button class="choice-btn" onclick="answer('w1','30','wrong')"><span class="cb-emoji">🌸</span><span class="cb-word">30 plants</span></button>
+      </div>
+      <div class="fb-box" id="fb-w1"></div>
+    </div>
+  </div>
+
+  <!-- W2 -->
+  <div class="scenario-card" id="w2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🔵</div>
+        <p>Mary has <span class="hl">24 marbles</span>. Hussain has <span class="hl">15 marbles</span>.</p>
+        <div class="story-q">What is the total number of marbles?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w2','39','correct')"><span class="cb-emoji">🔵</span><span class="cb-word">39</span></button>
+        <button class="choice-btn" onclick="answer('w2','29','wrong')"><span class="cb-emoji">🔵</span><span class="cb-word">29</span></button>
+        <button class="choice-btn" onclick="answer('w2','40','wrong')"><span class="cb-emoji">🔵</span><span class="cb-word">40</span></button>
+      </div>
+      <div class="fb-box" id="fb-w2"></div>
+    </div>
+  </div>
+
+  <!-- W3 -->
+  <div class="scenario-card" id="w3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🎈</div>
+        <p>A balloon seller has <span class="hl">13 yellow balloons</span> and <span class="hl">14 red balloons</span>.</p>
+        <div class="story-q">What is the total number of balloons?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w3','27','correct')"><span class="cb-emoji">🎈</span><span class="cb-word">27</span></button>
+        <button class="choice-btn" onclick="answer('w3','17','wrong')"><span class="cb-emoji">🎈</span><span class="cb-word">17</span></button>
+        <button class="choice-btn" onclick="answer('w3','37','wrong')"><span class="cb-emoji">🎈</span><span class="cb-word">37</span></button>
+      </div>
+      <div class="fb-box" id="fb-w3"></div>
+    </div>
+  </div>
+
+  <!-- W4 -->
+  <div class="scenario-card" id="w4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🏏</div>
+        <p>Mahesh scored <span class="hl">44 marks</span> in Mathematics and <span class="hl">32 marks</span> in Kannada.</p>
+        <div class="story-q">What are the total marks?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w4','76','correct')"><span class="cb-emoji">📝</span><span class="cb-word">76</span></button>
+        <button class="choice-btn" onclick="answer('w4','66','wrong')"><span class="cb-emoji">📝</span><span class="cb-word">66</span></button>
+        <button class="choice-btn" onclick="answer('w4','78','wrong')"><span class="cb-emoji">📝</span><span class="cb-word">78</span></button>
+      </div>
+      <div class="fb-box" id="fb-w4"></div>
+    </div>
+  </div>
+
+  <!-- W5 -->
+  <div class="scenario-card" id="w5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🏫</div>
+        <p>In a school, there are <span class="hl">29 students</span> in class one and <span class="hl">33 students</span> in class two.</p>
+        <div class="story-q">What is the total number of students?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w5','62','correct')"><span class="cb-emoji">👦</span><span class="cb-word">62</span></button>
+        <button class="choice-btn" onclick="answer('w5','52','wrong')"><span class="cb-emoji">👦</span><span class="cb-word">52</span></button>
+        <button class="choice-btn" onclick="answer('w5','63','wrong')"><span class="cb-emoji">👦</span><span class="cb-word">63</span></button>
+      </div>
+      <div class="fb-box" id="fb-w5"></div>
+    </div>
+  </div>
+
+  <!-- W6 -->
+  <div class="scenario-card" id="w6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🏏</div>
+        <p>A cricket player scored <span class="hl">52 runs</span> in the first innings and <span class="hl">19 runs</span> in the second innings.</p>
+        <div class="story-q">What is the total number of runs scored?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w6','71','correct')"><span class="cb-emoji">🏆</span><span class="cb-word">71 runs</span></button>
+        <button class="choice-btn" onclick="answer('w6','61','wrong')"><span class="cb-emoji">🏆</span><span class="cb-word">61 runs</span></button>
+        <button class="choice-btn" onclick="answer('w6','72','wrong')"><span class="cb-emoji">🏆</span><span class="cb-word">72 runs</span></button>
+      </div>
+      <div class="fb-box" id="fb-w6"></div>
+    </div>
+  </div>
+
+  <!-- W7 -->
+  <div class="scenario-card" id="w7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 7</div>
+      <div class="story-card">
+        <div class="story-icon">🥥</div>
+        <p>A coconut seller sold <span class="hl">28 coconuts</span> on the first day and <span class="hl">26 coconuts</span> on the second day.</p>
+        <div class="story-q">What is the total number of coconuts sold?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="answer('w7','54','correct')"><span class="cb-emoji">🥥</span><span class="cb-word">54</span></button>
+        <button class="choice-btn" onclick="answer('w7','44','wrong')"><span class="cb-emoji">🥥</span><span class="cb-word">44</span></button>
+        <button class="choice-btn" onclick="answer('w7','56','wrong')"><span class="cb-emoji">🥥</span><span class="cb-word">56</span></button>
+      </div>
+      <div class="fb-box" id="fb-w7"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-wordprob" disabled onclick="nextTab('quiz')">Next Step ➡️</button>
+</div>
+
+
+<!-- ===== TAB 6: FINAL QUIZ ===== -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <div class="banner-emoji">🎯</div>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Final Quiz!</div>
+      <div class="banner-sub" style="color:#bf360c;">Show what you know! Tap the right answer.</div>
+    </div>
+  </div>
+
+  <!-- FQ1 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 1 of 10</div>
+    <div class="quiz-question">What is 11 + 13 = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq1',this,'24')">24</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq1',this,'23')">23</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq1',this,'25')">25</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq1',this,'14')">14</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq1"></div>
+  </div>
+
+  <!-- FQ2 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 2 of 10</div>
+    <div class="quiz-question">Add: 40 + 33 = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq2',this,'63')">63</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq2',this,'73')">73</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq2',this,'43')">43</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq2',this,'70')">70</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq2"></div>
+  </div>
+
+  <!-- FQ3 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 3 of 10</div>
+    <div class="quiz-question">What is 38 + 19 = ? (with carry!)</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq3',this,'47')">47</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq3',this,'57')">57</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq3',this,'56')">56</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq3',this,'58')">58</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq3"></div>
+  </div>
+
+  <!-- FQ4 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 4 of 10</div>
+    <div class="quiz-question">43 + 17 = 17 + ? (swap)</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq4',this,'43')">43</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq4',this,'17')">17</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq4',this,'60')">60</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq4',this,'34')">34</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq4"></div>
+  </div>
+
+  <!-- FQ5 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 5 of 10</div>
+    <div class="quiz-question">Number line: Start at 3, jump 6. Where do you land?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq5',this,'9')">9</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq5',this,'8')">8</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq5',this,'36')">36</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq5',this,'7')">7</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq5"></div>
+  </div>
+
+  <!-- FQ6 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 6 of 10</div>
+    <div class="quiz-question">35 + 31 = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq6',this,'66')">66</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq6',this,'56')">56</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq6',this,'60')">60</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq6',this,'67')">67</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq6"></div>
+  </div>
+
+  <!-- FQ7 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 7 of 10</div>
+    <div class="quiz-question">Hussain has 13 chocolates. Raziya has 18. Total?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq7',this,'31')">31</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq7',this,'21')">21</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq7',this,'30')">30</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq7',this,'32')">32</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq7"></div>
+  </div>
+
+  <!-- FQ8 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 8 of 10</div>
+    <div class="quiz-question">14 + 14 = ?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq8',this,'28')">28</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq8',this,'24')">24</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq8',this,'18')">18</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq8',this,'29')">29</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq8"></div>
+  </div>
+
+  <!-- FQ9 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 9 of 10</div>
+    <div class="quiz-question">When we swap 22 + 13, we get 13 + __ = same sum.</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq9',this,'22')">22</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq9',this,'13')">13</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq9',this,'35')">35</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq9',this,'9')">9</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq9"></div>
+  </div>
+
+  <!-- FQ10 -->
+  <div class="quiz-box-wrap">
+    <div class="quiz-num">Quiz 10 of 10</div>
+    <div class="quiz-question">Mamatha has 51 shells. Mary has 13 shells. Total?</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAnswer('fq10',this,'64')">64</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq10',this,'54')">54</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq10',this,'60')">60</div>
+      <div class="quiz-opt" onclick="quizAnswer('fq10',this,'63')">63</div>
+    </div>
+    <div class="quiz-fb" id="qfb-fq10"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 See My Results!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-emoji">🏆</div>
+  <div class="celeb-title">Lesson Complete!</div>
+  <div class="celeb-sub">Amazing work! You finished<br>Chapter 3 — Addition! 🎉</div>
+  <div class="celeb-stars" id="celebStars"></div>
+  <button class="celeb-btn" onclick="restartLesson()">🔄 Try Again</button>
+</div>
+
+<script>
+// ===== SETUP =====
+const TABS = ['nocarry','carry','interchange','numline','wordprob','quiz'];
+const TAB_QUESTIONS = {
+  nocarry: ['nc1','nc2','nc3','nc4','nc5','nc6'],
+  carry:   ['c1','c2','c3','c4','c5','c6'],
+  interchange: ['i1','i2','i3','i4','i5','i6'],
+  numline: ['n1','n2','n3','n4','n5','n6'],
+  wordprob: ['w1','w2','w3','w4','w5','w6','w7'],
+  quiz: []
+};
+
+const QUIZ_ANSWERS = {
+  fq1:'24', fq2:'73', fq3:'57', fq4:'43',
+  fq5:'9', fq6:'66', fq7:'31', fq8:'28',
+  fq9:'22', fq10:'64'
+};
+
+const FEEDBACKS = {
+  correct: ['⭐ Great job!','🌟 Excellent!','🎉 Correct!','🔥 You got it!','💪 Superstar!','✅ Perfect!'],
+  wrong:   ['😊 Try again next time!','💡 Almost! Check the steps.','🤔 Think step by step!']
+};
+
+let tabStatus = {};
+let currentTab = 'nocarry';
+let answered = {};
+let quizDone = {};
+let stars = 0;
+
+function init(){
+  TABS.forEach((t,i) => tabStatus[t] = i===0 ? 'active' : 'locked');
+  renderTabs();
+  updateProgress();
+}
+
+// ===== ANSWER HANDLER =====
+function answer(qId, chosen, result){
+  if(answered[qId]) return;
+  answered[qId] = true;
+  const card = document.getElementById(qId);
+  const fb = document.getElementById('fb-'+qId);
+  const btns = card.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.classList.add('locked-choice'));
+
+  if(result === 'correct'){
+    card.querySelector(`[onclick*="'${chosen}'"]`)?.classList.add('correct');
+    fb.className = 'fb-box ok';
+    fb.textContent = FEEDBACKS.correct[Math.floor(Math.random()*FEEDBACKS.correct.length)];
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+  } else {
+    card.querySelector(`[onclick*="'${chosen}'"]`)?.classList.add('wrong');
+    fb.className = 'fb-box no';
+    fb.textContent = FEEDBACKS.wrong[Math.floor(Math.random()*FEEDBACKS.wrong.length)];
+  }
+  card.classList.add('done');
+  checkTabComplete(currentTab);
+}
+
+// ===== QUIZ ANSWER =====
+function quizAnswer(qId, el, chosen){
+  if(quizDone[qId]) return;
+  quizDone[qId] = true;
+  const correct = QUIZ_ANSWERS[qId];
+  const allOpts = el.parentElement.querySelectorAll('.quiz-opt');
+  allOpts.forEach(o => {
+    o.style.pointerEvents='none';
+    if(o.textContent.trim() === correct) o.classList.add('right');
+  });
+  const fb = document.getElementById('qfb-'+qId);
+  if(chosen === correct){
+    el.classList.add('right');
+    fb.className = 'quiz-fb ok';
+    fb.textContent = FEEDBACKS.correct[Math.floor(Math.random()*FEEDBACKS.correct.length)];
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+  } else {
+    el.classList.add('wrong');
+    fb.className = 'quiz-fb no';
+    fb.textContent = '❌ Correct answer: ' + correct;
+  }
+  fb.style.display = 'block';
+  if(Object.keys(quizDone).length === Object.keys(QUIZ_ANSWERS).length){
+    document.getElementById('btn-quiz').disabled = false;
+    markTabDone('quiz');
+  }
+}
+
+// ===== TAB COMPLETE CHECK =====
+function checkTabComplete(tab){
+  if(tab === 'quiz') return;
+  const qs = TAB_QUESTIONS[tab];
+  if(!qs || qs.length === 0) return;
+  const allDone = qs.every(q => answered[q]);
+  if(allDone){
+    markTabDone(tab);
+    const btn = document.getElementById('btn-'+tab);
+    if(btn) btn.disabled = false;
+  }
+}
+
+function markTabDone(tab){
+  tabStatus[tab] = 'done';
+  updateProgress();
+}
+
+// ===== TAB NAVIGATION =====
+function nextTab(toTab){
+  tabStatus[currentTab] = 'done';
+  tabStatus[toTab] = 'active';
+  currentTab = toTab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+toTab).classList.add('active');
+  renderTabs();
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderTabs(){
+  document.querySelectorAll('.step-tab').forEach(tab => {
+    const t = tab.dataset.tab;
+    tab.className = 'step-tab ' + tabStatus[t];
+  });
+}
+
+// Tab click
+document.getElementById('stepsBar').addEventListener('click', e => {
+  const tab = e.target.closest('.step-tab');
+  if(!tab) return;
+  const t = tab.dataset.tab;
+  if(tabStatus[t] === 'locked'){
+    tab.classList.remove('shaking');
+    void tab.offsetWidth;
+    tab.classList.add('shaking');
+    setTimeout(() => tab.classList.remove('shaking'), 600);
+    showToast('🔒 Finish the previous step first!');
+    return;
+  }
+  if(tabStatus[t] === 'done' || tabStatus[t] === 'unlocked'){
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-'+t).classList.add('active');
+    TABS.forEach(tab2 => { if(tabStatus[tab2]==='active' && tab2!==t) tabStatus[tab2]='unlocked'; });
+    tabStatus[t] = 'active';
+    currentTab = t;
+    renderTabs();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+});
+
+// Unlock next tab when current is done
+function updateProgress(){
+  TABS.forEach((t, i) => {
+    if(tabStatus[t]==='done' && i+1<TABS.length && tabStatus[TABS[i+1]]==='locked'){
+      tabStatus[TABS[i+1]] = 'unlocked';
+    }
+  });
+  renderTabs();
+
+  const done = TABS.filter(t => tabStatus[t]==='done').length;
+  const pct = Math.round((done/TABS.length)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  const labels = [
+    'Start with Step 1! 👇',
+    'Great start! Keep going! 🚀',
+    'You\'re doing amazing! 💪',
+    'Halfway through! 🌟',
+    'Almost done! 🔥',
+    'Lesson Complete! 🏆'
+  ];
+  const li = Math.min(Math.floor(pct/20), 5);
+  document.getElementById('progLabel').textContent = labels[li];
+}
+
+// Toast
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Celebrate
+function showCelebration(){
+  const s = document.getElementById('celebScreen');
+  const starsEl = document.getElementById('celebStars');
+  starsEl.textContent = '⭐'.repeat(Math.min(stars, 15));
+  s.classList.add('show');
+}
+function restartLesson(){
+  document.getElementById('celebScreen').classList.remove('show');
+  window.location.reload();
+}
+
+init();
+</script>
+</body>
+</html>

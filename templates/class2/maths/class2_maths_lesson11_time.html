@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 — Lesson 11: Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:#e3f2fd;min-height:100vh;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#0d47a1,#1976d2,#64b5f6);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(13,71,161,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:18px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#0d47a1,#1976d2,#90caf9);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:24px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#bbdefb;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#0d47a1,#64b5f6);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.unlocked{background:#fff;color:#1976d2;border-color:#90caf9;}
+.step-tab.active{background:#1976d2;color:#fff;border-color:#1976d2;box-shadow:0 4px 14px rgba(25,118,210,.5);}
+.step-tab.done{background:#e3f2fd;color:#0d47a1;border-color:#90caf9;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#0d47a1;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #1976d2;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#1976d2;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#0d47a1;font-size:15px;}
+
+/* SCENARIO CARDS */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#90caf9;background:#e3f2fd;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#1976d2;font-size:19px;}
+.scene-bottom{border-top:2px dashed #90caf9;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #90caf9;background:#e3f2fd;font-family:'Baloo 2',cursive;font-size:15px;color:#1976d2;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* BIG BUTTONS */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#0d47a1,#64b5f6);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #90caf9;}
+.info-strip p{font-size:14px;font-weight:800;color:#0d47a1;line-height:1.7;}
+
+/* RULE BOX */
+.rule-box{background:#fff;border:3px solid #1976d2;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#1976d2;font-weight:900;line-height:1.7;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#aaa;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#0d47a1;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#e3f2fd;border:3px solid #90caf9;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#1976d2;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* SECTION DIVIDER */
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#1976d2;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* DAY WHEEL VISUAL */
+.day-wheel{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;}
+.day-cell{background:#e3f2fd;border-radius:10px;padding:8px 4px;font-family:'Baloo 2',cursive;font-size:11px;color:#1976d2;font-weight:900;}
+.day-cell.highlight{background:#1976d2;color:#fff;}
+
+/* MONTH GRID */
+.month-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.month-card{background:#fff;border-radius:14px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:4px solid #1976d2;}
+.month-card .mn{font-family:'Baloo 2',cursive;font-size:15px;color:#0d47a1;font-weight:900;}
+.month-card .md{font-size:12px;font-weight:800;color:#888;}
+.month-card.s31{border-left-color:#e53935;}
+.month-card.s30{border-left-color:#43a047;}
+.month-card.s28{border-left-color:#fb8c00;}
+
+/* SEASON CARDS */
+.season-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.season-card{border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.season-card.summer{background:linear-gradient(135deg,#fff9c4,#ffee58);}
+.season-card.rainy{background:linear-gradient(135deg,#e1f5fe,#81d4fa);}
+.season-card.winter{background:linear-gradient(135deg,#e8eaf6,#9fa8da);}
+.season-emoji{font-size:36px;}
+.season-info .st{font-family:'Baloo 2',cursive;font-size:16px;font-weight:900;color:#222;}
+.season-info .sm{font-size:12px;font-weight:800;color:#555;}
+
+/* CELEB */
+.celeb-screen{position:fixed;inset:0;background:rgba(13,71,161,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#0d47a1;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+
+/* SORT ACTIVITY */
+.sort-pool{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#e3f2fd;border-radius:14px;min-height:50px;margin:8px 0;}
+.sort-chip{background:#1976d2;color:#fff;padding:8px 14px;border-radius:30px;font-family:'Baloo 2',cursive;font-size:14px;cursor:pointer;user-select:none;transition:transform .15s;font-weight:900;}
+.sort-chip:active{transform:scale(.9);}
+.sort-chip.placed{opacity:.4;pointer-events:none;}
+.sort-buckets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:8px 0;}
+.sort-bucket{background:#fff;border:3px dashed #90caf9;border-radius:14px;min-height:80px;padding:8px;border-radius:14px;}
+.sort-bucket-title{font-family:'Baloo 2',cursive;font-size:13px;color:#1976d2;font-weight:900;text-align:center;margin-bottom:4px;}
+.sort-bucket-items{display:flex;flex-wrap:wrap;gap:4px;min-height:40px;}
+.sort-bucket-items .placed-chip{background:#0d47a1;color:#fff;padding:5px 10px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:12px;font-weight:900;}
+
+/* CALENDAR MINI */
+.cal-wrap{background:#fff;border-radius:20px;padding:14px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);overflow-x:auto;}
+.cal-table{width:100%;border-collapse:collapse;font-family:'Baloo 2',cursive;font-size:13px;}
+.cal-table th{background:#1976d2;color:#fff;padding:6px 4px;text-align:center;font-size:12px;}
+.cal-table td{padding:5px 4px;text-align:center;color:#333;font-weight:800;}
+.cal-table td.sun{color:#e53935;}
+.cal-table td.sat{color:#1976d2;}
+.cal-table td.highlight{background:#ffd54f;border-radius:8px;font-weight:900;}
+
+/* DAYNIGHTTILE */
+.dn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.dn-tile{border-radius:18px;padding:16px;text-align:center;}
+.dn-tile.day-tile{background:linear-gradient(135deg,#fff9c4,#ffe082);}
+.dn-tile.night-tile{background:linear-gradient(135deg,#1a237e,#283593);}
+.dn-tile .dt-emoji{font-size:36px;display:block;margin-bottom:6px;}
+.dn-tile .dt-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:900;color:#333;}
+.dn-tile.night-tile .dt-title{color:#fff;}
+.dn-tile .dt-sub{font-size:11px;font-weight:800;color:#666;margin-top:4px;}
+.dn-tile.night-tile .dt-sub{color:#9fa8da;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🕐 Lesson 11 — Time</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🗓️</span>
+  <h1>Class 2 · Lesson 11</h1>
+  <p>TIME — Days, Months, Seasons &amp; More!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="days">📅 Days of Week</div>
+  <div class="step-tab locked" data-tab="yesterday">⏪ Yesterday/Today/Tomorrow</div>
+  <div class="step-tab locked" data-tab="months">🗓️ Months</div>
+  <div class="step-tab locked" data-tab="seasons">🌤️ Seasons</div>
+  <div class="step-tab locked" data-tab="daynight">🌙 Day &amp; Night</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Final Quiz</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ==================== TAB 1: DAYS OF WEEK ==================== -->
+<div class="tab-panel active" id="panel-days">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#90caf9);">
+    <span class="banner-emoji">📅</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">Days of the Week</div>
+      <div class="banner-sub" style="color:#1976d2;">There are 7 days in a week. Let's learn them!</div>
+    </div>
+  </div>
+
+  <div class="day-wheel">
+    <div class="day-row">
+      <div class="day-cell highlight">☀️<br>Sun</div>
+      <div class="day-cell">🔵<br>Mon</div>
+      <div class="day-cell">🟢<br>Tue</div>
+      <div class="day-cell">🟡<br>Wed</div>
+      <div class="day-cell">🟠<br>Thu</div>
+      <div class="day-cell">🔴<br>Fri</div>
+      <div class="day-cell">🟣<br>Sat</div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">📌 There are <span style="color:#e53935;font-size:20px;">7 days</span> in a week!<br>
+    Sunday → Monday → Tuesday → Wednesday → Thursday → Friday → Saturday</div>
+  </div>
+
+  <div class="info-strip">
+    <p>🌟 <span class="hl">Sunday</span> is the 1st day &nbsp;|&nbsp; <span class="hl">Saturday</span> is the 7th (last) day</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="d1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 7</div>
+      <div class="scene-sentence">Which is the <span class="kw">5th day</span> of the week?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d1','Wednesday','wrong',this)"><span class="cb-emoji">🟡</span><span class="cb-word">Wednesday</span></div>
+        <div class="choice-btn" onclick="answer('d1','Thursday','correct',this)"><span class="cb-emoji">🟠</span><span class="cb-word">Thursday</span></div>
+        <div class="choice-btn" onclick="answer('d1','Friday','wrong',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+      </div>
+      <div class="fb-box" id="fb-d1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="d2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 7</div>
+      <div class="scene-sentence">Monday is the <span class="kw">___ day</span> of the week.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d2','1st','wrong',this)"><span class="cb-emoji">1️⃣</span><span class="cb-word">1st</span></div>
+        <div class="choice-btn" onclick="answer('d2','2nd','correct',this)"><span class="cb-emoji">2️⃣</span><span class="cb-word">2nd</span></div>
+        <div class="choice-btn" onclick="answer('d2','3rd','wrong',this)"><span class="cb-emoji">3️⃣</span><span class="cb-word">3rd</span></div>
+      </div>
+      <div class="fb-box" id="fb-d2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="d3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 7</div>
+      <div class="scene-sentence">What is the <span class="kw">last day</span> of the week?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d3','Sunday','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Sunday</span></div>
+        <div class="choice-btn" onclick="answer('d3','Friday','wrong',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+        <div class="choice-btn" onclick="answer('d3','Saturday','correct',this)"><span class="cb-emoji">🟣</span><span class="cb-word">Saturday</span></div>
+      </div>
+      <div class="fb-box" id="fb-d3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="d4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 7</div>
+      <div class="scene-sentence">Sunday is the <span class="kw">___ day</span> of the week.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d4','1st','correct',this)"><span class="cb-emoji">1️⃣</span><span class="cb-word">1st</span></div>
+        <div class="choice-btn" onclick="answer('d4','7th','wrong',this)"><span class="cb-emoji">7️⃣</span><span class="cb-word">7th</span></div>
+        <div class="choice-btn" onclick="answer('d4','4th','wrong',this)"><span class="cb-emoji">4️⃣</span><span class="cb-word">4th</span></div>
+      </div>
+      <div class="fb-box" id="fb-d4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="d5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 7</div>
+      <div class="scene-sentence">How many <span class="kw">days</span> are there in a week?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d5','5','wrong',this)"><span class="cb-emoji">5️⃣</span><span class="cb-word">5</span></div>
+        <div class="choice-btn" onclick="answer('d5','7','correct',this)"><span class="cb-emoji">7️⃣</span><span class="cb-word">7</span></div>
+        <div class="choice-btn" onclick="answer('d5','6','wrong',this)"><span class="cb-emoji">6️⃣</span><span class="cb-word">6</span></div>
+      </div>
+      <div class="fb-box" id="fb-d5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="d6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 7</div>
+      <div class="scene-sentence">What is the <span class="kw">4th day</span> of the week?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d6','Tuesday','wrong',this)"><span class="cb-emoji">🟢</span><span class="cb-word">Tuesday</span></div>
+        <div class="choice-btn" onclick="answer('d6','Wednesday','correct',this)"><span class="cb-emoji">🟡</span><span class="cb-word">Wednesday</span></div>
+        <div class="choice-btn" onclick="answer('d6','Thursday','wrong',this)"><span class="cb-emoji">🟠</span><span class="cb-word">Thursday</span></div>
+      </div>
+      <div class="fb-box" id="fb-d6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="scenario-card" id="d7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 7</div>
+      <div class="scene-sentence">Which is the <span class="kw">6th day</span> of the week?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('d7','Saturday','wrong',this)"><span class="cb-emoji">🟣</span><span class="cb-word">Saturday</span></div>
+        <div class="choice-btn" onclick="answer('d7','Thursday','wrong',this)"><span class="cb-emoji">🟠</span><span class="cb-word">Thursday</span></div>
+        <div class="choice-btn" onclick="answer('d7','Friday','correct',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+      </div>
+      <div class="fb-box" id="fb-d7"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-days" disabled onclick="unlockNext('days','yesterday')">
+    Next: Yesterday / Today / Tomorrow ➡️
+  </button>
+</div>
+
+<!-- ==================== TAB 2: YESTERDAY / TODAY / TOMORROW ==================== -->
+<div class="tab-panel" id="panel-yesterday">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f48fb1);">
+    <span class="banner-emoji">⏪</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">Yesterday, Today &amp; Tomorrow</div>
+      <div class="banner-sub" style="color:#ad1457;">The day before = yesterday · The day after = tomorrow</div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">
+      If today is <span style="color:#e53935;">Monday</span> 📅<br>
+      Yesterday was <span style="color:#6a1b9a;">Sunday</span> ⬅️<br>
+      Tomorrow will be <span style="color:#1976d2;">Tuesday</span> ➡️
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>🐰 <span class="hl">Yesterday</span> = the day BEFORE today<br>
+    🐻 <span class="hl">Today</span> = right now!<br>
+    🐇 <span class="hl">Tomorrow</span> = the day AFTER today</p>
+  </div>
+
+  <div class="section-divider">— BEFORE &amp; AFTER DAYS — TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="y1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 8</div>
+      <div class="scene-sentence">If <span class="kw">today is Monday</span>, what is tomorrow?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y1','Sunday','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Sunday</span></div>
+        <div class="choice-btn" onclick="answer('y1','Tuesday','correct',this)"><span class="cb-emoji">🟢</span><span class="cb-word">Tuesday</span></div>
+        <div class="choice-btn" onclick="answer('y1','Wednesday','wrong',this)"><span class="cb-emoji">🟡</span><span class="cb-word">Wednesday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="y2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 8</div>
+      <div class="scene-sentence">If <span class="kw">today is Friday</span>, what is tomorrow?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y2','Friday','wrong',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+        <div class="choice-btn" onclick="answer('y2','Thursday','wrong',this)"><span class="cb-emoji">🟠</span><span class="cb-word">Thursday</span></div>
+        <div class="choice-btn" onclick="answer('y2','Saturday','correct',this)"><span class="cb-emoji">🟣</span><span class="cb-word">Saturday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="y3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 8</div>
+      <div class="scene-sentence">If <span class="kw">yesterday was Sunday</span>, what is today?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y3','Sunday','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Sunday</span></div>
+        <div class="choice-btn" onclick="answer('y3','Monday','correct',this)"><span class="cb-emoji">🔵</span><span class="cb-word">Monday</span></div>
+        <div class="choice-btn" onclick="answer('y3','Saturday','wrong',this)"><span class="cb-emoji">🟣</span><span class="cb-word">Saturday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="y4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 8</div>
+      <div class="scene-sentence">What comes <span class="kw">after Monday</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y4','Tuesday','correct',this)"><span class="cb-emoji">🟢</span><span class="cb-word">Tuesday</span></div>
+        <div class="choice-btn" onclick="answer('y4','Sunday','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Sunday</span></div>
+        <div class="choice-btn" onclick="answer('y4','Wednesday','wrong',this)"><span class="cb-emoji">🟡</span><span class="cb-word">Wednesday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="y5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 8</div>
+      <div class="scene-sentence">The day <span class="kw">before Thursday</span> is?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y5','Friday','wrong',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+        <div class="choice-btn" onclick="answer('y5','Wednesday','correct',this)"><span class="cb-emoji">🟡</span><span class="cb-word">Wednesday</span></div>
+        <div class="choice-btn" onclick="answer('y5','Tuesday','wrong',this)"><span class="cb-emoji">🟢</span><span class="cb-word">Tuesday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 - birthday story -->
+  <div class="scenario-card" id="y6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 8 — Birthday Story!</div>
+      <div class="scene-sentence">Today is <span class="kw">Friday</span> — Rama's birthday 🎂<br>Yesterday, Rama went to <span class="kw">Raju's</span> birthday.<br>On which day was Raju's birthday?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y6','Thursday','correct',this)"><span class="cb-emoji">🟠</span><span class="cb-word">Thursday</span></div>
+        <div class="choice-btn" onclick="answer('y6','Saturday','wrong',this)"><span class="cb-emoji">🟣</span><span class="cb-word">Saturday</span></div>
+        <div class="choice-btn" onclick="answer('y6','Wednesday','wrong',this)"><span class="cb-emoji">🟡</span><span class="cb-word">Wednesday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 - birthday story part 2 -->
+  <div class="scenario-card" id="y7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 8 — Birthday Story!</div>
+      <div class="scene-sentence">Today is <span class="kw">Friday</span>.<br>Rama and Raju are going to <span class="kw">David's</span> birthday tomorrow.<br>On which day is David's birthday?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y7','Friday','wrong',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+        <div class="choice-btn" onclick="answer('y7','Sunday','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Sunday</span></div>
+        <div class="choice-btn" onclick="answer('y7','Saturday','correct',this)"><span class="cb-emoji">🟣</span><span class="cb-word">Saturday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y7"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="scenario-card" id="y8">
+    <div class="scene-top">
+      <div class="scene-label">Question 8 of 8</div>
+      <div class="scene-sentence">If <span class="kw">today is Saturday</span>, what was yesterday?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('y8','Sunday','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Sunday</span></div>
+        <div class="choice-btn" onclick="answer('y8','Friday','correct',this)"><span class="cb-emoji">🔴</span><span class="cb-word">Friday</span></div>
+        <div class="choice-btn" onclick="answer('y8','Thursday','wrong',this)"><span class="cb-emoji">🟠</span><span class="cb-word">Thursday</span></div>
+      </div>
+      <div class="fb-box" id="fb-y8"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-yesterday" disabled onclick="unlockNext('yesterday','months')">
+    Next: Months of the Year ➡️
+  </button>
+</div>
+
+<!-- ==================== TAB 3: MONTHS ==================== -->
+<div class="tab-panel" id="panel-months">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#ce93d8);">
+    <span class="banner-emoji">🗓️</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">Months of the Year</div>
+      <div class="banner-sub" style="color:#6a1b9a;">12 months = 365 days = 1 year!</div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">📅 12 months = 365 days = <span style="color:#e53935;">1 Year</span><br>
+    🗓️ Year starts with <span style="color:#1976d2;">January</span> and ends with <span style="color:#e53935;">December</span></div>
+  </div>
+
+  <div class="month-grid">
+    <div class="month-card s31"><div class="mn">1. January</div><div class="md">31 days</div></div>
+    <div class="month-card s28"><div class="mn">2. February</div><div class="md">28 or 29 days</div></div>
+    <div class="month-card s31"><div class="mn">3. March</div><div class="md">31 days</div></div>
+    <div class="month-card s30"><div class="mn">4. April</div><div class="md">30 days</div></div>
+    <div class="month-card s31"><div class="mn">5. May</div><div class="md">31 days</div></div>
+    <div class="month-card s30"><div class="mn">6. June</div><div class="md">30 days</div></div>
+    <div class="month-card s31"><div class="mn">7. July</div><div class="md">31 days</div></div>
+    <div class="month-card s31"><div class="mn">8. August</div><div class="md">31 days</div></div>
+    <div class="month-card s30"><div class="mn">9. September</div><div class="md">30 days</div></div>
+    <div class="month-card s31"><div class="mn">10. October</div><div class="md">31 days</div></div>
+    <div class="month-card s30"><div class="mn">11. November</div><div class="md">30 days</div></div>
+    <div class="month-card s31"><div class="mn">12. December</div><div class="md">31 days</div></div>
+  </div>
+
+  <div class="info-strip">
+    <p>🔴 <span class="hl">31-day months:</span> Jan, Mar, May, Jul, Aug, Oct, Dec<br>
+    🟢 <span class="hl">30-day months:</span> Apr, Jun, Sep, Nov<br>
+    🟠 <span class="hl">28 or 29 days:</span> February only!</p>
+  </div>
+
+  <div class="info-strip" style="background:linear-gradient(135deg,#fff3e0,#ffcc80);border-color:#ffb74d;">
+    <p>🐸 A <span style="color:#e65100;">Leap Year</span> has 366 days! It comes once every <span style="color:#e65100;">4 years</span>. In a leap year, February has <span style="color:#e65100;">29 days</span>!</p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="m1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 8</div>
+      <div class="scene-sentence">What is the <span class="kw">10th month</span> of the year?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m1','September','wrong',this)"><span class="cb-emoji">🍂</span><span class="cb-word">September</span></div>
+        <div class="choice-btn" onclick="answer('m1','October','correct',this)"><span class="cb-emoji">🎃</span><span class="cb-word">October</span></div>
+        <div class="choice-btn" onclick="answer('m1','November','wrong',this)"><span class="cb-emoji">🍁</span><span class="cb-word">November</span></div>
+      </div>
+      <div class="fb-box" id="fb-m1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="m2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 8</div>
+      <div class="scene-sentence">What is the <span class="kw">12th month</span> of the year?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m2','November','wrong',this)"><span class="cb-emoji">🍁</span><span class="cb-word">November</span></div>
+        <div class="choice-btn" onclick="answer('m2','January','wrong',this)"><span class="cb-emoji">❄️</span><span class="cb-word">January</span></div>
+        <div class="choice-btn" onclick="answer('m2','December','correct',this)"><span class="cb-emoji">🎄</span><span class="cb-word">December</span></div>
+      </div>
+      <div class="fb-box" id="fb-m2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="m3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 8</div>
+      <div class="scene-sentence">How many days does <span class="kw">January</span> have?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m3','28','wrong',this)"><span class="cb-emoji">2️⃣8️⃣</span><span class="cb-word">28</span></div>
+        <div class="choice-btn" onclick="answer('m3','30','wrong',this)"><span class="cb-emoji">3️⃣0️⃣</span><span class="cb-word">30</span></div>
+        <div class="choice-btn" onclick="answer('m3','31','correct',this)"><span class="cb-emoji">3️⃣1️⃣</span><span class="cb-word">31</span></div>
+      </div>
+      <div class="fb-box" id="fb-m3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="m4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 8</div>
+      <div class="scene-sentence">Which month has the <span class="kw">least days</span> (28 or 29)?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m4','January','wrong',this)"><span class="cb-emoji">❄️</span><span class="cb-word">January</span></div>
+        <div class="choice-btn" onclick="answer('m4','February','correct',this)"><span class="cb-emoji">💘</span><span class="cb-word">February</span></div>
+        <div class="choice-btn" onclick="answer('m4','April','wrong',this)"><span class="cb-emoji">🌸</span><span class="cb-word">April</span></div>
+      </div>
+      <div class="fb-box" id="fb-m4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="m5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 8</div>
+      <div class="scene-sentence">How many months are there in <span class="kw">one year</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m5','10','wrong',this)"><span class="cb-emoji">🔟</span><span class="cb-word">10</span></div>
+        <div class="choice-btn" onclick="answer('m5','11','wrong',this)"><span class="cb-emoji">1️⃣1️⃣</span><span class="cb-word">11</span></div>
+        <div class="choice-btn" onclick="answer('m5','12','correct',this)"><span class="cb-emoji">1️⃣2️⃣</span><span class="cb-word">12</span></div>
+      </div>
+      <div class="fb-box" id="fb-m5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="m6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 8</div>
+      <div class="scene-sentence">How many days does <span class="kw">November</span> have?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m6','28','wrong',this)"><span class="cb-emoji">2️⃣8️⃣</span><span class="cb-word">28</span></div>
+        <div class="choice-btn" onclick="answer('m6','30','correct',this)"><span class="cb-emoji">3️⃣0️⃣</span><span class="cb-word">30</span></div>
+        <div class="choice-btn" onclick="answer('m6','31','wrong',this)"><span class="cb-emoji">3️⃣1️⃣</span><span class="cb-word">31</span></div>
+      </div>
+      <div class="fb-box" id="fb-m6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="scenario-card" id="m7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 8</div>
+      <div class="scene-sentence">How many months have <span class="kw">30 days</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m7','3','wrong',this)"><span class="cb-emoji">3️⃣</span><span class="cb-word">3</span></div>
+        <div class="choice-btn" onclick="answer('m7','4','correct',this)"><span class="cb-emoji">4️⃣</span><span class="cb-word">4</span></div>
+        <div class="choice-btn" onclick="answer('m7','5','wrong',this)"><span class="cb-emoji">5️⃣</span><span class="cb-word">5</span></div>
+      </div>
+      <div class="fb-box" id="fb-m7"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="scenario-card" id="m8">
+    <div class="scene-top">
+      <div class="scene-label">Question 8 of 8</div>
+      <div class="scene-sentence">A <span class="kw">Leap Year</span> has how many days?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('m8','365','wrong',this)"><span class="cb-emoji">3️⃣6️⃣5️⃣</span><span class="cb-word">365</span></div>
+        <div class="choice-btn" onclick="answer('m8','360','wrong',this)"><span class="cb-emoji">3️⃣6️⃣0️⃣</span><span class="cb-word">360</span></div>
+        <div class="choice-btn" onclick="answer('m8','366','correct',this)"><span class="cb-emoji">3️⃣6️⃣6️⃣</span><span class="cb-word">366</span></div>
+      </div>
+      <div class="fb-box" id="fb-m8"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-months" disabled onclick="unlockNext('months','seasons')">
+    Next: Seasons ➡️
+  </button>
+</div>
+
+<!-- ==================== TAB 4: SEASONS ==================== -->
+<div class="tab-panel" id="panel-seasons">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#a5d6a7);">
+    <span class="banner-emoji">🌤️</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Seasons of the Year</div>
+      <div class="banner-sub" style="color:#2e7d32;">There are 3 seasons — Summer, Rainy and Winter!</div>
+    </div>
+  </div>
+
+  <div class="season-wrap">
+    <div class="season-card summer">
+      <div class="season-emoji">☀️</div>
+      <div class="season-info">
+        <div class="st">SUMMER</div>
+        <div class="sm">February · March · April · May<br>Very hot! Wear thin cotton clothes 👕<br>Mangoes ripen! 🥭</div>
+      </div>
+    </div>
+    <div class="season-card rainy">
+      <div class="season-emoji">🌧️</div>
+      <div class="season-info">
+        <div class="st">RAINY</div>
+        <div class="sm">June · July · August · September<br>Country becomes green 🌿<br>Carry umbrellas! ☂️</div>
+      </div>
+    </div>
+    <div class="season-card winter">
+      <div class="season-emoji">❄️</div>
+      <div class="season-info">
+        <div class="st" style="color:#fff;">WINTER</div>
+        <div class="sm" style="color:#c5cae9;">October · November · December · January<br>Cold months! Wear sweaters 🧥<br>Trees lose leaves 🍂</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="s1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 7</div>
+      <div class="scene-sentence">How many <span class="kw">seasons</span> are there in a year?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s1','2','wrong',this)"><span class="cb-emoji">2️⃣</span><span class="cb-word">2</span></div>
+        <div class="choice-btn" onclick="answer('s1','3','correct',this)"><span class="cb-emoji">3️⃣</span><span class="cb-word">3</span></div>
+        <div class="choice-btn" onclick="answer('s1','4','wrong',this)"><span class="cb-emoji">4️⃣</span><span class="cb-word">4</span></div>
+      </div>
+      <div class="fb-box" id="fb-s1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="s2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 7</div>
+      <div class="scene-sentence">Which season do we get <span class="kw">mangoes</span>? 🥭</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s2','Winter','wrong',this)"><span class="cb-emoji">❄️</span><span class="cb-word">Winter</span></div>
+        <div class="choice-btn" onclick="answer('s2','Summer','correct',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Summer</span></div>
+        <div class="choice-btn" onclick="answer('s2','Rainy','wrong',this)"><span class="cb-emoji">🌧️</span><span class="cb-word">Rainy</span></div>
+      </div>
+      <div class="fb-box" id="fb-s2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="s3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 7</div>
+      <div class="scene-sentence">We carry <span class="kw">umbrellas</span> ☂️ during which season?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s3','Summer','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Summer</span></div>
+        <div class="choice-btn" onclick="answer('s3','Winter','wrong',this)"><span class="cb-emoji">❄️</span><span class="cb-word">Winter</span></div>
+        <div class="choice-btn" onclick="answer('s3','Rainy','correct',this)"><span class="cb-emoji">🌧️</span><span class="cb-word">Rainy</span></div>
+      </div>
+      <div class="fb-box" id="fb-s3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="s4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 7</div>
+      <div class="scene-sentence">Which season do we wear <span class="kw">sweaters and shawls</span> 🧥?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s4','Rainy','wrong',this)"><span class="cb-emoji">🌧️</span><span class="cb-word">Rainy</span></div>
+        <div class="choice-btn" onclick="answer('s4','Summer','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Summer</span></div>
+        <div class="choice-btn" onclick="answer('s4','Winter','correct',this)"><span class="cb-emoji">❄️</span><span class="cb-word">Winter</span></div>
+      </div>
+      <div class="fb-box" id="fb-s4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="s5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 7</div>
+      <div class="scene-sentence">In which season does the country become <span class="kw">green</span> 🌿?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s5','Summer','wrong',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Summer</span></div>
+        <div class="choice-btn" onclick="answer('s5','Rainy','correct',this)"><span class="cb-emoji">🌧️</span><span class="cb-word">Rainy</span></div>
+        <div class="choice-btn" onclick="answer('s5','Winter','wrong',this)"><span class="cb-emoji">❄️</span><span class="cb-word">Winter</span></div>
+      </div>
+      <div class="fb-box" id="fb-s5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="s6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 7</div>
+      <div class="scene-sentence">Which months belong to <span class="kw">Summer</span>? ☀️</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s6','Jun-Sep','wrong',this)"><span class="cb-emoji">🌧️</span><span class="cb-word">Jun–Sep</span></div>
+        <div class="choice-btn" onclick="answer('s6','Feb-May','correct',this)"><span class="cb-emoji">☀️</span><span class="cb-word">Feb–May</span></div>
+        <div class="choice-btn" onclick="answer('s6','Oct-Jan','wrong',this)"><span class="cb-emoji">❄️</span><span class="cb-word">Oct–Jan</span></div>
+      </div>
+      <div class="fb-box" id="fb-s6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="scenario-card" id="s7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 7</div>
+      <div class="scene-sentence">In <span class="kw">winter</span>, trees lose all their ___.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('s7','Flowers','wrong',this)"><span class="cb-emoji">🌸</span><span class="cb-word">Flowers</span></div>
+        <div class="choice-btn" onclick="answer('s7','Leaves','correct',this)"><span class="cb-emoji">🍂</span><span class="cb-word">Leaves</span></div>
+        <div class="choice-btn" onclick="answer('s7','Fruits','wrong',this)"><span class="cb-emoji">🍎</span><span class="cb-word">Fruits</span></div>
+      </div>
+      <div class="fb-box" id="fb-s7"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-seasons" disabled onclick="unlockNext('seasons','daynight')">
+    Next: Day &amp; Night ➡️
+  </button>
+</div>
+
+<!-- ==================== TAB 5: DAY AND NIGHT ==================== -->
+<div class="tab-panel" id="panel-daynight">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fffde7,#fff9c4);">
+    <span class="banner-emoji">🌙</span>
+    <div>
+      <div class="banner-title" style="color:#f57f17;">Day and Night</div>
+      <div class="banner-sub" style="color:#f9a825;">Sunrise to Sunset = Day · Sunset to Sunrise = Night!</div>
+    </div>
+  </div>
+
+  <div class="dn-row">
+    <div class="dn-tile day-tile">
+      <span class="dt-emoji">🌅</span>
+      <div class="dt-title">DAY TIME</div>
+      <div class="dt-sub">☀️ We get sunlight<br>🦅 Birds fly<br>👷 We work</div>
+    </div>
+    <div class="dn-tile night-tile">
+      <span class="dt-emoji">🌙</span>
+      <div class="dt-title">NIGHT TIME</div>
+      <div class="dt-sub">🌟 We use artificial light<br>🐦 Birds rest in nests<br>😴 We sleep</div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">
+      🌅 Day <span style="color:#e53935;">begins</span> with <span style="color:#e53935;">Sunrise</span><br>
+      🌇 Day <span style="color:#1976d2;">ends</span> with <span style="color:#1976d2;">Sunset</span><br>
+      🌆 Night <span style="color:#e53935;">begins</span> with <span style="color:#e53935;">Sunset</span><br>
+      🌄 Night <span style="color:#1976d2;">ends</span> with <span style="color:#1976d2;">Sunrise</span>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>🕐 In one full day, half the time is <span class="hl">day</span> and half the time is <span class="hl">night</span>!</p>
+  </div>
+
+  <div class="section-divider">— TRUE ✅ OR FALSE ❌ — TAP THE RIGHT ANSWER —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="dn1">
+    <div class="scene-top">
+      <div class="scene-label">Question 1 of 7</div>
+      <div class="scene-sentence">We <span class="kw">sleep</span> during the day.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn1','True','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn1','False','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="dn2">
+    <div class="scene-top">
+      <div class="scene-label">Question 2 of 7</div>
+      <div class="scene-sentence">We get <span class="kw">sunlight</span> during the day.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn2','True','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn2','False','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="dn3">
+    <div class="scene-top">
+      <div class="scene-label">Question 3 of 7</div>
+      <div class="scene-sentence">Birds take rest in their <span class="kw">nests</span> during night.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn3','True','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn3','False','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="dn4">
+    <div class="scene-top">
+      <div class="scene-label">Question 4 of 7</div>
+      <div class="scene-sentence"><span class="kw">Day</span> starts with sunset.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn4','True','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn4','False','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="dn5">
+    <div class="scene-top">
+      <div class="scene-label">Question 5 of 7</div>
+      <div class="scene-sentence"><span class="kw">Night</span> starts with sunset.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn5','True','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn5','False','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="dn6">
+    <div class="scene-top">
+      <div class="scene-label">Question 6 of 7</div>
+      <div class="scene-sentence">We use <span class="kw">artificial lights</span> during night.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn6','True','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn6','False','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="scenario-card" id="dn7">
+    <div class="scene-top">
+      <div class="scene-label">Question 7 of 7</div>
+      <div class="scene-sentence">There are <span class="kw">4 complete weeks</span> in a month.</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="answer('dn7','True','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">True</span></div>
+        <div class="choice-btn" onclick="answer('dn7','False','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">False</span></div>
+      </div>
+      <div class="fb-box" id="fb-dn7"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-daynight" disabled onclick="unlockNext('daynight','quiz')">
+    Final Quiz Time! 🏆 ➡️
+  </button>
+</div>
+
+<!-- ==================== TAB 6: FINAL QUIZ ==================== -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffd54f);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">Final Quiz!</div>
+      <div class="banner-sub" style="color:#ef6c00;">Answer all 12 questions to finish! You can do it! 💪</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-box-wrap" id="qb1">
+    <div class="quiz-num">Quiz 1 of 12</div>
+    <div class="quiz-question">Which is the 1st month of the year? 📅</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">December 🎄</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">January ❄️</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">March 🌸</div>
+      <div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">June 🌦️</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-box-wrap" id="qb2">
+    <div class="quiz-num">Quiz 2 of 12</div>
+    <div class="quiz-question">If today is Wednesday, tomorrow is? 📅</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">Tuesday 🟢</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">Monday 🔵</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">Thursday 🟠</div>
+      <div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">Friday 🔴</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-box-wrap" id="qb3">
+    <div class="quiz-num">Quiz 3 of 12</div>
+    <div class="quiz-question">How many complete weeks are in a year? 🗓️</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">48 weeks</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">52 weeks</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">30 weeks</div>
+      <div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">60 weeks</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-box-wrap" id="qb4">
+    <div class="quiz-num">Quiz 4 of 12</div>
+    <div class="quiz-question">Republic Day is celebrated on? 🇮🇳</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">15th August</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">26th January</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">2nd October</div>
+      <div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">14th November</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-box-wrap" id="qb5">
+    <div class="quiz-num">Quiz 5 of 12</div>
+    <div class="quiz-question">Independence Day is celebrated on? 🇮🇳</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">26th January</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">15th August</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">2nd October</div>
+      <div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">25th December</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-box-wrap" id="qb6">
+    <div class="quiz-num">Quiz 6 of 12</div>
+    <div class="quiz-question">Gandhi Jayanthi is on? 🕊️</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">14th November</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">5th September</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">2nd October</div>
+      <div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">1st November</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-box-wrap" id="qb7">
+    <div class="quiz-num">Quiz 7 of 12</div>
+    <div class="quiz-question">Children's Day is celebrated on? 🧒</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">5th September</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">14th November</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">2nd October</div>
+      <div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">26th January</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-box-wrap" id="qb8">
+    <div class="quiz-num">Quiz 8 of 12</div>
+    <div class="quiz-question">Christmas is celebrated on? 🎄</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">26th December</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">25th December</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">24th December</div>
+      <div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">1st December</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-box-wrap" id="qb9">
+    <div class="quiz-num">Quiz 9 of 12</div>
+    <div class="quiz-question">Which month comes after July? 🗓️</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">June 🌦️</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">September 🍂</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">August 🌻</div>
+      <div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">October 🎃</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-box-wrap" id="qb10">
+    <div class="quiz-num">Quiz 10 of 12</div>
+    <div class="quiz-question">Teacher's Day is in which month? 🧑‍🏫</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">September</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">October</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">August</div>
+      <div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">November</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb10"></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-box-wrap" id="qb11">
+    <div class="quiz-num">Quiz 11 of 12</div>
+    <div class="quiz-question">Kannada Rajyothsava is on? 🌟</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb11',this,'wrong')">15th August</div>
+      <div class="quiz-opt" onclick="quizAns('qb11',this,'wrong')">26th January</div>
+      <div class="quiz-opt" onclick="quizAns('qb11',this,'correct')">1st November</div>
+      <div class="quiz-opt" onclick="quizAns('qb11',this,'wrong')">14th November</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb11"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-box-wrap" id="qb12">
+    <div class="quiz-num">Quiz 12 of 12</div>
+    <div class="quiz-question">If today is Tuesday, yesterday was? ⏪</div>
+    <div class="quiz-opts">
+      <div class="quiz-opt" onclick="quizAns('qb12',this,'wrong')">Wednesday 🟡</div>
+      <div class="quiz-opt" onclick="quizAns('qb12',this,'correct')">Monday 🔵</div>
+      <div class="quiz-opt" onclick="quizAns('qb12',this,'wrong')">Sunday ☀️</div>
+      <div class="quiz-opt" onclick="quizAns('qb12',this,'wrong')">Thursday 🟠</div>
+    </div>
+    <div class="quiz-fb" id="qfb-qb12"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">
+    🎉 Finish Lesson 11!
+  </button>
+</div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">Amazing Work!</div>
+  <div class="celeb-sub">You completed Lesson 11 — Time! 🎉<br>You know Days, Months, Seasons, Day &amp; Night!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+</div>
+
+<script>
+let stars = 0;
+const tabOrder = ['days','yesterday','months','seasons','daynight','quiz'];
+
+const tabDoneQ = {
+  days:      {done:0, total:7,  btn:'btn-days'},
+  yesterday: {done:0, total:8,  btn:'btn-yesterday'},
+  months:    {done:0, total:8,  btn:'btn-months'},
+  seasons:   {done:0, total:7,  btn:'btn-seasons'},
+  daynight:  {done:0, total:7,  btn:'btn-daynight'},
+};
+
+const cardTabMap = {
+  d1:'days',d2:'days',d3:'days',d4:'days',d5:'days',d6:'days',d7:'days',
+  y1:'yesterday',y2:'yesterday',y3:'yesterday',y4:'yesterday',y5:'yesterday',y6:'yesterday',y7:'yesterday',y8:'yesterday',
+  m1:'months',m2:'months',m3:'months',m4:'months',m5:'months',m6:'months',m7:'months',m8:'months',
+  s1:'seasons',s2:'seasons',s3:'seasons',s4:'seasons',s5:'seasons',s6:'seasons',s7:'seasons',
+  dn1:'daynight',dn2:'daynight',dn3:'daynight',dn4:'daynight',dn5:'daynight',dn6:'daynight',dn7:'daynight',
+};
+
+let quizDone = 0;
+const QUIZ_TOTAL = 12;
+
+function goTab(tabId) {
+  document.querySelectorAll('.step-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + tabId);
+  });
+  updateProgress();
+}
+
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(() => tab.classList.remove('shaking'), 520);
+      showToast('🔒 Finish the previous step first!');
+      return;
+    }
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    goTab(tab.dataset.tab);
+  });
+});
+
+function unlockNext(currentTab, nextTab) {
+  const btn = document.querySelector(`[data-tab="${currentTab}"]`);
+  if (btn) { btn.classList.remove('active'); btn.classList.add('done'); }
+  const next = document.querySelector(`[data-tab="${nextTab}"]`);
+  if (next) { next.classList.remove('locked'); next.classList.add('active'); }
+  document.querySelectorAll('.step-tab').forEach(t => {
+    if (t.dataset.tab !== nextTab && !t.classList.contains('done')) t.classList.remove('active');
+  });
+  goTab(nextTab);
+  window.scrollTo({top:0, behavior:'smooth'});
+  addStars(3);
+}
+
+function updateProgress() {
+  const doneCount = document.querySelectorAll('.step-tab.done').length;
+  const pct = Math.round((doneCount / tabOrder.length) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  const labels = [
+    'Start with Step 1! 👇',
+    'Great! Keep going! 💪',
+    'Halfway there! 🔥',
+    'Almost done! 🚀',
+    'Nearly finished! ⚡',
+    'One more step! 🌟',
+    'Lesson Complete! 🎉'
+  ];
+  document.getElementById('progLabel').textContent = labels[doneCount] || labels[0];
+}
+
+function answer(cardId, choice, result, btnEl) {
+  const card = document.getElementById(cardId);
+  if (card.dataset.done) return;
+  const btns = card.querySelectorAll('.choice-btn');
+  const fb = document.getElementById('fb-' + cardId);
+  if (result === 'correct') {
+    card.dataset.done = '1';
+    card.classList.add('done');
+    btns.forEach(b => b.classList.add('locked-choice'));
+    btnEl.classList.add('correct');
+    fb.className = 'fb-box ok'; fb.textContent = '✅ Correct! Well done! 🌟';
+    addStars(1);
+    const tab = cardTabMap[cardId];
+    if (tab) {
+      tabDoneQ[tab].done++;
+      if (tabDoneQ[tab].done >= tabDoneQ[tab].total) {
+        document.getElementById(tabDoneQ[tab].btn).disabled = false;
+      }
+    }
+  } else {
+    btnEl.classList.add('wrong');
+    fb.className = 'fb-box no'; fb.textContent = '❌ Try again! You can do it! 💪';
+    setTimeout(() => {
+      btnEl.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 900);
+  }
+}
+
+function quizAns(boxId, btn, result) {
+  const box = document.getElementById(boxId);
+  if (box.dataset.done) return;
+  const opts = box.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + boxId);
+  if (result === 'correct') {
+    box.dataset.done = '1';
+    opts.forEach(o => o.style.pointerEvents = 'none');
+    btn.classList.add('right');
+    fb.className = 'quiz-fb ok'; fb.textContent = '✅ Correct! Superstar! ⭐';
+    addStars(1);
+    quizDone++;
+    if (quizDone >= QUIZ_TOTAL) {
+      document.getElementById('btn-quiz').disabled = false;
+    }
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-fb no'; fb.textContent = '❌ Try again! 💪';
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      fb.style.display = 'none';
+    }, 900);
+  }
+}
+
+function addStars(n) {
+  stars += n;
+  document.getElementById('starsNum').textContent = stars;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function showCelebration() {
+  const s = document.getElementById('celebScreen');
+  s.classList.add('show');
+  const starStr = stars >= 40 ? '⭐⭐⭐' : stars >= 25 ? '⭐⭐' : '⭐';
+  document.getElementById('celebStars').textContent = starStr;
+  addStars(5);
+}
+</script>
+</body>
+</html>

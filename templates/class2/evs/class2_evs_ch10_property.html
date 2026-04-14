@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — Lesson 10: Our Property</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#e8eaf6 0%,#c5cae9 100%);min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#303f9f,#3949ab,#5c6bc0);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(48,63,159,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:17px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#283593,#3949ab,#7986cb);padding:18px 20px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'🏛️🏥🚰🚌🚥';position:absolute;bottom:8px;left:0;right:0;font-size:30px;letter-spacing:15px;opacity:.3;animation:scrollEmoji 14s linear infinite;}
+@keyframes scrollEmoji{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);position:relative;z-index:10;}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#c5cae9;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#303f9f,#5c6bc0);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#3949ab;color:#fff;border-color:#3949ab;box-shadow:0 4px 14px rgba(57,73,171,.5);}
+.step-tab.done{background:#e8eaf6;color:#283593;border-color:#9fa8da;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#303f9f;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #3949ab;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#303f9f;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#3949ab;font-size:15px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#9fa8da;background:#e8eaf6;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#303f9f;font-size:19px;}
+.scene-bottom{border-top:2px dashed #c5cae9;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #9fa8da;background:#e8eaf6;font-family:'Baloo 2',cursive;font-size:16px;color:#303f9f;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#303f9f;background:#c5cae9;color:#1a237e;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c5cae9;color:#1a237e;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#303f9f,#5c6bc0);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.info-strip{background:linear-gradient(135deg,#e8eaf6,#c5cae9);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #9fa8da;}
+.info-strip p{font-size:14px;font-weight:800;color:#1a237e;line-height:1.7;}
+
+.plant-grid{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.plant-grid-title{font-family:'Baloo 2',cursive;font-size:15px;color:#303f9f;font-weight:900;text-align:center;margin-bottom:12px;}
+.plant-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;justify-items:center;}
+.plant-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:16px;transition:transform .2s;}
+.plant-cell:hover{transform:scale(1.08);}
+.plant-cell .pe{font-size:36px;}
+.plant-cell .pn{font-family:'Baloo 2',cursive;font-size:11px;font-weight:900;text-align:center;color:#303f9f;}
+
+.rule-box{background:#fff;border:3px solid #3949ab;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#303f9f;font-weight:900;line-height:1.7;}
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#3949ab;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#283593;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#e8eaf6;border:3px solid #9fa8da;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#303f9f;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#303f9f;background:#c5cae9;color:#1a237e;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c5cae9;color:#1a237e;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(40,53,147,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#303f9f;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🏛️ EVS Lesson 10 — Property</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🏛️</span>
+  <h1>Class 2 EVS · Lesson 10</h1>
+  <p>OUR PROPERTY — Used by everyone!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="places">🏛️ Public Places</div>
+  <div class="step-tab locked" data-tab="facilities">🚰 Facilities</div>
+  <div class="step-tab locked" data-tab="citizen">🛡️ Good Citizen</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: PLACES ══════════════ -->
+<div class="tab-panel active" id="panel-places">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <span class="banner-emoji">🏥</span>
+    <div>
+      <div class="banner-title" style="color:#283593;">Important Places</div>
+      <div class="banner-sub" style="color:#3949ab;">They help everyone in the village!</div>
+    </div>
+  </div>
+
+  <div class="plant-grid">
+    <div class="plant-grid-title">Where do you go?</div>
+    <div class="plant-row">
+      <div class="plant-cell"><span class="pe">📮</span><span class="pn">Post Office<br>(Letters)</span></div>
+      <div class="plant-cell"><span class="pe">🏥</span><span class="pn">Hospital<br>(Sick people)</span></div>
+      <div class="plant-cell"><span class="pe">🏫</span><span class="pn">School<br>(Study)</span></div>
+      <div class="plant-cell"><span class="pe">🚌</span><span class="pn">Bus Station<br>(Travel)</span></div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🏛️ What is Public Property?</h3>
+    <p>To help people, we have schools, post offices, hospitals, fair price shops, and bus stations. These fulfil our needs.</p>
+    <p>They are used by <span class="hl">all the people</span> in the town/village. So, they are called <span class="hl" style="font-weight:900;">Public Property!</span></p>
+  </div>
+
+  <div class="section-divider">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="p1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Where do we send <span class="kw">letters</span> to our friends? ✉️</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('p1','post','correct',this)"><span class="cb-emoji">📮</span><span class="cb-word">Post Office</span></div>
+    <div class="choice-btn" onclick="answer('p1','hospital','wrong',this)"><span class="cb-emoji">🏥</span><span class="cb-word">Hospital</span></div>
+  </div><div class="fb-box" id="fb-p1"></div></div></div>
+
+  <div class="scenario-card" id="p2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">Where do sick people go for care? 🤒</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('p2','hospital','correct',this)"><span class="cb-emoji">🏥</span><span class="cb-word">Hospital</span></div>
+    <div class="choice-btn" onclick="answer('p2','park','wrong',this)"><span class="cb-emoji">🌳</span><span class="cb-word">Park</span></div>
+  </div><div class="fb-box" id="fb-p2"></div></div></div>
+
+  <div class="scenario-card" id="p3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">A property used by <span class="kw">all the people</span> is called:</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('p3','public','correct',this)"><span class="cb-emoji">🏛️</span><span class="cb-word">Public Property</span></div>
+    <div class="choice-btn" onclick="answer('p3','mine','wrong',this)"><span class="cb-emoji">🎒</span><span class="cb-word">My Property</span></div>
+  </div><div class="fb-box" id="fb-p3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-places" disabled onclick="unlockNext('places','facilities')">Next: Public Facilities! 🚰 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: FACILITIES ══════════════ -->
+<div class="tab-panel" id="panel-facilities">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e1bee7,#ce93d8);">
+    <span class="banner-emoji">🚰</span>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">Public Facilities</div>
+      <div class="banner-sub" style="color:#8e24aa;">Things we use every day!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#8e24aa;">
+    <h3 style="color:#6a1b9a;">🚦 Free for the Public!</h3>
+    <p>👉 <span class="hl" style="color:#8e24aa;">Street Lights</span>: Help people walk safely during the night! 💡</p>
+    <p>👉 <span class="hl" style="color:#8e24aa;">Public Tap</span>: Anybody can collect water from it! 🚰</p>
+    <p>👉 <span class="hl" style="color:#8e24aa;">Public Toilet</span>: Built in towns/cities. Do not urinate in open places! 🚻</p>
+    <p>👉 <span class="hl" style="color:#8e24aa;">Fair Price Shop</span>: Where rice, wheat, and oil are sold at a low price. 🍚</p>
+  </div>
+
+  <div class="section-divider" style="color:#8e24aa;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="f1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">What helps people walk during the <span class="kw" style="color:#8e24aa;">night</span>? 🌙</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('f1','light','correct',this)"><span class="cb-emoji">💡</span><span class="cb-word">Street Lights</span></div>
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('f1','tap','wrong',this)"><span class="cb-emoji">🚰</span><span class="cb-word">Public Tap</span></div>
+  </div><div class="fb-box" id="fb-f1"></div></div></div>
+
+  <div class="scenario-card" id="f2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">Where can rice and wheat be bought at a <span class="kw" style="color:#8e24aa;">low price</span>? 🍚</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('f2','fair','correct',this)"><span class="cb-emoji">🏪</span><span class="cb-word">Fair Price Shop</span></div>
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('f2','hospital','wrong',this)"><span class="cb-emoji">🏥</span><span class="cb-word">Hospital</span></div>
+  </div><div class="fb-box" id="fb-f2"></div></div></div>
+
+  <div class="scenario-card" id="f3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Why do we need a <span class="kw" style="color:#8e24aa;">public tap</span>?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('f3','water','correct',this)"><span class="cb-emoji">💧</span><span class="cb-word">Collect Water</span></div>
+    <div class="choice-btn" style="color:#6a1b9a; border-color:#ce93d8;" onclick="answer('f3','play','wrong',this)"><span class="cb-emoji">⚽</span><span class="cb-word">To Play</span></div>
+  </div><div class="fb-box" id="fb-f3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-facilities" disabled onclick="unlockNext('facilities','citizen')">Next: Good Citizen! 🛡️ ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: CITIZEN ══════════════ -->
+<div class="tab-panel" id="panel-citizen">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🛡️</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">Protect Our Property!</div>
+      <div class="banner-sub" style="color:#2e7d32;">They belong to all of us!</div>
+    </div>
+  </div>
+
+  <div class="rule-box" style="border-color:#2e7d32;background:#e8f5e9;">
+    <div class="rule-text" style="color:#1b5e20;">"We should not destroy public property but safeguard them! Do not damage taps and street lights!" 🚰💡</div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#2e7d32;">
+    <h3 style="color:#1b5e20;">🧹 Keep it Clean!</h3>
+    <p>👉 We should keep the public toilets <span class="hl" style="color:#2e7d32;">clean</span>. 🚻</p>
+    <p>👉 We should <span style="font-weight:900;color:#c62828;">not litter</span> in public parks. 🌳</p>
+    <p>👉 Do <span style="font-weight:900;color:#c62828;">not spill</span> water unnecessarily from taps! 💧</p>
+  </div>
+
+  <div class="section-divider" style="color:#2e7d32;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="c1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Should we <span class="kw" style="color:#2e7d32;">damage</span> street lights with stones? 🪨</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('c1','no','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">NO!</span></div>
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('c1','yes','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+  </div><div class="fb-box" id="fb-c1"></div></div></div>
+
+  <div class="scenario-card" id="c2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">What should you do while at a <span class="kw" style="color:#2e7d32;">public park</span>? 🌳</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('c2','clean','correct',this)"><span class="cb-emoji">🧹</span><span class="cb-word">Keep it clean</span></div>
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('c2','litter','wrong',this)"><span class="cb-emoji">🗑️</span><span class="cb-word">Throw trash</span></div>
+  </div><div class="fb-box" id="fb-c2"></div></div></div>
+
+  <div class="scenario-card" id="c3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Is it okay to waste water from the <span class="kw" style="color:#2e7d32;">public tap</span>? 💧</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('c3','no','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">NO! Never!</span></div>
+    <div class="choice-btn" style="color:#1b5e20; border-color:#a5d6a7;" onclick="answer('c3','yes','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+  </div><div class="fb-box" id="fb-c3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-citizen" disabled onclick="unlockNext('citizen','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 4: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#c5cae9,#9fa8da);">
+    <span class="banner-emoji">🏆</span>
+    <div><div class="banner-title" style="color:#283593;">Final Quiz!</div>
+    <div class="banner-sub" style="color:#303f9f;">Test your Property Knowledge!</div></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb1"><div class="quiz-num">Question 1 of 10</div><div class="quiz-question">Property used by all the people is:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">🏛️ Public Property</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🏠 My House</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🚗 My Car</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🎒 My Bag</div></div><div class="quiz-fb" id="qfb-qb1"></div></div>
+
+  <div class="quiz-box-wrap" id="qb2"><div class="quiz-num">Question 2 of 10</div><div class="quiz-question">Where do you buy cheap rice and wheat?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🏪 Fair Price Shop</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🏥 Hospital</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">📮 Post Office</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🌳 Park</div></div><div class="quiz-fb" id="qfb-qb2"></div></div>
+
+  <div class="quiz-box-wrap" id="qb3"><div class="quiz-num">Question 3 of 10</div><div class="quiz-question">Which of these is a Public Property?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🏫 Government School</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">👕 My Shirt</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🐕 My Dog</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">📚 My Notebook</div></div><div class="quiz-fb" id="qfb-qb3"></div></div>
+
+  <div class="quiz-box-wrap" id="qb4"><div class="quiz-num">Question 4 of 10</div><div class="quiz-question">Where do buses halt?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">🚌 Bus Station</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🏥 Hospital</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">📮 Post Office</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🚰 Public Tap</div></div><div class="quiz-fb" id="qfb-qb4"></div></div>
+
+  <div class="quiz-box-wrap" id="qb5"><div class="quiz-num">Question 5 of 10</div><div class="quiz-question">Is it okay to litter in the park?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">❌ No</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">✅ Yes</div></div><div class="quiz-fb" id="qfb-qb5"></div></div>
+
+  <div class="quiz-box-wrap" id="qb6"><div class="quiz-num">Question 6 of 10</div><div class="quiz-question">Where do you mail a letter?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">📮 Post Office</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🌳 Park</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🏫 School</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">🏥 Hospital</div></div><div class="quiz-fb" id="qfb-qb6"></div></div>
+
+  <div class="quiz-box-wrap" id="qb7"><div class="quiz-num">Question 7 of 10</div><div class="quiz-question">What protects you in the dark?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">💡 Street Lights</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🚰 Public Tap</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🏫 School</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🚌 Bus Station</div></div><div class="quiz-fb" id="qfb-qb7"></div></div>
+
+  <div class="quiz-box-wrap" id="qb8"><div class="quiz-num">Question 8 of 10</div><div class="quiz-question">Can ANYBODY collect water from a public tap?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">✅ Yes!</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">❌ No</div></div><div class="quiz-fb" id="qfb-qb8"></div></div>
+
+  <div class="quiz-box-wrap" id="qb9"><div class="quiz-num">Question 9 of 10</div><div class="quiz-question">Should you keep the public toilet clean?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">✅ Yes!</div><div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">❌ No</div></div><div class="quiz-fb" id="qfb-qb9"></div></div>
+
+  <div class="quiz-box-wrap" id="qb10"><div class="quiz-num">Question 10 of 10</div><div class="quiz-question">Who should safeguard public property?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">👨‍👩‍👧‍👦 All of us</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">🐕 Animals</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">👽 Aliens</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">👻 Ghosts</div></div><div class="quiz-fb" id="qfb-qb10"></div></div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 10!</button>
+</div>
+
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏛️🏆</div>
+  <div class="celeb-title">Good Citizen!</div>
+  <div class="celeb-sub">You completed EVS Lesson 10 — Our Property! 🎉<br>You are now a guardian of our town's public facilities!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_evs_ch10_progress';
+let stars = 0;
+const tabOrder = ['places','facilities','citizen','quiz'];
+const tabDoneQ = {
+  places:    {done:0, total:3, btn:'btn-places'},
+  facilities:{done:0, total:3, btn:'btn-facilities'},
+  citizen:   {done:0, total:3, btn:'btn-citizen'},
+};
+const cardTabMap = {
+  p1:'places',p2:'places',p3:'places',
+  f1:'facilities',f2:'facilities',f3:'facilities',
+  c1:'citizen',c2:'citizen',c3:'citizen',
+};
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId){document.querySelectorAll('.step-tab').forEach(t=>{t.classList.toggle('active',t.dataset.tab===tabId)});document.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.id==='panel-'+tabId)});updateProgress();}
+document.querySelectorAll('.step-tab').forEach(tab=>{tab.addEventListener('click',()=>{if(tab.classList.contains('locked')){tab.classList.add('shaking');setTimeout(()=>tab.classList.remove('shaking'),520);showToast('🔒 Finish the previous step first!');return;}document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');goTab(tab.dataset.tab);});});
+function unlockNext(currentTab,nextTab){const btn=document.querySelector(`[data-tab="${currentTab}"]`);if(btn){btn.classList.remove('active');btn.classList.add('done');}const next=document.querySelector(`[data-tab="${nextTab}"]`);if(next){next.classList.remove('locked');next.classList.add('active');}document.querySelectorAll('.step-tab').forEach(t=>{if(t.dataset.tab!==nextTab&&!t.classList.contains('done'))t.classList.remove('active');});goTab(nextTab);window.scrollTo({top:0,behavior:'smooth'});addStars(3);}
+function updateProgress(){const doneCount=document.querySelectorAll('.step-tab.done').length;const pct=Math.round((doneCount/tabOrder.length)*100);document.getElementById('progFill').style.width=pct+'%';const labels=['Step 1! 👇','Keep going! 💪','Almost there! 🔥','Quiz time! ⭐','Lesson Complete! 🎉'];document.getElementById('progLabel').textContent=labels[doneCount]||labels[0];}
+function answer(cardId,choice,result,btnEl){const card=document.getElementById(cardId);if(card.dataset.done)return;const btns=card.querySelectorAll('.choice-btn');const fb=document.getElementById('fb-'+cardId);if(result==='correct'){card.dataset.done='1';card.classList.add('done');btns.forEach(b=>b.classList.add('locked-choice'));btnEl.classList.add('correct');fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';addStars(1);const tab=cardTabMap[cardId];if(tab){tabDoneQ[tab].done++;if(tabDoneQ[tab].done>=tabDoneQ[tab].total){document.getElementById(tabDoneQ[tab].btn).disabled=false;}}}else{btnEl.classList.add('wrong');fb.className='fb-box no';fb.textContent='❌ Try again! You can do it! 💪';setTimeout(()=>{btnEl.classList.remove('wrong');fb.style.display='none';},1500);}}
+function quizAns(boxId,btn,result){const box=document.getElementById(boxId);if(box.dataset.done)return;const opts=box.querySelectorAll('.quiz-opt');const fb=document.getElementById('qfb-'+boxId);if(result==='correct'){box.dataset.done='1';opts.forEach(o=>o.style.pointerEvents='none');btn.classList.add('right');fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';addStars(1);quizDone++;if(quizDone>=QUIZ_TOTAL){document.getElementById('btn-quiz').disabled=false;}}else{btn.classList.add('wrong');fb.className='quiz-fb no';fb.textContent='❌ Try again! 💪';setTimeout(()=>{btn.classList.remove('wrong');fb.style.display='none';},1500);}}
+function addStars(n){stars+=n;document.getElementById('starsNum').textContent=stars;saveProgress();}
+function showToast(msg){const t=document.getElementById('lockToast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showCelebration(){const s=document.getElementById('celebScreen');s.classList.add('show');const starStr=stars>=30?'⭐⭐⭐':stars>=18?'⭐⭐':'⭐';document.getElementById('celebStars').textContent=starStr;addStars(5);}
+
+function saveProgress(){try{const state={stars,quizDone,tabDoneQ:JSON.parse(JSON.stringify(tabDoneQ)),doneCards:[],doneTabs:[],doneQuizBoxes:[]};document.querySelectorAll('.scenario-card[data-done]').forEach(c=>state.doneCards.push(c.id));document.querySelectorAll('.step-tab.done').forEach(t=>state.doneTabs.push(t.dataset.tab));document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q=>state.doneQuizBoxes.push(q.id));localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){}}
+function loadProgress(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;const state=JSON.parse(raw);stars=state.stars||0;quizDone=state.quizDone||0;document.getElementById('starsNum').textContent=stars;if(state.tabDoneQ)Object.keys(state.tabDoneQ).forEach(k=>{if(tabDoneQ[k])tabDoneQ[k].done=state.tabDoneQ[k].done;});(state.doneCards||[]).forEach(id=>{const card=document.getElementById(id);if(!card)return;card.dataset.done='1';card.classList.add('done');card.querySelectorAll('.choice-btn').forEach(b=>b.classList.add('locked-choice'));card.querySelectorAll('.choice-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'correct'"))b.classList.add('correct');});const fb=document.getElementById('fb-'+id);if(fb){fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';}});(state.doneQuizBoxes||[]).forEach(id=>{const box=document.getElementById(id);if(!box)return;box.dataset.done='1';box.querySelectorAll('.quiz-opt').forEach(o=>{o.style.pointerEvents='none';if(o.getAttribute('onclick')&&o.getAttribute('onclick').includes("'correct'"))o.classList.add('right');});const fb=document.getElementById('qfb-'+id);if(fb){fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';}});(state.doneTabs||[]).forEach(tabId=>{const tab=document.querySelector(`[data-tab="${tabId}"]`);if(tab){tab.classList.remove('active','locked');tab.classList.add('done');}});Object.keys(tabDoneQ).forEach(k=>{if(tabDoneQ[k].done>=tabDoneQ[k].total){const btn=document.getElementById(tabDoneQ[k].btn);if(btn)btn.disabled=false;}});if(quizDone>=QUIZ_TOTAL){const btn=document.getElementById('btn-quiz');if(btn)btn.disabled=false;}const allDone=state.doneTabs||[];if(allDone.length>0){const lastDoneIdx=Math.max(...allDone.map(t=>tabOrder.indexOf(t)));const nextIdx=lastDoneIdx+1;if(nextIdx<tabOrder.length){const nextTab=tabOrder[nextIdx];const nextEl=document.querySelector(`[data-tab="${nextTab}"]`);if(nextEl){nextEl.classList.remove('locked');nextEl.classList.add('active');}goTab(nextTab);}else{goTab(tabOrder[tabOrder.length-1]);}}updateProgress();}catch(e){}}
+function startOver(){localStorage.removeItem(SAVE_KEY);location.reload();}
+loadProgress();
+</script>
+</body>
+</html>

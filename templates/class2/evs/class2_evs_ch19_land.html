@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — Lesson 19: My Beautiful Native Land</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#e8f5e9 0%,#c8e6c9 100%);min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#2e7d32,#388e3c,#4caf50);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(46,125,50,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:17px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#1b5e20,#2e7d32,#4caf50);padding:18px 20px 44px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'🌲🏔️🌊🦁🐦🏞️';position:absolute;bottom:8px;left:0;right:0;font-size:30px;letter-spacing:15px;opacity:.3;animation:scrollEmoji 15s linear infinite;}
+@keyframes scrollEmoji{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);position:relative;z-index:10;}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#2e7d32,#4caf50);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#388e3c;color:#fff;border-color:#1b5e20;box-shadow:0 4px 14px rgba(56,142,60,.4);}
+.step-tab.done{background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#2e7d32;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:88vw;text-align:center;}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #4caf50;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#2e7d32;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;}
+.hl{color:#388e3c;font-size:15px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#a5d6a7;background:#e8f5e9;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:17px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#2e7d32;font-size:19px;}
+.scene-bottom{border-top:2px dashed #c8e6c9;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:70px;padding:13px 8px;border-radius:16px;border:3px solid #a5d6a7;background:#e8f5e9;font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn .cb-emoji{font-size:26px;}
+.choice-btn .cb-word{font-size:12px;font-weight:900;}
+.choice-btn.correct{border-color:#2e7d32;background:#a5d6a7;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#a5d6a7;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#2e7d32,#4caf50);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.info-strip{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #a5d6a7;}
+.info-strip p{font-size:14px;font-weight:800;color:#1b5e20;line-height:1.7;}
+
+.plant-grid{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.plant-grid-title{font-family:'Baloo 2',cursive;font-size:15px;color:#2e7d32;font-weight:900;text-align:center;margin-bottom:12px;}
+.plant-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;justify-items:center;}
+.plant-cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:16px;transition:transform .2s;}
+.plant-cell:hover{transform:scale(1.08);}
+.plant-cell .pe{font-size:36px;}
+.plant-cell .pn{font-family:'Baloo 2',cursive;font-size:11px;font-weight:900;text-align:center;color:#2e7d32;}
+
+.rule-box{background:#fff;border:3px solid #4caf50;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;font-weight:900;line-height:1.7;}
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#4caf50;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* QUIZ */
+.quiz-box-wrap{background:#fff;border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.quiz-num{font-size:12px;color:#888;font-weight:900;margin-bottom:6px;text-align:center;}
+.quiz-question{font-family:'Baloo 2',cursive;font-size:19px;color:#1b5e20;text-align:center;margin-bottom:14px;line-height:1.4;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{background:#e8f5e9;border:3px solid #a5d6a7;border-radius:16px;padding:15px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:'Baloo 2',cursive;font-size:18px;color:#2e7d32;user-select:none;line-height:1.3;}
+.quiz-opt:active{transform:scale(.93);}
+.quiz-opt.right{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;pointer-events:none;}
+.quiz-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;pointer-events:none;}
+.quiz-fb{font-size:14px;font-weight:800;text-align:center;margin-top:8px;display:none;padding:8px;border-radius:12px;}
+.quiz-fb.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.quiz-fb.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(27,94,32,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:36px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:16px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#2e7d32;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.celeb-restart{background:transparent;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.5);padding:12px 30px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:16px;cursor:pointer;font-weight:900;margin-top:12px;transition:all .2s;}
+.celeb-restart:hover{background:rgba(255,255,255,.15);color:#fff;}
+@media (max-width:350px){.choice-row{flex-direction:column;}.choice-btn{min-width:100%;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🏞️ EVS Lesson 19 — Native Land</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🏞️</span>
+  <h1>Class 2 EVS · Lesson 19</h1>
+  <p>NATIVE LAND — Rivers, Forests, Seas!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Start with Step 1! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="water">🌊 River & Sea</div>
+  <div class="step-tab locked" data-tab="land">🌲 Forest & Hill</div>
+  <div class="step-tab locked" data-tab="town">📍 My Taluk</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════ TAB 1: WATER ══════════════ -->
+<div class="tab-panel active" id="panel-water">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e1f5fe,#b3e5fc);">
+    <span class="banner-emoji">🌊</span>
+    <div>
+      <div class="banner-title" style="color:#0277bd;">River and Sea</div>
+      <div class="banner-sub" style="color:#0288d1;">Water bodies around us!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#0288d1;">
+    <h3 style="color:#0277bd;">💧 The Broad River</h3>
+    <p>A <span class="hl" style="color:#0288d1;">River</span> is broad and deep. Its water flows and is used for farming and washing!</p>
+    <p>A <span class="hl" style="color:#0288d1;">Sea</span> is huge! Its water is very <span class="hl" style="color:#0288d1;">Salty</span>. Ships move on it, and fishermen catch fish! 🚢</p>
+  </div>
+
+  <div class="section-divider" style="color:#0288d1;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="w1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Whose water is <span class="kw" style="color:#0288d1;">salty</span>?</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#0277bd; border-color:#81d4fa;" onclick="answer('w1','sea','correct',this)"><span class="cb-emoji">🌊</span><span class="cb-word">Sea</span></div>
+    <div class="choice-btn" style="color:#0277bd; border-color:#81d4fa;" onclick="answer('w1','glass','wrong',this)"><span class="cb-emoji">🥛</span><span class="cb-word">Drinking Water</span></div>
+  </div><div class="fb-box" id="fb-w1"></div></div></div>
+
+  <div class="scenario-card" id="w2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">Fishermen catch fish from the <span class="kw" style="color:#0288d1;">______</span>. 🚢</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#0277bd; border-color:#81d4fa;" onclick="answer('w2','sea','correct',this)"><span class="cb-emoji">🌊</span><span class="cb-word">Sea</span></div>
+    <div class="choice-btn" style="color:#0277bd; border-color:#81d4fa;" onclick="answer('w2','mountain','wrong',this)"><span class="cb-emoji">⛰️</span><span class="cb-word">Mountain</span></div>
+  </div><div class="fb-box" id="fb-w2"></div></div></div>
+
+  <div class="scenario-card" id="w3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Should we keep our rivers and ponds <span class="kw" style="color:#0288d1;">clean</span>? ✨</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#0277bd; border-color:#81d4fa;" onclick="answer('w3','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes!</span></div>
+    <div class="choice-btn" style="color:#0277bd; border-color:#81d4fa;" onclick="answer('w3','dirty','wrong',this)"><span class="cb-emoji">🗑️</span><span class="cb-word">Make Dirty</span></div>
+  </div><div class="fb-box" id="fb-w3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-water" style="background:#0288d1;" disabled onclick="unlockNext('water','land')">Next: Forests & Hills! 🌲 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 2: LAND ══════════════ -->
+<div class="tab-panel" id="panel-land">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">⛰️</span>
+    <div>
+      <div class="banner-title" style="color:#2e7d32;">Forests and Hills</div>
+      <div class="banner-sub" style="color:#388e3c;">Greenery all around!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#388e3c;">
+    <h3 style="color:#2e7d32;">🌲 Animals and Trees</h3>
+    <p>A <span class="hl" style="color:#388e3c;">Forest</span> is full of green trees! Look at all the beautiful birds and wild animals! It gives cool air. 🦜</p>
+    <p>A <span class="hl" style="color:#388e3c;">Hill</span> is very tall. It has big rocks, trees, and small plants growing on it! 🏔️</p>
+  </div>
+
+  <div class="section-divider" style="color:#2e7d32;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="l1"><div class="scene-top"><div class="scene-label">Question 1 of 3</div>
+  <div class="scene-sentence">Where do wild animals and birds live? 🦜</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('l1','forest','correct',this)"><span class="cb-emoji">🌲</span><span class="cb-word">Forest</span></div>
+    <div class="choice-btn" onclick="answer('l1','school','wrong',this)"><span class="cb-emoji">🏫</span><span class="cb-word">School Room</span></div>
+  </div><div class="fb-box" id="fb-l1"></div></div></div>
+
+  <div class="scenario-card" id="l2"><div class="scene-top"><div class="scene-label">Question 2 of 3</div>
+  <div class="scene-sentence">What is very <span class="kw">tall</span> and has large rocks and trees? ⛰️</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('l2','hill','correct',this)"><span class="cb-emoji">🏔️</span><span class="cb-word">Hill</span></div>
+    <div class="choice-btn" onclick="answer('l2','lake','wrong',this)"><span class="cb-emoji">💧</span><span class="cb-word">Lake</span></div>
+  </div><div class="fb-box" id="fb-l2"></div></div></div>
+
+  <div class="scenario-card" id="l3"><div class="scene-top"><div class="scene-label">Question 3 of 3</div>
+  <div class="scene-sentence">Is it <span class="kw">good</span> to cut down all the trees in the forest? 🪓</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" onclick="answer('l3','no','correct',this)"><span class="cb-emoji">❌</span><span class="cb-word">No! Never!</span></div>
+    <div class="choice-btn" onclick="answer('l3','yes','wrong',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+  </div><div class="fb-box" id="fb-l3"></div></div></div>
+
+  <button class="big-btn primary" id="btn-land" disabled onclick="unlockNext('land','town')">Next: My Taluk! 📍 ➡️</button>
+</div>
+
+<!-- ══════════════ TAB 3: TOWN ══════════════ -->
+<div class="tab-panel" id="panel-town">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">📍</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">My Native Land</div>
+      <div class="banner-sub" style="color:#f57c00;">My village, my hobli, my taluk!</div>
+    </div>
+  </div>
+
+  <div class="rule-box" style="border-color:#ff9800;background:#fff3e0;">
+    <div class="rule-text" style="color:#e65100;">"My town is lovely, come and see. Hills and mountains, Forests all, Surrounds my little town, one and all!" 🎶</div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#f57c00;">
+    <h3 style="color:#e65100;">🏡 Knowing My Place</h3>
+    <p>Every person lives in a Hometown or Village.</p>
+    <p>Many villages make up a <span class="hl" style="color:#f57c00;">Hobli</span>.</p>
+    <p>And many Hoblis make up a <span class="hl" style="color:#f57c00;">Taluk</span>! Knowing these names makes us proud! ❤️</p>
+  </div>
+
+  <div class="section-divider" style="color:#f57c00;">— TAP THE RIGHT ANSWER —</div>
+
+  <div class="scenario-card" id="t1"><div class="scene-top"><div class="scene-label">Question 1 of 2</div>
+  <div class="scene-sentence">Is your <span class="kw" style="color:#e65100;">Hometown</span> a lovely place? 🏡</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#e65100; border-color:#ffcc80;" onclick="answer('t1','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes Always</span></div>
+    <div class="choice-btn" style="color:#e65100; border-color:#ffcc80;" onclick="answer('t1','no','wrong',this)"><span class="cb-emoji">❌</span><span class="cb-word">No</span></div>
+  </div><div class="fb-box" id="fb-t1"></div></div></div>
+
+  <div class="scenario-card" id="t2"><div class="scene-top"><div class="scene-label">Question 2 of 2</div>
+  <div class="scene-sentence">Should we know the name of our Village, Hobli, and Taluk? 📍</div></div>
+  <div class="scene-bottom"><div class="choice-row">
+    <div class="choice-btn" style="color:#e65100; border-color:#ffcc80;" onclick="answer('t2','yes','correct',this)"><span class="cb-emoji">✅</span><span class="cb-word">Yes</span></div>
+    <div class="choice-btn" style="color:#e65100; border-color:#ffcc80;" onclick="answer('t2','forget','wrong',this)"><span class="cb-emoji">😴</span><span class="cb-word">Forget it</span></div>
+  </div><div class="fb-box" id="fb-t2"></div></div></div>
+
+  <button class="big-btn primary" id="btn-town" style="background:#f57c00;color:#fff;" disabled onclick="unlockNext('town','quiz')">Next: Final Quiz! 🏆 ➡️</button>
+</div>
+
+
+<!-- ══════════════ TAB 4: QUIZ ══════════════ -->
+<div class="tab-panel" id="panel-quiz">
+
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🏆</span>
+    <div><div class="banner-title" style="color:#2e7d32;">Final Quiz!</div>
+    <div class="banner-sub" style="color:#388e3c;">Test your Geography!</div></div>
+  </div>
+
+  <div class="quiz-box-wrap" id="qb1"><div class="quiz-num">Question 1 of 10</div><div class="quiz-question">Which water body has VERY salty water?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb1',this,'correct')">🌊 The Sea</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">💧 A Drinking Well</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🚿 The Shower</div><div class="quiz-opt" onclick="quizAns('qb1',this,'wrong')">🌧️ Rain</div></div><div class="quiz-fb" id="qfb-qb1"></div></div>
+
+  <div class="quiz-box-wrap" id="qb2"><div class="quiz-num">Question 2 of 10</div><div class="quiz-question">What is green and full of trees and animals?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb2',this,'correct')">🌲 Forest</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🏢 City building</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🚗 Road</div><div class="quiz-opt" onclick="quizAns('qb2',this,'wrong')">🏖️ Sandbox</div></div><div class="quiz-fb" id="qfb-qb2"></div></div>
+
+  <div class="quiz-box-wrap" id="qb3"><div class="quiz-num">Question 3 of 10</div><div class="quiz-question">What moves on the Sea water?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb3',this,'correct')">🚢 Ships</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🚌 Buses</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🚲 Bicycles</div><div class="quiz-opt" onclick="quizAns('qb3',this,'wrong')">🛵 Scooters</div></div><div class="quiz-fb" id="qfb-qb3"></div></div>
+
+  <div class="quiz-box-wrap" id="qb4"><div class="quiz-num">Question 4 of 10</div><div class="quiz-question">What is very tall with rocks and trees?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb4',this,'correct')">⛰️ Hill / Mountain</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🌊 Sea</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">💧 Pond</div><div class="quiz-opt" onclick="quizAns('qb4',this,'wrong')">🏠 Table</div></div><div class="quiz-fb" id="qfb-qb4"></div></div>
+
+  <div class="quiz-box-wrap" id="qb5"><div class="quiz-num">Question 5 of 10</div><div class="quiz-question">Where do fishermen catch fish?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb5',this,'correct')">🌊 Sea / River</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">⛰️ Top of a Hill</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🌲 Dry Forest</div><div class="quiz-opt" onclick="quizAns('qb5',this,'wrong')">🏠 Kitchen floor</div></div><div class="quiz-fb" id="qfb-qb5"></div></div>
+
+  <div class="quiz-box-wrap" id="qb6"><div class="quiz-num">Question 6 of 10</div><div class="quiz-question">Should you cut down all the plants in the forest?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb6',this,'correct')">❌ No!</div><div class="quiz-opt" onclick="quizAns('qb6',this,'wrong')">✅ Yes!</div></div><div class="quiz-fb" id="qfb-qb6"></div></div>
+
+  <div class="quiz-box-wrap" id="qb7"><div class="quiz-num">Question 7 of 10</div><div class="quiz-question">What do we use the river water for?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb7',this,'correct')">💦 Washing & Farming</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">🔥 Burning wood</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">👟 Tying shoes</div><div class="quiz-opt" onclick="quizAns('qb7',this,'wrong')">😴 Sleeping</div></div><div class="quiz-fb" id="qfb-qb7"></div></div>
+
+  <div class="quiz-box-wrap" id="qb8"><div class="quiz-num">Question 8 of 10</div><div class="quiz-question">Many villages group together to form a:</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb8',this,'correct')">📍 Hobli</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🌊 Sea</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🚢 Ship</div><div class="quiz-opt" onclick="quizAns('qb8',this,'wrong')">🐦 Bird</div></div><div class="quiz-fb" id="qfb-qb8"></div></div>
+
+  <div class="quiz-box-wrap" id="qb9"><div class="quiz-num">Question 9 of 10</div><div class="quiz-question">Should we keep the water in a pond CLEAN?</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb9',this,'correct')">✅ Yes</div><div class="quiz-opt" onclick="quizAns('qb9',this,'wrong')">❌ No</div></div><div class="quiz-fb" id="qfb-qb9"></div></div>
+
+  <div class="quiz-box-wrap" id="qb10"><div class="quiz-num">Question 10 of 10</div><div class="quiz-question">My town is lovely, come and...</div><div class="quiz-opts"><div class="quiz-opt" onclick="quizAns('qb10',this,'correct')">👀 See!</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😭 Cry!</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😴 Sleep!</div><div class="quiz-opt" onclick="quizAns('qb10',this,'wrong')">😠 Yell!</div></div><div class="quiz-fb" id="qfb-qb10"></div></div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 Finish Lesson 19! (SYLLABUS COMPLETE!)</button>
+</div>
+
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 Finish the previous step first!</div>
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🎓🏆</div>
+  <div class="celeb-title">GRADUATE!</div>
+  <div class="celeb-sub">You did it! 🎉<br>You completed Lesson 19 AND the entire Class 2 EVS Syllabus!</div>
+  <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">Back to Lesson 🔙</button>
+  <button class="celeb-restart" onclick="startOver()">🔄 Start Over</button>
+</div>
+
+<script>
+const SAVE_KEY = 'vidya_evs_ch19_progress';
+let stars = 0;
+const tabOrder = ['water','land','town','quiz'];
+const tabDoneQ = {
+  water: {done:0, total:3, btn:'btn-water'},
+  land:  {done:0, total:3, btn:'btn-land'},
+  town:  {done:0, total:2, btn:'btn-town'},
+};
+const cardTabMap = {
+  w1:'water',w2:'water',w3:'water',
+  l1:'land',l2:'land',l3:'land',
+  t1:'town',t2:'town',
+};
+let quizDone = 0;
+const QUIZ_TOTAL = 10;
+
+function goTab(tabId){document.querySelectorAll('.step-tab').forEach(t=>{t.classList.toggle('active',t.dataset.tab===tabId)});document.querySelectorAll('.tab-panel').forEach(p=>{p.classList.toggle('active',p.id==='panel-'+tabId)});updateProgress();}
+document.querySelectorAll('.step-tab').forEach(tab=>{tab.addEventListener('click',()=>{if(tab.classList.contains('locked')){tab.classList.add('shaking');setTimeout(()=>tab.classList.remove('shaking'),520);showToast('🔒 Finish the previous step first!');return;}document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');goTab(tab.dataset.tab);});});
+function unlockNext(currentTab,nextTab){const btn=document.querySelector(`[data-tab="${currentTab}"]`);if(btn){btn.classList.remove('active');btn.classList.add('done');}const next=document.querySelector(`[data-tab="${nextTab}"]`);if(next){next.classList.remove('locked');next.classList.add('active');}document.querySelectorAll('.step-tab').forEach(t=>{if(t.dataset.tab!==nextTab&&!t.classList.contains('done'))t.classList.remove('active');});goTab(nextTab);window.scrollTo({top:0,behavior:'smooth'});addStars(3);}
+function updateProgress(){const doneCount=document.querySelectorAll('.step-tab.done').length;const pct=Math.round((doneCount/tabOrder.length)*100);document.getElementById('progFill').style.width=pct+'%';const labels=['Step 1! 👇','Keep going! 💪','Almost there! 🔥','Quiz time! 🏆','Syllabus Complete! 🎉🎓'];document.getElementById('progLabel').textContent=labels[doneCount]||labels[0];}
+function answer(cardId,choice,result,btnEl){const card=document.getElementById(cardId);if(card.dataset.done)return;const btns=card.querySelectorAll('.choice-btn');const fb=document.getElementById('fb-'+cardId);if(result==='correct'){card.dataset.done='1';card.classList.add('done');btns.forEach(b=>b.classList.add('locked-choice'));btnEl.classList.add('correct');fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';addStars(1);const tab=cardTabMap[cardId];if(tab){tabDoneQ[tab].done++;if(tabDoneQ[tab].done>=tabDoneQ[tab].total){document.getElementById(tabDoneQ[tab].btn).disabled=false;}}}else{btnEl.classList.add('wrong');fb.className='fb-box no';fb.textContent='❌ Try again! You can do it! 💪';setTimeout(()=>{btnEl.classList.remove('wrong');fb.style.display='none';},1500);}}
+function quizAns(boxId,btn,result){const box=document.getElementById(boxId);if(box.dataset.done)return;const opts=box.querySelectorAll('.quiz-opt');const fb=document.getElementById('qfb-'+boxId);if(result==='correct'){box.dataset.done='1';opts.forEach(o=>o.style.pointerEvents='none');btn.classList.add('right');fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';addStars(1);quizDone++;if(quizDone>=QUIZ_TOTAL){document.getElementById('btn-quiz').disabled=false;}}else{btn.classList.add('wrong');fb.className='quiz-fb no';fb.textContent='❌ Try again! 💪';setTimeout(()=>{btn.classList.remove('wrong');fb.style.display='none';},1500);}}
+function addStars(n){stars+=n;document.getElementById('starsNum').textContent=stars;saveProgress();}
+function showToast(msg){const t=document.getElementById('lockToast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showCelebration(){const s=document.getElementById('celebScreen');s.classList.add('show');const starStr=stars>=30?'⭐⭐⭐':stars>=18?'⭐⭐':'⭐';document.getElementById('celebStars').textContent=starStr;addStars(5);}
+
+function saveProgress(){try{const state={stars,quizDone,tabDoneQ:JSON.parse(JSON.stringify(tabDoneQ)),doneCards:[],doneTabs:[],doneQuizBoxes:[]};document.querySelectorAll('.scenario-card[data-done]').forEach(c=>state.doneCards.push(c.id));document.querySelectorAll('.step-tab.done').forEach(t=>state.doneTabs.push(t.dataset.tab));document.querySelectorAll('.quiz-box-wrap[data-done]').forEach(q=>state.doneQuizBoxes.push(q.id));localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){}}
+function loadProgress(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;const state=JSON.parse(raw);stars=state.stars||0;quizDone=state.quizDone||0;document.getElementById('starsNum').textContent=stars;if(state.tabDoneQ)Object.keys(state.tabDoneQ).forEach(k=>{if(tabDoneQ[k])tabDoneQ[k].done=state.tabDoneQ[k].done;});(state.doneCards||[]).forEach(id=>{const card=document.getElementById(id);if(!card)return;card.dataset.done='1';card.classList.add('done');card.querySelectorAll('.choice-btn').forEach(b=>b.classList.add('locked-choice'));card.querySelectorAll('.choice-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'correct'"))b.classList.add('correct');});const fb=document.getElementById('fb-'+id);if(fb){fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';}});(state.doneQuizBoxes||[]).forEach(id=>{const box=document.getElementById(id);if(!box)return;box.dataset.done='1';box.querySelectorAll('.quiz-opt').forEach(o=>{o.style.pointerEvents='none';if(o.getAttribute('onclick')&&o.getAttribute('onclick').includes("'correct'"))o.classList.add('right');});const fb=document.getElementById('qfb-'+id);if(fb){fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';}});(state.doneTabs||[]).forEach(tabId=>{const tab=document.querySelector(`[data-tab="${tabId}"]`);if(tab){tab.classList.remove('active','locked');tab.classList.add('done');}});Object.keys(tabDoneQ).forEach(k=>{if(tabDoneQ[k].done>=tabDoneQ[k].total){const btn=document.getElementById(tabDoneQ[k].btn);if(btn)btn.disabled=false;}});if(quizDone>=QUIZ_TOTAL){const btn=document.getElementById('btn-quiz');if(btn)btn.disabled=false;}const allDone=state.doneTabs||[];if(allDone.length>0){const lastDoneIdx=Math.max(...allDone.map(t=>tabOrder.indexOf(t)));const nextIdx=lastDoneIdx+1;if(nextIdx<tabOrder.length){const nextTab=tabOrder[nextIdx];const nextEl=document.querySelector(`[data-tab="${nextTab}"]`);if(nextEl){nextEl.classList.remove('locked');nextEl.classList.add('active');}goTab(nextTab);}else{goTab(tabOrder[tabOrder.length-1]);}}updateProgress();}catch(e){}}
+function startOver(){localStorage.removeItem(SAVE_KEY);location.reload();}
+loadProgress();
+</script>
+</body>
+</html>
