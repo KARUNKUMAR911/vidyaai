@@ -89,6 +89,31 @@ GRADE1_ENGLISH_LESSONS = [
     'story2',
 ]
 
+GRADE1_MATHS_LESSONS = [
+    'shapes',
+    'numbers',
+    'addition',
+    'subtraction',
+    'money',
+    'measurement',
+    'time',
+    'data',
+    'patterns'
+]
+
+GRADE1_EVS_LESSONS = [
+    'me', 
+    'body', 
+    'cleanliness', 
+    'family', 
+    'home', 
+    'food', 
+    'water', 
+    'habitats',
+    'heavenly_friends',
+    'around_us'
+]
+
 GRADE2_MATHS_LESSONS = [f'lesson{i}' for i in range(1, 14)]
 GRADE2_EVS_LESSONS = [f'lesson{i}' for i in range(1, 20)]
 
@@ -738,11 +763,6 @@ def class1_evs_around_us():
     student = Student.query.get(session['student_id'])
     return render_template('class1/evs/around_us.html', student=student)
 
-'around_us',
-]
-
-GRADE2_MATHS_LESSONS = [f'lesson{i}' for i in range(1, 14)]
-GRADE2_EVS_LESSONS = [f'lesson{i}' for i in range(1, 20)]
 
 # --- CLASS 1 MATHS LESSONS ---
 
