@@ -3,416 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class 2 English - VidyaAI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>VidyaAI - Class 2 English</title>
     <style>
-        :root {
-            --primary: #d84315;
-            --primary-light: #ffab91;
-            --secondary: #2e7d32;
-            --bg-color: #fbe9e7;
-            --card-bg: #ffffff;
-            --text-main: #2d3436;
-            --text-dim: #636e72;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding-bottom: 40px;
+            font-family: 'Segoe UI', sans-serif;
+            background: #fdf4ff;
+            min-height: 100vh;
         }
 
-        /* --- Header --- */
-        .header {
-            background: linear-gradient(135deg, var(--primary), #f4511e);
-            padding: 2.5rem 1.5rem;
-            border-radius: 0 0 40px 40px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(216, 67, 21, 0.2);
-            position: relative;
-            overflow: hidden;
+        .navbar {
+            background: linear-gradient(135deg, #d84315, #f4511e);
+            padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(216, 67, 21, 0.3);
+            position: sticky; top: 0; z-index: 50;
         }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+        .navbar-left { display: flex; align-items: center; gap: 10px; }
+        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
+        .navbar-subject {
+            background: rgba(255,255,255,0.25); color: white;
+            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
         }
-
         .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
+            background: white; color: #d84315;
+            padding: 7px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 700; text-decoration: none;
         }
 
-        .back-btn:hover {
-            background: white;
-            color: var(--primary);
-            transform: translateX(-5px);
+        .hero {
+            background: linear-gradient(135deg, #d84315, #f4511e);
+            padding: 20px 20px 35px; text-align: center; color: white;
+        }
+        .hero-icon { font-size: 56px; margin-bottom: 8px; }
+        .hero h2   { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+        .hero p    { font-size: 13px; opacity: 0.9; }
+
+        .progress-card {
+            background: white; margin: -18px 16px 20px;
+            border-radius: 18px; padding: 14px 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .progress-circle {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, #d84315, #f4511e);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
+        }
+        .progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
+        .progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+        .progress-bar-wrap {
+            flex: 1; background: #f0f0f0;
+            border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
+        }
+        .progress-bar-inner {
+            height: 100%; background: linear-gradient(90deg, #d84315, #ffab91);
+            border-radius: 10px; width: 0%; transition: width 0.5s;
         }
 
-        .header h1 {
-            font-family: 'Baloo 2', cursive;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 800;
+        .section-label {
+            padding: 8px 16px 6px;
+            font-size: 12px; font-weight: 800;
+            color: #888; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            font-weight: 500;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* --- Progress Section --- */
-        .stats-container {
-            max-width: 900px;
-            margin: -30px auto 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 0 20px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        . icon-blue { background: #e3f2fd; color: #1976d2; }
-        . icon-yellow { background: #fffde7; color: #fbc02d; }
-
-        .stat-info h3 {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            font-weight: 700;
-        }
-
-        .stat-info p {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            font-weight: 600;
-        }
-
-        /* --- Chapter List --- */
-        .chapters-section {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .chapters-list {
+            padding: 0 16px 100px;
+            display: flex; flex-direction: column; gap: 10px;
         }
 
         .chapter-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            margin-bottom: 16px;
-            padding: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            border: 2px solid transparent;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: white; border-radius: 18px;
+            padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            cursor: pointer; transition: all 0.25s;
+            text-decoration: none; position: relative; overflow: hidden;
         }
+        .chapter-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .chapter-card:active { transform: scale(0.98); }
+        .chapter-card.completed { border-left: 4px solid #059669; }
+        .chapter-card.inprogress { border-left: 4px solid #f59e0b; }
+        .chapter-card.notstarted { border-left: 4px solid #e5e7eb; }
 
-        .chapter-card:hover {
-            transform: translateY(-3px) scale(1.01);
-            border-color: var(--primary-light);
-            box-shadow: 0 10px 25px rgba(216, 67, 21, 0.1);
+        .chapter-num {
+            width: 42px; height: 42px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; font-weight: 900;
         }
+        .chapter-info { flex: 1; }
+        .chapter-title { font-size: 15px; font-weight: 800; color: #333; margin-bottom: 3px; }
+        .chapter-meta  { font-size: 12px; color: #888; font-weight: 600; }
+        .chapter-status { font-size: 18px; flex-shrink: 0; }
 
-        .chapter-main {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .c1 .chapter-num { background: #ede9fe; }
+        .c2 .chapter-num { background: #fef3c7; }
+        .c3 .chapter-num { background: #d1fae5; }
+        .c4 .chapter-num { background: #dbeafe; }
+        .c5 .chapter-num { background: #fce7f3; }
 
-        .chapter-number {
-            width: 60px;
-            height: 60px;
-            background: #f1f2f6;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Baloo 2', cursive;
-            font-size: 1.4rem;
-            color: var(--text-dim);
-            font-weight: 800;
-            transition: all 0.3s ease;
+        .bottom-nav {
+            position: fixed; bottom:0; left:0; right:0;
+            background:white; border-top:1px solid #f0f0f0;
+            display:flex; padding:8px 0 12px;
+            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
         }
-
-        .chapter-card:hover .chapter-number {
-            background: var(--primary);
-            color: white;
-            transform: rotate(-5deg);
+        .nav-item {
+            flex:1; display:flex; flex-direction:column;
+            align-items:center; gap:3px; cursor:pointer;
+            padding:6px; text-decoration:none;
         }
-
-        .chapter-content h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 2px;
-        }
-
-        .chapter-content p {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            font-weight: 600;
-        }
-
-        .lock-status {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f1f2f6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #bdc3c7;
-            transition: all 0.3s ease;
-        }
-
-        .chapter-card.completed {
-            border-left: 8px solid var(--secondary);
-        }
-
-        .chapter-card.completed .lock-status {
-            background: #e8f5e9;
-            color: var(--secondary);
-        }
-
-        @media (max-width: 600px) {
-            .header h1 { font-size: 1.8rem; }
-            .chapter-card { padding: 1rem; }
-            .chapter-number { width: 50px; height: 50px; font-size: 1.2rem; }
-            .chapter-content h2 { font-size: 1rem; }
-            .stats-container { grid-template-columns: 1fr; }
-        }
+        .nav-icon  { font-size:22px; }
+        .nav-label { font-size:11px; font-weight:700; color:#888; }
+        .nav-item.active .nav-label { color:#d84315; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <a href="/class/2" class="back-btn"><i class="fas fa-chevron-left"></i></a>
-        <h1>Class 2 English</h1>
-        <p>Learn to speak, read, and write English with fun stories and characters! 🏠🚌🦒</p>
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-subject">Class 2 • English</div>
     </div>
+    <a href="/class/2" class="back-btn">← Back</a>
+</nav>
 
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-icon icon-blue"><i class="fas fa-book-open"></i></div>
-            <div class="stat-info">
-                <h3>10 Chapters</h3>
-                <p>Course Content</p>
-            </div>
+<div class="hero">
+    <div class="hero-icon">🏠🚌</div>
+    <h2>English</h2>
+    <p>Class 2 • Karnataka State Board • First Language</p>
+</div>
+
+<div class="progress-card">
+    <div class="progress-circle" id="progressNum">0%</div>
+    <div class="progress-info" style="flex:1">
+        <h4>My Progress</h4>
+        <p id="progressText">0 of 10 lessons completed</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-inner" id="progressBar"></div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon icon-yellow"><i class="fas fa-star"></i></div>
-            <div class="stat-info">
-                <h3 id="progress-text">0 / 10</h3>
-                <p>Completed</p>
-            </div>
+    </div>
+</div>
+
+<div class="section-label">📖 All Chapters</div>
+
+<div class="chapters-list">
+    <a href="/class/2/english/lesson1" data-lesson="lesson1" class="chapter-card c1 notstarted">
+        <div class="chapter-num">🏠</div>
+        <div class="chapter-info">
+            <div class="chapter-title">1. My House</div>
+            <div class="chapter-meta">Rooms, colors and home life</div>
         </div>
-    </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson2" data-lesson="lesson2" class="chapter-card c2 notstarted">
+        <div class="chapter-num">🏃</div>
+        <div class="chapter-info">
+            <div class="chapter-title">2. Action Words</div>
+            <div class="chapter-meta">Verbs and physical activities</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson3" data-lesson="lesson3" class="chapter-card c3 notstarted">
+        <div class="chapter-num">👕</div>
+        <div class="chapter-info">
+            <div class="chapter-title">3. My Dress</div>
+            <div class="chapter-meta">Clothing items and styles</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson4" data-lesson="lesson4" class="chapter-card c4 notstarted">
+        <div class="chapter-num">👨‍👩‍👧</div>
+        <div class="chapter-info">
+            <div class="chapter-title">4. My Family</div>
+            <div class="chapter-meta">Relationships and shared love</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson5" data-lesson="lesson5" class="chapter-card c5 notstarted">
+        <div class="chapter-num">🧼</div>
+        <div class="chapter-info">
+            <div class="chapter-title">5. Health & Hygiene</div>
+            <div class="chapter-meta">Cleanliness and staying fit</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson6" data-lesson="lesson6" class="chapter-card c1 notstarted">
+        <div class="chapter-num">🍎</div>
+        <div class="chapter-info">
+            <div class="chapter-title">6. The Market</div>
+            <div class="chapter-meta">Shopping fruits and vegetables</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson7" data-lesson="lesson7" class="chapter-card c2 notstarted">
+        <div class="chapter-num">⛈️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">7. Weather</div>
+            <div class="chapter-meta">Sun, Rain, Wind and Clouds</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson8" data-lesson="lesson8" class="chapter-card c3 notstarted">
+        <div class="chapter-num">👨‍⚕️</div>
+        <div class="chapter-info">
+            <div class="chapter-title">8. Helping Hands</div>
+            <div class="chapter-meta">Community helpers in our life</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson9" data-lesson="lesson9" class="chapter-card c4 notstarted">
+        <div class="chapter-num">🥕</div>
+        <div class="chapter-info">
+            <div class="chapter-title">9. Healthy Food</div>
+            <div class="chapter-meta">Eat well to stay strong</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+    <a href="/class/2/english/lesson10" data-lesson="lesson10" class="chapter-card c5 notstarted">
+        <div class="chapter-num">🏆</div>
+        <div class="chapter-info">
+            <div class="chapter-title">10. Year End Finale</div>
+            <div class="chapter-meta">Summary and Review</div>
+        </div>
+        <div class="chapter-status">▶️</div>
+    </a>
+</div>
 
-    <div class="chapters-section" id="chapter-list">
-        <!-- Chapter 1 -->
-        <a href="/class/2/english/lesson1" class="chapter-card" id="lesson-1">
-            <div class="chapter-main">
-                <div class="chapter-number">1</div>
-                <div class="chapter-content">
-                    <h2>My House</h2>
-                    <p>Learn words for your home and colors! 🏠</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
+<div class="bottom-nav">
+    <a href="/class/2" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">📝</div>
+        <div class="nav-label">English</div>
+    </a>
+    <a href="#" class="nav-item">
+        <div class="nav-icon">📊</div>
+        <div class="nav-label">Progress</div>
+    </a>
+    <a href="/profile" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
+    </a>
+</div>
 
-        <!-- Chapter 2 -->
-        <a href="/class/2/english/lesson2" class="chapter-card" id="lesson-2">
-            <div class="chapter-main">
-                <div class="chapter-number">2</div>
-                <div class="chapter-content">
-                    <h2>Action Words</h2>
-                    <p>What can you do? Jump, run, play! 🏃‍♂️</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/lesson_progress/load?grade=2&subject=english');
+        const data = await res.json();
+        const lessons = data.lessons || {};
+        const total = data.totalLessons || 10;
+        const completed = Object.values(lessons).filter(x => x.completed).length;
+        const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-        <!-- Chapter 3 -->
-        <a href="/class/2/english/lesson3" class="chapter-card" id="lesson-3">
-            <div class="chapter-main">
-                <div class="chapter-number">3</div>
-                <div class="chapter-content">
-                    <h2>My Dress</h2>
-                    <p>Shirt, skirt, cap, and more! 👕</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
+        document.getElementById('progressNum').textContent  = `${pct}%`;
+        document.getElementById('progressText').textContent = `${completed} of ${total} lessons completed`;
+        document.getElementById('progressBar').style.width  = `${pct}%`;
 
-        <!-- Chapter 4 -->
-        <a href="/class/2/english/lesson4" class="chapter-card" id="lesson-4">
-            <div class="chapter-main">
-                <div class="chapter-number">4</div>
-                <div class="chapter-content">
-                    <h2>My Family</h2>
-                    <p>Father, Mother, Brother, Sister ❤️</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
+        document.querySelectorAll('a.chapter-card[data-lesson]').forEach(card => {
+            const key = card.getAttribute('data-lesson');
+            const p = lessons[key] || {completed:false, stars:0};
+            card.classList.remove('completed','inprogress','notstarted');
+            const statusEl = card.querySelector('.chapter-status');
 
-        <!-- Chapter 5 -->
-        <a href="/class/2/english/lesson5" class="chapter-card" id="lesson-5">
-            <div class="chapter-main">
-                <div class="chapter-number">5</div>
-                <div class="chapter-content">
-                    <h2>Health & Hygiene</h2>
-                    <p>Wash your hands and stay clean! 🧼</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
-
-        <!-- Chapter 6 -->
-        <a href="/class/2/english/lesson6" class="chapter-card" id="lesson-6">
-            <div class="chapter-main">
-                <div class="chapter-number">6</div>
-                <div class="chapter-content">
-                    <h2>The Market</h2>
-                    <p>Let's go shopping for fruits! 🍎</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
-
-        <!-- Chapter 7 -->
-        <a href="/class/2/english/lesson7" class="chapter-card" id="lesson-7">
-            <div class="chapter-main">
-                <div class="chapter-number">7</div>
-                <div class="chapter-content">
-                    <h2>Weather</h2>
-                    <p>Rainy, Sunny, and Windy days ⛈️</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
-
-        <!-- Chapter 8 -->
-        <a href="/class/2/english/lesson8" class="chapter-card" id="lesson-8">
-            <div class="chapter-main">
-                <div class="chapter-number">8</div>
-                <div class="chapter-content">
-                    <h2>Helping Hands</h2>
-                    <p>People who help us every day 👨‍⚕️</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
-
-        <!-- Chapter 9 -->
-        <a href="/class/2/english/lesson9" class="chapter-card" id="lesson-9">
-            <div class="chapter-main">
-                <div class="chapter-number">9</div>
-                <div class="chapter-content">
-                    <h2>Healthy Food</h2>
-                    <p>Eating well keeps us strong! 🥕</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
-
-        <!-- Chapter 10 -->
-        <a href="/class/2/english/lesson10" class="chapter-card" id="lesson-10">
-            <div class="chapter-main">
-                <div class="chapter-number">10</div>
-                <div class="chapter-content">
-                    <h2>Year End Finale</h2>
-                    <p>Review and Celebration! 🏆</p>
-                </div>
-            </div>
-            <div class="lock-status"><i class="fas fa-play"></i></div>
-        </a>
-    </div>
-
-    <script>
-        function loadProgress() {
-            const subjects = ['english'];
-            let completed = 0;
-            
-            // This is a simplified progress check for the UI demo
-            // Real logic would fetch from /api/progress/grade2/english
-            fetch('/api/progress/grade2/english')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.progress) {
-                        const lessons = data.progress;
-                        let count = 0;
-                        for (let i = 1; i <= 10; i++) {
-                            if (lessons['lesson' + i]) {
-                                document.getElementById('lesson-' + i).classList.add('completed');
-                                document.getElementById('lesson-' + i).querySelector('.lock-status').innerHTML = '<i class="fas fa-check"></i>';
-                                count++;
-                            }
-                        }
-                        document.getElementById('progress-text').textContent = `${count} / 10`;
-                    }
-                })
-                .catch(err => console.log("Progress not loaded yet"));
-        }
-
-        window.onload = loadProgress;
-    </script>
+            if (p.completed) {
+                card.classList.add('completed');
+                statusEl.textContent = '✅';
+            } else if (p.stars > 0) {
+                card.classList.add('inprogress');
+                statusEl.textContent = '⏳';
+            } else {
+                card.classList.add('notstarted');
+                statusEl.textContent = '▶️';
+            }
+        });
+    } catch(e) {}
+}
+loadProgress();
+</script>
 </body>
 </html>
