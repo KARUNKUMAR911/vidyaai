@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಕಡಲು - ಪಾಠ ೧೪ | ೨ನೇ ತರಗತಿ ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:   #0c4a6e;
+  --blue2:  #0284c7;
+  --blue3:  #bae6fd;
+  --teal:   #0f766e;
+  --teal2:  #2dd4bf;
+  --teal3:  #ccfbf1;
+  --sand:   #b45309;
+  --sand2:  #fbbf24;
+  --sand3:  #fef9c3;
+  --white:  #ffffff;
+  --text:   #0c4a6e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans Kannada',sans-serif;
+  background:linear-gradient(160deg,#f0f9ff 0%,#e0f2fe 50%,#bae6fd 100%);
+  color:var(--text);min-height:100vh;overflow-x:hidden;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#0c4a6e 0%,#0284c7 60%,#0ea5e9 100%);
+  color:white;text-align:center;padding:16px 16px 8px;
+  position:relative;overflow:hidden;
+}
+header::before{
+  content:'🌊🐚🐠🦀🌊🐚🐠🦀🌊🐚🐠🦀🌊🐚🐠🦀';
+  position:absolute;bottom:0;left:0;right:0;
+  font-size:14px;letter-spacing:2px;opacity:0.15;
+}
+.badge{
+  display:inline-block;background:#fbbf24;color:#0c4a6e;
+  font-weight:800;font-size:11px;padding:3px 14px;
+  border-radius:20px;margin-bottom:6px;
+}
+header h1{
+  font-family:'Noto Serif Kannada',serif;
+  font-size:clamp(17px,5.5vw,34px);font-weight:700;
+  text-shadow:0 2px 10px rgba(0,0,0,0.25);
+}
+header .sub{font-size:12px;opacity:0.85;margin-top:2px;}
+.progress-wrap{
+  background:rgba(255,255,255,0.25);border-radius:10px;
+  height:10px;margin:10px 20px 0;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,#fbbf24,#2dd4bf);
+  border-radius:10px;transition:width 0.6s cubic-bezier(.4,0,.2,1);width:12%;
+}
+.progress-label{text-align:center;font-size:11px;opacity:0.85;margin-top:4px;padding-bottom:6px;}
+
+/* TAB BAR */
+.tab-bar{
+  display:flex;background:#0c4a6e;overflow-x:auto;
+  scrollbar-width:none;position:sticky;top:0;z-index:100;
+  border-bottom:3px solid #fbbf24;gap:2px;padding:0 4px;
+}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:1 1 0;min-width:52px;display:flex;flex-direction:column;
+  align-items:center;gap:2px;padding:9px 4px 7px;
+  background:none;border:none;color:rgba(255,255,255,0.35);
+  font-family:'Noto Sans Kannada',sans-serif;font-size:9px;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;
+  border-bottom:3px solid transparent;margin-bottom:-3px;position:relative;
+}
+.tab-btn .tab-icon{font-size:18px;}
+.tab-btn.active{color:#fbbf24;border-bottom-color:#fbbf24;background:rgba(255,255,255,0.08);}
+.tab-btn.done{color:#6ee7b7;}
+.tab-btn.locked{color:rgba(255,255,255,0.2);cursor:not-allowed;}
+.tab-btn.locked .tab-icon{filter:grayscale(1) opacity(0.3);}
+.lock-icon{position:absolute;top:4px;right:4px;font-size:9px;opacity:0.5;}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-8px) rotate(-3deg)}
+  30%{transform:translateX(8px) rotate(3deg)}
+  45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  90%{transform:translateX(3px)}
+}
+.shake{animation:shake 0.5s ease;}
+
+/* TOAST */
+#lockToast{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#b91c1c;color:white;padding:12px 22px;
+  border-radius:30px;font-size:14px;font-weight:700;
+  box-shadow:0 6px 24px rgba(0,0,0,0.25);z-index:999;
+  opacity:0;transition:opacity 0.3s,transform 0.3s;
+  pointer-events:none;text-align:center;max-width:88vw;
+}
+#lockToast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* SECTIONS */
+.section{display:none;padding:16px 14px 100px;max-width:900px;margin:0 auto;}
+.section.active{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-title{
+  font-family:'Noto Serif Kannada',serif;font-size:17px;
+  font-weight:700;color:#0c4a6e;margin-bottom:14px;padding-bottom:8px;
+  border-bottom:3px solid #0284c7;display:flex;align-items:center;gap:8px;
+}
+
+/* NEXT BUTTON */
+.next-btn{
+  display:none;width:100%;margin-top:22px;padding:16px;
+  background:linear-gradient(135deg,#0284c7,#0c4a6e);color:white;
+  border:none;border-radius:16px;font-family:'Noto Sans Kannada',sans-serif;
+  font-size:17px;font-weight:800;cursor:pointer;
+  box-shadow:0 4px 18px rgba(2,132,199,0.35);transition:transform 0.15s;
+}
+.next-btn:active{transform:scale(0.97);}
+
+/* CARDS */
+.card{
+  background:white;border-radius:18px;padding:16px;
+  box-shadow:0 4px 18px rgba(2,132,199,0.12);margin-bottom:12px;
+}
+
+/* INSTRUCTION BOX */
+.instr{
+  background:linear-gradient(135deg,#f0f9ff,#e0f2fe);
+  border-radius:14px;padding:13px 16px;font-size:14px;
+  color:#0c4a6e;font-weight:600;text-align:center;margin-bottom:14px;
+  border:2px dashed #0284c7;
+}
+
+/* MINI PROGRESS */
+.mini-bar-wrap{background:#e5e7eb;border-radius:10px;height:10px;margin:8px 0 4px;overflow:hidden;}
+.mini-bar{height:100%;background:linear-gradient(90deg,#0284c7,#2dd4bf);border-radius:10px;width:0%;transition:width 0.4s;}
+.mini-label{font-size:13px;color:#0c4a6e;font-weight:700;margin-bottom:10px;}
+
+/* SCENE CARDS - Tab 0 intro */
+.scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.scene-card{
+  background:white;border:3px solid #bae6fd;border-radius:16px;
+  padding:16px 10px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.scene-card .s-icon{font-size:46px;display:block;margin-bottom:8px;}
+.scene-card .s-name{
+  font-family:'Noto Serif Kannada',serif;font-size:15px;
+  font-weight:700;color:#0c4a6e;
+}
+.scene-card .s-detail{font-size:12px;color:#0369a1;display:none;margin-top:6px;line-height:1.6;}
+.scene-card .s-tap{font-size:11px;color:#0284c7;display:block;margin-top:4px;}
+.scene-card.tapped{background:#e0f2fe;border-color:#0284c7;}
+.scene-card.tapped .s-detail{display:block;}
+.scene-card.tapped .s-tap{display:none;}
+.scene-card:active{transform:scale(0.95);}
+
+/* POEM CARDS - Tab 1 */
+.poem-stanza{
+  background:white;border-radius:18px;padding:18px 16px;
+  box-shadow:0 4px 18px rgba(2,132,199,0.10);margin-bottom:14px;
+  border-left:5px solid #0284c7;cursor:pointer;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+  transition:all 0.25s;
+}
+.poem-stanza:active{transform:scale(0.98);}
+.poem-stanza.highlighted{background:#f0f9ff;border-left-color:#0c4a6e;border:2px solid #0284c7;}
+.poem-stanza-icon{font-size:28px;margin-bottom:8px;display:block;}
+.poem-text{
+  font-family:'Noto Serif Kannada',serif;font-size:16px;
+  line-height:2.4;color:#0c1e30;
+}
+.poem-meaning{
+  font-size:13px;color:#0284c7;font-weight:600;margin-top:10px;
+  display:none;background:#e0f2fe;border-radius:8px;padding:10px 12px;
+  line-height:1.8;
+}
+.poem-stanza.highlighted .poem-meaning{display:block;}
+.tap-hint{text-align:center;font-size:13px;color:#0284c7;font-weight:700;
+  margin-bottom:12px;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* WORD CARDS - Tab 2 */
+.word-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.word-card{
+  background:white;border:3px solid #bae6fd;border-radius:14px;
+  padding:14px 8px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.word-card .w-icon{font-size:32px;display:block;margin-bottom:6px;}
+.word-card .w-kn{
+  font-family:'Noto Serif Kannada',serif;font-size:14px;
+  font-weight:700;color:#0c4a6e;
+}
+.word-card .w-meaning{font-size:11px;color:#0369a1;display:none;margin-top:5px;font-weight:600;}
+.word-card .w-tap{font-size:10px;color:#0284c7;display:block;margin-top:4px;}
+.word-card.tapped{background:#e0f2fe;border-color:#0284c7;}
+.word-card.tapped .w-meaning{display:block;}
+.word-card.tapped .w-tap{display:none;}
+.word-card:active{transform:scale(0.95);}
+
+/* RHYME CARDS - Tab 3 */
+.rhyme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.rhyme-card{
+  background:white;border:3px solid #ccfbf1;border-radius:16px;
+  padding:16px 12px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.rhyme-card .r-word{
+  font-family:'Noto Serif Kannada',serif;font-size:18px;font-weight:700;color:#0f766e;
+}
+.rhyme-card .r-pair{
+  font-family:'Noto Serif Kannada',serif;font-size:16px;color:#0c4a6e;
+  display:none;margin-top:6px;font-weight:600;
+}
+.rhyme-card .r-tap{font-size:11px;color:#0f766e;display:block;margin-top:4px;}
+.rhyme-card.tapped{background:#ccfbf1;border-color:#0f766e;}
+.rhyme-card.tapped .r-pair{display:block;}
+.rhyme-card.tapped .r-tap{display:none;}
+.rhyme-card:active{transform:scale(0.95);}
+
+/* QA SECTION - Tab 4 */
+.qa-block{background:white;border-radius:18px;padding:16px;margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(2,132,199,0.10);}
+.qa-q{font-family:'Noto Serif Kannada',serif;font-size:15px;font-weight:700;
+  color:#0c4a6e;margin-bottom:12px;line-height:1.8;}
+.qa-opts{display:flex;flex-direction:column;gap:8px;}
+.qa-btn{
+  padding:13px 16px;border-radius:12px;border:2px solid #bae6fd;
+  background:#f0f9ff;font-family:'Noto Serif Kannada',serif;font-size:14px;
+  color:#0c4a6e;cursor:pointer;transition:all 0.2s;text-align:left;
+  font-weight:600;-webkit-tap-highlight-color:transparent;
+}
+.qa-btn:active{transform:scale(0.98);}
+.qa-btn.correct{background:#dcfce7;border-color:#16a34a;color:#166534;}
+.qa-btn.wrong{background:#fee2e2;border-color:#dc2626;color:#991b1b;
+  animation:shake 0.4s ease;}
+.qa-btn.answered{opacity:0.45;pointer-events:none;}
+
+/* MATCH SECTION - Tab 5 */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-item{
+  background:white;border:3px solid #bae6fd;border-radius:12px;
+  padding:13px 10px;text-align:center;cursor:pointer;
+  font-family:'Noto Serif Kannada',serif;font-size:14px;font-weight:700;
+  color:#0c4a6e;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.match-item.selected{background:#e0f2fe;border-color:#0284c7;transform:scale(1.03);}
+.match-item.matched-correct{background:#dcfce7;border-color:#16a34a;color:#166534;pointer-events:none;}
+.match-item.matched-wrong{background:#fee2e2;border-color:#dc2626;animation:shake 0.4s ease;}
+.match-item:active{transform:scale(0.97);}
+
+/* FILL BLANKS - Tab 6 */
+.fill-sentence{
+  background:white;border-radius:16px;padding:16px;margin-bottom:12px;
+  box-shadow:0 4px 14px rgba(2,132,199,0.10);
+  font-family:'Noto Serif Kannada',serif;font-size:15px;color:#0c1e30;
+  line-height:2.5;
+}
+.blank{
+  display:inline-block;min-width:90px;border-bottom:3px solid #0284c7;
+  text-align:center;padding:2px 8px;border-radius:6px;
+  cursor:pointer;transition:all 0.2s;color:#0c4a6e;font-weight:700;
+  background:#f0f9ff;margin:0 4px;
+}
+.blank.active-blank{background:#bae6fd;border-color:#0c4a6e;transform:scale(1.05);}
+.blank.correct{background:#dcfce7;border-color:#16a34a;color:#166534;pointer-events:none;}
+.blank.wrong{background:#fee2e2;border-color:#dc2626;animation:shake 0.4s ease;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 8px;}
+.chip{
+  background:white;border:2.5px solid #0284c7;border-radius:30px;
+  padding:9px 18px;font-family:'Noto Serif Kannada',serif;font-size:14px;
+  font-weight:700;color:#0c4a6e;cursor:pointer;transition:all 0.2s;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.chip:active{transform:scale(0.95);}
+.chip.used{opacity:0.3;pointer-events:none;text-decoration:line-through;}
+
+/* RESULT MESSAGE */
+.result-msg{
+  margin-top:14px;padding:14px;background:#dcfce7;border-radius:14px;
+  color:#166534;font-weight:800;font-size:16px;text-align:center;
+  display:none;
+}
+.result-msg.show{display:block;animation:fadeUp 0.3s ease;}
+
+/* COMPLETE CARD */
+.complete-card{
+  background:linear-gradient(135deg,#0c4a6e,#0ea5e9);color:white;
+  border-radius:22px;padding:28px 20px;text-align:center;margin-top:20px;
+  box-shadow:0 8px 32px rgba(12,74,110,0.3);display:none;
+}
+.complete-card.show{display:block;animation:fadeUp 0.4s ease;}
+.complete-card .big-emoji{font-size:60px;display:block;margin-bottom:12px;}
+.complete-card h2{
+  font-family:'Noto Serif Kannada',serif;font-size:20px;font-weight:700;margin-bottom:8px;}
+.complete-card p{font-size:14px;opacity:0.9;line-height:1.7;}
+
+/* NOTE BOX */
+.note-box{
+  background:#e0f2fe;border-radius:14px;padding:13px 16px;font-size:14px;
+  color:#0c4a6e;font-weight:600;text-align:center;margin-top:14px;
+  border:2px solid #0284c7;display:none;
+}
+.note-box.show{display:block;}
+
+/* WAVE DIVIDER */
+.wave-divider{text-align:center;font-size:22px;letter-spacing:3px;margin:10px 0;opacity:0.6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">೨ನೇ ತರಗತಿ · ಕನ್ನಡ · ಪಾಠ ೧೪</div>
+  <h1>🌊 ಕಡಲು (ಪದ್ಯ)</h1>
+  <div class="sub">ವಾಣಿ ಸುಬ್ಬಯ್ಯ ಅವರಿಂದ · Tap to Learn!</div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">ಹಂತ ೧: ಕಡಲಿನ ಚಿತ್ರಗಳು 👀</div>
+</header>
+
+<!-- TAB BAR -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" id="tab-0" onclick="tryTab(0)">
+    <span class="tab-icon">🌊</span><span>ಚಿತ್ರಗಳು</span>
+  </button>
+  <button class="tab-btn locked" id="tab-1" onclick="tryTab(1)">
+    <span class="tab-icon">📜</span><span>ಪದ್ಯ</span>
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-2" onclick="tryTab(2)">
+    <span class="tab-icon">📖</span><span>ಪದಗಳು</span>
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-3" onclick="tryTab(3)">
+    <span class="tab-icon">🎵</span><span>ಪ್ರಾಸ</span>
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-4" onclick="tryTab(4)">
+    <span class="tab-icon">❓</span><span>ಪ್ರಶ್ನೆ</span>
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-5" onclick="tryTab(5)">
+    <span class="tab-icon">🔗</span><span>ಜೋಡಣೆ</span>
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-6" onclick="tryTab(6)">
+    <span class="tab-icon">✏️</span><span>ಖಾಲಿ</span>
+    <span class="lock-icon">🔒</span>
+  </button>
+</div>
+
+<div id="lockToast"></div>
+
+<!-- ====== TAB 0: INTRO PICTURES ====== -->
+<div class="section active" id="sec-0">
+  <div class="sec-title">🌊 ಕಡಲಿನ ಚಿತ್ರಗಳು ನೋಡಿ!</div>
+  <div class="instr">👆 ಪ್ರತಿ ಚಿತ್ರವನ್ನು <strong>ತಟ್ಟಿ</strong> ಹೆಸರು ತಿಳಿಯಿರಿ!</div>
+  <div class="mini-label">ನೀವು ನೋಡಿದ್ದು: <span id="introCount">೦</span> / ೬</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="introBar"></div></div>
+
+  <div class="scene-grid">
+    <div class="scene-card" id="sc0" onclick="tapScene(this,'sc0')">
+      <span class="s-icon">🐚</span>
+      <div class="s-name">ಕಪ್ಪೆಚಿಪ್ಪು</div>
+      <div class="s-detail">ಕಡಲ ತೀರದಲ್ಲಿ ಸಿಗುವ ಚಿಪ್ಪು.<br>ಒಳಗೆ ಮುತ್ತು ಇರುತ್ತದೆ!</div>
+      <span class="s-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="scene-card" id="sc1" onclick="tapScene(this,'sc1')">
+      <span class="s-icon">⛵</span>
+      <div class="s-name">ದೋಣಿ</div>
+      <div class="s-detail">ನೀರಿನ ಮೇಲೆ ಓಡುವ ವಾಹನ.<br>ಗಾಳಿಯಲ್ಲಿ ತೇಲುತ್ತದೆ!</div>
+      <span class="s-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="scene-card" id="sc2" onclick="tapScene(this,'sc2')">
+      <span class="s-icon">🐠</span>
+      <div class="s-name">ಮೀನು</div>
+      <div class="s-detail">ಕಡಲಲ್ಲಿ ಈಜುವ ಜಲಚರ ಪ್ರಾಣಿ.<br>ಬಣ್ಣ ಬಣ್ಣದ ಮೀನುಗಳು ಇವೆ!</div>
+      <span class="s-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="scene-card" id="sc3" onclick="tapScene(this,'sc3')">
+      <span class="s-icon">🏖️</span>
+      <div class="s-name">ಮರಳ ತೀರ</div>
+      <div class="s-detail">ಕಡಲ ಅಂಚಿನ ಮರಳಿನ ಜಾಗ.<br>ಆಡಲು ಬಹಳ ಚೆಂದ!</div>
+      <span class="s-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="scene-card" id="sc4" onclick="tapScene(this,'sc4')">
+      <span class="s-icon">🌊</span>
+      <div class="s-name">ಅಲೆ</div>
+      <div class="s-detail">ಕಡಲಲ್ಲಿ ಏಳುವ ನೀರಿನ ಅಲೆ.<br>ಅಬ್ಬರದ ಶಬ್ದ ಮಾಡುತ್ತದೆ!</div>
+      <span class="s-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="scene-card" id="sc5" onclick="tapScene(this,'sc5')">
+      <span class="s-icon">🚢</span>
+      <div class="s-name">ಹಡಗು</div>
+      <div class="s-detail">ದೊಡ್ಡ ಕಡಲಿನಲ್ಲಿ ಓಡುವ ದೊಡ್ಡ ವಾಹನ.<br>ದೂರ ದೂರ ಹೋಗುತ್ತದೆ!</div>
+      <span class="s-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+  </div>
+
+  <div class="note-box" id="introNote">🎉 ಭಲೇ! ಎಲ್ಲ ಚಿತ್ರಗಳನ್ನು ನೋಡಿದಿರಿ! ಈಗ ಪದ್ಯ ಕಲಿಯೋಣ! 🌊</div>
+  <button class="next-btn" id="introNextBtn" onclick="goNext(0)">ಮುಂದೆ ಹೋಗೋಣ → ಪದ್ಯ ಓದಿ 📜</button>
+</div>
+
+<!-- ====== TAB 1: POEM ====== -->
+<div class="section" id="sec-1">
+  <div class="sec-title">📜 ಕಡಲು — ಪದ್ಯ ಕಲಿಯಿರಿ</div>
+  <div class="instr">👆 ಪ್ರತಿ ಚರಣವನ್ನು <strong>ತಟ್ಟಿ</strong> ಅರ್ಥ ತಿಳಿಯಿರಿ!</div>
+  <div class="mini-label">ನೀವು ಓದಿದ್ದು: <span id="poemCount">೦</span> / ೪</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="poemBar"></div></div>
+  <div class="tap-hint">👆 ತಟ್ಟಿ ತಿಳಿಯಿರಿ!</div>
+
+  <div class="poem-stanza" id="p0" onclick="tapPoem(this,'p0')">
+    <span class="poem-stanza-icon">🌊</span>
+    <div class="poem-text">
+      ಹೋಗುವ ಬಾರ ಕಡಲಿನ ತೀರಕೆ<br>
+      ಸುಂದರ ನೋಟವ ನೋಡಲಿಕೆ ॥ ಪ ॥
+    </div>
+    <div class="poem-meaning">🌟 <strong>ಅರ್ಥ:</strong> ಬನ್ನಿ, ಕಡಲ ತೀರಕ್ಕೆ ಹೋಗೋಣ — ಅಲ್ಲಿ ಎಷ್ಟು ಸುಂದರ ನೋಟ ಇದೆ ಎಂದು ನೋಡೋಣ!</div>
+  </div>
+
+  <div class="poem-stanza" id="p1" onclick="tapPoem(this,'p1')">
+    <span class="poem-stanza-icon">🏖️</span>
+    <div class="poem-text">
+      ತೀರದ ತುಂಬಾ ಮರಳಿನ ರಾಶಿ<br>
+      ಹರಡಿದೆ ಕಪ್ಪೆಯ ಚಿಪ್ಪಿನ ರಾಶಿ<br>
+      ಆಡುವ ಬಾ ಕುಣಿದಾಡುವ ಬಾ<br>
+      ಕಪ್ಪೆಯ ಗೂಡನು ಕಟ್ಟುವ ಬಾ ॥ ೧ ॥
+    </div>
+    <div class="poem-meaning">🌟 <strong>ಅರ್ಥ:</strong> ತೀರದ ತುಂಬಾ ಮರಳು ಮತ್ತು ಚಿಪ್ಪುಗಳ ರಾಶಿ ಇದೆ. ಬನ್ನಿ — ಆಡೋಣ, ಕುಣಿಯೋಣ, ಮರಳಿನಲ್ಲಿ ಗೂಡು ಕಟ್ಟೋಣ!</div>
+  </div>
+
+  <div class="poem-stanza" id="p2" onclick="tapPoem(this,'p2')">
+    <span class="poem-stanza-icon">☁️</span>
+    <div class="poem-text">
+      ಕಡಲಾಗಿದೆ ನೀರಿನ ಒಡಲು<br>
+      ಬಾನಂಚಿನವರೆಗೂ ನೀರಿನ ಮಡಿಲು<br>
+      ತೆರೆತೆರೆಯಾಗಿ ಹರಿದಿದೆ ಹೊನಲು<br>
+      ಅಲೆಗಳ ಅಬ್ಬರ ತುಂಬಿದೆ ಮುಗಿಲು ॥ ೨ ॥
+    </div>
+    <div class="poem-meaning">🌟 <strong>ಅರ್ಥ:</strong> ಕಡಲು ನೀರಿನ ದೇಹ. ಆಕಾಶದ ಕೊನೆಯವರೆಗೆ ನೀರೇ ನೀರು. ಅಲೆಗಳು ತೆರೆ ತೆರೆಯಾಗಿ ಬರುತ್ತವೆ — ಅವುಗಳ ಅಬ್ಬರ ಮೋಡ ತನಕ ತಲುಪುತ್ತದೆ!</div>
+  </div>
+
+  <div class="poem-stanza" id="p3" onclick="tapPoem(this,'p3')">
+    <span class="poem-stanza-icon">💎</span>
+    <div class="poem-text">
+      ಕಡಲಿನ ತುಂಬಾ ಜಲಚರ ಪ್ರಾಣಿ<br>
+      ಕಡಲಿನಾಳದಲ್ಲಿ ರತ್ನದ ಗಣಿ<br>
+      ಸುಂದರ ಸೊಬಗನು ನೀಡುವ ಖಣಿ<br>
+      ನಿನಗೆ ನಾವು ಸದಾಋಣಿ. ॥ ೩ ॥
+    </div>
+    <div class="poem-meaning">🌟 <strong>ಅರ್ಥ:</strong> ಕಡಲಲ್ಲಿ ಅನೇಕ ಜಲಚರ ಪ್ರಾಣಿಗಳಿವೆ. ಕಡಲಿನ ಆಳದಲ್ಲಿ ರತ್ನಗಳ ಗಣಿ ಇದೆ. ಇಷ್ಟೊಂದು ಸೊಬಗು ಕೊಡುವ ಕಡಲಿಗೆ ನಾವು ಸದಾ ಕೃತಜ್ಞರು!</div>
+  </div>
+
+  <div class="note-box" id="poemNote">🎉 ಭಲೇ! ಇಡೀ ಪದ್ಯ ಓದಿದಿರಿ! ಈಗ ಪದಗಳ ಅರ್ಥ ಕಲಿಯೋಣ! 📖</div>
+  <button class="next-btn" id="poemNextBtn" onclick="goNext(1)">ಮುಂದೆ ಹೋಗೋಣ → ಪದಗಳ ಅರ್ಥ 📖</button>
+</div>
+
+<!-- ====== TAB 2: VOCABULARY ====== -->
+<div class="section" id="sec-2">
+  <div class="sec-title">📖 ಪದಗಳ ಅರ್ಥ ಕಲಿಯಿರಿ</div>
+  <div class="instr">👆 ಪ್ರತಿ ಪದ ಕಾರ್ಡ್ ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿಯಿರಿ!</div>
+  <div class="mini-label">ನೀವು ಕಲಿತದ್ದು: <span id="wordCount">೦</span> / ೮</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="wordBar"></div></div>
+
+  <div class="word-grid">
+    <div class="word-card" id="wc0" onclick="tapWord(this,'wc0')">
+      <span class="w-icon">🌊</span>
+      <div class="w-kn">ಕಡಲು</div>
+      <div class="w-meaning">= ಸಮುದ್ರ</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc1" onclick="tapWord(this,'wc1')">
+      <span class="w-icon">👁️</span>
+      <div class="w-kn">ದೃಶ್ಯ</div>
+      <div class="w-meaning">= ನೋಟ (view)</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc2" onclick="tapWord(this,'wc2')">
+      <span class="w-icon">🏃</span>
+      <div class="w-kn">ಒಡಲು</div>
+      <div class="w-meaning">= ದೇಹ (body)</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc3" onclick="tapWord(this,'wc3')">
+      <span class="w-icon">🌅</span>
+      <div class="w-kn">ಬಾನಂಚು</div>
+      <div class="w-meaning">= ಆಕಾಶದ ಕೊನೆ</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc4" onclick="tapWord(this,'wc4')">
+      <span class="w-icon">🌊</span>
+      <div class="w-kn">ಹೊನಲು</div>
+      <div class="w-meaning">= ನದಿ (river)</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc5" onclick="tapWord(this,'wc5')">
+      <span class="w-icon">☁️</span>
+      <div class="w-kn">ಮುಗಿಲು</div>
+      <div class="w-meaning">= ಮೋಡ (cloud)</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc6" onclick="tapWord(this,'wc6')">
+      <span class="w-icon">🐟</span>
+      <div class="w-kn">ಜಲಚರ</div>
+      <div class="w-meaning">= ನೀರಲ್ಲಿ ಇರುವ ಪ್ರಾಣಿ</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+    <div class="word-card" id="wc7" onclick="tapWord(this,'wc7')">
+      <span class="w-icon">💎</span>
+      <div class="w-kn">ರತ್ನ</div>
+      <div class="w-meaning">= ಬೆಲೆಯುಳ್ಳ ಕಲ್ಲು (gem)</div>
+      <span class="w-tap">👆 ತಟ್ಟಿ</span>
+    </div>
+  </div>
+
+  <div class="note-box" id="wordNote">🎉 ಭಲೇ! ಎಲ್ಲ ಪದಗಳ ಅರ್ಥ ತಿಳಿಯಿತು! ಈಗ ಪ್ರಾಸ ಪದಗಳನ್ನು ಕಲಿಯೋಣ! 🎵</div>
+  <button class="next-btn" id="wordNextBtn" onclick="goNext(2)">ಮುಂದೆ ಹೋಗೋಣ → ಪ್ರಾಸ ಪದಗಳು 🎵</button>
+</div>
+
+<!-- ====== TAB 3: RHYMING WORDS ====== -->
+<div class="section" id="sec-3">
+  <div class="sec-title">🎵 ಪ್ರಾಸ ಪದಗಳು</div>
+  <div class="instr">👆 ಒಂದು ಪದ ತಟ್ಟಿ ಅದರ ಜೊತೆ ಪದ ನೋಡಿ!</div>
+  <div class="mini-label">ನೀವು ನೋಡಿದ್ದು: <span id="rhymeCount">೦</span> / ೪</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="rhymeBar"></div></div>
+  <div class="wave-divider">〰️〰️〰️〰️〰️〰️</div>
+
+  <div class="card">
+    <div style="font-size:13px;color:#0369a1;font-weight:700;margin-bottom:8px;">📌 ಪ್ರಾಸ ಎಂದರೆ: ಕೊನೆಯ ಅಕ್ಷರ ಒಂದೇ ರೀತಿ ಇರುವ ಪದಗಳು</div>
+    <div style="font-size:13px;color:#0c4a6e;">ಉದಾ: <strong>ತೀರಕೆ</strong> → <strong>ನೋಡಲಿಕೆ</strong> (ಕೆ - ಕೆ ✓)</div>
+  </div>
+
+  <div class="rhyme-grid">
+    <div class="rhyme-card" id="rh0" onclick="tapRhyme(this,'rh0')">
+      <div class="r-word">ತೀರಕೆ</div>
+      <div class="r-pair">↔ ನೋಡಲಿಕೆ</div>
+      <span class="r-tap">👆 ಜೊತೆ ಪದ ನೋಡಿ</span>
+    </div>
+    <div class="rhyme-card" id="rh1" onclick="tapRhyme(this,'rh1')">
+      <div class="r-word">ಒಡಲು</div>
+      <div class="r-pair">↔ ಮಡಿಲು</div>
+      <span class="r-tap">👆 ಜೊತೆ ಪದ ನೋಡಿ</span>
+    </div>
+    <div class="rhyme-card" id="rh2" onclick="tapRhyme(this,'rh2')">
+      <div class="r-word">ಹೊನಲು</div>
+      <div class="r-pair">↔ ಮುಗಿಲು</div>
+      <span class="r-tap">👆 ಜೊತೆ ಪದ ನೋಡಿ</span>
+    </div>
+    <div class="rhyme-card" id="rh3" onclick="tapRhyme(this,'rh3')">
+      <div class="r-word">ಪ್ರಾಣಿ</div>
+      <div class="r-pair">↔ ಗಣಿ / ಖಣಿ / ಋಣಿ</div>
+      <span class="r-tap">👆 ಜೊತೆ ಪದ ನೋಡಿ</span>
+    </div>
+  </div>
+
+  <div class="note-box" id="rhymeNote">🎉 ಭಲೇ! ಪ್ರಾಸ ಪದಗಳು ತಿಳಿಯಿತು! ಈಗ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸೋಣ! ❓</div>
+  <button class="next-btn" id="rhymeNextBtn" onclick="goNext(3)">ಮುಂದೆ ಹೋಗೋಣ → ಪ್ರಶ್ನೆಗಳು ❓</button>
+</div>
+
+<!-- ====== TAB 4: QUESTIONS ====== -->
+<div class="section" id="sec-4">
+  <div class="sec-title">❓ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ</div>
+  <div class="instr">👆 ಸರಿಯಾದ ಉತ್ತರ <strong>ತಟ್ಟಿ</strong> ಆರಿಸಿ!</div>
+  <div class="mini-label">ಸರಿ ಉತ್ತರ: <span id="qCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="qBar"></div></div>
+
+  <!-- Q1 -->
+  <div class="qa-block">
+    <div class="qa-q">೧. ಕಡಲಿನ ತೀರದ ದೃಶ್ಯ ನೋಡಲಿಕೆ ಹೇಗೆ ಕಾಣುತ್ತದೆ?</div>
+    <div class="qa-opts" id="qg1">
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg1')">ಭಯಂಕರವಾಗಿ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQ(this,'qg1')">ಸುಂದರವಾಗಿ</button>
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg1')">ಬಿಸಿಲಾಗಿ</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa-block">
+    <div class="qa-q">೨. ಕಡಲ ತೀರದಲ್ಲಿ ರಾಶಿ ರಾಶಿ ಏನು ಹರಡಿದೆ?</div>
+    <div class="qa-opts" id="qg2">
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg2')">ಹೂವಿನ ರಾಶಿ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQ(this,'qg2')">ಮರಳು ಮತ್ತು ಕಪ್ಪೆಚಿಪ್ಪು</button>
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg2')">ಹಣ್ಣಿನ ರಾಶಿ</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qa-block">
+    <div class="qa-q">೩. ಕಡಲಿನ ಅಲೆಗಳ ಅಬ್ಬರ ಎಲ್ಲಿ ತನಕ ತಲುಪಿದೆ?</div>
+    <div class="qa-opts" id="qg3">
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg3')">ಕಾಡಿನ ತನಕ</button>
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg3')">ಊರಿನ ತನಕ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQ(this,'qg3')">ಮುಗಿಲಿನ (ಮೋಡದ) ತನಕ</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qa-block">
+    <div class="qa-q">೪. ಕಡಲಿನಾಳದಲ್ಲಿ ಯಾವ ಗಣಿ ಇದೆ?</div>
+    <div class="qa-opts" id="qg4">
+      <button class="qa-btn" data-correct="true" onclick="pickQ(this,'qg4')">ರತ್ನದ ಗಣಿ</button>
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg4')">ಚಿನ್ನದ ಗಣಿ</button>
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg4')">ಉಪ್ಪಿನ ಗಣಿ</button>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qa-block">
+    <div class="qa-q">೫. ಈ ಪದ್ಯವನ್ನು ಯಾರು ಬರೆದಿದ್ದಾರೆ?</div>
+    <div class="qa-opts" id="qg5">
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg5')">ವಿ.ಜಿ.ಭಟ್ಟ</button>
+      <button class="qa-btn" data-correct="true" onclick="pickQ(this,'qg5')">ವಾಣಿ ಸುಬ್ಬಯ್ಯ</button>
+      <button class="qa-btn" data-correct="false" onclick="pickQ(this,'qg5')">ಕುವೆಂಪು</button>
+    </div>
+  </div>
+
+  <div class="result-msg" id="result-q">🎉 ಶಾಭಾಷ್! ಎಲ್ಲ ಪ್ರಶ್ನೆಗಳಿಗೆ ಸರಿ ಉತ್ತರ!</div>
+  <button class="next-btn" id="qNextBtn" onclick="goNext(4)">ಮುಂದೆ ಹೋಗೋಣ → ಜೋಡಿಸಿ 🔗</button>
+</div>
+
+<!-- ====== TAB 5: MATCH ====== -->
+<div class="section" id="sec-5">
+  <div class="sec-title">🔗 ಜೋಡಿ ಹುಡುಕಿ</div>
+  <div class="instr">👆 ಎಡಗಡೆಯ ಕನ್ನಡ ಪದ ತಟ್ಟಿ, ನಂತರ ಬಲಗಡೆ ಸರಿಯಾದ ಅರ್ಥ ತಟ್ಟಿ!</div>
+  <div class="mini-label">ಸರಿ ಜೋಡಿ: <span id="matchCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="matchBar"></div></div>
+
+  <div class="match-grid">
+    <div class="match-col">
+      <div class="match-item" id="m-kadalu" onclick="selectMatch(this,'m-kadalu','p-sea')">ಕಡಲು</div>
+      <div class="match-item" id="m-odalu" onclick="selectMatch(this,'m-odalu','p-body')">ಒಡಲು</div>
+      <div class="match-item" id="m-mugilu" onclick="selectMatch(this,'m-mugilu','p-cloud')">ಮುಗಿಲು</div>
+      <div class="match-item" id="m-honalu" onclick="selectMatch(this,'m-honalu','p-river')">ಹೊನಲು</div>
+      <div class="match-item" id="m-ratna" onclick="selectMatch(this,'m-ratna','p-gem')">ರತ್ನ</div>
+    </div>
+    <div class="match-col">
+      <div class="match-item" id="a-cloud" onclick="selectMatch(this,'a-cloud','p-cloud')">☁️ ಮೋಡ</div>
+      <div class="match-item" id="a-gem" onclick="selectMatch(this,'a-gem','p-gem')">💎 ಬೆಲೆಯ ಕಲ್ಲು</div>
+      <div class="match-item" id="a-sea" onclick="selectMatch(this,'a-sea','p-sea')">🌊 ಸಮುದ್ರ</div>
+      <div class="match-item" id="a-river" onclick="selectMatch(this,'a-river','p-river')">🌊 ನದಿ</div>
+      <div class="match-item" id="a-body" onclick="selectMatch(this,'a-body','p-body')">🏃 ದೇಹ</div>
+    </div>
+  </div>
+
+  <div class="result-msg" id="result-match">🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಜೋಡಿ ಸರಿ!</div>
+  <button class="next-btn" id="matchNextBtn" onclick="goNext(5)">ಮುಂದೆ ಹೋಗೋಣ → ಖಾಲಿ ತುಂಬಿ ✏️</button>
+</div>
+
+<!-- ====== TAB 6: FILL BLANKS ====== -->
+<div class="section" id="sec-6">
+  <div class="sec-title">✏️ ಖಾಲಿ ಜಾಗ ತುಂಬಿ</div>
+  <div class="instr">
+    <strong>ಹೇಗೆ ಆಡುವುದು?</strong><br>
+    ೧. ಮೊದಲು ಖಾಲಿ ಜಾಗ 👆 ತಟ್ಟಿ<br>
+    ೨. ನಂತರ ಕೆಳಗಿನ ಸರಿ ಪದ ತಟ್ಟಿ!
+  </div>
+  <div class="mini-label">ಸರಿ ಉತ್ತರ: <span id="fillCount">೦</span> / ೪</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="fillBar"></div></div>
+
+  <div class="fill-sentence">
+    ೧. ಹೋಗುವ ಬಾರ ಕಡಲಿನ 
+    <span class="blank" id="blank0" data-answer="ತೀರಕೆ" onclick="selectBlank('blank0')">_ _ _</span>
+  </div>
+  <div class="fill-sentence">
+    ೨. ತೀರದ ತುಂಬಾ 
+    <span class="blank" id="blank1" data-answer="ಮರಳಿನ" onclick="selectBlank('blank1')">_ _ _</span>
+     ರಾಶಿ
+  </div>
+  <div class="fill-sentence">
+    ೩. ಕಡಲಿನ ತುಂಬಾ 
+    <span class="blank" id="blank2" data-answer="ಜಲಚರ" onclick="selectBlank('blank2')">_ _ _</span>
+     ಪ್ರಾಣಿ
+  </div>
+  <div class="fill-sentence">
+    ೪. ಕಡಲಿನಾಳದಲ್ಲಿ 
+    <span class="blank" id="blank3" data-answer="ರತ್ನದ" onclick="selectBlank('blank3')">_ _ _</span>
+     ಗಣಿ
+  </div>
+
+  <div class="chips" id="chipArea">
+    <div class="chip" onclick="placeWord('ತೀರಕೆ', this)">ತೀರಕೆ</div>
+    <div class="chip" onclick="placeWord('ಮರಳಿನ', this)">ಮರಳಿನ</div>
+    <div class="chip" onclick="placeWord('ಜಲಚರ', this)">ಜಲಚರ</div>
+    <div class="chip" onclick="placeWord('ರತ್ನದ', this)">ರತ್ನದ</div>
+    <div class="chip" onclick="placeWord('ಅಲೆ', this)">ಅಲೆ</div>
+    <div class="chip" onclick="placeWord('ಕಪ್ಪೆ', this)">ಕಪ್ಪೆ</div>
+  </div>
+
+  <div class="result-msg" id="result-fill">🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಸರಿಯಾಗಿ ತುಂಬಿದಿರಿ!</div>
+
+  <div class="complete-card" id="completeCard">
+    <span class="big-emoji">🏆</span>
+    <h2>ಪಾಠ ೧೪ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!</h2>
+    <p>
+      ನೀವು ಇಂದು ಕಲಿತದ್ದು:<br>
+      🌊 ಕಡಲಿನ ಚಿತ್ರಗಳು &nbsp;|&nbsp; 📜 ಪದ್ಯ<br>
+      📖 ಪದಗಳ ಅರ್ಥ &nbsp;|&nbsp; 🎵 ಪ್ರಾಸ ಪದಗಳು<br>
+      ❓ ಪ್ರಶ್ನೆ-ಉತ್ತರ &nbsp;|&nbsp; 🔗 ಜೋಡಿ &nbsp;|&nbsp; ✏️ ಖಾಲಿ ತುಂಬುವುದು<br><br>
+      <strong>ನೀನು ತುಂಬಾ ಚಾಣಾಕ್ಷ! 🌟</strong>
+    </p>
+  </div>
+</div>
+
+<script>
+const knNums = ['೦','೧','೨','೩','೪','೫','೬','೭','೮','೯','೧೦','೧೧','೧೨'];
+const totalTabs = 7;
+let unlockedUpTo = 0;
+
+const progressSteps = [
+  {pct:14, label:'ಹಂತ ೧: ಕಡಲಿನ ಚಿತ್ರಗಳು 👀'},
+  {pct:28, label:'ಹಂತ ೨: ಪದ್ಯ ಓದುತ್ತಿದ್ದೀರಿ 📜'},
+  {pct:42, label:'ಹಂತ ೩: ಪದಗಳ ಅರ್ಥ 📖'},
+  {pct:57, label:'ಹಂತ ೪: ಪ್ರಾಸ ಪದಗಳು 🎵'},
+  {pct:71, label:'ಹಂತ ೫: ಪ್ರಶ್ನೆ-ಉತ್ತರ ❓'},
+  {pct:85, label:'ಹಂತ ೬: ಜೋಡಿ ಹುಡುಕಿ 🔗'},
+  {pct:100, label:'🏆 ಪಾಠ ೧೪ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!'},
+];
+
+function tryTab(idx) {
+  if (idx > unlockedUpTo) {
+    const btn = document.getElementById('tab-'+idx);
+    btn.classList.remove('shake');
+    void btn.offsetWidth;
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 600);
+    showToast('🔒 ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸಿ!');
+    return;
+  }
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-'+idx).classList.add('active');
+  document.getElementById('tab-'+idx).classList.add('active');
+  document.getElementById('tab-'+idx).scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function goNext(fromIdx) {
+  const next = fromIdx + 1;
+  if (next < totalTabs) {
+    unlockedUpTo = Math.max(unlockedUpTo, next);
+    const btn = document.getElementById('tab-'+next);
+    btn.classList.remove('locked');
+    const lock = btn.querySelector('.lock-icon');
+    if (lock) lock.remove();
+    document.getElementById('tab-'+fromIdx).classList.add('done');
+    document.getElementById('progressFill').style.width = progressSteps[next].pct + '%';
+    document.getElementById('progressLabel').textContent = progressSteps[next].label;
+    tryTab(next);
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showResult(id) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+}
+
+// ===== TAB 0: SCENES =====
+let sceneTapped = new Set();
+function tapScene(card, id) {
+  if (!sceneTapped.has(id)) {
+    card.classList.add('tapped'); sceneTapped.add(id);
+    document.getElementById('introCount').textContent = knNums[sceneTapped.size];
+    document.getElementById('introBar').style.width = (sceneTapped.size / 6 * 100) + '%';
+    if (sceneTapped.size >= 6) {
+      document.getElementById('introNote').style.display = 'block';
+      document.getElementById('introNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 1: POEM =====
+let poemTapped = 0;
+function tapPoem(el, id) {
+  if (!el.classList.contains('highlighted')) {
+    el.classList.add('highlighted');
+    poemTapped++;
+    document.getElementById('poemCount').textContent = knNums[poemTapped];
+    document.getElementById('poemBar').style.width = (poemTapped / 4 * 100) + '%';
+    if (poemTapped >= 4) {
+      document.getElementById('poemNote').style.display = 'block';
+      document.getElementById('poemNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 2: WORDS =====
+let wordTapped = new Set();
+function tapWord(card, id) {
+  if (!wordTapped.has(id)) {
+    card.classList.add('tapped'); wordTapped.add(id);
+    document.getElementById('wordCount').textContent = knNums[wordTapped.size];
+    document.getElementById('wordBar').style.width = (wordTapped.size / 8 * 100) + '%';
+    if (wordTapped.size >= 8) {
+      document.getElementById('wordNote').style.display = 'block';
+      document.getElementById('wordNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 3: RHYME =====
+let rhymeTapped = new Set();
+function tapRhyme(card, id) {
+  if (!rhymeTapped.has(id)) {
+    card.classList.add('tapped'); rhymeTapped.add(id);
+    document.getElementById('rhymeCount').textContent = knNums[rhymeTapped.size];
+    document.getElementById('rhymeBar').style.width = (rhymeTapped.size / 4 * 100) + '%';
+    if (rhymeTapped.size >= 4) {
+      document.getElementById('rhymeNote').style.display = 'block';
+      document.getElementById('rhymeNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 4: QUESTIONS =====
+let qCorrect = 0;
+function pickQ(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true'; qCorrect++;
+    document.getElementById('qCount').textContent = knNums[qCorrect];
+    document.getElementById('qBar').style.width = (qCorrect / 5 * 100) + '%';
+    if (qCorrect === 5) {
+      setTimeout(() => {
+        showResult('result-q');
+        setTimeout(() => document.getElementById('qNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(() => btn.classList.remove('wrong'), 700);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+
+// ===== TAB 5: MATCH =====
+let matchSelected = null;
+let matchSelectedSide = null;
+let matchCorrect = 0;
+
+function selectMatch(el, elId, pairId) {
+  const isLeft = elId.startsWith('m-');
+  if (el.classList.contains('matched-correct')) return;
+  document.querySelectorAll('.match-item.selected').forEach(item => {
+    const itemIsLeft = item.id.startsWith('m-');
+    if (itemIsLeft === isLeft) item.classList.remove('selected');
+  });
+  el.classList.add('selected');
+  if (matchSelected === null || matchSelectedSide === isLeft) {
+    matchSelected = {el, pairId}; matchSelectedSide = isLeft;
+  } else {
+    const prev = matchSelected;
+    if (prev.pairId === pairId) {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-correct');
+      el.classList.remove('selected'); el.classList.add('matched-correct');
+      matchCorrect++;
+      document.getElementById('matchCount').textContent = knNums[matchCorrect];
+      document.getElementById('matchBar').style.width = (matchCorrect / 5 * 100) + '%';
+      if (matchCorrect === 5) {
+        setTimeout(() => {
+          showResult('result-match');
+          setTimeout(() => document.getElementById('matchNextBtn').style.display = 'block', 500);
+        }, 300);
+      }
+    } else {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-wrong');
+      el.classList.remove('selected'); el.classList.add('matched-wrong');
+      setTimeout(() => { prev.el.classList.remove('matched-wrong'); el.classList.remove('matched-wrong'); }, 600);
+      showToast('❌ ತಪ್ಪು ಜೋಡಿ! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+    }
+    matchSelected = null; matchSelectedSide = null;
+  }
+}
+
+// ===== TAB 6: FILL BLANKS =====
+let selectedBlankId = null;
+let fillCorrect = 0;
+
+function selectBlank(id) {
+  const blank = document.getElementById(id);
+  if (blank.classList.contains('correct')) return;
+  document.querySelectorAll('.blank').forEach(b => b.classList.remove('active-blank'));
+  selectedBlankId = id;
+  blank.classList.add('active-blank');
+}
+
+function placeWord(word, chip) {
+  if (!selectedBlankId) { showToast('👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟಿ!'); return; }
+  const blank = document.getElementById(selectedBlankId);
+  if (blank.classList.contains('correct')) return;
+  blank.classList.remove('active-blank', 'wrong');
+  if (word === blank.dataset.answer) {
+    blank.textContent = word; blank.classList.add('correct');
+    chip.classList.add('used'); fillCorrect++; selectedBlankId = null;
+    document.getElementById('fillCount').textContent = knNums[fillCorrect];
+    document.getElementById('fillBar').style.width = (fillCorrect / 4 * 100) + '%';
+    if (fillCorrect === 4) {
+      setTimeout(() => {
+        showResult('result-fill');
+        setTimeout(() => {
+          document.getElementById('completeCard').classList.add('show');
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('tab-6').classList.add('done');
+          document.getElementById('progressLabel').textContent = '🏆 ಪಾಠ ೧೪ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!';
+        }, 800);
+      }, 300);
+    }
+  } else {
+    blank.classList.add('wrong'); blank.textContent = '✗';
+    setTimeout(() => { blank.classList.remove('wrong'); blank.textContent = '_ _ _'; }, 800);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+</script>
+</body>
+</html>

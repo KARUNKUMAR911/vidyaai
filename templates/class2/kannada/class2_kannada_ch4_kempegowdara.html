@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಕೆಂಪೇಗೌಡರ ಕನಸು - ಪಾಠ ೪</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #c2410c;
+  --saffron-dark: #7c2d12;
+  --saffron-light: #ffedd5;
+  --gold: #d97706;
+  --gold-light: #fef3c7;
+  --maroon: #9f1239;
+  --blue: #1d4ed8;
+  --blue-light: #dbeafe;
+  --green: #15803d;
+  --cream: #fffbeb;
+  --white: #ffffff;
+  --text: #7c2d12;
+  --muted: #78716c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans Kannada', sans-serif;
+  background: linear-gradient(160deg, #ffedd5 0%, #fef3c7 50%, #fce7f3 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 60%, #f97316 100%);
+  color: white;
+  text-align: center;
+  padding: 16px 16px 8px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '🏰🐴⚔️🏰🐴⚔️🏰🐴⚔️';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  font-size: 16px; letter-spacing: 4px; opacity: 0.15;
+}
+.badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--saffron-dark);
+  font-weight: 800;
+  font-size: 11px;
+  padding: 3px 14px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+header h1 {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: clamp(18px, 6vw, 36px);
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+header .sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+.progress-wrap {
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  height: 10px;
+  margin: 10px 20px 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #fbbf24);
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  width: 14%;
+}
+.progress-label {
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 4px;
+  padding-bottom: 6px;
+}
+
+/* TAB BAR */
+.tab-bar {
+  display: flex;
+  background: var(--saffron-dark);
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid var(--gold);
+  gap: 2px;
+  padding: 0 4px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1 1 0;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 9px 4px 7px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  position: relative;
+}
+.tab-btn .tab-icon { font-size: 18px; }
+.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(255,255,255,0.1); }
+.tab-btn.done { color: #86efac; }
+.tab-btn.locked { color: rgba(255,255,255,0.2); cursor: not-allowed; }
+.tab-btn.locked .tab-icon { filter: grayscale(1) opacity(0.3); }
+.lock-icon { position: absolute; top: 4px; right: 4px; font-size: 9px; opacity: 0.5; }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-8px) rotate(-3deg)}
+  30%{transform:translateX(8px) rotate(3deg)}
+  45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  90%{transform:translateX(3px)}
+}
+.shake { animation: shake 0.5s ease; }
+
+/* TOAST */
+#lockToast {
+  position: fixed;
+  bottom: 80px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--maroon);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  text-align: center;
+  max-width: 88vw;
+}
+#lockToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* SECTIONS */
+.section { display: none; padding: 16px 14px 90px; max-width: 900px; margin: 0 auto; }
+.section.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+.sec-title {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--saffron);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* NEXT BUTTON */
+.next-btn {
+  display: none;
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--saffron), var(--saffron-dark));
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.next-btn:active { transform: scale(0.97); }
+
+/* ===== TAB 1: MEET CHARACTERS ===== */
+.meet-intro {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(194,65,12,0.12);
+  margin-bottom: 14px;
+  text-align: center;
+}
+.meet-intro h2 {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 18px; color: var(--saffron-dark); margin-bottom: 4px;
+}
+.meet-intro p { font-size: 13px; color: var(--muted); }
+
+.chars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.char-card {
+  background: var(--saffron-light);
+  border-radius: 18px;
+  padding: 16px 8px 12px;
+  text-align: center;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+}
+.char-card:active { transform: scale(0.94); }
+.char-card.tapped { border-color: var(--saffron); background: #fed7aa; }
+.char-card .char-emoji { font-size: 46px; display: block; margin-bottom: 8px; }
+.char-card .char-kn {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px; font-weight: 700; color: var(--saffron-dark);
+}
+.char-card .char-desc { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.char-card .tap-check {
+  position: absolute; top: 8px; right: 10px;
+  font-size: 18px; opacity: 0; transition: opacity 0.25s;
+}
+.char-card.tapped .tap-check { opacity: 1; }
+.meet-count { font-size: 22px; font-weight: 800; color: var(--saffron); margin-top: 6px; }
+.intro-note {
+  background: linear-gradient(135deg, #fef9c3, #fef3c7);
+  border-radius: 14px;
+  padding: 13px 16px;
+  font-size: 14px; color: #92400e;
+  font-weight: 600; text-align: center; margin-top: 12px;
+}
+
+/* ===== TAB 2: STORY ===== */
+.story-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px 16px;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.10);
+  margin-bottom: 12px;
+}
+.story-para {
+  font-size: 15px;
+  line-height: 2;
+  color: #1c1917;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: background 0.2s;
+  margin-bottom: 6px;
+  border: 2px solid transparent;
+}
+.story-para:active { transform: scale(0.99); }
+.story-para.highlighted { background: #fed7aa; border-color: var(--saffron); }
+.story-para .para-emoji { font-size: 20px; margin-right: 6px; }
+.story-tap-note {
+  text-align: center; font-size: 13px; color: var(--muted);
+  margin-bottom: 12px; font-weight: 600;
+}
+.story-progress-bar {
+  background: #e7e5e4;
+  border-radius: 10px;
+  height: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.story-progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  border-radius: 10px;
+  transition: width 0.4s;
+  width: 0%;
+}
+
+/* ===== TAB 3: VOCAB CARDS ===== */
+.vocab-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(194,65,12,0.08);
+}
+.vocab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.vocab-card {
+  height: 110px;
+  perspective: 800px;
+  cursor: pointer;
+}
+.vocab-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+.vocab-card.flipped .vocab-inner { transform: rotateY(180deg); }
+.vocab-front, .vocab-back {
+  position: absolute; inset: 0;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 12px;
+  text-align: center;
+}
+.vocab-front {
+  background: linear-gradient(135deg, var(--saffron-light), #fed7aa);
+  border: 2px solid var(--saffron);
+}
+.vocab-front .vf-word {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 17px; font-weight: 700; color: var(--saffron-dark);
+}
+.vocab-front .vf-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.vocab-back {
+  background: linear-gradient(135deg, #7c2d12, #c2410c);
+  border: 2px solid var(--gold);
+  transform: rotateY(180deg);
+}
+.vocab-back .vb-emoji { font-size: 28px; margin-bottom: 6px; }
+.vocab-back .vb-meaning { font-size: 14px; color: white; font-weight: 700; }
+.vocab-back .vb-en { font-size: 11px; color: #fed7aa; margin-top: 3px; }
+.vocab-count { text-align: center; font-size: 18px; font-weight: 800; color: var(--saffron); margin: 8px 0; }
+
+/* ===== TAB 4: SEQUENCE QUIZ ===== */
+.seq-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(194,65,12,0.08);
+}
+.quiz-q {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(194,65,12,0.1);
+}
+.quiz-text {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.qa-btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  background: var(--saffron-light);
+  border: 2px solid #fed7aa;
+  border-radius: 12px;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 14px;
+  color: var(--saffron-dark);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+.qa-btn:active { transform: scale(0.98); }
+.qa-btn.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+.qa-btn.wrong { background: #fce7f3; border-color: #e11d48; color: #9f1239; animation: shake 0.4s ease; }
+.qa-btn.answered { opacity: 0.4; pointer-events: none; }
+
+/* ===== TAB 5: WORD MATCH ===== */
+.match-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.match-col { display: flex; flex-direction: column; gap: 8px; }
+.dmatch-word, .dmatch-meaning {
+  background: white;
+  border: 2.5px solid #fed7aa;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  transition: all 0.2s;
+  min-height: 54px;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1.4;
+}
+.dmatch-word:active, .dmatch-meaning:active { transform: scale(0.96); }
+.dmatch-word.selected, .dmatch-meaning.selected { border-color: var(--saffron); background: #fed7aa; }
+.dmatch-word.matched, .dmatch-meaning.matched { border-color: var(--green); background: #dcfce7; color: var(--green); pointer-events: none; }
+.dmatch-word.wrong, .dmatch-meaning.wrong { border-color: var(--maroon); background: #fce7f3; animation: shake 0.4s ease; }
+
+/* ===== TAB 6: FILL BLANKS ===== */
+.fill-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.fill-sentence {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 2;
+  color: #1c1917;
+  box-shadow: 0 2px 10px rgba(194,65,12,0.08);
+  font-weight: 600;
+}
+.blank-box {
+  display: inline-block;
+  min-width: 80px;
+  padding: 4px 10px;
+  border-bottom: 3px solid var(--saffron);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--saffron-dark);
+  background: var(--saffron-light);
+  transition: all 0.2s;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.blank-box.active-blank { background: #fed7aa; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(217,119,6,0.3); }
+.blank-box.correct { background: #dcfce7; border-color: var(--green); color: var(--green); pointer-events: none; }
+.blank-box.wrong { background: #fce7f3; border-color: var(--maroon); animation: shake 0.4s ease; }
+.word-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 14px;
+  background: white;
+  border-radius: 14px;
+  justify-content: center;
+}
+.chip {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--saffron-light), #fed7aa);
+  border: 2px solid var(--saffron);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Noto Sans Kannada', sans-serif;
+}
+.chip:active { transform: scale(0.95); }
+.chip.used { opacity: 0.3; pointer-events: none; }
+
+/* ===== TAB 7: FINAL QUIZ ===== */
+.result-msg {
+  display: none;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--gold-light);
+  color: var(--gold);
+  margin-top: 10px;
+}
+.result-msg.show { display: block; }
+.complete-card {
+  display: none;
+  background: linear-gradient(135deg, #7c2d12, #c2410c, #f97316);
+  border-radius: 24px;
+  padding: 28px;
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+  box-shadow: 0 8px 32px rgba(194,65,12,0.4);
+}
+.complete-card.show { display: block; animation: fadeUp 0.5s ease; }
+.complete-card .trophy { font-size: 56px; margin-bottom: 10px; }
+.complete-card .stars { font-size: 32px; letter-spacing: 4px; margin-bottom: 10px; }
+.complete-card h2 { font-family: 'Noto Serif Kannada', serif; font-size: 22px; margin-bottom: 8px; }
+.complete-card p { font-size: 14px; opacity: 0.9; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">೨ನೇ ತರಗತಿ • ಕನ್ನಡ • ಪಾಠ ೪</div>
+  <h1>ಕೆಂಪೇಗೌಡರ ಕನಸು</h1>
+  <div class="sub">ಗದ್ಯ (Prose) — ಸಮಿತಿ ರಚನೆ</div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">ಹಂತ ೧ / ೭</div>
+</header>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-meet" onclick="tryTab('meet',this)">
+    <span class="tab-icon">👑</span>ಪರಿಚಯ
+  </button>
+  <button class="tab-btn locked" id="tab-story" onclick="tryTab('story',this)">
+    <span class="tab-icon">📖</span>ಕಥೆ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-vocab" onclick="tryTab('vocab',this)">
+    <span class="tab-icon">🔤</span>ಪದಗಳು
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-seq" onclick="tryTab('seq',this)">
+    <span class="tab-icon">🧩</span>ಪ್ರಶ್ನೆ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-dmatch" onclick="tryTab('dmatch',this)">
+    <span class="tab-icon">🔗</span>ಜೋಡಿ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-fill" onclick="tryTab('fill',this)">
+    <span class="tab-icon">✏️</span>ತುಂಬಿ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-quiz" onclick="tryTab('quiz',this)">
+    <span class="tab-icon">🏆</span>ಕ್ವಿಜ್
+    <span class="lock-icon">🔒</span>
+  </button>
+</div>
+
+<div id="lockToast"></div>
+
+<!-- ============ TAB 1: MEET ============ -->
+<div class="section active" id="meet">
+  <div class="sec-title">👑 ಪ್ರಮುಖ ವ್ಯಕ್ತಿಗಳು ಮತ್ತು ಸ್ಥಳಗಳನ್ನು ತಟ್ಟಿ!</div>
+  <div class="meet-intro">
+    <h2>ಕೆಂಪೇಗೌಡರ ಕನಸು</h2>
+    <p>ಇವರನ್ನು ಮತ್ತು ಈ ಸ್ಥಳಗಳನ್ನು ತಟ್ಟಿ ಪರಿಚಯ ಮಾಡಿಕೊಳ್ಳಿ!</p>
+    <div class="meet-count"><span id="meetCount">೦</span> / ೬ ✅</div>
+  </div>
+
+  <div class="chars-grid">
+    <div class="char-card" onclick="tapChar(this,'c1')">
+      <span class="tap-check">✅</span>
+      <span class="char-emoji">👑</span>
+      <div class="char-kn">ಕೆಂಪೇಗೌಡರು</div>
+      <div class="char-desc">ಯಲಹಂಕ ನಾಡಿನ ದೊರೆ. ಬೆಂಗಳೂರನ್ನು ಕಟ್ಟಿದರು.</div>
+    </div>
+    <div class="char-card" onclick="tapChar(this,'c2')">
+      <span class="tap-check">✅</span>
+      <span class="char-emoji">🏙️</span>
+      <div class="char-kn">ಬೆಂಗಳೂರು</div>
+      <div class="char-desc">ಕರ್ನಾಟಕ ರಾಜ್ಯದ ರಾಜಧಾನಿ. ಸುಂದರ ನಗರ.</div>
+    </div>
+    <div class="char-card" onclick="tapChar(this,'c3')">
+      <span class="tap-check">✅</span>
+      <span class="char-emoji">🌊</span>
+      <div class="char-kn">ಶಿವಸಮುದ್ರ</div>
+      <div class="char-desc">ಬೆಂಗಳೂರಿನ ದಕ್ಷಿಣದ ಹಳ್ಳಿ. ಹೊಸ ನಗರ ಇಲ್ಲಿ ಕಟ್ಟಿದರು.</div>
+    </div>
+    <div class="char-card" onclick="tapChar(this,'c4')">
+      <span class="tap-check">✅</span>
+      <span class="char-emoji">🏛️</span>
+      <div class="char-kn">ವಿಜಯನಗರ</div>
+      <div class="char-desc">ದೊಡ್ಡ ಸಾಮ್ರಾಜ್ಯ. ಅಚ್ಯುತರಾಯರು ಅರಸರಾಗಿದ್ದರು.</div>
+    </div>
+    <div class="char-card" onclick="tapChar(this,'c5')">
+      <span class="tap-check">✅</span>
+      <span class="char-emoji">🗼</span>
+      <div class="char-kn">ಕಾವಲು ಗೋಪುರ</div>
+      <div class="char-desc">ಪಟ್ಟಣದ ನಾಲ್ಕು ಮೂಲೆಗಳಲ್ಲಿ ಕಟ್ಟಿದ ಗೋಪುರ. ಈಗಲೂ ನೋಡಬಹುದು!</div>
+    </div>
+    <div class="char-card" onclick="tapChar(this,'c6')">
+      <span class="tap-check">✅</span>
+      <span class="char-emoji">🏠</span>
+      <div class="char-kn">ಯಲಹಂಕ</div>
+      <div class="char-desc">ಕೆಂಪೇಗೌಡರ ಮೊದಲಿನ ರಾಜಧಾನಿ. ಬೆಂಗಳೂರಿನ ಉತ್ತರದಲ್ಲಿದೆ.</div>
+    </div>
+  </div>
+
+  <div class="intro-note" id="meetNote">👆 ಮೇಲಿನ ಚಿತ್ರಗಳನ್ನು ಒಂದೊಂದಾಗಿ ತಟ್ಟಿ!</div>
+  <button class="next-btn" id="meetNextBtn" onclick="completeTab('meet','story')">ಮುಂದೆ → ಕಥೆ ಓದೋಣ 📖</button>
+</div>
+
+<!-- ============ TAB 2: STORY ============ -->
+<div class="section" id="story">
+  <div class="sec-title">📖 ಕಥೆ — ಒಂದೊಂದು ಭಾಗ ತಟ್ಟಿ ಓದಿ!</div>
+  <p class="story-tap-note">👆 ಪ್ರತಿ ಭಾಗ ತಟ್ಟಿದಾಗ ಬಣ್ಣ ಬರುತ್ತದೆ</p>
+  <div class="story-progress-bar"><div class="story-progress-inner" id="storyBar"></div></div>
+  <div style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:12px;">
+    <span id="storyTapped">0</span> / 8 ಭಾಗಗಳು ✅
+  </div>
+
+  <div class="story-card">
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">🌆</span>
+      <strong>ಬೆಂಗಳೂರು</strong> ಭಾರತ ದೇಶದ ಸುಂದರ ನಗರಗಳಲ್ಲಿ ಒಂದು. ಅದು ಈಗ ಕರ್ನಾಟಕ ರಾಜ್ಯದ <strong>ರಾಜಧಾನಿ</strong>ಯಾಗಿದೆ. ಸುಮಾರು ನಾಲ್ಕುನೂರು ವರ್ಷಗಳ ಹಿಂದೆ ಈಗಿನ ಬೆಂಗಳೂರು ನಗರವು ಇರುವ ಸ್ಥಳದಲ್ಲಿ ಒಂದು <strong>ಕಾಡು</strong> ಇತ್ತು. ಕಾಡಿನ ಉತ್ತರಕ್ಕೆ ತುಸು ದೂರದಲ್ಲಿ ಬೆಂಗಳೂರು ಎಂಬ ಒಂದು ಚಿಕ್ಕ ಹಳ್ಳಿಯಿತ್ತು. ಕಾಡಿನ ದಕ್ಷಿಣಕ್ಕೆ <strong>ಶಿವಸಮುದ್ರ</strong>ವೆಂಬ ಹಳ್ಳಿಯಿತ್ತು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">👑</span>
+      ಈ ಎರಡು ಹಳ್ಳಿಗಳ ನಡುವಿದ್ದ ಕಾಡಿನಲ್ಲಿ <strong>ಬೆಂಗಳೂರು</strong> ಹುಟ್ಟಿತು. ಅದನ್ನು <strong>ಕೆಂಪೇಗೌಡ</strong>ರೆಂಬ ದೊರೆಗಳು ಸಾಮಾನ್ಯ ಶಕ <strong>೧೫೩೭</strong>ರಲ್ಲಿ ಕಟ್ಟಿಸಿದರು. ಅದನ್ನು ತನ್ನ ರಾಜಧಾನಿಯಾಗಿ ಮಾಡಿಕೊಂಡು ಆಳಿದರು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">⚔️</span>
+      ಕೆಂಪೇಗೌಡರು <strong>ಯಲಹಂಕ</strong> ನಾಡಿನ ದೊರೆ. ಆಗ ಯಲಹಂಕನಾಡು <strong>ವಿಜಯನಗರ</strong> ಸಾಮ್ರಾಜ್ಯದ ಒಂದು ಭಾಗವಾಗಿತ್ತು. ಕೆಂಪೇಗೌಡರು <strong>ಶೂರರೂ ದಯಾಳುವೂ ದೇವರಲ್ಲಿ ಭಕ್ತಿಯುಳ್ಳವರೂ</strong> ಆಗಿದ್ದರು. ಪ್ರಜೆಗಳನ್ನು ತನ್ನ ಮಕ್ಕಳಂತೆ ಪ್ರೀತಿಸುತ್ತಿದ್ದರು. ಪ್ರಜೆಗಳೂ ಅವರನ್ನು ತಂದೆಯಂತೆ ಗೌರವಿಸುತ್ತಿದ್ದರು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">💤</span>
+      ಒಂದು ದಿನ ಕೆಂಪೇಗೌಡರಿಗೆ ಒಂದು <strong>ಕನಸು</strong> ಬಿದ್ದಿತು. ಕನಸಿನಲ್ಲಿ ಒಬ್ಬ <strong>ದೇವಿ</strong>ಯು ಬಂದು ಶಿವಸಮುದ್ರದ ಬಳಿಯ ಕಾಡಿನಲ್ಲಿ ಕಾಣದಾದಳು. ಕೆಂಪೇಗೌಡರಿಗೆ ಆ ಕನಸಿನ ಅರ್ಥ ತಿಳಿಯಲಿಲ್ಲ. ಮತ್ತೆ ಮತ್ತೆ ಅದೇ ಕನಸು ಬಿದ್ದಿತು. ಕೆಂಪೇಗೌಡರಿಗೆ ಆಶ್ಚರ್ಯವಾಯಿತು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">🤝</span>
+      ಮರುದಿನ ತನ್ನ <strong>ಮಂತ್ರಿ</strong>ಗಳನ್ನೂ <strong>ಗುರುಹಿರಿಯ</strong>ರನ್ನೂ ಕರೆಯಿಸಿಕೊಂಡರು. ತನ್ನ ಕನಸನ್ನು ಅವರಿಗೆ ತಿಳಿಸಿದರು. ಅದು ಒಳ್ಳೆಯ ಕನಸೆಂದು ಮಂತ್ರಿಗಳೂ ಗುರುಹಿರಿಯರೂ ಹೇಳಿದರು. ಕನಸಿನಲ್ಲಿ ದೇವಿಯು ಕಾಡಿನಲ್ಲಿ ಒಂದು <strong>ನಗರ</strong>ವನ್ನು ಕಟ್ಟಬೇಕೆಂದು ತಿಳಿಸಿದರು. ಅದರಂತೆ ಕೆಂಪೇಗೌಡರು ನಗರ ಕಟ್ಟಿಸಲು ನಿಶ್ಚಯಿಸಿದರು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">🏗️</span>
+      ದೇಶದ ನಾನಾ ಭಾಗಗಳಿಂದ <strong>ಶಿಲ್ಪಿ</strong>ಗಳನ್ನು ಕರೆಸಿದರು. ಹೊಸ ನಗರವನ್ನು ಕಟ್ಟಿಸಿದರು. ಹೊಸ ನಗರಕ್ಕೆ <strong>ಬೆಂಗಳೂರು</strong> ಎಂದು ಹೆಸರಿಟ್ಟರು — ಕೆಂಪೇಗೌಡರ ತಾಯಿ <strong>ಲಿಂಗಮಾಂಬೆ</strong>, ಹೆಂಡತಿ <strong>ಚೆನ್ನಾಂಬೆ</strong> ಮತ್ತು ಸೊಸೆ <strong>ಲಕ್ಷ್ಮಾಂಬೆ</strong> ಇವರ ತವರೂರಾದ ಬೆಂಗಳೂರು ಹಳ್ಳಿ ಹತ್ತಿರ ಇತ್ತು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">🗼</span>
+      ಬೆಂಗಳೂರು ನಗರ ಬೆಳೆಯಿತು. ದೇಶದ ನಾನಾ ಭಾಗಗಳಿಂದ <strong>ಕಸಬುದಾರ</strong>ರು ಬಂದರು. ಪಟ್ಟಣದ ನಾಲ್ಕು ಮೂಲೆಗಳಲ್ಲಿ ನಾಲ್ಕು <strong>ಕಾವಲು ಗೋಪುರ</strong>ಗಳನ್ನು ಕಟ್ಟಿಸಿದರು. ಬೆಂಗಳೂರಲ್ಲಿ ಈ ಗೋಪುರಗಳನ್ನು ಈಗಲೂ ನೋಡಬಹುದು.
+    </div>
+    <div class="story-para" onclick="tapStoryLine(this)">
+      <span class="para-emoji">🌟</span>
+      ಕೆಂಪೇಗೌಡರ <strong>ದೈವಭಕ್ತಿ, ಪ್ರಜಾಪ್ರೇಮ, ಬುದ್ಧಿವಂತಿಕೆ</strong> ಇವುಗಳನ್ನು ವಿಜಯನಗರದ ಅರಸರಾಗಿದ್ದ <strong>ಅಚ್ಯುತರಾಯ</strong>ರು ಬಹಳ ಮೆಚ್ಚಿದರು. ಬೆಂಗಳೂರು ಸಮೀಪದ ಹತ್ತು ಊರುಗಳನ್ನು ಅವರು ಕೆಂಪೇಗೌಡರಿಗೆ <strong>ದಾನ</strong>ವಾಗಿ ಕೊಟ್ಟರು. ಕೆಂಪೇಗೌಡರು ಕಟ್ಟಿಸಿದ ಬೆಂಗಳೂರು ದೊಡ್ಡ ನಗರವಾಗಿ ಬೆಳೆದು ಈಗ ನಮ್ಮ ರಾಜ್ಯದ ರಾಜಧಾನಿಯಾಗಿದೆ. <strong>ಒಳ್ಳೆಯ ಕೆಲಸ ಸದಾ ಜನೋಪಯೋಗಿ!</strong>
+    </div>
+  </div>
+
+  <button class="next-btn" id="storyNextBtn" onclick="completeTab('story','vocab')">ಮುಂದೆ → ಪದಗಳು ಕಲಿಯೋಣ 🔤</button>
+</div>
+
+<!-- ============ TAB 3: VOCAB ============ -->
+<div class="section" id="vocab">
+  <div class="sec-title">🔤 ಪದಗಳ ಅರ್ಥ — ತಟ್ಟಿ ತಿರುಗಿಸಿ!</div>
+  <div class="vocab-intro">
+    ಪ್ರತಿ ಕಾರ್ಡ್ ತಟ್ಟಿ ತಿರುಗಿಸಿ ಅರ್ಥ ನೋಡಿ! 👆<br>
+    ತಿರುಗಿಸಿದವು: <strong id="vocabCount">0</strong> / 10
+  </div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="flipVocab(this,'v1')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ರಾಜಧಾನಿ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🏛️</div><div class="vb-meaning">ರಾಜ್ಯದ ಮುಖ್ಯ ಆಡಳಿತ ಕೇಂದ್ರ</div><div class="vb-en">Capital city</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v2')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಕಸಬು</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🔧</div><div class="vb-meaning">ಉದ್ಯೋಗ / ಕೆಲಸ</div><div class="vb-en">Trade / Occupation</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v3')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಗುಡಿ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">⛩️</div><div class="vb-meaning">ದೇಗುಲ / ದೇವಾಲಯ</div><div class="vb-en">Temple</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v4')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ತವರೂರು</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🏡</div><div class="vb-meaning">ಹುಟ್ಟಿದ ಊರು</div><div class="vb-en">Native / Hometown</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v5')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಶಿಲ್ಪಿ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🪨</div><div class="vb-meaning">ಕಟ್ಟಡ ಕಟ್ಟುವ ತಜ್ಞ</div><div class="vb-en">Sculptor / Builder</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v6')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಪ್ರಜೆ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">👥</div><div class="vb-meaning">ರಾಜ್ಯದ ಜನರು</div><div class="vb-en">Citizens / Subjects</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v7')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಕಾವಲು ಗೋಪುರ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🗼</div><div class="vb-meaning">ಶತ್ರುಗಳಿಂದ ಊರು ಕಾಯಲು ಎತ್ತರದಲ್ಲಿ ಕಟ್ಟಿದ ಗೋಪುರ</div><div class="vb-en">Watch Tower</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v8')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಪ್ರಜಾಪ್ರೇಮ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">❤️</div><div class="vb-meaning">ಪ್ರಜೆಗಳ ಮೇಲೆ ಪ್ರೀತಿ</div><div class="vb-en">Love for citizens</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v9')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ದಾನ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🎁</div><div class="vb-meaning">ಉಚಿತವಾಗಿ ಕೊಡುವುದು</div><div class="vb-en">Donation / Gift</div></div>
+      </div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v10')">
+      <div class="vocab-inner">
+        <div class="vocab-front"><div class="vf-word">ಸಾಮ್ರಾಜ್ಯ</div><div class="vf-hint">👆 ತಟ್ಟಿ ಅರ್ಥ ನೋಡಿ</div></div>
+        <div class="vocab-back"><div class="vb-emoji">🌍</div><div class="vb-meaning">ರಾಜ ಆಳುವ ದೊಡ್ಡ ರಾಜ್ಯ</div><div class="vb-en">Empire / Kingdom</div></div>
+      </div>
+    </div>
+  </div>
+  <button class="next-btn" id="vocabNextBtn" onclick="completeTab('vocab','seq')">ಮುಂದೆ → ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರ ಕೊಡೋಣ 🧩</button>
+</div>
+
+<!-- ============ TAB 4: SEQUENCE QUIZ ============ -->
+<div class="section" id="seq">
+  <div class="sec-title">🧩 ಸರಿಯಾದ ಉತ್ತರ ತಟ್ಟಿ!</div>
+  <div class="seq-intro">ಒಂದೊಂದು ಪ್ರಶ್ನೆ ಓದಿ ಸರಿಯಾದ ಉತ್ತರ ತಟ್ಟಿ! ✅</div>
+
+  <div class="quiz-q" id="sq1">
+    <div class="quiz-text">೧. ಕೆಂಪೇಗೌಡರು ಬೆಂಗಳೂರನ್ನು ಯಾವ ವರ್ಷ ಕಟ್ಟಿಸಿದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq1')">📅 ೧೬೩೭</button>
+    <button class="qa-btn" data-correct="true" onclick="pickSeq(this,'sq1')">📅 ೧೫೩೭</button>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq1')">📅 ೧೪೩೭</button>
+  </div>
+
+  <div class="quiz-q" id="sq2">
+    <div class="quiz-text">೨. ಕೆಂಪೇಗೌಡರ ಮೊದಲಿನ ರಾಜಧಾನಿ ಯಾವುದು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq2')">🏙️ ಶಿವಸಮುದ್ರ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq2')">🏙️ ಬೆಂಗಳೂರು</button>
+    <button class="qa-btn" data-correct="true" onclick="pickSeq(this,'sq2')">🏙️ ಯಲಹಂಕ</button>
+  </div>
+
+  <div class="quiz-q" id="sq3">
+    <div class="quiz-text">೩. ಕನಸಿನಲ್ಲಿ ದೇವಿ ಏನು ಹೇಳಿದಳು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq3')">💤 ಯುದ್ಧ ಮಾಡಬೇಕು</button>
+    <button class="qa-btn" data-correct="true" onclick="pickSeq(this,'sq3')">🏗️ ಕಾಡಿನಲ್ಲಿ ನಗರ ಕಟ್ಟಬೇಕು</button>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq3')">🌊 ಕೆರೆ ತೋಡಬೇಕು</button>
+  </div>
+
+  <div class="quiz-q" id="sq4">
+    <div class="quiz-text">೪. ಅಚ್ಯುತರಾಯರು ಕೆಂಪೇಗೌಡರಿಗೆ ಏನು ದಾನ ಕೊಟ್ಟರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq4')">💰 ಚಿನ್ನ ಮತ್ತು ಬೆಳ್ಳಿ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickSeq(this,'sq4')">🏘️ ಬೆಂಗಳೂರು ಸಮೀಪದ ಹತ್ತು ಊರುಗಳು</button>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq4')">🐴 ಕುದುರೆಗಳು</button>
+  </div>
+
+  <div class="quiz-q" id="sq5">
+    <div class="quiz-text">೫. ಬೆಂಗಳೂರಲ್ಲಿ ಪಟ್ಟಣದ ನಾಲ್ಕು ಮೂಲೆಗಳಲ್ಲಿ ಏನು ಕಟ್ಟಿಸಿದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq5')">⛩️ ದೇವಾಲಯಗಳು</button>
+    <button class="qa-btn" data-correct="false" onclick="pickSeq(this,'sq5')">🏊 ಕೆರೆಗಳು</button>
+    <button class="qa-btn" data-correct="true" onclick="pickSeq(this,'sq5')">🗼 ಕಾವಲು ಗೋಪುರಗಳು</button>
+  </div>
+
+  <div class="result-msg" id="result-seq"></div>
+  <button class="next-btn" id="seqNextBtn" onclick="completeTab('seq','dmatch')">ಮುಂದೆ → ಜೋಡಿ ಮಾಡೋಣ 🔗</button>
+</div>
+
+<!-- ============ TAB 5: WORD MATCH ============ -->
+<div class="section" id="dmatch">
+  <div class="sec-title">🔗 ಪದ ಮತ್ತು ಅರ್ಥ ಜೋಡಿಸಿ!</div>
+  <div class="match-intro">ಎಡಗಡೆ ಪದ ತಟ್ಟಿ, ಆಮೇಲೆ ಅದರ ಅರ್ಥ ತಟ್ಟಿ! 👆</div>
+
+  <div class="match-grid">
+    <div class="match-col">
+      <div class="dmatch-word" onclick="selectDMatch(this,'left','1')">ರಾಜಧಾನಿ</div>
+      <div class="dmatch-word" onclick="selectDMatch(this,'left','2')">ಶಿಲ್ಪಿ</div>
+      <div class="dmatch-word" onclick="selectDMatch(this,'left','3')">ಕಸಬು</div>
+      <div class="dmatch-word" onclick="selectDMatch(this,'left','4')">ದೈವಭಕ್ತಿ</div>
+      <div class="dmatch-word" onclick="selectDMatch(this,'left','5')">ಪ್ರಜಾಪ್ರೇಮ</div>
+    </div>
+    <div class="match-col">
+      <div class="dmatch-meaning" onclick="selectDMatch(this,'right','3')">ಉದ್ಯೋಗ</div>
+      <div class="dmatch-meaning" onclick="selectDMatch(this,'right','1')">ಮುಖ್ಯ ಆಡಳಿತ ಕೇಂದ್ರ</div>
+      <div class="dmatch-meaning" onclick="selectDMatch(this,'right','5')">ಪ್ರಜೆಗಳ ಮೇಲೆ ಪ್ರೀತಿ</div>
+      <div class="dmatch-meaning" onclick="selectDMatch(this,'right','2')">ಕಟ್ಟಡ ಕಟ್ಟುವ ತಜ್ಞ</div>
+      <div class="dmatch-meaning" onclick="selectDMatch(this,'right','4')">ದೇವರಲ್ಲಿ ಭಕ್ತಿ</div>
+    </div>
+  </div>
+
+  <div class="result-msg" id="result-dmatch"></div>
+  <button class="next-btn" id="dmatchNextBtn" onclick="completeTab('dmatch','fill')">ಮುಂದೆ → ಖಾಲಿ ತುಂಬಿ ✏️</button>
+</div>
+
+<!-- ============ TAB 6: FILL BLANKS ============ -->
+<div class="section" id="fill">
+  <div class="sec-title">✏️ ಸರಿಯಾದ ಪದ ತಟ್ಟಿ ತುಂಬಿ!</div>
+  <div class="fill-intro">ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟಿ, ಆಮೇಲೆ ಕೆಳಗಿನ ಪದ ತಟ್ಟಿ! 👆</div>
+
+  <div class="fill-sentence">
+    ೧. ಕೆಂಪೇಗೌಡರು <span class="blank-box" id="b1" data-answer="ಪ್ರಜೆಗಳನ್ನು" onclick="selectBlank('b1')">_ _ _</span> ತನ್ನ ಮಕ್ಕಳಂತೆ ಪ್ರೀತಿಸುತ್ತಿದ್ದರು.
+  </div>
+  <div class="fill-sentence">
+    ೨. ಕನಸಿನಲ್ಲಿ ದೇವಿಯು ಕಾಡಿನಲ್ಲಿ ಒಂದು <span class="blank-box" id="b2" data-answer="ನಗರ" onclick="selectBlank('b2')">_ _ _</span> ಕಟ್ಟಬೇಕೆಂದು ತಿಳಿಸಿದರು.
+  </div>
+  <div class="fill-sentence">
+    ೩. ಕಸಬುದಾರರಿಂದ <span class="blank-box" id="b3" data-answer="ಕೈಗಾರಿಕೆಗಳು" onclick="selectBlank('b3')">_ _ _</span> ಬೆಳೆದವು.
+  </div>
+  <div class="fill-sentence">
+    ೪. ಕೆಂಪೇಗೌಡರ ತಾಯಿ <span class="blank-box" id="b4" data-answer="ಲಿಂಗಮಾಂಬೆ" onclick="selectBlank('b4')">_ _ _</span> ಯವರ ತವರೂರು ಬೆಂಗಳೂರು.
+  </div>
+  <div class="fill-sentence">
+    ೫. ಕೆಂಪೇಗೌಡರ ಬುದ್ಧಿವಂತಿಕೆ ನೋಡಿ <span class="blank-box" id="b5" data-answer="ಅಚ್ಯುತರಾಯರು" onclick="selectBlank('b5')">_ _ _</span> ಮೆಚ್ಚಿದರು.
+  </div>
+
+  <div class="word-chips">
+    <div class="chip" onclick="placeWord('ಪ್ರಜೆಗಳನ್ನು', this)">ಪ್ರಜೆಗಳನ್ನು</div>
+    <div class="chip" onclick="placeWord('ನಗರ', this)">ನಗರ</div>
+    <div class="chip" onclick="placeWord('ಕೈಗಾರಿಕೆಗಳು', this)">ಕೈಗಾರಿಕೆಗಳು</div>
+    <div class="chip" onclick="placeWord('ಲಿಂಗಮಾಂಬೆ', this)">ಲಿಂಗಮಾಂಬೆ</div>
+    <div class="chip" onclick="placeWord('ಅಚ್ಯುತರಾಯರು', this)">ಅಚ್ಯುತರಾಯರು</div>
+    <div class="chip" onclick="placeWord('ಕಾಡು', this)">ಕಾಡು</div>
+  </div>
+
+  <div class="result-msg" id="result-fill"></div>
+  <button class="next-btn" id="fillNextBtn" onclick="completeTab('fill','quiz')">ಮುಂದೆ → ಅಂತಿಮ ಕ್ವಿಜ್! 🏆</button>
+</div>
+
+<!-- ============ TAB 7: FINAL QUIZ ============ -->
+<div class="section" id="quiz">
+  <div class="sec-title">🏆 ಅಂತಿಮ ಕ್ವಿಜ್!</div>
+
+  <div class="quiz-q" id="qq1">
+    <div class="quiz-text">೧. ಬೆಂಗಳೂರು ಈಗ ಯಾವ ರಾಜ್ಯದ ರಾಜಧಾನಿ?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq1')">🗺️ ತಮಿಳುನಾಡು</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'qq1')">🗺️ ಕರ್ನಾಟಕ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq1')">🗺️ ಆಂಧ್ರ ಪ್ರದೇಶ</button>
+  </div>
+
+  <div class="quiz-q" id="qq2">
+    <div class="quiz-text">೨. ಕೆಂಪೇಗೌಡರು ಯಾವ ಸಾಮ್ರಾಜ್ಯದ ಭಾಗವಾಗಿದ್ದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq2')">👑 ಮೈಸೂರು</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'qq2')">👑 ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq2')">👑 ಮರಾಠಾ</button>
+  </div>
+
+  <div class="quiz-q" id="qq3">
+    <div class="quiz-text">೩. ಕೆಂಪೇಗೌಡರ ಹೆಂಡತಿ ಹೆಸರು ಏನು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq3')">👩 ಲಕ್ಷ್ಮಾಂಬೆ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'qq3')">👩 ಚೆನ್ನಾಂಬೆ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq3')">👩 ಲಿಂಗಮಾಂಬೆ</button>
+  </div>
+
+  <div class="quiz-q" id="qq4">
+    <div class="quiz-text">೪. ಪಾಠದ ಕೊನೆಯ ಮಾತು ಯಾವುದು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq4')">🌟 ಕನಸು ಕಾಣಿ, ಯಶ ಪಡೆಯಿರಿ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'qq4')">🌟 ಒಳ್ಳೆಯ ಕೆಲಸ ಸದಾ ಜನೋಪಯೋಗಿ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq4')">🌟 ರಾಜ ಆಳಿದರೆ ಪ್ರಜೆ ಬಾಳುತ್ತಾರೆ</button>
+  </div>
+
+  <div class="quiz-q" id="qq5">
+    <div class="quiz-text">೫. ಕೆಂಪೇಗೌಡರ ದೊಡ್ಡ ಬಸವಣ್ಣನ ಗುಡಿ ಇರುವ ಊರು ಯಾವುದು?</div>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'qq5')">⛩️ ಬೆಂಗಳೂರು</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq5')">⛩️ ಮೈಸೂರು</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'qq5')">⛩️ ಹಂಪಿ</button>
+  </div>
+
+  <div class="result-msg" id="result-quiz"></div>
+
+  <div class="complete-card" id="completeCard">
+    <div class="trophy">🏆</div>
+    <div class="stars">⭐⭐⭐</div>
+    <h2>ಶಾಭಾಷ್! ನೀವು ಗೆದ್ದಿರಿ!</h2>
+    <p>ಕೆಂಪೇಗೌಡರ ಕನಸು ಪಾಠ ಸಂಪೂರ್ಣ ಕಲಿತಿರಿ! 🎉<br>
+    ಒಳ್ಳೆಯ ಕೆಲಸ ಸದಾ ಜನೋಪಯೋಗಿ! 👑🏙️🌟</p>
+  </div>
+</div>
+
+<script>
+const tabOrder = ['meet','story','vocab','seq','dmatch','fill','quiz'];
+const progressPct = {meet:14,story:28,vocab:42,seq:56,dmatch:70,fill:85,quiz:100};
+const stepNum = {meet:'೧',story:'೨',vocab:'೩',seq:'೪',dmatch:'೫',fill:'೬',quiz:'೭'};
+let unlockedTabs = new Set(['meet']);
+let currentTab = 'meet';
+
+function tryTab(id, btn) {
+  if (unlockedTabs.has(id)) {
+    showTab(id);
+  } else {
+    btn.classList.remove('shake');
+    void btn.offsetWidth;
+    btn.classList.add('shake');
+    btn.addEventListener('animationend', () => btn.classList.remove('shake'), {once:true});
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ!');
+  }
+}
+
+function showTab(id) {
+  tabOrder.forEach(t => {
+    document.getElementById(t).classList.remove('active');
+    document.getElementById('tab-'+t).classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('progressFill').style.width = progressPct[id] + '%';
+  document.getElementById('progressLabel').textContent = 'ಹಂತ ' + stepNum[id] + ' / ೭';
+  currentTab = id;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function completeTab(current, next) {
+  const curBtn = document.getElementById('tab-'+current);
+  curBtn.classList.remove('active');
+  curBtn.classList.add('done');
+  const nextBtn = document.getElementById('tab-'+next);
+  nextBtn.classList.remove('locked');
+  const lockEl = nextBtn.querySelector('.lock-icon');
+  if (lockEl) lockEl.remove();
+  unlockedTabs.add(next);
+  showTab(next);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2300);
+}
+
+function showResult(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+// ===== TAB 1: MEET =====
+let charTapped = new Set();
+const kn_nums = ['೦','೧','೨','೩','೪','೫','೬'];
+
+function tapChar(card, id) {
+  if (!charTapped.has(id)) {
+    card.classList.add('tapped');
+    charTapped.add(id);
+    document.getElementById('meetCount').textContent = kn_nums[charTapped.size];
+    if (charTapped.size === 6) {
+      document.getElementById('meetNote').textContent = '✅ ಎಲ್ಲರನ್ನೂ ಪರಿಚಯ ಮಾಡಿಕೊಂಡಿರಿ! 🎉';
+      document.getElementById('meetNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 2: STORY =====
+let storyTappedCount = 0;
+const storyTotal = 8;
+
+function tapStoryLine(el) {
+  if (!el.classList.contains('highlighted')) {
+    el.classList.add('highlighted');
+    storyTappedCount++;
+    document.getElementById('storyTapped').textContent = storyTappedCount;
+    document.getElementById('storyBar').style.width = (storyTappedCount / storyTotal * 100) + '%';
+    if (storyTappedCount >= storyTotal) {
+      document.getElementById('storyNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 3: VOCAB =====
+let vocabFlipped = new Set();
+
+function flipVocab(card, id) {
+  card.classList.toggle('flipped');
+  if (card.classList.contains('flipped')) {
+    vocabFlipped.add(id);
+  } else {
+    vocabFlipped.delete(id);
+  }
+  document.getElementById('vocabCount').textContent = vocabFlipped.size;
+  if (vocabFlipped.size >= 10) {
+    document.getElementById('vocabNextBtn').style.display = 'block';
+  }
+}
+
+// ===== TAB 4: SEQ QUIZ =====
+let seqCorrect = 0;
+const seqTotal = 5;
+
+function pickSeq(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true';
+    seqCorrect++;
+    if (seqCorrect === seqTotal) {
+      setTimeout(() => {
+        showResult('result-seq', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಉತ್ತರ ಸರಿ!');
+        setTimeout(() => document.getElementById('seqNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(() => btn.classList.remove('wrong'), 700);
+  }
+}
+
+// ===== TAB 5: WORD MATCH =====
+let selectedLeftDM = null;
+let selectedRightDM = null;
+let dmatchCorrect = 0;
+const dmatchTotal = 5;
+
+function selectDMatch(el, side, pair) {
+  if (el.classList.contains('matched')) return;
+  if (side === 'left') {
+    document.querySelectorAll('.dmatch-word').forEach(w => { if (!w.classList.contains('matched')) w.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedLeftDM = {el, pair};
+  } else {
+    document.querySelectorAll('.dmatch-meaning').forEach(w => { if (!w.classList.contains('matched')) w.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedRightDM = {el, pair};
+  }
+  if (selectedLeftDM && selectedRightDM) {
+    if (selectedLeftDM.pair === selectedRightDM.pair) {
+      selectedLeftDM.el.classList.remove('selected');
+      selectedRightDM.el.classList.remove('selected');
+      selectedLeftDM.el.classList.add('matched');
+      selectedRightDM.el.classList.add('matched');
+      dmatchCorrect++;
+      selectedLeftDM = null; selectedRightDM = null;
+      if (dmatchCorrect === dmatchTotal) {
+        setTimeout(() => {
+          showResult('result-dmatch', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಜೋಡಿಗಳು ಸರಿಯಾಗಿವೆ!');
+          setTimeout(() => document.getElementById('dmatchNextBtn').style.display = 'block', 500);
+        }, 300);
+      }
+    } else {
+      const l = selectedLeftDM.el, r = selectedRightDM.el;
+      l.classList.add('wrong'); r.classList.add('wrong');
+      setTimeout(() => { l.classList.remove('wrong','selected'); r.classList.remove('wrong','selected'); }, 700);
+      selectedLeftDM = null; selectedRightDM = null;
+    }
+  }
+}
+
+// ===== TAB 6: FILL BLANKS =====
+let selectedBlankId = null;
+let fillCorrect = 0;
+const fillTotal = 5;
+
+function selectBlank(id) {
+  const blank = document.getElementById(id);
+  if (blank.classList.contains('correct')) return;
+  if (selectedBlankId && selectedBlankId !== id) {
+    const prev = document.getElementById(selectedBlankId);
+    if (prev) prev.classList.remove('active-blank');
+  }
+  selectedBlankId = id;
+  blank.classList.add('active-blank');
+}
+
+function placeWord(word, chip) {
+  if (!selectedBlankId) { showToast('👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟಿ!'); return; }
+  const blank = document.getElementById(selectedBlankId);
+  if (blank.classList.contains('correct')) return;
+  blank.classList.remove('active-blank', 'wrong');
+  if (word === blank.dataset.answer) {
+    blank.textContent = word;
+    blank.classList.add('correct');
+    chip.classList.add('used');
+    fillCorrect++;
+    selectedBlankId = null;
+    if (fillCorrect === fillTotal) {
+      setTimeout(() => {
+        showResult('result-fill', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಸರಿಯಾಗಿವೆ!');
+        setTimeout(() => document.getElementById('fillNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    blank.classList.add('wrong');
+    blank.textContent = '✗';
+    setTimeout(() => { blank.classList.remove('wrong'); blank.textContent = '_ _ _'; }, 700);
+  }
+}
+
+// ===== TAB 7: FINAL QUIZ =====
+let quizCorrect = 0;
+const quizTotal = 5;
+
+function pickQuiz(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true';
+    quizCorrect++;
+    if (quizCorrect === quizTotal) {
+      setTimeout(() => {
+        showResult('result-quiz', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಪ್ರಶ್ನೆಗಳಿಗೆ ಸರಿ ಉತ್ತರ!');
+        setTimeout(() => {
+          document.getElementById('completeCard').classList.add('show');
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('tab-quiz').classList.add('done');
+        }, 800);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(() => btn.classList.remove('wrong'), 700);
+  }
+}
+</script>
+</body>
+</html>

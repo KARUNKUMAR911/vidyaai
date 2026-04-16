@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ತಾಯಿ - ಪಾಠ ೧೭ | ೨ನೇ ತರಗತಿ ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rose:#7c1d3f;--rose2:#e11d48;--rose3:#fecdd3;
+  --warm:#92400e;--warm2:#f59e0b;--warm3:#fef3c7;
+  --purple:#4c1d95;--purple2:#7c3aed;--purple3:#ede9fe;
+  --white:#ffffff;--text:#7c1d3f;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans Kannada',sans-serif;
+  background:linear-gradient(160deg,#fff1f2 0%,#ffe4e6 50%,#fecdd3 100%);
+  color:var(--text);min-height:100vh;overflow-x:hidden;
+}
+header{
+  background:linear-gradient(135deg,#7c1d3f 0%,#be185d 60%,#e11d48 100%);
+  color:white;text-align:center;padding:16px 16px 8px;
+  position:relative;overflow:hidden;
+}
+header::before{
+  content:'❤️🌸👶💕❤️🌸👶💕❤️🌸👶💕❤️🌸👶💕';
+  position:absolute;bottom:0;left:0;right:0;
+  font-size:14px;letter-spacing:2px;opacity:0.15;
+}
+.badge{
+  display:inline-block;background:#f59e0b;color:#7c1d3f;
+  font-weight:800;font-size:11px;padding:3px 14px;
+  border-radius:20px;margin-bottom:6px;
+}
+header h1{
+  font-family:'Noto Serif Kannada',serif;
+  font-size:clamp(17px,5.5vw,34px);font-weight:700;
+  text-shadow:0 2px 10px rgba(0,0,0,0.25);
+}
+header .sub{font-size:12px;opacity:0.85;margin-top:2px;}
+.progress-wrap{
+  background:rgba(255,255,255,0.25);border-radius:10px;
+  height:10px;margin:10px 20px 0;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,#f59e0b,#f9a8d4);
+  border-radius:10px;transition:width 0.6s cubic-bezier(.4,0,.2,1);width:14%;
+}
+.progress-label{text-align:center;font-size:11px;opacity:0.85;margin-top:4px;padding-bottom:6px;}
+
+.tab-bar{
+  display:flex;background:#7c1d3f;overflow-x:auto;
+  scrollbar-width:none;position:sticky;top:0;z-index:100;
+  border-bottom:3px solid #f59e0b;gap:2px;padding:0 4px;
+}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:1 1 0;min-width:52px;display:flex;flex-direction:column;
+  align-items:center;gap:2px;padding:9px 4px 7px;
+  background:none;border:none;color:rgba(255,255,255,0.35);
+  font-family:'Noto Sans Kannada',sans-serif;font-size:9px;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;
+  border-bottom:3px solid transparent;margin-bottom:-3px;position:relative;
+}
+.tab-btn .tab-icon{font-size:18px;}
+.tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b;background:rgba(255,255,255,0.08);}
+.tab-btn.done{color:#fbcfe8;}
+.tab-btn.locked{color:rgba(255,255,255,0.2);cursor:not-allowed;}
+.tab-btn.locked .tab-icon{filter:grayscale(1) opacity(0.3);}
+.lock-icon{position:absolute;top:4px;right:4px;font-size:9px;opacity:0.5;}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-8px) rotate(-3deg)}
+  30%{transform:translateX(8px) rotate(3deg)}
+  45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  90%{transform:translateX(3px)}
+}
+.shake{animation:shake 0.5s ease;}
+
+#lockToast{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#b91c1c;color:white;padding:12px 22px;
+  border-radius:30px;font-size:14px;font-weight:700;
+  box-shadow:0 6px 24px rgba(0,0,0,0.25);z-index:999;
+  opacity:0;transition:opacity 0.3s,transform 0.3s;
+  pointer-events:none;text-align:center;max-width:88vw;
+}
+#lockToast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.section{display:none;padding:16px 14px 100px;max-width:900px;margin:0 auto;}
+.section.active{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-title{
+  font-family:'Noto Serif Kannada',serif;font-size:17px;
+  font-weight:700;color:#7c1d3f;margin-bottom:14px;padding-bottom:8px;
+  border-bottom:3px solid #e11d48;display:flex;align-items:center;gap:8px;
+}
+.next-btn{
+  display:none;width:100%;margin-top:22px;padding:16px;
+  background:linear-gradient(135deg,#e11d48,#7c1d3f);color:white;
+  border:none;border-radius:16px;font-family:'Noto Sans Kannada',sans-serif;
+  font-size:17px;font-weight:800;cursor:pointer;
+  box-shadow:0 4px 18px rgba(225,29,72,0.35);transition:transform 0.15s;
+}
+.next-btn:active{transform:scale(0.97);}
+.card{
+  background:white;border-radius:18px;padding:16px;
+  box-shadow:0 4px 18px rgba(225,29,72,0.12);margin-bottom:12px;
+}
+.instr{
+  background:linear-gradient(135deg,#fff1f2,#ffe4e6);
+  border-radius:14px;padding:13px 16px;font-size:14px;
+  color:#7c1d3f;font-weight:600;text-align:center;margin-bottom:14px;
+  border:2px dashed #e11d48;
+}
+.mini-bar-wrap{background:#e5e7eb;border-radius:10px;height:10px;margin:8px 0 4px;overflow:hidden;}
+.mini-bar{height:100%;background:linear-gradient(90deg,#e11d48,#f9a8d4);border-radius:10px;width:0%;transition:width 0.4s;}
+.mini-label{font-size:13px;color:#7c1d3f;font-weight:700;margin-bottom:10px;}
+
+/* INTRO / SCENE CARDS */
+.scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.scene-card{
+  background:white;border:3px solid #fecdd3;border-radius:16px;
+  padding:16px 10px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.scene-card .s-icon{font-size:46px;display:block;margin-bottom:8px;}
+.scene-card .s-name{font-family:'Noto Serif Kannada',serif;font-size:15px;font-weight:700;color:#7c1d3f;}
+.scene-card .s-detail{font-size:12px;color:#be185d;display:none;margin-top:6px;line-height:1.8;}
+.scene-card .s-tap{font-size:11px;color:#e11d48;display:block;margin-top:4px;}
+.scene-card.tapped{background:#ffe4e6;border-color:#e11d48;}
+.scene-card.tapped .s-detail{display:block;}
+.scene-card.tapped .s-tap{display:none;}
+.scene-card:active{transform:scale(0.95);}
+
+/* POEM STANZA CARDS */
+.poem-card{
+  background:white;border-radius:18px;padding:18px 16px;
+  box-shadow:0 4px 18px rgba(225,29,72,0.10);margin-bottom:14px;
+  border-left:5px solid #e11d48;cursor:pointer;
+  user-select:none;-webkit-tap-highlight-color:transparent;transition:all 0.25s;
+}
+.poem-card:active{transform:scale(0.98);}
+.poem-card.highlighted{background:#fff1f2;border:2px solid #e11d48;}
+.poem-icon{font-size:28px;margin-bottom:8px;display:block;}
+.poem-lines{
+  font-family:'Noto Serif Kannada',serif;font-size:16px;
+  line-height:2.6;color:#0c1e30;font-style:italic;
+  background:linear-gradient(135deg,#fff1f2,#ffe4e6);
+  border-radius:12px;padding:14px;margin-bottom:10px;
+}
+.poem-meaning{
+  font-size:13px;color:#be185d;font-weight:600;
+  display:none;background:#ffe4e6;border-radius:8px;padding:10px 12px;line-height:1.8;
+}
+.poem-card.highlighted .poem-meaning{display:block;}
+.tap-hint{text-align:center;font-size:13px;color:#e11d48;font-weight:700;
+  margin-bottom:12px;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* WORD CARDS */
+.word-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.word-card{
+  background:white;border:3px solid #fecdd3;border-radius:14px;
+  padding:14px 8px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.word-card .w-icon{font-size:32px;display:block;margin-bottom:6px;}
+.word-card .w-kn{font-family:'Noto Serif Kannada',serif;font-size:13px;font-weight:700;color:#7c1d3f;}
+.word-card .w-meaning{font-size:11px;color:#be185d;display:none;margin-top:5px;font-weight:600;line-height:1.6;}
+.word-card .w-tap{font-size:10px;color:#e11d48;display:block;margin-top:4px;}
+.word-card.tapped{background:#ffe4e6;border-color:#e11d48;}
+.word-card.tapped .w-meaning{display:block;}
+.word-card.tapped .w-tap{display:none;}
+.word-card:active{transform:scale(0.95);}
+
+/* ACTION CARDS (mother actions) */
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.action-card{
+  background:white;border:3px solid #fecdd3;border-radius:16px;
+  padding:14px 10px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.action-card .ac-icon{font-size:40px;display:block;margin-bottom:6px;}
+.action-card .ac-name{font-family:'Noto Serif Kannada',serif;font-size:14px;font-weight:700;color:#7c1d3f;}
+.action-card .ac-detail{font-size:12px;color:#be185d;display:none;margin-top:6px;line-height:1.7;}
+.action-card .ac-tap{font-size:11px;color:#e11d48;display:block;margin-top:4px;}
+.action-card.tapped{background:#ffe4e6;border-color:#e11d48;}
+.action-card.tapped .ac-detail{display:block;}
+.action-card.tapped .ac-tap{display:none;}
+.action-card:active{transform:scale(0.95);}
+
+/* QUESTIONS */
+.q-block{background:white;border-radius:16px;padding:16px;margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(225,29,72,0.1);}
+.q-text{font-family:'Noto Serif Kannada',serif;font-size:15px;font-weight:700;
+  color:#7c1d3f;margin-bottom:12px;line-height:2;}
+.qa-btn{
+  display:block;width:100%;text-align:left;padding:12px 16px;margin-bottom:8px;
+  background:#fff1f2;border:2px solid #fecdd3;border-radius:12px;
+  font-family:'Noto Sans Kannada',sans-serif;font-size:14px;color:#7c1d3f;
+  cursor:pointer;transition:all 0.2s;font-weight:600;
+}
+.qa-btn:active{transform:scale(0.98);}
+.qa-btn.correct{background:#dcfce7;border-color:#16a34a;color:#14532d;}
+.qa-btn.correct::after{content:' ✅';float:right;}
+.qa-btn.wrong{background:#fee2e2;border-color:#ef4444;animation:shake 0.4s;}
+.qa-btn.answered{opacity:0.4;pointer-events:none;}
+
+/* MATCH */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-item{
+  background:white;border:2.5px solid #fecdd3;border-radius:12px;
+  padding:12px 10px;text-align:center;cursor:pointer;font-weight:700;
+  font-family:'Noto Serif Kannada',serif;font-size:13px;color:#7c1d3f;
+  transition:all 0.2s;user-select:none;min-height:54px;display:flex;align-items:center;justify-content:center;
+}
+.match-item.selected{background:#fef3c7;border-color:#f59e0b;transform:scale(1.03);}
+.match-item.matched-correct{background:#dcfce7;border-color:#16a34a;color:#14532d;pointer-events:none;}
+.match-item.matched-correct::after{content:' ✅';font-size:12px;}
+.match-item.matched-wrong{background:#fee2e2;border-color:#ef4444;animation:shake 0.4s;}
+
+/* FILL BLANKS */
+.fill-sentence{
+  background:white;border-radius:16px;padding:16px;margin-bottom:14px;
+  font-family:'Noto Serif Kannada',serif;font-size:15px;line-height:3;
+  color:#7c1d3f;box-shadow:0 3px 14px rgba(225,29,72,0.10);
+}
+.blank{
+  display:inline-block;min-width:80px;border-bottom:3px solid #e11d48;
+  padding:0 6px;text-align:center;cursor:pointer;font-weight:700;
+  color:#e11d48;transition:all 0.2s;background:transparent;border-radius:0;
+  font-family:'Noto Serif Kannada',serif;font-size:15px;
+}
+.blank.active-blank{border-bottom-color:#f59e0b;background:#fef3c7;border-radius:6px;}
+.blank.correct{border-bottom-color:#16a34a;background:#dcfce7;color:#14532d;border-radius:6px;cursor:default;}
+.blank.wrong{background:#fee2e2;color:#ef4444;animation:shake 0.3s;}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.chip{
+  padding:10px 16px;background:white;border:2.5px solid #e11d48;
+  border-radius:12px;font-family:'Noto Serif Kannada',serif;
+  font-size:14px;font-weight:700;color:#7c1d3f;cursor:pointer;
+  transition:all 0.2s;user-select:none;
+}
+.chip:active{transform:scale(0.95);}
+.chip.used{opacity:0.3;pointer-events:none;text-decoration:line-through;}
+
+/* RESULT */
+.result-box{
+  display:none;background:linear-gradient(135deg,#7c1d3f,#e11d48);
+  color:white;border-radius:20px;padding:20px;text-align:center;
+  margin-top:14px;
+}
+.result-box.show{display:block;animation:fadeUp 0.4s ease;}
+.result-box .r-icon{font-size:48px;display:block;margin-bottom:8px;}
+.result-box .r-text{font-size:17px;font-weight:800;}
+
+/* COMPLETE */
+.complete-card{
+  display:none;background:linear-gradient(135deg,#7c1d3f,#e11d48,#f9a8d4);
+  border-radius:24px;padding:30px 20px;text-align:center;color:white;
+  margin-top:20px;
+}
+.complete-card.show{display:block;animation:fadeUp 0.5s ease;}
+.complete-card .c-icon{font-size:64px;display:block;margin-bottom:10px;}
+.complete-card .c-title{font-family:'Noto Serif Kannada',serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.complete-card .c-msg{font-size:15px;opacity:0.95;line-height:1.8;}
+
+/* POEM BOX for full poem display */
+.full-poem-box{
+  background:white;border-radius:20px;padding:20px 16px;
+  box-shadow:0 4px 18px rgba(225,29,72,0.12);margin-bottom:16px;
+  border:2px solid #fecdd3;text-align:center;
+}
+.full-poem-box .poem-title{
+  font-family:'Noto Serif Kannada',serif;font-size:18px;font-weight:700;
+  color:#7c1d3f;margin-bottom:14px;border-bottom:2px solid #fecdd3;padding-bottom:8px;
+}
+.full-poem-box .stanza{
+  font-family:'Noto Serif Kannada',serif;font-size:15px;line-height:2.8;
+  color:#3d0011;margin-bottom:12px;
+}
+.poet-name{font-size:13px;color:#be185d;font-weight:700;margin-top:8px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">೨ನೇ ತರಗತಿ · ಕನ್ನಡ · ಪಾಠ ೧೭</div>
+  <h1>❤️ ತಾಯಿ ❤️</h1>
+  <div class="sub">ಪದ್ಯ | ಎ.ಕೆ. ರಾಮೇಶ್ವರ ಅವರಿಂದ</div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">ಹಂತ ೧: ತಾಯಿ ಪರಿಚಯ ❤️</div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" id="tab-0" onclick="tryTab(0)">
+    <span class="tab-icon">❤️</span>ಪರಿಚಯ
+  </button>
+  <button class="tab-btn locked" id="tab-1" onclick="tryTab(1)">
+    <span class="tab-icon">📜</span>ಪದ್ಯ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-2" onclick="tryTab(2)">
+    <span class="tab-icon">🔤</span>ಪದಗಳು<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-3" onclick="tryTab(3)">
+    <span class="tab-icon">👩‍👦</span>ತಾಯಿ ಕೆಲಸ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-4" onclick="tryTab(4)">
+    <span class="tab-icon">❓</span>ಪ್ರಶ್ನೆ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-5" onclick="tryTab(5)">
+    <span class="tab-icon">🔗</span>ಜೋಡಣೆ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-6" onclick="tryTab(6)">
+    <span class="tab-icon">✏️</span>ಖಾಲಿ ತುಂಬು<span class="lock-icon">🔒</span>
+  </button>
+</nav>
+
+<div id="lockToast"></div>
+
+<!-- ===== TAB 0: INTRO ===== -->
+<div class="section active" id="sec-0">
+  <div class="sec-title">❤️ ತಾಯಿಯ ಪ್ರೀತಿ ಬಗ್ಗೆ ತಿಳಿಯೋಣ</div>
+  <div class="instr">👆 ಒಂದೊಂದಾಗಿ ಎಲ್ಲ ಚಿತ್ರ ತಟ್ಟಿ — ತಾಯಿ ಮಾಡುವ ಕೆಲಸ ನೋಡು!</div>
+
+  <div class="mini-label">ನೀನು ನೋಡಿದ್ದು: <span id="introCount">೦</span> / ೬</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="introBar"></div></div>
+
+  <div class="scene-grid">
+    <div class="scene-card" onclick="tapScene(this,'s1')">
+      <span class="s-icon">👶</span>
+      <div class="s-name">ಮಗು ಹಡೆದಳು</div>
+      <div class="s-detail">ತಾಯಿ ತಾನು ಮಗುವನ್ನು ಹಡೆದು ಜಗವನ್ನು ಮರೆತಳು. ಮಗುವೇ ತನ್ನ ಇಡಿಯ ಜಗ ಎಂದು ಬಗೆದಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s2')">
+      <span class="s-icon">🏃</span>
+      <div class="s-name">ಮಗು ಆಡಲು ಬಂತು</div>
+      <div class="s-detail">ಮಗುವು ದಿನವು ಆಡಿ ಬರಲು ಹೆಮ್ಮೆ ಪಡುವಳು. ಮಗುವು ಬೇಗ ಬಾರದಿರಲು ಕೂಗಿ ಕರೆವಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s3')">
+      <span class="s-icon">🤱</span>
+      <div class="s-name">ಮಗುವ ಪೋಷಿಸಿದಳು</div>
+      <div class="s-detail">ತನ್ನ ನೂರು ಕಷ್ಟ ಸಹಿಸಿ ಮಗುವ ಪೊರೆವಳು. ಹಲವು ಕೆಲಸ ಇರಲು ಬಿಟ್ಟು ತಿಂಡಿ ಕೊಡುವಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s4')">
+      <span class="s-icon">😢</span>
+      <div class="s-name">ಮಗು ಅತ್ತರೆ</div>
+      <div class="s-detail">ಮಗುವು ಅಳಲು ನೊಂದು ತಾನು ಮನದಿ ಕನಲುವಳು. ತನ್ನ ಮಗುವ ನೋಡಿ ಎಲ್ಲ ಮರೆವಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s5')">
+      <span class="s-icon">🌟</span>
+      <div class="s-name">ನಾಡ ಪ್ರಜೆ</div>
+      <div class="s-detail">ಮಗುವೇ ನಾಳೆ ನಾಡ ಪ್ರಜೆಯು ಎಂದು ನೆನೆವಳು. ಜಗಕೆ ಮಗುವ ಕೊಟ್ಟು ತಾನು ತಾಯಿ ಆದಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s6')">
+      <span class="s-icon">❤️</span>
+      <div class="s-name">ತಾಯಿ ಪ್ರೀತಿ</div>
+      <div class="s-detail">ತಾಯಿ ಮಗುವನ್ನು ತನ್ನ ಕರುಳ ಕುಡಿ ಎಂದು ಬಗೆವಳು. ಮಗುವಿನೊಡನೆ ದಿನದ ಕೆಲಸ ಮಾಡಿ ಬಿಡುವಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+  </div>
+
+  <div class="card" id="introNote" style="display:none;text-align:center;background:linear-gradient(135deg,#fff1f2,#ffe4e6);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#7c1d3f;margin-top:6px;">ಭಲೇ! ನೀನು ಎಲ್ಲವನ್ನೂ ನೋಡಿದೆ!<br>ಈಗ ಪದ್ಯ ಓದೋಣ!</div>
+  </div>
+  <button class="next-btn" id="introNextBtn" onclick="goNext(0)">ಮುಂದೆ ➜ ಪದ್ಯ ಓದೋಣ 📜</button>
+</div>
+
+<!-- ===== TAB 1: POEM ===== -->
+<div class="section" id="sec-1">
+  <div class="sec-title">📜 ತಾಯಿ ಪದ್ಯ — ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ</div>
+  <div class="tap-hint">👆 ಪ್ರತಿ ನುಡಿ ತಟ್ಟಿ ಅರ್ಥ ಓದು!</div>
+
+  <div class="mini-label">ಓದಿದ ನುಡಿ: <span id="storyCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="storyBar"></div></div>
+
+  <div class="poem-card" onclick="tapStory(this,'p1')">
+    <span class="poem-icon">❤️</span>
+    <div class="poem-lines">
+      ತಾಯಿ ತಾನು ಮಗುವ ಹಡೆದು<br>
+      ಜಗವ ಮರೆತಳು<br>
+      ಮಗುವ ತನ್ನ ಇಡಿಯ ಜಗವು<br>
+      ಎಂದು ಬಗೆದಳು
+    </div>
+    <div class="poem-meaning">💕 ತಾಯಿ ಮಗು ಹುಟ್ಟಿದ ಮೇಲೆ ಬೇರೆ ಎಲ್ಲವನ್ನೂ ಮರೆತಳು. ಮಗುವೇ ತನ್ನ ಸಂಪೂರ್ಣ ಜಗತ್ತು ಎಂದು ತಿಳಿದಳು.<br>ಹಡೆದು = ಹೆತ್ತು | ಇಡಿಯ = ಸಂಪೂರ್ಣ | ಬಗೆದಳು = ತಿಳಿದಳು</div>
+  </div>
+
+  <div class="poem-card" onclick="tapStory(this,'p2')">
+    <span class="poem-icon">🏃</span>
+    <div class="poem-lines">
+      ಮಗುವು ದಿನವು ಆಡಿ ಬರಲು<br>
+      ಹೆಮ್ಮೆ ಪಡುವಳು<br>
+      ಮಗುವು ಬೇಗ ಬಾರದಿರಲು<br>
+      ಕೂಗಿ ಕರೆವಳು
+    </div>
+    <div class="poem-meaning">🏃 ಮಗು ಆಡಿ ಬಂದರೆ ತಾಯಿ ಹೆಮ್ಮೆ ಪಡುತ್ತಾಳೆ. ತಡವಾದರೆ ಕೂಗಿ ಕರೆಯುತ್ತಾಳೆ — ಇದು ತಾಯಿಯ ಪ್ರೀತಿ!<br>ಹೆಮ್ಮೆ = ಹೆಮ್ಮೆ, ಅಭಿಮಾನ | ಕರೆವಳು = ಕರೆಯುತ್ತಾಳೆ</div>
+  </div>
+
+  <div class="poem-card" onclick="tapStory(this,'p3')">
+    <span class="poem-icon">🤱</span>
+    <div class="poem-lines">
+      ತನ್ನ ನೂರು ಕಷ್ಟ ಸಹಿಸಿ<br>
+      ಮಗುವ ಪೊರೆವಳು<br>
+      ಹಲವು ಕೆಲಸ ಇರಲು ಬಿಟ್ಟು<br>
+      ತಿಂಡಿ ಕೊಡುವಳು
+    </div>
+    <div class="poem-meaning">💪 ತಾಯಿ ನೂರು ಕಷ್ಟ ಸಹಿಸಿ ಮಗುವನ್ನು ಪಾಲಿಸುತ್ತಾಳೆ. ಕೆಲಸ ಬಿಟ್ಟು ಮಗುವಿಗೆ ತಿಂಡಿ ಕೊಡುತ್ತಾಳೆ.<br>ಸಹಿಸಿ = ತಾಳಿಕೊಂಡು | ಪೊರೆವಳು = ಕಾಪಾಡುತ್ತಾಳೆ</div>
+  </div>
+
+  <div class="poem-card" onclick="tapStory(this,'p4')">
+    <span class="poem-icon">😢</span>
+    <div class="poem-lines">
+      ಮಗುವು ಅಳಲು ನೊಂದು ತಾನು<br>
+      ಮನದಿ ಕನಲುವಳು<br>
+      ತನ್ನ ಮಗುವ ನೋಡಿ<br>
+      ಎಲ್ಲ ಮರೆವಳು
+    </div>
+    <div class="poem-meaning">😢 ಮಗು ಅತ್ತರೆ ತಾಯಿ ಮನಸ್ಸಿನಲ್ಲಿ ಸಂಕಟ ಪಡುತ್ತಾಳೆ. ಆದರೆ ಮಗುವನ್ನು ನೋಡಿದ ಕೂಡಲೇ ಎಲ್ಲ ಮರೆಯುತ್ತಾಳೆ.<br>ಕನಲುವಳು = ಸಂಕಟ ಪಡುವಳು | ನೊಂದು = ನೋವು ಪಟ್ಟು</div>
+  </div>
+
+  <div class="poem-card" onclick="tapStory(this,'p5')">
+    <span class="poem-icon">🌟</span>
+    <div class="poem-lines">
+      ಮಗುವೇ ನಾಳೆ ನಾಡ ಪ್ರಜೆಯು<br>
+      ಎಂದು ನೆನೆವಳು<br>
+      ಜಗಕೆ ಮಗುವ ಕೊಟ್ಟು ತಾನು<br>
+      ತಾಯಿ ಆದಳು
+    </div>
+    <div class="poem-meaning">🌟 ತಾಯಿ ಯೋಚಿಸುತ್ತಾಳೆ — ಈ ಮಗು ನಾಳೆ ನಾಡಿನ ಪ್ರಜೆ! ಜಗತ್ತಿಗೆ ಮಗುವನ್ನು ಕೊಟ್ಟು ತಾಯಾದಳು.<br>ಪ್ರಜೆ = ನಾಡಿನ ಜನ | ನೆನೆವಳು = ನೆನೆಯುತ್ತಾಳೆ</div>
+  </div>
+
+  <div class="card" id="storyNote" style="display:none;text-align:center;background:linear-gradient(135deg,#fff1f2,#ffe4e6);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#7c1d3f;margin-top:6px;">ಭಲೇ! ನೀನು ಎಲ್ಲ ನುಡಿ ಓದಿದೆ!<br>ಈಗ ಪದಗಳ ಅರ್ಥ ತಿಳಿಯೋಣ!</div>
+  </div>
+  <button class="next-btn" id="storyNextBtn" onclick="goNext(1)">ಮುಂದೆ ➜ ಪದಗಳ ಅರ್ಥ 🔤</button>
+</div>
+
+<!-- ===== TAB 2: WORDS ===== -->
+<div class="section" id="sec-2">
+  <div class="sec-title">🔤 ಪದಗಳ ಅರ್ಥ ತಿಳಿಯೋಣ</div>
+  <div class="instr">👆 ಪ್ರತಿ ಪದ ತಟ್ಟಿ ಅರ್ಥ ನೋಡು!</div>
+
+  <div class="mini-label">ಕಲಿತ ಪದಗಳು: <span id="wordCount">೦</span> / ೧೨</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="wordBar"></div></div>
+
+  <div class="word-grid">
+    <div class="word-card" onclick="tapWord(this,'w1')">
+      <span class="w-icon">🌍</span>
+      <div class="w-kn">ಜಗ</div>
+      <div class="w-meaning">ಜಗತ್ತು, ಪ್ರಪಂಚ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w2')">
+      <span class="w-icon">💫</span>
+      <div class="w-kn">ಇಡಿ</div>
+      <div class="w-meaning">ಪೂರ್ಣ, ಸಂಪೂರ್ಣ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w3')">
+      <span class="w-icon">💡</span>
+      <div class="w-kn">ಬಗೆವಳು</div>
+      <div class="w-meaning">ತಿಳಿಯುತ್ತಾಳೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w4')">
+      <span class="w-icon">😊</span>
+      <div class="w-kn">ಹೆಮ್ಮೆ</div>
+      <div class="w-meaning">ಅಭಿಮಾನ, ಹೆಮ್ಮೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w5')">
+      <span class="w-icon">🛡️</span>
+      <div class="w-kn">ಪೊರೆವಳು</div>
+      <div class="w-meaning">ಕಾಪಾಡುತ್ತಾಳೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w6')">
+      <span class="w-icon">😔</span>
+      <div class="w-kn">ಕನಲುವಳು</div>
+      <div class="w-meaning">ಸಂಕಟ ಪಡುವಳು</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w7')">
+      <span class="w-icon">💪</span>
+      <div class="w-kn">ಸಹಿಸಿ</div>
+      <div class="w-meaning">ತಾಳಿಕೊಂಡು</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w8')">
+      <span class="w-icon">🏙️</span>
+      <div class="w-kn">ಪ್ರಜೆ</div>
+      <div class="w-meaning">ನಾಡಿನ ಜನ, ನಾಗರಿಕ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w9')">
+      <span class="w-icon">💖</span>
+      <div class="w-kn">ಕರುಳ ಕುಡಿ</div>
+      <div class="w-meaning">ತಾಯಿ ಮಗು ಎಂದು ಕರೆಯುವ ಪ್ರೀತಿಯ ಮಾತು</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w10')">
+      <span class="w-icon">🍼</span>
+      <div class="w-kn">ಹಡೆದು</div>
+      <div class="w-meaning">ಹೆತ್ತು, ಹುಟ್ಟಿಸಿ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w11')">
+      <span class="w-icon">💭</span>
+      <div class="w-kn">ನೆನೆವಳು</div>
+      <div class="w-meaning">ನೆನೆಯುತ್ತಾಳೆ, ಯೋಚಿಸುತ್ತಾಳೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w12')">
+      <span class="w-icon">😢</span>
+      <div class="w-kn">ನೊಂದು</div>
+      <div class="w-meaning">ನೋವು ಪಟ್ಟು, ಸಂಕಟ ಪಟ್ಟು</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+  </div>
+
+  <div class="card" id="wordNote" style="display:none;text-align:center;background:linear-gradient(135deg,#fff1f2,#ffe4e6);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#7c1d3f;margin-top:6px;">ಭಲೇ! ಎಲ್ಲ ಪದ ಕಲಿತೆ!<br>ಈಗ ತಾಯಿ ಕೆಲಸ ನೋಡೋಣ!</div>
+  </div>
+  <button class="next-btn" id="wordNextBtn" onclick="goNext(2)">ಮುಂದೆ ➜ ತಾಯಿ ಮಾಡುವ ಕೆಲಸ 👩‍👦</button>
+</div>
+
+<!-- ===== TAB 3: MOTHER ACTIONS ===== -->
+<div class="section" id="sec-3">
+  <div class="sec-title">👩‍👦 ತಾಯಿ ಮಾಡುವ ಕೆಲಸ</div>
+  <div class="instr">👆 ಪ್ರತಿ ಚಿತ್ರ ತಟ್ಟಿ ತಾಯಿ ಏನು ಮಾಡುತ್ತಾಳೆ ಎಂದು ನೋಡು!</div>
+
+  <div class="mini-label">ನೋಡಿದ ಕೆಲಸ: <span id="actionCount">೦</span> / ೮</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="actionBar"></div></div>
+
+  <div class="action-grid">
+    <div class="action-card" onclick="tapAction(this,'ac1')">
+      <span class="ac-icon">🤱</span>
+      <div class="ac-name">ಪೊರೆವಳು</div>
+      <div class="ac-detail">ತಾಯಿ ನೂರು ಕಷ್ಟ ಸಹಿಸಿ ಮಗುವನ್ನು ಕಾಪಾಡುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac2')">
+      <span class="ac-icon">🍱</span>
+      <div class="ac-name">ತಿಂಡಿ ಕೊಡುವಳು</div>
+      <div class="ac-detail">ಹಲವು ಕೆಲಸ ಇರಲು ಬಿಟ್ಟು ಮಗುವಿಗೆ ತಿಂಡಿ ಕೊಡುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac3')">
+      <span class="ac-icon">📣</span>
+      <div class="ac-name">ಕೂಗಿ ಕರೆವಳು</div>
+      <div class="ac-detail">ಮಗು ಬೇಗ ಬಾರದಿರಲು ಕೂಗಿ ಕರೆಯುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac4')">
+      <span class="ac-icon">😊</span>
+      <div class="ac-name">ಹೆಮ್ಮೆ ಪಡುವಳು</div>
+      <div class="ac-detail">ಮಗು ದಿನವು ಆಡಿ ಬಂದರೆ ತಾಯಿ ಹೆಮ್ಮೆ ಪಡುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac5')">
+      <span class="ac-icon">😢</span>
+      <div class="ac-name">ಕನಲುವಳು</div>
+      <div class="ac-detail">ಮಗು ಅತ್ತರೆ ತಾಯಿ ಮನಸ್ಸಿನಲ್ಲಿ ಸಂಕಟ ಪಡುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac6')">
+      <span class="ac-icon">🧹</span>
+      <div class="ac-name">ದಿನದ ಕೆಲಸ</div>
+      <div class="ac-detail">ಮಗುವಿನೊಡನೆ ದಿನದ ಕೆಲಸ ಮಾಡಿ ಬಿಡುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac7')">
+      <span class="ac-icon">💭</span>
+      <div class="ac-name">ನೆನೆವಳು</div>
+      <div class="ac-detail">ಮಗುವೇ ನಾಳೆ ನಾಡ ಪ್ರಜೆ ಎಂದು ಯೋಚಿಸುತ್ತಾಳೆ.</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="action-card" onclick="tapAction(this,'ac8')">
+      <span class="ac-icon">🌏</span>
+      <div class="ac-name">ಜಗ ಮರೆತಳು</div>
+      <div class="ac-detail">ಮಗು ಹುಟ್ಟಿದ ಮೇಲೆ ತಾಯಿ ಜಗತ್ತನ್ನೇ ಮರೆತಳು — ಮಗುವೇ ಎಲ್ಲ!</div>
+      <span class="ac-tap">ತಟ್ಟು ▼</span>
+    </div>
+  </div>
+
+  <div class="card" id="actionNote" style="display:none;text-align:center;background:linear-gradient(135deg,#fff1f2,#ffe4e6);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#7c1d3f;margin-top:6px;">ಭಲೇ! ತಾಯಿ ಮಾಡುವ ಎಲ್ಲ ಕೆಲಸ ನೋಡಿದೆ!<br>ಈಗ ಪ್ರಶ್ನೆ ಉತ್ತರಿಸೋಣ!</div>
+  </div>
+  <button class="next-btn" id="actionNextBtn" onclick="goNext(3)">ಮುಂದೆ ➜ ಪ್ರಶ್ನೆಗಳು ❓</button>
+</div>
+
+<!-- ===== TAB 4: QUESTIONS ===== -->
+<div class="section" id="sec-4">
+  <div class="sec-title">❓ ಪ್ರಶ್ನೆ ಉತ್ತರಿಸೋಣ</div>
+  <div class="instr">✅ ಸರಿ ಉತ್ತರ ತಟ್ಟು!</div>
+
+  <div class="mini-label">ಸರಿ ಉತ್ತರ: <span id="qCount">೦</span> / ೬</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="qBar"></div></div>
+
+  <div class="q-block" id="qg1">
+    <div class="q-text">೧. ತಾಯಿ ಮಗುವ ಪಡೆದು ಏನನ್ನು ಮರೆತಳು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg1')" data-correct="false">ಮನೆ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg1')" data-correct="true">ಜಗವ (ಜಗತ್ತನ್ನು)</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg1')" data-correct="false">ಕೆಲಸ</button>
+  </div>
+
+  <div class="q-block" id="qg2">
+    <div class="q-text">೨. ತಾಯಿ ಮಗುವನ್ನು ಹೇಗೆ ಪೊರೆವಳು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg2')" data-correct="false">ನೂರು ಕಷ್ಟ ಕೊಟ್ಟು</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg2')" data-correct="true">ನೂರು ಕಷ್ಟ ಸಹಿಸಿ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg2')" data-correct="false">ಅಳಿಸಿ</button>
+  </div>
+
+  <div class="q-block" id="qg3">
+    <div class="q-text">೩. ತಾಯಿ ಮಗುವಿಗೆ ಏನು ಕೊಡುವಳು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg3')" data-correct="false">ಹಣ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg3')" data-correct="true">ತಿಂಡಿ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg3')" data-correct="false">ಪುಸ್ತಕ</button>
+  </div>
+
+  <div class="q-block" id="qg4">
+    <div class="q-text">೪. ಮಗು ಅತ್ತರೆ ತಾಯಿ ಮನಸ್ಸಿನಲ್ಲಿ ಏನಾಗುತ್ತದೆ?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg4')" data-correct="false">ಸಂತೋಷ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg4')" data-correct="true">ಕನಲುವಳು (ಸಂಕಟ ಪಡುವಳು)</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg4')" data-correct="false">ನಿದ್ದೆ ಮಾಡುವಳು</button>
+  </div>
+
+  <div class="q-block" id="qg5">
+    <div class="q-text">೫. ತಾಯಿ ಮಗುವ ಏನೆಂದು ಬಗೆವಳು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg5')" data-correct="false">ತನ್ನ ಕೆಲಸ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg5')" data-correct="true">ತನ್ನ ಕರುಳ ಕುಡಿ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg5')" data-correct="false">ಗೆಳೆಯ</button>
+  </div>
+
+  <div class="q-block" id="qg6">
+    <div class="q-text">೬. ತಾಯಿ ಮಗುವ ಬಗ್ಗೆ ಏನು ನೆನೆವಳು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg6')" data-correct="false">ಮಗು ದೊಡ್ಡ ಅಳುಬೋ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg6')" data-correct="true">ಮಗುವೇ ನಾಳೆ ನಾಡ ಪ್ರಜೆ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg6')" data-correct="false">ಮಗು ಆಡಬಾರದು</button>
+  </div>
+
+  <div class="result-box" id="result-q">
+    <span class="r-icon">🎯</span>
+    <div class="r-text">ಶಾಭಾಸ್! ಎಲ್ಲ ಉತ್ತರ ಸರಿ! 🌟</div>
+  </div>
+  <button class="next-btn" id="qNextBtn" onclick="goNext(4)">ಮುಂದೆ ➜ ಜೋಡಣೆ 🔗</button>
+</div>
+
+<!-- ===== TAB 5: MATCH ===== -->
+<div class="section" id="sec-5">
+  <div class="sec-title">🔗 ಜೋಡಿ ಹುಡುಕಿ</div>
+  <div class="instr">👈 ಎಡಗಡೆ ತಟ್ಟು, ಬಳಿಕ 👉 ಬಲಗಡೆ ತಟ್ಟು — ಜೋಡಿ ಮಾಡು!</div>
+
+  <div class="mini-label">ಜೋಡಿ: <span id="matchCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="matchBar"></div></div>
+
+  <div class="match-wrap">
+    <div class="match-col">
+      <div class="match-item" id="m-1" onclick="selectMatch(this,'m-1','p1')">ಕನಲುವಳು</div>
+      <div class="match-item" id="m-2" onclick="selectMatch(this,'m-2','p2')">ಇಡಿ</div>
+      <div class="match-item" id="m-3" onclick="selectMatch(this,'m-3','p3')">ಬಗೆವಳು</div>
+      <div class="match-item" id="m-4" onclick="selectMatch(this,'m-4','p4')">ಪೊರೆವಳು</div>
+      <div class="match-item" id="m-5" onclick="selectMatch(this,'m-5','p5')">ಪ್ರಜೆ</div>
+    </div>
+    <div class="match-col">
+      <div class="match-item" id="a-3" onclick="selectMatch(this,'a-3','p3')">ತಿಳಿಯುತ್ತಾಳೆ</div>
+      <div class="match-item" id="a-5" onclick="selectMatch(this,'a-5','p5')">ನಾಡಿನ ಜನ</div>
+      <div class="match-item" id="a-1" onclick="selectMatch(this,'a-1','p1')">ಸಂಕಟ ಪಡುವಳು</div>
+      <div class="match-item" id="a-2" onclick="selectMatch(this,'a-2','p2')">ಪೂರ್ಣ/ಸಂಪೂರ್ಣ</div>
+      <div class="match-item" id="a-4" onclick="selectMatch(this,'a-4','p4')">ಕಾಪಾಡುತ್ತಾಳೆ</div>
+    </div>
+  </div>
+
+  <div class="result-box" id="result-match">
+    <span class="r-icon">🔗</span>
+    <div class="r-text">ಭಲೇ! ಎಲ್ಲ ಜೋಡಿ ಸರಿಯಾಗಿ ಮಾಡಿದೆ! 🌟</div>
+  </div>
+  <button class="next-btn" id="matchNextBtn" onclick="goNext(5)">ಮುಂದೆ ➜ ಖಾಲಿ ತುಂಬು ✏️</button>
+</div>
+
+<!-- ===== TAB 6: FILL BLANKS ===== -->
+<div class="section" id="sec-6">
+  <div class="sec-title">✏️ ಖಾಲಿ ಜಾಗ ತುಂಬು</div>
+  <div class="instr">👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟು, ಬಳಿಕ ಕೆಳಗಿನ ಪದ ತಟ್ಟು!</div>
+
+  <div class="mini-label">ತುಂಬಿದ ಜಾಗ: <span id="fillCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="fillBar"></div></div>
+
+  <div class="fill-sentence">
+    ೧. ತಾಯಿ ತಾನು ಮಗುವ ಹಡೆದು <span class="blank" id="b1" data-answer="ಜಗವ" onclick="selectBlank('b1')">_ _ _</span> ಮರೆತಳು.
+  </div>
+  <div class="fill-sentence">
+    ೨. ಮಗುವು ದಿನವು ಆಡಿ ಬರಲು <span class="blank" id="b2" data-answer="ಹೆಮ್ಮೆ" onclick="selectBlank('b2')">_ _ _</span> ಪಡುವಳು.
+  </div>
+  <div class="fill-sentence">
+    ೩. ತನ್ನ ನೂರು ಕಷ್ಟ ಸಹಿಸಿ ಮಗುವ <span class="blank" id="b3" data-answer="ಪೊರೆವಳು" onclick="selectBlank('b3')">_ _ _</span>.
+  </div>
+  <div class="fill-sentence">
+    ೪. ಮಗುವೇ ನಾಳೆ ನಾಡ <span class="blank" id="b4" data-answer="ಪ್ರಜೆ" onclick="selectBlank('b4')">_ _ _</span> ಎಂದು ನೆನೆವಳು.
+  </div>
+  <div class="fill-sentence">
+    ೫. ಜಗಕೆ ಮಗುವ ಕೊಟ್ಟು ತಾನು <span class="blank" id="b5" data-answer="ತಾಯಿ" onclick="selectBlank('b5')">_ _ _</span> ಆದಳು.
+  </div>
+
+  <div class="chips-wrap">
+    <div class="chip" onclick="placeWord('ಜಗವ',this)">ಜಗವ</div>
+    <div class="chip" onclick="placeWord('ಹೆಮ್ಮೆ',this)">ಹೆಮ್ಮೆ</div>
+    <div class="chip" onclick="placeWord('ಪೊರೆವಳು',this)">ಪೊರೆವಳು</div>
+    <div class="chip" onclick="placeWord('ಪ್ರಜೆ',this)">ಪ್ರಜೆ</div>
+    <div class="chip" onclick="placeWord('ತಾಯಿ',this)">ತಾಯಿ</div>
+    <div class="chip" onclick="placeWord('ಮಗು',this)">ಮಗು</div>
+    <div class="chip" onclick="placeWord('ಕನಲು',this)">ಕನಲು</div>
+  </div>
+
+  <div class="result-box" id="result-fill">
+    <span class="r-icon">✏️</span>
+    <div class="r-text">ಭಲೇ! ಎಲ್ಲ ಖಾಲಿ ಜಾಗ ತುಂಬಿದೆ! 🌟</div>
+  </div>
+
+  <div class="complete-card" id="completeCard">
+    <span class="c-icon">🏆</span>
+    <div class="c-title">ಪಾಠ ೧೭ ಮುಗಿಯಿತು! ❤️</div>
+    <div class="c-msg">
+      ನೀನು ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!<br><br>
+      ❤️ ತಾಯಿ = ಪ್ರೀತಿ, ಕಷ್ಟ, ಕಾಪಾಡುವಿಕೆ<br>
+      👶 ಮಗು = ತಾಯಿಯ ಇಡಿಯ ಜಗ<br>
+      💪 ತಾಯಿ ನೂರು ಕಷ್ಟ ಸಹಿಸುತ್ತಾಳೆ<br>
+      🌟 ಮಗುವೇ ನಾಳೆ ನಾಡ ಪ್ರಜೆ!<br>
+      ✍️ ಕವಿ: ಎ.ಕೆ. ರಾಮೇಶ್ವರ
+    </div>
+  </div>
+</div>
+
+<script>
+const knNums = ['೦','೧','೨','೩','೪','೫','೬','೭','೮','೯','೧೦','೧೧','೧೨'];
+let unlockedUpTo = 0;
+const totalTabs = 7;
+
+const progressSteps = [
+  {pct:14, label:'ಹಂತ ೧: ತಾಯಿ ಪರಿಚಯ ❤️'},
+  {pct:28, label:'ಹಂತ ೨: ಪದ್ಯ ಓದು 📜'},
+  {pct:42, label:'ಹಂತ ೩: ಪದಗಳ ಅರ್ಥ 🔤'},
+  {pct:56, label:'ಹಂತ ೪: ತಾಯಿ ಕೆಲಸ 👩‍👦'},
+  {pct:70, label:'ಹಂತ ೫: ಪ್ರಶ್ನೆ ❓'},
+  {pct:85, label:'ಹಂತ ೬: ಜೋಡಣೆ 🔗'},
+  {pct:100, label:'🏆 ಪಾಠ ೧೭ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!'},
+];
+
+function tryTab(idx) {
+  if (idx > unlockedUpTo) {
+    const btn = document.getElementById('tab-'+idx);
+    btn.classList.remove('shake');
+    void btn.offsetWidth;
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 600);
+    showToast('🔒 ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸಿ!');
+    return;
+  }
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-'+idx).classList.add('active');
+  document.getElementById('tab-'+idx).classList.add('active');
+  document.getElementById('tab-'+idx).scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function goNext(fromIdx) {
+  const next = fromIdx + 1;
+  if (next < totalTabs) {
+    unlockedUpTo = Math.max(unlockedUpTo, next);
+    const btn = document.getElementById('tab-'+next);
+    btn.classList.remove('locked');
+    const lock = btn.querySelector('.lock-icon');
+    if (lock) lock.remove();
+    document.getElementById('tab-'+fromIdx).classList.add('done');
+    document.getElementById('progressFill').style.width = progressSteps[next].pct + '%';
+    document.getElementById('progressLabel').textContent = progressSteps[next].label;
+    tryTab(next);
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// TAB 0
+let sceneTapped = new Set();
+function tapScene(card, id) {
+  if (!sceneTapped.has(id)) {
+    card.classList.add('tapped'); sceneTapped.add(id);
+    document.getElementById('introCount').textContent = knNums[sceneTapped.size];
+    document.getElementById('introBar').style.width = (sceneTapped.size / 6 * 100) + '%';
+    if (sceneTapped.size >= 6) {
+      document.getElementById('introNote').style.display = 'block';
+      document.getElementById('introNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 1
+let storyTapped = 0;
+function tapStory(el, id) {
+  if (!el.classList.contains('highlighted')) {
+    el.classList.add('highlighted'); storyTapped++;
+    document.getElementById('storyCount').textContent = knNums[storyTapped];
+    document.getElementById('storyBar').style.width = (storyTapped / 5 * 100) + '%';
+    if (storyTapped >= 5) {
+      document.getElementById('storyNote').style.display = 'block';
+      document.getElementById('storyNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 2
+let wordTapped = new Set();
+function tapWord(card, id) {
+  if (!wordTapped.has(id)) {
+    card.classList.add('tapped'); wordTapped.add(id);
+    document.getElementById('wordCount').textContent = knNums[wordTapped.size];
+    document.getElementById('wordBar').style.width = (wordTapped.size / 12 * 100) + '%';
+    if (wordTapped.size >= 12) {
+      document.getElementById('wordNote').style.display = 'block';
+      document.getElementById('wordNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 3
+let actionTapped = new Set();
+function tapAction(card, id) {
+  if (!actionTapped.has(id)) {
+    card.classList.add('tapped'); actionTapped.add(id);
+    document.getElementById('actionCount').textContent = knNums[actionTapped.size];
+    document.getElementById('actionBar').style.width = (actionTapped.size / 8 * 100) + '%';
+    if (actionTapped.size >= 8) {
+      document.getElementById('actionNote').style.display = 'block';
+      document.getElementById('actionNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 4
+let qCorrect = 0;
+function pickQ(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true'; qCorrect++;
+    document.getElementById('qCount').textContent = knNums[qCorrect];
+    document.getElementById('qBar').style.width = (qCorrect / 6 * 100) + '%';
+    if (qCorrect === 6) {
+      setTimeout(() => {
+        document.getElementById('result-q').classList.add('show');
+        setTimeout(() => document.getElementById('qNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(() => btn.classList.remove('wrong'), 700);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+
+// TAB 5 MATCH
+let matchSelected = null;
+let matchSelectedSide = null;
+let matchCorrect = 0;
+
+function selectMatch(el, elId, pairId) {
+  const isLeft = elId.startsWith('m-');
+  if (el.classList.contains('matched-correct')) return;
+  document.querySelectorAll('.match-item.selected').forEach(item => {
+    const itemIsLeft = item.id.startsWith('m-');
+    if (itemIsLeft === isLeft) item.classList.remove('selected');
+  });
+  el.classList.add('selected');
+  if (matchSelected === null || matchSelectedSide === isLeft) {
+    matchSelected = {el, pairId}; matchSelectedSide = isLeft;
+  } else {
+    const prev = matchSelected;
+    if (prev.pairId === pairId) {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-correct');
+      el.classList.remove('selected'); el.classList.add('matched-correct');
+      matchCorrect++;
+      document.getElementById('matchCount').textContent = knNums[matchCorrect];
+      document.getElementById('matchBar').style.width = (matchCorrect / 5 * 100) + '%';
+      if (matchCorrect === 5) {
+        setTimeout(() => {
+          document.getElementById('result-match').classList.add('show');
+          setTimeout(() => document.getElementById('matchNextBtn').style.display = 'block', 500);
+        }, 300);
+      }
+    } else {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-wrong');
+      el.classList.remove('selected'); el.classList.add('matched-wrong');
+      setTimeout(() => { prev.el.classList.remove('matched-wrong'); el.classList.remove('matched-wrong'); }, 600);
+      showToast('❌ ತಪ್ಪು ಜೋಡಿ! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+    }
+    matchSelected = null; matchSelectedSide = null;
+  }
+}
+
+// TAB 6 FILL
+let selectedBlankId = null;
+let fillCorrect = 0;
+
+function selectBlank(id) {
+  const blank = document.getElementById(id);
+  if (blank.classList.contains('correct')) return;
+  document.querySelectorAll('.blank').forEach(b => b.classList.remove('active-blank'));
+  selectedBlankId = id;
+  blank.classList.add('active-blank');
+}
+
+function placeWord(word, chip) {
+  if (!selectedBlankId) { showToast('👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟಿ!'); return; }
+  const blank = document.getElementById(selectedBlankId);
+  if (blank.classList.contains('correct')) return;
+  blank.classList.remove('active-blank','wrong');
+  if (word === blank.dataset.answer) {
+    blank.textContent = word; blank.classList.add('correct');
+    chip.classList.add('used'); fillCorrect++; selectedBlankId = null;
+    document.getElementById('fillCount').textContent = knNums[fillCorrect];
+    document.getElementById('fillBar').style.width = (fillCorrect / 5 * 100) + '%';
+    if (fillCorrect === 5) {
+      setTimeout(() => {
+        document.getElementById('result-fill').classList.add('show');
+        setTimeout(() => {
+          document.getElementById('completeCard').classList.add('show');
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('tab-6').classList.add('done');
+          document.getElementById('progressLabel').textContent = '🏆 ಪಾಠ ೧೭ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!';
+        }, 800);
+      }, 300);
+    }
+  } else {
+    blank.classList.add('wrong'); blank.textContent = '✗';
+    setTimeout(() => { blank.classList.remove('wrong'); blank.textContent = '_ _ _'; }, 800);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+</script>
+</body>
+</html>

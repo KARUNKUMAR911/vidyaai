@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — ಪಾಠ 11: ಪಯಣ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Noto+Sans+Kannada:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#e3f2fd;min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(13,71,161,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:15px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.25);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#0d47a1,#1565c0,#64b5f6);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:20px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.25);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#bbdefb;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#0d47a1,#64b5f6);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#0d47a1;color:#fff;border-color:#0d47a1;box-shadow:0 4px 14px rgba(13,71,161,.5);}
+.step-tab.done{background:#e3f2fd;color:#0d47a1;border-color:#64b5f6;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#0d47a1;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #0d47a1;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#0d47a1;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;margin-bottom:4px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#64b5f6;background:#e3f2fd;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:16px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#0d47a1;font-size:18px;}
+.scene-bottom{border-top:2px dashed #64b5f6;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:60px;padding:13px 8px;border-radius:16px;border:3px solid #64b5f6;background:#e3f2fd;font-family:'Baloo 2',cursive;font-size:15px;color:#0d47a1;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-weight:900;line-height:1.3;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn.correct{border-color:#0d47a1;background:#bbdefb;color:#0d47a1;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#bbdefb;color:#0d47a1;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.info-strip{background:#e3f2fd;border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #64b5f6;}
+.info-strip p{font-size:14px;font-weight:800;color:#0d47a1;line-height:1.7;}
+
+.rule-box{background:#fff;border:3px solid #0d47a1;border-radius:18px;padding:14px 16px;margin:10px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:15px;color:#0d47a1;font-weight:900;line-height:1.7;}
+
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#0d47a1;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+.grid-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.item-card{background:#fff;border-radius:16px;padding:14px 8px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #64b5f6;}
+.item-card .ic-emoji{font-size:38px;display:block;margin-bottom:6px;}
+.item-card .ic-label{font-family:'Baloo 2',cursive;font-size:13px;color:#0d47a1;font-weight:900;line-height:1.3;}
+.item-card .ic-sub{font-size:11px;color:#888;margin-top:2px;}
+
+.result-card{background:#fff;border-radius:20px;padding:20px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.08);margin-bottom:12px;}
+.result-emoji{font-size:60px;display:block;margin-bottom:8px;}
+.result-score{font-family:'Baloo 2',cursive;font-size:32px;color:#0d47a1;font-weight:900;}
+.result-msg{font-size:14px;font-weight:800;color:#555;margin-top:6px;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#0d47a1,#64b5f6);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(13,71,161,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:28px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:15px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#0d47a1;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🚌 ಪಾಠ 11 — ಪಯಣ</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🚂</span>
+  <h1>Class 2 EVS · ಪಾಠ 11</h1>
+  <p>ಪಯಣ — Let's Travel! ವಾಹನಗಳು ಕಲಿಯೋಣ!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Step 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="vehicles">🚗 ವಾಹನಗಳು</div>
+  <div class="step-tab locked" data-tab="speed">⚡ ವೇಗ</div>
+  <div class="step-tab locked" data-tab="types">🌊 ಪ್ರಕಾರಗಳು</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು!</div>
+
+<div class="content">
+
+<!-- TAB 1: VEHICLES -->
+<div class="tab-panel active" id="panel-vehicles">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🚗</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ವಾಹನಗಳು ಎಂದರೇನು?</div>
+      <div class="banner-sub" style="color:#1565c0;">ಒಂದು ಕಡೆಯಿಂದ ಮತ್ತೊಂದು ಕಡೆಗೆ ಸಾಗಿಸುವ ಸಾಧನ!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🚀 ವಾಹನ ಎಂದರೆ?</h3>
+    <p>ಜನರನ್ನು ಮತ್ತು ಸಾಮಾನುಗಳನ್ನು ಒಂದು ಕಡೆಯಿಂದ ಮತ್ತೊಂದು ಕಡೆಗೆ <span style="color:#0d47a1;">ಸಾಗಿಸುವ ಸಾಧನಗಳೇ ವಾಹನಗಳು.</span></p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card"><span class="ic-emoji">🚲</span><div class="ic-label">ಸೈಕಲ್</div><div class="ic-sub">Bicycle</div></div>
+    <div class="item-card"><span class="ic-emoji">🚌</span><div class="ic-label">ಬಸ್ಸು</div><div class="ic-sub">Bus</div></div>
+    <div class="item-card"><span class="ic-emoji">✈️</span><div class="ic-label">ವಿಮಾನ</div><div class="ic-sub">Aeroplane</div></div>
+    <div class="item-card"><span class="ic-emoji">🚂</span><div class="ic-label">ರೈಲು</div><div class="ic-sub">Train</div></div>
+    <div class="item-card"><span class="ic-emoji">🛺</span><div class="ic-label">ಆಟೋರಿಕ್ಷಾ</div><div class="ic-sub">Auto</div></div>
+    <div class="item-card"><span class="ic-emoji">🚛</span><div class="ic-label">ಲಾರಿ</div><div class="ic-sub">Lorry/Truck</div></div>
+    <div class="item-card"><span class="ic-emoji">🏍️</span><div class="ic-label">ಮೋಟಾರ್ ಬೈಕ್</div><div class="ic-sub">Motorbike</div></div>
+    <div class="item-card"><span class="ic-emoji">⛵</span><div class="ic-label">ದೋಣಿ</div><div class="ic-sub">Boat</div></div>
+  </div>
+
+  <div class="section-divider">— ಯಾವ ವಾಹನ? ಆರಿಸು! —</div>
+
+  <div class="scenario-card" id="sc_v1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">✈️ <span class="kw">ವಿಮಾನ</span> ಎಲ್ಲಿ ಹಾರುತ್ತದೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v1',false)">🌊 ನೀರಿನ ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v1',true)">🌤️ ಆಕಾಶದಲ್ಲಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v1',false)">🛣️ ರಸ್ತೆಯ ಮೇಲೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_v1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_v2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">⛵ <span class="kw">ದೋಣಿ</span> ಎಲ್ಲಿ ಚಲಿಸುತ್ತದೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v2',false)">🛣️ ರಸ್ತೆಯ ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v2',true)">🌊 ನೀರಿನ ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v2',false)">🌤️ ಆಕಾಶದಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_v2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_v3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">🚲 <span class="kw">ಸೈಕಲ್</span> ಎಲ್ಲಿ ಚಲಿಸುತ್ತದೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v3',true)">🛣️ ನೆಲದ ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v3',false)">🌊 ನೀರಿನ ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_v3',false)">🌤️ ಆಕಾಶದಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_v3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-vehicles" disabled onclick="completeTab('vehicles','speed','btn-vehicles')">👉 ಮುಂದೆ: ವೇಗ ಕಲಿಯೋಣ!</button>
+</div>
+
+<!-- TAB 2: SPEED -->
+<div class="tab-panel" id="panel-speed">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">⚡</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ವೇಗ ಮತ್ತು ನಿಧಾನ!</div>
+      <div class="banner-sub" style="color:#1565c0;">ಯಾವ ವಾಹನ ವೇಗ? ಯಾವ ವಾಹನ ನಿಧಾನ?</div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>🐢 <strong>ನಿಧಾನ ವಾಹನಗಳು:</strong> ಸೈಕಲ್, ಎತ್ತಿನ ಗಾಡಿ, ಕುದುರೆ ಗಾಡಿ, ದೋಣಿ<br>
+    ⚡ <strong>ವೇಗ ವಾಹನಗಳು:</strong> ವಿಮಾನ, ರೈಲು, ಬಸ್ಸು, ಮೋಟಾರ್ ಬೈಕ್, ಲಾರಿ</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">🚀 ವೇಗವಾಗಿ ಹೋಗಬೇಕಾದರೆ → ವಿಮಾನ / ರೈಲು!<br>🐢 ಹತ್ತಿರದ ಜಾಗಕ್ಕೆ → ಸೈಕಲ್ / ಆಟೋ!</div>
+  </div>
+
+  <div class="section-divider">— ವೇಗ ಅಥವಾ ನಿಧಾನ? ಆರಿಸು! —</div>
+
+  <div class="scenario-card" id="sc_s1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 4</div>
+      <div class="scene-sentence">✈️ <span class="kw">ವಿಮಾನ</span> ವೇಗವಾಗಿ ಹೋಗುತ್ತದೆಯೇ ಅಥವಾ ನಿಧಾನವಾಗಿ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',true)">⚡ ವೇಗ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',false)">🐢 ನಿಧಾನ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_s2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 4</div>
+      <div class="scene-sentence">🐂 <span class="kw">ಎತ್ತಿನ ಗಾಡಿ</span> ವೇಗವಾಗಿ ಹೋಗುತ್ತದೆಯೇ ಅಥವಾ ನಿಧಾನವಾಗಿ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',false)">⚡ ವೇಗ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',true)">🐢 ನಿಧಾನ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_s3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 4</div>
+      <div class="scene-sentence">🚂 ರಹೀಮ ಕಾರವಾರದಿಂದ ಉಡುಪಿಗೆ ಹೋಗಬೇಕು — ಯಾವ ವಾಹನದಲ್ಲಿ ಬೇಗ ತಲುಪುತ್ತಾನೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',false)">🐂 ಎತ್ತಿನ ಗಾಡಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',true)">🚌 ಬಸ್ಸು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_s4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 4</div>
+      <div class="scene-sentence">🏍️ ರಮೇಶ ಸೈಕಲ್ನಲ್ಲಿ ಮತ್ತು ಜಾನ್ ಮೋಟಾರ್ ಬೈಕ್ನಲ್ಲಿ ಹೊರಡುತ್ತಾರೆ — ಯಾರು ಮೊದಲು ತಲುಪುತ್ತಾರೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s4',false)">🚲 ರಮೇಶ (ಸೈಕಲ್)</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s4',true)">🏍️ ಜಾನ್ (ಮೋಟಾರ್ ಬೈಕ್)</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s4"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-speed" disabled onclick="completeTab('speed','types','btn-speed')">👉 ಮುಂದೆ: ಪ್ರಕಾರಗಳು ಕಲಿಯೋಣ!</button>
+</div>
+
+<!-- TAB 3: TYPES -->
+<div class="tab-panel" id="panel-types">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🌊</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಭೂ, ಜಲ, ವಾಯು ಸಾರಿಗೆ!</div>
+      <div class="banner-sub" style="color:#1565c0;">ನೆಲ, ನೀರು ಮತ್ತು ಗಾಳಿಯ ವಾಹನಗಳು!</div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <p>🛣️ <strong>ಭೂಸಾರಿಗೆ (Land):</strong> ಬಸ್ಸು, ಲಾರಿ, ಸೈಕಲ್, ರೈಲು, ಕಾರು, ಆಟೋ, ಮೋಟಾರ್ ಬೈಕ್, ಎತ್ತಿನ ಗಾಡಿ, ಕುದುರೆ ಗಾಡಿ<br>
+    🌊 <strong>ಜಲಸಾರಿಗೆ (Water):</strong> ದೋಣಿ, ಹಡಗು, ತೆಪ್ಪ<br>
+    🌤️ <strong>ವಾಯುಸಾರಿಗೆ (Air):</strong> ವಿಮಾನ, ಹೆಲಿಕಾಪ್ಟರ್</p>
+  </div>
+
+  <div class="section-divider">— ಯಾವ ಸಾರಿಗೆ? ಆರಿಸು! —</div>
+
+  <div class="scenario-card" id="sc_t1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 4</div>
+      <div class="scene-sentence">✈️ <span class="kw">ವಿಮಾನ</span> ಯಾವ ಸಾರಿಗೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',false)">🛣️ ಭೂಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',false)">🌊 ಜಲಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',true)">🌤️ ವಾಯುಸಾರಿಗೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_t2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 4</div>
+      <div class="scene-sentence">⛵ <span class="kw">ದೋಣಿ</span> ಯಾವ ಸಾರಿಗೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',false)">🛣️ ಭೂಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',true)">🌊 ಜಲಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',false)">🌤️ ವಾಯುಸಾರಿಗೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_t3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 4</div>
+      <div class="scene-sentence">🚂 <span class="kw">ರೈಲು</span> ಯಾವ ಸಾರಿಗೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',true)">🛣️ ಭೂಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',false)">🌊 ಜಲಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',false)">🌤️ ವಾಯುಸಾರಿಗೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_t4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 4</div>
+      <div class="scene-sentence">🚁 <span class="kw">ಹೆಲಿಕಾಪ್ಟರ್</span> ಯಾವ ಸಾರಿಗೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t4',false)">🛣️ ಭೂಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t4',false)">🌊 ಜಲಸಾರಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t4',true)">🌤️ ವಾಯುಸಾರಿಗೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t4"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-types" disabled onclick="completeTab('types','quiz','btn-types')">👉 ಮುಂದೆ: Quiz ಆಡೋಣ!</button>
+</div>
+
+<!-- TAB 4: QUIZ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಅಂತಿಮ Quiz!</div>
+      <div class="banner-sub" style="color:#1565c0;">ಎಲ್ಲ ಕಲಿತೆಯಾ? ತೋರಿಸು!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 5</div>
+      <div class="scene-sentence">🚗 ಯಾವ ವಾಹನ <span class="kw">ರಸ್ತೆ</span> ಮೇಲೆ ಚಲಿಸುತ್ತದೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q1',false)">✈️ ವಿಮಾನ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q1',true)">🚌 ಬಸ್ಸು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q1',false)">⛵ ದೋಣಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 5</div>
+      <div class="scene-sentence">🌊 ಯಾವ ವಾಹನ <span class="kw">ನೀರಿನ ಮೇಲೆ</span> ಚಲಿಸುತ್ತದೆ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q2',false)">🚂 ರೈಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q2',true)">🛶 ಹಡಗು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q2',false)">🚲 ಸೈಕಲ್</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 5</div>
+      <div class="scene-sentence">⚡ ಯಾವ ವಾಹನ <span class="kw">ಅತ್ಯಂತ ವೇಗ</span>?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q3',false)">🐂 ಎತ್ತಿನ ಗಾಡಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q3',true)">✈️ ವಿಮಾನ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q3',false)">🚲 ಸೈಕಲ್</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 5</div>
+      <div class="scene-sentence">🛣️ <span class="kw">ಭೂಸಾರಿಗೆ</span> ಎಂದರೆ ಏನು?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q4',true)">🛣️ ನೆಲದ ಮೇಲೆ ಚಲಿಸುವ ವಾಹನ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q4',false)">🌤️ ಗಾಳಿಯಲ್ಲಿ ಹಾರುವ ವಾಹನ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5 of 5</div>
+      <div class="scene-sentence">🏍️ ರಮೇಶ ಬಳಿ <span class="kw">ಸೈಕಲ್</span> ಮತ್ತು ಜಾನ್ ಬಳಿ <span class="kw">ಮೋಟಾರ್ ಬೈಕ್</span> ಇದೆ — ಯಾರ ವಾಹನ ನಿಧಾನ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q5',true)">🚲 ರಮೇಶ (ಸೈಕಲ್)</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q5',false)">🏍️ ಜಾನ್ (ಮೋಟಾರ್ ಬೈಕ್)</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q5"></div>
+    </div>
+  </div>
+
+  <div class="result-card" id="resultCard" style="display:none;">
+    <span class="result-emoji" id="resultEmoji">🏆</span>
+    <div class="result-score" id="resultScore">⭐ 0 Stars!</div>
+    <div class="result-msg" id="resultMsg">ನೀನು ಪಾಠ 11 ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!</div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 ನನ್ನ ಬಹುಮಾನ ತೆಗೆದುಕೊ!</button>
+</div>
+
+</div><!-- end content -->
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">ಭಲೇ ಭಲೇ! ನೀನು ಚಾಂಪಿಯನ್!</div>
+  <div class="celeb-sub">ಪಾಠ 11 — ಪಯಣ<br>ನೀನು ಎಲ್ಲ ಕಲಿತೆ! 🌟</div>
+  <div class="celeb-stars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">🎊 ಧನ್ಯವಾದ!</button>
+</div>
+
+<script>
+let stars=0;
+const tabDone={vehicles:false,speed:false,types:false,quiz:false};
+const tabQs={
+  vehicles:['sc_v1','sc_v2','sc_v3'],
+  speed:['sc_s1','sc_s2','sc_s3','sc_s4'],
+  types:['sc_t1','sc_t2','sc_t3','sc_t4'],
+  quiz:['sc_q1','sc_q2','sc_q3','sc_q4','sc_q5']
+};
+const totalTabs=4;
+
+function updateProgress(){
+  const doneCount=Object.values(tabDone).filter(Boolean).length;
+  const pct=Math.round(doneCount/totalTabs*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progLabel').textContent=pct===100?'🎉 ಎಲ್ಲ ಪೂರ್ಣ!':'Step '+(doneCount+1)+' ರಲ್ಲಿ ಇದ್ದೀರಿ — ಮುಂದುವರಿ! 💪';
+}
+
+function checkChoice(el,cardId,correct){
+  const card=document.getElementById(cardId);
+  if(card.classList.contains('done'))return;
+  const btns=card.querySelectorAll('.choice-btn');
+  const fb=document.getElementById('fb-'+cardId);
+  if(correct){
+    btns.forEach(b=>b.classList.add('locked-choice'));
+    el.classList.add('correct');
+    fb.textContent='✅ ಸರಿ! ಬಹಳ ಒಳ್ಳೆಯದು! 🌟';
+    fb.className='fb-box ok';
+    stars++;document.getElementById('starsNum').textContent=stars;
+    card.classList.add('done');
+    checkTabReady(getCurrentTab());
+  } else {
+    el.classList.add('wrong');
+    fb.textContent='❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು!';
+    fb.className='fb-box no';
+    setTimeout(()=>{
+      el.classList.remove('wrong');
+      fb.style.display='none';
+    },1500);
+  }
+}
+
+function getCurrentTab(){
+  const active=document.querySelector('.tab-panel.active');
+  return active?active.id.replace('panel-',''):'';
+}
+
+function checkTabReady(tabId){
+  const qs=tabQs[tabId];
+  if(!qs||qs.length===0)return;
+  const btn=document.getElementById('btn-'+tabId);
+  if(!btn)return;
+  const allDone=qs.every(q=>document.getElementById(q).classList.contains('done'));
+  if(allDone){
+    btn.disabled=false;
+    if(tabId==='quiz'){
+      const rc=document.getElementById('resultCard');
+      rc.style.display='block';
+      document.getElementById('resultEmoji').textContent='🚂';
+      document.getElementById('resultScore').textContent='⭐ '+stars+' Stars!';
+      document.getElementById('resultMsg').textContent='ನೀನು ಪಾಠ 11 ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!';
+    }
+  }
+}
+
+function completeTab(current,next,btnId){
+  tabDone[current]=true;
+  updateProgress();
+  const nextTab=document.querySelector('[data-tab="'+next+'"]');
+  if(nextTab){nextTab.classList.remove('locked');nextTab.classList.add('done');}
+  switchTab(next);
+}
+
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+tabId).classList.add('active');
+  const tab=document.querySelector('[data-tab="'+tabId+'"]');
+  if(tab){tab.classList.add('active');tab.classList.remove('done');}
+  window.scrollTo({top:0,behavior:'smooth'});
+  checkTabReady(tabId);
+}
+
+document.querySelectorAll('.step-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    if(tab.classList.contains('locked')){
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'),500);
+      const toast=document.getElementById('lockToast');
+      toast.textContent='🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು!';
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'),2500);
+      return;
+    }
+    switchTab(tab.dataset.tab);
+  });
+});
+
+function showCelebration(){
+  document.getElementById('celebScreen').classList.add('show');
+}
+</script>
+</body>
+</html>

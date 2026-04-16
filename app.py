@@ -116,6 +116,10 @@ GRADE1_EVS_LESSONS = [
 
 GRADE2_MATHS_LESSONS = [f'lesson{i}' for i in range(1, 14)]
 GRADE2_EVS_LESSONS = [f'lesson{i}' for i in range(1, 20)]
+GRADE2_KANNADA_LESSONS = [f'lesson{i}' for i in range(1, 20)]
+GRADE2_ENGLISH_LESSONS = [f'lesson{i}' for i in range(1, 11)]
+GRADE2_MATHS_KN_LESSONS = [f'lesson{i}' for i in range(1, 14)]
+GRADE2_EVS_KN_LESSONS = [f'lesson{i}' for i in range(1, 20)]
 
 
 class Message(db.Model):
@@ -991,6 +995,14 @@ def load_lesson_progress():
         lessons = GRADE2_MATHS_LESSONS
     elif str(grade) == '2' and subject == 'evs':
         lessons = GRADE2_EVS_LESSONS
+    elif str(grade) == '2' and subject == 'kannada':
+        lessons = GRADE2_KANNADA_LESSONS
+    elif str(grade) == '2' and subject == 'english':
+        lessons = GRADE2_ENGLISH_LESSONS
+    elif str(grade) == '2' and subject == 'maths_kn':
+        lessons = GRADE2_MATHS_KN_LESSONS
+    elif str(grade) == '2' and subject == 'evs_kn':
+        lessons = GRADE2_EVS_KN_LESSONS
 
     if lessons is None:
         return jsonify({'subject': subject, 'grade': grade, 'totalLessons': 0, 'lessons': {}})
@@ -1054,6 +1066,14 @@ def save_lesson_progress():
         lessons = GRADE2_MATHS_LESSONS
     elif grade == '2' and subject == 'evs':
         lessons = GRADE2_EVS_LESSONS
+    elif grade == '2' and subject == 'kannada':
+        lessons = GRADE2_KANNADA_LESSONS
+    elif grade == '2' and subject == 'english':
+        lessons = GRADE2_ENGLISH_LESSONS
+    elif grade == '2' and subject == 'maths_kn':
+        lessons = GRADE2_MATHS_KN_LESSONS
+    elif grade == '2' and subject == 'evs_kn':
+        lessons = GRADE2_EVS_KN_LESSONS
 
     if lessons is not None:
         rows = LessonProgress.query.filter_by(
@@ -1140,6 +1160,156 @@ def class2_dashboard():
         return redirect(url_for('login'))
     student = Student.query.get(session['student_id'])
     return render_template('class2/dashboard.html', student=student)
+
+@app.route('/class/2/kannada/chapters')
+def class2_kannada_index():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class2/kannada/index.html', student=student)
+
+@app.route('/class/2/kannada/lesson<int:num>')
+def class2_kannada_lesson(num):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    
+    # Mapping for lesson filenames
+    lesson_map = {
+        1:  'class2_kannada_ch1_bannada_hakki.html',
+        2:  'class2_kannada_ch2_oorige_obba_raja.html',
+        3:  'class2_kannada_ch3_gelatana.html',
+        4:  'class2_kannada_ch4_kempegowdara.html',
+        5:  'class2_kannada_ch5_halliya_dari.html',
+        6:  'class2_kannada_ch6_sante.html',
+        7:  'class2_kannada_ch7_arive_guru.html',
+        8:  'class2_kannada_ch8_nanna_devaru.html',
+        9:  'class2_kannada_ch9_mooru_kallugalu.html',
+        10: 'class2_kannada_ch10_satyavanta_balaka.html',
+        11: 'class2_kannada_ch11_mangagala_upavasa.html',
+        12: 'class2_kannada_ch12_negilu.html',
+        13: 'class2_kannada_ch13_saralate.html',
+        14: 'class2_kannada_ch14_kadalu.html',
+        15: 'class2_kannada_ch15_sahbaalve.html',
+        16: 'class2_kannada_ch16_kaveri.html',
+        17: 'class2_kannada_ch17_taayi.html',
+        18: 'class2_kannada_ch18_baanangaladalli.html',
+        19: 'class2_kannada_ch19_chandaduru_nannuru.html'
+    }
+    
+    template_name = lesson_map.get(num)
+    if not template_name:
+        return "Lesson not found", 404
+        
+    return render_template(f'class2/kannada/{template_name}', student=student)
+
+@app.route('/class/2/english/chapters')
+def class2_english_index():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class2/english/index.html', student=student)
+
+@app.route('/class/2/english/lesson<int:num>')
+def class2_english_lesson(num):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    
+    lesson_map = {
+        1:  'class2_eng_ch01_house.html',
+        2:  'class2_eng_ch02.html',
+        3:  'class2_eng_ch03_dress.html',
+        4:  'class2_eng_ch04_family.html',
+        5:  'class2_eng_ch05_hygiene.html',
+        6:  'class2_eng_ch06_market.html',
+        7:  'class2_eng_ch07_weather.html',
+        8:  'class2_eng_ch08_helpers.html',
+        9:  'class2_eng_ch09_health.html',
+        10: 'class2_eng_ch10_finale.html'
+    }
+    
+    template_name = lesson_map.get(num)
+    if not template_name:
+        return "Lesson not found", 404
+        
+    return render_template(f'class2/english/{template_name}', student=student)
+
+@app.route('/class/2/maths_kn/chapters')
+def class2_maths_kn_index():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class2/maths_kn/index.html', student=student)
+
+@app.route('/class/2/maths_kn/lesson<int:num>')
+def class2_maths_kn_lesson(num):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    
+    lesson_map = {
+        1:  'class2_maths_ch1_shapes_space - Copy.html',
+        2:  'class2_maths_ch2_numbers.html',
+        3:  'class2_maths_ch3_sankalana.html',
+        4:  'class2_maths_ch4_vyavakalana.html',
+        5:  'class2_maths_ch5_gunakara.html',
+        6:  'class2_maths_ch6_bhagakara.html',
+        7:  'class2_maths_ch7_manasika_lekkachara.html',
+        8:  'class2_maths_ch8_hana.html',
+        9:  'class2_maths_ch9_udda.html',
+        10: 'class2_maths_ch10_tooka.html',
+        11: 'class2_maths_ch11_kaala.html',
+        12: 'class2_maths_ch12_data_handling.html',
+        13: 'class2_maths_ch13_vinyasagalu.html'
+    }
+    
+    template_name = lesson_map.get(num)
+    if not template_name:
+        return "Lesson not found", 404
+        
+    return render_template(f'class2/maths_kn/{template_name}', student=student)
+
+@app.route('/class/2/evs_kn/chapters')
+def class2_evs_kn_index():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    return render_template('class2/evs_kn/index.html', student=student)
+
+@app.route('/class/2/evs_kn/lesson<int:num>')
+def class2_evs_kn_lesson(num):
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+    student = Student.query.get(session['student_id'])
+    
+    lesson_map = {
+        1:  'class2_kannada_evs_lesson01_animals.html',
+        2:  'class2_kannada_evs_lesson02_animal_care.html',
+        3:  'class2_evs_ch3_plants.html',
+        4:  'class2_evs_ch4_plants_for_us.html',
+        5:  'class2_evs_ch5_water.html',
+        6:  'class2_evs_ch6_food.html',
+        7:  'class2_evs_ch7_home.html',
+        8:  'class2_evs_ch8_body_health.html',
+        9:  'class2_evs_ch9_my_safety.html',
+        10: 'class2_evs_ch10_our_property.html',
+        11: 'class2_evs_ch11_travel.html',
+        12: 'class2_evs_ch12_family.html',
+        13: 'class2_evs_ch13_festivals.html',
+        14: 'class2_kannada_ch14_hiriyara_areyke.html',
+        15: 'class2_kannada_ch15_sahaya_sahakara.html',
+        16: 'class2_kannada_ch16_aadi_nali.html',
+        17: 'class2_kannada_ch17_namage_ivoo_beku.html',
+        18: 'class2_kannada_ch18_baanangaladalli.html',
+        19: 'class2_kannada_ch19_chandaduru_nannuru.html'
+    }
+    
+    template_name = lesson_map.get(num)
+    if not template_name:
+        return "Lesson not found", 404
+        
+    return render_template(f'class2/evs_kn/{template_name}', student=student)
 
 @app.route('/class/3')
 def class3_dashboard():

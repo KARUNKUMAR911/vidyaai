@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — ಪಾಠ 2: ಪ್ರಾಣಿ ಪಾಲನೆ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Noto+Sans+Kannada:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#e8f5e9;min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#1a237e,#283593,#3949ab);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(26,35,126,.4);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:16px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#1a237e,#283593,#5c6bc0);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:20px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#c5cae9;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#1a237e,#5c6bc0);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#1a237e;color:#fff;border-color:#1a237e;box-shadow:0 4px 14px rgba(26,35,126,.5);}
+.step-tab.done{background:#e8eaf6;color:#1a237e;border-color:#9fa8da;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1a237e;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #3949ab;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#1a237e;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;margin-bottom:4px;}
+.hl{color:#1a237e;font-size:15px;}
+
+.animal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.animal-card{background:#fff;border-radius:18px;padding:14px 10px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid #c5cae9;}
+.animal-emoji{font-size:44px;display:block;margin-bottom:6px;}
+.animal-name{font-family:'Baloo 2',cursive;font-size:15px;color:#1a237e;font-weight:900;}
+.animal-use{font-size:11px;color:#777;font-weight:800;margin-top:3px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#9fa8da;background:#e8eaf6;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:16px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#1a237e;font-size:18px;}
+.scene-bottom{border-top:2px dashed #9fa8da;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:60px;padding:13px 8px;border-radius:16px;border:3px solid #9fa8da;background:#e8eaf6;font-family:'Baloo 2',cursive;font-size:15px;color:#1a237e;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-weight:900;line-height:1.3;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn.correct{border-color:#1a237e;background:#c5cae9;color:#0d1b6e;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c5cae9;color:#1a237e;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.match-section{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.match-section h3{font-family:'Baloo 2',cursive;font-size:16px;color:#1a237e;margin-bottom:12px;text-align:center;}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.match-col-title{font-family:'Baloo 2',cursive;font-size:13px;color:#666;font-weight:900;text-align:center;margin-bottom:8px;}
+.match-item{background:#e8eaf6;border:3px solid #9fa8da;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;font-family:'Baloo 2',cursive;font-size:14px;color:#1a237e;margin-bottom:8px;transition:all .2s;user-select:none;font-weight:900;line-height:1.3;}
+.match-item:active{transform:scale(.95);}
+.match-item.selected{background:#1a237e;color:#fff;border-color:#0d1b6e;}
+.match-item.matched{background:#c5cae9;color:#1a237e;border-color:#1a237e;pointer-events:none;}
+.match-item.error{background:#ffcdd2;color:#c62828;border-color:#c62828;}
+.match-fb{text-align:center;font-size:14px;font-weight:900;margin-top:8px;padding:8px;border-radius:12px;}
+.match-fb.ok{background:#c5cae9;color:#1a237e;}
+.match-fb.no{background:#ffcdd2;color:#c62828;}
+
+.sort-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.sort-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#1a237e;margin-bottom:10px;text-align:center;}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.img-opt{border-radius:16px;border:3px solid #9fa8da;background:#e8eaf6;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s;user-select:none;}
+.img-opt:active{transform:scale(.95);}
+.img-opt .img-emoji{font-size:40px;display:block;margin-bottom:6px;}
+.img-opt .img-label{font-family:'Baloo 2',cursive;font-size:13px;color:#1a237e;font-weight:900;line-height:1.3;}
+.img-opt.correct{border-color:#1a237e;background:#c5cae9;}
+.img-opt.wrong{border-color:#c62828;background:#ffcdd2;}
+.img-opt.locked-choice{pointer-events:none;}
+
+.info-strip{background:linear-gradient(135deg,#e8eaf6,#c5cae9);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #9fa8da;}
+.info-strip p{font-size:14px;font-weight:800;color:#1a237e;line-height:1.7;}
+
+.rule-box{background:#fff;border:3px solid #1a237e;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:15px;color:#1a237e;font-weight:900;line-height:1.7;}
+
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#3949ab;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#1a237e,#5c6bc0);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(26,35,126,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:28px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:15px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#1a237e;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+
+/* Story dialogue boxes */
+.story-box{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.story-line{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;padding:10px;background:#f5f5f5;border-radius:14px;}
+.story-emoji{font-size:32px;flex-shrink:0;}
+.story-bubble{background:#e8eaf6;border-radius:14px;padding:10px 14px;font-family:'Baloo 2',cursive;font-size:14px;color:#1a237e;font-weight:800;line-height:1.6;flex:1;}
+
+.use-card{background:#fff;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.07);display:flex;align-items:center;gap:12px;border-left:5px solid #3949ab;}
+.use-emoji{font-size:36px;flex-shrink:0;}
+.use-info{flex:1;}
+.use-name{font-family:'Baloo 2',cursive;font-size:15px;color:#1a237e;font-weight:900;}
+.use-benefit{font-size:12px;color:#555;font-weight:800;margin-top:2px;line-height:1.5;}
+
+.tick-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.tick-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#1a237e;margin-bottom:10px;text-align:center;}
+.tick-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;border:3px solid #9fa8da;background:#e8eaf6;margin-bottom:8px;cursor:pointer;transition:all .2s;user-select:none;}
+.tick-item:active{transform:scale(.98);}
+.tick-item .tick-emoji{font-size:28px;flex-shrink:0;}
+.tick-item .tick-text{font-family:'Baloo 2',cursive;font-size:14px;color:#1a237e;font-weight:800;flex:1;}
+.tick-item .tick-check{font-size:22px;opacity:0;transition:opacity .2s;}
+.tick-item.ticked{border-color:#1a237e;background:#c5cae9;}
+.tick-item.ticked .tick-check{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🐄 ಪಾಠ 2 — ಪ್ರಾಣಿ ಪಾಲನೆ</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🦁</span>
+  <h1>Class 2 EVS · ಪಾಠ 2</h1>
+  <p>ಪ್ರಾಣಿ ಪಾಲನೆ — Caring for Animals!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Step 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="story">📖 ಕಥೆ</div>
+  <div class="step-tab locked" data-tab="types">🏠 ಸಾಕು vs ಕಾಡು</div>
+  <div class="step-tab locked" data-tab="uses">🌾 ಉಪಯೋಗಗಳು</div>
+  <div class="step-tab locked" data-tab="care">❤️ ಆರೈಕೆ</div>
+  <div class="step-tab locked" data-tab="good">✅ ಸರಿ-ತಪ್ಪು</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="lock-toast" id="lockToast">ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸಿ! 🔒</div>
+
+<div class="content">
+
+<!-- ═══ TAB 1: STORY ═══ -->
+<div class="tab-panel active" id="panel-story">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <span class="banner-emoji">📖</span>
+    <div>
+      <div class="banner-title" style="color:#1a237e;">ಪ್ರಾಣಿಗಳ ಸಭೆ!</div>
+      <div class="banner-sub" style="color:#3949ab;">ಸಿಂಹ ರಾಜನ ಕಥೆ</div>
+    </div>
+  </div>
+
+  <div class="story-box">
+    <div class="story-line">
+      <div class="story-emoji">🦁</div>
+      <div class="story-bubble">ಮುಂದಿನ ತಿಂಗಳು ನನ್ನ ಮಗಳ ಹುಟ್ಟು ಹಬ್ಬ ಇದೆ. ಹೇಗೆ ಆಚರಿಸುವುದು?</div>
+    </div>
+    <div class="story-line">
+      <div class="story-emoji">🐍</div>
+      <div class="story-bubble">ಸಿಂಹ ರಾಜ, ಕಾಡಿನಲ್ಲಿ ಹುಲ್ಲು ಕಡಿಮೆಯಾಗುತ್ತಿದೆ. ತಿನ್ನಲು ಹುಲ್ಲೇ ಇಲ್ಲ. ಇನ್ನು ಹುಟ್ಟು ಹಬ್ಬ ಹೇಗೆ?</div>
+    </div>
+    <div class="story-line">
+      <div class="story-emoji">🐂</div>
+      <div class="story-bubble">ನಮಗೆ ತೊಂದರೆ ಇಲ್ಲ. ನಮ್ಮನ್ನು ಸಾಕುವ ಯಜಮಾನ ನಮಗೆ ಚೆನ್ನಾಗಿ ಹುಲ್ಲು ಹಾಕುತ್ತಾನೆ.</div>
+    </div>
+    <div class="story-line">
+      <div class="story-emoji">🐭</div>
+      <div class="story-bubble">ನಮಗೂ ತೊಂದರೆ ಇಲ್ಲ. ನಮ್ಮನ್ನು ಯಾರು ಸಾಕದೇ ಇದ್ದರೂ ಊರಿನಲ್ಲಿ ನಮಗೆ ಧಾನ್ಯಗಳು ಸಿಗುತ್ತವೆ.</div>
+    </div>
+    <div class="story-line">
+      <div class="story-emoji">🐆</div>
+      <div class="story-bubble">ಹೌದು! ಮಳೆ ಬಂದರೆ ಜಿಂಕೆಗಳಿಗೆ, ಕಾಡೆಮ್ಮೆಗಳಿಗೆ ಚೆನ್ನಾಗಿ ಮೇವು ಸಿಗುತ್ತದೆ.</div>
+    </div>
+    <div class="story-line">
+      <div class="story-emoji">🦁</div>
+      <div class="story-bubble">ಎಲ್ಲರೂ ಕೇಳಿ. ನನ್ನ ಮಗಳ ಹುಟ್ಟು ಹಬ್ಬವನ್ನು ಈ ವರ್ಷ ಮಾಡುವುದು ಬೇಡ. ಮಳೆ ಬರಲಿ, ಹುಲ್ಲು ಬೆಳೆಯಲಿ, ಎಲ್ಲರೂ ಚೆನ್ನಾಗಿ ತಿನ್ನಲಿ, ಮುಂದಿನ ವರ್ಷ ಸಂಭ್ರಮದಿಂದ ಆಚರಿಸೋಣ.</div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಪ್ರಾಣಿಗಳೆಲ್ಲವೂ ಒಟ್ಟಾಗಿ ಸಭೆ ನಡೆಸುತ್ತಿವೆ! 🦁🐂🐆🐭</div>
+  </div>
+
+  <div class="section-divider">— ಕಥೆಯ ಪ್ರಶ್ನೆಗಳು 🎮 —</div>
+
+  <div class="scenario-card" id="sc_s1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಸಿಂಹ ರಾಜನ ಮಗಳ ಹುಟ್ಟು ಹಬ್ಬ ಯಾವಾಗ? <span class="kw">🦁</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',true)">📅 ಮುಂದಿನ ತಿಂಗಳು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',false)">📅 ಈ ತಿಂಗಳು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',false)">📅 ಮುಂದಿನ ವರ್ಷ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_s2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಕಾಡಿನಲ್ಲಿ ಯಾವುದು ಕಡಿಮೆಯಾಗುತ್ತಿದೆ? <span class="kw">🌿</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',false)">💧 ನೀರು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',true)">🌾 ಹುಲ್ಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',false)">🌳 ಮರ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_s3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಸಿಂಹ ರಾಜ ಹುಟ್ಟು ಹಬ್ಬ ಯಾವಾಗ ಆಚರಿಸಲು ನಿರ್ಧರಿಸಿದ? <span class="kw">📅</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',false)">ಈ ವರ್ಷ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',true)">ಮುಂದಿನ ವರ್ಷ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',false)">ಮಳೆ ಬಂದ ದಿನ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-story" disabled onclick="unlockNext('story','types')">ಮುಂದೆ ➜ ಸಾಕು vs ಕಾಡು 🏠</button>
+</div>
+
+<!-- ═══ TAB 2: DOMESTIC vs WILD ═══ -->
+<div class="tab-panel" id="panel-types">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f1f8e9,#dcedc8);">
+    <span class="banner-emoji">🏠</span>
+    <div>
+      <div class="banner-title" style="color:#33691e;">ಸಾಕು ಮತ್ತು ಕಾಡು ಪ್ರಾಣಿ</div>
+      <div class="banner-sub" style="color:#558b2f;">Domestic vs Wild Animals</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#558b2f;">
+    <h3 style="color:#33691e;">🏡 ಸಾಕು ಪ್ರಾಣಿಗಳು</h3>
+    <p><span class="hl">ಸಾಕು ಪ್ರಾಣಿಗಳು</span> — ನಾವು ಮನೆಗಳಲ್ಲಿ ಸಾಕುವ ಪ್ರಾಣಿಗಳೇ ಸಾಕು ಪ್ರಾಣಿಗಳು.</p>
+    <p>ಉದಾ: ಹಸು, ಎತ್ತು, ನಾಯಿ, ಬೆಕ್ಕು, ಕೋಳಿ, ಕುರಿ, ಎಮ್ಮೆ</p>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#e65100;">
+    <h3 style="color:#bf360c;">🌲 ಕಾಡು ಪ್ರಾಣಿಗಳು</h3>
+    <p><span class="hl">ಕಾಡು ಪ್ರಾಣಿಗಳು</span> — ಕಾಡಿನಲ್ಲಿ ವಾಸಿಸುವ ಪ್ರಾಣಿಗಳೇ ಕಾಡು ಪ್ರಾಣಿಗಳು.</p>
+    <p>ಉದಾ: ಸಿಂಹ, ಹುಲಿ, ಜಿಂಕೆ, ಕಾಡೆಮ್ಮೆ, ಆನೆ, ಕರಡಿ</p>
+  </div>
+
+  <div class="section-divider">— ಯಾವ ಗುಂಪಿಗೆ ಸೇರುತ್ತದೆ? 🎮 —</div>
+
+  <!-- Match domestic vs wild -->
+  <div class="match-section" id="type-match">
+    <h3>🔗 ಸಾಕು ಅಥವಾ ಕಾಡು ಪ್ರಾಣಿ?</h3>
+    <div class="match-cols">
+      <div>
+        <div class="match-col-title">🏡 ಸಾಕು ಪ್ರಾಣಿ</div>
+        <div class="match-item" id="td_cow" onclick="typeSort('td_cow','domestic')">🐄 ಹಸು</div>
+        <div class="match-item" id="td_dog" onclick="typeSort('td_dog','domestic')">🐕 ನಾಯಿ</div>
+        <div class="match-item" id="td_hen" onclick="typeSort('td_hen','domestic')">🐓 ಕೋಳಿ</div>
+        <div class="match-item" id="td_tiger" onclick="typeSort('td_tiger','wild')">🐯 ಹುಲಿ</div>
+        <div class="match-item" id="td_lion" onclick="typeSort('td_lion','wild')">🦁 ಸಿಂಹ</div>
+        <div class="match-item" id="td_elephant" onclick="typeSort('td_elephant','wild')">🐘 ಆನೆ</div>
+      </div>
+      <div>
+        <div class="match-col-title">🌲 ಕಾಡು ಪ್ರಾಣಿ</div>
+        <div style="min-height:60px;background:#f5f5f5;border-radius:12px;padding:8px;" id="wild-drop">
+          <p style="font-size:12px;color:#aaa;text-align:center;font-weight:800;padding-top:8px;">ಕಾಡು ಪ್ರಾಣಿಗಳ ಹೆಸರು ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ ⬆️</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px;">
+      <p style="font-size:13px;color:#888;font-weight:800;text-align:center;">👆 ಎಡಗಡೆ ಪ್ರಾಣಿಯ ಮೇಲೆ ಒತ್ತಿ — ಸಾಕು ಪ್ರಾಣಿ = ಹಸಿರು, ಕಾಡು = ಕೆಂಪು!</p>
+    </div>
+    <div class="match-fb" id="match-fb-type"></div>
+  </div>
+
+  <div class="scenario-card" id="sc_t1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಕಾಡಿನಲ್ಲಿ ವಾಸಿಸುವ ಪ್ರಾಣಿಗಳನ್ನು ಏನೆನ್ನುತ್ತಾರೆ? <span class="kw">🌲</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',false)">🏡 ಸಾಕು ಪ್ರಾಣಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',true)">🌲 ಕಾಡು ಪ್ರಾಣಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_t2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಇದು ಸಾಕು ಪ್ರಾಣಿಯೇ? — ಹುಲಿ 🐯</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',false)">✅ ಹೌದು, ಸಾಕು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',true)">❌ ಇಲ್ಲ, ಕಾಡು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_t3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಇದು ಸಾಕು ಪ್ರಾಣಿಯೇ? — ಹಸು 🐄</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',true)">✅ ಹೌದು, ಸಾಕು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',false)">❌ ಇಲ್ಲ, ಕಾಡು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-types" disabled onclick="unlockNext('types','uses')">ಮುಂದೆ ➜ ಉಪಯೋಗಗಳು 🌾</button>
+</div>
+
+<!-- ═══ TAB 3: USES ═══ -->
+<div class="tab-panel" id="panel-uses">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🌾</span>
+    <div>
+      <div class="banner-title" style="color:#bf360c;">ಸಾಕು ಪ್ರಾಣಿಗಳ ಉಪಯೋಗ</div>
+      <div class="banner-sub" style="color:#e65100;">Uses of Domestic Animals</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#e65100;">
+    <h3 style="color:#bf360c;">🐄 ಪ್ರಾಣಿಗಳಿಂದ ಏನು ಸಿಗುತ್ತದೆ?</h3>
+    <p>ಪ್ರಾಣಿಗಳನ್ನು ಉಪಯೋಗಕ್ಕಾಗಿ ಸಾಕುವುದಲ್ಲದೇ ಪ್ರೀತಿಗಾಗಿ, ಸಂತೋಷಕ್ಕಾಗಿ ಮತ್ತು ಮುದ್ದು ಮಾಡಲು ಸಾಕುತ್ತಾರೆ.</p>
+  </div>
+
+  <div class="use-card">
+    <div class="use-emoji">🐄</div>
+    <div class="use-info">
+      <div class="use-name">ಹಸು ಮತ್ತು ಎತ್ತು</div>
+      <div class="use-benefit">🥛 ಹಾಲು · 🚜 ಗಾಡಿ ಎಳೆಯುವುದು · 🌾 ಹೊಲ ಉಳುವುದು</div>
+    </div>
+  </div>
+  <div class="use-card">
+    <div class="use-emoji">🐕</div>
+    <div class="use-info">
+      <div class="use-name">ನಾಯಿ</div>
+      <div class="use-benefit">🏠 ಮನೆ ಕಾಯುವುದು · 👮 ರಕ್ಷಣೆ · ❤️ ಸ್ನೇಹ</div>
+    </div>
+  </div>
+  <div class="use-card">
+    <div class="use-emoji">🐑</div>
+    <div class="use-info">
+      <div class="use-name">ಕುರಿ</div>
+      <div class="use-benefit">🧥 ಉಣ್ಣೆ (wool) · 🥛 ಹಾಲು</div>
+    </div>
+  </div>
+  <div class="use-card">
+    <div class="use-emoji">🐓</div>
+    <div class="use-info">
+      <div class="use-name">ಕೋಳಿ</div>
+      <div class="use-benefit">🥚 ಮೊಟ್ಟೆ · 🍗 ಮಾಂಸ</div>
+    </div>
+  </div>
+  <div class="use-card">
+    <div class="use-emoji">🐰</div>
+    <div class="use-info">
+      <div class="use-name">ಮೊಲ (Kamala's pet)</div>
+      <div class="use-benefit">❤️ ಮುದ್ದು ಮಾಡಲು · 🌾 ಹುಲ್ಲು ತಿನ್ನಿಸಿ ಪಾಲನೆ</div>
+    </div>
+  </div>
+  <div class="use-card">
+    <div class="use-emoji">🕊️</div>
+    <div class="use-info">
+      <div class="use-name">ಪಾರಿವಾಳ (Saleem's pet)</div>
+      <div class="use-benefit">❤️ ಮುದ್ದು ಮಾಡಲು · ಕಾಳು, ನೀರು ಕೊಟ್ಟು ಪಾಲನೆ</div>
+    </div>
+  </div>
+  <div class="use-card">
+    <div class="use-emoji">🐱</div>
+    <div class="use-info">
+      <div class="use-name">ಬೆಕ್ಕು (Lara's cat - Pintu)</div>
+      <div class="use-benefit">❤️ ಮುದ್ದು · 🥛 ಹಾಲು ಕುಡಿಸಿ ಪಾಲನೆ</div>
+    </div>
+  </div>
+
+  <div class="rule-box" style="border-color:#e65100;">
+    <div class="rule-text" style="color:#bf360c;">ಪ್ರಾಣಿಗಳನ್ನು ಉಪಯೋಗಕ್ಕಾಗಿ ಸಾಕುವುದಲ್ಲದೇ<br>ಪ್ರೀತಿಗಾಗಿ ಮತ್ತು ಸಂತೋಷಕ್ಕಾಗಿ ಸಾಕುತ್ತಾರೆ ❤️</div>
+  </div>
+
+  <div class="section-divider">— ಪ್ರಶ್ನೆಗಳು 🎮 —</div>
+
+  <div class="scenario-card" id="sc_u1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಕೋಳಿಯಿಂದ ಏನು ದೊರೆಯುತ್ತದೆ? <span class="kw">🐓</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u1',false)">🥛 ಹಾಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u1',true)">🥚 ಮೊಟ್ಟೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u1',false)">🧥 ಉಣ್ಣೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_u1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_u2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಕುರಿಯಿಂದ ಯಾವ ಬಟ್ಟೆ ತಯಾರಿಸಲು ಸಾಧ್ಯ? <span class="kw">🐑</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u2',true)">🧥 ಉಣ್ಣೆ ಬಟ್ಟೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u2',false)">👗 ರೇಷ್ಮೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u2',false)">👕 ಹತ್ತಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_u2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_u3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಲಾರಾಳ ಬೆಕ್ಕಿನ ಹೆಸರು ಏನು? <span class="kw">🐱</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u3',false)">🐱 ಮಿಟ್ಟು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u3',true)">🐱 ಪಿಂಟು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_u3',false)">🐱 ಚಿಟ್ಟು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_u3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-uses" disabled onclick="unlockNext('uses','care')">ಮುಂದೆ ➜ ಆರೈಕೆ ❤️</button>
+</div>
+
+<!-- ═══ TAB 4: CARE ═══ -->
+<div class="tab-panel" id="panel-care">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);">
+    <span class="banner-emoji">❤️</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಪ್ರಾಣಿಗಳ ಆರೈಕೆ</div>
+      <div class="banner-sub" style="color:#ad1457;">How to Care for Animals</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#c2185b;">
+    <h3 style="color:#880e4f;">❤️ ಸಾಕು ಪ್ರಾಣಿಗಳ ಆರೈಕೆ ಹೇಗೆ?</h3>
+    <p>ನಾವು ಪ್ರಾಣಿಗಳನ್ನು <span class="hl">ಪ್ರೀತಿಯಿಂದ</span> ನೋಡಿಕೊಳ್ಳಬೇಕು.</p>
+  </div>
+
+  <div class="tick-card">
+    <h3>ಸಾಕು ಪ್ರಾಣಿಗಳಿಗೆ ಏನು ಮಾಡಬೇಕು? ✅ ಒತ್ತಿ ಆರಿಸಿ!</h3>
+    <div class="tick-item" onclick="tickIt(this)">
+      <div class="tick-emoji">🍃</div>
+      <div class="tick-text">ಆಹಾರ ನೀಡಬೇಕು</div>
+      <div class="tick-check">✅</div>
+    </div>
+    <div class="tick-item" onclick="tickIt(this)">
+      <div class="tick-emoji">💧</div>
+      <div class="tick-text">ನೀರು ಕೊಡಬೇಕು</div>
+      <div class="tick-check">✅</div>
+    </div>
+    <div class="tick-item" onclick="tickIt(this)">
+      <div class="tick-emoji">🏥</div>
+      <div class="tick-text">ಕಾಯಿಲೆ ಬಂದರೆ ವೈದ್ಯರ ಬಳಿ ಕರೆದುಕೊಂಡು ಹೋಗಬೇಕು</div>
+      <div class="tick-check">✅</div>
+    </div>
+    <div class="tick-item" onclick="tickIt(this)">
+      <div class="tick-emoji">🛁</div>
+      <div class="tick-text">ಸ್ವಚ್ಛಗೊಳಿಸಬೇಕು</div>
+      <div class="tick-check">✅</div>
+    </div>
+    <div class="tick-item" onclick="tickIt(this)">
+      <div class="tick-emoji">❤️</div>
+      <div class="tick-text">ಪ್ರೀತಿಯಿಂದ ನೋಡಿಕೊಳ್ಳಬೇಕು</div>
+      <div class="tick-check">✅</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_c1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಸಾಕು ಪ್ರಾಣಿಗೆ ಕಾಯಿಲೆ ಬಂದರೆ ಏನು ಮಾಡಬೇಕು? <span class="kw">🏥</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c1',false)">😴 ಬಿಟ್ಟುಬಿಡು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c1',true)">🏥 ವೈದ್ಯರ ಬಳಿ ಕರೆದುಕೊಂಡು ಹೋಗು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_c1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_c2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಸಲೀಮ್ ಪಾರಿವಾಳವನ್ನು ಹೇಗೆ ಸಾಕುತ್ತಾನೆ? <span class="kw">🕊️</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c2',true)">🌾 ಕಾಳು ಮತ್ತು ನೀರು ಕೊಡುತ್ತಾನೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c2',false)">🚫 ಏನೂ ಕೊಡುವುದಿಲ್ಲ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_c2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_c3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ನಾವು ಪ್ರಾಣಿಗಳನ್ನು ಹೇಗೆ ನೋಡಿಕೊಳ್ಳಬೇಕು? <span class="kw">❤️</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c3',false)">😠 ಕೋಪದಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c3',true)">❤️ ಪ್ರೀತಿಯಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_c3',false)">😴 ಗಮನ ಕೊಡದೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_c3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-care" disabled onclick="unlockNext('care','good')">ಮುಂದೆ ➜ ಸರಿ-ತಪ್ಪು ✅</button>
+</div>
+
+<!-- ═══ TAB 5: GOOD/BAD ═══ -->
+<div class="tab-panel" id="panel-good">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">✅</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಸರಿ ಅಥವಾ ತಪ್ಪು?</div>
+      <div class="banner-sub" style="color:#1565c0;">Right or Wrong?</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#1565c0;">
+    <h3 style="color:#0d47a1;">✅ ಸರಿಯಾದ ಚಿತ್ರ ಆರಿಸಿ!</h3>
+    <p>ಕೆಳಗಿನ ಪ್ರತಿ ಸನ್ನಿವೇಶದಲ್ಲಿ ಯಾವ ಕ್ರಿಯೆ ಸರಿ ಮತ್ತು ಯಾವುದು ತಪ್ಪು ಎಂದು ಹೇಳಿ!</p>
+  </div>
+
+  <div class="sort-card">
+    <h3>ನಾಯಿಯನ್ನು ಹೊಡೆಯಬಹುದೇ?</h3>
+    <div class="img-grid" id="good1">
+      <div class="img-opt" onclick="checkOddOne(this,'good1',false)">
+        <span class="img-emoji">😡</span>
+        <div class="img-label">ಹೌದು, ಹೊಡೆಯಿರಿ</div>
+      </div>
+      <div class="img-opt" onclick="checkOddOne(this,'good1',true)">
+        <span class="img-emoji">❤️</span>
+        <div class="img-label">ಇಲ್ಲ, ಪ್ರೀತಿಯಿಂದ ನೋಡಿ</div>
+      </div>
+    </div>
+    <div class="fb-box" id="fb-good1"></div>
+  </div>
+
+  <div class="sort-card">
+    <h3>ಹಸುವಿಗೆ ಆಹಾರ ಹಾಕಬೇಕೇ?</h3>
+    <div class="img-grid" id="good2">
+      <div class="img-opt" onclick="checkOddOne(this,'good2',true)">
+        <span class="img-emoji">🌾</span>
+        <div class="img-label">ಹೌದು, ಆಹಾರ ನೀಡಿ</div>
+      </div>
+      <div class="img-opt" onclick="checkOddOne(this,'good2',false)">
+        <span class="img-emoji">🚫</span>
+        <div class="img-label">ಇಲ್ಲ, ಬೇಡ</div>
+      </div>
+    </div>
+    <div class="fb-box" id="fb-good2"></div>
+  </div>
+
+  <div class="sort-card">
+    <h3>ಪ್ರಾಣಿಗೆ ಕಾಯಿಲೆ ಬಂದರೆ?</h3>
+    <div class="img-grid" id="good3">
+      <div class="img-opt" onclick="checkOddOne(this,'good3',false)">
+        <span class="img-emoji">🚶</span>
+        <div class="img-label">ಗಮನ ಕೊಡಬೇಡ</div>
+      </div>
+      <div class="img-opt" onclick="checkOddOne(this,'good3',true)">
+        <span class="img-emoji">🏥</span>
+        <div class="img-label">ವೈದ್ಯರ ಬಳಿ ಕರೆದುಕೊಂಡು ಹೋಗಿ</div>
+      </div>
+    </div>
+    <div class="fb-box" id="fb-good3"></div>
+  </div>
+
+  <div class="sort-card">
+    <h3>ಪಕ್ಷಿಗಳಿಗೆ ಕಾಳು ಹಾಕಬಹುದೇ?</h3>
+    <div class="img-grid" id="good4">
+      <div class="img-opt" onclick="checkOddOne(this,'good4',true)">
+        <span class="img-emoji">🌾</span>
+        <div class="img-label">ಹೌದು, ಕಾಳು ಹಾಕಿ</div>
+      </div>
+      <div class="img-opt" onclick="checkOddOne(this,'good4',false)">
+        <span class="img-emoji">🪨</span>
+        <div class="img-label">ಇಲ್ಲ, ಕಲ್ಲು ಎಸೆಯಿರಿ</div>
+      </div>
+    </div>
+    <div class="fb-box" id="fb-good4"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-good" disabled onclick="unlockNext('good','quiz')">ಮುಂದೆ ➜ Quiz 🏆</button>
+</div>
+
+<!-- ═══ TAB 6: QUIZ ═══ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff9c4,#fff59d);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#f57f17;">ಅಂತಿಮ ಪ್ರಶ್ನೋತ್ತರ!</div>
+      <div class="banner-sub" style="color:#f9a825;">Final Quiz — ಉತ್ತರ ಆರಿಸಿ!</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="fq1">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 1 of 5</div>
+      <div class="scene-sentence">ಸಾಕು ಪ್ರಾಣಿ ಯಾವುದು? <span class="kw">🏡</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'fq1',true)">🐄 ಹಸು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq1',false)">🦁 ಸಿಂಹ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq1',false)">🐯 ಹುಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-fq1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="fq2">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 2 of 5</div>
+      <div class="scene-sentence">ಕಾಡು ಪ್ರಾಣಿ ಯಾವುದು? <span class="kw">🌲</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'fq2',false)">🐕 ನಾಯಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq2',false)">🐓 ಕೋಳಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq2',true)">🦌 ಜಿಂಕೆ</div>
+      </div>
+      <div class="fb-box" id="fb-fq2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="fq3">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 3 of 5</div>
+      <div class="scene-sentence">ಕಮಲಳ ಸಾಕು ಪ್ರಾಣಿ ಯಾವುದು? <span class="kw">❤️</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'fq3',true)">🐰 ಮೊಲ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq3',false)">🐱 ಬೆಕ್ಕು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq3',false)">🕊️ ಪಾರಿವಾಳ</div>
+      </div>
+      <div class="fb-box" id="fb-fq3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="fq4">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 4 of 5</div>
+      <div class="scene-sentence">ಕುರಿಯಿಂದ ಏನು ದೊರೆಯುತ್ತದೆ? <span class="kw">🐑</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'fq4',false)">🥚 ಮೊಟ್ಟೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq4',true)">🧥 ಉಣ್ಣೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq4',false)">🍯 ಜೇನು</div>
+      </div>
+      <div class="fb-box" id="fb-fq4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="fq5">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 5 of 5</div>
+      <div class="scene-sentence">ನಾವು ಪ್ರಾಣಿಗಳನ್ನು ಹೇಗೆ ನೋಡಿಕೊಳ್ಳಬೇಕು? <span class="kw">💖</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'fq5',false)">😡 ಕ್ರೂರವಾಗಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq5',true)">❤️ ಪ್ರೀತಿಯಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'fq5',false)">😴 ನಿರ್ಲಕ್ಷ್ಯದಿಂದ</div>
+      </div>
+      <div class="fb-box" id="fb-fq5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">ಪಾಠ ಮುಗಿಸಿ! 🎉</button>
+</div>
+
+</div><!-- end content -->
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">ಅದ್ಭುತ! ನೀನು ಗೆದ್ದೆ!</div>
+  <div class="celeb-stars">⭐⭐⭐</div>
+  <div class="celeb-sub">ಪಾಠ 2 — ಪ್ರಾಣಿ ಪಾಲನೆ<br>ಪ್ರಾಣಿಗಳನ್ನು ಪ್ರೀತಿಯಿಂದ ನೋಡಿಕೊಳ್ಳಿ! 🐾❤️</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">ಮತ್ತೆ ಆಡಿ 🔄</button>
+</div>
+
+<script>
+// ── STATE ──
+const tabOrder = ['story','types','uses','care','good','quiz'];
+const tabDoneMap = {story:false, types:false, uses:false, care:false, good:false, quiz:false};
+const panelQuestions = {
+  story: ['sc_s1','sc_s2','sc_s3'],
+  types: ['sc_t1','sc_t2','sc_t3'],
+  uses: ['sc_u1','sc_u2','sc_u3'],
+  care: ['sc_c1','sc_c2','sc_c3'],
+  good: ['good1','good2','good3','good4'],
+  quiz: ['fq1','fq2','fq3','fq4','fq5']
+};
+const panelAnswered = {story:new Set(), types:new Set(), uses:new Set(), care:new Set(), good:new Set(), quiz:new Set()};
+let stars = 0;
+
+function addStar(n=1){stars+=n;document.getElementById('starsNum').textContent=stars;}
+
+// ── TABS ──
+function selectTab(name){
+  document.querySelectorAll('.step-tab').forEach(t=>{
+    const tn = t.dataset.tab;
+    t.className = 'step-tab' + (tn===name?' active': tabDoneMap[tn]?' done':' locked');
+  });
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  updateProgress();
+}
+
+document.querySelectorAll('.step-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const name = tab.dataset.tab;
+    if(tab.classList.contains('locked')){
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'),500);
+      const t = document.getElementById('lockToast');
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),2000);
+      return;
+    }
+    selectTab(name);
+  });
+});
+
+function unlockNext(current, next){
+  tabDoneMap[current]=true;
+  const nextTab = document.querySelector(`.step-tab[data-tab="${next}"]`);
+  if(nextTab) nextTab.classList.remove('locked');
+  selectTab(next);
+  addStar(2);
+}
+
+function updateProgress(){
+  const done = Object.values(tabDoneMap).filter(Boolean).length;
+  const pct = Math.round(done/tabOrder.length*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progLabel').textContent = pct===100 ? 'ಪಾಠ ಪೂರ್ಣ! 🎉' : `ಪ್ರಗತಿ: ${pct}% ಮುಗಿದಿದೆ`;
+}
+
+// ── CHOICE BUTTONS ──
+function checkChoice(el, cardId, isCorrect){
+  const card = document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const fb = document.getElementById('fb-'+cardId);
+  const allBtns = card.querySelectorAll('.choice-btn');
+  allBtns.forEach(b=>b.classList.add('locked-choice'));
+  if(isCorrect){
+    el.classList.add('correct');
+    fb.className='fb-box ok'; fb.textContent='✅ ಭಲೇ! ಸರಿಯಾದ ಉತ್ತರ!';
+    card.classList.add('done');
+    addStar(1);
+    const tabName = findTabForCard(cardId);
+    if(tabName) panelAnswered[tabName].add(cardId);
+    checkTabComplete(tabName);
+  } else {
+    el.classList.add('wrong');
+    fb.className='fb-box no'; fb.textContent='❌ ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ!';
+    setTimeout(()=>{
+      allBtns.forEach(b=>b.classList.remove('locked-choice','wrong','correct'));
+      fb.className='fb-box'; fb.textContent='';
+    },1200);
+  }
+}
+
+function findTabForCard(cardId){
+  for(const [tab, cards] of Object.entries(panelQuestions)){
+    if(cards.includes(cardId)) return tab;
+  }
+  return null;
+}
+
+function checkOddOne(el, groupId, isCorrect){
+  const group = document.getElementById(groupId);
+  if(group.dataset.done) return;
+  const fb = document.getElementById('fb-'+groupId);
+  const allOpts = group.querySelectorAll('.img-opt');
+  allOpts.forEach(o=>o.classList.add('locked-choice'));
+  if(isCorrect){
+    el.classList.add('correct');
+    fb.className='fb-box ok'; fb.textContent='✅ ಭಲೇ!';
+    group.dataset.done='1';
+    addStar(1);
+    const tabName = findTabForCard(groupId);
+    if(tabName) panelAnswered[tabName].add(groupId);
+    checkTabComplete(tabName);
+  } else {
+    el.classList.add('wrong');
+    fb.className='fb-box no'; fb.textContent='❌ ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ!';
+    setTimeout(()=>{
+      allOpts.forEach(o=>o.classList.remove('locked-choice','wrong','correct'));
+      fb.className='fb-box'; fb.textContent='';
+    },1200);
+  }
+}
+
+function checkTabComplete(tabName){
+  if(!tabName) return;
+  const required = panelQuestions[tabName];
+  const answered = panelAnswered[tabName];
+  const btnMap = {story:'btn-story',types:'btn-types',uses:'btn-uses',care:'btn-care',good:'btn-good',quiz:'btn-quiz'};
+  if(required.every(c=>answered.has(c))){
+    const btn = document.getElementById(btnMap[tabName]);
+    if(btn) btn.disabled=false;
+  }
+}
+
+// ── TYPE SORT ──
+const typeAnswers = {td_cow:'domestic',td_dog:'domestic',td_hen:'domestic',td_tiger:'wild',td_lion:'wild',td_elephant:'wild'};
+let typeSorted = 0;
+function typeSort(id, selected){
+  const el = document.getElementById(id);
+  if(el.classList.contains('matched')) return;
+  const correct = typeAnswers[id];
+  const fb = document.getElementById('match-fb-type');
+  if(selected === correct){
+    el.classList.add('matched');
+    el.style.background = correct==='domestic'?'#c8e6c9':'#ffcdd2';
+    el.style.borderColor = correct==='domestic'?'#2e7d32':'#c62828';
+    typeSorted++;
+    addStar(1);
+    fb.className='match-fb ok';
+    fb.textContent = correct==='domestic' ? '✅ ಸರಿ! ಇದು ಸಾಕು ಪ್ರಾಣಿ!' : '✅ ಸರಿ! ಇದು ಕಾಡು ಪ್ರಾಣಿ!';
+    if(typeSorted===6) fb.textContent='🎉 ಎಲ್ಲಾ ಸರಿ!';
+  } else {
+    el.style.background='#ffcdd2';
+    fb.className='match-fb no'; fb.textContent='❌ ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ!';
+    setTimeout(()=>{
+      el.style.background=''; fb.className='match-fb'; fb.textContent='';
+    },1000);
+  }
+}
+
+// ── TICK ITEMS ──
+function tickIt(el){
+  el.classList.toggle('ticked');
+}
+
+function showCelebration(){
+  document.getElementById('celebScreen').classList.add('show');
+  addStar(5);
+  updateProgress();
+}
+</script>
+</body>
+</html>

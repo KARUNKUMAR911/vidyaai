@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — ಪಾಠ 3: ಹಿತ್ತಲ ಗಿಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Noto+Sans+Kannada:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#f1faf0;min-height:100vh;overflow-x:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32,#43a047);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(27,94,32,.4);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:16px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#1b5e20,#2e7d32,#66bb6a);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:20px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.2);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+/* ── PROGRESS ── */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#2e7d32,#66bb6a);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* ── TABS ── */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32;box-shadow:0 4px 14px rgba(46,125,50,.5);}
+.step-tab.done{background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* ── TOAST ── */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1b5e20;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── CONTENT ── */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LESSON BANNER ── */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* ── TEACH CARD ── */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #2e7d32;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#2e7d32;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;margin-bottom:4px;}
+.hl{color:#1b5e20;font-size:15px;}
+
+/* ── PLANT VISUAL ── */
+.plant-visual{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);text-align:center;}
+.plant-visual svg{max-width:280px;width:100%;}
+.part-label{display:inline-block;background:#e8f5e9;border:2px solid #a5d6a7;color:#1b5e20;border-radius:12px;padding:6px 14px;font-family:'Baloo 2',cursive;font-size:14px;font-weight:900;margin:4px;}
+
+/* ── CHOICE CARDS ── */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#a5d6a7;background:#e8f5e9;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:16px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#2e7d32;font-size:18px;}
+.scene-bottom{border-top:2px dashed #a5d6a7;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:60px;padding:13px 8px;border-radius:16px;border:3px solid #a5d6a7;background:#e8f5e9;font-family:'Baloo 2',cursive;font-size:15px;color:#2e7d32;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-weight:900;line-height:1.3;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* ── MATCH GAME ── */
+.match-section{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.match-section h3{font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;margin-bottom:12px;text-align:center;}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.match-col-title{font-family:'Baloo 2',cursive;font-size:13px;color:#666;font-weight:900;text-align:center;margin-bottom:8px;}
+.match-item{background:#e8f5e9;border:3px solid #a5d6a7;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;font-family:'Baloo 2',cursive;font-size:15px;color:#1b5e20;margin-bottom:8px;transition:all .2s;user-select:none;font-weight:900;}
+.match-item:active{transform:scale(.95);}
+.match-item.selected{background:#2e7d32;color:#fff;border-color:#1b5e20;}
+.match-item.matched{background:#c8e6c9;color:#1b5e20;border-color:#2e7d32;pointer-events:none;}
+.match-item.error{background:#ffcdd2;color:#c62828;border-color:#c62828;}
+.match-fb{text-align:center;font-size:14px;font-weight:900;margin-top:8px;padding:8px;border-radius:12px;}
+.match-fb.ok{background:#c8e6c9;color:#1b5e20;}
+.match-fb.no{background:#ffcdd2;color:#c62828;}
+
+/* ── SORT CARD ── */
+.sort-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.sort-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;margin-bottom:10px;text-align:center;}
+.sort-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.sort-col{background:#f1faf0;border-radius:14px;padding:10px 6px;border:2px solid #a5d6a7;}
+.sort-col-head{font-family:'Baloo 2',cursive;font-size:13px;color:#1b5e20;font-weight:900;text-align:center;margin-bottom:8px;}
+.sort-drop{min-height:40px;border:2px dashed #a5d6a7;border-radius:10px;padding:4px;}
+.sort-drop .placed{background:#c8e6c9;color:#1b5e20;border:2px solid #2e7d32;border-radius:8px;padding:6px 4px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:900;text-align:center;margin-bottom:4px;}
+.sort-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px;}
+.sort-item{background:#fff3e0;border:3px solid #ffb300;color:#e65100;border-radius:14px;padding:10px 14px;font-family:'Baloo 2',cursive;font-size:14px;cursor:pointer;font-weight:900;transition:all .2s;user-select:none;}
+.sort-item:active{transform:scale(.93);}
+.sort-item.placed-away{opacity:.4;pointer-events:none;}
+.sort-fb{text-align:center;font-size:13px;font-weight:900;padding:8px;border-radius:12px;display:none;margin-top:6px;}
+.sort-fb.show{display:block;}
+.sort-fb.ok{background:#c8e6c9;color:#1b5e20;}
+.sort-fb.no{background:#ffcdd2;color:#c62828;}
+
+/* ── IMAGE CHOOSE ── */
+.img-choose{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.img-choose h3{font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;margin-bottom:10px;text-align:center;}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.img-opt{border-radius:16px;border:3px solid #a5d6a7;background:#e8f5e9;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s;user-select:none;}
+.img-opt:active{transform:scale(.95);}
+.img-opt .img-emoji{font-size:42px;display:block;margin-bottom:6px;}
+.img-opt .img-label{font-family:'Baloo 2',cursive;font-size:14px;color:#1b5e20;font-weight:900;}
+.img-opt.correct{border-color:#2e7d32;background:#c8e6c9;}
+.img-opt.wrong{border-color:#c62828;background:#ffcdd2;}
+.img-opt.locked-choice{pointer-events:none;}
+
+/* ── COLOR MATCH ── */
+.color-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.color-swatch{width:44px;height:44px;border-radius:50%;border:3px solid rgba(0,0,0,.1);flex-shrink:0;}
+.color-q{font-family:'Baloo 2',cursive;font-size:14px;color:#333;font-weight:900;flex:1;}
+.color-opts{display:flex;gap:6px;flex-wrap:wrap;}
+.color-opt{padding:8px 12px;border-radius:10px;border:3px solid #a5d6a7;background:#e8f5e9;font-family:'Baloo 2',cursive;font-size:13px;color:#1b5e20;cursor:pointer;font-weight:900;transition:all .2s;}
+.color-opt.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.color-opt.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.color-opt.locked-choice{pointer-events:none;}
+
+/* ── INFO STRIP ── */
+.info-strip{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #a5d6a7;}
+.info-strip p{font-size:14px;font-weight:800;color:#1b5e20;line-height:1.7;}
+
+.rule-box{background:#fff;border:3px solid #2e7d32;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:15px;color:#2e7d32;font-weight:900;line-height:1.7;}
+
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#2e7d32;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* ── BIG BTN ── */
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* ── CELEB ── */
+.celeb-screen{position:fixed;inset:0;background:rgba(27,94,32,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:28px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:15px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#1b5e20;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+
+/* ── POEM CARD ── */
+.poem-card{background:linear-gradient(135deg,#e8f5e9,#f1faf0);border:3px solid #a5d6a7;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.poem-card .poem-line{font-family:'Baloo 2',cursive;font-size:15px;color:#1b5e20;font-weight:900;line-height:2.2;text-align:center;}
+.poem-card .poem-line .kw-poem{color:#2e7d32;font-size:17px;}
+
+/* ── PARTS LABEL VISUAL ── */
+.parts-plant{display:flex;flex-direction:column;align-items:center;gap:6px;margin:12px 0;}
+.part-row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:12px 16px;width:100%;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.part-emoji-big{font-size:36px;width:50px;text-align:center;}
+.part-info{flex:1;}
+.part-name{font-family:'Baloo 2',cursive;font-size:16px;color:#1b5e20;font-weight:900;}
+.part-desc{font-size:12px;color:#666;font-weight:800;margin-top:2px;}
+
+/* ── QUIZ RESULT ── */
+.result-card{background:#fff;border-radius:20px;padding:20px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.08);margin-bottom:12px;}
+.result-emoji{font-size:60px;display:block;margin-bottom:8px;}
+.result-score{font-family:'Baloo 2',cursive;font-size:32px;color:#2e7d32;font-weight:900;}
+.result-msg{font-size:14px;font-weight:800;color:#555;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-title">🌿 ಪಾಠ 3 — ಹಿತ್ತಲ ಗಿಡ</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🌱</span>
+  <h1>Class 2 EVS · ಪಾಠ 3</h1>
+  <p>ಹಿತ್ತಲ ಗಿಡ — Plants Around Us!</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Step 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="parts">🌿 ಸಸ್ಯದ ಭಾಗಗಳು</div>
+  <div class="step-tab locked" data-tab="types">🌳 ಬಗೆ ಬಗೆ ಸಸ್ಯ</div>
+  <div class="step-tab locked" data-tab="stems">🪵 ಕಾಂಡ</div>
+  <div class="step-tab locked" data-tab="leaves">🍃 ಎಲೆಗಳು</div>
+  <div class="step-tab locked" data-tab="flowers">🌸 ಹೂಗಳು</div>
+  <div class="step-tab locked" data-tab="poem">🎵 ಹಾಡು</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div class="content">
+
+<!-- ═══ TAB 1: PARTS OF A PLANT ═══ -->
+<div class="tab-panel active" id="panel-parts">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🌿</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಸಸ್ಯದ ಮುಖ್ಯ ಭಾಗಗಳು</div>
+      <div class="banner-sub" style="color:#2e7d32;">Parts of a Plant</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌱 ಸಸ್ಯದ 6 ಮುಖ್ಯ ಭಾಗಗಳು!</h3>
+    <p>ಪ್ರತಿ ಸಸ್ಯಕ್ಕೆ ಆರು ಮುಖ್ಯ ಭಾಗಗಳಿವೆ. ಇವೆಲ್ಲ ಸೇರಿ ಸಸ್ಯ ಬೆಳೆಯುತ್ತದೆ!</p>
+  </div>
+
+  <!-- Visual plant parts -->
+  <div class="parts-plant">
+    <div class="part-row">
+      <div class="part-emoji-big">🌸</div>
+      <div class="part-info">
+        <div class="part-name">ಹೂ (Flower)</div>
+        <div class="part-desc">ಸಸ್ಯದ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಅರಳುತ್ತದೆ</div>
+      </div>
+    </div>
+    <div class="part-row">
+      <div class="part-emoji-big">🍎</div>
+      <div class="part-info">
+        <div class="part-name">ಹಣ್ಣುಗಳು (Fruit)</div>
+        <div class="part-desc">ಹೂ ಉದುರಿದ ನಂತರ ಬರುತ್ತದೆ</div>
+      </div>
+    </div>
+    <div class="part-row">
+      <div class="part-emoji-big">🍃</div>
+      <div class="part-info">
+        <div class="part-name">ಎಲೆ (Leaf)</div>
+        <div class="part-desc">ಕಾಂಡಕ್ಕೆ ಅಂಟಿರುತ್ತದೆ, ಹಸಿರಾಗಿರುತ್ತದೆ</div>
+      </div>
+    </div>
+    <div class="part-row">
+      <div class="part-emoji-big">🌿</div>
+      <div class="part-info">
+        <div class="part-name">ಕೊಂಬೆ (Branch)</div>
+        <div class="part-desc">ಕಾಂಡದಿಂದ ಹೊರಬರುತ್ತದೆ</div>
+      </div>
+    </div>
+    <div class="part-row">
+      <div class="part-emoji-big">🪵</div>
+      <div class="part-info">
+        <div class="part-name">ಕಾಂಡ (Stem)</div>
+        <div class="part-desc">ಸಸ್ಯವನ್ನು ನಿಲ್ಲಿಸಿಕೊಂಡಿರುತ್ತದೆ</div>
+      </div>
+    </div>
+    <div class="part-row">
+      <div class="part-emoji-big">🌾</div>
+      <div class="part-info">
+        <div class="part-name">ಬೇರು (Root)</div>
+        <div class="part-desc">ನೆಲದ ಒಳಗಿರುತ್ತದೆ, ನೀರು ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಬೇರು · ಕಾಂಡ · ಕೊಂಬೆ · ಎಲೆ · ಹೂ · ಹಣ್ಣುಗಳು<br>ಸಸ್ಯದ ಮುಖ್ಯ ಭಾಗಗಳು 🌱</div>
+  </div>
+
+  <div class="section-divider">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc_p1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 5</div>
+      <div class="scene-sentence">ಸಸ್ಯದ ಯಾವ ಭಾಗ ನೆಲದ ಒಳಗಿರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p1',false)">🍃 ಎಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p1',true)">🌾 ಬೇರು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p1',false)">🌸 ಹೂ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc_p2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 5</div>
+      <div class="scene-sentence">ಸಸ್ಯವನ್ನು ನಿಲ್ಲಿಸಿಕೊಂಡಿರುವ ಭಾಗ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p2',false)">🍎 ಹಣ್ಣು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p2',true)">🪵 ಕಾಂಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p2',false)">🌸 ಹೂ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc_p3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 5</div>
+      <div class="scene-sentence">ಹೂ ಉದುರಿದ ನಂತರ ಏನು ಬರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p3',false)">🍃 ಎಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p3',false)">🌾 ಬೇರು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p3',true)">🍎 ಹಣ್ಣು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc_p4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 5</div>
+      <div class="scene-sentence">ಸಾಮಾನ್ಯವಾಗಿ ಎಲೆಗಳ ಬಣ್ಣ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p4',false)">🔴 ಕೆಂಪು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p4',true)">🟢 ಹಸಿರು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p4',false)">🔵 ನೀಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="sc_p5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5 of 5</div>
+      <div class="scene-sentence">ಕಾಂಡದಿಂದ ಹೊರಬರುವ ಭಾಗ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p5',true)">🌿 ಕೊಂಬೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p5',false)">🌾 ಬೇರು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p5',false)">🍎 ಹಣ್ಣು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-parts" disabled onclick="completeTab('parts','types','btn-parts')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 2: TYPES OF PLANTS ═══ -->
+<div class="tab-panel" id="panel-types">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">🌳</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಬಗೆ ಬಗೆ ಸಸ್ಯಗಳು</div>
+      <div class="banner-sub" style="color:#bf360c;">ವಿಡ · ಮರ · ಬಳ್ಳಿ</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌿 ಮೂರು ಬಗೆ ಸಸ್ಯಗಳು!</h3>
+    <p><span class="hl">🌱 ಗಿಡ (Plant)</span> — ಸಣ್ಣ ಗಾತ್ರ, ಮೃದು ಕಾಂಡ</p>
+    <p><span class="hl">🌳 ಮರ (Tree)</span> — ದೊಡ್ಡ ಗಾತ್ರ, ಎತ್ತರ, ಗಟ್ಟಿ ಕಾಂಡ</p>
+    <p><span class="hl">🍇 ಬಳ್ಳಿ (Creeper)</span> — ಉದ್ದ ಕಾಂಡ, ಆಧಾರ ಬೇಕು</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಸಣ್ಣ ಗಾತ್ರ = <span style="color:#43a047">ಗಿಡ 🌱</span><br>ದೊಡ್ಡ ಎತ್ತರ = <span style="color:#795548">ಮರ 🌳</span><br>ಹಬ್ಬಿಕೊಳ್ಳುವುದು = <span style="color:#e65100">ಬಳ್ಳಿ 🍇</span></div>
+  </div>
+
+  <div class="section-divider">— ಯಾವ ಸಸ್ಯ ಗುರುತಿಸಿ! 🎮 —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc_t1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 5</div>
+      <div class="scene-sentence">ಮಾವು ಮರ — ಇದು ಏನು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',false)">🌱 ಗಿಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',true)">🌳 ಮರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t1',false)">🍇 ಬಳ್ಳಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc_t2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 5</div>
+      <div class="scene-sentence">ದ್ರಾಕ್ಷಿ (Grapes) — ಇದು ಏನು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',false)">🌱 ಗಿಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',false)">🌳 ಮರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t2',true)">🍇 ಬಳ್ಳಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc_t3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 5</div>
+      <div class="scene-sentence">ತೆಂಗಿನ ಮರ — ಇದು ಏನು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',false)">🌱 ಗಿಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',true)">🌳 ಮರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t3',false)">🍇 ಬಳ್ಳಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc_t4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 5</div>
+      <div class="scene-sentence">ಹಾಗಲಕಾಯಿ ಸಸ್ಯ — ಇದು ಏನು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t4',false)">🌱 ಗಿಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t4',false)">🌳 ಮರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t4',true)">🍇 ಬಳ್ಳಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="sc_t5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5 of 5</div>
+      <div class="scene-sentence">ಬಳ್ಳಿಗೆ ಬೆಳೆಯಲು ಏನು ಬೇಕು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t5',false)">🌧️ ಮಳೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t5',true)">🪵 ಆಧಾರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_t5',false)">☀️ ಬೆಳಕು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_t5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-types" disabled onclick="completeTab('types','stems','btn-types')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 3: STEMS ═══ -->
+<div class="tab-panel" id="panel-stems">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#efebe9,#d7ccc8);">
+    <span class="banner-emoji">🪵</span>
+    <div>
+      <div class="banner-title" style="color:#4e342e;">ಕಾಂಡಗಳು</div>
+      <div class="banner-sub" style="color:#6d4c41;">Stems — ಆಕಾರ, ಗಾತ್ರ, ಬಣ್ಣ</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🪵 ಕಾಂಡಗಳ ವ್ಯತ್ಯಾಸ!</h3>
+    <p>ಸಸ್ಯಗಳ ಕಾಂಡಗಳ <span class="hl">ಆಕಾರ, ಗಾತ್ರ, ಬಣ್ಣ</span>ಗಳಲ್ಲಿ ವ್ಯತ್ಯಾಸ ಇದೆ.</p>
+    <p>ಕೆಲವು ಕಾಂಡ <span class="hl">ಸಣ್ಣ</span>, ಕೆಲವು <span class="hl">ದಪ್ಪ</span>, ಕೆಲವು <span class="hl">ಉದ್ದ</span>!</p>
+  </div>
+
+  <!-- stem examples -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+    <div style="background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #d7ccc8;">
+      <div style="font-size:40px;margin-bottom:6px;">🌴</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:13px;color:#4e342e;font-weight:900;">ತೆಂಗಿನ ಮರ<br><span style="font-size:11px;color:#888;">ದೊಡ್ಡ, ಉದ್ದ ಕಾಂಡ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #d7ccc8;">
+      <div style="font-size:40px;margin-bottom:6px;">🍅</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:13px;color:#4e342e;font-weight:900;">ಟಮ್ಯಾಟೋ ಗಿಡ<br><span style="font-size:11px;color:#888;">ಸಣ್ಣ, ಮೃದು ಕಾಂಡ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #d7ccc8;">
+      <div style="font-size:40px;margin-bottom:6px;">🎍</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:13px;color:#4e342e;font-weight:900;">ಬಿದಿರು<br><span style="font-size:11px;color:#888;">ಉದ್ದ, ತೆಳ್ಳನೆ ಕಾಂಡ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #d7ccc8;">
+      <div style="font-size:40px;margin-bottom:6px;">🍇</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:13px;color:#4e342e;font-weight:900;">ದ್ರಾಕ್ಷಿ ಬಳ್ಳಿ<br><span style="font-size:11px;color:#888;">ಉದ್ದ, ಮೃದು ಕಾಂಡ</span></div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಸಸ್ಯಗಳ ಕಾಂಡಗಳ ಆಕಾರ, ಗಾತ್ರ,<br>ಬಣ್ಣಗಳಲ್ಲಿ ವ್ಯತ್ಯಾಸ ಇದೆ 🪵</div>
+  </div>
+
+  <div class="section-divider">— ಕಾಂಡ ಗುರುತಿಸಿ! 🎮 —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc_s1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 4</div>
+      <div class="scene-sentence">ದ್ರಾಕ್ಷಿ ಬಳ್ಳಿಯ ಕಾಂಡ ಹೇಗಿರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',false)">ಗಟ್ಟಿ ದಪ್ಪ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',true)">ಉದ್ದ ಮೃದು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s1',false)">ಚಿಕ್ಕ ಮೃದು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc_s2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 4</div>
+      <div class="scene-sentence">ಯಾವ ಸಸ್ಯಕ್ಕೆ ದೊಡ್ಡ ಎತ್ತರದ ಕಾಂಡ ಇರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',false)">🍅 ಟಮ್ಯಾಟೋ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',true)">🌴 ತೆಂಗಿನ ಮರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s2',false)">🌸 ಗುಲಾಬಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc_s3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 4</div>
+      <div class="scene-sentence">ಮರದ ಕಾಂಡ ಹೇಗಿರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',false)">ಮೃದು, ಸಣ್ಣ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',true)">ಗಟ್ಟಿ, ದಪ್ಪ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s3',false)">ತೆಳ್ಳಗೆ, ಉದ್ದ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc_s4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 4</div>
+      <div class="scene-sentence">ಪಡವಲಕಾಯಿ ಸಸ್ಯ ಯಾವ ರೀತಿ ಬೆಳೆಯುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s4',false)">ನಿಟ್ಟಾಗಿ ಮೇಲಕ್ಕೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s4',true)">ಹಬ್ಬಿಕೊಳ್ಳುತ್ತ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_s4',false)">ನೆಲದ ಮೇಲೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_s4"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-stems" disabled onclick="completeTab('stems','leaves','btn-stems')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 4: LEAVES ═══ -->
+<div class="tab-panel" id="panel-leaves">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🍃</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಎಲೆಗಳು</div>
+      <div class="banner-sub" style="color:#2e7d32;">Leaves — ಆಕಾರ, ಗಾತ್ರ, ಬಣ್ಣ</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🍃 ಎಲೆಗಳ ವ್ಯತ್ಯಾಸ!</h3>
+    <p>ಕೆಲವು ಎಲೆಗಳು <span class="hl">ಚಿಕ್ಕ</span>ದಾಗಿರುತ್ತವೆ. ಕೆಲವು <span class="hl">ದೊಡ್ಡ</span>ದಾಗಿರುತ್ತವೆ.</p>
+    <p>ಆಕಾರವೂ <span class="hl">ಬೇರೆ ಬೇರೆ</span>. ಸಾಮಾನ್ಯವಾಗಿ ಎಲ್ಲ ಎಲೆಗಳ ಬಣ್ಣ <span class="hl">ಹಸಿರು</span>!</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0;">
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #a5d6a7;">
+      <div style="font-size:36px;">🍃</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#1b5e20;font-weight:900;margin-top:4px;">ಮಾವಿನ ಎಲೆ<br><span style="font-size:10px;color:#888;">ಉದ್ದ, ತೆಳ್ಳಗೆ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #a5d6a7;">
+      <div style="font-size:36px;">🌿</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#1b5e20;font-weight:900;margin-top:4px;">ಬಾಳೆ ಎಲೆ<br><span style="font-size:10px;color:#888;">ದೊಡ್ಡ, ಅಗಲ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #a5d6a7;">
+      <div style="font-size:36px;">☘️</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#1b5e20;font-weight:900;margin-top:4px;">ತುಳಸಿ ಎಲೆ<br><span style="font-size:10px;color:#888;">ಚಿಕ್ಕ, ದುಂಡಗೆ</span></div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಕೆಲವು ಎಲೆ ಚಿಕ್ಕ, ಕೆಲವು ದೊಡ್ಡ.<br>ಆಕಾರ ಬೇರೆ. ಬಣ್ಣ ಹಸಿರು! 🍃</div>
+  </div>
+
+  <div class="section-divider">— ಎಲೆ ಗುರುತಿಸಿ! 🎮 —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc_l1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 4</div>
+      <div class="scene-sentence">ಸಾಮಾನ್ಯವಾಗಿ ಎಲೆಗಳ ಬಣ್ಣ ಹೇಗಿರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l1',false)">🟡 ಹಳದಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l1',true)">🟢 ಹಸಿರು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l1',false)">🔴 ಕೆಂಪು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_l1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc_l2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 4</div>
+      <div class="scene-sentence">ಬಾಳೆ ಎಲೆ ಹೇಗಿರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l2',false)">ಚಿಕ್ಕ, ತೆಳ್ಳಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l2',true)">ದೊಡ್ಡ, ಅಗಲ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l2',false)">ಮುಳ್ಳು ಮುಳ್ಳು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_l2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc_l3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 4</div>
+      <div class="scene-sentence">ಎಲ್ಲ ಎಲೆಗಳ ಆಕಾರ ಒಂದೇ ರೀತಿ ಇರುತ್ತದೆಯೇ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l3',false)">ಹೌದು, ಒಂದೇ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l3',true)">ಇಲ್ಲ, ಬೇರೆ ಬೇರೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_l3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc_l4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 4</div>
+      <div class="scene-sentence">ತುಳಸಿ ಎಲೆ ಹೇಗಿರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l4',false)">ದೊಡ್ಡ, ಅಗಲ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l4',true)">ಚಿಕ್ಕ, ದುಂಡಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_l4',false)">ಉದ್ದ, ತೆಳ್ಳಗೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_l4"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-leaves" disabled onclick="completeTab('leaves','flowers','btn-leaves')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 5: FLOWERS ═══ -->
+<div class="tab-panel" id="panel-flowers">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">🌸</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಹೂಗಳು</div>
+      <div class="banner-sub" style="color:#ad1457;">Flowers — ಬಣ್ಣ ಬಣ್ಣ ಹೂಗಳು!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌸 ಹೂಗಳ ಬಣ್ಣ ಅನೇಕ!</h3>
+    <p>ಹೂಗಳ ಬಣ್ಣ <span class="hl">ಅನೇಕ</span>. ಕೆಂಪು, ನೀಲಿ, ಬಿಳಿ, ಹಳದಿ ಹೀಗೆ ಹಲವಾರು!</p>
+    <p>ಮಲ್ಲಿಗೆ, ಜಾಜಿ, ಸಂಪಿಗೆ ಹೂಗಳು <span class="hl">ಪರಿಮಳ</span> ಹರಡುತ್ತವೆ.</p>
+  </div>
+
+  <!-- flower gallery -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0;">
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #f48fb1;">
+      <div style="font-size:36px;">🌹</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#880e4f;font-weight:900;">ಗುಲಾಬಿ<br><span style="font-size:10px;color:#888;">ಕೆಂಪು</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #f48fb1;">
+      <div style="font-size:36px;">🌻</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#880e4f;font-weight:900;">ಸೂರ್ಯಕಾಂತಿ<br><span style="font-size:10px;color:#888;">ಹಳದಿ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #f48fb1;">
+      <div style="font-size:36px;">🏵️</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#880e4f;font-weight:900;">ಚೆಂಡು ಹೂ<br><span style="font-size:10px;color:#888;">ಕಿತ್ತಳೆ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #f48fb1;">
+      <div style="font-size:36px;">💐</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#880e4f;font-weight:900;">ಮಲ್ಲಿಗೆ<br><span style="font-size:10px;color:#888;">ಬಿಳಿ</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #f48fb1;">
+      <div style="font-size:36px;">🌺</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#880e4f;font-weight:900;">ದಾಸವಾಳ<br><span style="font-size:10px;color:#888;">ಕೆಂಪು</span></div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:2px solid #f48fb1;">
+      <div style="font-size:36px;">🪷</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:12px;color:#880e4f;font-weight:900;">ತಾವರೆ<br><span style="font-size:10px;color:#888;">ಗುಲಾಬಿ</span></div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಹೂಗಳ ಬಣ್ಣ ಅನೇಕ 🌸<br>ಕೆಂಪು · ನೀಲಿ · ಬಿಳಿ · ಹಳದಿ ಹೀಗೆ ಹಲವಾರು</div>
+  </div>
+
+  <div class="section-divider">— ಹೂ ಯಾವ ಬಣ್ಣ? 🎮 —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc_f1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 5</div>
+      <div class="scene-sentence">ಗುಲಾಬಿ ಹೂವಿನ ಬಣ್ಣ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f1',true)">🔴 ಕೆಂಪು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f1',false)">🔵 ನೀಲಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f1',false)">🟡 ಹಳದಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc_f2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 5</div>
+      <div class="scene-sentence">ಸೂರ್ಯಕಾಂತಿ ಹೂವಿನ ಬಣ್ಣ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f2',false)">⚪ ಬಿಳಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f2',true)">🟡 ಹಳದಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f2',false)">🔴 ಕೆಂಪು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc_f3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 5</div>
+      <div class="scene-sentence">ಮಲ್ಲಿಗೆ ಹೂ ಯಾವ ಬಣ್ಣ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f3',false)">🔴 ಕೆಂಪು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f3',true)">⚪ ಬಿಳಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f3',false)">🟡 ಹಳದಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc_f4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 5</div>
+      <div class="scene-sentence">ಮಲ್ಲಿಗೆ, ಜಾಜಿ, ಸಂಪಿಗೆ ಹೂಗಳು ಏನು ಹರಡುತ್ತವೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f4',false)">ಬಣ್ಣ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f4',true)">ಪರಿಮಳ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f4',false)">ನೀರು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="sc_f5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5 of 5</div>
+      <div class="scene-sentence">ತಾವರೆ ಯಾವ ಬಣ್ಣ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f5',false)">🟡 ಹಳದಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f5',true)">🪷 ಗುಲಾಬಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_f5',false)">⚪ ಬಿಳಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f5"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-flowers" disabled onclick="completeTab('flowers','poem','btn-flowers')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 6: POEM ═══ -->
+<div class="tab-panel" id="panel-poem">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">
+    <span class="banner-emoji">🎵</span>
+    <div>
+      <div class="banner-title" style="color:#1a237e;">ಹಾಡಿ ನಲಿ!</div>
+      <div class="banner-sub" style="color:#283593;">ಗಿಡ ಮರ ಬಳ್ಳಿ ಹಾಡು</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🎵 ಹಾಡಿ ನಲಿ — ಪಠ್ಯಪುಸ್ತಕದ ಹಾಡು!</h3>
+    <p>ಈ ಹಾಡಿನಲ್ಲಿ ಸಸ್ಯಗಳ ಬಗ್ಗೆ ಚಂದದ ವಿಷಯ ಇದೆ. ಓದಿ ಸಂತೋಷ ಪಡಿ!</p>
+  </div>
+
+  <div class="poem-card">
+    <div class="poem-line"><span class="kw-poem">ಗಿಡ, ಮರ, ಬಳ್ಳಿ</span> ನೋಡು</div>
+    <div class="poem-line">ಸಸ್ಯದ ಬಗೆಗಳು;</div>
+    <div class="poem-line"><span class="kw-poem">ಕಾಂಡ, ಎಲೆ, ಹೂಗಳು</span></div>
+    <div class="poem-line">ಸಸ್ಯದ ಭಾಗಗಳು.</div>
+  </div>
+
+  <div class="poem-card">
+    <div class="poem-line"><span class="kw-poem">ಮಾವು, ಬೇವು, ತೆಂಗು, ಹೊಂಗೆ</span></div>
+    <div class="poem-line">ಮರಕೆ ಬಳ್ಳಿ ಹಬ್ಬಿದೆ;</div>
+    <div class="poem-line">ಮಳೆಗೆ ತೋಯ್ದು, ಕೊಂಬೆ ಹೊಯ್ದು</div>
+    <div class="poem-line">ಗಿಡವು ಬಾಗಿ ನಿಂತಿದೆ.</div>
+  </div>
+
+  <div class="poem-card">
+    <div class="poem-line">ಸಣ್ಣ, ದಪ್ಪ, ಗಿಡ್ಡ, ಉದ್ದ</div>
+    <div class="poem-line">ಕಾಂಡಗಳು ತುಂಬಿವೆ;</div>
+    <div class="poem-line">ದೊಡ್ಡ, ಚಿಕ್ಕ ಎಲೆಗಳೆಲ್ಲ</div>
+    <div class="poem-line">ಅದರ ತುಂಬ ಹರಡಿವೆ.</div>
+  </div>
+
+  <div class="poem-card">
+    <div class="poem-line"><span class="kw-poem">ಮಲ್ಲೆ, ಜಾಜಿ, ಸಂಪಿಗೆ</span></div>
+    <div class="poem-line">ಪರಿಮಳವ ಹರಡಿವೆ;</div>
+    <div class="poem-line">ಬಣ್ಣ, ಬಣ್ಣದ ಕುಸುಮ</div>
+    <div class="poem-line">ನಮ್ಮ ಮನವ ಸೆಳೆದಿವೆ.</div>
+  </div>
+
+  <div class="section-divider">— ಹಾಡಿನ ಪ್ರಶ್ನೆ 🎮 —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="sc_po1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 4</div>
+      <div class="scene-sentence">ಹಾಡಿನಲ್ಲಿ ಯಾವ ಮರಗಳ ಹೆಸರು ಬಂದಿದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po1',false)">ಗುಲಾಬಿ, ಮಲ್ಲಿಗೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po1',true)">ಮಾವು, ಬೇವು, ತೆಂಗು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po1',false)">ಬಾಳೆ, ಅಡಿಕೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_po1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="sc_po2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 4</div>
+      <div class="scene-sentence">ಮಲ್ಲೆ, ಜಾಜಿ, ಸಂಪಿಗೆ ಏನು ಹರಡುತ್ತವೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po2',false)">ಬೆಳಕು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po2',true)">ಪರಿಮಳ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po2',false)">ಬೀಜ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_po2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="sc_po3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 4</div>
+      <div class="scene-sentence">ಹಾಡಿನ ಪ್ರಕಾರ ಸಸ್ಯದ ಭಾಗಗಳು ಯಾವವು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po3',true)">ಕಾಂಡ, ಎಲೆ, ಹೂ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po3',false)">ಮರ, ಗಿಡ, ಬಳ್ಳಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po3',false)">ನೆಲ, ನೀರು, ಗಾಳಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_po3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="sc_po4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4 of 4</div>
+      <div class="scene-sentence">ಹಾಡಿನ ಪ್ರಕಾರ ಸಸ್ಯದ ಬಗೆಗಳು ಯಾವವು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po4',true)">ಗಿಡ, ಮರ, ಬಳ್ಳಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po4',false)">ಹೂ, ಎಲೆ, ಕಾಂಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_po4',false)">ಬೇರು, ಕೊಂಬೆ, ಹಣ್ಣು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_po4"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-poem" disabled onclick="completeTab('poem','quiz','btn-poem')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 7: FINAL QUIZ ═══ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಅಂತಿಮ ಕ್ವಿಜ್!</div>
+      <div class="banner-sub" style="color:#bf360c;">ಎಲ್ಲ ನೆನಪಿದೆಯಾ?</div>
+    </div>
+  </div>
+
+  <div class="section-divider">— ಒಟ್ಟು 6 ಪ್ರಶ್ನೆ — ಎಲ್ಲ ಗೆಲ್ಲು! 🎯 —</div>
+
+  <!-- QZ1 -->
+  <div class="scenario-card" id="sc_q1">
+    <div class="scene-top">
+      <div class="scene-label">🏆 ಪ್ರಶ್ನೆ 1 of 6</div>
+      <div class="scene-sentence">ಸಸ್ಯದ ಮುಖ್ಯ ಭಾಗಗಳು ಎಷ್ಟು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q1',false,'q')">4</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q1',true,'q')">6</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q1',false,'q')">3</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q1"></div>
+    </div>
+  </div>
+
+  <!-- QZ2 -->
+  <div class="scenario-card" id="sc_q2">
+    <div class="scene-top">
+      <div class="scene-label">🏆 ಪ್ರಶ್ನೆ 2 of 6</div>
+      <div class="scene-sentence">ಬಳ್ಳಿ ಯಾವ ರೀತಿ ಬೆಳೆಯುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q2',false,'q')">ನಿಟ್ಟಾಗಿ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q2',true,'q')">ಹಬ್ಬಿಕೊಳ್ಳುತ್ತ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q2',false,'q')">ಒಳಗೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q2"></div>
+    </div>
+  </div>
+
+  <!-- QZ3 -->
+  <div class="scenario-card" id="sc_q3">
+    <div class="scene-top">
+      <div class="scene-label">🏆 ಪ್ರಶ್ನೆ 3 of 6</div>
+      <div class="scene-sentence">ಯಾವ ಸಸ್ಯ ಗಿಡ (Plant)? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q3',false,'q')">🌴 ತೆಂಗಿನ ಮರ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q3',true,'q')">🍅 ಟಮ್ಯಾಟೋ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q3',false,'q')">🍇 ದ್ರಾಕ್ಷಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q3"></div>
+    </div>
+  </div>
+
+  <!-- QZ4 -->
+  <div class="scenario-card" id="sc_q4">
+    <div class="scene-top">
+      <div class="scene-label">🏆 ಪ್ರಶ್ನೆ 4 of 6</div>
+      <div class="scene-sentence">ಎಲ್ಲ ಎಲೆಗಳ ಸಾಮಾನ್ಯ ಬಣ್ಣ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q4',false,'q')">🔴 ಕೆಂಪು</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q4',true,'q')">🟢 ಹಸಿರು</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q4',false,'q')">🟡 ಹಳದಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q4"></div>
+    </div>
+  </div>
+
+  <!-- QZ5 -->
+  <div class="scenario-card" id="sc_q5">
+    <div class="scene-top">
+      <div class="scene-label">🏆 ಪ್ರಶ್ನೆ 5 of 6</div>
+      <div class="scene-sentence">ಬೇರು ಎಲ್ಲಿ ಇರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q5',false,'q')">ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q5',true,'q')">ನೆಲದ ಒಳಗೆ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q5',false,'q')">ಕೊಂಬೆಯಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q5"></div>
+    </div>
+  </div>
+
+  <!-- QZ6 -->
+  <div class="scenario-card" id="sc_q6">
+    <div class="scene-top">
+      <div class="scene-label">🏆 ಪ್ರಶ್ನೆ 6 of 6</div>
+      <div class="scene-sentence">ಹೂ ಉದುರಿದ ನಂತರ ಏನಾಗುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q6',false,'q')">ಎಲೆ ಬರುತ್ತದೆ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q6',true,'q')">ಹಣ್ಣು ಬರುತ್ತದೆ</div>
+        <div class="choice-btn" onclick="checkQuiz(this,'sc_q6',false,'q')">ಬೇರು ಬರುತ್ತದೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q6"></div>
+    </div>
+  </div>
+
+  <div class="result-card" id="quizResult" style="display:none;">
+    <span class="result-emoji" id="resultEmoji">🌟</span>
+    <div class="result-score" id="resultScore">6/6</div>
+    <div class="result-msg" id="resultMsg">ಅದ್ಭುತ! ನೀನು ಎಲ್ಲ ಸರಿ ಉತ್ತರಿಸಿದೆ!</div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="finishQuiz()">ಫಲಿತಾಂಶ ನೋಡಿ 🎉</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- LOCK TOAST -->
+<div class="lock-toast" id="lockToast">🔒 ಹಿಂದಿನ ಹಂತ ಮೊದಲು ಮುಗಿಸು!</div>
+
+<!-- CELEBRATION -->
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🌟</div>
+  <div class="celeb-title">ಅದ್ಭುತ! ನೀನು ಗೆದ್ದೆ! 🎉</div>
+  <div class="celeb-sub">ಪಾಠ 3 — ಹಿತ್ತಲ ಗಿಡ ಮುಗಿದಿದೆ!<br>ಗಿಡ · ಮರ · ಬಳ್ಳಿ — ಎಲ್ಲ ಕಲಿತೆ! 🌱🌳🍇</div>
+  <div class="celeb-stars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">ಮನೆಗೆ ಹೋಗು 🏠</button>
+</div>
+
+<script>
+// ── State ──
+const tabOrder = ['parts','types','stems','leaves','flowers','poem','quiz'];
+const tabQuestions = {
+  parts:  ['sc_p1','sc_p2','sc_p3','sc_p4','sc_p5'],
+  types:  ['sc_t1','sc_t2','sc_t3','sc_t4','sc_t5'],
+  stems:  ['sc_s1','sc_s2','sc_s3','sc_s4'],
+  leaves: ['sc_l1','sc_l2','sc_l3','sc_l4'],
+  flowers:['sc_f1','sc_f2','sc_f3','sc_f4','sc_f5'],
+  poem:   ['sc_po1','sc_po2','sc_po3','sc_po4'],
+  quiz:   ['sc_q1','sc_q2','sc_q3','sc_q4','sc_q5','sc_q6']
+};
+const tabAnswered = {};
+Object.keys(tabQuestions).forEach(t => tabAnswered[t] = new Set());
+let stars = 0;
+let quizScore = 0;
+
+// ── Tab switching ──
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const id = tab.dataset.tab;
+    if (tab.classList.contains('locked')) {
+      tab.classList.add('shaking');
+      setTimeout(() => tab.classList.remove('shaking'), 520);
+      showToast('🔒 ಹಿಂದಿನ ಹಂತ ಮೊದಲು ಮುಗಿಸು!');
+      return;
+    }
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+    tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  });
+});
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── Check regular choice ──
+function checkChoice(btn, cardId, isCorrect) {
+  const card = document.getElementById(cardId);
+  if (card.classList.contains('done')) return;
+  const fb = document.getElementById('fb-' + cardId);
+  const allBtns = card.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => b.classList.add('locked-choice'));
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ ಸರಿ! ಭಾಲೆ!';
+    fb.className = 'fb-box ok';
+    card.classList.add('done');
+    stars++;
+    document.getElementById('starsNum').textContent = stars;
+    // find which tab owns this
+    const tab = findTab(cardId);
+    tabAnswered[tab].add(cardId);
+    checkTabComplete(tab);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ ತಪ್ಪು! ಮತ್ತೆ ಯೋಚಿಸು!';
+    fb.className = 'fb-box no';
+    setTimeout(() => {
+      allBtns.forEach(b => { b.classList.remove('locked-choice','wrong'); });
+      fb.style.display = 'none';
+    }, 1200);
+  }
+}
+
+function findTab(cardId) {
+  for (const [tab, qs] of Object.entries(tabQuestions)) {
+    if (qs.includes(cardId)) return tab;
+  }
+}
+
+// ── Check quiz (counts score) ──
+function checkQuiz(btn, cardId, isCorrect, type) {
+  const card = document.getElementById(cardId);
+  if (card.classList.contains('done')) return;
+  const fb = document.getElementById('fb-' + cardId);
+  const allBtns = card.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => b.classList.add('locked-choice'));
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ ಸರಿ! ಭಾಲೆ!';
+    fb.className = 'fb-box ok';
+    card.classList.add('done');
+    stars++;
+    quizScore++;
+    document.getElementById('starsNum').textContent = stars;
+    tabAnswered['quiz'].add(cardId);
+    checkTabComplete('quiz');
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ ತಪ್ಪು! ಮತ್ತೆ ಯೋಚಿಸು!';
+    fb.className = 'fb-box no';
+    setTimeout(() => {
+      allBtns.forEach(b => { b.classList.remove('locked-choice','wrong'); });
+      fb.style.display = 'none';
+    }, 1200);
+  }
+}
+
+// ── Tab completion check ──
+function checkTabComplete(tab) {
+  const total = tabQuestions[tab].length;
+  const done = tabAnswered[tab].size;
+  if (done >= total) {
+    const btnId = 'btn-' + tab;
+    const btn = document.getElementById(btnId);
+    if (btn) btn.disabled = false;
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  let totalQ = 0, doneQ = 0;
+  Object.entries(tabQuestions).forEach(([tab, qs]) => {
+    totalQ += qs.length;
+    doneQ += tabAnswered[tab].size;
+  });
+  const pct = Math.round((doneQ / totalQ) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progLabel').textContent = pct < 100
+    ? `${doneQ} / ${totalQ} ಪ್ರಶ್ನೆ ಮಾಡಿದ್ದೀಯ! 🌱`
+    : '🎉 ಎಲ್ಲ ಮುಗಿದಿದೆ! ಶಾಭಾಸ್!';
+}
+
+// ── Complete tab & unlock next ──
+function completeTab(currentTab, nextTab, btnId) {
+  // mark current done
+  const currTabEl = document.querySelector(`[data-tab="${currentTab}"]`);
+  currTabEl.classList.remove('active');
+  currTabEl.classList.add('done');
+  // unlock next
+  const nextTabEl = document.querySelector(`[data-tab="${nextTab}"]`);
+  nextTabEl.classList.remove('locked');
+  // switch
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + nextTab).classList.add('active');
+  nextTabEl.classList.add('active');
+  nextTabEl.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+}
+
+// ── Finish quiz ──
+function finishQuiz() {
+  const result = document.getElementById('quizResult');
+  result.style.display = 'block';
+  const total = tabQuestions['quiz'].length;
+  document.getElementById('resultScore').textContent = quizScore + '/' + total;
+  let emoji = '🌟', msg = '';
+  if (quizScore === total) { emoji='🏆'; msg='ಅದ್ಭುತ! ಎಲ್ಲ ಸರಿ! ನೀನು ಬಲ್ಲಿದ! 🎉'; }
+  else if (quizScore >= total * 0.7) { emoji='😊'; msg='ತುಂಬ ಚಂದ! ಮತ್ತಷ್ಟು ಅಭ್ಯಾಸ ಮಾಡಿ!'; }
+  else { emoji='💪'; msg='ಪ್ರಯತ್ನ ಮಾಡಿ! ಮತ್ತೊಮ್ಮೆ ಓದು!'; }
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultMsg').textContent = msg;
+  // show celeb if all done
+  const allDone = Object.entries(tabAnswered).every(([t, s]) => s.size >= tabQuestions[t].length);
+  if (allDone) {
+    setTimeout(() => document.getElementById('celebScreen').classList.add('show'), 800);
+  }
+}
+</script>
+</body>
+</html>

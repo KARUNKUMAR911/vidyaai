@@ -142,19 +142,24 @@
         <div class="hero-avatar">🧒</div>
         <h2>Welcome, {{ student.name }}! 🌟</h2>
         <p>Class 2 • English Medium • Keep learning every day!</p>
+        <div style="margin-top: 15px;">
+            <a href="/class/2/kannada" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; border: 1px solid rgba(255,255,255,0.4);">
+                🔄 Switch to Kannada Medium
+            </a>
+        </div>
     </div>
 
     <div class="progress-section">
         <div class="progress-header">
             <div class="progress-title">📊 My Progress</div>
-            <div class="progress-count" id="progressCount">0 of 6 subjects</div>
+            <div class="progress-count" id="progressCount">0 of 4 subjects</div>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
     </div>
 
-    <a href="/class/2/english" class="challenge-card">
+    <a href="/class/2/maths" class="challenge-card">
         <div class="challenge-icon">🌟</div>
         <div class="challenge-text">
             <h3>Today's Challenge!</h3>
@@ -166,13 +171,6 @@
     <div class="section-title">📖 My Subjects</div>
 
     <div class="subjects-grid">
-        <a href="/class/2/english" class="subject-card c1">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">📝</span>
-            <div class="card-title">English</div>
-            <div class="card-sub">Reading, Writing & Grammar</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
-        </a>
         <a href="/class/2/maths" class="subject-card c2">
             <div class="card-badge">📘 Subject</div>
             <span class="card-icon">🔢</span>
@@ -187,26 +185,19 @@
             <div class="card-sub">Plants, Animals & Nature</div>
             <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-evs"></div></div>
         </a>
-        <a href="/class/2/social" class="subject-card c4">
-            <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🌍</span>
-            <div class="card-title">Social Science</div>
-            <div class="card-sub">Family, Community & World</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-social"></div></div>
-        </a>
-        <a href="/class/2/kannada" class="subject-card c5">
+        <a href="/class/2/kannada/chapters" class="subject-card c5">
             <div class="card-badge">📘 Subject</div>
             <span class="card-icon">🌸</span>
             <div class="card-title">Kannada</div>
             <div class="card-sub">ಕನ್ನಡ ಭಾಷೆ</div>
             <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
         </a>
-        <a href="/class/2/hindi" class="subject-card c6">
+        <a href="/class/2/english/chapters" class="subject-card c1">
             <div class="card-badge">📘 Subject</div>
-            <span class="card-icon">🙏</span>
-            <div class="card-title">Hindi</div>
-            <div class="card-sub">हिंदी भाषा</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-hindi"></div></div>
+            <span class="card-icon">🏠</span>
+            <div class="card-title">English</div>
+            <div class="card-sub">English Language</div>
+            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
         </a>
     </div>
 </div>
@@ -236,7 +227,7 @@ async function loadProgress() {
         const res = await fetch('/api/progress/load?grade=2');
         const data = await res.json();
         let completed = 0;
-        const subjects = ['english','maths','evs','social','kannada','hindi'];
+        const subjects = ['maths','evs','kannada','english'];
         subjects.forEach(s => {
             const p = data[s];
             const bar = document.getElementById(`prog-${s}`);
@@ -246,8 +237,8 @@ async function loadProgress() {
                 if (pct===100) completed++;
             }
         });
-        document.getElementById('progressCount').textContent = `${completed} of 6 subjects`;
-        document.getElementById('progressFill').style.width = `${Math.round((completed/6)*100)}%`;
+        document.getElementById('progressCount').textContent = `${completed} of 4 subjects`;
+        document.getElementById('progressFill').style.width = `${Math.round((completed/4)*100)}%`;
         const stars = Object.values(data).reduce((s,p)=>s+(p.stars||0),0);
         document.getElementById('totalStars').textContent = stars;
     } catch(e) {}

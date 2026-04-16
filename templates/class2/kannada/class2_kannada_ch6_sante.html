@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಸಂತೆ - ಪಾಠ ೬ | ೨ನೇ ತರಗತಿ ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #c2410c;
+  --orange-mid: #ea580c;
+  --orange-light: #fed7aa;
+  --orange-pale: #fff7ed;
+  --gold: #b45309;
+  --gold-light: #fef3c7;
+  --teal: #0f766e;
+  --teal-light: #ccfbf1;
+  --red: #b91c1c;
+  --cream: #fefce8;
+  --white: #ffffff;
+  --text: #431407;
+  --muted: #78716c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans Kannada', sans-serif;
+  background: linear-gradient(160deg, #fff7ed 0%, #fef9c3 50%, #ccfbf1 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 60%, #fdba74 100%);
+  color: white;
+  text-align: center;
+  padding: 16px 16px 8px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '🛒🥬🌾🍅🌺🥥🛒🥬🌾🍅🌺🥥';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  font-size: 16px; letter-spacing: 4px; opacity: 0.15;
+}
+.badge {
+  display: inline-block;
+  background: #fbbf24;
+  color: #7c2d12;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 3px 14px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+header h1 {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: clamp(17px, 5.5vw, 34px);
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+header .sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+.progress-wrap {
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  height: 10px;
+  margin: 10px 20px 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f97316);
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  width: 12%;
+}
+.progress-label {
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 4px;
+  padding-bottom: 6px;
+}
+
+/* TAB BAR */
+.tab-bar {
+  display: flex;
+  background: #431407;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid #fbbf24;
+  gap: 2px;
+  padding: 0 4px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1 1 0;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 9px 4px 7px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.35);
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  position: relative;
+}
+.tab-btn .tab-icon { font-size: 18px; }
+.tab-btn.active { color: #fbbf24; border-bottom-color: #fbbf24; background: rgba(255,255,255,0.08); }
+.tab-btn.done { color: #6ee7b7; }
+.tab-btn.locked { color: rgba(255,255,255,0.2); cursor: not-allowed; }
+.tab-btn.locked .tab-icon { filter: grayscale(1) opacity(0.3); }
+.lock-icon { position: absolute; top: 4px; right: 4px; font-size: 9px; opacity: 0.5; }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-8px) rotate(-3deg)}
+  30%{transform:translateX(8px) rotate(3deg)}
+  45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  90%{transform:translateX(3px)}
+}
+.shake { animation: shake 0.5s ease; }
+
+/* TOAST */
+#lockToast {
+  position: fixed;
+  bottom: 80px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--red);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  text-align: center;
+  max-width: 88vw;
+}
+#lockToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* SECTIONS */
+.section { display: none; padding: 16px 14px 100px; max-width: 900px; margin: 0 auto; }
+.section.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+.sec-title {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #7c2d12;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--orange-mid);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* NEXT BUTTON */
+.next-btn {
+  display: none;
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--orange-mid), #7c2d12);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.next-btn:active { transform: scale(0.97); }
+
+/* CARDS */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.10);
+  margin-bottom: 12px;
+}
+
+/* INSTRUCTION BOX */
+.instr {
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-radius: 14px;
+  padding: 13px 16px;
+  font-size: 14px; color: #92400e;
+  font-weight: 600; text-align: center; margin-bottom: 14px;
+}
+
+/* PROGRESS BAR MINI */
+.mini-bar-wrap { background: #e5e7eb; border-radius: 10px; height: 10px; margin: 8px 0 4px; overflow: hidden; }
+.mini-bar { height: 100%; background: linear-gradient(90deg, var(--orange-mid), #fbbf24); border-radius: 10px; width: 0%; transition: width 0.4s; }
+.mini-label { font-size: 13px; color: #7c2d12; font-weight: 700; margin-bottom: 10px; }
+
+/* ===== TAB 1: STORY ===== */
+.story-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px 16px;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.10);
+  margin-bottom: 12px;
+  border-left: 5px solid var(--orange-mid);
+}
+.story-para {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px;
+  line-height: 2.3;
+  color: #1c0a00;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: all 0.25s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 6px;
+}
+.story-para:active { transform: scale(0.98); }
+.story-para.highlighted { background: #fed7aa; color: #7c2d12; font-weight: 700; }
+.dialog-block {
+  background: #fff7ed;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-left: 4px solid #fb923c;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.25s;
+}
+.dialog-block:active { transform: scale(0.98); }
+.dialog-block.highlighted { background: #fed7aa; border-left-color: #c2410c; }
+.speaker { font-size: 12px; font-weight: 800; color: var(--orange); margin-bottom: 3px; }
+.dialog-text { font-family: 'Noto Serif Kannada', serif; font-size: 14px; line-height: 2; color: #1c0a00; }
+
+/* ===== TAB 2: KEY WORDS ===== */
+.word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.word-card {
+  background: white;
+  border: 2.5px solid #fed7aa;
+  border-radius: 16px;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.word-card:active { transform: scale(0.95); }
+.word-card.tapped { background: linear-gradient(135deg, #fed7aa, #fde68a); border-color: var(--orange-mid); }
+.word-card.tapped .word-kn { color: #7c2d12; font-weight: 800; }
+.word-icon { font-size: 26px; margin-bottom: 6px; }
+.word-kn { font-family: 'Noto Serif Kannada', serif; font-size: 14px; font-weight: 700; color: #431407; }
+.word-en { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.word-card.tapped::after { content: '✓'; position: absolute; top: 4px; right: 8px; font-size: 14px; color: var(--orange-mid); font-weight: 900; }
+
+/* ===== TAB 3: VOCAB MEANING ===== */
+.vocab-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.vocab-card {
+  background: white;
+  border-radius: 16px;
+  border: 2.5px solid #fed7aa;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.25s;
+}
+.vocab-card:active { transform: scale(0.98); }
+.vocab-front {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.vocab-emoji { font-size: 28px; }
+.vocab-word { font-family: 'Noto Serif Kannada', serif; font-size: 16px; font-weight: 700; color: #431407; }
+.vocab-hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.vocab-back {
+  display: none;
+  background: linear-gradient(135deg, #fed7aa, #fde68a);
+  padding: 12px 16px;
+  border-top: 2px dashed #fb923c;
+}
+.vocab-meaning { font-family: 'Noto Serif Kannada', serif; font-size: 14px; color: #7c2d12; font-weight: 700; line-height: 1.8; }
+.vocab-card.revealed .vocab-back { display: block; }
+.vocab-card.revealed { border-color: var(--orange-mid); }
+.vocab-card.revealed .vocab-front { background: #fff7ed; }
+
+/* ===== TAB 4: WHO SAID WHAT ===== */
+.qa-group {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 12px rgba(194,65,12,0.08);
+}
+.qa-question {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #431407;
+  background: #fff7ed;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--orange-mid);
+  line-height: 1.9;
+}
+.qa-sub { font-size: 13px; color: #7c2d12; font-weight: 700; margin-bottom: 8px; }
+.qa-btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 13px 16px;
+  background: #fff7ed;
+  border: 2.5px solid #fed7aa;
+  border-radius: 14px;
+  font-family: 'Noto Serif Kannada', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #431407;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.qa-btn:active { transform: scale(0.98); }
+.qa-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+.qa-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shake 0.4s ease; }
+.qa-btn.answered { opacity: 0.45; pointer-events: none; }
+
+.result-msg {
+  display: none;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 800;
+  color: #065f46;
+  margin-top: 10px;
+}
+.result-msg.show { display: block; animation: fadeUp 0.4s ease; }
+
+/* ===== TAB 5: MATCH ===== */
+.match-section { margin-bottom: 20px; }
+.match-section h3 { font-size: 15px; font-weight: 800; color: #7c2d12; margin-bottom: 12px; }
+.match-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.match-item {
+  background: white;
+  border: 2.5px solid #fed7aa;
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.22s;
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #431407;
+}
+.match-item:active { transform: scale(0.95); }
+.match-item.selected { background: #fed7aa; border-color: var(--orange-mid); transform: scale(1.04); }
+.match-item.matched-correct { background: #d1fae5; border-color: #10b981; color: #065f46; pointer-events: none; }
+.match-item.matched-wrong { background: #fee2e2; border-color: #ef4444; animation: shake 0.4s ease; }
+.match-emoji { font-size: 22px; display: block; margin-bottom: 4px; }
+
+/* ===== TAB 6: FILL BLANKS ===== */
+.fill-sentence {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 12px rgba(194,65,12,0.08);
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px;
+  line-height: 2.5;
+  color: #1c0a00;
+}
+.blank {
+  display: inline-block;
+  min-width: 70px;
+  border-bottom: 3px solid var(--orange-mid);
+  padding: 2px 10px;
+  border-radius: 8px;
+  background: #fff7ed;
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--orange);
+  transition: all 0.2s;
+  text-align: center;
+}
+.blank.active-blank { background: #fed7aa; border-bottom-color: #c2410c; transform: scale(1.06); }
+.blank.correct { background: #d1fae5; border-bottom-color: #10b981; color: #065f46; cursor: default; }
+.blank.wrong { background: #fee2e2; border-bottom-color: #ef4444; animation: shake 0.4s ease; }
+
+.chip-area { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chip {
+  background: linear-gradient(135deg, #fed7aa, #fde68a);
+  border: 2.5px solid #fb923c;
+  border-radius: 30px;
+  padding: 9px 18px;
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #7c2d12;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+.chip:active { transform: scale(0.93); }
+.chip.used { background: #f3f4f6; border-color: #d1d5db; color: #9ca3af; pointer-events: none; }
+
+/* ===== TAB 7: FINAL QUIZ ===== */
+.complete-card {
+  display: none;
+  background: linear-gradient(135deg, #7c2d12, #c2410c);
+  border-radius: 24px;
+  padding: 30px 20px;
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+}
+.complete-card.show { display: block; animation: fadeUp 0.6s ease; }
+.complete-card .trophy { font-size: 56px; margin-bottom: 8px; }
+.complete-card .stars { font-size: 32px; margin-bottom: 12px; letter-spacing: 6px; }
+.complete-card h2 { font-family: 'Noto Serif Kannada', serif; font-size: 22px; margin-bottom: 8px; }
+.complete-card p { font-size: 14px; opacity: 0.9; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">೨ನೇ ತರಗತಿ · ಕನ್ನಡ · ಪಾಠ ೬</div>
+  <h1>🛒 ಸಂತೆ</h1>
+  <div class="sub">ಗದ್ಯ ಪಾಠ — ಮಾರುಕಟ್ಟೆಯ ಜಗತ್ತಿನಲ್ಲಿ ಓಡಾಡೋಣ!</div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">ಹಂತ ೧ / ೭</div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-story" onclick="tryTab('story',this)">
+    <span class="tab-icon">📖</span>ಕಥೆ
+  </button>
+  <button class="tab-btn locked" id="tab-words" onclick="tryTab('words',this)">
+    <span class="tab-icon">🔤</span>ಪದಗಳು
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-vocab" onclick="tryTab('vocab',this)">
+    <span class="tab-icon">📚</span>ಅರ್ಥ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-whosaid" onclick="tryTab('whosaid',this)">
+    <span class="tab-icon">🗣️</span>ಯಾರು?
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-match" onclick="tryTab('match',this)">
+    <span class="tab-icon">🔗</span>ಜೋಡಿ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-fill" onclick="tryTab('fill',this)">
+    <span class="tab-icon">✏️</span>ಖಾಲಿ
+    <span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-quiz" onclick="tryTab('quiz',this)">
+    <span class="tab-icon">🏆</span>ಸ್ಪರ್ಧೆ
+    <span class="lock-icon">🔒</span>
+  </button>
+</div>
+
+<div id="lockToast"></div>
+
+<!-- ===== TAB 1: STORY ===== -->
+<div class="section active" id="story">
+  <div class="sec-title">📖 ಕಥೆ ಓದು — ಪ್ರತಿ ಭಾಗ ತಟ್ಟು!</div>
+  <div class="instr">👆 ಪ್ರತಿ ಭಾಗವನ್ನು ತಟ್ಟಿ ಓದು. ಎಲ್ಲಾ ಭಾಗ ತಟ್ಟಿದ ನಂತರ ಮುಂದೆ ಹೋಗಬಹುದು!</div>
+
+  <div class="mini-bar-wrap"><div class="mini-bar" id="storyBar"></div></div>
+  <div class="mini-label">ತಟ್ಟಿದ ಭಾಗ: <span id="storyCount">೦</span> / ೧೨</div>
+
+  <div class="story-card">
+    <div class="story-para" onclick="tapStory(this)">ಅಂದು ಶನಿವಾರ ಶಾಲೆಗೆ ಮಧ್ಯಾಹ್ನ ರಜೆ. ಅನಿತಾ, ಜಾನ್, ರಶೀದ್ ಮತ್ತು ಕುಮಾರ ನಾಲ್ವರೂ ತಮ್ಮೂರಿನ ಸಂತೆ ನೋಡಲು ಹೊರಟರು. ಅನಿತಾಳ ಚಿಕ್ಕಪ್ಪ ಜೊತೆಯಲ್ಲಿರುವುದು ಅವರಿಗೆ ತುಂಬಾ ಸಂತೋಷವೆನಿಸಿತು.</div>
+    <div class="story-para" onclick="tapStory(this)">ಊರಂಚಿನ ಮೈದಾನದಲ್ಲಿ ಸಂತೆ ನೆರೆದಿತ್ತು. ಅಲ್ಲಿ ಸದ್ದು-ಗದ್ದಲ ತುಂಬಿತ್ತು. ಮಕ್ಕಳಿಗೆ ಸಂತೆಯೊಳಗೆ ನುಗ್ಗುವ ಆತುರ. ಆದರೆ ಅನಿತಾಳ ಚಿಕ್ಕಪ್ಪ ಅವರನ್ನು ಸಂತೆಯ ಮುಂಭಾಗದಲ್ಲಿ ನಿಲ್ಲಿಸಿಕೊಂಡು "ಮಕ್ಕಳೇ, ಅವಸರದಿಂದ ಚದುರಿ ಹೋಗಬೇಡಿ. ನನ್ನ ಜೊತೆಯಲ್ಲೇ ಬನ್ನಿ, ಸಂತೆಯಲ್ಲಿ ಸುತ್ತಿಸುವೆ" ಎಂದರು.</div>
+  </div>
+
+  <div class="story-card">
+    <div class="story-para" onclick="tapStory(this)">ಅಲ್ಲಿ ದಿನಸಿ ಅಂಗಡಿಗಳು ಸಾಲು ಸಾಲಾಗಿದ್ದವು. ಅಕ್ಕಿ, ಜೋಳ, ರಾಗಿ, ತೊಗರಿ, ಕಡಲೆ ಮುಂತಾದ ಧಾನ್ಯಗಳ ರಾಶಿ ಒಂದು ಕಡೆ ಇದೆ. ಇನ್ನೊಂದು ಬದಿಯಲ್ಲಿ ತೆಂಗಿನಕಾಯಿ, ಎಳನೀರು, ಕೊಬ್ಬರಿ ಇಟ್ಟಿದ್ದಾರೆ. ಮುಂದಿನ ಸಾಲಿನಲ್ಲಿ ಈರುಳ್ಳಿ, ಬೆಳ್ಳುಳ್ಳಿ ಗುಡ್ಡೆಗಳಿವೆ.</div>
+    <div class="story-para" onclick="tapStory(this)">ಅದರ ಪಕ್ಕದಲ್ಲಿ ಮೆಣಸಿನ ಕಾಯಿ, ಮರದ ಬುಡದಲ್ಲಿ ವೀಳ್ಯದೆಲೆ, ಬಾಳೆಎಲೆ, ಅಡಿಕೆ ಇವೆ. ಮುಂದೆ ಹೋದರೆ ಬದನೆ, ಸೌತೆ, ಬೆಂಡೆಕಾಯಿ, ತೊಂಡೆಕಾಯಿ, ಟೊಮೇಟೊ ಮುಂತಾದ ತರಕಾರಿಗಳನ್ನು ಇಟ್ಟಿದ್ದಾರೆ. ಪಕ್ಕದಲ್ಲಿ ವಿವಿಧ ಸೊಪ್ಪನ್ನು ಮಾರುತ್ತಿದ್ದಾರೆ.</div>
+  </div>
+
+  <div class="story-card" style="border-left-color:#0f766e;">
+    <div class="speaker" style="color:#0f766e;font-size:13px;padding:4px 0 6px 2px;">💬 ಮಾತುಕತೆ</div>
+
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">🌸 ಅನಿತಾ:</div>
+      <div class="dialog-text">ಓಹೋ! ಅಲ್ಲಿ ನೋಡಿ, ಘಮಘಮಿಸುವ ಹೂಗಳು.</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">👨 ಚಿಕ್ಕಪ್ಪ:</div>
+      <div class="dialog-text">ಬಿಸಿಲಿಗೆ ಬಾಡದಿರಲಿ ಎಂದು ನೆರಳಿನಲ್ಲಿ ಇಟ್ಟಿದ್ದಾರೆ. ಅಲ್ಲಿ ಸೇವಂತಿಗೆ, ಮಲ್ಲಿಗೆ, ಕನಕಾಂಬರ, ಗುಲಾಬಿ, ಚೆಂಡು ಹೂಗಳಿವೆ.</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">🙋 ಜಾನ್:</div>
+      <div class="dialog-text">ಇಲ್ಲಿಗೆ ಇವೆಲ್ಲವನ್ನೂ ಎಲ್ಲಿಂದ ತರುತ್ತಾರೆ?</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">👨 ಚಿಕ್ಕಪ್ಪ:</div>
+      <div class="dialog-text">ಇವೆಲ್ಲವನ್ನು ರೈತರು ತಮ್ಮ ಹೊಲ, ಗದ್ದೆ, ತೋಟಗಳಲ್ಲಿ ಬೆಳೆಯುತ್ತಾರೆ. ಅಲ್ಲಿಂದ ತಂದು ಇಲ್ಲಿ ಮಾರುತ್ತಾರೆ.</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">🧒 ರಶೀದ್:</div>
+      <div class="dialog-text">ಚಿಕ್ಕಪ್ಪ, ಅಲ್ಲಿ ಕೈಚೀಲ, ಚೀಲ, ಬುಟ್ಟಿ ಹಿಡಿದು ಜನರು ಓಡಾಡುತ್ತಿದ್ದಾರಲ್ಲ ಏಕೆ?</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">👨 ಚಿಕ್ಕಪ್ಪ:</div>
+      <div class="dialog-text">ಅವರೆಲ್ಲ ತಮಗೆ ಬೇಕಾದ ಪದಾರ್ಥಗಳನ್ನು ಕೊಳ್ಳಲು ಬಂದಿದ್ದಾರೆ. ಸಂತೆ ಎಂದರೆ ಕೇವಲ ವ್ಯಾಪಾರ ಮಾಡುವ ಸ್ಥಳ ಅಲ್ಲ — ಹಾಡು, ಆಟಗಳಂತಹ ಮನೋರಂಜನೆಗಳೂ ಇಲ್ಲಿ ನಡೆಯುತ್ತವೆ. ಸಂತೆ ಗ್ರಾಮೀಣ ಜನರ ಸಹಕಾರ ಮತ್ತು ಸಾಂಸ್ಕೃತಿಕ ಕೇಂದ್ರ.</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">😮 ಕುಮಾರ:</div>
+      <div class="dialog-text">ನೋಡಿ, ನನ್ನ ಅಕ್ಕ ಬಳಸುವ ರಿಬ್ಬನ್, ಬಳೆ, ಸರ, ಪೌಡರ್‌ಗಳೂ ಇಲ್ಲಿವೆ. ಅಲ್ಲಿ ಗುದ್ದಲಿ, ಹಾರೆ, ಪಿಕಾಸಿ, ಕುಳ, ಕುಡುಗೋಲು — ಇವೆಲ್ಲ ರೈತರಿಗೆ ಬೇಕಾದ ಸಲಕರಣೆಗಳು.</div>
+    </div>
+    <div class="dialog-block" onclick="tapStory(this)">
+      <div class="speaker">😀 ಅನಿತಾ:</div>
+      <div class="dialog-text">ಅಬ್ಬಾ! ಸಂತೆಯಲ್ಲಿ ಎಷ್ಟೆಲ್ಲಾ ಅಂಗಡಿಗಳು! ಶಾಲೆ ಹಾಗೂ ಮನೆಯಲ್ಲಿ ಬೇಡವಾದ ವಸ್ತುಗಳನ್ನು ಹಾಕಲು ಕಸದ ತೊಟ್ಟಿಗಳಿವೆ. ಇಲ್ಲೂ ಕಸದ ತೊಟ್ಟಿಗೆ ಸಿಪ್ಪೆ ಹಾಕಿರಿ ಎಂದು ಚಿಕ್ಕಪ್ಪ ಹೇಳಿದರು. ಬಾಳೆಹಣ್ಣಿನ ಸಿಪ್ಪೆಯನ್ನು ಕಸದ ತೊಟ್ಟಿಗೆ ಹಾಕಿದರು. ಸಂತೆ ನೋಡಿದ ಖುಷಿಯಲ್ಲಿ ಎಲ್ಲರೂ ಮನೆಗೆ ಹೊರಟರು.</div>
+    </div>
+  </div>
+
+  <div id="storyNote" class="instr" style="display:none;background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;">✅ ಶಾಭಾಷ್! ಎಲ್ಲಾ ಭಾಗ ಓದಿದಿರಿ! 🎉</div>
+  <button class="next-btn" id="storyNextBtn" onclick="completeTab('story','words')">ಮುಂದೆ ➜ ಪದಗಳು</button>
+</div>
+
+<!-- ===== TAB 2: KEY WORDS ===== -->
+<div class="section" id="words">
+  <div class="sec-title">🔤 ಕೇಳಿದ ಪದಗಳು — ಪ್ರತಿ ಪದ ತಟ್ಟು!</div>
+  <div class="instr">👆 ಪ್ರತಿ ಪದವನ್ನು ತಟ್ಟಿ ಓದು. ಎಲ್ಲ ೧೮ ಪದ ತಟ್ಟಿದ ನಂತರ ಮುಂದೆ ಹೋಗು!</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="wordBar"></div></div>
+  <div class="mini-label">ತಟ್ಟಿದ ಪದ: <span id="wordCount">೦</span> / ೧೮</div>
+
+  <div class="word-grid">
+    <div class="word-card" onclick="tapWord(this,'w1')"><div class="word-icon">🛒</div><div class="word-kn">ಸಂತೆ</div><div class="word-en">Market</div></div>
+    <div class="word-card" onclick="tapWord(this,'w2')"><div class="word-icon">📢</div><div class="word-kn">ಗದ್ದಲ</div><div class="word-en">Noise/Chaos</div></div>
+    <div class="word-card" onclick="tapWord(this,'w3')"><div class="word-icon">🏪</div><div class="word-kn">ಅಂಗಡಿ</div><div class="word-en">Shop</div></div>
+    <div class="word-card" onclick="tapWord(this,'w4')"><div class="word-icon">💼</div><div class="word-kn">ವ್ಯಾಪಾರ</div><div class="word-en">Trade/Business</div></div>
+    <div class="word-card" onclick="tapWord(this,'w5')"><div class="word-icon">🌾</div><div class="word-kn">ಧಾನ್ಯ</div><div class="word-en">Grains</div></div>
+    <div class="word-card" onclick="tapWord(this,'w6')"><div class="word-icon">🌾</div><div class="word-kn">ದಿನಸಿ</div><div class="word-en">Provisions</div></div>
+    <div class="word-card" onclick="tapWord(this,'w7')"><div class="word-icon">🧅</div><div class="word-kn">ಈರುಳ್ಳಿ</div><div class="word-en">Onion</div></div>
+    <div class="word-card" onclick="tapWord(this,'w8')"><div class="word-icon">🧄</div><div class="word-kn">ಬೆಳ್ಳುಳ್ಳಿ</div><div class="word-en">Garlic</div></div>
+    <div class="word-card" onclick="tapWord(this,'w9')"><div class="word-icon">🥬</div><div class="word-kn">ತರಕಾರಿ</div><div class="word-en">Vegetables</div></div>
+    <div class="word-card" onclick="tapWord(this,'w10')"><div class="word-icon">🌺</div><div class="word-kn">ಹೂ</div><div class="word-en">Flower</div></div>
+    <div class="word-card" onclick="tapWord(this,'w11')"><div class="word-icon">👨‍🌾</div><div class="word-kn">ರೈತ</div><div class="word-en">Farmer</div></div>
+    <div class="word-card" onclick="tapWord(this,'w12')"><div class="word-icon">🎪</div><div class="word-kn">ಮೈದಾನ</div><div class="word-en">Ground/Field</div></div>
+    <div class="word-card" onclick="tapWord(this,'w13')"><div class="word-icon">⛏️</div><div class="word-kn">ಗುದ್ದಲಿ</div><div class="word-en">Hoe/Spade</div></div>
+    <div class="word-card" onclick="tapWord(this,'w14')"><div class="word-icon">🔧</div><div class="word-kn">ಸಲಕರಣೆ</div><div class="word-en">Equipment</div></div>
+    <div class="word-card" onclick="tapWord(this,'w15')"><div class="word-icon">🗑️</div><div class="word-kn">ಕಸದ ತೊಟ್ಟಿ</div><div class="word-en">Dustbin</div></div>
+    <div class="word-card" onclick="tapWord(this,'w16')"><div class="word-icon">😄</div><div class="word-kn">ಖುಷಿ</div><div class="word-en">Happiness</div></div>
+    <div class="word-card" onclick="tapWord(this,'w17')"><div class="word-icon">🎭</div><div class="word-kn">ಮನೋರಂಜನೆ</div><div class="word-en">Entertainment</div></div>
+    <div class="word-card" onclick="tapWord(this,'w18')"><div class="word-icon">🏘️</div><div class="word-kn">ಗ್ರಾಮೀಣ</div><div class="word-en">Rural/Village</div></div>
+  </div>
+
+  <div id="wordNote" class="instr" style="display:none;margin-top:14px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;"></div>
+  <button class="next-btn" id="wordsNextBtn" onclick="completeTab('words','vocab')">ಮುಂದೆ ➜ ಅರ್ಥ</button>
+</div>
+
+<!-- ===== TAB 3: VOCAB MEANING ===== -->
+<div class="section" id="vocab">
+  <div class="sec-title">📚 ಪದಗಳ ಅರ್ಥ — ತಟ್ಟಿ ತಿಳಿ!</div>
+  <div class="instr">👆 ಪ್ರತಿ ಪದ ತಟ್ಟಿದರೆ ಅರ್ಥ ಕಾಣಿಸುತ್ತದೆ. ಎಲ್ಲಾ ೮ ತಟ್ಟಿದ ನಂತರ ಮುಂದೆ ಹೋಗಬಹುದು!</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="vocabBar"></div></div>
+  <div class="mini-label">ಕಲಿತ ಅರ್ಥ: <span id="vocabCount">೦</span> / ೮</div>
+
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="flipVocab(this,'v1')">
+      <div class="vocab-front"><div class="vocab-emoji">😄</div><div><div class="vocab-word">ಖುಷಿ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಹಿಗ್ಗು, ಹರ್ಷ — Joy, happiness</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v2')">
+      <div class="vocab-front"><div class="vocab-emoji">📦</div><div><div class="vocab-word">ಪದಾರ್ಥ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ವಸ್ತು — A thing / material</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v3')">
+      <div class="vocab-front"><div class="vocab-emoji">🌾</div><div><div class="vocab-word">ರಾಶಿ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಗುಂಪು, ಗುಪ್ಪೆ, ಸಮೂಹ — A heap or pile</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v4')">
+      <div class="vocab-front"><div class="vocab-emoji">🔧</div><div><div class="vocab-word">ಸಲಕರಣೆ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಉಪಕರಣ — Tools, equipment</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v5')">
+      <div class="vocab-front"><div class="vocab-emoji">🌾</div><div><div class="vocab-word">ದಿನಸಿ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಧಾನ್ಯ, ದವಸ — Food grains / provisions</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v6')">
+      <div class="vocab-front"><div class="vocab-emoji">↔️</div><div><div class="vocab-word">ಬದಿ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಪಕ್ಕ, ಮಗ್ಗಲು — Side / beside</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v7')">
+      <div class="vocab-front"><div class="vocab-emoji">🔨</div><div><div class="vocab-word">ರಿಪೇರಿ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಸರಿಪಡಿಸುವಿಕೆ — Repair / fixing</div></div>
+    </div>
+    <div class="vocab-card" onclick="flipVocab(this,'v8')">
+      <div class="vocab-front"><div class="vocab-emoji">🎭</div><div><div class="vocab-word">ಮನೋರಂಜನೆ</div><div class="vocab-hint">ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ 👆</div></div></div>
+      <div class="vocab-back"><div class="vocab-meaning">ಮನಸ್ಸನ್ನು ಸಂತೋಷಗೊಳಿಸುವುದು — Entertainment</div></div>
+    </div>
+  </div>
+
+  <div id="vocabNote" class="instr" style="display:none;margin-top:14px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;"></div>
+  <button class="next-btn" id="vocabNextBtn" onclick="completeTab('vocab','whosaid')">ಮುಂದೆ ➜ ಯಾರು ಹೇಳಿದರು?</button>
+</div>
+
+<!-- ===== TAB 4: WHO SAID WHAT ===== -->
+<div class="section" id="whosaid">
+  <div class="sec-title">🗣️ ಯಾರು ಹೇಳಿದರು? — ಸರಿ ಉತ್ತರ ಆರಿಸು!</div>
+  <div class="instr">👆 ಪ್ರತಿ ಮಾತು ಯಾರು ಹೇಳಿದರು ಎಂದು ಆರಿಸಿ. ೪ ಸರಿ ಉತ್ತರ ಬೇಕು!</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="wsBar"></div></div>
+  <div class="mini-label">ಸರಿ ಉತ್ತರ: <span id="wsCount">೦</span> / ೪</div>
+
+  <div class="qa-group" id="ws1">
+    <div class="qa-question">"ಅವಸರದಿಂದ ಚದುರಿ ಹೋಗಬೇಡಿ. ನನ್ನ ಜೊತೆಯಲ್ಲೇ ಬನ್ನಿ, ಸಂತೆಯಲ್ಲಿ ಸುತ್ತಿಸುವೆ."</div>
+    <div class="qa-sub">👆 ಯಾರು ಹೇಳಿದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws1')">🌸 ಅನಿತಾ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickWS(this,'ws1')">👨 ಚಿಕ್ಕಪ್ಪ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws1')">🙋 ಜಾನ್</button>
+  </div>
+
+  <div class="qa-group" id="ws2">
+    <div class="qa-question">"ಓಹೋ! ಅಲ್ಲಿ ನೋಡಿ, ಘಮಘಮಿಸುವ ಹೂಗಳು."</div>
+    <div class="qa-sub">👆 ಯಾರು ಹೇಳಿದರು?</div>
+    <button class="qa-btn" data-correct="true" onclick="pickWS(this,'ws2')">🌸 ಅನಿತಾ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws2')">👨 ಚಿಕ್ಕಪ್ಪ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws2')">😮 ಕುಮಾರ</button>
+  </div>
+
+  <div class="qa-group" id="ws3">
+    <div class="qa-question">"ಇಲ್ಲಿಗೆ ಇವೆಲ್ಲವನ್ನೂ ಎಲ್ಲಿಂದ ತರುತ್ತಾರೆ?"</div>
+    <div class="qa-sub">👆 ಯಾರು ಹೇಳಿದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws3')">🧒 ರಶೀದ್</button>
+    <button class="qa-btn" data-correct="true" onclick="pickWS(this,'ws3')">🙋 ಜಾನ್</button>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws3')">😮 ಕುಮಾರ</button>
+  </div>
+
+  <div class="qa-group" id="ws4">
+    <div class="qa-question">"ಸಿಪ್ಪೆಯನ್ನು ದಾರಿಗೆ ಎಸೆಯಬಾರದು."</div>
+    <div class="qa-sub">👆 ಯಾರು ಹೇಳಿದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws4')">🙋 ಜಾನ್</button>
+    <button class="qa-btn" data-correct="false" onclick="pickWS(this,'ws4')">😮 ಕುಮಾರ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickWS(this,'ws4')">🧒 ರಶೀದ್</button>
+  </div>
+
+  <div class="result-msg" id="result-ws"></div>
+  <button class="next-btn" id="wsNextBtn" onclick="completeTab('whosaid','match')">ಮುಂದೆ ➜ ಜೋಡಿ ಮಾಡು</button>
+</div>
+
+<!-- ===== TAB 5: MATCH ===== -->
+<div class="section" id="match">
+  <div class="sec-title">🔗 ಜೋಡಿ ಮಾಡು — ಎಡ ತಟ್ಟು, ಬಲ ತಟ್ಟು!</div>
+  <div class="instr">👆 ಎಡ ಕಡೆ ತಟ್ಟಿ, ನಂತರ ಸರಿ ಜೋಡಿ ಬಲ ಕಡೆ ತಟ್ಟು! ೬ ಜೋಡಿ ಮಾಡು.</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="matchBar"></div></div>
+  <div class="mini-label">ಜೋಡಿ: <span id="matchCount">೦</span> / ೬</div>
+
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start;">
+      <div>
+        <div style="font-size:12px;font-weight:800;color:#7c2d12;margin-bottom:8px;text-align:center;">🌾 ಧಾನ್ಯ / ತರಕಾರಿ</div>
+        <div class="match-item" onclick="selectMatch(this,'m-akki','akki')" id="m-akki" data-id="akki"><span class="match-emoji">🌾</span>ಅಕ್ಕಿ</div>
+        <div class="match-item" onclick="selectMatch(this,'m-jola','jola')" id="m-jola" data-id="jola" style="margin-top:8px"><span class="match-emoji">🌽</span>ಜೋಳ</div>
+        <div class="match-item" onclick="selectMatch(this,'m-bendekayi','bendekayi')" id="m-bendekayi" data-id="bendekayi" style="margin-top:8px"><span class="match-emoji">🥒</span>ಬೆಂಡೆಕಾಯಿ</div>
+        <div class="match-item" onclick="selectMatch(this,'m-ragi','ragi')" id="m-ragi" data-id="ragi" style="margin-top:8px"><span class="match-emoji">🌿</span>ರಾಗಿ</div>
+        <div class="match-item" onclick="selectMatch(this,'m-tomato','tomato')" id="m-tomato" data-id="tomato" style="margin-top:8px"><span class="match-emoji">🍅</span>ಟೊಮೇಟೊ</div>
+        <div class="match-item" onclick="selectMatch(this,'m-mallige','mallige')" id="m-mallige" data-id="mallige" style="margin-top:8px"><span class="match-emoji">🌸</span>ಮಲ್ಲಿಗೆ</div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:#0f766e;margin-bottom:8px;text-align:center;">✅ ಅದು ಏನು?</div>
+        <div class="match-item" onclick="selectMatch(this,'r-jola','jola')" id="r-jola" data-id="jola" style="background:#f0fdf4;border-color:#a7f3d0"><span class="match-emoji">🌽</span>ಒಂದು ಧಾನ್ಯ</div>
+        <div class="match-item" onclick="selectMatch(this,'r-tomato','tomato')" id="r-tomato" data-id="tomato" style="margin-top:8px;background:#f0fdf4;border-color:#a7f3d0"><span class="match-emoji">🍅</span>ತರಕಾರಿ — ಕೆಂಪಗಿದೆ</div>
+        <div class="match-item" onclick="selectMatch(this,'r-mallige','mallige')" id="r-mallige" data-id="mallige" style="margin-top:8px;background:#f0fdf4;border-color:#a7f3d0"><span class="match-emoji">🌸</span>ಬಿಳಿ ಹೂ — ಪರಿಮಳ</div>
+        <div class="match-item" onclick="selectMatch(this,'r-ragi','ragi')" id="r-ragi" data-id="ragi" style="margin-top:8px;background:#f0fdf4;border-color:#a7f3d0"><span class="match-emoji">🌿</span>ಕಪ್ಪು ಧಾನ್ಯ</div>
+        <div class="match-item" onclick="selectMatch(this,'r-akki','akki')" id="r-akki" data-id="akki" style="margin-top:8px;background:#f0fdf4;border-color:#a7f3d0"><span class="match-emoji">🍚</span>ಅನ್ನ ಬೇಯಿಸಲು</div>
+        <div class="match-item" onclick="selectMatch(this,'r-bendekayi','bendekayi')" id="r-bendekayi" data-id="bendekayi" style="margin-top:8px;background:#f0fdf4;border-color:#a7f3d0"><span class="match-emoji">🥒</span>ಹಸಿರು ತರಕಾರಿ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-msg" id="result-match"></div>
+  <button class="next-btn" id="matchNextBtn" onclick="completeTab('match','fill')">ಮುಂದೆ ➜ ಖಾಲಿ ತುಂಬಿಸು</button>
+</div>
+
+<!-- ===== TAB 6: FILL BLANKS ===== -->
+<div class="section" id="fill">
+  <div class="sec-title">✏️ ಖಾಲಿ ಜಾಗ ತುಂಬಿಸು!</div>
+  <div class="instr">👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟು, ನಂತರ ಕೆಳಗಿನ ಸರಿ ಪದ ತಟ್ಟು!</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="fillBar"></div></div>
+  <div class="mini-label">ತುಂಬಿಸಿದ: <span id="fillCount">೦</span> / ೫</div>
+
+  <div class="fill-sentence">
+    ೧. ಊರಂಚಿನ <span class="blank" id="b1" data-answer="ಮೈದಾನ" onclick="selectBlank('b1')">_ _ _</span>ದಲ್ಲಿ ಸಂತೆ ನೆರೆದಿತ್ತು.
+  </div>
+  <div class="fill-sentence">
+    ೨. ಅಕ್ಕಿ, ಜೋಳ, ರಾಗಿ, ತೊಗರಿ, ಕಡಲೆ ಇವೆಲ್ಲ <span class="blank" id="b2" data-answer="ಧಾನ್ಯ" onclick="selectBlank('b2')">_ _ _</span>ಗಳು.
+  </div>
+  <div class="fill-sentence">
+    ೩. ರೈತರು ತಮ್ಮ ಹೊಲ, <span class="blank" id="b3" data-answer="ಗದ್ದೆ" onclick="selectBlank('b3')">_ _ _</span>, ತೋಟಗಳಲ್ಲಿ ಬೆಳೆಯುತ್ತಾರೆ.
+  </div>
+  <div class="fill-sentence">
+    ೪. ಗುದ್ದಲಿ, ಹಾರೆ, ಪಿಕಾಸಿ ಇವೆಲ್ಲ ರೈತರಿಗೆ ಬೇಕಾದ <span class="blank" id="b4" data-answer="ಸಲಕರಣೆ" onclick="selectBlank('b4')">_ _ _</span>ಗಳು.
+  </div>
+  <div class="fill-sentence">
+    ೫. ಬಾಳೆಹಣ್ಣಿನ ಸಿಪ್ಪೆಯನ್ನು <span class="blank" id="b5" data-answer="ಕಸದ ತೊಟ್ಟಿ" onclick="selectBlank('b5')">_ _ _</span>ಗೆ ಹಾಕಿದರು.
+  </div>
+
+  <div class="chip-area">
+    <div class="chip" onclick="placeWord('ಮೈದಾನ',this)">ಮೈದಾನ</div>
+    <div class="chip" onclick="placeWord('ಧಾನ್ಯ',this)">ಧಾನ್ಯ</div>
+    <div class="chip" onclick="placeWord('ಗದ್ದೆ',this)">ಗದ್ದೆ</div>
+    <div class="chip" onclick="placeWord('ಸಲಕರಣೆ',this)">ಸಲಕರಣೆ</div>
+    <div class="chip" onclick="placeWord('ಕಸದ ತೊಟ್ಟಿ',this)">ಕಸದ ತೊಟ್ಟಿ</div>
+    <div class="chip" onclick="placeWord('ಹೂ',this)">ಹೂ</div>
+  </div>
+
+  <div class="result-msg" id="result-fill"></div>
+  <button class="next-btn" id="fillNextBtn" onclick="completeTab('fill','quiz')">ಮುಂದೆ ➜ ಸ್ಪರ್ಧೆ!</button>
+</div>
+
+<!-- ===== TAB 7: FINAL QUIZ ===== -->
+<div class="section" id="quiz">
+  <div class="sec-title">🏆 ಕೊನೆಯ ಪ್ರಶ್ನೆಗಳು — ಎಲ್ಲ ೫ ಸರಿ ಉತ್ತರ ಕೊಡು!</div>
+  <div class="instr">👆 ಸರಿ ಉತ್ತರ ಆರಿಸು. ತಪ್ಪಾದರೆ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು!</div>
+
+  <div class="qa-group" id="fq1">
+    <div class="qa-question">೧. ಮಕ್ಕಳು ಯಾವ ದಿನ ಸಂತೆಗೆ ಹೋದರು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq1')">🌙 ಭಾನುವಾರ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'fq1')">🌞 ಶನಿವಾರ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq1')">⭐ ಶುಕ್ರವಾರ</button>
+  </div>
+
+  <div class="qa-group" id="fq2">
+    <div class="qa-question">೨. ಸಂತೆ ಎಲ್ಲಿ ನಡೆದಿತ್ತು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq2')">🏫 ಶಾಲೆ ಮುಂದೆ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'fq2')">🌳 ಊರಂಚಿನ ಮೈದಾನ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq2')">🏠 ಅನಿತಾ ಮನೆ ಹತ್ತಿರ</button>
+  </div>
+
+  <div class="qa-group" id="fq3">
+    <div class="qa-question">೩. ಸಂತೆಗೆ ತರಕಾರಿ ಯಾರು ತರುತ್ತಾರೆ?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq3')">🚌 ಅಂಗಡಿಯವರು ಬೇರೆ ಊರಿಂದ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'fq3')">👨‍🌾 ರೈತರು ತಮ್ಮ ಹೊಲದಿಂದ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq3')">🏙️ ಶಹರದ ಅಂಗಡಿಯಿಂದ</button>
+  </div>
+
+  <div class="qa-group" id="fq4">
+    <div class="qa-question">೪. ಬಾಳೆ ಸಿಪ್ಪೆ ಎಲ್ಲಿ ಹಾಕಬೇಕು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq4')">🛣️ ದಾರಿಗೆ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'fq4')">🗑️ ಕಸದ ತೊಟ್ಟಿಗೆ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq4')">🌊 ಕೆರೆಗೆ</button>
+  </div>
+
+  <div class="qa-group" id="fq5">
+    <div class="qa-question">೫. ಸಂತೆ ಎಂದರೆ ಕೇವಲ ವ್ಯಾಪಾರ ಸ್ಥಳ ಅಲ್ಲ — ಇನ್ನು ಏನು?</div>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq5')">🏃 ಓಡಾಡುವ ಜಾಗ</button>
+    <button class="qa-btn" data-correct="true" onclick="pickQuiz(this,'fq5')">🎭 ಮನೋರಂಜನೆ ಮತ್ತು ಸಾಂಸ್ಕೃತಿಕ ಕೇಂದ್ರ</button>
+    <button class="qa-btn" data-correct="false" onclick="pickQuiz(this,'fq5')">😴 ವಿಶ್ರಾಂತಿ ಸ್ಥಳ</button>
+  </div>
+
+  <div class="result-msg" id="result-quiz"></div>
+
+  <div class="complete-card" id="completeCard">
+    <div class="trophy">🏆</div>
+    <div class="stars">⭐⭐⭐</div>
+    <h2>ಶಾಭಾಷ್! ನೀವು ಗೆದ್ದಿರಿ! 🎉</h2>
+    <p>ಸಂತೆ ಪಾಠ ಸಂಪೂರ್ಣ ಕಲಿತಿರಿ!<br>
+    ಸಂತೆ — ಗ್ರಾಮೀಣ ಜನರ ಸಹಕಾರ ಮತ್ತು ಸಾಂಸ್ಕೃತಿಕ ಕೇಂದ್ರ! 🛒🌾🌺</p>
+  </div>
+</div>
+
+<script>
+const tabOrder = ['story','words','vocab','whosaid','match','fill','quiz'];
+const progressPct = {story:12, words:27, vocab:42, whosaid:57, match:70, fill:85, quiz:100};
+const stepNum = {story:'೧', words:'೨', vocab:'೩', whosaid:'೪', match:'೫', fill:'೬', quiz:'೭'};
+let unlockedTabs = new Set(['story']);
+const knNums = ['೦','೧','೨','೩','೪','೫','೬','೭','೮','೯','೧೦','೧೧','೧೨','೧೩','೧೪','೧೫','೧೬','೧೭','೧೮'];
+
+function tryTab(id, btn) {
+  if (unlockedTabs.has(id)) {
+    showTab(id);
+  } else {
+    btn.classList.remove('shake'); void btn.offsetWidth; btn.classList.add('shake');
+    btn.addEventListener('animationend', () => btn.classList.remove('shake'), {once:true});
+    showToast('🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!');
+  }
+}
+
+function showTab(id) {
+  tabOrder.forEach(t => {
+    document.getElementById(t).classList.remove('active');
+    document.getElementById('tab-'+t).classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('progressFill').style.width = progressPct[id] + '%';
+  document.getElementById('progressLabel').textContent = 'ಹಂತ ' + stepNum[id] + ' / ೭';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function completeTab(current, next) {
+  const curBtn = document.getElementById('tab-'+current);
+  curBtn.classList.remove('active'); curBtn.classList.add('done');
+  const nextBtn = document.getElementById('tab-'+next);
+  nextBtn.classList.remove('locked');
+  const lockEl = nextBtn.querySelector('.lock-icon');
+  if (lockEl) lockEl.remove();
+  unlockedTabs.add(next);
+  showTab(next);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function showResult(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+
+// ===== TAB 1: STORY =====
+let storyTapped = 0;
+const storyTotal = 12;
+
+function tapStory(el) {
+  if (!el.classList.contains('highlighted')) {
+    el.classList.add('highlighted');
+    storyTapped++;
+    document.getElementById('storyCount').textContent = knNums[storyTapped];
+    document.getElementById('storyBar').style.width = (storyTapped / storyTotal * 100) + '%';
+    if (storyTapped >= storyTotal) {
+      document.getElementById('storyNote').style.display = 'block';
+      document.getElementById('storyNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 2: WORDS =====
+let wordTapped = new Set();
+function tapWord(card, id) {
+  if (!wordTapped.has(id)) {
+    card.classList.add('tapped'); wordTapped.add(id);
+    document.getElementById('wordCount').textContent = knNums[wordTapped.size];
+    document.getElementById('wordBar').style.width = (wordTapped.size / 18 * 100) + '%';
+    if (wordTapped.size >= 18) {
+      document.getElementById('wordNote').style.display = 'block';
+      document.getElementById('wordNote').textContent = '✅ ಎಲ್ಲಾ ಪದಗಳನ್ನು ತಿಳಿದಿರಿ! 🎉';
+      document.getElementById('wordsNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 3: VOCAB =====
+let vocabRevealed = new Set();
+function flipVocab(card, id) {
+  if (!vocabRevealed.has(id)) {
+    card.classList.add('revealed'); vocabRevealed.add(id);
+    document.getElementById('vocabCount').textContent = knNums[vocabRevealed.size];
+    document.getElementById('vocabBar').style.width = (vocabRevealed.size / 8 * 100) + '%';
+    if (vocabRevealed.size >= 8) {
+      document.getElementById('vocabNote').style.display = 'block';
+      document.getElementById('vocabNote').textContent = '✅ ಎಲ್ಲಾ ಅರ್ಥ ಕಲಿತಿರಿ! 🎉';
+      document.getElementById('vocabNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// ===== TAB 4: WHO SAID =====
+let wsCorrect = 0;
+function pickWS(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true'; wsCorrect++;
+    document.getElementById('wsCount').textContent = knNums[wsCorrect];
+    document.getElementById('wsBar').style.width = (wsCorrect / 4 * 100) + '%';
+    if (wsCorrect === 4) {
+      setTimeout(() => {
+        showResult('result-ws', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲ ಮಾತು ಯಾರು ಹೇಳಿದರು ಎಂದು ತಿಳಿದಿದೆ!');
+        setTimeout(() => document.getElementById('wsNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong'); setTimeout(() => btn.classList.remove('wrong'), 700);
+  }
+}
+
+// ===== TAB 5: MATCH =====
+let matchSelected = null;
+let matchSelectedSide = null;
+let matchCorrect = 0;
+
+function selectMatch(el, elId, pairId) {
+  const isLeft = elId.startsWith('m-');
+  if (el.classList.contains('matched-correct')) return;
+
+  // Deselect same-side previous
+  document.querySelectorAll('.match-item.selected').forEach(item => {
+    const itemIsLeft = item.id.startsWith('m-');
+    if (itemIsLeft === isLeft) item.classList.remove('selected');
+  });
+
+  el.classList.add('selected');
+
+  if (matchSelected === null || matchSelectedSide === isLeft) {
+    matchSelected = {el, pairId};
+    matchSelectedSide = isLeft;
+  } else {
+    // We have one from each side — check match
+    const prev = matchSelected;
+    if (prev.pairId === pairId) {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-correct');
+      el.classList.remove('selected'); el.classList.add('matched-correct');
+      matchCorrect++;
+      document.getElementById('matchCount').textContent = knNums[matchCorrect];
+      document.getElementById('matchBar').style.width = (matchCorrect / 6 * 100) + '%';
+      if (matchCorrect === 6) {
+        setTimeout(() => {
+          showResult('result-match', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಜೋಡಿ ಸರಿ!');
+          setTimeout(() => document.getElementById('matchNextBtn').style.display = 'block', 500);
+        }, 300);
+      }
+    } else {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-wrong');
+      el.classList.remove('selected'); el.classList.add('matched-wrong');
+      setTimeout(() => { prev.el.classList.remove('matched-wrong'); el.classList.remove('matched-wrong'); }, 600);
+      showToast('❌ ತಪ್ಪು ಜೋಡಿ! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+    }
+    matchSelected = null; matchSelectedSide = null;
+  }
+}
+
+// ===== TAB 6: FILL BLANKS =====
+let selectedBlankId = null;
+let fillCorrect = 0;
+
+function selectBlank(id) {
+  const blank = document.getElementById(id);
+  if (blank.classList.contains('correct')) return;
+  document.querySelectorAll('.blank').forEach(b => b.classList.remove('active-blank'));
+  selectedBlankId = id;
+  blank.classList.add('active-blank');
+}
+
+function placeWord(word, chip) {
+  if (!selectedBlankId) { showToast('👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟಿ!'); return; }
+  const blank = document.getElementById(selectedBlankId);
+  if (blank.classList.contains('correct')) return;
+  blank.classList.remove('active-blank', 'wrong');
+  if (word === blank.dataset.answer) {
+    blank.textContent = word; blank.classList.add('correct');
+    chip.classList.add('used'); fillCorrect++; selectedBlankId = null;
+    document.getElementById('fillCount').textContent = knNums[fillCorrect];
+    document.getElementById('fillBar').style.width = (fillCorrect / 5 * 100) + '%';
+    if (fillCorrect === 5) {
+      setTimeout(() => {
+        showResult('result-fill', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಸರಿಯಾಗಿವೆ!');
+        setTimeout(() => document.getElementById('fillNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    blank.classList.add('wrong'); blank.textContent = '✗';
+    setTimeout(() => { blank.classList.remove('wrong'); blank.textContent = '_ _ _'; }, 800);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+
+// ===== TAB 7: FINAL QUIZ =====
+let quizCorrect = 0;
+function pickQuiz(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true'; quizCorrect++;
+    if (quizCorrect === 5) {
+      setTimeout(() => {
+        showResult('result-quiz', '🎉 ಶಾಭಾಷ್! ಎಲ್ಲಾ ಪ್ರಶ್ನೆಗಳಿಗೆ ಸರಿ ಉತ್ತರ!');
+        setTimeout(() => {
+          document.getElementById('completeCard').classList.add('show');
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('tab-quiz').classList.add('done');
+        }, 800);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong'); setTimeout(() => btn.classList.remove('wrong'), 700);
+  }
+}
+</script>
+</body>
+</html>

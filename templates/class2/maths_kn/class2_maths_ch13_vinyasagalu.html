@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>2ನೇ ತರಗತಿ ಗಣಿತ — ಪಾಠ 13: ವಿನ್ಯಾಸಗಳು</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Noto+Sans+Kannada:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#fff8e1;min-height:100vh;overflow-x:hidden;}
+
+/* TOP BAR */
+.topbar{background:linear-gradient(135deg,#e65100,#f57c00,#ffa726);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(230,81,0,.4);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:13px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.2);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#e65100,#f57c00,#ff9800);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.3);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+/* PROGRESS */
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#ffe0b2;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#e65100,#ffa726);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+/* TABS */
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#f57c00;color:#fff;border-color:#f57c00;box-shadow:0 4px 14px rgba(245,124,0,.5);}
+.step-tab.done{background:#fff3e0;color:#e65100;border-color:#ffcc80;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+/* TOAST */
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#b71c1c;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CONTENT */
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* LESSON BANNER */
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+/* TEACH CARD */
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #f57c00;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#e65100;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;margin-bottom:4px;}
+
+/* INFO STRIP */
+.info-strip{background:linear-gradient(135deg,#fff8e1,#ffe0b2);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #ffcc80;}
+.info-strip p{font-size:14px;font-weight:800;color:#e65100;line-height:1.7;}
+
+/* RULE BOX */
+.rule-box{background:#fff;border:3px solid #f57c00;border-radius:18px;padding:14px 16px;margin:12px 0;text-align:center;}
+.rule-text{font-family:'Baloo 2',cursive;font-size:15px;color:#e65100;font-weight:900;line-height:1.7;}
+
+/* PATTERN DISPLAY */
+.pattern-display{background:#fff9f0;border:2px solid #ffcc80;border-radius:18px;padding:14px;margin:10px 0;text-align:center;font-size:30px;line-height:2.2;letter-spacing:4px;}
+.pattern-row{margin:6px 0;font-size:28px;}
+
+/* QUESTION CARD */
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#ffcc80;background:#fff8e1;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-question{font-family:'Baloo 2',cursive;font-size:16px;color:#222;line-height:1.6;margin-bottom:4px;}
+.scene-bottom{border-top:2px dashed #ffcc80;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:60px;padding:13px 8px;border-radius:16px;border:3px solid #ffcc80;background:#fff8e1;font-family:'Baloo 2',cursive;font-size:15px;color:#e65100;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-weight:900;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn.correct{border-color:#e65100;background:#ffe0b2;color:#bf360c;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#ffe0b2;color:#bf360c;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+/* LARGE EMOJI CHOICES */
+.emoji-choice-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.emoji-btn{flex:1;min-width:70px;max-width:110px;padding:16px 10px;border-radius:20px;border:3px solid #ffcc80;background:#fff8e1;font-size:28px;cursor:pointer;transition:all .2s;text-align:center;user-select:none;}
+.emoji-btn:active{transform:scale(.9);}
+.emoji-btn.correct{border-color:#e65100;background:#ffe0b2;}
+.emoji-btn.wrong{border-color:#c62828;background:#ffcdd2;}
+.emoji-btn.locked-choice{pointer-events:none;}
+.emoji-btn .elabel{font-family:'Baloo 2',cursive;font-size:11px;color:#555;display:block;margin-top:4px;font-weight:900;}
+
+/* NUMBER PATTERN */
+.num-seq{background:#fff;border-radius:16px;padding:12px 16px;margin:8px 0;display:flex;align-items:center;flex-wrap:wrap;gap:8px;border:2px solid #ffcc80;}
+.num-box{min-width:38px;height:38px;border-radius:10px;background:#fff8e1;border:2px solid #ffcc80;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:16px;font-weight:900;color:#e65100;}
+.num-box.blank{background:#ffe0b2;border:2px dashed #f57c00;color:#aaa;}
+.arrow-box{font-size:14px;color:#f57c00;font-weight:900;}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-family:'Baloo 2',cursive;font-size:13px;}
+.data-table th{background:#f57c00;color:#fff;padding:10px 6px;font-weight:900;}
+.data-table td{padding:9px 6px;font-weight:800;color:#333;border-bottom:2px solid #fff3e0;text-align:center;}
+.data-table tr:nth-child(even) td{background:#fff8e1;}
+.data-table .total-row td{background:#ffe0b2;color:#e65100;font-size:14px;}
+
+/* CONTINUE BUTTON */
+.cont-btn{width:100%;margin-top:16px;padding:16px;background:linear-gradient(135deg,#e65100,#ffa726);color:#fff;font-family:'Baloo 2',cursive;font-size:17px;font-weight:900;border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(230,81,0,.4);transition:all .2s;}
+.cont-btn:active{transform:scale(.97);}
+.cont-btn:disabled{background:#e0e0e0;color:#9e9e9e;box-shadow:none;cursor:not-allowed;}
+
+/* CELEBRATION */
+.celeb-screen{position:fixed;inset:0;background:linear-gradient(135deg,#e65100,#f57c00);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .4s;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-emoji{font-size:80px;margin-bottom:12px;animation:heroFloat 2s ease-in-out infinite;}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:28px;color:#fff;font-weight:900;text-align:center;margin-bottom:8px;}
+.celeb-msg{font-family:'Baloo 2',cursive;font-size:15px;color:#ffe0b2;text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:40px;margin-bottom:20px;}
+.celeb-btn{padding:16px 32px;background:#fff;color:#e65100;font-family:'Baloo 2',cursive;font-size:17px;font-weight:900;border:none;border-radius:20px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#e65100;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+/* HIGHLIGHT KEY WORD */
+.kw{color:#e65100;font-size:1.1em;}
+
+/* TILE PATTERN */
+.tile-box{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;padding:12px;background:#fff9f0;border-radius:16px;border:2px solid #ffcc80;margin:10px 0;}
+.tile{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+
+/* SHAPE PATTERN */
+.shape-seq{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px;background:#fff9f0;border-radius:16px;border:2px solid #ffcc80;margin:10px 0;justify-content:center;}
+.shape{font-size:30px;}
+.shape.blank-shape{font-size:20px;width:40px;height:40px;border:2px dashed #f57c00;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#ffe0b2;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-title">🔶 2ನೇ ತರಗತಿ | ಪಾಠ 13: ವಿನ್ಯಾಸಗಳು</div>
+  <div class="stars-pill">⭐ <span id="starsNum">0</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🎨</span>
+  <h1>ವಿನ್ಯಾಸಗಳು (Patterns)</h1>
+  <p>ಆಕಾರ • ಬಣ್ಣ • ಸಂಖ್ಯೆ • ಕ್ರಮ</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">ಹಂತ 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<!-- TABS -->
+<div class="steps-bar">
+  <div class="step-tab active"  data-tab="intro">🌟 ಪರಿಚಯ</div>
+  <div class="step-tab locked" data-tab="shapes">🔷 ಆಕಾರ</div>
+  <div class="step-tab locked" data-tab="colours">🎨 ಬಣ್ಣ</div>
+  <div class="step-tab locked" data-tab="numbers">🔢 ಸಂಖ್ಯೆ</div>
+  <div class="step-tab locked" data-tab="growing">📈 ಬೆಳೆಯುವ</div>
+  <div class="step-tab locked" data-tab="table">📊 ಕೋಷ್ಠಕ</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 ಕ್ವಿಜ್</div>
+</div>
+
+<div class="lock-toast" id="lockToast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸಿ! Finish the previous step first!</div>
+
+<div class="content">
+
+<!-- ===== TAB 1: INTRO (ಪರಿಚಯ) ===== -->
+<div class="tab-panel active" id="panel-intro">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffe0b2);">
+    <span class="banner-emoji">🎨</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ವಿನ್ಯಾಸ ಎಂದರೇನು?</div>
+      <div class="banner-sub" style="color:#f57c00;">What is a Pattern?</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>📌 ವಿನ್ಯಾಸ = ಪುನಾರಾವರ್ತನೆ (Repeating)</h3>
+    <p>ಒಂದೇ <span class="kw">ಆಕಾರ</span> ಅಥವಾ <span class="kw">ಬಣ್ಣ</span> ಅಥವಾ <span class="kw">ಸಂಖ್ಯೆ</span> ಮತ್ತೆ ಮತ್ತೆ ಬಂದರೆ ಅದು <strong>ವಿನ್ಯಾಸ!</strong></p>
+    <p>When the same shape / colour / number repeats again and again — that is a <strong>Pattern!</strong></p>
+  </div>
+
+  <div class="info-strip">
+    <p>🏠 ನಿಮ್ಮ ಮನೆಯ ನೆಲ, ಸೀರೆ, ಬಟ್ಟೆ — ಎಲ್ಲದರಲ್ಲೂ ವಿನ್ಯಾಸ ಇರುತ್ತದೆ!<br>Your floor tiles, sarees, clothes — all have patterns!</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ವ್ಯವಸ್ಥಿತ ಅಂತರದಲ್ಲಿ ಒಂದೇ ಆಕಾರಗಳು<br>ಪುನರಾವರ್ತಿಸಲ್ಪಟ್ಟಿರುವುದಕ್ಕೆ<br>'<span class="kw">ವಿನ್ಯಾಸ</span>' ಎಂದು ಹೆಸರು 🎨</div>
+  </div>
+
+  <div class="section-divider">— ನೀವು ಎಲ್ಲಿ ವಿನ್ಯಾಸ ನೋಡಿದ್ದೀರಾ? —</div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="i1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1</div>
+      <div class="scene-question">ನೀಲಿ ಮತ್ತು ಕಿತ್ತಳೆ ನೆಲಹಾಸಿನ (Tile) ವಿನ್ಯಾಸ ನೋಡಿ — ಎಷ್ಟು ಬಣ್ಣಗಳು ಪುನಾರಾವರ್ತನೆ ಆಗುತ್ತಿವೆ?<br><small>Blue-orange tile: how many colours repeat?</small></div>
+      <div class="pattern-display">🟦🟧🟦🟧🟦🟧🟦🟧</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'i1',false)">1</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i1',true)">2</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i1',false)">3</button>
+      </div>
+      <div class="fb-box" id="fb-i1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="i2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2</div>
+      <div class="scene-question">ಹಾಗಲಕಾಯಿ (Hakala kaayi), ತೊಂಡೆಕಾಯಿ — ಈ ಎರಡು ತರಕಾರಿಗಳಿಂದ ವಿನ್ಯಾಸ ರಚಿಸಬಹುದೇ?<br><small>Can we make a pattern with 2 vegetables?</small></div>
+      <div class="pattern-display">🥒🌿🥒🌿🥒🌿</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'i2',true)">ಹೌದು ✅</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i2',false)">ಇಲ್ಲ ❌</button>
+      </div>
+      <div class="fb-box" id="fb-i2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="i3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3</div>
+      <div class="scene-question">ಕ್ರಮ ಬದ್ಧವಾಗಿ ಜೋಡಿಸಿರುವ ಚಿತ್ರ ಅಥವಾ ಬಣ್ಣ ಅಥವಾ ಆಕಾರಗಳೇ — ಇದನ್ನೇ ಏನೆಂದು ಕರೆಯುತ್ತಾರೆ?<br><small>Shapes/colours arranged in order = ?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'i3',false)">ಕೋಷ್ಠಕ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i3',true)">ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i3',false)">ಗಣಿತ</button>
+      </div>
+      <div class="fb-box" id="fb-i3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="i4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4</div>
+      <div class="scene-question">ಹೊದಿಕೆ (ಬೆಡ್‌ಶೀಟ್) ಮೇಲೆ ಒಂದೇ ಬಗೆಯ ಹೂಗಳ ಚಿತ್ರ ಮತ್ತೆ ಮತ್ತೆ ಕಾಣಿಸಿದರೆ — ಅದು ಯಾವ ವಿನ್ಯಾಸ?<br><small>Flowers repeating on a bedsheet = which type?</small></div>
+      <div class="pattern-display">🌸🌸🌸🌸🌸🌸🌸🌸</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'i4',false)">ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i4',true)">ಚಿತ್ರ ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i4',false)">ಬಣ್ಣ ವಿನ್ಯಾಸ</button>
+      </div>
+      <div class="fb-box" id="fb-i4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="i5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5</div>
+      <div class="scene-question">ಸೀರೆ (Saree) ಮತ್ತು ಬಟ್ಟೆ (Cloth) ಯಲ್ಲಿ ವಿನ್ಯಾಸ ಇರುತ್ತದೆ — ಈ ಮಾತು ಸರಿಯೇ?<br><small>Sarees and clothes have patterns — True?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'i5',true)">ಹೌದು, ಸರಿ ✅</button>
+        <button class="choice-btn" onclick="checkChoice(this,'i5',false)">ತಪ್ಪು ❌</button>
+      </div>
+      <div class="fb-box" id="fb-i5"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-intro" disabled onclick="completeTab('intro','shapes')">ಮುಂದೆ → ಆಕಾರ ವಿನ್ಯಾಸ 🔷</button>
+</div>
+
+<!-- ===== TAB 2: SHAPES (ಆಕಾರ ವಿನ್ಯಾಸ) ===== -->
+<div class="tab-panel" id="panel-shapes">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+    <span class="banner-emoji">🔷</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಆಕಾರ ವಿನ್ಯಾಸ</div>
+      <div class="banner-sub" style="color:#ad1457;">Shape Patterns — ಆಯತ, ವೃತ್ತ, ತ್ರಿಭುಜ</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>📌 ಆಯತ (Rectangle) = ಅಡ್ಡಗೆರೆ + ಲಂಬಗೆರೆ</h3>
+    <p>ನಾಲ್ಕು ಕೋನಗಳಿರುವ ಆಕಾರ = <span class="kw">ಆಯತ</span></p>
+    <p>ದುಂಡನೆಯ ಆಕಾರ = <span class="kw">ವೃತ್ತ</span> (Circle)</p>
+    <p>ಮೂರು ಬಾಹುಗಳಿರುವ ಆಕಾರ = <span class="kw">ತ್ರಿಭುಜ</span> (Triangle)</p>
+  </div>
+
+  <div class="pattern-display">
+    <div>⬜🔴⬜🔴⬜🔴</div>
+    <div style="font-size:13px;color:#f57c00;font-weight:900;margin-top:4px;">ಆಯತ • ವೃತ್ತ • ಆಯತ • ವೃತ್ತ …</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="s1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1</div>
+      <div class="scene-question">ಈ ಕ್ರಮದ ನಂತರ ಯಾವ ಆಕಾರ ಬರಬೇಕು?<br>🔺🔵🔺🔵🔺 __ ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="emoji-choice-row">
+        <button class="emoji-btn" onclick="checkChoice(this,'s1',true)">🔵<span class="elabel">ವೃತ್ತ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'s1',false)">🔺<span class="elabel">ತ್ರಿಭುಜ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'s1',false)">⬛<span class="elabel">ಆಯತ</span></button>
+      </div>
+      <div class="fb-box" id="fb-s1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="s2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2</div>
+      <div class="scene-question">ಮನೆ ಚಿತ್ರದಲ್ಲಿ ಕಿಟಕಿ (window) ಯಾವ ಆಕಾರ?<br><small>What shape is a window?</small></div>
+      <div class="pattern-display" style="font-size:40px;">🏠</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'s2',false)">ವೃತ್ತ 🔵</button>
+        <button class="choice-btn" onclick="checkChoice(this,'s2',true)">ಆಯತ ⬜</button>
+        <button class="choice-btn" onclick="checkChoice(this,'s2',false)">ತ್ರಿಭುಜ 🔺</button>
+      </div>
+      <div class="fb-box" id="fb-s2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="s3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3</div>
+      <div class="scene-question">ಈ ವಿನ್ಯಾಸದ ಮಧ್ಯದ ಬಿಟ್ಟ ಆಕಾರ ಯಾವುದು?<br>⬜🔺⬜__⬜🔺</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="emoji-choice-row">
+        <button class="emoji-btn" onclick="checkChoice(this,'s3',false)">⬜<span class="elabel">ಆಯತ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'s3',true)">🔺<span class="elabel">ತ್ರಿಭುಜ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'s3',false)">🔵<span class="elabel">ವೃತ್ತ</span></button>
+      </div>
+      <div class="fb-box" id="fb-s3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="s4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4</div>
+      <div class="scene-question">ನೆಲಹಾಸಿನ (Tile) ಮಾದರಿ ನೋಡಿ — ಯಾವ ಆಕಾರ ಮತ್ತೆ ಮತ್ತೆ ಬರುತ್ತಿದೆ?<br>🌸🌸🌸🌸🌸<br><small>Flower shapes on a tile = which shape repeating?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'s4',false)">ಆಯತ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'s4',false)">ತ್ರಿಭುಜ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'s4',true)">ಹೂ ಆಕಾರ 🌸</button>
+      </div>
+      <div class="fb-box" id="fb-s4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="s5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5</div>
+      <div class="scene-question">ಎರಡು ಆಯಾಮಗಳುಳ್ಳ ಆಕೃತಿಗಳನ್ನು ಅಂಟಿಸುವ ಮೂಲಕ ಹೊಸ ವಿನ್ಯಾಸ ರಚಿಸಬಹುದೇ?<br><small>Can joining 2D shapes make new patterns?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'s5',true)">ಹೌದು ✅</button>
+        <button class="choice-btn" onclick="checkChoice(this,'s5',false)">ಇಲ್ಲ ❌</button>
+      </div>
+      <div class="fb-box" id="fb-s5"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-shapes" disabled onclick="completeTab('shapes','colours')">ಮುಂದೆ → ಬಣ್ಣ ವಿನ್ಯಾಸ 🎨</button>
+</div>
+
+<!-- ===== TAB 3: COLOURS (ಬಣ್ಣ ವಿನ್ಯಾಸ) ===== -->
+<div class="tab-panel" id="panel-colours">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🎨</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಬಣ್ಣ ವಿನ್ಯಾಸ</div>
+      <div class="banner-sub" style="color:#388e3c;">Colour Patterns — ಹಳದಿ, ಕೆಂಪು, ಹಸಿರು, ನೀಲಿ</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🎨 ಬಣ್ಣಗಳ ಕ್ರಮ</h3>
+    <p>ಹಳದಿ → ಕೆಂಪು → ಹಳದಿ → ಕೆಂಪು … ಇದು <span class="kw">ಬಣ್ಣ ವಿನ್ಯಾಸ!</span></p>
+    <p>ಮಣಿ ಸರ (Bead necklace) ದಲ್ಲಿ ಬಣ್ಣ ವಿನ್ಯಾಸ ಕಾಣಬಹುದು!</p>
+  </div>
+
+  <div class="pattern-display">
+    <div>🟡🔴🟡🔴🟡🔴</div>
+    <div style="font-size:13px;color:#f57c00;font-weight:900;margin-top:4px;">ಹಳದಿ • ಕೆಂಪು • ಹಳದಿ • ಕೆಂಪು …</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="c1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1</div>
+      <div class="scene-question">ಮಣಿ ಸರ (Bead necklace) ದಲ್ಲಿ ಮುಂದೆ ಯಾವ ಬಣ್ಣದ ಮಣಿ ಬರಬೇಕು?<br>🟤⚪🟤⚪🟤 __ ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="emoji-choice-row">
+        <button class="emoji-btn" onclick="checkChoice(this,'c1',false)">🟤<span class="elabel">ಕಂದು</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'c1',true)">⚪<span class="elabel">ಬಿಳಿ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'c1',false)">🔵<span class="elabel">ನೀಲಿ</span></button>
+      </div>
+      <div class="fb-box" id="fb-c1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="c2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2</div>
+      <div class="scene-question">ಅಚ್ಚು ಒತ್ತುವ ಮೂಲಕ ಹೆಬ್ಬೆರಳು, ಎಲೆಗಳು ಹಾಗೂ ತರಕಾರಿ ಹೋಳುಗಳಿಂದ ವಿನ್ಯಾಸ ರಚಿಸಬಹುದೇ?<br><small>Can we make patterns using stamps (leaves/vegetables)?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'c2',true)">ಹೌದು ✅</button>
+        <button class="choice-btn" onclick="checkChoice(this,'c2',false)">ಇಲ್ಲ ❌</button>
+      </div>
+      <div class="fb-box" id="fb-c2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="c3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3</div>
+      <div class="scene-question">ಈ ಬಣ್ಣ ವಿನ್ಯಾಸದ ಮುಂದಿನ ಬಣ್ಣ ಯಾವುದು?<br>🟩🟥🟩🟥🟩 __ ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="emoji-choice-row">
+        <button class="emoji-btn" onclick="checkChoice(this,'c3',false)">🟩<span class="elabel">ಹಸಿರು</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'c3',true)">🟥<span class="elabel">ಕೆಂಪು</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'c3',false)">🟨<span class="elabel">ಹಳದಿ</span></button>
+      </div>
+      <div class="fb-box" id="fb-c3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="c4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4</div>
+      <div class="scene-question">ಕ್ಯಾರೆಟ್ ತುಂಡನ್ನು ಬಣ್ಣದಲ್ಲಿ ಅದ್ದಿ ಹಾಳೆ ಮೇಲೆ ಅಚ್ಚು ಹಾಕಿದಾಗ ಏನು ಸಿಗುತ್ತದೆ?<br><small>Dipping carrot in colour and stamping = ?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'c4',false)">ಸಂಖ್ಯೆ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'c4',true)">ಚಿತ್ರ ವಿನ್ಯಾಸ 🥕</button>
+        <button class="choice-btn" onclick="checkChoice(this,'c4',false)">ಅಕ್ಷರ</button>
+      </div>
+      <div class="fb-box" id="fb-c4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="c5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5</div>
+      <div class="scene-question">ಹಳದಿ-ನೀಲಿ-ಗುಲಾಬಿ ಬಣ್ಣ ಕ್ರಮದ ನಂತರ ಮತ್ತೆ ಯಾವ ಬಣ್ಣ ಬರಬೇಕು?<br>🟡🔵🌸🟡🔵 __ ?</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="emoji-choice-row">
+        <button class="emoji-btn" onclick="checkChoice(this,'c5',true)">🌸<span class="elabel">ಗುಲಾಬಿ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'c5',false)">🟡<span class="elabel">ಹಳದಿ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'c5',false)">🔵<span class="elabel">ನೀಲಿ</span></button>
+      </div>
+      <div class="fb-box" id="fb-c5"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-colours" disabled onclick="completeTab('colours','numbers')">ಮುಂದೆ → ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ 🔢</button>
+</div>
+
+<!-- ===== TAB 4: NUMBERS (ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ) ===== -->
+<div class="tab-panel" id="panel-numbers">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🔢</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ</div>
+      <div class="banner-sub" style="color:#1565c0;">Number Patterns — ನಿಯಮ ಕಂಡುಹಿಡಿ!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🔢 ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ ಎಂದರೇನು?</h3>
+    <p>ಸಂಖ್ಯೆಗಳನ್ನು ಒಂದು ನಿರ್ದಿಷ್ಟ ಕ್ರಮದಲ್ಲಿ ಜೋಡಿಸುವುದೇ <span class="kw">ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ</span></p>
+    <p>1,2,3,4 → ಪ್ರತಿ ಸಂಖ್ಯೆಗೆ 1 ಹೆಚ್ಚಳ (add 1)</p>
+    <p>2,4,6,8 → ಪ್ರತಿ ಸಂಖ್ಯೆಗೆ 2 ಹೆಚ್ಚಳ (add 2)</p>
+    <p>100,90,80 → ಪ್ರತಿ ಸಂಖ್ಯೆಗೆ 10 ಕಡಿಮೆ (subtract 10)</p>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಸಂಖ್ಯೆಗಳನ್ನು ಒಂದು ನಿರ್ದಿಷ್ಟ ಕ್ರಮದಲ್ಲಿ ಜೋಡಿಸುವದೇ<br>"<span class="kw">ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ</span>" 🔢</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="n1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1</div>
+      <div class="scene-question">1, 2, 3, 4, 5, 6, 7, 8, 9, __ — ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><small>What comes next? (add 1 each time)</small></div>
+      <div class="num-seq">
+        <div class="num-box">1</div><div class="arrow-box">→</div>
+        <div class="num-box">2</div><div class="arrow-box">→</div>
+        <div class="num-box">3</div><div class="arrow-box">→</div>
+        <div class="num-box">4</div><div class="arrow-box">→</div>
+        <div class="num-box">…</div><div class="arrow-box">→</div>
+        <div class="num-box blank">?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'n1',false)">8</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n1',true)">10</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n1',false)">11</button>
+      </div>
+      <div class="fb-box" id="fb-n1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="n2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2</div>
+      <div class="scene-question">2, 4, 6, 8, 10, __, 14 — ಬಿಟ್ಟ ಸಂಖ್ಯೆ ಯಾವುದು?<br><small>Fill in the blank (add 2 each time)</small></div>
+      <div class="num-seq">
+        <div class="num-box">2</div><div class="arrow-box">+2</div>
+        <div class="num-box">4</div><div class="arrow-box">+2</div>
+        <div class="num-box">6</div><div class="arrow-box">+2</div>
+        <div class="num-box">8</div><div class="arrow-box">+2</div>
+        <div class="num-box">10</div><div class="arrow-box">+2</div>
+        <div class="num-box blank">?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'n2',false)">11</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n2',true)">12</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n2',false)">13</button>
+      </div>
+      <div class="fb-box" id="fb-n2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="n3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3</div>
+      <div class="scene-question">100, 90, 80, 70, 60, __ — ಮುಂದಿನ ಸಂಖ್ಯೆ ಯಾವುದು?<br><small>What comes next? (subtract 10)</small></div>
+      <div class="num-seq">
+        <div class="num-box">100</div><div class="arrow-box">-10</div>
+        <div class="num-box">90</div><div class="arrow-box">-10</div>
+        <div class="num-box">80</div><div class="arrow-box">-10</div>
+        <div class="num-box">70</div><div class="arrow-box">-10</div>
+        <div class="num-box">60</div><div class="arrow-box">-10</div>
+        <div class="num-box blank">?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'n3',false)">40</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n3',true)">50</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n3',false)">55</button>
+      </div>
+      <div class="fb-box" id="fb-n3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="n4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4</div>
+      <div class="scene-question">15, 20, 25, 30, 35 — ಇಲ್ಲಿ ನಿಯಮ (rule) ಯಾವುದು?<br><small>What is the rule here?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'n4',false)">+2 ಕೂಡಿಸು</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n4',true)">+5 ಕೂಡಿಸು</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n4',false)">+10 ಕೂಡಿಸು</button>
+      </div>
+      <div class="fb-box" id="fb-n4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="n5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5</div>
+      <div class="scene-question">15, 13, 11, 9 — ಇಲ್ಲಿ ನಿಯಮ ಯಾವುದು?<br><small>What is the rule? (going down)</small></div>
+      <div class="num-seq">
+        <div class="num-box">15</div><div class="arrow-box">→</div>
+        <div class="num-box">13</div><div class="arrow-box">→</div>
+        <div class="num-box">11</div><div class="arrow-box">→</div>
+        <div class="num-box">9</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'n5',false)">-1 ಕಡಿಮೆ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n5',true)">-2 ಕಡಿಮೆ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'n5',false)">-3 ಕಡಿಮೆ</button>
+      </div>
+      <div class="fb-box" id="fb-n5"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-numbers" disabled onclick="completeTab('numbers','growing')">ಮುಂದೆ → ಬೆಳೆಯುವ ವಿನ್ಯಾಸ 📈</button>
+</div>
+
+<!-- ===== TAB 5: GROWING PATTERNS (ಬೆಳೆಯುವ ವಿನ್ಯಾಸ) ===== -->
+<div class="tab-panel" id="panel-growing">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+    <span class="banner-emoji">📈</span>
+    <div>
+      <div class="banner-title" style="color:#4a148c;">ಬೆಳೆಯುವ ವಿನ್ಯಾಸ</div>
+      <div class="banner-sub" style="color:#6a1b9a;">Growing Patterns — ▲ ▲▲ ▲▲▲</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>📌 ಒಂದೊಂದರಂತೆ ಹೆಚ್ಚಾಗುವ ವಿನ್ಯಾಸ</h3>
+    <p>▲ → ▲▲ → ▲▲▲ → ▲▲▲▲ …<br>ಪ್ರತಿ ಬಾರಿ <span class="kw">1 ತ್ರಿಭುಜ ಹೆಚ್ಚಾಗುತ್ತದೆ!</span></p>
+    <p>🔵🔵 → 🔵🔵🔵🔵 → 🔵🔵🔵🔵🔵🔵 …<br>ಪ್ರತಿ ಬಾರಿ 2 ವೃತ್ತಗಳು ಹೆಚ್ಚಾಗುತ್ತವೆ!</p>
+  </div>
+
+  <div class="info-strip">
+    <p>🏔️ ಬೆಟ್ಟ ಆಕಾರದ ವಿನ್ಯಾಸ: 1, 1+1, 1+1+1 — ಇದೇ ಬೆಳೆಯುವ ವಿನ್ಯಾಸ!<br>1 = 1 | 2 = 1+1 | 3 = 1+1+1 | 4 = 1+2+1</p>
+  </div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="g1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1</div>
+      <div class="scene-question">▲ → ▲▲ → ▲▲▲ → __ — ಮುಂದೆ ಎಷ್ಟು ತ್ರಿಭುಜಗಳು?<br><small>Triangles growing: 1, 2, 3, ?</small></div>
+      <div class="pattern-display">▲&nbsp;&nbsp;▲▲&nbsp;&nbsp;▲▲▲&nbsp;&nbsp;__</div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'g1',false)">3</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g1',true)">4</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g1',false)">5</button>
+      </div>
+      <div class="fb-box" id="fb-g1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="g2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2</div>
+      <div class="scene-question">16 ಅನ್ನು ವಿಭಾಗಿಸಿ: 16 = 8+8 = 4+4+4+4 = 2+2+2+2+2+2+2+2<br>ಈ ವಿಭಾಗಣೆ (decomposition) ಎಂದರೆ ಏನು?<br><small>Breaking 16 into parts = ?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'g2',false)">ಕಳೆಯುವುದು</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g2',true)">ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g2',false)">ಗುಣಾಕಾರ</button>
+      </div>
+      <div class="fb-box" id="fb-g2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="g3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3</div>
+      <div class="scene-question">4 = 1+2+1 | 5 = 1+3+1 | 6 = 1+4+1<br>ಇಲ್ಲಿ ಮಧ್ಯದ ಸಂಖ್ಯೆ ಪ್ರತಿ ಬಾರಿ ಎಷ್ಟು ಹೆಚ್ಚಾಗುತ್ತದೆ?<br><small>Middle number increases by how much each time?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'g3',false)">2</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g3',true)">1</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g3',false)">3</button>
+      </div>
+      <div class="fb-box" id="fb-g3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="g4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4</div>
+      <div class="scene-question">8, 11, 14, __, __ — ಮುಂದಿನ ಎರಡು ಸಂಖ್ಯೆಗಳು? (ನಿಯಮ: +3)<br><small>Next two numbers? Rule: add 3</small></div>
+      <div class="num-seq">
+        <div class="num-box">8</div><div class="arrow-box">+3</div>
+        <div class="num-box">11</div><div class="arrow-box">+3</div>
+        <div class="num-box">14</div><div class="arrow-box">+3</div>
+        <div class="num-box blank">?</div><div class="arrow-box">+3</div>
+        <div class="num-box blank">?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'g4',false)">15, 16</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g4',true)">17, 20</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g4',false)">16, 19</button>
+      </div>
+      <div class="fb-box" id="fb-g4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="g5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5</div>
+      <div class="scene-question">39, 32, 25, __, __ — ಮುಂದಿನ ಎರಡು ಸಂಖ್ಯೆಗಳು? (ನಿಯಮ: -7)<br><small>Next two numbers? Rule: subtract 7</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'g5',false)">20, 15</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g5',false)">19, 12</button>
+        <button class="choice-btn" onclick="checkChoice(this,'g5',true)">18, 11</button>
+      </div>
+      <div class="fb-box" id="fb-g5"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-growing" disabled onclick="completeTab('growing','table')">ಮುಂದೆ → ಚಟುವಟಿಕೆ ಕೋಷ್ಠಕ 📊</button>
+</div>
+
+<!-- ===== TAB 6: TABLE (ಕೋಷ್ಠಕ) ===== -->
+<div class="tab-panel" id="panel-table">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);">
+    <span class="banner-emoji">📊</span>
+    <div>
+      <div class="banner-title" style="color:#006064;">ಅಚ್ಚು ಮೆಚ್ಚಿನ ಚಟುವಟಿಕೆ</div>
+      <div class="banner-sub" style="color:#00838f;">Favourite Activities Table — ದತ್ತಾಂಶ ಓದಿ!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>📋 ಕೋಷ್ಠಕ = Table ಎಂದರೇನು?</h3>
+    <p>ದತ್ತಾಂಶ ಮಾಹಿತಿಯನ್ನು ಸಂಗ್ರಹಿಸಿ ವ್ಯವಸ್ಥಿತವಾಗಿ ಬರೆಯುವುದಕ್ಕೆ <span class="kw">ಕೋಷ್ಠಕ</span> ಎಂದು ಕರೆಯುತ್ತಾರೆ!</p>
+    <p>Table = Organised way of writing information!</p>
+  </div>
+
+  <!-- THE TABLE -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ವಿದ್ಯಾರ್ಥಿಗಳು</th>
+        <th>ಸಂಗೀತ 🎵</th>
+        <th>ನೃತ್ಯ 💃</th>
+        <th>ಓದು 📚</th>
+        <th>ಚಿತ್ರ&ಕ್ರಾಫ್ಟ್ 🎨</th>
+        <th>ಆಟಗಳು 🏏</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ಹುಡುಗಿಯರು</td>
+        <td>12</td>
+        <td>20</td>
+        <td>9</td>
+        <td>34</td>
+        <td>16</td>
+      </tr>
+      <tr>
+        <td>ಹುಡುಗರು</td>
+        <td>6</td>
+        <td>8</td>
+        <td>11</td>
+        <td>25</td>
+        <td>40</td>
+      </tr>
+      <tr class="total-row">
+        <td>ಒಟ್ಟು</td>
+        <td>18</td>
+        <td>28</td>
+        <td>20</td>
+        <td>59</td>
+        <td>56</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="t1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1</div>
+      <div class="scene-question">ಹುಡುಗಿಯರ ಅಚ್ಚು ಮೆಚ್ಚಿನ ಚಟುವಟಿಕೆ ಯಾವುದು?<br><small>Girls' most favourite activity?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'t1',false)">ನೃತ್ಯ 💃</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t1',true)">ಚಿತ್ರ&ಕ್ರಾಫ್ಟ್ 🎨 (34)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t1',false)">ಆಟಗಳು 🏏</button>
+      </div>
+      <div class="fb-box" id="fb-t1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="t2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2</div>
+      <div class="scene-question">ಹುಡುಗರ ಅಚ್ಚು ಮೆಚ್ಚಿನ ಚಟುವಟಿಕೆ ಯಾವುದು?<br><small>Boys' most favourite activity?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'t2',false)">ನೃತ್ಯ 💃</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t2',false)">ಚಿತ್ರ&ಕ್ರಾಫ್ಟ್ 🎨</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t2',true)">ಆಟಗಳು 🏏 (40)</button>
+      </div>
+      <div class="fb-box" id="fb-t2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="t3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3</div>
+      <div class="scene-question">ಒಟ್ಟಾರೆ ಎಲ್ಲಾ ವಿದ್ಯಾರ್ಥಿಗಳ ಅಚ್ಚು ಮೆಚ್ಚಿನ ಚಟುವಟಿಕೆ ಯಾವುದು?<br><small>All students together — most popular activity?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'t3',false)">ಆಟಗಳು 🏏 (56)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t3',true)">ಚಿತ್ರ&ಕ್ರಾಫ್ಟ್ 🎨 (59)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t3',false)">ನೃತ್ಯ 💃 (28)</button>
+      </div>
+      <div class="fb-box" id="fb-t3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="t4">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 4</div>
+      <div class="scene-question">ಹುಡುಗರು ಅತೀ ಕಡಿಮೆ ಇಷ್ಟ ಪಟ್ಟಿರುವ ಚಟುವಟಿಕೆ ಯಾವುದು?<br><small>Boys' least favourite activity?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'t4',true)">ಸಂಗೀತ 🎵 (6)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t4',false)">ಓದು 📚 (11)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t4',false)">ನೃತ್ಯ 💃 (8)</button>
+      </div>
+      <div class="fb-box" id="fb-t4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="t5">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 5</div>
+      <div class="scene-question">ಹುಡುಗರು ಮತ್ತು ಹುಡುಗಿಯರಲ್ಲಿ ನೃತ್ಯವನ್ನು ಕಡಿಮೆ ಇಷ್ಟ ಪಟ್ಟಿರುವವರು ಯಾರು?<br><small>Who likes dance LESS — boys or girls?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'t5',true)">ಹುಡುಗರು 👦 (8)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t5',false)">ಹುಡುಗಿಯರು 👧 (20)</button>
+        <button class="choice-btn" onclick="checkChoice(this,'t5',false)">ಒಂದೇ ರೀತಿ</button>
+      </div>
+      <div class="fb-box" id="fb-t5"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-table" disabled onclick="completeTab('table','quiz')">ಮುಂದೆ → ಅಂತಿಮ ಕ್ವಿಜ್ 🏆</button>
+</div>
+
+<!-- ===== TAB 7: FINAL QUIZ ===== -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಅಂತಿಮ ಕ್ವಿಜ್!</div>
+      <div class="banner-sub" style="color:#f57c00;">Final Quiz — ಎಲ್ಲಾ ಕಲಿತದ್ದನ್ನು ತೋರಿಸಿ!</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="scenario-card" id="q1">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 1</div>
+      <div class="scene-question">🔴🔵🔴🔵🔴🔵 — ಈ ವಿನ್ಯಾಸದ ನಿಯಮ ಯಾವುದು?<br><small>What is the rule of this pattern?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q1',true)">ಕೆಂಪು-ನೀಲಿ ಪುನಾರಾವರ್ತನೆ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q1',false)">ಕೆಂಪು ಮಾತ್ರ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q1',false)">3 ಬಣ್ಣಗಳು</button>
+      </div>
+      <div class="fb-box" id="fb-q1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="scenario-card" id="q2">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 2</div>
+      <div class="scene-question">6, 12, __, 24, __ — ಬಿಟ್ಟ ಸಂಖ್ಯೆಗಳು (ನಿಯಮ: +6)?<br><small>Missing numbers? Rule: add 6</small></div>
+      <div class="num-seq">
+        <div class="num-box">6</div><div class="arrow-box">+6</div>
+        <div class="num-box">12</div><div class="arrow-box">+6</div>
+        <div class="num-box blank">?</div><div class="arrow-box">+6</div>
+        <div class="num-box">24</div><div class="arrow-box">+6</div>
+        <div class="num-box blank">?</div>
+      </div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q2',false)">16, 28</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q2',true)">18, 30</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q2',false)">20, 32</button>
+      </div>
+      <div class="fb-box" id="fb-q2"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="scenario-card" id="q3">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 3</div>
+      <div class="scene-question">36, 31, __, 21, 16 — ಬಿಟ್ಟ ಸಂಖ್ಯೆ (ನಿಯಮ: -5)?<br><small>Missing number? Rule: subtract 5</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q3',false)">24</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q3',true)">26</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q3',false)">28</button>
+      </div>
+      <div class="fb-box" id="fb-q3"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="scenario-card" id="q4">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 4</div>
+      <div class="scene-question">🔷⬜🔷⬜🔷 — ಮುಂದೆ ಯಾವ ಆಕಾರ?<br><small>What shape comes next?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="emoji-choice-row">
+        <button class="emoji-btn" onclick="checkChoice(this,'q4',false)">🔷<span class="elabel">ವಜ್ರ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'q4',true)">⬜<span class="elabel">ಆಯತ</span></button>
+        <button class="emoji-btn" onclick="checkChoice(this,'q4',false)">🔺<span class="elabel">ತ್ರಿಭುಜ</span></button>
+      </div>
+      <div class="fb-box" id="fb-q4"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="scenario-card" id="q5">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 5</div>
+      <div class="scene-question">22, 32, __, 52, __, __, 82 — ನಿಯಮ: +10<br>ಮೂರು ಬಿಟ್ಟ ಸಂಖ್ಯೆಗಳ ಒಟ್ಟು ಮೊತ್ತ?<br><small>Sum of the 3 missing numbers (rule +10)?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q5',false)">150</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q5',true)">42+62+72=176</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q5',false)">180</button>
+      </div>
+      <div class="fb-box" id="fb-q5"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="scenario-card" id="q6">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 6</div>
+      <div class="scene-question">ಮಣಿ ಸರದಲ್ಲಿ ಕಪ್ಪು-ಬಿಳಿ ಕ್ರಮದ ವಿನ್ಯಾಸ ಇದ್ದರೆ ಅದನ್ನು ಏನೆಂದು ಕರೆಯುತ್ತಾರೆ?<br><small>Black-white bead sequence = ?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q6',false)">ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q6',true)">ಬಣ್ಣ ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q6',false)">ಚಿತ್ರ ವಿನ್ಯಾಸ</button>
+      </div>
+      <div class="fb-box" id="fb-q6"></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="scenario-card" id="q7">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 7</div>
+      <div class="scene-question">50, 45, 40, __, __ — ಮುಂದಿನ ಎರಡು ಸಂಖ್ಯೆಗಳು (ನಿಯಮ: -5)?<br><small>Next 2 numbers? Rule: subtract 5</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q7',false)">36, 30</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q7',true)">35, 30</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q7',false)">34, 28</button>
+      </div>
+      <div class="fb-box" id="fb-q7"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="scenario-card" id="q8">
+    <div class="scene-top">
+      <div class="scene-label">ಕ್ವಿಜ್ 8</div>
+      <div class="scene-question">ಚಿನ್ನಿ ಮತ್ತು ಗಿನ್ನಿ ನೆಲಹಾಸಿನ ದಾರಿ ನೋಡಿದರು — ನೆಲ ಹಾಸಿನಲ್ಲಿ ಯಾವ ವಿನ್ಯಾಸ ಇರುತ್ತದೆ?<br><small>Chini and Ginni saw a tile path — what pattern do tiles have?</small></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <button class="choice-btn" onclick="checkChoice(this,'q8',false)">ಸಂಖ್ಯೆಗಳು</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q8',true)">ಬಣ್ಣ ಮತ್ತು ಆಕಾರ ವಿನ್ಯಾಸ</button>
+        <button class="choice-btn" onclick="checkChoice(this,'q8',false)">ಅಕ್ಷರಗಳು</button>
+      </div>
+      <div class="fb-box" id="fb-q8"></div>
+    </div>
+  </div>
+
+  <button class="cont-btn" id="btn-quiz" disabled onclick="finishAll()">🏆 ಪಾಠ 13 ಮುಗಿಸು!</button>
+</div>
+
+</div><!-- /content -->
+
+<!-- CELEBRATE -->
+<div class="celeb-screen" id="celebScreen">
+  <span class="celeb-emoji">🎉</span>
+  <div class="celeb-title">ಅದ್ಭುತ! Well Done! 🏆</div>
+  <div class="celeb-msg">
+    ಪಾಠ 13 ಪೂರ್ಣ ಮಾಡಿದ್ದೀರಾ! 🌟<br>
+    ✅ ವಿನ್ಯಾಸ ಕಲಿತಿದ್ದೀರಾ!<br>
+    🔷 ಆಕಾರ • 🎨 ಬಣ್ಣ • 🔢 ಸಂಖ್ಯೆ • 📈 ಬೆಳೆಯುವ ವಿನ್ಯಾಸ!
+  </div>
+  <div class="celeb-stars">⭐⭐⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">ಮತ್ತೆ ನೋಡು 🔄</button>
+</div>
+
+<script>
+const tabOrder = ['intro','shapes','colours','numbers','growing','table','quiz'];
+const tabQCounts = {intro:5, shapes:5, colours:5, numbers:5, growing:5, table:5, quiz:8};
+const tabAnswered = {intro:0, shapes:0, colours:0, numbers:0, growing:0, table:0, quiz:0};
+let stars = 0;
+
+document.querySelectorAll('.step-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const t = tab.dataset.tab;
+    if(tab.classList.contains('locked')){
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'),550);
+      const toast = document.getElementById('lockToast');
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'),2500);
+      return;
+    }
+    switchTab(t);
+  });
+});
+
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelector('[data-tab="'+name+'"]').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function checkChoice(btn, cardId, isCorrect){
+  const card = document.getElementById(cardId);
+  if(card.classList.contains('done')) return;
+  const fb = document.getElementById('fb-'+cardId);
+  const allBtns = card.querySelectorAll('.choice-btn, .emoji-btn');
+  allBtns.forEach(b=>b.classList.add('locked-choice'));
+  if(isCorrect){
+    btn.classList.add('correct');
+    fb.textContent='✅ ಸರಿ! Correct! ⭐';
+    fb.className='fb-box ok';
+    addStar();
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent='❌ ತಪ್ಪು! Try again next time!';
+    fb.className='fb-box no';
+  }
+  card.classList.add('done');
+  const tab = getTabForCard(cardId);
+  tabAnswered[tab]++;
+  checkTabComplete(tab);
+}
+
+function getTabForCard(cid){
+  if(cid.startsWith('i')) return 'intro';
+  if(cid.startsWith('s')) return 'shapes';
+  if(cid.startsWith('c')) return 'colours';
+  if(cid.startsWith('n')) return 'numbers';
+  if(cid.startsWith('g')) return 'growing';
+  if(cid.startsWith('t')) return 'table';
+  if(cid.startsWith('q')) return 'quiz';
+  return '';
+}
+
+function checkTabComplete(tab){
+  if(tabAnswered[tab] >= tabQCounts[tab]){
+    const btn = document.getElementById('btn-'+tab);
+    if(btn) btn.disabled = false;
+  }
+  updateProgress();
+}
+
+function completeTab(current, next){
+  const currentTab = document.querySelector('[data-tab="'+current+'"]');
+  currentTab.classList.remove('active');
+  currentTab.classList.add('done');
+  if(!currentTab.innerHTML.includes('✅')){
+    currentTab.innerHTML = '✅ ' + currentTab.innerHTML;
+  }
+  if(next){
+    const nextTab = document.querySelector('[data-tab="'+next+'"]');
+    nextTab.classList.remove('locked');
+    switchTab(next);
+    nextTab.classList.add('active');
+  }
+  updateProgress();
+}
+
+function finishAll(){
+  completeTab('quiz', null);
+  document.getElementById('celebScreen').classList.add('show');
+  updateProgress();
+}
+
+function addStar(){
+  stars++;
+  document.getElementById('starsNum').textContent = stars;
+}
+
+function updateProgress(){
+  let done = document.querySelectorAll('.step-tab.done').length;
+  let total = tabOrder.length;
+  let pct = Math.round((done/total)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  const labels=[
+    'ಹಂತ 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇',
+    'ಚೆನ್ನಾಗಿ! ಆಕಾರ ವಿನ್ಯಾಸ ಕಲಿಯೋಣ! 🔷',
+    'ಬಣ್ಣ ವಿನ್ಯಾಸ ಹಂತಕ್ಕೆ ಹೋಗೋಣ! 🎨',
+    'ಸಂಖ್ಯಾ ವಿನ್ಯಾಸ ಕಲಿಯೋಣ! 🔢',
+    'ಬೆಳೆಯುವ ವಿನ್ಯಾಸ! 📈 Keep going!',
+    'ಕೋಷ್ಠಕ ಓದೋಣ! 📊 Almost there!',
+    'ಅಂತಿಮ ಕ್ವಿಜ್! 🏆 You are almost done!',
+    '🏆 ಪಾಠ 13 ಪೂರ್ಣ ಮಾಡಿದ್ದೀರಾ! Excellent!'
+  ];
+  document.getElementById('progLabel').textContent = labels[done] || labels[labels.length-1];
+}
+</script>
+</body>
+</html>

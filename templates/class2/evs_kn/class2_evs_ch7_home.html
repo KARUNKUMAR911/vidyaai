@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — ಪಾಠ 7: ಮನೆ ಬೇಕು ಮನೆ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Noto+Sans+Kannada:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#e3f2fd;min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(13,71,161,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:15px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.25);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#0d47a1,#1976d2,#42a5f5);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:20px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.25);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#bbdefb;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#0d47a1,#42a5f5);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#1565c0;color:#fff;border-color:#1565c0;box-shadow:0 4px 14px rgba(21,101,192,.5);}
+.step-tab.done{background:#e3f2fd;color:#0d47a1;border-color:#90caf9;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#0d47a1;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #1565c0;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#1565c0;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;margin-bottom:4px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#90caf9;background:#e3f2fd;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:16px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#1565c0;font-size:18px;}
+.scene-bottom{border-top:2px dashed #90caf9;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:60px;padding:13px 8px;border-radius:16px;border:3px solid #90caf9;background:#e3f2fd;font-family:'Baloo 2',cursive;font-size:15px;color:#1565c0;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-weight:900;line-height:1.3;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn.correct{border-color:#1565c0;background:#bbdefb;color:#0d47a1;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#bbdefb;color:#0d47a1;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.info-strip{background:linear-gradient(135deg,#e3f2fd,#e8eaf6);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #90caf9;}
+.info-strip p{font-size:14px;font-weight:800;color:#0d47a1;line-height:1.7;}
+
+.rule-box{background:#fff;border:3px solid #1565c0;border-radius:18px;padding:14px 16px;margin:10px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:15px;color:#1565c0;font-weight:900;line-height:1.7;}
+
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#1565c0;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+.grid-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.item-card{background:#fff;border-radius:16px;padding:14px 8px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #90caf9;}
+.item-card .ic-emoji{font-size:38px;display:block;margin-bottom:6px;}
+.item-card .ic-label{font-family:'Baloo 2',cursive;font-size:13px;color:#0d47a1;font-weight:900;line-height:1.3;}
+.item-card .ic-sub{font-size:11px;color:#888;margin-top:2px;}
+
+.match-section{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.match-section h3{font-family:'Baloo 2',cursive;font-size:16px;color:#1565c0;margin-bottom:12px;text-align:center;}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.match-col-title{font-family:'Baloo 2',cursive;font-size:13px;color:#666;font-weight:900;text-align:center;margin-bottom:8px;}
+.match-item{background:#e3f2fd;border:3px solid #90caf9;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;font-family:'Baloo 2',cursive;font-size:14px;color:#0d47a1;margin-bottom:8px;transition:all .2s;user-select:none;font-weight:900;line-height:1.3;}
+.match-item:active{transform:scale(.95);}
+.match-item.selected{background:#1565c0;color:#fff;border-color:#0d47a1;}
+.match-item.matched{background:#bbdefb;color:#0d47a1;border-color:#1565c0;pointer-events:none;}
+.match-item.error{background:#ffcdd2;color:#c62828;border-color:#c62828;}
+.match-fb{text-align:center;font-size:14px;font-weight:900;margin-top:8px;padding:8px;border-radius:12px;}
+.match-fb.ok{background:#bbdefb;color:#0d47a1;}
+.match-fb.no{background:#ffcdd2;color:#c62828;}
+
+.sort-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.sort-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#1565c0;margin-bottom:10px;text-align:center;}
+.sort-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px;}
+.sort-item{background:#e3f2fd;border:3px solid #90caf9;color:#0d47a1;border-radius:14px;padding:10px 14px;font-family:'Baloo 2',cursive;font-size:14px;cursor:pointer;font-weight:900;transition:all .2s;user-select:none;}
+.sort-item:active{transform:scale(.93);}
+.sort-item.placed-away{opacity:.4;pointer-events:none;}
+.drop-zone{min-height:50px;border:2px dashed #90caf9;border-radius:10px;padding:6px;margin-bottom:10px;}
+.drop-zone .placed{background:#bbdefb;color:#0d47a1;border:2px solid #1565c0;border-radius:8px;padding:6px 8px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:900;display:inline-block;margin:3px;}
+.drop-zone-label{font-family:'Baloo 2',cursive;font-size:12px;color:#1565c0;font-weight:900;text-align:center;margin-bottom:6px;}
+.sort-fb{text-align:center;font-size:13px;font-weight:900;padding:8px;border-radius:12px;display:none;margin-top:6px;}
+.sort-fb.show{display:block;}
+.sort-fb.ok{background:#bbdefb;color:#0d47a1;}
+.sort-fb.no{background:#ffcdd2;color:#c62828;}
+
+.result-card{background:#fff;border-radius:20px;padding:20px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.08);margin-bottom:12px;}
+.result-emoji{font-size:60px;display:block;margin-bottom:8px;}
+.result-score{font-family:'Baloo 2',cursive;font-size:32px;color:#1565c0;font-weight:900;}
+.result-msg{font-size:14px;font-weight:800;color:#555;margin-top:6px;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#0d47a1,#42a5f5);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(13,71,161,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:28px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:15px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#0d47a1;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+
+.song-card{background:linear-gradient(135deg,#e3f2fd,#e8eaf6);border:3px solid #90caf9;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.song-card .song-line{font-family:'Baloo 2',cursive;font-size:15px;color:#0d47a1;font-weight:900;line-height:2.4;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🏠 ಪಾಠ 7 — ಮನೆ ಬೇಕು ಮನೆ</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🏡</span>
+  <h1>Class 2 EVS · ಪಾಠ 7</h1>
+  <p>ಮನೆ ಬೇಕು ಮನೆ — Home Sweet Home!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Step 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="whyhouse">🏠 ಮನೆ ಏಕೆ?</div>
+  <div class="step-tab locked" data-tab="animalhouse">🐾 ಪ್ರಾಣಿ ಮನೆ</div>
+  <div class="step-tab locked" data-tab="houseparts">🚪 ಮನೆ ಭಾಗಗಳು</div>
+  <div class="step-tab locked" data-tab="family">👨‍👩‍👧 ಕುಟುಂಬ</div>
+  <div class="step-tab locked" data-tab="waste">🗑️ ಕಸ ವಿಲೇವಾರಿ</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div id="lockToast" class="lock-toast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು!</div>
+
+<div class="content">
+
+<!-- ═══ TAB 1: WHY HOME ═══ -->
+<div class="tab-panel active" id="panel-whyhouse">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🏠</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಮನೆ ಏಕೆ ಬೇಕು?</div>
+      <div class="banner-sub" style="color:#1565c0;">Why do we need a home?</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🏠 ಮನೆ ಅಗತ್ಯ</h3>
+    <p>ಚಳಿ, ಗಾಳಿ, ಮಳೆ, ಬಿಸಿಲಿನಿಂದ ರಕ್ಷಣೆಯನ್ನು ಪಡೆಯಲು ನಮಗೆಲ್ಲರಿಗೂ ಮನೆ ಬೇಕು.</p>
+    <p>ಮನೆ ಇಲ್ಲದಿದ್ದರೆ ನಾವು ಎಲ್ಲಿ ಮಲಗುತ್ತೇವೆ? ಎಲ್ಲಿ ಊಟ ಮಾಡುತ್ತೇವೆ?</p>
+    <p>ಮನೆ ನಮಗೆ ಸುರಕ್ಷಿತ ಮತ್ತು ಸಂತೋಷದ ಸ್ಥಳ!</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card"><span class="ic-emoji">🌧️</span><div class="ic-label">ಮಳೆಯಿಂದ ರಕ್ಷಣೆ</div><div class="ic-sub">Rain protection</div></div>
+    <div class="item-card"><span class="ic-emoji">❄️</span><div class="ic-label">ಚಳಿಯಿಂದ ರಕ್ಷಣೆ</div><div class="ic-sub">Cold protection</div></div>
+    <div class="item-card"><span class="ic-emoji">☀️</span><div class="ic-label">ಬಿಸಿಲಿನಿಂದ ರಕ್ಷಣೆ</div><div class="ic-sub">Sun protection</div></div>
+    <div class="item-card"><span class="ic-emoji">💨</span><div class="ic-label">ಗಾಳಿಯಿಂದ ರಕ್ಷಣೆ</div><div class="ic-sub">Wind protection</div></div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ನಾವು ವಾಸಿಸಲು ಮನೆ ಬೇಕು.<br>ಪ್ರಾಣಿಗಳೂ ವಾಸಿಸಲು ವಾಸಸ್ಥಳ ಬೇಕು! 🏡</div>
+  </div>
+
+  <div class="section-divider">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_w1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಮನೆ ನಮಗೆ ಯಾವ ರಕ್ಷಣೆ ನೀಡುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w1',true)">🌧️ ಮಳೆ, ಚಳಿ, ಬಿಸಿಲಿನಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w1',false)">🦁 ಸಿಂಹದಿಂದ ಮಾತ್ರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w1',false)">🐟 ಮೀನಿನಿಂದ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_w1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_w2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಮನೆ ಯಾವ ರೀತಿಯ ಸ್ಥಳ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w2',false)">😟 ಭಯದ ಸ್ಥಳ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w2',true)">😊 ಸುರಕ್ಷಿತ ಸಂತೋಷದ ಸ್ಥಳ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w2',false)">😴 ಮಾತ್ರ ಮಲಗುವ ಸ್ಥಳ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_w2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_w3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಪ್ರಾಣಿಗಳಿಗೆ ಮನೆ ಬೇಕೇ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w3',false)">❌ ಬೇಡ, ಪ್ರಾಣಿಗಳಿಗೆ ಬೇಡ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w3',true)">✅ ಹೌದು, ಬೇಕು!</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_w3',false)">🤔 ಗೊತ್ತಿಲ್ಲ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_w3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-whyhouse" disabled onclick="completeTab('whyhouse','animalhouse','btn-whyhouse')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 2: ANIMAL HOMES ═══ -->
+<div class="tab-panel" id="panel-animalhouse">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e8eaf6);">
+    <span class="banner-emoji">🐾</span>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">ಪ್ರಾಣಿಗಳ ವಾಸಸ್ಥಳ</div>
+      <div class="banner-sub" style="color:#7b1fa2;">Where do animals live?</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#7b1fa2;">
+    <h3 style="color:#7b1fa2;">🐾 ಪ್ರಾಣಿಗಳ ಮನೆ</h3>
+    <p>ಇಲಿ — ಹುತ್ತದಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ.</p>
+    <p>ಸಿಂಹ — ಗವಿಯಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ.</p>
+    <p>ಹಕ್ಕಿ — ಮರದ ಮೇಲೆ ಗೂಡು ಕಟ್ಟುತ್ತದೆ.</p>
+    <p>ಆಕಳು — ಕೊಟ್ಟಿಗೆಯಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ.</p>
+    <p>ಹಾವು — ಹುತ್ತ ಅಥವಾ ಕಲ್ಲಿನ ರಂಧ್ರದಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ.</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🐭</span><div class="ic-label" style="color:#6a1b9a;">ಇಲಿ → ಹುತ್ತ</div><div class="ic-sub">Anthill</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🦁</span><div class="ic-label" style="color:#6a1b9a;">ಸಿಂಹ → ಗವಿ</div><div class="ic-sub">Cave</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🐦</span><div class="ic-label" style="color:#6a1b9a;">ಹಕ್ಕಿ → ಗೂಡು</div><div class="ic-sub">Nest on tree</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🐄</span><div class="ic-label" style="color:#6a1b9a;">ಆಕಳು → ಕೊಟ್ಟಿಗೆ</div><div class="ic-sub">Cattle shed</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🐍</span><div class="ic-label" style="color:#6a1b9a;">ಹಾವು → ಹುತ್ತ</div><div class="ic-sub">Anthill / hole</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🐸</span><div class="ic-label" style="color:#6a1b9a;">ಕಪ್ಪೆ → ನೀರು</div><div class="ic-sub">Near water</div></div>
+  </div>
+
+  <div class="section-divider" style="color:#7b1fa2;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <!-- Match activity -->
+  <div class="match-section">
+    <h3 style="color:#7b1fa2;">🔗 ಪ್ರಾಣಿ ಮತ್ತು ಮನೆ ಹೊಂದಿಸು!</h3>
+    <p style="text-align:center;font-size:13px;font-weight:800;color:#888;margin-bottom:12px;">ಮೊದಲು ಪ್ರಾಣಿ ಒತ್ತು, ನಂತರ ಅದರ ಮನೆ ಒತ್ತು!</p>
+    <div class="match-cols">
+      <div>
+        <div class="match-col-title">🐾 ಪ್ರಾಣಿ</div>
+        <div class="match-item" id="m_rat" onclick="matchSelect('m_rat','rat')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🐭 ಇಲಿ</div>
+        <div class="match-item" id="m_lion" onclick="matchSelect('m_lion','lion')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🦁 ಸಿಂಹ</div>
+        <div class="match-item" id="m_bird" onclick="matchSelect('m_bird','bird')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🐦 ಹಕ್ಕಿ</div>
+        <div class="match-item" id="m_cow" onclick="matchSelect('m_cow','cow')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🐄 ಆಕಳು</div>
+      </div>
+      <div>
+        <div class="match-col-title">🏠 ವಾಸಸ್ಥಳ</div>
+        <div class="match-item" id="mh_shed" onclick="matchTarget('mh_shed','cow')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🏠 ಕೊಟ್ಟಿಗೆ</div>
+        <div class="match-item" id="mh_nest" onclick="matchTarget('mh_nest','bird')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🌳 ಗೂಡು</div>
+        <div class="match-item" id="mh_cave" onclick="matchTarget('mh_cave','lion')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🪨 ಗವಿ</div>
+        <div class="match-item" id="mh_anthill" onclick="matchTarget('mh_anthill','rat')" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;">🏔️ ಹುತ್ತ</div>
+      </div>
+    </div>
+    <div class="match-fb" id="matchFb"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-animalhouse" disabled onclick="completeTab('animalhouse','houseparts','btn-animalhouse')" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 3: HOUSE PARTS ═══ -->
+<div class="tab-panel" id="panel-houseparts">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🚪</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಮನೆಯ ಭಾಗಗಳು</div>
+      <div class="banner-sub" style="color:#2e7d32;">Parts of a house</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#2e7d32;">
+    <h3 style="color:#2e7d32;">🏠 ಮನೆಯ ವಿವಿಧ ಭಾಗಗಳು</h3>
+    <p>🛏️ ಮಲಗುವ ಕೋಣೆ (Bedroom) — ಮಲಗಲು ಬಳಸುತ್ತೇವೆ</p>
+    <p>🍳 ಅಡುಗೆ ಕೋಣೆ (Kitchen) — ಅಡುಗೆ ಮಾಡಲು</p>
+    <p>🛁 ಶೌಚಾಲಯ / ಸ್ನಾನದ ಕೋಣೆ (Bathroom) — ಕೈ, ಕಾಲು, ಮುಖ ತೊಳೆಯಲು</p>
+    <p>📺 ಹಾಲ್ (Hall) — ಮನೆಯವರೊಂದಿಗೆ ಕೂಡಲು, ಹರಟಲು</p>
+    <p>🌸 ಅಂಗಳ (Compound) — ಆಟ ಆಡಲು, ಗಿಡ ಬೆಳೆಸಲು</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#a5d6a7;"><span class="ic-emoji">🛏️</span><div class="ic-label" style="color:#1b5e20;">ಮಲಗುವ ಕೋಣೆ</div><div class="ic-sub">Bedroom</div></div>
+    <div class="item-card" style="border-color:#a5d6a7;"><span class="ic-emoji">🍳</span><div class="ic-label" style="color:#1b5e20;">ಅಡುಗೆ ಕೋಣೆ</div><div class="ic-sub">Kitchen</div></div>
+    <div class="item-card" style="border-color:#a5d6a7;"><span class="ic-emoji">🛁</span><div class="ic-label" style="color:#1b5e20;">ಸ್ನಾನದ ಕೋಣೆ</div><div class="ic-sub">Bathroom</div></div>
+    <div class="item-card" style="border-color:#a5d6a7;"><span class="ic-emoji">📺</span><div class="ic-label" style="color:#1b5e20;">ಹಾಲ್</div><div class="ic-sub">Hall / Living room</div></div>
+    <div class="item-card" style="border-color:#a5d6a7;"><span class="ic-emoji">🌸</span><div class="ic-label" style="color:#1b5e20;">ಅಂಗಳ</div><div class="ic-sub">Compound</div></div>
+    <div class="item-card" style="border-color:#a5d6a7;"><span class="ic-emoji">🚪</span><div class="ic-label" style="color:#1b5e20;">ಬಾಗಿಲು</div><div class="ic-sub">Door</div></div>
+  </div>
+
+  <div class="section-divider" style="color:#2e7d32;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_hp1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಅರುಣ ಕೈ, ಕಾಲು, ಮುಖ ತೊಳೆಯಲು ಮನೆಯ ಯಾವ ಭಾಗಕ್ಕೆ ಹೋದ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp1',true)">🛁 ಶೌಚಾಲಯ/ಕೋಣೆ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp1',false)">🍳 ಅಡುಗೆ ಕೋಣೆ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp1',false)">🛏️ ಮಲಗುವ ಕೋಣೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_hp1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_hp2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಅಜ್ಜಿ ಮನೆಯ ಯಾವ ಭಾಗದಲ್ಲಿ ಮಲಗಿದ್ದರು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp2',true)">🛏️ ಕೋಣೆಯಲ್ಲಿ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp2',false)">🌸 ಅಂಗಳದಲ್ಲಿ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp2',false)">🍳 ಅಡುಗೆ ಕೋಣೆಯಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_hp2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_hp3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಮನೆಯಲ್ಲಿ ಅಡುಗೆ ಮಾಡುವ ಕೋಣೆ ಯಾವುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp3',false)">📺 ಹಾಲ್</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp3',true)">🍳 ಅಡುಗೆ ಕೋಣೆ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#1b5e20;" onclick="checkChoice(this,'sc_hp3',false)">🛏️ ಮಲಗುವ ಕೋಣೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_hp3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-houseparts" disabled onclick="completeTab('houseparts','family','btn-houseparts')" style="background:linear-gradient(135deg,#1b5e20,#43a047);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 4: FAMILY ═══ -->
+<div class="tab-panel" id="panel-family">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+    <span class="banner-emoji">👨‍👩‍👧</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಕುಟುಂಬ ಮತ್ತು ಕೂಡಿ ಬಾಳುವಿಕೆ</div>
+      <div class="banner-sub" style="color:#ef6c00;">Family and living together!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#e65100;">
+    <h3 style="color:#e65100;">👨‍👩‍👧 ಕುಟುಂಬ</h3>
+    <p>ಒಂದು ಮನೆಯಲ್ಲಿ ಒಂದು ಕುಟುಂಬದವರೆಲ್ಲ ಒಟ್ಟಾಗಿ ವಾಸಿಸುತ್ತಾರೆ.</p>
+    <p>ಕುಟುಂಬದ ಪ್ರತಿಯೊಬ್ಬರೂ ಮನೆಯ ಕೆಲಸಗಳನ್ನು ಹಂಚಿಕೊಂಡು ಮಾಡುತ್ತಾರೆ.</p>
+    <p>ಒಬ್ಬರಿಗೊಬ್ಬರು ಸಹಾಯವನ್ನೂ ಮಾಡುತ್ತಾರೆ. ಕೂಡಿಬಾಳುವುದರಲ್ಲಿ ಸಂತೋಷವಿದೆ!</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">👩‍🍳</span><div class="ic-label" style="color:#e65100;">ತಾಯಿ</div><div class="ic-sub">ಅಡುಗೆ, ಮನೆ ಕೆಲಸ</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">👨‍💼</span><div class="ic-label" style="color:#e65100;">ತಂದೆ</div><div class="ic-sub">ತಾಯಿಗೆ ಸಹಾಯ</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">📚</span><div class="ic-label" style="color:#e65100;">ಅಕ್ಕ/ಣ್ಣ</div><div class="ic-sub">ಓದು, ಸಹಾಯ</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">👵</span><div class="ic-label" style="color:#e65100;">ಅಜ್ಜಿ</div><div class="ic-sub">ಕಥೆ, ಜ್ಞಾನ</div></div>
+  </div>
+
+  <div class="song-card">
+    <div class="song-line">ಮನೆ ಮನೆ ನನ್ನ ಮನೆ,</div>
+    <div class="song-line">ಚಂದದ ಹೂಗಳು ಇರುವ ಮನೆ;</div>
+    <div class="song-line">ತಂಪಿನ ಗಾಳಿಯು ಬರುವ ಮನೆ,</div>
+    <div class="song-line">ಸ್ವಚ್ಛ ಸುಂದರ ನನ್ನ ಮನೆ. 🏡</div>
+  </div>
+
+  <div class="section-divider" style="color:#e65100;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_f1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಕುಟುಂಬದ ಪ್ರತಿಯೊಬ್ಬರೂ ಮನೆ ಕೆಲಸ ಹೇಗೆ ಮಾಡುತ್ತಾರೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f1',false)">😤 ಜಗಳ ಮಾಡಿ</div>
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f1',true)">🤝 ಹಂಚಿಕೊಂಡು</div>
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f1',false)">😴 ಮಲಗಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_f2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಕೂಡಿ ಬಾಳುವುದರಲ್ಲಿ ಏನಿದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f2',false)">😢 ದುಃಖ</div>
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f2',true)">😊 ಸಂತೋಷ</div>
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f2',false)">😡 ಕೋಪ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_f3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಕಮಲ ಮತ್ತು ರಾಜು ರಾತ್ರಿ ಯಾರೊಂದಿಗೆ ಊಟ ಮಾಡುತ್ತಾರೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f3',false)">🏫 ಶಾಲೆಯ ಗೆಳೆಯರೊಂದಿಗೆ</div>
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f3',true)">👨‍👩‍👧 ಮನೆಯವರೆಲ್ಲರೊಂದಿಗೆ</div>
+        <div class="choice-btn" style="border-color:#ffcc80;background:#fff3e0;color:#e65100;" onclick="checkChoice(this,'sc_f3',false)">😶 ಒಬ್ಬರೇ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_f3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-family" disabled onclick="completeTab('family','waste','btn-family')" style="background:linear-gradient(135deg,#e65100,#ffa726);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 5: WASTE ═══ -->
+<div class="tab-panel" id="panel-waste">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#dcedc8);">
+    <span class="banner-emoji">🗑️</span>
+    <div>
+      <div class="banner-title" style="color:#33691e;">ಕಸ ವಿಲೇವಾರಿ</div>
+      <div class="banner-sub" style="color:#558b2f;">Waste management — ಮನೆ ಸ್ವಚ್ಛ ಮಾಡೋಣ!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#558b2f;">
+    <h3 style="color:#558b2f;">🗑️ ಕಸ ವಿಂಗಡಣೆ</h3>
+    <p>🟢 ಹಸಿ ಕಸ (Wet waste): ತರಕಾರಿ ಸಿಪ್ಪೆ, ಹಣ್ಣಿನ ಸಿಪ್ಪೆ, ಎಲೆಗಳು, ಸೊಪ್ಪಿನ ಕಸ — ಒಂದು ಕಸದ ಡಬ್ಬಕ್ಕೆ ಹಾಕು. ಇವನ್ನು ಗೊಬ್ಬರ ಮಾಡಿ ಕೈತೋಟಕ್ಕೆ ಹಾಕಬಹುದು!</p>
+    <p>🔵 ಒಣ ಕಸ (Dry waste): ಪ್ಲಾಸ್ಟಿಕ್, ಪೇಪರ್, ಚಾಕಲೇಟ್ ಕವರ್, ಕಾಗದದ ಚೂರು, ದೊಡ್ಡ ಕಡ್ಡಿಗಳು — ಇನ್ನೊಂದು ಕಸದ ಡಬ್ಬಕ್ಕೆ ಹಾಕು.</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#a5d6a7;background:#e8f5e9;"><span class="ic-emoji">🥬</span><div class="ic-label" style="color:#33691e;">🟢 ಹಸಿ ಕಸ</div><div class="ic-sub">ತರಕಾರಿ ಸಿಪ್ಪೆ, ಎಲೆ</div></div>
+    <div class="item-card" style="border-color:#a5d6a7;background:#e8f5e9;"><span class="ic-emoji">♻️</span><div class="ic-label" style="color:#33691e;">🟢 ಗೊಬ್ಬರ ಮಾಡಿ</div><div class="ic-sub">ಕೈತೋಟಕ್ಕೆ ಹಾಕು</div></div>
+    <div class="item-card" style="border-color:#90caf9;background:#e3f2fd;"><span class="ic-emoji">🗞️</span><div class="ic-label" style="color:#0d47a1;">🔵 ಒಣ ಕಸ</div><div class="ic-sub">ಪ್ಲಾಸ್ಟಿಕ್, ಪೇಪರ್</div></div>
+    <div class="item-card" style="border-color:#90caf9;background:#e3f2fd;"><span class="ic-emoji">🚚</span><div class="ic-label" style="color:#0d47a1;">ಪ್ರತಿ ದಿನ</div><div class="ic-sub">ಪೌರ ಕಾರ್ಮಿಕರಿಗೆ ಕೊಡು</div></div>
+  </div>
+
+  <div class="rule-box" style="border-color:#558b2f;">
+    <div class="rule-text" style="color:#558b2f;">ಮನೆಯನ್ನು ಸ್ವಚ್ಛವಾಗಿಡು,<br>ಮನೆ ಕಸವನ್ನು ಬೀದಿಗೆ ಹಾಕಬೇಡ! 🌱</div>
+  </div>
+
+  <div class="section-divider" style="color:#558b2f;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_wst1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ರಮಾ ತರಕಾರಿ ಕಸವನ್ನು ಎಲ್ಲಿ ಹಾಕಿದಳು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst1',true)">🟢 ಹಸಿ ಕಸದ ಡಬ್ಬ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst1',false)">🔵 ಒಣ ಕಸದ ಡಬ್ಬ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst1',false)">🏠 ಅಂಗಳದಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_wst1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_wst2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ರವಿ ಪ್ಲಾಸ್ಟಿಕ್ ಮತ್ತು ಪೇಪರ್ ಎಲ್ಲಿ ಹಾಕಿದ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst2',false)">🟢 ಹಸಿ ಕಸದ ಡಬ್ಬ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst2',true)">🔵 ಒಣ ಕಸದ ಡಬ್ಬ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst2',false)">🏠 ಬೀದಿಯಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_wst2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_wst3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಮನೆಯ ಕಸವನ್ನು ಪ್ರತಿ ದಿನ ಯಾರಿಗೆ ಕೊಡಬೇಕು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst3',false)">🏫 ಶಾಲೆಗೆ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst3',true)">🚚 ಪೌರ ಕಾರ್ಮಿಕರಿಗೆ</div>
+        <div class="choice-btn" style="border-color:#a5d6a7;background:#e8f5e9;color:#33691e;" onclick="checkChoice(this,'sc_wst3',false)">❌ ಬೀದಿಗೆ ಹಾಕು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_wst3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-waste" disabled onclick="completeTab('waste','quiz','btn-waste')" style="background:linear-gradient(135deg,#33691e,#7cb342);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 6: QUIZ ═══ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಅಂತಿಮ ಪ್ರಶ್ನೋತ್ತರ!</div>
+      <div class="banner-sub" style="color:#1565c0;">Final Quiz — ಎಲ್ಲವೂ ನೆನಪಿದೆಯಾ?</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_fq1">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 1 of 5</div>
+      <div class="scene-sentence">ಮನೆ ನಮಗೆ ಏನಿನಿಂದ ರಕ್ಷಣೆ ನೀಡುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq1',true)">🌧️ ಮಳೆ, ಚಳಿ, ಬಿಸಿಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq1',false)">🍎 ಹಣ್ಣು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq1',false)">📚 ಪುಸ್ತಕ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_fq1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_fq2">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 2 of 5</div>
+      <div class="scene-sentence">ಸಿಂಹ ಎಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq2',false)">🌳 ಮರದ ಮೇಲೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq2',true)">🪨 ಗವಿಯಲ್ಲಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq2',false)">🏠 ಮನೆಯಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_fq2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_fq3">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 3 of 5</div>
+      <div class="scene-sentence">ತರಕಾರಿ ಸಿಪ್ಪೆ ಯಾವ ಕಸದ ಡಬ್ಬಕ್ಕೆ ಹಾಕಬೇಕು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq3',true)">🟢 ಹಸಿ ಕಸ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq3',false)">🔵 ಒಣ ಕಸ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq3',false)">🏠 ಅಂಗಳ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_fq3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_fq4">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 4 of 5</div>
+      <div class="scene-sentence">ಮನೆಯ ಅಡುಗೆ ಕೋಣೆಯಲ್ಲಿ ಏನು ಮಾಡುತ್ತಾರೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq4',false)">😴 ಮಲಗುತ್ತಾರೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq4',true)">🍳 ಅಡುಗೆ ಮಾಡುತ್ತಾರೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq4',false)">📺 ಟಿ.ವಿ ನೋಡುತ್ತಾರೆ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_fq4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_fq5">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 5 of 5</div>
+      <div class="scene-sentence">ಹಕ್ಕಿ ಎಲ್ಲಿ ವಾಸಿಸುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq5',false)">🪨 ಗವಿಯಲ್ಲಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq5',true)">🌳 ಮರದ ಮೇಲೆ ಗೂಡು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_fq5',false)">🏠 ಕೊಟ್ಟಿಗೆಯಲ್ಲಿ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_fq5"></div>
+    </div>
+  </div>
+
+  <div class="result-card" id="resultCard" style="display:none;">
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-score" id="resultScore"></div>
+    <div class="result-msg" id="resultMsg"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 ಅಭಿನಂದನೆ!</button>
+</div>
+
+</div><!-- /content -->
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">ಅದ್ಭುತ! ನೀನು ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!</div>
+  <div class="celeb-sub">ಪಾಠ 7 — ಮನೆ ಬೇಕು ಮನೆ ಮುಗಿಯಿತು!<br>ಮನೆ, ಕುಟುಂಬ, ಮತ್ತು ಸ್ವಚ್ಛತೆ ಈಗ ಗೊತ್ತು! 🌟</div>
+  <div class="celeb-stars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">ಮನೆಗೆ ಹೋಗೋಣ 🏠</button>
+</div>
+
+<script>
+const TABS=['whyhouse','animalhouse','houseparts','family','waste','quiz'];
+const tabQs={whyhouse:['sc_w1','sc_w2','sc_w3'],animalhouse:[],houseparts:['sc_hp1','sc_hp2','sc_hp3'],family:['sc_f1','sc_f2','sc_f3'],waste:['sc_wst1','sc_wst2','sc_wst3'],quiz:['sc_fq1','sc_fq2','sc_fq3','sc_fq4','sc_fq5']};
+let stars=0;
+const tabDone={};
+
+function updateProgress(){
+  const done=Object.keys(tabDone).length;
+  const pct=Math.round((done/TABS.length)*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progLabel').textContent='ಪ್ರಗತಿ: '+pct+'% ✅';
+}
+
+function checkChoice(el,cardId,correct){
+  const card=document.getElementById(cardId);
+  if(card.classList.contains('done'))return;
+  const btns=card.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.classList.add('locked-choice'));
+  const fb=document.getElementById('fb-'+cardId);
+  if(correct){
+    el.classList.add('correct');
+    fb.textContent='✅ ಶಾಬಾಶ್! ಸರಿಯಾದ ಉತ್ತರ!';
+    fb.className='fb-box ok';
+    stars++;document.getElementById('starsNum').textContent=stars;
+    card.classList.add('done');
+    checkTabReady(getCurrentTab());
+  } else {
+    el.classList.add('wrong');
+    fb.textContent='❌ ಪ್ರಯತ್ನಿಸಿದ್ದೀರ! ಹಸಿರು ಉತ್ತರ ನೋಡು.';
+    fb.className='fb-box no';
+    setTimeout(()=>{
+      btns.forEach(b=>b.classList.remove('locked-choice'));
+      fb.style.display='none';el.classList.remove('wrong');
+    },1500);
+  }
+}
+
+function getCurrentTab(){
+  const active=document.querySelector('.tab-panel.active');
+  return active?active.id.replace('panel-',''):'';
+}
+
+function checkTabReady(tabId){
+  const qs=tabQs[tabId];
+  if(!qs||qs.length===0)return;
+  const btn=document.getElementById('btn-'+tabId);
+  if(!btn)return;
+  const allDone=qs.every(q=>document.getElementById(q).classList.contains('done'));
+  if(allDone)btn.disabled=false;
+}
+
+// Match activity for animal homes
+let matchSelected=null;
+const matchCorrect={rat:'anthill',lion:'cave',bird:'nest',cow:'shed'};
+const matchDone={};
+
+function matchSelect(elId,animal){
+  if(matchDone[animal])return;
+  document.querySelectorAll('.match-item').forEach(i=>{if(!i.classList.contains('matched'))i.classList.remove('selected');});
+  document.getElementById(elId).classList.add('selected');
+  matchSelected={elId,animal};
+}
+
+function matchTarget(elId,animalKey){
+  if(!matchSelected){
+    const fb=document.getElementById('matchFb');
+    fb.textContent='👆 ಮೊದಲು ಪ್ರಾಣಿ ಆರಿಸು!';
+    fb.className='match-fb no';return;
+  }
+  const {elId:selId,animal}=matchSelected;
+  const fb=document.getElementById('matchFb');
+  if(matchCorrect[animal]===animalKey.replace('mh_','')||
+     (animal==='rat'&&animalKey==='anthill'&&elId==='mh_anthill')||
+     (animal==='lion'&&elId==='mh_cave')||
+     (animal==='bird'&&elId==='mh_nest')||
+     (animal==='cow'&&elId==='mh_shed')){
+    document.getElementById(selId).classList.remove('selected');
+    document.getElementById(selId).classList.add('matched');
+    document.getElementById(elId).classList.add('matched');
+    matchDone[animal]=true;
+    stars++;document.getElementById('starsNum').textContent=stars;
+    fb.textContent='✅ ಸರಿ! ';
+    fb.className='match-fb ok';
+    matchSelected=null;
+    if(Object.keys(matchDone).length===4){
+      document.getElementById('btn-animalhouse').disabled=false;
+      fb.textContent='🎉 ಎಲ್ಲ ಪ್ರಾಣಿಗಳ ಮನೆ ಹೊಂದಿಸಿದೆ!';
+    }
+  } else {
+    document.getElementById(selId).classList.remove('selected');
+    document.getElementById(elId).classList.add('error');
+    fb.textContent='❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು!';
+    fb.className='match-fb no';
+    setTimeout(()=>{
+      document.getElementById(elId).classList.remove('error');
+      fb.className='match-fb';
+    },1200);
+    matchSelected=null;
+  }
+}
+
+function completeTab(current,next,btnId){
+  tabDone[current]=true;
+  updateProgress();
+  const nextTab=document.querySelector('[data-tab="'+next+'"]');
+  if(nextTab){nextTab.classList.remove('locked');nextTab.classList.add('done');}
+  switchTab(next);
+}
+
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+tabId).classList.add('active');
+  const tab=document.querySelector('[data-tab="'+tabId+'"]');
+  if(tab){tab.classList.add('active');tab.classList.remove('done');}
+  window.scrollTo({top:0,behavior:'smooth'});
+  checkTabReady(tabId);
+}
+
+document.querySelectorAll('.step-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    if(tab.classList.contains('locked')){
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'),500);
+      const toast=document.getElementById('lockToast');
+      toast.textContent='🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು!';
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'),2500);
+      return;
+    }
+    switchTab(tab.dataset.tab);
+  });
+});
+
+function showCelebration(){
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+setInterval(()=>{
+  const qs=tabQs['quiz'];
+  const btn=document.getElementById('btn-quiz');
+  if(btn&&btn.disabled){
+    const allDone=qs.every(q=>document.getElementById(q).classList.contains('done'));
+    if(allDone){
+      btn.disabled=false;
+      const rc=document.getElementById('resultCard');
+      rc.style.display='block';
+      document.getElementById('resultEmoji').textContent='🏡';
+      document.getElementById('resultScore').textContent='⭐ '+stars+' Stars!';
+      document.getElementById('resultMsg').textContent='ನೀನು ಪಾಠ 7 ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!';
+    }
+  }
+},500);
+</script>
+</body>
+</html>

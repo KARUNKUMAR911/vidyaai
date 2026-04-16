@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Class 2 EVS — ಪಾಠ 6: ಬಗೆ ಬಗೆಯ ಆಹಾರ</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Noto+Sans+Kannada:wght@700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#e8f5e9;min-height:100vh;overflow-x:hidden;}
+
+.topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32,#43a047);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(27,94,32,.45);}
+.topbar-title{font-family:'Baloo 2',cursive;font-size:15px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.25);}
+.stars-pill{background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);color:#fff;padding:5px 14px;border-radius:30px;font-size:15px;font-weight:900;}
+
+.hero{background:linear-gradient(160deg,#1b5e20,#388e3c,#66bb6a);padding:18px 20px 44px;text-align:center;}
+.hero-emoji{font-size:64px;display:block;margin-bottom:6px;animation:heroFloat 3s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-family:'Baloo 2',cursive;font-size:20px;color:#fff;margin-bottom:4px;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.25);}
+.hero p{font-size:13px;color:rgba(255,255,255,.95);font-weight:800;}
+
+.prog-wrap{margin:-22px 16px 16px;background:#fff;border-radius:20px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.prog-label{font-size:13px;font-weight:900;color:#555;margin-bottom:8px;}
+.prog-bar{background:#c8e6c9;border-radius:10px;height:14px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,#1b5e20,#43a047);height:100%;border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);width:0%;}
+
+.steps-bar{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.steps-bar::-webkit-scrollbar{display:none;}
+.step-tab{flex-shrink:0;padding:9px 14px;border-radius:50px;font-size:12px;font-weight:900;border:3px solid transparent;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:5px;white-space:nowrap;user-select:none;}
+.step-tab.active{background:#2e7d32;color:#fff;border-color:#2e7d32;box-shadow:0 4px 14px rgba(46,125,50,.5);}
+.step-tab.done{background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7;}
+.step-tab.locked{background:#f5f5f5;color:#bdbdbd;border-color:#e0e0e0;cursor:not-allowed;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.step-tab.shaking{animation:shake .5s ease;}
+
+.lock-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1b5e20;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:800;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+.lock-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.content{padding:6px 16px 120px;}
+.tab-panel{display:none;animation:fadeIn .35s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.lesson-banner{border-radius:20px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 14px rgba(0,0,0,.1);}
+.banner-emoji{font-size:44px;}
+.banner-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:900;}
+.banner-sub{font-size:12px;font-weight:800;opacity:.8;line-height:1.4;}
+
+.teach-card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border-left:6px solid #2e7d32;}
+.teach-card h3{font-family:'Baloo 2',cursive;font-size:17px;color:#2e7d32;margin-bottom:8px;}
+.teach-card p{font-size:14px;font-weight:800;color:#444;line-height:1.9;margin-bottom:4px;}
+
+.scenario-card{background:#fff;border-radius:22px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);border:3px solid transparent;transition:border-color .3s,background .3s;overflow:hidden;}
+.scenario-card.done{border-color:#a5d6a7;background:#f1f8e9;}
+.scene-top{padding:16px 16px 10px;}
+.scene-label{font-size:11px;font-weight:900;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.scene-sentence{font-family:'Baloo 2',cursive;font-size:16px;color:#222;line-height:1.5;margin-bottom:4px;}
+.scene-sentence .kw{color:#2e7d32;font-size:18px;}
+.scene-bottom{border-top:2px dashed #a5d6a7;padding:12px 16px;}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap;}
+.choice-btn{flex:1;min-width:60px;padding:13px 8px;border-radius:16px;border:3px solid #a5d6a7;background:#e8f5e9;font-family:'Baloo 2',cursive;font-size:15px;color:#2e7d32;cursor:pointer;transition:all .2s;text-align:center;user-select:none;font-weight:900;line-height:1.3;}
+.choice-btn:active{transform:scale(.93);}
+.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9;color:#1b5e20;}
+.choice-btn.wrong{border-color:#c62828;background:#ffcdd2;color:#c62828;}
+.choice-btn.locked-choice{pointer-events:none;}
+.fb-box{padding:10px 14px;border-radius:14px;font-size:14px;font-weight:900;text-align:center;margin-top:8px;display:none;}
+.fb-box.ok{background:#c8e6c9;color:#1b5e20;display:block;}
+.fb-box.no{background:#ffcdd2;color:#c62828;display:block;}
+
+.info-strip{background:linear-gradient(135deg,#f1f8e9,#e8f5e9);border-radius:16px;padding:12px 16px;margin:10px 0;border:2px solid #a5d6a7;}
+.info-strip p{font-size:14px;font-weight:800;color:#1b5e20;line-height:1.7;}
+
+.rule-box{background:#fff;border:3px solid #2e7d32;border-radius:18px;padding:14px 16px;margin:10px 0;text-align:center;}
+.rule-box .rule-text{font-family:'Baloo 2',cursive;font-size:15px;color:#2e7d32;font-weight:900;line-height:1.7;}
+
+.section-divider{text-align:center;font-family:'Baloo 2',cursive;font-size:13px;color:#2e7d32;margin:16px 0 8px;font-weight:900;letter-spacing:1px;}
+
+.grid-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.item-card{background:#fff;border-radius:16px;padding:14px 8px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.08);border:2px solid #a5d6a7;}
+.item-card .ic-emoji{font-size:38px;display:block;margin-bottom:6px;}
+.item-card .ic-label{font-family:'Baloo 2',cursive;font-size:13px;color:#1b5e20;font-weight:900;line-height:1.3;}
+.item-card .ic-sub{font-size:11px;color:#888;margin-top:2px;}
+
+.match-section{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.match-section h3{font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;margin-bottom:12px;text-align:center;}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.match-col-title{font-family:'Baloo 2',cursive;font-size:13px;color:#666;font-weight:900;text-align:center;margin-bottom:8px;}
+.match-item{background:#e8f5e9;border:3px solid #a5d6a7;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;font-family:'Baloo 2',cursive;font-size:14px;color:#1b5e20;margin-bottom:8px;transition:all .2s;user-select:none;font-weight:900;line-height:1.3;}
+.match-item:active{transform:scale(.95);}
+.match-item.selected{background:#2e7d32;color:#fff;border-color:#1b5e20;}
+.match-item.matched{background:#c8e6c9;color:#1b5e20;border-color:#2e7d32;pointer-events:none;}
+.match-item.error{background:#ffcdd2;color:#c62828;border-color:#c62828;}
+.match-fb{text-align:center;font-size:14px;font-weight:900;margin-top:8px;padding:8px;border-radius:12px;}
+.match-fb.ok{background:#c8e6c9;color:#1b5e20;}
+.match-fb.no{background:#ffcdd2;color:#c62828;}
+
+.sort-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.sort-card h3{font-family:'Baloo 2',cursive;font-size:16px;color:#2e7d32;margin-bottom:10px;text-align:center;}
+.sort-2cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.sort-col{background:#f1f8e9;border-radius:14px;padding:10px 6px;border:2px solid #a5d6a7;}
+.sort-col-head{font-family:'Baloo 2',cursive;font-size:12px;color:#1b5e20;font-weight:900;text-align:center;margin-bottom:8px;line-height:1.4;}
+.sort-drop{min-height:40px;border:2px dashed #a5d6a7;border-radius:10px;padding:4px;}
+.sort-drop .placed{background:#c8e6c9;color:#1b5e20;border:2px solid #2e7d32;border-radius:8px;padding:6px 4px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:900;text-align:center;margin-bottom:4px;}
+.sort-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px;}
+.sort-item{background:#fff3e0;border:3px solid #ffcc80;color:#e65100;border-radius:14px;padding:10px 14px;font-family:'Baloo 2',cursive;font-size:14px;cursor:pointer;font-weight:900;transition:all .2s;user-select:none;}
+.sort-item:active{transform:scale(.93);}
+.sort-item.placed-away{opacity:.4;pointer-events:none;}
+.sort-fb{text-align:center;font-size:13px;font-weight:900;padding:8px;border-radius:12px;display:none;margin-top:6px;}
+.sort-fb.show{display:block;}
+.sort-fb.ok{background:#c8e6c9;color:#1b5e20;}
+.sort-fb.no{background:#ffcdd2;color:#c62828;}
+
+.result-card{background:#fff;border-radius:20px;padding:20px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.08);margin-bottom:12px;}
+.result-emoji{font-size:60px;display:block;margin-bottom:8px;}
+.result-score{font-family:'Baloo 2',cursive;font-size:32px;color:#2e7d32;font-weight:900;}
+.result-msg{font-size:14px;font-weight:800;color:#555;margin-top:6px;}
+
+.big-btn{width:100%;padding:17px;border:none;border-radius:18px;font-family:'Baloo 2',cursive;font-size:19px;cursor:pointer;transition:all .2s;margin-top:12px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.12);}
+.big-btn:active{transform:scale(.97);}
+.big-btn.primary{background:linear-gradient(135deg,#1b5e20,#43a047);color:#fff;}
+.big-btn.primary:disabled{background:#ccc;color:#999;box-shadow:none;cursor:not-allowed;transform:none;}
+
+.celeb-screen{position:fixed;inset:0;background:rgba(27,94,32,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .5s;padding:24px;}
+.celeb-screen.show{opacity:1;pointer-events:all;}
+.celeb-trophy{font-size:90px;animation:bounce 1s ease infinite;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.celeb-title{font-family:'Baloo 2',cursive;font-size:28px;color:#fff;margin:12px 0 6px;text-align:center;}
+.celeb-sub{font-family:'Baloo 2',cursive;font-size:15px;color:rgba(255,255,255,.9);text-align:center;margin-bottom:16px;line-height:1.6;}
+.celeb-stars{font-size:44px;margin:8px 0 20px;}
+.celeb-btn{background:#fff;color:#1b5e20;border:none;padding:16px 40px;border-radius:20px;font-family:'Baloo 2',cursive;font-size:20px;cursor:pointer;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+
+.poem-card{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:3px solid #a5d6a7;border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.poem-card .poem-line{font-family:'Baloo 2',cursive;font-size:15px;color:#1b5e20;font-weight:900;line-height:2.2;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🥦 ಪಾಠ 6 — ಬಗೆ ಬಗೆಯ ಆಹಾರ</span>
+  <span class="stars-pill">⭐ <span id="starsNum">0</span></span>
+</div>
+
+<div class="hero">
+  <span class="hero-emoji">🍱</span>
+  <h1>Class 2 EVS · ಪಾಠ 6</h1>
+  <p>ಬಗೆ ಬಗೆಯ ಆಹಾರ — Different Kinds of Food!</p>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-label" id="progLabel">Step 1 ರಿಂದ ಪ್ರಾರಂಭಿಸೋಣ! 👇</div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+</div>
+
+<div class="steps-bar">
+  <div class="step-tab active" data-tab="plant">🌾 ಸಸ್ಯ ಆಹಾರ</div>
+  <div class="step-tab locked" data-tab="animal">🥚 ಪ್ರಾಣಿ ಆಹಾರ</div>
+  <div class="step-tab locked" data-tab="rawcooked">🥗 ಹಸಿ vs ಬೇಯಿಸಿ</div>
+  <div class="step-tab locked" data-tab="animaleats">🐄 ಪ್ರಾಣಿ ಏನು ತಿನ್ನುತ್ತೆ?</div>
+  <div class="step-tab locked" data-tab="sort">🔀 ವಿಂಗಡಿಸು</div>
+  <div class="step-tab locked" data-tab="quiz">🏆 Quiz</div>
+</div>
+
+<div id="lockToast" class="lock-toast">🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು!</div>
+
+<div class="content">
+
+<!-- ═══ TAB 1: PLANT FOODS ═══ -->
+<div class="tab-panel active" id="panel-plant">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+    <span class="banner-emoji">🌾</span>
+    <div>
+      <div class="banner-title" style="color:#1b5e20;">ಸಸ್ಯಗಳಿಂದ ದೊರೆಯುವ ಆಹಾರ</div>
+      <div class="banner-sub" style="color:#2e7d32;">Food from Plants — ಭತ್ತ, ತರಕಾರಿ, ಹಣ್ಣು!</div>
+    </div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🌾 ಧಾನ್ಯಗಳು (Grains)</h3>
+    <p>ಸಸ್ಯಗಳಿಂದ ನಾವು ಅಕ್ಕಿ, ಗೋಧಿ, ಮೆಕ್ಕೆಜೋಳ, ಜೋಳ, ಬೇಳೆ, ಹೆಸರುಕಾಳು, ರಾಗಿ, ಸಜ್ಜೆ ಪಡೆಯುತ್ತೇವೆ.</p>
+    <p>ಇವು ನಮ್ಮ ಪ್ರಮುಖ ಆಹಾರ ಪದಾರ್ಥಗಳು!</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card"><span class="ic-emoji">🍚</span><div class="ic-label">ಅಕ್ಕಿ</div><div class="ic-sub">Rice</div></div>
+    <div class="item-card"><span class="ic-emoji">🌾</span><div class="ic-label">ಗೋಧಿ</div><div class="ic-sub">Wheat</div></div>
+    <div class="item-card"><span class="ic-emoji">🌽</span><div class="ic-label">ಮೆಕ್ಕೆಜೋಳ</div><div class="ic-sub">Maize</div></div>
+    <div class="item-card"><span class="ic-emoji">🫘</span><div class="ic-label">ಬೇಳೆ</div><div class="ic-sub">Lentils</div></div>
+    <div class="item-card"><span class="ic-emoji">🌿</span><div class="ic-label">ಹೆಸರುಕಾಳು</div><div class="ic-sub">Green gram</div></div>
+    <div class="item-card"><span class="ic-emoji">🌾</span><div class="ic-label">ರಾಗಿ</div><div class="ic-sub">Ragi/Finger millet</div></div>
+  </div>
+
+  <div class="teach-card">
+    <h3>🥦 ತರಕಾರಿಗಳು (Vegetables)</h3>
+    <p>ಬದನೆಕಾಯಿ, ಸೌತೆಕಾಯಿ, ಬೆಂಡೆಕಾಯಿ, ಪಡವಲಕಾಯಿ, ಕುಂಬಳಕಾಯಿ, ಹಾಗಲಕಾಯಿ, ಮೂಲಂಗಿ, ಆಲೂಗಡ್ಡೆ — ಎಲ್ಲವೂ ಸಸ್ಯಗಳಿಂದ!</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card"><span class="ic-emoji">🍆</span><div class="ic-label">ಬದನೆಕಾಯಿ</div><div class="ic-sub">Brinjal</div></div>
+    <div class="item-card"><span class="ic-emoji">🥒</span><div class="ic-label">ಸೌತೆಕಾಯಿ</div><div class="ic-sub">Cucumber</div></div>
+    <div class="item-card"><span class="ic-emoji">🥬</span><div class="ic-label">ಬಸಳೆಸೊಪ್ಪು</div><div class="ic-sub">Greens</div></div>
+    <div class="item-card"><span class="ic-emoji">🎃</span><div class="ic-label">ಕುಂಬಳಕಾಯಿ</div><div class="ic-sub">Pumpkin</div></div>
+    <div class="item-card"><span class="ic-emoji">🥕</span><div class="ic-label">ಕ್ಯಾರೆಟ್</div><div class="ic-sub">Carrot</div></div>
+    <div class="item-card"><span class="ic-emoji">🥔</span><div class="ic-label">ಆಲೂಗಡ್ಡೆ</div><div class="ic-sub">Potato</div></div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-text">ಸಸ್ಯಗಳಿಂದ ಧಾನ್ಯ, ತರಕಾರಿ, ಹಣ್ಣು, ಸೊಪ್ಪು — ಎಲ್ಲಾ ದೊರೆಯುತ್ತದೆ! 🌱</div>
+  </div>
+
+  <div class="section-divider">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_p1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಅಕ್ಕಿ ಎಲ್ಲಿಂದ ದೊರೆಯುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p1',false)">🐄 ಹಸುವಿನಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p1',true)">🌾 ಸಸ್ಯದಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p1',false)">🐟 ಮೀನಿನಿಂದ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_p2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಬದನೆಕಾಯಿ ಯಾವ ಗುಂಪಿಗೆ ಸೇರುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p2',false)">🥚 ಪ್ರಾಣಿ ಆಹಾರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p2',true)">🌿 ಸಸ್ಯ ಆಹಾರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p2',false)">🐄 ಹಾಲು ಗುಂಪು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_p3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ರಾಗಿ ಯಾವ ರೀತಿಯ ಆಹಾರ ಪದಾರ್ಥ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p3',false)">🥩 ಮಾಂಸ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p3',true)">🌾 ಧಾನ್ಯ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_p3',false)">🍎 ಹಣ್ಣು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_p3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-plant" disabled onclick="completeTab('plant','animal','btn-plant')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 2: ANIMAL FOODS ═══ -->
+<div class="tab-panel" id="panel-animal">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#fff3e0);">
+    <span class="banner-emoji">🥚</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಪ್ರಾಣಿಗಳಿಂದ ದೊರೆಯುವ ಆಹಾರ</div>
+      <div class="banner-sub" style="color:#ef6c00;">Food from Animals — ಹಾಲು, ಮೊಟ್ಟೆ, ಮಾಂಸ, ಮೀನು!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#e65100;">
+    <h3 style="color:#e65100;">🥚 ಪ್ರಾಣಿ ಆಹಾರ ಪದಾರ್ಥಗಳು</h3>
+    <p>ಮೊಟ್ಟೆ, ಮಾಂಸ, ಮೀನು, ಹಾಲು — ಇವೆಲ್ಲ ಪ್ರಾಣಿಗಳಿಂದ ದೊರೆಯುತ್ತವೆ.</p>
+    <p>ಮೊಸರು ಮತ್ತು ಚಹಾ ಕೂಡ ಹಾಲಿನಿಂದ ಮಾಡುತ್ತಾರೆ!</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">🥛</span><div class="ic-label" style="color:#e65100;">ಹಾಲು</div><div class="ic-sub">Milk - ಹಸು, ಎಮ್ಮೆ</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">🥚</span><div class="ic-label" style="color:#e65100;">ಮೊಟ್ಟೆ</div><div class="ic-sub">Egg - ಕೋಳಿ</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">🐟</span><div class="ic-label" style="color:#e65100;">ಮೀನು</div><div class="ic-sub">Fish</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">🥩</span><div class="ic-label" style="color:#e65100;">ಮಾಂಸ</div><div class="ic-sub">Meat</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">🫙</span><div class="ic-label" style="color:#e65100;">ಮೊಸರು</div><div class="ic-sub">Curd - ಹಾಲಿನಿಂದ</div></div>
+    <div class="item-card" style="border-color:#ffcc80;"><span class="ic-emoji">☕</span><div class="ic-label" style="color:#e65100;">ಚಹಾ</div><div class="ic-sub">Tea - ಹಾಲು ಹಾಕಿ</div></div>
+  </div>
+
+  <div class="rule-box" style="border-color:#e65100;">
+    <div class="rule-text" style="color:#e65100;">ಹಾಲು, ಮೊಟ್ಟೆ, ಮೀನು, ಮಾಂಸ — ಪ್ರಾಣಿಗಳಿಂದ ದೊರೆಯುತ್ತದೆ! 🐄</div>
+  </div>
+
+  <div class="section-divider" style="color:#e65100;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_a1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಹಾಲು ಎಲ್ಲಿಂದ ದೊರೆಯುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a1',true)">🐄 ಹಸು/ಎಮ್ಮೆಯಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a1',false)">🌾 ಗೋಧಿಯಿಂದ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a1',false)">🍅 ಟೊಮ್ಯಾಟೋದಿಂದ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_a1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_a2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಮೊಟ್ಟೆ ಯಾವ ಪ್ರಾಣಿಯಿಂದ ದೊರೆಯುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a2',false)">🐄 ಹಸು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a2',true)">🐔 ಕೋಳಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a2',false)">🐟 ಮೀನು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_a2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_a3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಮೊಸರು ಯಾವ ಪ್ರಾಣಿ ಆಹಾರದಿಂದ ಮಾಡಲಾಗುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a3',false)">🥚 ಮೊಟ್ಟೆ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a3',true)">🥛 ಹಾಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_a3',false)">🥩 ಮಾಂಸ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_a3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-animal" disabled onclick="completeTab('animal','rawcooked','btn-animal')">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 3: RAW vs COOKED ═══ -->
+<div class="tab-panel" id="panel-rawcooked">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#f3e5f5,#e8eaf6);">
+    <span class="banner-emoji">🥗</span>
+    <div>
+      <div class="banner-title" style="color:#6a1b9a;">ಹಸಿ vs ಬೇಯಿಸಿ ತಿನ್ನುವ ಆಹಾರ</div>
+      <div class="banner-sub" style="color:#7b1fa2;">Raw food vs Cooked food!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#7b1fa2;">
+    <h3 style="color:#7b1fa2;">🥗 ಹಸಿಯಾಗಿ ತಿನ್ನುವ ಆಹಾರ</h3>
+    <p>ಕ್ಯಾರೆಟ್, ಮೂಲಂಗಿ, ಸೌತೆಕಾಯಿ, ಟೊಮ್ಯಾಟೋ, ಬಾಳೆಹಣ್ಣು, ಸೇಬು, ಮಾವಿನಹಣ್ಣು — ಇವನ್ನು ಹಸಿಯಾಗಿ ತಿನ್ನಬಹುದು.</p>
+    <p>ಕ್ಯಾರೆಟ್, ಮೂಲಂಗಿ, ಸೌತೆಯಂತಹ ತರಕಾರಿಗಳನ್ನು ಹಸಿಯಾಗಿ ತಿನ್ನುವುದು ಆರೋಗ್ಯಕ್ಕೆ ಒಳ್ಳೆಯದು.</p>
+    <p>ಆದರೆ ಇವುಗಳನ್ನು ನೀರಿನಲ್ಲಿ ಚೆನ್ನಾಗಿ ತೊಳೆದು ತಿನ್ನಬೇಕು.</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🥕</span><div class="ic-label" style="color:#6a1b9a;">ಕ್ಯಾರೆಟ್</div><div class="ic-sub">ಹಸಿ ತಿನ್ನಬಹುದು</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🥒</span><div class="ic-label" style="color:#6a1b9a;">ಸೌತೆಕಾಯಿ</div><div class="ic-sub">ಊಟದಲ್ಲಿ ಇಷ್ಟ!</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🍅</span><div class="ic-label" style="color:#6a1b9a;">ಟೊಮ್ಯಾಟೋ</div><div class="ic-sub">ಹಸಿ ತಿಂದರೆ ರುಚಿ!</div></div>
+    <div class="item-card" style="border-color:#ce93d8;"><span class="ic-emoji">🍌</span><div class="ic-label" style="color:#6a1b9a;">ಬಾಳೆಹಣ್ಣು</div><div class="ic-sub">ಎಲ್ಲರೂ ಇಷ್ಟ!</div></div>
+  </div>
+
+  <div class="info-strip" style="border-color:#ce93d8;background:linear-gradient(135deg,#f3e5f5,#ede7f6);">
+    <p style="color:#6a1b9a;">🍳 ಬೇಯಿಸಿ ತಿನ್ನುವ ಆಹಾರ: ಅಕ್ಕಿ, ಬೇಳೆ, ಆಲೂಗಡ್ಡೆ, ಮಾಂಸ, ಮೀನು — ಇವನ್ನು ಬೇಯಿಸಿ ತಿನ್ನುತ್ತಾರೆ.</p>
+  </div>
+
+  <div class="section-divider" style="color:#7b1fa2;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_r1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಕ್ಯಾರೆಟ್ ಅನ್ನು ಹೇಗೆ ತಿನ್ನಬಹುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r1',true)">🥗 ಹಸಿಯಾಗಿ</div>
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r1',false)">🍳 ಮಾತ್ರ ಬೇಯಿಸಿ</div>
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r1',false)">❌ ತಿನ್ನಲೇ ಬಾರದು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_r1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_r2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಹಸಿ ತರಕಾರಿ ತಿನ್ನುವ ಮೊದಲು ಏನು ಮಾಡಬೇಕು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r2',false)">🎨 ಬಣ್ಣ ಹಚ್ಚಬೇಕು</div>
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r2',true)">💧 ನೀರಿನಲ್ಲಿ ತೊಳೆಯಬೇಕು</div>
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r2',false)">🔥 ಬೇಯಿಸಲೇ ಬೇಕು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_r2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_r3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಅಕ್ಕಿಯನ್ನು ಹೇಗೆ ತಿನ್ನುತ್ತಾರೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r3',false)">🥗 ಹಸಿಯಾಗಿ</div>
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r3',true)">🍳 ಬೇಯಿಸಿ</div>
+        <div class="choice-btn" style="border-color:#ce93d8;background:#f3e5f5;color:#6a1b9a;" onclick="checkChoice(this,'sc_r3',false)">❌ ತಿನ್ನಲೇ ಬಾರದು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_r3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-rawcooked" disabled onclick="completeTab('rawcooked','animaleats','btn-rawcooked')" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 4: WHAT ANIMALS EAT ═══ -->
+<div class="tab-panel" id="panel-animaleats">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">
+    <span class="banner-emoji">🐄</span>
+    <div>
+      <div class="banner-title" style="color:#0d47a1;">ಪ್ರಾಣಿಗಳ ಆಹಾರ</div>
+      <div class="banner-sub" style="color:#1565c0;">What do animals eat?</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#1565c0;">
+    <h3 style="color:#1565c0;">🌿 ಸಸ್ಯ ತಿನ್ನುವ ಪ್ರಾಣಿಗಳು</h3>
+    <p>ಜಿಂಕೆ, ಮೊಲ, ಕುರಿ, ಆಕಳು, ಗಿಳಿ — ಇವು ಸಸ್ಯ ಮತ್ತು ಸಸ್ಯಗಳಿಂದ ದೊರೆಯುವ ಆಹಾರ ಪದಾರ್ಥಗಳನ್ನು ಮಾತ್ರ ಸೇವಿಸುತ್ತವೆ.</p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="item-card" style="border-color:#90caf9;"><span class="ic-emoji">🦌</span><div class="ic-label" style="color:#0d47a1;">ಜಿಂಕೆ</div><div class="ic-sub">ಹುಲ್ಲು ತಿನ್ನುತ್ತದೆ</div></div>
+    <div class="item-card" style="border-color:#90caf9;"><span class="ic-emoji">🐇</span><div class="ic-label" style="color:#0d47a1;">ಮೊಲ</div><div class="ic-sub">ಕ್ಯಾರೆಟ್, ಹುಲ್ಲು</div></div>
+    <div class="item-card" style="border-color:#90caf9;"><span class="ic-emoji">🐑</span><div class="ic-label" style="color:#0d47a1;">ಕುರಿ</div><div class="ic-sub">ಹುಲ್ಲು ತಿನ್ನುತ್ತದೆ</div></div>
+    <div class="item-card" style="border-color:#90caf9;"><span class="ic-emoji">🐦</span><div class="ic-label" style="color:#0d47a1;">ಗಿಳಿ</div><div class="ic-sub">ಕಾಳು ತಿನ್ನುತ್ತದೆ</div></div>
+    <div class="item-card" style="border-color:#90caf9;"><span class="ic-emoji">🐘</span><div class="ic-label" style="color:#0d47a1;">ಆನೆ</div><div class="ic-sub">ಕಬ್ಬು, ಬಾಳೆ</div></div>
+    <div class="item-card" style="border-color:#90caf9;"><span class="ic-emoji">🐄</span><div class="ic-label" style="color:#0d47a1;">ಆಕಳು</div><div class="ic-sub">ಹುಲ್ಲು, ಒಣ ಹುಲ್ಲು</div></div>
+  </div>
+
+  <div class="info-strip" style="border-color:#90caf9;background:linear-gradient(135deg,#e3f2fd,#e8eaf6);">
+    <p style="color:#0d47a1;">🦁 ಇತರ ಪ್ರಾಣಿಗಳನ್ನು ತಿನ್ನುವ ಪ್ರಾಣಿಗಳು: ಹುಲಿ, ಸಿಂಹ, ಗಿಡುಗ — ಇವು ಇತರ ಪ್ರಾಣಿಗಳನ್ನು ಆಹಾರವಾಗಿ ಸೇವಿಸುತ್ತವೆ.</p>
+  </div>
+
+  <div class="section-divider" style="color:#1565c0;">— ಈಗ ಆಟ ಆಡೋಣ 🎮 —</div>
+
+  <div class="scenario-card" id="sc_ae1">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 1 of 3</div>
+      <div class="scene-sentence">ಮೊಲ ಏನು ತಿನ್ನುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae1',true)">🥕 ಕ್ಯಾರೆಟ್, ಹುಲ್ಲು</div>
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae1',false)">🥩 ಮಾಂಸ</div>
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae1',false)">🐟 ಮೀನು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_ae1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_ae2">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 2 of 3</div>
+      <div class="scene-sentence">ಆನೆ ಏನು ತಿನ್ನಲು ಇಷ್ಟ ಪಡುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae2',false)">🐑 ಕುರಿ</div>
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae2',true)">🍌 ಕಬ್ಬು, ಬಾಳೆ</div>
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae2',false)">🍖 ಮೊಳೆ ಮಾಂಸ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_ae2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_ae3">
+    <div class="scene-top">
+      <div class="scene-label">ಪ್ರಶ್ನೆ 3 of 3</div>
+      <div class="scene-sentence">ಹುಲಿ ಯಾವ ರೀತಿ ಆಹಾರ ಸೇವಿಸುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae3',false)">🌿 ಹುಲ್ಲು ಮಾತ್ರ</div>
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae3',true)">🦌 ಇತರ ಪ್ರಾಣಿಗಳನ್ನು</div>
+        <div class="choice-btn" style="border-color:#90caf9;background:#e3f2fd;color:#0d47a1;" onclick="checkChoice(this,'sc_ae3',false)">🍎 ಹಣ್ಣು ಮಾತ್ರ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_ae3"></div>
+    </div>
+  </div>
+
+  <button class="big-btn primary" id="btn-animaleats" disabled onclick="completeTab('animaleats','sort','btn-animaleats')" style="background:linear-gradient(135deg,#0d47a1,#1976d2);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 5: SORT ACTIVITY ═══ -->
+<div class="tab-panel" id="panel-sort">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);">
+    <span class="banner-emoji">🔀</span>
+    <div>
+      <div class="banner-title" style="color:#880e4f;">ಆಹಾರ ವಿಂಗಡಿಸು!</div>
+      <div class="banner-sub" style="color:#ad1457;">Sort the food into groups!</div>
+    </div>
+  </div>
+
+  <div class="teach-card" style="border-left-color:#ad1457;">
+    <h3 style="color:#ad1457;">🎯 ಆಹಾರ ಗುಂಪು ಮಾಡು</h3>
+    <p>ಕೆಳಗಿನ ಆಹಾರ ಪದಾರ್ಥಗಳನ್ನು ಸಸ್ಯ ಆಹಾರ ಮತ್ತು ಪ್ರಾಣಿ ಆಹಾರ ಎಂದು ವಿಂಗಡಿಸು. ಆಹಾರದ ಮೇಲೆ ಒತ್ತಿ ಸರಿಯಾದ ಗುಂಪಿಗೆ ಹಾಕು!</p>
+  </div>
+
+  <div class="sort-card">
+    <h3 style="color:#ad1457;">ಆಹಾರ ಗುಂಪು ಮಾಡು 🗂️</h3>
+    <div class="sort-items" id="sortItems">
+      <div class="sort-item" onclick="selectSortItem(this,'ಅಕ್ಕಿ','plant')">🍚 ಅಕ್ಕಿ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಹಾಲು','animal')">🥛 ಹಾಲು</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಬದನೆಕಾಯಿ','plant')">🍆 ಬದನೆ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಮೀನು','animal')">🐟 ಮೀನು</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಟೊಮ್ಯಾಟೋ','plant')">🍅 ಟೊಮ್ಯಾಟೋ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಮೊಟ್ಟೆ','animal')">🥚 ಮೊಟ್ಟೆ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ರಾಗಿ','plant')">🌾 ರಾಗಿ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಮಾಂಸ','animal')">🥩 ಮಾಂಸ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಬಾಳೆಹಣ್ಣು','plant')">🍌 ಬಾಳೆ</div>
+      <div class="sort-item" onclick="selectSortItem(this,'ಮೊಸರು','animal')">🫙 ಮೊಸರು</div>
+    </div>
+    <div class="sort-2cols">
+      <div class="sort-col">
+        <div class="sort-col-head">🌿 ಸಸ್ಯಗಳಿಂದ ದೊರೆಯುವ ಆಹಾರ</div>
+        <div class="sort-drop" id="drop-plant" onclick="dropHere('plant')"></div>
+      </div>
+      <div class="sort-col">
+        <div class="sort-col-head">🐄 ಪ್ರಾಣಿಗಳಿಂದ ದೊರೆಯುವ ಆಹಾರ</div>
+        <div class="sort-drop" id="drop-animal" onclick="dropHere('animal')"></div>
+      </div>
+    </div>
+    <div class="sort-fb" id="sortFb"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-sort" disabled onclick="completeTab('sort','quiz','btn-sort')" style="background:linear-gradient(135deg,#880e4f,#c2185b);">ಮುಂದಿನ ಹಂತ →</button>
+</div>
+
+<!-- ═══ TAB 6: QUIZ ═══ -->
+<div class="tab-panel" id="panel-quiz">
+  <div class="lesson-banner" style="background:linear-gradient(135deg,#fff8e1,#fff3e0);">
+    <span class="banner-emoji">🏆</span>
+    <div>
+      <div class="banner-title" style="color:#e65100;">ಅಂತಿಮ ಪ್ರಶ್ನೋತ್ತರ!</div>
+      <div class="banner-sub" style="color:#f57c00;">Final Quiz — ಎಲ್ಲವೂ ನೆನಪಿದೆಯಾ?</div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q1">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 1 of 5</div>
+      <div class="scene-sentence">ಹೆಸರುಕಾಳು ಎಲ್ಲಿಂದ ದೊರೆಯುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q1',false)">🐄 ಪ್ರಾಣಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q1',true)">🌿 ಸಸ್ಯ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q1',false)">🐟 ಮೀನು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q1"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q2">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 2 of 5</div>
+      <div class="scene-sentence">ಆಕಳು ಏನು ತಿನ್ನುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q2',true)">🌿 ಹುಲ್ಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q2',false)">🥩 ಮಾಂಸ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q2',false)">🐟 ಮೀನು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q2"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q3">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 3 of 5</div>
+      <div class="scene-sentence">ಟೊಮ್ಯಾಟೋ ಮತ್ತು ಸೌತೆಕಾಯಿ ಯಾವ ಆಹಾರ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q3',false)">🐄 ಪ್ರಾಣಿ ಆಹಾರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q3',true)">🌿 ಸಸ್ಯ ಆಹಾರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q3',false)">🌊 ಸಮುದ್ರ ಆಹಾರ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q3"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q4">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 4 of 5</div>
+      <div class="scene-sentence">ಸಿಂಹ ಯಾವ ರೀತಿ ಆಹಾರ ತಿನ್ನುತ್ತದೆ? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q4',false)">🌿 ಹುಲ್ಲು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q4',true)">🦌 ಇತರ ಪ್ರಾಣಿಗಳನ್ನು</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q4',false)">🍎 ಹಣ್ಣು ಮಾತ್ರ</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q4"></div>
+    </div>
+  </div>
+
+  <div class="scenario-card" id="sc_q5">
+    <div class="scene-top">
+      <div class="scene-label">Quiz 5 of 5</div>
+      <div class="scene-sentence">ಬಾಳೆಹಣ್ಣನ್ನು ಹೇಗೆ ತಿನ್ನಬಹುದು? <span class="kw">?</span></div>
+    </div>
+    <div class="scene-bottom">
+      <div class="choice-row">
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q5',true)">🥗 ಹಸಿಯಾಗಿ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q5',false)">🍳 ಬೇಯಿಸಿ ಮಾತ್ರ</div>
+        <div class="choice-btn" onclick="checkChoice(this,'sc_q5',false)">❌ ತಿನ್ನಬಾರದು</div>
+      </div>
+      <div class="fb-box" id="fb-sc_q5"></div>
+    </div>
+  </div>
+
+  <div class="result-card" id="resultCard" style="display:none;">
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-score" id="resultScore"></div>
+    <div class="result-msg" id="resultMsg"></div>
+  </div>
+
+  <button class="big-btn primary" id="btn-quiz" disabled onclick="showCelebration()">🎉 ಅಭಿನಂದನೆ!</button>
+</div>
+
+</div><!-- /content -->
+
+<div class="celeb-screen" id="celebScreen">
+  <div class="celeb-trophy">🏆</div>
+  <div class="celeb-title">ಅದ್ಭುತ! ನೀನು ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!</div>
+  <div class="celeb-sub">ಪಾಠ 6 — ಬಗೆ ಬಗೆಯ ಆಹಾರ ಮುಗಿಯಿತು!<br>ಸಸ್ಯ ಆಹಾರ ಮತ್ತು ಪ್ರಾಣಿ ಆಹಾರ ಈಗ ಗೊತ್ತು! 🌟</div>
+  <div class="celeb-stars">⭐⭐⭐</div>
+  <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">ಮನೆಗೆ ಹೋಗೋಣ 🏠</button>
+</div>
+
+<script>
+const TABS=['plant','animal','rawcooked','animaleats','sort','quiz'];
+const tabQs={plant:['sc_p1','sc_p2','sc_p3'],animal:['sc_a1','sc_a2','sc_a3'],rawcooked:['sc_r1','sc_r2','sc_r3'],animaleats:['sc_ae1','sc_ae2','sc_ae3'],sort:[],quiz:['sc_q1','sc_q2','sc_q3','sc_q4','sc_q5']};
+const tabDone={};let stars=0;
+
+function updateProgress(){
+  const done=Object.keys(tabDone).length;
+  const pct=Math.round((done/TABS.length)*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progLabel').textContent='ಪ್ರಗತಿ: '+pct+'% ✅';
+}
+
+function checkChoice(el,cardId,correct){
+  const card=document.getElementById(cardId);
+  if(card.classList.contains('done'))return;
+  const btns=card.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.classList.add('locked-choice'));
+  const fb=document.getElementById('fb-'+cardId);
+  if(correct){
+    el.classList.add('correct');
+    fb.textContent='✅ ಶಾಬಾಶ್! ಸರಿಯಾದ ಉತ್ತರ!';
+    fb.className='fb-box ok';
+    stars++;document.getElementById('starsNum').textContent=stars;
+    card.classList.add('done');
+    checkTabReady(getCurrentTab());
+  } else {
+    el.classList.add('wrong');
+    fb.textContent='❌ ಪ್ರಯತ್ನಿಸಿದ್ದೀರ! ಹಸಿರು ಉತ್ತರ ನೋಡು.';
+    fb.className='fb-box no';
+    setTimeout(()=>{
+      btns.forEach(b=>b.classList.remove('locked-choice'));
+      fb.style.display='none';el.classList.remove('wrong');
+    },1500);
+  }
+}
+
+function getCurrentTab(){
+  const active=document.querySelector('.tab-panel.active');
+  return active?active.id.replace('panel-',''):'';
+}
+
+function checkTabReady(tabId){
+  const qs=tabQs[tabId];
+  if(!qs)return;
+  const btn=document.getElementById('btn-'+tabId);
+  if(!btn)return;
+  const allDone=qs.every(q=>document.getElementById(q).classList.contains('done'));
+  if(allDone){btn.disabled=false;}
+}
+
+// Sort activity
+let selectedSortItem=null;
+const sortAnswers={plant:[],animal:[]};
+const sortCorrect={plant:['ಅಕ್ಕಿ','ಬದನೆಕಾಯಿ','ಟೊಮ್ಯಾಟೋ','ರಾಗಿ','ಬಾಳೆಹಣ್ಣು'],animal:['ಹಾಲು','ಮೀನು','ಮೊಟ್ಟೆ','ಮಾಂಸ','ಮೊಸರು']};
+
+function selectSortItem(el,name,correctGroup){
+  if(el.classList.contains('placed-away'))return;
+  document.querySelectorAll('.sort-item').forEach(i=>i.style.outline='none');
+  el.style.outline='3px solid #ad1457';
+  selectedSortItem={el,name,correctGroup};
+}
+
+function dropHere(group){
+  if(!selectedSortItem)return;
+  const {el,name,correctGroup}=selectedSortItem;
+  const fb=document.getElementById('sortFb');
+  if(group===correctGroup){
+    const drop=document.getElementById('drop-'+group);
+    const div=document.createElement('div');div.className='placed';div.textContent=el.textContent;
+    drop.appendChild(div);
+    el.classList.add('placed-away');el.style.outline='none';
+    sortAnswers[group].push(name);
+    fb.textContent='✅ ಸರಿ! '+name+' → '+( group==='plant'?'ಸಸ್ಯ ಆಹಾರ':'ಪ್ರಾಣಿ ಆಹಾರ');
+    fb.className='sort-fb show ok';
+    stars++;document.getElementById('starsNum').textContent=stars;
+    selectedSortItem=null;
+    const total=sortAnswers.plant.length+sortAnswers.animal.length;
+    if(total===10){
+      document.getElementById('btn-sort').disabled=false;
+      fb.textContent='🎉 ಅದ್ಭುತ! ಎಲ್ಲವನ್ನೂ ಸರಿಯಾಗಿ ವಿಂಗಡಿಸಿದೆ!';
+    }
+  } else {
+    fb.textContent='❌ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು!';
+    fb.className='sort-fb show no';
+    setTimeout(()=>fb.className='sort-fb',1500);
+  }
+}
+
+function completeTab(current,next,btnId){
+  tabDone[current]=true;
+  updateProgress();
+  const nextTab=document.querySelector('[data-tab="'+next+'"]');
+  if(nextTab){nextTab.classList.remove('locked');nextTab.classList.add('done');}
+  switchTab(next);
+}
+
+function switchTab(tabId){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+tabId).classList.add('active');
+  const tab=document.querySelector('[data-tab="'+tabId+'"]');
+  if(tab){tab.classList.add('active');tab.classList.remove('done');}
+  window.scrollTo({top:0,behavior:'smooth'});
+  checkTabReady(tabId);
+}
+
+document.querySelectorAll('.step-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    if(tab.classList.contains('locked')){
+      tab.classList.add('shaking');
+      setTimeout(()=>tab.classList.remove('shaking'),500);
+      const toast=document.getElementById('lockToast');
+      toast.textContent='🔒 ಮೊದಲ ಹಂತ ಮುಗಿಸು!';
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'),2500);
+      return;
+    }
+    switchTab(tab.dataset.tab);
+  });
+});
+
+function showCelebration(){
+  document.getElementById('celebScreen').classList.add('show');
+}
+
+// Quiz completion check
+setInterval(()=>{
+  const qs=tabQs['quiz'];
+  const btn=document.getElementById('btn-quiz');
+  if(btn&&btn.disabled){
+    const allDone=qs.every(q=>document.getElementById(q).classList.contains('done'));
+    if(allDone){
+      btn.disabled=false;
+      const rc=document.getElementById('resultCard');
+      rc.style.display='block';
+      document.getElementById('resultEmoji').textContent='🌟';
+      document.getElementById('resultScore').textContent='⭐ '+stars+' Stars!';
+      document.getElementById('resultMsg').textContent='ನೀನು ಪಾಠ 6 ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!';
+    }
+  }
+},500);
+</script>
+</body>
+</html>

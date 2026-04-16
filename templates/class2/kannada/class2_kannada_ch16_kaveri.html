@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಕಾವೇರಿ - ಪಾಠ ೧೬ | ೨ನೇ ತರಗತಿ ಕನ್ನಡ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1e3a5f;--blue2:#2563eb;--blue3:#bfdbfe;
+  --teal:#0d9488;--teal2:#99f6e4;
+  --amber:#92400e;--amber2:#f59e0b;--amber3:#fef3c7;
+  --white:#ffffff;--text:#1e3a5f;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans Kannada',sans-serif;
+  background:linear-gradient(160deg,#eff6ff 0%,#dbeafe 50%,#bfdbfe 100%);
+  color:var(--text);min-height:100vh;overflow-x:hidden;
+}
+header{
+  background:linear-gradient(135deg,#1e3a5f 0%,#1d4ed8 60%,#2563eb 100%);
+  color:white;text-align:center;padding:16px 16px 8px;
+  position:relative;overflow:hidden;
+}
+header::before{
+  content:'🌊💧🐟🌊💧🐟🌊💧🐟🌊💧🐟🌊💧🐟';
+  position:absolute;bottom:0;left:0;right:0;
+  font-size:14px;letter-spacing:2px;opacity:0.15;
+}
+.badge{
+  display:inline-block;background:#f59e0b;color:#1e3a5f;
+  font-weight:800;font-size:11px;padding:3px 14px;
+  border-radius:20px;margin-bottom:6px;
+}
+header h1{
+  font-family:'Noto Serif Kannada',serif;
+  font-size:clamp(17px,5.5vw,34px);font-weight:700;
+  text-shadow:0 2px 10px rgba(0,0,0,0.25);
+}
+header .sub{font-size:12px;opacity:0.85;margin-top:2px;}
+.progress-wrap{
+  background:rgba(255,255,255,0.25);border-radius:10px;
+  height:10px;margin:10px 20px 0;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,#f59e0b,#60a5fa);
+  border-radius:10px;transition:width 0.6s cubic-bezier(.4,0,.2,1);width:14%;
+}
+.progress-label{text-align:center;font-size:11px;opacity:0.85;margin-top:4px;padding-bottom:6px;}
+
+.tab-bar{
+  display:flex;background:#1e3a5f;overflow-x:auto;
+  scrollbar-width:none;position:sticky;top:0;z-index:100;
+  border-bottom:3px solid #f59e0b;gap:2px;padding:0 4px;
+}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:1 1 0;min-width:52px;display:flex;flex-direction:column;
+  align-items:center;gap:2px;padding:9px 4px 7px;
+  background:none;border:none;color:rgba(255,255,255,0.35);
+  font-family:'Noto Sans Kannada',sans-serif;font-size:9px;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;
+  border-bottom:3px solid transparent;margin-bottom:-3px;position:relative;
+}
+.tab-btn .tab-icon{font-size:18px;}
+.tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b;background:rgba(255,255,255,0.08);}
+.tab-btn.done{color:#6ee7b7;}
+.tab-btn.locked{color:rgba(255,255,255,0.2);cursor:not-allowed;}
+.tab-btn.locked .tab-icon{filter:grayscale(1) opacity(0.3);}
+.lock-icon{position:absolute;top:4px;right:4px;font-size:9px;opacity:0.5;}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-8px) rotate(-3deg)}
+  30%{transform:translateX(8px) rotate(3deg)}
+  45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  90%{transform:translateX(3px)}
+}
+.shake{animation:shake 0.5s ease;}
+
+#lockToast{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#b91c1c;color:white;padding:12px 22px;
+  border-radius:30px;font-size:14px;font-weight:700;
+  box-shadow:0 6px 24px rgba(0,0,0,0.25);z-index:999;
+  opacity:0;transition:opacity 0.3s,transform 0.3s;
+  pointer-events:none;text-align:center;max-width:88vw;
+}
+#lockToast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.section{display:none;padding:16px 14px 100px;max-width:900px;margin:0 auto;}
+.section.active{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-title{
+  font-family:'Noto Serif Kannada',serif;font-size:17px;
+  font-weight:700;color:#1e3a5f;margin-bottom:14px;padding-bottom:8px;
+  border-bottom:3px solid #2563eb;display:flex;align-items:center;gap:8px;
+}
+.next-btn{
+  display:none;width:100%;margin-top:22px;padding:16px;
+  background:linear-gradient(135deg,#2563eb,#1e3a5f);color:white;
+  border:none;border-radius:16px;font-family:'Noto Sans Kannada',sans-serif;
+  font-size:17px;font-weight:800;cursor:pointer;
+  box-shadow:0 4px 18px rgba(37,99,235,0.35);transition:transform 0.15s;
+}
+.next-btn:active{transform:scale(0.97);}
+.card{
+  background:white;border-radius:18px;padding:16px;
+  box-shadow:0 4px 18px rgba(37,99,235,0.12);margin-bottom:12px;
+}
+.instr{
+  background:linear-gradient(135deg,#eff6ff,#dbeafe);
+  border-radius:14px;padding:13px 16px;font-size:14px;
+  color:#1e3a5f;font-weight:600;text-align:center;margin-bottom:14px;
+  border:2px dashed #2563eb;
+}
+.mini-bar-wrap{background:#e5e7eb;border-radius:10px;height:10px;margin:8px 0 4px;overflow:hidden;}
+.mini-bar{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:10px;width:0%;transition:width 0.4s;}
+.mini-label{font-size:13px;color:#1e3a5f;font-weight:700;margin-bottom:10px;}
+
+/* SCENE / INTRO CARDS */
+.scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.scene-card{
+  background:white;border:3px solid #bfdbfe;border-radius:16px;
+  padding:16px 10px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.scene-card .s-icon{font-size:46px;display:block;margin-bottom:8px;}
+.scene-card .s-name{font-family:'Noto Serif Kannada',serif;font-size:15px;font-weight:700;color:#1e3a5f;}
+.scene-card .s-detail{font-size:12px;color:#1d4ed8;display:none;margin-top:6px;line-height:1.8;}
+.scene-card .s-tap{font-size:11px;color:#2563eb;display:block;margin-top:4px;}
+.scene-card.tapped{background:#dbeafe;border-color:#2563eb;}
+.scene-card.tapped .s-detail{display:block;}
+.scene-card.tapped .s-tap{display:none;}
+.scene-card:active{transform:scale(0.95);}
+
+/* STORY CARDS */
+.story-card{
+  background:white;border-radius:18px;padding:18px 16px;
+  box-shadow:0 4px 18px rgba(37,99,235,0.10);margin-bottom:14px;
+  border-left:5px solid #2563eb;cursor:pointer;
+  user-select:none;-webkit-tap-highlight-color:transparent;transition:all 0.25s;
+}
+.story-card:active{transform:scale(0.98);}
+.story-card.highlighted{background:#eff6ff;border:2px solid #2563eb;}
+.story-icon{font-size:28px;margin-bottom:8px;display:block;}
+.story-text{font-family:'Noto Serif Kannada',serif;font-size:15px;line-height:2.2;color:#0c1e30;}
+.story-meaning{
+  font-size:13px;color:#1d4ed8;font-weight:600;margin-top:10px;
+  display:none;background:#dbeafe;border-radius:8px;padding:10px 12px;line-height:1.8;
+}
+.story-card.highlighted .story-meaning{display:block;}
+.tap-hint{text-align:center;font-size:13px;color:#2563eb;font-weight:700;
+  margin-bottom:12px;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* WORD CARDS */
+.word-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.word-card{
+  background:white;border:3px solid #bfdbfe;border-radius:14px;
+  padding:14px 8px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.word-card .w-icon{font-size:32px;display:block;margin-bottom:6px;}
+.word-card .w-kn{font-family:'Noto Serif Kannada',serif;font-size:13px;font-weight:700;color:#1e3a5f;}
+.word-card .w-meaning{font-size:11px;color:#1d4ed8;display:none;margin-top:5px;font-weight:600;line-height:1.6;}
+.word-card .w-tap{font-size:10px;color:#2563eb;display:block;margin-top:4px;}
+.word-card.tapped{background:#dbeafe;border-color:#2563eb;}
+.word-card.tapped .w-meaning{display:block;}
+.word-card.tapped .w-tap{display:none;}
+.word-card:active{transform:scale(0.95);}
+
+/* PLACE CARDS */
+.place-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.place-card{
+  background:white;border:3px solid #bfdbfe;border-radius:16px;
+  padding:14px 10px;text-align:center;cursor:pointer;
+  transition:all 0.25s;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.place-card .p-icon{font-size:40px;display:block;margin-bottom:6px;}
+.place-card .p-name{font-family:'Noto Serif Kannada',serif;font-size:14px;font-weight:700;color:#1e3a5f;}
+.place-card .p-fact{font-size:12px;color:#1d4ed8;display:none;margin-top:6px;line-height:1.7;}
+.place-card .p-tap{font-size:11px;color:#2563eb;display:block;margin-top:4px;}
+.place-card.tapped{background:#dbeafe;border-color:#2563eb;}
+.place-card.tapped .p-fact{display:block;}
+.place-card.tapped .p-tap{display:none;}
+.place-card:active{transform:scale(0.95);}
+
+/* QUESTIONS */
+.q-block{background:white;border-radius:16px;padding:16px;margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(37,99,235,0.1);}
+.q-text{font-family:'Noto Serif Kannada',serif;font-size:15px;font-weight:700;
+  color:#1e3a5f;margin-bottom:12px;line-height:2;}
+.qa-btn{
+  display:block;width:100%;text-align:left;padding:12px 16px;margin-bottom:8px;
+  background:#eff6ff;border:2px solid #bfdbfe;border-radius:12px;
+  font-family:'Noto Sans Kannada',sans-serif;font-size:14px;color:#1e3a5f;
+  cursor:pointer;transition:all 0.2s;font-weight:600;
+}
+.qa-btn:active{transform:scale(0.98);}
+.qa-btn.correct{background:#dcfce7;border-color:#16a34a;color:#14532d;}
+.qa-btn.correct::after{content:' ✅';float:right;}
+.qa-btn.wrong{background:#fee2e2;border-color:#ef4444;animation:shake 0.4s;}
+.qa-btn.answered{opacity:0.4;pointer-events:none;}
+
+/* MATCH */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-item{
+  background:white;border:2.5px solid #bfdbfe;border-radius:12px;
+  padding:12px 10px;text-align:center;cursor:pointer;font-weight:700;
+  font-family:'Noto Serif Kannada',serif;font-size:13px;color:#1e3a5f;
+  transition:all 0.2s;user-select:none;min-height:54px;display:flex;align-items:center;justify-content:center;
+}
+.match-item.selected{background:#fef3c7;border-color:#f59e0b;transform:scale(1.03);}
+.match-item.matched-correct{background:#dcfce7;border-color:#16a34a;color:#14532d;pointer-events:none;}
+.match-item.matched-correct::after{content:' ✅';font-size:12px;}
+.match-item.matched-wrong{background:#fee2e2;border-color:#ef4444;animation:shake 0.4s;}
+
+/* FILL BLANKS */
+.fill-sentence{
+  background:white;border-radius:16px;padding:16px;margin-bottom:14px;
+  font-family:'Noto Serif Kannada',serif;font-size:15px;line-height:3;
+  color:#1e3a5f;box-shadow:0 3px 14px rgba(37,99,235,0.10);
+}
+.blank{
+  display:inline-block;min-width:80px;border-bottom:3px solid #2563eb;
+  padding:0 6px;text-align:center;cursor:pointer;font-weight:700;
+  color:#2563eb;transition:all 0.2s;background:transparent;border-radius:0;
+  font-family:'Noto Serif Kannada',serif;font-size:15px;
+}
+.blank.active-blank{border-bottom-color:#f59e0b;background:#fef3c7;border-radius:6px;}
+.blank.correct{border-bottom-color:#16a34a;background:#dcfce7;color:#14532d;border-radius:6px;cursor:default;}
+.blank.wrong{background:#fee2e2;color:#ef4444;animation:shake 0.3s;}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.chip{
+  padding:10px 16px;background:white;border:2.5px solid #2563eb;
+  border-radius:12px;font-family:'Noto Serif Kannada',serif;
+  font-size:14px;font-weight:700;color:#1e3a5f;cursor:pointer;
+  transition:all 0.2s;user-select:none;
+}
+.chip:active{transform:scale(0.95);}
+.chip.used{opacity:0.3;pointer-events:none;text-decoration:line-through;}
+
+/* RESULT */
+.result-box{
+  display:none;background:linear-gradient(135deg,#1e3a5f,#2563eb);
+  color:white;border-radius:20px;padding:20px;text-align:center;
+  margin-top:14px;
+}
+.result-box.show{display:block;animation:fadeUp 0.4s ease;}
+.result-box .r-icon{font-size:48px;display:block;margin-bottom:8px;}
+.result-box .r-text{font-size:17px;font-weight:800;}
+
+/* COMPLETE */
+.complete-card{
+  display:none;background:linear-gradient(135deg,#1e3a5f,#2563eb,#60a5fa);
+  border-radius:24px;padding:30px 20px;text-align:center;color:white;
+  margin-top:20px;
+}
+.complete-card.show{display:block;animation:fadeUp 0.5s ease;}
+.complete-card .c-icon{font-size:64px;display:block;margin-bottom:10px;}
+.complete-card .c-title{font-family:'Noto Serif Kannada',serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.complete-card .c-msg{font-size:15px;opacity:0.95;line-height:1.8;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">೨ನೇ ತರಗತಿ · ಕನ್ನಡ · ಪಾಠ ೧೬</div>
+  <h1>🌊 ಕಾವೇರಿ 🌊</h1>
+  <div class="sub">ಗದ್ಯ | ಕನ್ನಡ ನಾಡಿನ ಜೀವನದಿ!</div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">ಹಂತ ೧: ಕಾವೇರಿ ಪರಿಚಯ 🌊</div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" id="tab-0" onclick="tryTab(0)">
+    <span class="tab-icon">🌊</span>ಪರಿಚಯ
+  </button>
+  <button class="tab-btn locked" id="tab-1" onclick="tryTab(1)">
+    <span class="tab-icon">📖</span>ಗದ್ಯ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-2" onclick="tryTab(2)">
+    <span class="tab-icon">🔤</span>ಪದಗಳು<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-3" onclick="tryTab(3)">
+    <span class="tab-icon">🏛️</span>ಸ್ಥಳಗಳು<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-4" onclick="tryTab(4)">
+    <span class="tab-icon">❓</span>ಪ್ರಶ್ನೆ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-5" onclick="tryTab(5)">
+    <span class="tab-icon">🔗</span>ಜೋಡಣೆ<span class="lock-icon">🔒</span>
+  </button>
+  <button class="tab-btn locked" id="tab-6" onclick="tryTab(6)">
+    <span class="tab-icon">✏️</span>ಖಾಲಿ ತುಂಬು<span class="lock-icon">🔒</span>
+  </button>
+</nav>
+
+<div id="lockToast"></div>
+
+<!-- ===== TAB 0: INTRO ===== -->
+<div class="section active" id="sec-0">
+  <div class="sec-title">🌊 ಕಾವೇರಿ ನದಿಯನ್ನು ಪರಿಚಯ ಮಾಡಿಕೊಳ್ಳೋಣ</div>
+  <div class="instr">👆 ಒಂದೊಂದಾಗಿ ಎಲ್ಲ ಚಿತ್ರ ತಟ್ಟಿ — ಏನಿದೆ ಅಂತ ನೋಡು!</div>
+
+  <div class="mini-label">ನೀನು ನೋಡಿದ್ದು: <span id="introCount">೦</span> / ೬</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="introBar"></div></div>
+
+  <div class="scene-grid">
+    <div class="scene-card" onclick="tapScene(this,'s1')">
+      <span class="s-icon">🏔️</span>
+      <div class="s-name">ತಲಕಾವೇರಿ</div>
+      <div class="s-detail">ಕಾವೇರಿ ನದಿ ಕೊಡಗು ಜಿಲ್ಲೆಯ ಬ್ರಹ್ಮಗಿರಿ ಬೆಟ್ಟಸಾಲಿನ ತಲಕಾವೇರಿಯಲ್ಲಿ ಹುಟ್ಟುತ್ತದೆ.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s2')">
+      <span class="s-icon">🌊</span>
+      <div class="s-name">ತ್ರಿವೇಣಿ ಸಂಗಮ</div>
+      <div class="s-detail">ಭಾಗಮಂಡಲದಲ್ಲಿ ಕಾವೇರಿಗೆ ಕನಿಕೆ ಮತ್ತು ಜ್ಯೋತಿ ಎಂಬ ಎರಡು ನದಿಗಳು ಸೇರುತ್ತವೆ. ಈ ಸ್ಥಳಕ್ಕೆ "ತ್ರಿವೇಣಿ ಸಂಗಮ" ಎನ್ನುತ್ತಾರೆ.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s3')">
+      <span class="s-icon">🏗️</span>
+      <div class="s-name">ಕೃಷ್ಣರಾಜಸಾಗರ</div>
+      <div class="s-detail">ಕಾವೇರಿಯ ಅಣೆಕಟ್ಟುಗಳಲ್ಲಿ ಕೃಷ್ಣರಾಜಸಾಗರ (ಕೆ.ಆರ್.ಎಸ್.) ಮೊದಲನೆಯದು ಮತ್ತು ದೊಡ್ಡದು. ಇದನ್ನು ಭಾರತರತ್ನ ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ ಅವರ ಮಾರ್ಗದರ್ಶನದಲ್ಲಿ ನಿರ್ಮಿಸಲಾಯಿತು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s4')">
+      <span class="s-icon">🌿</span>
+      <div class="s-name">ಬೃಂದಾವನ</div>
+      <div class="s-detail">ಕೆ.ಆರ್.ಎಸ್. ಅಣೆಕಟ್ಟಿನ ಬಳಿ ಸುಂದರವಾದ ಬೃಂದಾವನವನ್ನು ನಿರ್ಮಿಸಲಾಗಿದೆ. ಇಲ್ಲಿಯ ಸೊಬಗು ಕಣ್ಣುಗಳಿಗೆ ಹಬ್ಬವನ್ನು ಉಂಟುಮಾಡುತ್ತದೆ.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s5')">
+      <span class="s-icon">💦</span>
+      <div class="s-name">ಜಲಪಾತಗಳು</div>
+      <div class="s-detail">ಚುಂಚನಕಟ್ಟೆ, ಗಗನಚುಕ್ಕಿ, ಭರಚುಕ್ಕಿ, ಹೊಗೇನಕಲ್ — ಇವು ಕಾವೇರಿ ನದಿಯ ಪ್ರಮುಖ ಜಲಪಾತಗಳು.</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="scene-card" onclick="tapScene(this,'s6')">
+      <span class="s-icon">⚡</span>
+      <div class="s-name">ಶಿವನಸಮುದ್ರ</div>
+      <div class="s-detail">ಶಿವನಸಮುದ್ರವು ಏಷ್ಯಾಖಂಡದಲ್ಲಿಯೇ ಪ್ರಥಮ ವಿದ್ಯುತ್ ಉತ್ಪಾದನಾ ಕೇಂದ್ರ ಎಂಬ ಕೀರ್ತಿಗೆ ಪಾತ್ರವಾಗಿದೆ!</div>
+      <span class="s-tap">ತಟ್ಟು ▼</span>
+    </div>
+  </div>
+
+  <div class="card" id="introNote" style="display:none;text-align:center;background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#1e3a5f;margin-top:6px;">ಭಲೇ! ನೀನು ಎಲ್ಲವನ್ನೂ ನೋಡಿದೆ!<br>ಈಗ ಗದ್ಯ ಓದೋಣ!</div>
+  </div>
+  <button class="next-btn" id="introNextBtn" onclick="goNext(0)">ಮುಂದೆ ➜ ಗದ್ಯ ಓದೋಣ 📖</button>
+</div>
+
+<!-- ===== TAB 1: STORY (PROSE) ===== -->
+<div class="section" id="sec-1">
+  <div class="sec-title">📖 ಗದ್ಯ ಓದೋಣ — ತಟ್ಟಿ ಅರ್ಥ ತಿಳಿ</div>
+  <div class="tap-hint">👆 ಪ್ರತಿ ಚೌಕವನ್ನು ತಟ್ಟಿ ಅರ್ಥ ಓದು!</div>
+
+  <div class="mini-label">ಓದಿದ್ದು: <span id="storyCount">೦</span> / ೬</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="storyBar"></div></div>
+
+  <div class="story-card" onclick="tapStory(this,'p1')">
+    <span class="story-icon">🏔️</span>
+    <div class="story-text">ಕನ್ನಡ ನಾಡಿನ ಜೀವನದಿ ಕಾವೇರಿ. ಕರ್ನಾಟಕದ ದಕ್ಷಿಣ ಭಾಗದಲ್ಲಿ ಹರಿಯುವ ಮುಖ್ಯ ನದಿ. ಇದು ಕೊಡಗು ಜಿಲ್ಲೆಯ ಬ್ರಹ್ಮಗಿರಿ ಬೆಟ್ಟಸಾಲಿನ ತಲಕಾವೇರಿಯಲ್ಲಿ ಹುಟ್ಟುತ್ತದೆ.</div>
+    <div class="story-meaning">💧 ಕಾವೇರಿ ಕೊಡಗಿನ ತಲಕಾವೇರಿಯಲ್ಲಿ ಹುಟ್ಟುತ್ತದೆ. ಇದನ್ನು "ಕೊಡಗಿನ ಕಾವೇರಿ" ಎಂದು ಕರೆಯುತ್ತಾರೆ.</div>
+  </div>
+
+  <div class="story-card" onclick="tapStory(this,'p2')">
+    <span class="story-icon">🌊</span>
+    <div class="story-text">ಭಾಗಮಂಡಲದಲ್ಲಿ ಕಾವೇರಿಗೆ ಕನಿಕೆ, ಜ್ಯೋತಿ ಎಂಬ ಎರಡು ನದಿಗಳು ಸೇರುತ್ತವೆ. ಈ ಸ್ಥಳಕ್ಕೆ "ತ್ರಿವೇಣಿ ಸಂಗಮ" ಎನ್ನುತ್ತಾರೆ. ಇದೊಂದು ಪವಿತ್ರ ಯಾತ್ರಾ ಸ್ಥಳವಾಗಿದೆ.</div>
+    <div class="story-meaning">🏛️ ಭಾಗಮಂಡಲದಲ್ಲಿ ಮೂರು ನದಿಗಳು ಒಟ್ಟಾಗಿ ಸೇರುವ ಸ್ಥಳ — ತ್ರಿವೇಣಿ ಸಂಗಮ. ಇದೊಂದು ಪವಿತ್ರ ಯಾತ್ರಾ ಸ್ಥಳ.</div>
+  </div>
+
+  <div class="story-card" onclick="tapStory(this,'p3')">
+    <span class="story-icon">🏗️</span>
+    <div class="story-text">ಕಾವೇರಿ ನದಿಗೆ ಅಡ್ಡಲಾಗಿ ಅನೇಕ ಅಣೆಕಟ್ಟುಗಳನ್ನು ಕಟ್ಟಲಾಗಿದೆ. ಇವುಗಳಿಗೆ ಕಾಲುವೆಗಳನ್ನು ನಿರ್ಮಿಸಿ ನೀರಾವರಿ ಸೌಲಭ್ಯಗಳನ್ನು ಕಲ್ಪಿಸಿಕೊಡಲಾಗಿದೆ. ಇದರಿಂದ ರೈತರು ಬೇಸಾಯ, ಪಶುಪಾಲನೆ, ಮೀನುಸಾಕಾಣಿಕೆ ಮಾಡಲು ಅನುಕೂಲವಾಗಿದೆ.</div>
+    <div class="story-meaning">🌾 ಅಣೆಕಟ್ಟು → ಕಾಲುವೆ → ನೀರಾವರಿ → ರೈತರಿಗೆ ಬೇಸಾಯ, ಪಶುಪಾಲನೆ, ಮೀನುಸಾಕಾಣಿಕೆ ಅನುಕೂಲ.</div>
+  </div>
+
+  <div class="story-card" onclick="tapStory(this,'p4')">
+    <span class="story-icon">🌿</span>
+    <div class="story-text">ಕೃಷ್ಣರಾಜಸಾಗರ ಅಣೆಕಟ್ಟು ಮೊದಲನೆಯದು ಮತ್ತು ದೊಡ್ಡದು. ಇದನ್ನು ಭಾರತರತ್ನ ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ ಅವರ ಮಾರ್ಗದರ್ಶನದಲ್ಲಿ ನಿರ್ಮಿಸಲಾಯಿತು. ಅಣೆಕಟ್ಟಿನ ಬಳಿ ಸುಂದರವಾದ ಬೃಂದಾವನವನ್ನು ನಿರ್ಮಿಸಲಾಗಿದೆ. ಇಲ್ಲಿಯ ಸೊಬಗು, ಸಂಗೀತ ಕಾರಂಜಿ ಕಣ್ಣನ್ನು ಸೆಳೆಯುತ್ತದೆ.</div>
+    <div class="story-meaning">🏛️ ಕೆ.ಆರ್.ಎಸ್. = ಕೃಷ್ಣರಾಜಸಾಗರ. ಬೃಂದಾವನ, ಸಂಗೀತ ಕಾರಂಜಿ, ದೀಪಾಲಂಕಾರ ನೋಡಲು ದೂರ ದೂರದ ಊರುಗಳಿಂದ ಜನರು ಬರುತ್ತಾರೆ.</div>
+  </div>
+
+  <div class="story-card" onclick="tapStory(this,'p5')">
+    <span class="story-icon">💦</span>
+    <div class="story-text">ಕಾವೇರಿ ನದಿಯು ಕೆಲವು ಕಡೆ ಎತ್ತರ ಪ್ರದೇಶದಿಂದ ಧುಮುಕುತ್ತದೆ. ಚುಂಚನಕಟ್ಟೆ, ಗಗನಚುಕ್ಕಿ, ಭರಚುಕ್ಕಿ, ಹೊಗೇನಕಲ್ ಜಲಪಾತಗಳು ಪ್ರಮುಖವಾದವು. ಮಳೆಗಾಲದಲ್ಲಿ ತುಂಬಿ ರಭಸದಿಂದ ಧುಮ್ಮಿಕ್ಕುವ ಜಲಪಾತಗಳ ನೋಟ ರಮಣೀಯವಾಗಿರುತ್ತದೆ.</div>
+    <div class="story-meaning">💧 ರಮಣೀಯ = ಸುಂದರ/ಚೆಲುವಾದ. ಮಳೆಗಾಲದಲ್ಲಿ ಜಲಪಾತಗಳು ತುಂಬಾ ಸೊಗಸಾಗಿ ಕಾಣುತ್ತವೆ.</div>
+  </div>
+
+  <div class="story-card" onclick="tapStory(this,'p6')">
+    <span class="story-icon">⚡</span>
+    <div class="story-text">ಶಿವನಸಮುದ್ರವು ಏಷ್ಯಾಖಂಡದಲ್ಲಿಯೇ ಪ್ರಥಮ ವಿದ್ಯುತ್ ಉತ್ಪಾದನಾ ಕೇಂದ್ರ. ಕಾವೇರಿ ನದಿ ಕರ್ನಾಟಕದಲ್ಲಿ ಹುಟ್ಟಿ ತಮಿಳುನಾಡಿನಲ್ಲಿ ಹರಿದು ಕೊನೆಗೆ ಬಂಗಾಳಕೊಲ್ಲಿ ಸೇರುತ್ತದೆ. ನದಿಗಳು ಕೇವಲ ನೀರನ್ನು ಒಯ್ಯುವ ವಾಹಿನಿಗಳಲ್ಲ, ಅವುಗಳು ಜೀವ ಪರಿಸರದ ಒಡನಾಡಿಗಳು.</div>
+    <div class="story-meaning">⚡ ಶಿವನಸಮುದ್ರ = ಏಷ್ಯಾದ ಮೊದಲ ವಿದ್ಯುತ್ ಕೇಂದ್ರ! ಕಾವೇರಿ ಬಂಗಾಳಕೊಲ್ಲಿ ಸೇರುತ್ತದೆ.</div>
+  </div>
+
+  <div class="card" id="storyNote" style="display:none;text-align:center;background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#1e3a5f;margin-top:6px;">ಭಲೇ! ನೀನು ಎಲ್ಲ ಗದ್ಯ ಓದಿದೆ!<br>ಈಗ ಪದಗಳ ಅರ್ಥ ತಿಳಿಯೋಣ!</div>
+  </div>
+  <button class="next-btn" id="storyNextBtn" onclick="goNext(1)">ಮುಂದೆ ➜ ಪದಗಳ ಅರ್ಥ 🔤</button>
+</div>
+
+<!-- ===== TAB 2: WORDS ===== -->
+<div class="section" id="sec-2">
+  <div class="sec-title">🔤 ಪದಗಳ ಅರ್ಥ ತಿಳಿಯೋಣ</div>
+  <div class="instr">👆 ಪ್ರತಿ ಪದ ತಟ್ಟಿ ಅರ್ಥ ನೋಡು!</div>
+
+  <div class="mini-label">ಕಲಿತ ಪದಗಳು: <span id="wordCount">೦</span> / ೧೨</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="wordBar"></div></div>
+
+  <div class="word-grid">
+    <div class="word-card" onclick="tapWord(this,'w1')">
+      <span class="w-icon">💧</span>
+      <div class="w-kn">ಜೀವನದಿ</div>
+      <div class="w-meaning">ಎಂದೂ ಬತ್ತದ ನದಿ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w2')">
+      <span class="w-icon">🏞️</span>
+      <div class="w-kn">ಜಲಪಾತ</div>
+      <div class="w-meaning">ನೀರು ಧುಮುಕುವ ಸ್ಥಳ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w3')">
+      <span class="w-icon">🚜</span>
+      <div class="w-kn">ನೀರಾವರಿ</div>
+      <div class="w-meaning">ಕಾಲುವೆ ಮೂಲಕ ನೀರು ಹರಿಸುವಿಕೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w4')">
+      <span class="w-icon">🏗️</span>
+      <div class="w-kn">ಅಣೆಕಟ್ಟು</div>
+      <div class="w-meaning">ಹರಿಯುವ ನದಿ ನೀರಿಗೆ ಅಡ್ಡಲಾಗಿ ಕಟ್ಟಿದ ಕಟ್ಟೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w5')">
+      <span class="w-icon">🌸</span>
+      <div class="w-kn">ರಮಣೀಯ</div>
+      <div class="w-meaning">ಚೆಲುವಾದ / ಸುಂದರವಾದ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w6')">
+      <span class="w-icon">👁️</span>
+      <div class="w-kn">ಪ್ರೇಕ್ಷಣೀಯ</div>
+      <div class="w-meaning">ನೋಡಲು ಅರ್ಹವಾದ, ರಮ್ಯವಾದ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w7')">
+      <span class="w-icon">🧹</span>
+      <div class="w-kn">ಶುದ್ಧೀಕರಿಸು</div>
+      <div class="w-meaning">ಶುಚಿಗೊಳಿಸು</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w8')">
+      <span class="w-icon">🤝</span>
+      <div class="w-kn">ಉಪಕಾರ</div>
+      <div class="w-meaning">ಸಹಾಯ, ನೆರವು</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w9')">
+      <span class="w-icon">📈</span>
+      <div class="w-kn">ಅಭಿವೃದ್ಧಿ</div>
+      <div class="w-meaning">ಬೆಳವಣಿಗೆ, ಮುಂದರಿಕೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w10')">
+      <span class="w-icon">🎛️</span>
+      <div class="w-kn">ನಿಯಂತ್ರಿಸು</div>
+      <div class="w-meaning">ಹಿಡಿತ, ಹತೋಟಿ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w11')">
+      <span class="w-icon">⚡</span>
+      <div class="w-kn">ವಿದ್ಯುತ್</div>
+      <div class="w-meaning">ಬೆಳಕು ಮಾಡಲು ಬಳಸುವ ಶಕ್ತಿ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="word-card" onclick="tapWord(this,'w12')">
+      <span class="w-icon">🎶</span>
+      <div class="w-kn">ದೀಪಾಲಂಕಾರ</div>
+      <div class="w-meaning">ದೀಪಗಳಿಂದ ಅಲಂಕರಿಸುವಿಕೆ</div>
+      <span class="w-tap">ತಟ್ಟು ▼</span>
+    </div>
+  </div>
+
+  <div class="card" id="wordNote" style="display:none;text-align:center;background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#1e3a5f;margin-top:6px;">ಭಲೇ! ಎಲ್ಲ ಪದ ಕಲಿತೆ!<br>ಈಗ ಸ್ಥಳಗಳನ್ನು ತಿಳಿಯೋಣ!</div>
+  </div>
+  <button class="next-btn" id="wordNextBtn" onclick="goNext(2)">ಮುಂದೆ ➜ ಸ್ಥಳಗಳು 🏛️</button>
+</div>
+
+<!-- ===== TAB 3: PLACES ===== -->
+<div class="section" id="sec-3">
+  <div class="sec-title">🏛️ ಕಾವೇರಿ ನದಿಯ ಪ್ರಮುಖ ಸ್ಥಳಗಳು</div>
+  <div class="instr">👆 ಪ್ರತಿ ಸ್ಥಳ ತಟ್ಟಿ ಮಾಹಿತಿ ನೋಡು!</div>
+
+  <div class="mini-label">ನೋಡಿದ ಸ್ಥಳ: <span id="placeCount">೦</span> / ೮</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="placeBar"></div></div>
+
+  <div class="place-grid">
+    <div class="place-card" onclick="tapPlace(this,'pl1')">
+      <span class="p-icon">🏔️</span>
+      <div class="p-name">ತಲಕಾವೇರಿ</div>
+      <div class="p-fact">ಕಾವೇರಿ ನದಿ ಹುಟ್ಟುವ ಮೂಲ ಸ್ಥಾನ. ಕೊಡಗು ಜಿಲ್ಲೆಯ ಬ್ರಹ್ಮಗಿರಿ ಬೆಟ್ಟದಲ್ಲಿದೆ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl2')">
+      <span class="p-icon">🌊</span>
+      <div class="p-name">ಭಾಗಮಂಡಲ</div>
+      <div class="p-fact">ತ್ರಿವೇಣಿ ಸಂಗಮ ಇಲ್ಲಿದೆ. ಕಾವೇರಿ, ಕನಿಕೆ, ಜ್ಯೋತಿ — ಮೂರು ನದಿಗಳು ಸೇರುವ ಪಾವನ ಸ್ಥಳ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl3')">
+      <span class="p-icon">🏗️</span>
+      <div class="p-name">ಕೃಷ್ಣರಾಜಸಾಗರ</div>
+      <div class="p-fact">ಕೆ.ಆರ್.ಎಸ್. ಮಂಡ್ಯ ಜಿಲ್ಲೆಯ ಕನ್ನಂಬಾಡಿ ಬಳಿ ಇದೆ. ಭಾರತರತ್ನ ವಿಶ್ವೇಶ್ವರಯ್ಯ ಅವರ ಮಾರ್ಗದರ್ಶನದಲ್ಲಿ ನಿರ್ಮಿತ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl4')">
+      <span class="p-icon">🌿</span>
+      <div class="p-name">ಬೃಂದಾವನ</div>
+      <div class="p-fact">ಕೆ.ಆರ್.ಎಸ್. ಅಣೆಕಟ್ಟಿನ ಬಳಿ ಇದೆ. ಸಂಗೀತ ಕಾರಂಜಿ, ದೀಪಾಲಂಕಾರ ಪ್ರಸಿದ್ಧ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl5')">
+      <span class="p-icon">💦</span>
+      <div class="p-name">ಚುಂಚನಕಟ್ಟೆ</div>
+      <div class="p-fact">ಕಾವೇರಿ ನದಿಯ ಪ್ರಮುಖ ಜಲಪಾತ. ಮಳೆಗಾಲದಲ್ಲಿ ರಭಸದಿಂದ ಧುಮ್ಮಿಕ್ಕುತ್ತದೆ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl6')">
+      <span class="p-icon">🌅</span>
+      <div class="p-name">ಶ್ರೀರಂಗಪಟ್ಟಣ</div>
+      <div class="p-fact">ಕಾವೇರಿ ನದಿ ಹರಿಯುವ ಮಾರ್ಗದಲ್ಲಿ ಬರುವ ಪ್ರಮುಖ ಐತಿಹಾಸಿಕ ಸ್ಥಳ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl7')">
+      <span class="p-icon">⚡</span>
+      <div class="p-name">ಶಿವನಸಮುದ್ರ</div>
+      <div class="p-fact">ಏಷ್ಯಾಖಂಡದ ಪ್ರಥಮ ವಿದ್ಯುತ್ ಉತ್ಪಾದನಾ ಕೇಂದ್ರ. ಕಾವೇರಿ ನೀರಿನಿಂದ ವಿದ್ಯುತ್ ತಯಾರಾಗುತ್ತದೆ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+    <div class="place-card" onclick="tapPlace(this,'pl8')">
+      <span class="p-icon">🌊</span>
+      <div class="p-name">ಬಂಗಾಳಕೊಲ್ಲಿ</div>
+      <div class="p-fact">ಕಾವೇರಿ ನದಿ ಕರ್ನಾಟಕ ಮತ್ತು ತಮಿಳುನಾಡಿನಲ್ಲಿ ಹರಿದು ಕೊನೆಗೆ ಬಂಗಾಳಕೊಲ್ಲಿ ಸೇರುತ್ತದೆ.</div>
+      <span class="p-tap">ತಟ್ಟು ▼</span>
+    </div>
+  </div>
+
+  <div class="card" id="placeNote" style="display:none;text-align:center;background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+    <span style="font-size:32px">🎉</span>
+    <div style="font-size:15px;font-weight:700;color:#1e3a5f;margin-top:6px;">ಭಲೇ! ಎಲ್ಲ ಸ್ಥಳ ತಿಳಿದೆ!<br>ಈಗ ಪ್ರಶ್ನೆ ಉತ್ತರಿಸೋಣ!</div>
+  </div>
+  <button class="next-btn" id="placeNextBtn" onclick="goNext(3)">ಮುಂದೆ ➜ ಪ್ರಶ್ನೆಗಳು ❓</button>
+</div>
+
+<!-- ===== TAB 4: QUESTIONS ===== -->
+<div class="section" id="sec-4">
+  <div class="sec-title">❓ ಪ್ರಶ್ನೆ ಉತ್ತರಿಸೋಣ</div>
+  <div class="instr">✅ ಸರಿ ಉತ್ತರ ತಟ್ಟು!</div>
+
+  <div class="mini-label">ಸರಿ ಉತ್ತರ: <span id="qCount">೦</span> / ೬</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="qBar"></div></div>
+
+  <div class="q-block" id="qg1">
+    <div class="q-text">೧. ಕನ್ನಡ ನಾಡಿನ ಜೀವನದಿ ಯಾವುದು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg1')" data-correct="false">ತುಂಗಭದ್ರಾ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg1')" data-correct="true">ಕಾವೇರಿ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg1')" data-correct="false">ಕೃಷ್ಣಾ</button>
+  </div>
+
+  <div class="q-block" id="qg2">
+    <div class="q-text">೨. ಕಾವೇರಿ ನದಿ ಎಲ್ಲಿ ಹುಟ್ಟುತ್ತದೆ?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg2')" data-correct="false">ಮೈಸೂರು</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg2')" data-correct="true">ತಲಕಾವೇರಿ (ಕೊಡಗು)</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg2')" data-correct="false">ಶಿವನಸಮುದ್ರ</button>
+  </div>
+
+  <div class="q-block" id="qg3">
+    <div class="q-text">೩. ಕಾವೇರಿ ನದಿಯ ದೊಡ್ಡ ಅಣೆಕಟ್ಟಿನ ಹೆಸರೇನು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg3')" data-correct="false">ಭದ್ರಾ ಅಣೆಕಟ್ಟು</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg3')" data-correct="true">ಕೃಷ್ಣರಾಜಸಾಗರ (ಕೆ.ಆರ್.ಎಸ್.)</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg3')" data-correct="false">ಆಲಮಟ್ಟಿ</button>
+  </div>
+
+  <div class="q-block" id="qg4">
+    <div class="q-text">೪. ಏಷ್ಯಾ ಖಂಡದ ಪ್ರಥಮ ವಿದ್ಯುತ್ ಉತ್ಪಾದನಾ ಕೇಂದ್ರ ಯಾವುದು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg4')" data-correct="false">ಕೃಷ್ಣರಾಜಸಾಗರ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg4')" data-correct="true">ಶಿವನಸಮುದ್ರ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg4')" data-correct="false">ಭಾಗಮಂಡಲ</button>
+  </div>
+
+  <div class="q-block" id="qg5">
+    <div class="q-text">೫. ಕಾವೇರಿ ನದಿ ಕೊನೆಗೆ ಎಲ್ಲಿ ಸೇರುತ್ತದೆ?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg5')" data-correct="false">ಅರಬ್ಬಿ ಸಮುದ್ರ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg5')" data-correct="true">ಬಂಗಾಳಕೊಲ್ಲಿ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg5')" data-correct="false">ಹಿಂದೂ ಮಹಾಸಾಗರ</button>
+  </div>
+
+  <div class="q-block" id="qg6">
+    <div class="q-text">೬. ಭಾಗಮಂಡಲದಲ್ಲಿ ಕಾವೇರಿಗೆ ಸೇರುವ ನದಿಗಳ ಸ್ಥಳಕ್ಕೆ ಏನು ಹೆಸರು?</div>
+    <button class="qa-btn" onclick="pickQ(this,'qg6')" data-correct="false">ಪಂಚ ನದಿ ಸಂಗಮ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg6')" data-correct="true">ತ್ರಿವೇಣಿ ಸಂಗಮ</button>
+    <button class="qa-btn" onclick="pickQ(this,'qg6')" data-correct="false">ನದಿ ಮೂಲ</button>
+  </div>
+
+  <div class="result-box" id="result-q">
+    <span class="r-icon">🎯</span>
+    <div class="r-text">ಶಾಭಾಸ್! ಎಲ್ಲ ಉತ್ತರ ಸರಿ! 🌟</div>
+  </div>
+  <button class="next-btn" id="qNextBtn" onclick="goNext(4)">ಮುಂದೆ ➜ ಜೋಡಣೆ 🔗</button>
+</div>
+
+<!-- ===== TAB 5: MATCH ===== -->
+<div class="section" id="sec-5">
+  <div class="sec-title">🔗 ಜೋಡಿ ಹುಡುಕಿ</div>
+  <div class="instr">👈 ಎಡಗಡೆ ತಟ್ಟು, ಬಳಿಕ 👉 ಬಲಗಡೆ ತಟ್ಟು — ಜೋಡಿ ಮಾಡು!</div>
+
+  <div class="mini-label">ಜೋಡಿ: <span id="matchCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="matchBar"></div></div>
+
+  <div class="match-wrap">
+    <div class="match-col">
+      <div class="match-item" id="m-1" onclick="selectMatch(this,'m-1','p1')">ಜೀವನದಿ</div>
+      <div class="match-item" id="m-2" onclick="selectMatch(this,'m-2','p2')">ಅಣೆಕಟ್ಟು</div>
+      <div class="match-item" id="m-3" onclick="selectMatch(this,'m-3','p3')">ಜಲಪಾತ</div>
+      <div class="match-item" id="m-4" onclick="selectMatch(this,'m-4','p4')">ರಮಣೀಯ</div>
+      <div class="match-item" id="m-5" onclick="selectMatch(this,'m-5','p5')">ಉಪಕಾರ</div>
+    </div>
+    <div class="match-col">
+      <div class="match-item" id="a-3" onclick="selectMatch(this,'a-3','p3')">ನೀರು ಧುಮುಕುವ ಸ್ಥಳ</div>
+      <div class="match-item" id="a-5" onclick="selectMatch(this,'a-5','p5')">ಸಹಾಯ, ನೆರವು</div>
+      <div class="match-item" id="a-1" onclick="selectMatch(this,'a-1','p1')">ಎಂದೂ ಬತ್ತದ ನದಿ</div>
+      <div class="match-item" id="a-2" onclick="selectMatch(this,'a-2','p2')">ನದಿಗೆ ಅಡ್ಡ ಕಟ್ಟೆ</div>
+      <div class="match-item" id="a-4" onclick="selectMatch(this,'a-4','p4')">ಚೆಲುವಾದ / ಸುಂದರ</div>
+    </div>
+  </div>
+
+  <div class="result-box" id="result-match">
+    <span class="r-icon">🔗</span>
+    <div class="r-text">ಭಲೇ! ಎಲ್ಲ ಜೋಡಿ ಸರಿಯಾಗಿ ಮಾಡಿದೆ! 🌟</div>
+  </div>
+  <button class="next-btn" id="matchNextBtn" onclick="goNext(5)">ಮುಂದೆ ➜ ಖಾಲಿ ತುಂಬು ✏️</button>
+</div>
+
+<!-- ===== TAB 6: FILL BLANKS ===== -->
+<div class="section" id="sec-6">
+  <div class="sec-title">✏️ ಖಾಲಿ ಜಾಗ ತುಂಬು</div>
+  <div class="instr">👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟು, ಬಳಿಕ ಕೆಳಗಿನ ಪದ ತಟ್ಟು!</div>
+
+  <div class="mini-label">ತುಂಬಿದ ಜಾಗ: <span id="fillCount">೦</span> / ೫</div>
+  <div class="mini-bar-wrap"><div class="mini-bar" id="fillBar"></div></div>
+
+  <div class="fill-sentence">
+    ೧. ಕನ್ನಡ ನಾಡಿನ <span class="blank" id="b1" data-answer="ಜೀವನದಿ" onclick="selectBlank('b1')">_ _ _</span> ಕಾವೇರಿ.
+  </div>
+  <div class="fill-sentence">
+    ೨. ಕಾವೇರಿ ನದಿ ಕೊಡಗಿನ <span class="blank" id="b2" data-answer="ತಲಕಾವೇರಿ" onclick="selectBlank('b2')">_ _ _</span> ಯಲ್ಲಿ ಹುಟ್ಟುತ್ತದೆ.
+  </div>
+  <div class="fill-sentence">
+    ೩. ಕೃಷ್ಣರಾಜಸಾಗರ ಅಣೆಕಟ್ಟಿನ ಬಳಿ <span class="blank" id="b3" data-answer="ಬೃಂದಾವನ" onclick="selectBlank('b3')">_ _ _</span> ಇದೆ.
+  </div>
+  <div class="fill-sentence">
+    ೪. ಶಿವನಸಮುದ್ರವು ಏಷ್ಯಾಖಂಡದ ಪ್ರಥಮ <span class="blank" id="b4" data-answer="ವಿದ್ಯುತ್" onclick="selectBlank('b4')">_ _ _</span> ಉತ್ಪಾದನಾ ಕೇಂದ್ರ.
+  </div>
+  <div class="fill-sentence">
+    ೫. ಕಾವೇರಿ ನದಿ ಕೊನೆಗೆ <span class="blank" id="b5" data-answer="ಬಂಗಾಳಕೊಲ್ಲಿ" onclick="selectBlank('b5')">_ _ _</span> ಸೇರುತ್ತದೆ.
+  </div>
+
+  <div class="chips-wrap">
+    <div class="chip" onclick="placeWord('ಜೀವನದಿ',this)">ಜೀವನದಿ</div>
+    <div class="chip" onclick="placeWord('ತಲಕಾವೇರಿ',this)">ತಲಕಾವೇರಿ</div>
+    <div class="chip" onclick="placeWord('ಬೃಂದಾವನ',this)">ಬೃಂದಾವನ</div>
+    <div class="chip" onclick="placeWord('ವಿದ್ಯುತ್',this)">ವಿದ್ಯುತ್</div>
+    <div class="chip" onclick="placeWord('ಬಂಗಾಳಕೊಲ್ಲಿ',this)">ಬಂಗಾಳಕೊಲ್ಲಿ</div>
+    <div class="chip" onclick="placeWord('ಕಾವೇರಿ',this)">ಕಾವೇರಿ</div>
+    <div class="chip" onclick="placeWord('ಅಣೆಕಟ್ಟು',this)">ಅಣೆಕಟ್ಟು</div>
+  </div>
+
+  <div class="result-box" id="result-fill">
+    <span class="r-icon">✏️</span>
+    <div class="r-text">ಭಲೇ! ಎಲ್ಲ ಖಾಲಿ ಜಾಗ ತುಂಬಿದೆ! 🌟</div>
+  </div>
+
+  <div class="complete-card" id="completeCard">
+    <span class="c-icon">🏆</span>
+    <div class="c-title">ಪಾಠ ೧೬ ಮುಗಿಯಿತು! 🌊</div>
+    <div class="c-msg">
+      ನೀನು ಬಹಳ ಚೆನ್ನಾಗಿ ಕಲಿತೆ!<br><br>
+      🌊 ಕಾವೇರಿ = ಕನ್ನಡ ನಾಡಿನ ಜೀವನದಿ<br>
+      🏔️ ಹುಟ್ಟುವ ಸ್ಥಳ = ತಲಕಾವೇರಿ, ಕೊಡಗು<br>
+      🏗️ ಕೆ.ಆರ್.ಎಸ್. = ಕೃಷ್ಣರಾಜಸಾಗರ<br>
+      ⚡ ಶಿವನಸಮುದ್ರ = ಏಷ್ಯಾದ ಮೊದಲ ವಿದ್ಯುತ್ ಕೇಂದ್ರ<br>
+      🌊 ಕೊನೆ = ಬಂಗಾಳಕೊಲ್ಲಿ
+    </div>
+  </div>
+</div>
+
+<script>
+const knNums = ['೦','೧','೨','೩','೪','೫','೬','೭','೮','೯','೧೦','೧೧','೧೨'];
+let unlockedUpTo = 0;
+const totalTabs = 7;
+
+const progressSteps = [
+  {pct:14, label:'ಹಂತ ೧: ಕಾವೇರಿ ಪರಿಚಯ 🌊'},
+  {pct:28, label:'ಹಂತ ೨: ಗದ್ಯ ಓದು 📖'},
+  {pct:42, label:'ಹಂತ ೩: ಪದಗಳ ಅರ್ಥ 🔤'},
+  {pct:56, label:'ಹಂತ ೪: ಸ್ಥಳಗಳು 🏛️'},
+  {pct:70, label:'ಹಂತ ೫: ಪ್ರಶ್ನೆ ❓'},
+  {pct:85, label:'ಹಂತ ೬: ಜೋಡಣೆ 🔗'},
+  {pct:100, label:'🏆 ಪಾಠ ೧೬ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!'},
+];
+
+function tryTab(idx) {
+  if (idx > unlockedUpTo) {
+    const btn = document.getElementById('tab-'+idx);
+    btn.classList.remove('shake');
+    void btn.offsetWidth;
+    btn.classList.add('shake');
+    setTimeout(() => btn.classList.remove('shake'), 600);
+    showToast('🔒 ಮೊದಲು ಹಿಂದಿನ ಹಂತ ಮುಗಿಸಿ!');
+    return;
+  }
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-'+idx).classList.add('active');
+  document.getElementById('tab-'+idx).classList.add('active');
+  document.getElementById('tab-'+idx).scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function goNext(fromIdx) {
+  const next = fromIdx + 1;
+  if (next < totalTabs) {
+    unlockedUpTo = Math.max(unlockedUpTo, next);
+    const btn = document.getElementById('tab-'+next);
+    btn.classList.remove('locked');
+    const lock = btn.querySelector('.lock-icon');
+    if (lock) lock.remove();
+    document.getElementById('tab-'+fromIdx).classList.add('done');
+    document.getElementById('progressFill').style.width = progressSteps[next].pct + '%';
+    document.getElementById('progressLabel').textContent = progressSteps[next].label;
+    tryTab(next);
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('lockToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// TAB 0
+let sceneTapped = new Set();
+function tapScene(card, id) {
+  if (!sceneTapped.has(id)) {
+    card.classList.add('tapped'); sceneTapped.add(id);
+    document.getElementById('introCount').textContent = knNums[sceneTapped.size];
+    document.getElementById('introBar').style.width = (sceneTapped.size / 6 * 100) + '%';
+    if (sceneTapped.size >= 6) {
+      document.getElementById('introNote').style.display = 'block';
+      document.getElementById('introNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 1
+let storyTapped = 0;
+function tapStory(el, id) {
+  if (!el.classList.contains('highlighted')) {
+    el.classList.add('highlighted'); storyTapped++;
+    document.getElementById('storyCount').textContent = knNums[storyTapped];
+    document.getElementById('storyBar').style.width = (storyTapped / 6 * 100) + '%';
+    if (storyTapped >= 6) {
+      document.getElementById('storyNote').style.display = 'block';
+      document.getElementById('storyNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 2
+let wordTapped = new Set();
+function tapWord(card, id) {
+  if (!wordTapped.has(id)) {
+    card.classList.add('tapped'); wordTapped.add(id);
+    document.getElementById('wordCount').textContent = knNums[wordTapped.size];
+    document.getElementById('wordBar').style.width = (wordTapped.size / 12 * 100) + '%';
+    if (wordTapped.size >= 12) {
+      document.getElementById('wordNote').style.display = 'block';
+      document.getElementById('wordNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 3
+let placeTapped = new Set();
+function tapPlace(card, id) {
+  if (!placeTapped.has(id)) {
+    card.classList.add('tapped'); placeTapped.add(id);
+    document.getElementById('placeCount').textContent = knNums[placeTapped.size];
+    document.getElementById('placeBar').style.width = (placeTapped.size / 8 * 100) + '%';
+    if (placeTapped.size >= 8) {
+      document.getElementById('placeNote').style.display = 'block';
+      document.getElementById('placeNextBtn').style.display = 'block';
+    }
+  }
+}
+
+// TAB 4
+let qCorrect = 0;
+function pickQ(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (group.dataset.answered) return;
+  if (btn.dataset.correct === 'true') {
+    btn.classList.add('correct');
+    group.querySelectorAll('.qa-btn').forEach(b => { if (b !== btn) b.classList.add('answered'); });
+    group.dataset.answered = 'true'; qCorrect++;
+    document.getElementById('qCount').textContent = knNums[qCorrect];
+    document.getElementById('qBar').style.width = (qCorrect / 6 * 100) + '%';
+    if (qCorrect === 6) {
+      setTimeout(() => {
+        document.getElementById('result-q').classList.add('show');
+        setTimeout(() => document.getElementById('qNextBtn').style.display = 'block', 500);
+      }, 300);
+    }
+  } else {
+    btn.classList.add('wrong');
+    setTimeout(() => btn.classList.remove('wrong'), 700);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+
+// TAB 5 MATCH
+let matchSelected = null;
+let matchSelectedSide = null;
+let matchCorrect = 0;
+
+function selectMatch(el, elId, pairId) {
+  const isLeft = elId.startsWith('m-');
+  if (el.classList.contains('matched-correct')) return;
+  document.querySelectorAll('.match-item.selected').forEach(item => {
+    const itemIsLeft = item.id.startsWith('m-');
+    if (itemIsLeft === isLeft) item.classList.remove('selected');
+  });
+  el.classList.add('selected');
+  if (matchSelected === null || matchSelectedSide === isLeft) {
+    matchSelected = {el, pairId}; matchSelectedSide = isLeft;
+  } else {
+    const prev = matchSelected;
+    if (prev.pairId === pairId) {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-correct');
+      el.classList.remove('selected'); el.classList.add('matched-correct');
+      matchCorrect++;
+      document.getElementById('matchCount').textContent = knNums[matchCorrect];
+      document.getElementById('matchBar').style.width = (matchCorrect / 5 * 100) + '%';
+      if (matchCorrect === 5) {
+        setTimeout(() => {
+          document.getElementById('result-match').classList.add('show');
+          setTimeout(() => document.getElementById('matchNextBtn').style.display = 'block', 500);
+        }, 300);
+      }
+    } else {
+      prev.el.classList.remove('selected'); prev.el.classList.add('matched-wrong');
+      el.classList.remove('selected'); el.classList.add('matched-wrong');
+      setTimeout(() => { prev.el.classList.remove('matched-wrong'); el.classList.remove('matched-wrong'); }, 600);
+      showToast('❌ ತಪ್ಪು ಜೋಡಿ! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+    }
+    matchSelected = null; matchSelectedSide = null;
+  }
+}
+
+// TAB 6 FILL
+let selectedBlankId = null;
+let fillCorrect = 0;
+
+function selectBlank(id) {
+  const blank = document.getElementById(id);
+  if (blank.classList.contains('correct')) return;
+  document.querySelectorAll('.blank').forEach(b => b.classList.remove('active-blank'));
+  selectedBlankId = id;
+  blank.classList.add('active-blank');
+}
+
+function placeWord(word, chip) {
+  if (!selectedBlankId) { showToast('👆 ಮೊದಲು ಖಾಲಿ ಜಾಗ ತಟ್ಟಿ!'); return; }
+  const blank = document.getElementById(selectedBlankId);
+  if (blank.classList.contains('correct')) return;
+  blank.classList.remove('active-blank','wrong');
+  if (word === blank.dataset.answer) {
+    blank.textContent = word; blank.classList.add('correct');
+    chip.classList.add('used'); fillCorrect++; selectedBlankId = null;
+    document.getElementById('fillCount').textContent = knNums[fillCorrect];
+    document.getElementById('fillBar').style.width = (fillCorrect / 5 * 100) + '%';
+    if (fillCorrect === 5) {
+      setTimeout(() => {
+        document.getElementById('result-fill').classList.add('show');
+        setTimeout(() => {
+          document.getElementById('completeCard').classList.add('show');
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('tab-6').classList.add('done');
+          document.getElementById('progressLabel').textContent = '🏆 ಪಾಠ ೧೬ ಸಂಪೂರ್ಣ ಮುಗಿಯಿತು!';
+        }, 800);
+      }, 300);
+    }
+  } else {
+    blank.classList.add('wrong'); blank.textContent = '✗';
+    setTimeout(() => { blank.classList.remove('wrong'); blank.textContent = '_ _ _'; }, 800);
+    showToast('❌ ತಪ್ಪು! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!');
+  }
+}
+</script>
+</body>
+</html>
