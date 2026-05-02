@@ -1004,8 +1004,17 @@ def load_lesson_progress():
     elif str(grade) == '2' and subject == 'evs_kn':
         lessons = GRADE2_EVS_KN_LESSONS
 
+
     if lessons is None:
-        return jsonify({'subject': subject, 'grade': grade, 'totalLessons': 0, 'lessons': {}})
+        # No predefined lesson list — dynamically return whatever is in the DB
+        rows = LessonProgress.query.filter_by(
+            student_id=session['student_id'],
+            grade=str(grade),
+            subject=subject
+        ).all()
+        lesson_map = {r.lesson: {'completed': bool(r.completed), 'stars': int(r.stars or 0)} for r in rows}
+        return jsonify({'subject': subject, 'grade': str(grade), 'totalLessons': len(lesson_map), 'lessons': lesson_map})
+
 
     rows = LessonProgress.query.filter_by(
         student_id=session['student_id'],

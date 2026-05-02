@@ -442,6 +442,49 @@ if ('serviceWorker' in navigator) {
         .then(() => console.log('VidyaAI PWA Ready!'))
         .catch(err => console.log('SW Error:', err));
 }
+
+// Load real progress from server
+async function loadLKGProgress() {
+    try {
+        const res = await fetch('/api/progress/load?grade=lkg');
+        const data = await res.json();
+        let totalCompleted = 0, totalSubjects = 0, totalStars = 0;
+        for (const subj in data) {
+            totalSubjects++;
+            if (data[subj].completed > 0) totalCompleted++;
+            totalStars += data[subj].stars || 0;
+        }
+        // If no data from server yet, count subject cards on page
+        const cardCount = document.querySelectorAll('.subject-card').length || 10;
+        const pct = cardCount > 0 ? Math.round((totalCompleted / cardCount) * 100) : 0;
+
+        const countEl = document.querySelector('.progress-count');
+        const fillEl = document.querySelector('.progress-fill');
+        const starsEl = document.getElementById('totalStars');
+        if (countEl) countEl.textContent = totalCompleted + ' of ' + cardCount + ' subjects completed';
+        if (fillEl) fillEl.style.width = pct + '%';
+        if (starsEl) starsEl.textContent = totalStars;
+
+        // Update card badges based on completion
+        document.querySelectorAll('.subject-card').forEach(card => {
+            const href = card.getAttribute('href') || '';
+            const parts = href.replace(/^\//, '').split('/');
+            const lesson = parts[parts.length - 1] || '';
+            // Check if this subject has progress
+            for (const subj in data) {
+                if (subj.includes(lesson) || lesson.includes(subj)) {
+                    const badge = card.querySelector('.card-badge');
+                    if (badge && data[subj].completed > 0) {
+                        badge.textContent = '✅ Done';
+                        badge.style.background = '#059669';
+                        badge.style.color = 'white';
+                    }
+                }
+            }
+        });
+    } catch(e) { console.log('Progress load failed', e); }
+}
+loadLKGProgress();
 </script>
 
 </body>

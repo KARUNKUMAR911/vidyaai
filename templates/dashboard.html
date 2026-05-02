@@ -180,6 +180,30 @@
             </div>
         </div>
     </div>
+
+<script>
+async function loadDashboardProgress() {
+    try {
+        const grade = '{{ student.grade }}';
+        const res = await fetch('/api/progress/load?grade=' + grade);
+        const data = await res.json();
+        let totalCompleted = 0, totalLessons = 0, totalStars = 0;
+        for (const subj in data) {
+            totalCompleted += data[subj].completed || 0;
+            totalLessons += data[subj].total || 0;
+            totalStars += data[subj].stars || 0;
+        }
+        const progressCard = document.querySelector('.card[href="/progress"]');
+        if (progressCard) {
+            const pEl = progressCard.querySelector('p');
+            if (pEl && totalLessons > 0) {
+                pEl.textContent = totalCompleted + ' of ' + totalLessons + ' lessons done | ' + totalStars + ' stars earned!';
+            }
+        }
+    } catch(e) {}
+}
+loadDashboardProgress();
+</script>
 </body>
 </html>
 

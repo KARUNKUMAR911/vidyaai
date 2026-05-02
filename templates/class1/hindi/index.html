@@ -65,6 +65,31 @@
 /* ===== RESPONSIVE SCALING - FULL WIDTH ===== */
 .content{padding:clamp(6px,1vw,16px) clamp(12px,3.5vw,60px) clamp(80px,10vw,140px);}
 .card{border-radius:clamp(16px,2vw,28px);}
+
+/* Progress Card */
+.progress-card {
+    background: white; margin: -18px 16px 20px;
+    border-radius: 18px; padding: 14px 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    display: flex; align-items: center; gap: 14px;
+}
+.progress-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, #e64a19, #f57c00);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
+}
+.progress-info { flex: 1; }
+.progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
+.progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+.progress-bar-wrap {
+    flex: 1; background: #f0f0f0;
+    border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
+}
+.progress-bar-inner {
+    height: 100%; background: linear-gradient(90deg, #e64a19, #ffab91);
+    border-radius: 10px; width: 0%; transition: width 0.5s;
+}
 </style>
 </head>
 <body>
@@ -77,6 +102,48 @@
       <a class="btn" href="/learn">Go to Dashboard</a>
     </div>
   </div>
+
+<script>
+async function loadProgress() {
+    try {
+        const res = await fetch('/api/lesson_progress/load?grade=1&subject=hindi');
+        const data = await res.json();
+        const lessons = data.lessons || {};
+        const total = data.totalLessons || document.querySelectorAll('.card[data-lesson], .chapter-card[data-lesson]').length || 1;
+        const completed = Object.values(lessons).filter(x => x.completed).length;
+        const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        const numEl = document.getElementById('progressNum');
+        const txtEl = document.getElementById('progressText');
+        const barEl = document.getElementById('progressBar');
+        if(numEl) numEl.textContent = pct + '%';
+        if(txtEl) txtEl.textContent = completed + ' of ' + total + ' lessons completed';
+        if(barEl) barEl.style.width = pct + '%';
+
+        document.querySelectorAll('.card[data-lesson], .chapter-card[data-lesson], a[data-lesson]').forEach(card => {
+            const key = card.getAttribute('data-lesson');
+            const p = lessons[key] || {completed:false, stars:0};
+            card.classList.remove('completed','inprogress','notstarted');
+            const statusEl = card.querySelector('.chapter-status, .card-arrow');
+
+            if (p.completed) {
+                card.classList.add('completed');
+                if(statusEl) statusEl.textContent = '\u2705';
+                card.style.borderLeft = '4px solid #059669';
+            } else if (p.stars > 0) {
+                card.classList.add('inprogress');
+                if(statusEl) statusEl.textContent = '\u23f3';
+                card.style.borderLeft = '4px solid #f59e0b';
+            } else {
+                card.classList.add('notstarted');
+                if(statusEl) statusEl.textContent = '\u25b6\ufe0f';
+            }
+        });
+    } catch(e) { console.log('Progress load failed', e); }
+}
+loadProgress();
+</script>
+
 </body>
 </html>
 
