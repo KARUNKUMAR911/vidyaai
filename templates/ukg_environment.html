@@ -250,6 +250,7 @@ body{font-family:'Fredoka One',cursive;overflow:hidden;height:100vh;width:100vw;
   <!-- BOTTOM BAR -->
   <div class="bottom-bar">
     <button class="nav-btn" id="prevBtn" onclick="prev(event)" disabled>← Back</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
     <div class="bottom-center">
       <div class="tap-hint">👆 Tap to continue!</div>
     </div>
@@ -927,6 +928,18 @@ function launchConfetti(){
 updateDots();
 updateScreen(false);
 setTimeout(speak,900);
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'ukg', subject:'english', lesson:'environment', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

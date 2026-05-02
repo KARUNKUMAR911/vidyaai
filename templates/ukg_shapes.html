@@ -326,6 +326,7 @@
     <div class="celeb-title" id="celebTitle">Amazing!</div>
     <div class="celeb-sub"   id="celebSub">You learned a shape!</div>
     <button class="celeb-btn" onclick="closeCelebration()">Keep Going! 🚀</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
 </div>
 
 <script>
@@ -874,6 +875,18 @@ function reAnimate(id,anim){const el=document.getElementById(id);if(!el)return;e
 updateDots();
 updateScreen(false);
 document.getElementById('mainScreen').onclick=(e)=>handleTap(e);
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'ukg', subject:'english', lesson:'shapes', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

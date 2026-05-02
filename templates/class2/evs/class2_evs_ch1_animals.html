@@ -1068,6 +1068,18 @@ function loadProgress() {
 
 function startOver() { localStorage.removeItem(SAVE_KEY); location.reload(); }
 loadProgress();
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'2', subject:'evs', lesson:'class2_evs_ch1_animals', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

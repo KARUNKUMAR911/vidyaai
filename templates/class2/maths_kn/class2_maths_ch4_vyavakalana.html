@@ -1206,6 +1206,7 @@ body{font-family:'Nunito','Noto Sans Kannada',sans-serif;background:#f0f8ff;min-
   <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
   <div style="font-family:'Baloo 2',cursive;font-size:22px;color:#fff;margin-bottom:16px;">ನೀನು ⭐ <span id="finalStars">0</span> ಗಳಿಸಿದ್ದೀಯ!</div>
   <button class="celeb-btn" onclick="document.getElementById('celebScreen').classList.remove('show')">↩️ ಮತ್ತೆ ಓದು</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
 </div>
 
 <script>
@@ -1352,6 +1353,18 @@ function showCeleb() {
   document.getElementById('celebStars').textContent = starsEmoji;
   document.getElementById('celebScreen').classList.add('show');
 }
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'2', subject:'maths_kn', lesson:'class2_maths_ch4_vyavakalana', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

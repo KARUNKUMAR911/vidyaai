@@ -510,6 +510,18 @@ if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
   window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 }
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'ukg', subject:'kannada', lesson:'days_months_seasons', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

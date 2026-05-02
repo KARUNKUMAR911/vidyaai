@@ -1176,6 +1176,7 @@ body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8f0;min-height:100vh;
   <div class="celeb-s">ನೀವು ಎಲ್ಲ ಆಕಾರಗಳನ್ನು ಕಲಿತಿರಿ!<br>You learned all shapes!</div>
   <div class="celeb-stars" id="celebStars">⭐⭐⭐</div>
   <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">✅ ಮನೆಗೆ</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
 </div>
 
 <script>
@@ -1355,6 +1356,18 @@ function showCelebration() {
 
 // Init dots
 TAB_ORDER.forEach(t => { if(TAB_QS[t]) checkTabComplete(t); });
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'1', subject:'kannada_maths', lesson:'lesson02', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 
 </body>

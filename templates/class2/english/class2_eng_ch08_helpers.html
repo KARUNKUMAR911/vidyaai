@@ -372,6 +372,18 @@ function saveProgress(){try{const state={stars,quizDone,tabDoneQ:JSON.parse(JSON
 function loadProgress(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return;const state=JSON.parse(raw);stars=state.stars||0;quizDone=state.quizDone||0;document.getElementById('starsNum').textContent=stars;if(state.tabDoneQ)Object.keys(state.tabDoneQ).forEach(k=>{if(tabDoneQ[k])tabDoneQ[k].done=state.tabDoneQ[k].done;});(state.doneCards||[]).forEach(id=>{const card=document.getElementById(id);if(!card)return;card.dataset.done='1';card.classList.add('done');card.querySelectorAll('.choice-btn').forEach(b=>b.classList.add('locked-choice'));card.querySelectorAll('.choice-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'correct'"))b.classList.add('correct');});const fb=document.getElementById('fb-'+id);if(fb){fb.className='fb-box ok';fb.textContent='✅ Correct! Well done! 🌟';}});(state.doneQuizBoxes||[]).forEach(id=>{const box=document.getElementById(id);if(!box)return;box.dataset.done='1';box.querySelectorAll('.quiz-opt').forEach(o=>{o.style.pointerEvents='none';if(o.getAttribute('onclick')&&o.getAttribute('onclick').includes("'correct'"))o.classList.add('right');});const fb=document.getElementById('qfb-'+id);if(fb){fb.className='quiz-fb ok';fb.textContent='✅ Correct! Superstar! ⭐';}});(state.doneTabs||[]).forEach(tabId=>{const tab=document.querySelector(`[data-tab="${tabId}"]`);if(tab){tab.classList.remove('active','locked');tab.classList.add('done');}});Object.keys(tabDoneQ).forEach(k=>{if(tabDoneQ[k].done>=tabDoneQ[k].total){const btn=document.getElementById(tabDoneQ[k].btn);if(btn)btn.disabled=false;}});if(quizDone>=QUIZ_TOTAL){const btn=document.getElementById('btn-quiz');if(btn)btn.disabled=false;}const allDone=state.doneTabs||[];if(allDone.length>0){const lastDoneIdx=Math.max(...allDone.map(t=>tabOrder.indexOf(t)));const nextIdx=lastDoneIdx+1;if(nextIdx<tabOrder.length){const nextTab=tabOrder[nextIdx];const nextEl=document.querySelector(`[data-tab="${nextTab}"]`);if(nextEl){nextEl.classList.remove('locked');nextEl.classList.add('active');}goTab(nextTab);}else{goTab(tabOrder[tabOrder.length-1]);}}updateProgress();}catch(e){}}
 function startOver(){localStorage.removeItem(SAVE_KEY);location.reload();}
 loadProgress();
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'2', subject:'english', lesson:'class2_eng_ch08_helpers', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

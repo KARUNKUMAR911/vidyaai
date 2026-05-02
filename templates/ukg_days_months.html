@@ -274,6 +274,7 @@
     <div class="celeb-title" id="celebTitle">Amazing!</div>
     <div class="celeb-sub"   id="celebSub">Great job!</div>
     <button class="celeb-btn" id="celebContinueBtn" onclick="closeCelebration()">Keep Going! &#128640;</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
 </div>
 
 <script>
@@ -724,6 +725,18 @@ document.querySelectorAll('.toggle').forEach(el=>{
 updateDots();
 updateScreen(false);
 setTimeout(speakItem,900);
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'ukg', subject:'english', lesson:'days_months', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

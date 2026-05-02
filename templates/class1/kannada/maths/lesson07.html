@@ -1198,6 +1198,7 @@ body{font-family:'Baloo Tamma 2',sans-serif;background:#e8f5e9;min-height:100vh;
     <div class="celeb-kn">ನೀನು ಸಂಖ್ಯೆ 10 ಕಲಿತೆ!<br>You learnt Number 10! 🔟</div>
     <div style="font-size:14px;font-weight:700;color:#555;margin-bottom:16px">ಹತ್ತು = 10 · Ten = 10 · ಎರಡು ಅಂಕಿಗಳ ಸಂಖ್ಯೆ!</div>
     <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">👍 ಆಯಿತು!</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
   </div>
 </div>
 
@@ -1448,6 +1449,18 @@ Object.keys(tabTotals).forEach(t=>{
   else buildDots('score'+t, 0, tabTotals[t]);
 });
 updateProgress();
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'1', subject:'kannada_maths', lesson:'lesson07', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>

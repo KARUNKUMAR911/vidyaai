@@ -1176,6 +1176,7 @@ body{font-family:'Baloo Tamma 2',sans-serif;background:#fff8e1;min-height:100vh;
     <div class="celeb-score">ಒಟ್ಟು ⭐ <span id="finalStarCount">0</span></div>
     <div style="font-size:13px;font-weight:700;color:#888;margin-bottom:16px">ಬಿಡಿ ಮತ್ತು ಹತ್ತರ ಗುಂಪು ಕಲಿತೆ! · You learned Ones and Groups of Ten!</div>
     <button class="celeb-btn" onclick="document.getElementById('celeb').classList.remove('show')">🌟 ಮತ್ತೆ ನೋಡು · Review</button>
+  <button class="celeb-btn" onclick="location.reload()" style="margin-top:10px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;">&#x1f504; Play Again</button>
   </div>
 </div>
 
@@ -1343,6 +1344,18 @@ Object.keys(tabTotals).forEach(t=>{
   buildDots(t==='8'?'scoreFinal':'score'+t, 0, tabTotals[parseInt(t)]);
 });
 updateProgress();
+
+// === AUTO-INJECTED: Server progress save ===
+async function saveLessonCompletion(){
+  try{
+    await fetch('/api/lesson_progress/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({grade:'1', subject:'kannada_maths', lesson:'lesson08', completed:true, stars: typeof stars !== 'undefined' ? stars : 0})
+    });
+  }catch(e){console.log('Progress save failed',e);}
+}
+// === END AUTO-INJECTED ===
 </script>
 </body>
 </html>
