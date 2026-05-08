@@ -5,121 +5,531 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ಕೆಂಪೇಗೌಡರ ಕನಸು - ಪಾಠ ೪</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@400;700&display=swap" rel="stylesheet">
-    
-        
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Noto+Sans+Kannada:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { font-family: 'Noto Sans Kannada', 'Outfit', sans-serif; background: #f8fafc; min-height: 100vh; overflow-x: hidden; color: #1e293b; position: relative; }
+<style>
+:root {
+  --saffron: #c2410c;
+  --saffron-dark: #7c2d12;
+  --saffron-light: #ffedd5;
+  --gold: #d97706;
+  --gold-light: #fef3c7;
+  --maroon: #9f1239;
+  --blue: #1d4ed8;
+  --blue-light: #dbeafe;
+  --green: #15803d;
+  --cream: #fffbeb;
+  --white: #ffffff;
+  --text: #7c2d12;
+  --muted: #78716c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans Kannada', sans-serif;
+  background: linear-gradient(160deg, #ffedd5 0%, #fef3c7 50%, #fce7f3 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-        /* DYNAMIC BACKGROUND */
-        .bg-blob {
-            position: fixed; width: 300px; height: 300px; border-radius: 50%;
-            filter: blur(80px); z-index: -1; opacity: 0.15; animation: float 15s infinite alternate;
-        }
-        .blob-1 { top: -100px; right: -100px; background: var(--accent, #6366f1); }
-        .blob-2 { bottom: -100px; left: -100px; background: #22d3ee; }
-        @keyframes float { from { transform: translate(0,0); } to { transform: translate(50px, 100px); } }
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 60%, #f97316 100%);
+  color: white;
+  text-align: center;
+  padding: 16px 16px 8px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '🏰🐴⚔️🏰🐴⚔️🏰🐴⚔️';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  font-size: 16px; letter-spacing: 4px; opacity: 0.15;
+}
+.badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--saffron-dark);
+  font-weight: 800;
+  font-size: 11px;
+  padding: 3px 14px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+header h1 {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: clamp(18px, 6vw, 36px);
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+header .sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+.progress-wrap {
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  height: 10px;
+  margin: 10px 20px 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #fbbf24);
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  width: 14%;
+}
+.progress-label {
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 4px;
+  padding-bottom: 6px;
+}
 
-        /* PREMIUM TOPBAR */
-        .topbar {
-            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: clamp(10px, 1.5vw, 20px) clamp(16px, 3vw, 48px);
-            display: flex; align-items: center; justify-content: space-between;
-            position: sticky; top: 0; z-index: 500;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.03); border-bottom: 1px solid rgba(255,255,255,0.8);
-        }
-        .topbar-title { font-weight: 900; font-size: clamp(14px, 2vw, 22px); color: #334155; }
-        .topbar-right { display: flex; align-items: center; gap: 12px; }
-        .stars-pill { 
-            background: linear-gradient(135deg, #f59e0b, #d97706); color: white; 
-            padding: clamp(4px, 0.8vw, 8px) clamp(10px, 1.5vw, 18px);
-            border-radius: 50px; font-size: clamp(13px, 1.5vw, 18px); font-weight: 900;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'Outfit', sans-serif;
-        }
-        .reset-btn {
-            background: white; border: 1px solid rgba(0,0,0,0.05); color: #ef4444;
-            padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: 900;
-            cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
+/* TAB BAR */
+.tab-bar {
+  display: flex;
+  background: var(--saffron-dark);
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid var(--gold);
+  gap: 2px;
+  padding: 0 4px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1 1 0;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 9px 4px 7px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  position: relative;
+}
+.tab-btn .tab-icon { font-size: 18px; }
+.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(255,255,255,0.1); }
+.tab-btn.done { color: #86efac; }
+.tab-btn.locked { color: rgba(255,255,255,0.2); cursor: not-allowed; }
+.tab-btn.locked .tab-icon { filter: grayscale(1) opacity(0.3); }
+.lock-icon { position: absolute; top: 4px; right: 4px; font-size: 9px; opacity: 0.5; }
 
-        /* PREMIUM HERO */
-        .hero {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            padding: clamp(30px, 5vw, 60px) clamp(20px, 4vw, 40px) clamp(60px, 8vw, 90px);
-            text-align: center; color: white; position: relative; overflow: hidden;
-            border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;
-        }
-        .hero-emoji { font-size: clamp(50px, 8vw, 90px); display: block; margin-bottom: 12px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
-        .hero h1 { font-size: clamp(22px, 3.5vw, 42px); font-weight: 900; margin-bottom: 4px; }
-        .hero p { font-size: clamp(13px, 1.6vw, 18px); opacity: 0.9; font-weight: 600; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-8px) rotate(-3deg)}
+  30%{transform:translateX(8px) rotate(3deg)}
+  45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+  90%{transform:translateX(3px)}
+}
+.shake { animation: shake 0.5s ease; }
 
-        /* PROGRESS OVERLAY */
-        .prog-wrap {
-            margin: clamp(-35px, -5vw, -45px) clamp(16px, 3vw, 48px) 20px;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px);
-            border-radius: 30px; padding: clamp(14px, 2.5vw, 24px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,1);
-            position: relative; z-index: 100;
-        }
-        .prog-label { font-size: clamp(12px, 1.5vw, 16px); font-weight: 900; color: #475569; margin-bottom: 8px; }
-        .prog-bar { background: #f1f5f9; border-radius: 50px; height: 14px; overflow: hidden; }
-        .prog-fill { background: linear-gradient(135deg, #f59e0b, #d97706); height: 100%; border-radius: 50px; transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1); width: 0%; }
+/* TOAST */
+#lockToast {
+  position: fixed;
+  bottom: 80px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--maroon);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  text-align: center;
+  max-width: 88vw;
+}
+#lockToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* TABS SCROLLER */
-        .steps-bar { display: flex; gap: 10px; padding: 10px clamp(16px, 3vw, 48px); overflow-x: auto; scrollbar-width: none; }
-        .step-tab {
-            flex-shrink: 0; padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 800;
-            background: white; color: #64748b; border: 1px solid rgba(0,0,0,0.03);
-            cursor: pointer; transition: all 0.3s; white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-        .step-tab.active { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: none; }
+/* SECTIONS */
+.section { display: none; padding: 16px 14px 90px; max-width: 900px; margin: 0 auto; }
+.section.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-        /* CONTENT CARDS */
-        .content { padding: 10px clamp(16px, 3vw, 48px) 120px; }
-        .teach-card {
-            background: white; border-radius: 35px; padding: 28px;
-            margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            border-left: 8px solid #f59e0b;
-        }
-        .teach-card h3 { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 12px; }
-        .teach-card p { font-size: 17px; font-weight: 600; color: #475569; line-height: 1.7; }
+.sec-title {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--saffron);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-        .scenario-card {
-            background: white; border-radius: 35px; margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); overflow: hidden;
-            border: 2px solid transparent; transition: all 0.3s;
-        }
-        .scenario-card.done { border-color: #10b981; background: #f0fdf4; }
-        .scene-sentence { font-size: 22px; font-weight: 900; color: #1e293b; line-height: 1.4; }
+/* NEXT BUTTON */
+.next-btn {
+  display: none;
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--saffron), var(--saffron-dark));
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.next-btn:active { transform: scale(0.97); }
 
-        .choice-btn {
-            flex: 1; min-width: 120px; padding: 18px; border-radius: 20px;
-            border: 2px solid #f1f5f9; background: white; font-size: 17px; font-weight: 800;
-            color: #334155; cursor: pointer; transition: all 0.2s;
-        }
-        .choice-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--accent); }
-        .choice-btn.correct { background: #10b981; color: white; border-color: #10b981; }
-        .choice-btn.wrong { background: #ef4444; color: white; border-color: #ef4444; }
+/* ===== TAB 1: MEET CHARACTERS ===== */
+.meet-intro {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(194,65,12,0.12);
+  margin-bottom: 14px;
+  text-align: center;
+}
+.meet-intro h2 {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 18px; color: var(--saffron-dark); margin-bottom: 4px;
+}
+.meet-intro p { font-size: 13px; color: var(--muted); }
 
-        .big-btn {
-            width: 100%; padding: 22px; border: none; border-radius: 24px;
-            font-size: 20px; font-weight: 900; cursor: pointer; transition: all 0.3s;
-            background: var(--theme-gradient, #475569); color: white;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
+.chars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.char-card {
+  background: var(--saffron-light);
+  border-radius: 18px;
+  padding: 16px 8px 12px;
+  text-align: center;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+}
+.char-card:active { transform: scale(0.94); }
+.char-card.tapped { border-color: var(--saffron); background: #fed7aa; }
+.char-card .char-emoji { font-size: 46px; display: block; margin-bottom: 8px; }
+.char-card .char-kn {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px; font-weight: 700; color: var(--saffron-dark);
+}
+.char-card .char-desc { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.char-card .tap-check {
+  position: absolute; top: 8px; right: 10px;
+  font-size: 18px; opacity: 0; transition: opacity 0.25s;
+}
+.char-card.tapped .tap-check { opacity: 1; }
+.meet-count { font-size: 22px; font-weight: 800; color: var(--saffron); margin-top: 6px; }
+.intro-note {
+  background: linear-gradient(135deg, #fef9c3, #fef3c7);
+  border-radius: 14px;
+  padding: 13px 16px;
+  font-size: 14px; color: #92400e;
+  font-weight: 600; text-align: center; margin-top: 12px;
+}
 
-        .celeb-screen {
-            position: fixed; inset: 0; background: var(--theme-gradient, #475569);
-            z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .celeb-screen.show { opacity: 1; pointer-events: all; }
-    </style>
+/* ===== TAB 2: STORY ===== */
+.story-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px 16px;
+  box-shadow: 0 4px 18px rgba(194,65,12,0.10);
+  margin-bottom: 12px;
+}
+.story-para {
+  font-size: 15px;
+  line-height: 2;
+  color: #1c1917;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: background 0.2s;
+  margin-bottom: 6px;
+  border: 2px solid transparent;
+}
+.story-para:active { transform: scale(0.99); }
+.story-para.highlighted { background: #fed7aa; border-color: var(--saffron); }
+.story-para .para-emoji { font-size: 20px; margin-right: 6px; }
+.story-tap-note {
+  text-align: center; font-size: 13px; color: var(--muted);
+  margin-bottom: 12px; font-weight: 600;
+}
+.story-progress-bar {
+  background: #e7e5e4;
+  border-radius: 10px;
+  height: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.story-progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  border-radius: 10px;
+  transition: width 0.4s;
+  width: 0%;
+}
+
+/* ===== TAB 3: VOCAB CARDS ===== */
+.vocab-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(194,65,12,0.08);
+}
+.vocab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.vocab-card {
+  height: 110px;
+  perspective: 800px;
+  cursor: pointer;
+}
+.vocab-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+.vocab-card.flipped .vocab-inner { transform: rotateY(180deg); }
+.vocab-front, .vocab-back {
+  position: absolute; inset: 0;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 12px;
+  text-align: center;
+}
+.vocab-front {
+  background: linear-gradient(135deg, var(--saffron-light), #fed7aa);
+  border: 2px solid var(--saffron);
+}
+.vocab-front .vf-word {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 17px; font-weight: 700; color: var(--saffron-dark);
+}
+.vocab-front .vf-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.vocab-back {
+  background: linear-gradient(135deg, #7c2d12, #c2410c);
+  border: 2px solid var(--gold);
+  transform: rotateY(180deg);
+}
+.vocab-back .vb-emoji { font-size: 28px; margin-bottom: 6px; }
+.vocab-back .vb-meaning { font-size: 14px; color: white; font-weight: 700; }
+.vocab-back .vb-en { font-size: 11px; color: #fed7aa; margin-top: 3px; }
+.vocab-count { text-align: center; font-size: 18px; font-weight: 800; color: var(--saffron); margin: 8px 0; }
+
+/* ===== TAB 4: SEQUENCE QUIZ ===== */
+.seq-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(194,65,12,0.08);
+}
+.quiz-q {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(194,65,12,0.1);
+}
+.quiz-text {
+  font-family: 'Noto Serif Kannada', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.qa-btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  background: var(--saffron-light);
+  border: 2px solid #fed7aa;
+  border-radius: 12px;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: 14px;
+  color: var(--saffron-dark);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+.qa-btn:active { transform: scale(0.98); }
+.qa-btn.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+.qa-btn.wrong { background: #fce7f3; border-color: #e11d48; color: #9f1239; animation: shake 0.4s ease; }
+.qa-btn.answered { opacity: 0.4; pointer-events: none; }
+
+/* ===== TAB 5: WORD MATCH ===== */
+.match-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.match-col { display: flex; flex-direction: column; gap: 8px; }
+.dmatch-word, .dmatch-meaning {
+  background: white;
+  border: 2.5px solid #fed7aa;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  transition: all 0.2s;
+  min-height: 54px;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1.4;
+}
+.dmatch-word:active, .dmatch-meaning:active { transform: scale(0.96); }
+.dmatch-word.selected, .dmatch-meaning.selected { border-color: var(--saffron); background: #fed7aa; }
+.dmatch-word.matched, .dmatch-meaning.matched { border-color: var(--green); background: #dcfce7; color: var(--green); pointer-events: none; }
+.dmatch-word.wrong, .dmatch-meaning.wrong { border-color: var(--maroon); background: #fce7f3; animation: shake 0.4s ease; }
+
+/* ===== TAB 6: FILL BLANKS ===== */
+.fill-intro {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.fill-sentence {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 2;
+  color: #1c1917;
+  box-shadow: 0 2px 10px rgba(194,65,12,0.08);
+  font-weight: 600;
+}
+.blank-box {
+  display: inline-block;
+  min-width: 80px;
+  padding: 4px 10px;
+  border-bottom: 3px solid var(--saffron);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--saffron-dark);
+  background: var(--saffron-light);
+  transition: all 0.2s;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.blank-box.active-blank { background: #fed7aa; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(217,119,6,0.3); }
+.blank-box.correct { background: #dcfce7; border-color: var(--green); color: var(--green); pointer-events: none; }
+.blank-box.wrong { background: #fce7f3; border-color: var(--maroon); animation: shake 0.4s ease; }
+.word-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 14px;
+  background: white;
+  border-radius: 14px;
+  justify-content: center;
+}
+.chip {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--saffron-light), #fed7aa);
+  border: 2px solid var(--saffron);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--saffron-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Noto Sans Kannada', sans-serif;
+}
+.chip:active { transform: scale(0.95); }
+.chip.used { opacity: 0.3; pointer-events: none; }
+
+/* ===== TAB 7: FINAL QUIZ ===== */
+.result-msg {
+  display: none;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--gold-light);
+  color: var(--gold);
+  margin-top: 10px;
+}
+.result-msg.show { display: block; }
+.complete-card {
+  display: none;
+  background: linear-gradient(135deg, #7c2d12, #c2410c, #f97316);
+  border-radius: 24px;
+  padding: 28px;
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+  box-shadow: 0 8px 32px rgba(194,65,12,0.4);
+}
+.complete-card.show { display: block; animation: fadeUp 0.5s ease; }
+.complete-card .trophy { font-size: 56px; margin-bottom: 10px; }
+.complete-card .stars { font-size: 32px; letter-spacing: 4px; margin-bottom: 10px; }
+.complete-card h2 { font-family: 'Noto Serif Kannada', serif; font-size: 22px; margin-bottom: 8px; }
+.complete-card p { font-size: 14px; opacity: 0.9; line-height: 1.7; }
+
+/* ===== RESPONSIVE SCALING - FULL WIDTH ===== */
+.header h1{font-size:clamp(22px,3.5vw,52px);}
+.header p{font-size:clamp(13px,1.6vw,22px);}
+.header{padding:clamp(18px,3vw,48px) clamp(20px,5vw,80px) clamp(44px,6vw,80px);}
+.content{padding:clamp(6px,1vw,16px) clamp(12px,3.5vw,60px) clamp(80px,10vw,140px);}
+.hl{font-size:clamp(13px,1.6vw,22px);}
+.word-chip{font-size:clamp(12px,1.4vw,20px);padding:clamp(7px,0.9vw,14px) clamp(12px,1.5vw,22px);}
+.card{border-radius:clamp(16px,2vw,28px);}
+</style>
 </head>
-<body style="--accent-color:#f97316; --theme-gradient:linear-gradient(135deg, #f97316, #ea580c);">
+<body>
 
 <header>
   <div class="badge">೨ನೇ ತರಗತಿ • ಕನ್ನಡ • ಪಾಠ ೪</div>
@@ -490,7 +900,6 @@
 </div>
 
 <script>
-window.student_id = "{{ student.id if student else '' }}";
 const tabOrder = ['meet','story','vocab','seq','dmatch','fill','quiz'];
 const progressPct = {meet:14,story:28,vocab:42,seq:56,dmatch:70,fill:85,quiz:100};
 const stepNum = {meet:'೧',story:'೨',vocab:'೩',seq:'೪',dmatch:'೫',fill:'೬',quiz:'೭'};
@@ -739,6 +1148,6 @@ async function saveLessonCompletion(){
   }catch(e){console.log('Progress save failed',e);}
 }
 // === END AUTO-INJECTED ===
-function startOver(){ if(confirm("Restart lesson?")){ localStorage.removeItem(SAVE_KEY); location.reload(); } }</script>
+</script>
 </body>
 </html>
