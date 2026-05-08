@@ -190,7 +190,7 @@ class Friendship(db.Model):
 @app.route('/')
 def home():
     if 'student_id' in session:
-        return redirect(url_for('grade_dashboard'))
+        return redirect(url_for('dashboard'))
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -224,7 +224,7 @@ def signup():
         session['student_name'] = student.name
         session['student_grade'] = student.grade
         session['student_language'] = student.language
-        return redirect(url_for('grade_dashboard'))
+        return redirect(url_for('dashboard'))
 
     return render_template('signup.html')
 
@@ -240,7 +240,7 @@ def login():
             session['student_name'] = student.name
             session['student_grade'] = student.grade
             session['student_language'] = student.language
-            return redirect(url_for('grade_dashboard'))
+            return redirect(url_for('dashboard'))
 
         return render_template('login.html', error='Wrong email or password!')
 
@@ -1109,7 +1109,7 @@ def profile():
         db.session.commit()
         session['student_grade'] = new_grade
         session['student_language'] = new_language
-        return redirect(url_for('grade_dashboard'))
+        return redirect(url_for('dashboard'))
     return render_template('profile.html', student=student)
 
 @app.route('/lkg/numbers')
