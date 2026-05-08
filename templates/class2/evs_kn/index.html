@@ -4,143 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VidyaAI - Class 2 EVS (KN)</title>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Noto+Sans+Kannada:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: 'Segoe UI', 'Noto Sans Kannada', sans-serif;
-            background: #f1f8f1;
-            min-height: 100vh;
+            font-family: 'Noto Sans Kannada', 'Outfit', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh; overflow-x: hidden; position: relative; padding-bottom: 100px;
+            color: #1e293b;
+        }
+
+        /* DYNAMIC BACKGROUND */
+        .bg-blob {
+            position: fixed; width: clamp(200px, 40vw, 500px); height: clamp(200px, 40vw, 500px); border-radius: 50%;
+            filter: blur(80px); z-index: -1; opacity: 0.2; animation: float 15s infinite alternate;
+        }
+        .blob-1 { top: -10%; right: -10%; background: #10b981; }
+        .blob-2 { bottom: -10%; left: -10%; background: #22d3ee; }
+        @keyframes float { 
+            0% { transform: translate(0,0) scale(1); } 
+            100% { transform: translate(10%, 20%) scale(1.1); } 
         }
 
         .navbar {
-            background: linear-gradient(135deg, #27ae60, #11998e);
-            padding: 14px 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-            position: sticky; top: 0; z-index: 50;
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 500;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.03); border-bottom: 1px solid rgba(255,255,255,0.8);
         }
-        .navbar-left { display: flex; align-items: center; gap: 10px; }
-        .navbar-logo { font-size: 18px; font-weight: 900; color: white; }
-        .navbar-subject {
-            background: rgba(255,255,255,0.25); color: white;
-            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
-        }
-        .back-btn {
-            background: white; color: #27ae60;
-            padding: 7px 14px; border-radius: 20px;
-            font-size: 13px; font-weight: 700; text-decoration: none;
-        }
+        .navbar-logo { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; font-family: 'Outfit', sans-serif; }
+        .home-link { text-decoration: none; font-size: 20px; background: white; padding: 8px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
         .hero {
-            background: linear-gradient(135deg, #27ae60, #11998e);
-            padding: 20px 20px 35px; text-align: center; color: white;
+            background: linear-gradient(135deg, #10b981, #059669);
+            padding: clamp(40px, 8vw, 70px) 24px clamp(60px, 10vw, 90px);
+            text-align: center; color: white; position: relative; overflow: hidden;
+            border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
-        .hero-icon { font-size: 56px; margin-bottom: 8px; }
-        .hero h2   { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
-        .hero p    { font-size: 13px; opacity: 0.9; }
+        .hero h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 900; margin-bottom: 8px; }
+        .hero p { font-size: 16px; opacity: 0.9; font-weight: 600; }
 
-        .progress-card {
-            background: white; margin: -18px 16px 20px;
-            border-radius: 18px; padding: 14px 18px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 14px;
+        .prog-card {
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            margin: -40px 24px 30px; border-radius: 35px; padding: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,1);
+            position: relative; z-index: 100;
         }
-        .progress-circle {
-            width: 52px; height: 52px; border-radius: 50%;
-            background: linear-gradient(135deg, #27ae60, #11998e);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 18px; font-weight: 900; flex-shrink: 0;
-        }
-        .progress-info h4 { font-size: 14px; font-weight: 800; color: #333; }
-        .progress-info p  { font-size: 12px; color: #888; margin-top: 2px; }
-        .progress-bar-wrap {
-            flex: 1; background: #f0f0f0;
-            border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px;
-        }
-        .progress-bar-inner {
-            height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60);
-            border-radius: 10px; width: 0%; transition: width 0.5s;
-        }
+        .prog-bar { background: #f1f5f9; height: 14px; border-radius: 50px; overflow: hidden; }
+        .prog-fill { background: linear-gradient(135deg, #10b981, #059669); height: 100%; border-radius: 50px; width: 0%; transition: width 1s ease; }
 
-        .section-label {
-            padding: 8px 16px 6px;
-            font-size: 12px; font-weight: 800;
-            color: #888; text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .chapters-list {
-            padding: 0 16px 100px;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-
+        .chapters-list { padding: 0 20px 50px; display: flex; flex-direction: column; gap: 16px; }
+        
         .chapter-card {
-            background: white; border-radius: 18px;
-            padding: 16px 18px;
-            display: flex; align-items: center; gap: 14px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
-            cursor: pointer; transition: all 0.25s;
-            text-decoration: none; position: relative; overflow: hidden;
+            background: white; border-radius: 30px; padding: 20px;
+            text-decoration: none; display: flex; align-items: center; gap: 16px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0,0,0,0.02); box-shadow: 0 8px 25px rgba(0,0,0,0.04);
         }
-        .chapter-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
-        .chapter-card.completed { border-left: 4px solid #059669; }
-        .chapter-card.inprogress { border-left: 4px solid #f59e0b; }
-        .chapter-card.notstarted { border-left: 4px solid #e5e7eb; }
-
-        .chapter-num {
-            width: 42px; height: 42px; border-radius: 12px;
+        .chapter-card:hover { transform: translateX(10px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-color: var(--accent); }
+        
+        .ch-num { 
+            width: 50px; height: 50px; border-radius: 18px; 
+            background: var(--theme-gradient, #f1f5f9); color: white;
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px; flex-shrink: 0; font-weight: 900;
+            font-weight: 900; font-size: 20px; flex-shrink: 0; font-family: 'Outfit', sans-serif;
         }
-        .chapter-info { flex: 1; }
-        .chapter-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 3px; }
-        .chapter-meta  { font-size: 12px; color: #888; font-weight: 600; }
-        .chapter-status { font-size: 18px; flex-shrink: 0; }
+        .ch-info { flex: 1; min-width: 0; }
+        .ch-title { font-size: 17px; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+        .ch-sub { font-size: 13px; color: #64748b; font-weight: 600; }
+        
+        .ch-status { font-size: 22px; width: 40px; text-align: center; }
 
-        .c-evs .chapter-num { background: #dcfce7; color: #166534; }
-
-        .bottom-nav {
-            position: fixed; bottom:0; left:0; right:0;
-            background:white; border-top:1px solid #f0f0f0;
-            display:flex; padding:8px 0 12px;
-            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
+        @media(min-width: 768px) {
+            .chapters-list { max-width: 800px; margin: 0 auto; }
+            .prog-card { max-width: 600px; margin: -40px auto 40px; }
         }
-        .nav-item {
-            flex:1; display:flex; flex-direction:column;
-            align-items:center; gap:3px; cursor:pointer;
-            padding:6px; text-decoration:none;
-        }
-        .nav-icon  { font-size:22px; }
-        .nav-label { font-size:11px; font-weight:700; color:#888; }
-        .nav-item.active .nav-label { color:#27ae60; }
-    
-
-/* ===== RESPONSIVE SCALING - FULL WIDTH ===== */
-.navbar{padding:clamp(10px,1.5vw,20px) clamp(16px,3vw,48px);}
-.hero-icon{font-size:clamp(56px,7vw,120px);}
-.hero h1{font-size:clamp(22px,3.5vw,52px);}
-.hero h2{font-size:clamp(22px,3.5vw,52px);}
-.hero p{font-size:clamp(13px,1.6vw,22px);}
-.hero{padding:clamp(18px,3vw,48px) clamp(20px,5vw,80px) clamp(44px,6vw,80px);}
-.progress-card{margin:clamp(-18px,-2vw,-14px) clamp(12px,3vw,48px) clamp(12px,2vw,24px);padding:clamp(12px,1.8vw,22px) clamp(16px,2.5vw,36px);border-radius:clamp(14px,2vw,24px);}
-.progress-circle{width:clamp(44px,6vw,72px);height:clamp(44px,6vw,72px);font-size:clamp(15px,2vw,26px);}
-.progress-info h4{font-size:clamp(13px,1.5vw,20px);}
-.progress-info p{font-size:clamp(11px,1.3vw,17px);}
-.progress-bar-wrap{height:clamp(6px,1vw,12px);}
-.content{padding:clamp(6px,1vw,16px) clamp(12px,3.5vw,60px) clamp(80px,10vw,140px);}
-.card{border-radius:clamp(16px,2vw,28px);}
-.chapter-card{padding:clamp(12px,1.5vw,22px) clamp(14px,2vw,28px);border-radius:clamp(14px,2vw,24px);}
-.chapter-num{width:clamp(36px,5vw,60px);height:clamp(36px,5vw,60px);border-radius:clamp(10px,1.2vw,18px);font-size:clamp(16px,2.2vw,30px);}
-.chapter-title{font-size:clamp(13px,1.6vw,22px);}
-.chapter-meta{font-size:clamp(11px,1.2vw,17px);}
-.chapter-status{font-size:clamp(15px,2vw,26px);}
-.section-label{font-size:clamp(11px,1.2vw,17px);padding:clamp(6px,1vw,12px) clamp(12px,2vw,24px);}
-.bottom-nav{padding:clamp(6px,1vw,14px) 0 clamp(8px,1.2vw,16px);}
-.nav-icon{font-size:clamp(18px,2.5vw,32px);}
-.nav-label{font-size:clamp(10px,1.1vw,15px);}
-.back-btn{padding:clamp(5px,0.8vw,12px) clamp(10px,1.3vw,20px);font-size:clamp(12px,1.3vw,18px);}
-</style>
+    </style>
 </head>
-<body>
+<body style='--bg-gradient:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); --theme-gradient:linear-gradient(135deg, #0ea5e9, #2563eb);'>
 
 <nav class="navbar">
     <div class="navbar-left">
