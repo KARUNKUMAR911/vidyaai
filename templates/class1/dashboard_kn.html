@@ -2,299 +2,214 @@
 <html lang="kn">
 <head>
     <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#7c3aed">
+    <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="VidyaAI">
     <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VidyaAI - 1ನೇ ತರಗತಿ ಕನ್ನಡ</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Noto Sans Kannada', 'Segoe UI', sans-serif; background: #fff8f5; min-height: 100vh; }
-
-        .navbar {
-            background: linear-gradient(135deg, #b5179e, #7209b7);
-            padding: 14px 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 15px rgba(181,23,158,0.3);
-        }
-        .navbar-left { display: flex; align-items: center; gap: 12px; }
-        .navbar-logo { font-size: 20px; font-weight: 900; color: white; }
-        .navbar-grade {
-            background: rgba(255,255,255,0.25); color: white;
-            padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
-        }
-        .navbar-right { display: flex; align-items: center; gap: 10px; }
-        .stars-badge {
-            background: rgba(255,255,255,0.25); color: white;
-            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700;
-        }
-        .home-btn {
-            background: white; color: #b5179e;
-            padding: 7px 14px; border-radius: 20px;
-            font-size: 13px; font-weight: 700; text-decoration: none;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #b5179e, #7209b7);
-            padding: 20px 20px 40px; text-align: center; color: white;
-        }
-        .hero-avatar { font-size: 60px; margin-bottom: 8px; }
-        .hero h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
-        .hero p  { font-size: 14px; opacity: 0.9; }
-
-        .progress-section {
-            background: white; margin: -20px 16px 20px;
-            border-radius: 20px; padding: 16px 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .progress-title { font-size: 14px; font-weight: 700; color: #333; }
-        .progress-count { font-size: 13px; color: #888; }
-        .progress-bar { background: #f0f0f0; border-radius: 10px; height: 12px; overflow: hidden; }
-        .progress-fill {
-            background: linear-gradient(90deg, #b5179e, #7209b7);
-            height: 100%; border-radius: 10px; width: 0%; transition: width 0.5s;
-        }
-
-        .challenge-card {
-            margin: 0 16px 20px;
-            background: linear-gradient(135deg, #b5179e, #7209b7);
-            border-radius: 20px; padding: 18px 20px;
-            display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 8px 25px rgba(181,23,158,0.3);
-            cursor: pointer; text-decoration: none; transition: transform 0.2s;
-        }
-        .challenge-card:hover { transform: scale(1.02); }
-        .challenge-icon { font-size: 44px; flex-shrink: 0; }
-        .challenge-text h3 { font-size: 16px; font-weight: 900; color: white; margin-bottom: 3px; }
-        .challenge-text p  { font-size: 13px; color: rgba(255,255,255,0.85); }
-        .challenge-arrow   { margin-left: auto; font-size: 22px; color: white; }
-
-        .section-title { padding: 5px 20px 12px; font-size: 18px; font-weight: 900; color: #333; }
-
-        .subjects-grid {
-            display: grid; grid-template-columns: repeat(2,1fr);
-            gap: 14px; padding: 0 16px 30px;
-        }
-        .subject-card {
-            border-radius: 24px; padding: 22px 16px; text-align: center;
-            cursor: pointer; transition: all 0.25s; position: relative;
-            overflow: hidden; text-decoration: none; display: block;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        }
-        .subject-card:hover  { transform: translateY(-5px) scale(1.02); }
-        .subject-card:active { transform: scale(0.97); }
-        .subject-card::before {
-            content: ''; position: absolute; top:-50%; left:-50%;
-            width:200%; height:200%;
-            background: radial-gradient(circle,rgba(255,255,255,0.15) 0%,transparent 60%);
-            pointer-events: none;
-        }
-        .card-icon  { font-size: 52px; margin-bottom: 10px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
-        .card-title { font-size: 15px; font-weight: 900; color: white; margin-bottom: 3px; }
-        .card-sub   { font-size: 11px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 2px; }
-        .card-en    { font-size: 10px; color: rgba(255,255,255,0.65); font-style: italic; }
-        .card-badge {
-            position: absolute; top:10px; left:10px;
-            background: #fbbf24; color: #333;
-            border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 800;
-        }
-        .progress-bar-card {
-            height: 4px; background: rgba(255,255,255,0.3);
-            border-radius: 2px; margin-top: 10px; overflow: hidden;
-        }
-        .progress-bar-fill { height:100%; background:white; border-radius:2px; width:0%; transition:width 0.5s; }
-
-        .c1 { background: linear-gradient(135deg,#FF6B6B,#cc3333); }
-        .c2 { background: linear-gradient(135deg,#4895EF,#1a68c0); }
-        .c3 { background: linear-gradient(135deg,#43AA8B,#2a7a60); }
-        .c4 { background: linear-gradient(135deg,#F9C74F,#c99a00); }
-        .c5 { background: linear-gradient(135deg,#E85D04,#aa3a00); }
-        .c6 { background: linear-gradient(135deg,#7B2D8B,#4e1a5e); }
-
-        .bottom-nav {
-            position: fixed; bottom:0; left:0; right:0;
-            background:white; border-top:1px solid #f0f0f0;
-            display:flex; padding:8px 0 12px;
-            box-shadow:0 -4px 15px rgba(0,0,0,0.08); z-index:50;
-        }
-        .nav-item {
-            flex:1; display:flex; flex-direction:column;
-            align-items:center; gap:3px; cursor:pointer;
-            padding:6px; text-decoration:none;
-        }
-        .nav-icon  { font-size:22px; }
-        .nav-label { font-size:11px; font-weight:700; color:#888; }
-        .nav-item.active .nav-label { color:#b5179e; }
-        .nav-item.active .nav-icon  { transform:scale(1.15); }
-        .page-content { padding-bottom:80px; }
+    <title>VidyaAI • 1ನೇ ತರಗತಿ ಕನ್ನಡ</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Noto+Sans+Kannada:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Noto Sans Kannada', 'Outfit', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh; overflow-x: hidden; position: relative; padding-bottom: 100px;
+            color: #1e293b;
+        }
 
-/* ===== RESPONSIVE SCALING - FULL WIDTH ===== */
-.navbar{padding:clamp(10px,1.5vw,20px) clamp(16px,3vw,48px);}
-.hero h1{font-size:clamp(22px,3.5vw,52px);}
-.hero h2{font-size:clamp(22px,3.5vw,52px);}
-.hero p{font-size:clamp(13px,1.6vw,22px);}
-.hero{padding:clamp(18px,3vw,48px) clamp(20px,5vw,80px) clamp(44px,6vw,80px);}
-.header h1{font-size:clamp(22px,3.5vw,52px);}
-.header p{font-size:clamp(13px,1.6vw,22px);}
-.header{padding:clamp(18px,3vw,48px) clamp(20px,5vw,80px) clamp(44px,6vw,80px);}
-.content{padding:clamp(6px,1vw,16px) clamp(12px,3.5vw,60px) clamp(80px,10vw,140px);}
-.card{border-radius:clamp(16px,2vw,28px);}
-.card-title{font-size:clamp(14px,1.7vw,24px);}
-.subject-card{border-radius:clamp(16px,2vw,28px);padding:clamp(14px,2vw,28px);}
-.card-icon{font-size:clamp(36px,5vw,72px);}
-.card-badge{font-size:clamp(10px,1.1vw,15px);padding:clamp(3px,0.5vw,8px) clamp(8px,1vw,16px);}
-.card-sub{font-size:clamp(11px,1.3vw,18px);}
-.card-en{font-size:clamp(10px,1.1vw,15px);}
-.section-title{font-size:clamp(14px,1.7vw,24px);padding:clamp(10px,1.5vw,20px) clamp(14px,2vw,28px);}
-.progress-section{padding:clamp(10px,1.5vw,20px) clamp(14px,2vw,28px);}
-.progress-title{font-size:clamp(13px,1.5vw,20px);}
-.progress-count{font-size:clamp(11px,1.3vw,17px);}
-.challenge-card{padding:clamp(12px,1.5vw,22px) clamp(14px,2vw,28px);border-radius:clamp(16px,2vw,28px);}
-.challenge-text h3{font-size:clamp(14px,1.7vw,24px);}
-.challenge-text p{font-size:clamp(11px,1.3vw,18px);}
-.challenge-icon{font-size:clamp(28px,4vw,56px);}
-.challenge-arrow{font-size:clamp(18px,2.5vw,36px);}
-.bottom-nav{padding:clamp(6px,1vw,14px) 0 clamp(8px,1.2vw,16px);}
-.nav-icon{font-size:clamp(18px,2.5vw,32px);}
-.nav-label{font-size:clamp(10px,1.1vw,15px);}
-</style>
+        /* STATIC PREMIUM BACKGROUND (100% LAG-FREE) */
+        .bg-blob {
+            position: fixed; width: clamp(200px, 40vw, 500px); height: clamp(200px, 40vw, 500px); border-radius: 50%;
+            filter: blur(60px); z-index: -1; opacity: 0.2; 
+        }
+        .blob-1 { top: -10%; right: -10%; background: #6366f1; }
+        .blob-2 { bottom: -10%; left: -10%; background: #22d3ee; }
+
+        /* PREMIUM NAVBAR */
+        .navbar {
+            background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: clamp(12px, 2vw, 20px) clamp(16px, 4vw, 40px);
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 500;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.03); border-bottom: 1px solid rgba(255,255,255,0.8);
+        }
+        .navbar-logo { font-size: clamp(20px, 2.5vw, 28px); font-weight: 900; background: linear-gradient(135deg, #4f46e5, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
+        .navbar-right { display: flex; align-items: center; gap: 12px; }
+        .stars-badge { 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; 
+            padding: 8px 18px; border-radius: 50px; font-size: 15px; font-weight: 900; 
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); display: flex; align-items: center; gap: 6px;
+        }
+
+        /* COSMIC HERO */
+        .hero {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            padding: clamp(40px, 8vw, 80px) 24px clamp(60px, 12vw, 100px);
+            text-align: center; color: white; position: relative; overflow: hidden;
+            border-bottom-left-radius: clamp(40px, 6vw, 60px); border-bottom-right-radius: clamp(40px, 6vw, 60px);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.2);
+        }
+        .hero-avatar { font-size: clamp(60px, 10vw, 100px); display: inline-block; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2)); margin-bottom: 15px; }
+        .hero h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 900; margin-bottom: 8px; }
+        .hero p { font-size: clamp(14px, 1.8vw, 18px); opacity: 0.9; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* PROGRESS OVERLAY */
+        .prog-card {
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            margin: clamp(-35px, -6vw, -50px) 24px 30px; border-radius: 35px; padding: 28px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,1);
+            position: relative; z-index: 100;
+        }
+        .prog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .prog-title { font-size: 18px; font-weight: 900; color: #1e293b; }
+        .prog-chip { background: #4f46e5; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 800; font-family: 'Outfit', sans-serif; }
+        .prog-bar { background: #f1f5f9; height: 16px; border-radius: 50px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        .prog-fill { background: linear-gradient(90deg, #4f46e5, #06b6d4); height: 100%; border-radius: 50px; width: 0%; transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* SUBJECTS SECTION */
+        .section-title { padding: 10px 30px 20px; font-size: clamp(22px, 3vw, 26px); font-weight: 900; color: #0f172a; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 3vw, 24px); padding: 0 24px 50px; }
+
+        .card {
+            background: white; border-radius: 40px; padding: clamp(25px, 4vw, 40px) 20px; text-align: center;
+            text-decoration: none; display: block; position: relative; overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+        .card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.1); border-color: rgba(79, 70, 229, 0.1); }
+        .card::before { content: ""; position: absolute; inset: 0; background: var(--grad); opacity: 0.04; transition: opacity 0.3s; }
+        .card:hover::before { opacity: 0.08; }
+        
+        .icon-box { font-size: clamp(55px, 8vw, 75px); margin-bottom: 15px; display: block; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); transition: transform 0.3s; }
+        .card:hover .icon-box { transform: scale(1.1) rotate(5deg); }
+        .title { font-size: clamp(17px, 2.2vw, 20px); font-weight: 900; color: #1e293b; margin-bottom: 5px; }
+        .sub { font-size: 12px; color: #64748b; font-weight: 700; }
+
+        .card-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.03); color: #475569; padding: 5px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; }
+        .card-pct { position: absolute; top: 15px; right: 15px; background: var(--grad); color: white; padding: 5px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; font-family: 'Outfit', sans-serif; }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 12px 10px 30px; display: flex; justify-content: space-around;
+            border-top: 1px solid rgba(255,255,255,0.5); box-shadow: 0 -10px 40px rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #94a3b8; transition: all 0.3s; }
+        .nav-item.active { color: #4f46e5; }
+        .nav-item i { font-size: 24px; transition: 0.3s; }
+        .nav-item.active i { transform: translateY(-5px); }
+        .nav-item span { font-size: 11px; font-weight: 800; }
+
+        @media(min-width: 768px) {
+            .grid { grid-template-columns: repeat(4, 1fr); max-width: 1200px; margin: 0 auto; }
+            .prog-card { max-width: 800px; margin: -60px auto 40px; }
+            .section-title { text-align: center; max-width: 1200px; margin: 0 auto; }
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="navbar-left">
-        <div class="navbar-logo">📚 VidyaAI</div>
-        <div class="navbar-grade">1ನೇ ತರಗತಿ • ಕನ್ನಡ</div>
-    </div>
-    <div class="navbar-right">
-        <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
-        <a href="/dashboard" class="home-btn">🏠</a>
-    </div>
-</nav>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
 
-<div class="page-content">
+    <nav class="navbar">
+        <div class="navbar-logo">📚 VidyaAI</div>
+        <div class="navbar-right">
+            <div class="stars-badge">⭐ <span id="totalStars">0</span></div>
+        </div>
+    </nav>
 
     <div class="hero">
         <div class="hero-avatar">🧒</div>
-        <h2>ನಮಸ್ಕಾರ, {{ student.name }}! 🌟</h2>
+        <h2>ನಮಸ್ಕಾರ, {{ student.name if student else 'ಗೆಳೆಯ' }}! 🌟</h2>
         <p>1ನೇ ತರಗತಿ • ಕನ್ನಡ ಮಾಧ್ಯಮ • ಇಂದು ಕಲಿಯೋಣ!</p>
-    </div>
-
-    <div class="progress-section">
-        <div class="progress-header">
-            <div class="progress-title">📊 ನನ್ನ ಪ್ರಗತಿ</div>
-        <div class="progress-count" id="progressCount">4 ರಲ್ಲಿ 0 ವಿಷಯ</div>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
+        <div style="margin-top: 20px;">
+            <a href="/class/1" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 14px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3);">Switch to English Medium</a>
         </div>
     </div>
 
-    <a href="/class/1/kannada/chapters" class="challenge-card">
-        <div class="challenge-icon">🌟</div>
-        <div class="challenge-text">
-            <h3>ಇಂದಿನ ಸವಾಲು!</h3>
-            <p>1 ಪಾಠ ಪೂರ್ಣಗೊಳಿಸಿ ಬೋನಸ್ ನಕ್ಷತ್ರ ಗಳಿಸಿ!</p>
+    <div class="prog-card">
+        <div class="prog-header">
+            <div class="prog-title">ನನ್ನ ಪ್ರಗತಿ</div>
+            <div class="prog-chip" id="progressCount">4 ರಲ್ಲಿ 0 ವಿಷಯ</div>
         </div>
-        <div class="challenge-arrow">→</div>
-    </a>
-
-    <div class="section-title">📖 ನನ್ನ ವಿಷಯಗಳು</div>
-
-    <div class="subjects-grid">
-
-        <a href="/class/1/kannada/chapters" class="subject-card c1">
-            <div class="card-badge">📘 ವಿಷಯ</div>
-            <span class="card-icon">🌸</span>
-            <div class="card-title">ಕನ್ನಡ</div>
-            <div class="card-sub">ಕನ್ನಡ ಪಾಠಗಳು</div>
-            <div class="card-en">Kannada</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-kannada"></div></div>
-        </a>
-
-        <a href="/class/1/kannada/maths" class="subject-card c2">
-            <div class="card-badge">📘 ವಿಷಯ</div>
-            <span class="card-icon">🔢</span>
-            <div class="card-title">ಗಣಿತ</div>
-            <div class="card-sub">ಗಣಿತ ಪಾಠಗಳು</div>
-            <div class="card-en">Mathematics</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-maths"></div></div>
-        </a>
-
-        <a href="/class/1/kannada/evs" class="subject-card c3">
-            <div class="card-badge">📘 ವಿಷಯ</div>
-            <span class="card-icon">🌿</span>
-            <div class="card-title">EVS</div>
-            <div class="card-sub">EVS lessons</div>
-            <div class="card-en">Environmental Studies</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-evs"></div></div>
-        </a>
-
-        <a href="/class/1/english" class="subject-card c4" style="grid-column: span 2;">
-            <div class="card-badge">📘 ವಿಷಯ</div>
-            <span class="card-icon">📝</span>
-            <div class="card-title">English</div>
-            <div class="card-sub">English lessons (same as English medium)</div>
-            <div class="card-en">English</div>
-            <div class="progress-bar-card"><div class="progress-bar-fill" id="prog-english"></div></div>
-        </a>
-
+        <div class="prog-bar">
+            <div class="prog-fill" id="progressFill"></div>
+        </div>
     </div>
-</div>
 
-<div class="bottom-nav">
-    <a href="/class/1/kannada" class="nav-item active">
-        <div class="nav-icon">🏠</div>
-        <div class="nav-label">ಮನೆ</div>
-    </a>
-    <a href="#" class="nav-item">
-        <div class="nav-icon">📊</div>
-        <div class="nav-label">ಪ್ರಗತಿ</div>
-    </a>
-    <a href="#" class="nav-item">
-        <div class="nav-icon">⭐</div>
-        <div class="nav-label">ನಕ್ಷತ್ರ</div>
-    </a>
-    <a href="/profile" class="nav-item">
-        <div class="nav-icon">👤</div>
-        <div class="nav-label">ಪ್ರೊಫೈಲ್</div>
-    </a>
-</div>
+    <h2 class="section-title">📖 ನನ್ನ ವಿಷಯಗಳು</h2>
 
-<script>
-async function loadProgress() {
-    try {
-        const res = await fetch('/api/progress/load?grade=1');
-        const data = await res.json();
-        let completed = 0;
-        const subjects = ['kannada','maths','evs','english'];
-        subjects.forEach(s => {
-            const p = data[s];
-            const bar = document.getElementById(`prog-${s}`);
-            if (bar && p && p.total > 0) {
-                const pct = Math.round((p.completed/p.total)*100);
-                bar.style.width = pct+'%';
-                if (pct===100) completed++;
-            }
-        });
-        document.getElementById('progressCount').textContent = `4 ರಲ್ಲಿ ${completed} ವಿಷಯ`;
-        document.getElementById('progressFill').style.width = `${Math.round((completed/4)*100)}%`;
-        const stars = Object.values(data).reduce((s,p)=>s+(p.stars||0),0);
-        document.getElementById('totalStars').textContent = stars;
-    } catch(e) {}
-}
-loadProgress();
-</script>
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/service-worker.js')
-        .then(() => console.log('VidyaAI PWA Ready!'))
-        .catch(err => console.log('SW Error:', err));
-}
-</script>
+    <div class="grid">
+        <a href="/class/1/kannada/chapters" class="card" style="--grad: linear-gradient(135deg, #f59e0b, #d97706);">
+            <div class="card-badge">ವಿಷಯ</div>
+            <div class="card-pct" id="pct-kannada">0%</div>
+            <span class="icon-box">🌸</span>
+            <div class="title">ಕನ್ನಡ</div>
+            <div class="sub">ಕನ್ನಡ ಪಾಠಗಳು</div>
+        </a>
+
+        <a href="/class/1/kannada/maths" class="card" style="--grad: linear-gradient(135deg, #3b82f6, #2563eb);">
+            <div class="card-badge">ವಿಷಯ</div>
+            <div class="card-pct" id="pct-maths">0%</div>
+            <span class="icon-box">🔢</span>
+            <div class="title">ಗಣಿತ</div>
+            <div class="sub">ಗಣಿತ ಪಾಠಗಳು</div>
+        </a>
+
+        <a href="/class/1/kannada/evs" class="card" style="--grad: linear-gradient(135deg, #10b981, #059669);">
+            <div class="card-badge">ವಿಷಯ</div>
+            <div class="card-pct" id="pct-evs">0%</div>
+            <span class="icon-box">🌿</span>
+            <div class="title">EVS</div>
+            <div class="sub">EVS lessons</div>
+        </a>
+
+        <a href="/class/1/english" class="card" style="--grad: linear-gradient(135deg, #ec4899, #db2777);">
+            <div class="card-badge">ವಿಷಯ</div>
+            <div class="card-pct" id="pct-english">0%</div>
+            <span class="icon-box">📝</span>
+            <div class="title">English</div>
+            <div class="sub">English lessons</div>
+        </a>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="/dashboard" class="nav-item"><i>🏠</i><span>ಮುಖಪುಟ</span></a>
+        <a href="#" class="nav-item active"><i>📚</i><span>ಕಲಿಕೆ</span></a>
+        <a href="/profile" class="nav-item"><i>👤</i><span>ಪ್ರೊಫೈಲ್</span></a>
+    </div>
+
+    <script>
+    async function loadProgress() {
+        try {
+            const res = await fetch('/api/progress/load?grade=1');
+            const data = await res.json();
+            let completed = 0;
+            const subjects = ['kannada','maths','evs','english'];
+            subjects.forEach(s => {
+                const p = data[s];
+                const pctLabel = document.getElementById(`pct-${s}`);
+                if (p && p.total > 0) {
+                    const pct = Math.round((p.completed/p.total)*100);
+                    if (pctLabel) pctLabel.textContent = pct + '%';
+                    if (pct===100) completed++;
+                }
+            });
+            document.getElementById('progressCount').textContent = `4 ರಲ್ಲಿ ${completed} ವಿಷಯ`;
+            document.getElementById('progressFill').style.width = `${Math.round((completed/4)*100)}%`;
+            const stars = Object.values(data).reduce((s,p)=>s+(p.stars||0),0);
+            document.getElementById('totalStars').textContent = stars;
+        } catch(e) {}
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        loadProgress();
+    });
+    </script>
 </body>
 </html>
